@@ -1,0 +1,70 @@
+# Prototype test events, fired from the console (country scope = your empire):
+#   event pe.1   steelworks on your capital
+#   event pe.2   conglomerate on your capital
+#   event pe.3   private exchange building on your capital
+#   event pe.4   remove all firms and the private exchange from your capital
+#   event pe.5   conglomerate on every non-gestalt AI capital (to watch the AI)
+namespace = pe
+
+country_event = {
+	id = pe.1
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		capital_scope = { add_deposit = d_pe_firm_steelworks }
+		log = "private_economy: pe.1 added d_pe_firm_steelworks to the capital"
+	}
+}
+
+country_event = {
+	id = pe.2
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		capital_scope = { add_deposit = d_pe_firm_conglomerate }
+		log = "private_economy: pe.2 added d_pe_firm_conglomerate to the capital"
+	}
+}
+
+country_event = {
+	id = pe.3
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		capital_scope = { add_building = pe_building_private_exchange }
+		log = "private_economy: pe.3 added pe_building_private_exchange to the capital"
+	}
+}
+
+country_event = {
+	id = pe.4
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		capital_scope = {
+			while = {
+				count = 20
+				if = { limit = { has_deposit = d_pe_firm_steelworks } remove_deposit = d_pe_firm_steelworks }
+				if = { limit = { has_deposit = d_pe_firm_conglomerate } remove_deposit = d_pe_firm_conglomerate }
+			}
+			if = {
+				limit = { has_building = pe_building_private_exchange }
+				remove_building = pe_building_private_exchange
+			}
+		}
+		log = "private_economy: pe.4 removed firms and the private exchange from the capital"
+	}
+}
+
+country_event = {
+	id = pe.5
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_playable_country = {
+			limit = { is_ai = yes is_country_type = default is_gestalt = no exists = capital_scope }
+			capital_scope = { add_deposit = d_pe_firm_conglomerate }
+		}
+		log = "private_economy: pe.5 added d_pe_firm_conglomerate to every AI capital"
+	}
+}

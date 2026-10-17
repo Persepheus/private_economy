@@ -1,0 +1,29 @@
+# Private buildings: placed only by script, cannot be built, demolished or disabled by
+# the player. Upkeep is paid by the firm, so the building costs the empire nothing.
+
+pe_building_private_exchange = {
+	base_buildtime = 360
+	can_build = no
+	can_demolish = no
+	can_be_ruined = no
+	can_be_disabled = no
+
+	category = trade
+
+	building_sets = {
+		trade
+	}
+
+	potential = {
+		exists = owner
+		owner = { is_gestalt = no }
+	}
+
+	resources = {
+		category = planet_buildings
+	}
+
+	planet_modifier = {
+		job_pe_private_trader_add = 100
+	}
+}

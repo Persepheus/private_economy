@@ -1,0 +1,56 @@
+# Economic order: share of district slots run by private firms (0/20/40/60/80%).
+# Stored as pe_private_share (percent) for the private economy logic.
+pe_economic_order = {
+	category = economy
+
+	potential = {
+		is_country_type = default
+		is_gestalt = no
+	}
+
+	option = {
+		name = "pe_order_planned"
+		policy_flags = { pe_order_planned }
+		on_enabled = { set_variable = { which = pe_private_share value = 0 } }
+		ai_weight = {
+			weight = 50
+			modifier = { factor = 3 is_authoritarian = yes }
+		}
+	}
+	option = {
+		name = "pe_order_guided"
+		policy_flags = { pe_order_guided }
+		on_enabled = { set_variable = { which = pe_private_share value = 20 } }
+		ai_weight = {
+			weight = 80
+			modifier = { factor = 2 is_authoritarian = yes }
+		}
+	}
+	option = {
+		name = "pe_order_mixed"
+		policy_flags = { pe_order_mixed }
+		on_enabled = { set_variable = { which = pe_private_share value = 40 } }
+		ai_weight = {
+			weight = 100
+		}
+	}
+	option = {
+		name = "pe_order_free_market"
+		policy_flags = { pe_order_free_market }
+		on_enabled = { set_variable = { which = pe_private_share value = 60 } }
+		ai_weight = {
+			weight = 80
+			modifier = { factor = 2 is_egalitarian = yes }
+			modifier = { factor = 2 has_authority = auth_corporate }
+		}
+	}
+	option = {
+		name = "pe_order_laissez_faire"
+		policy_flags = { pe_order_laissez_faire }
+		on_enabled = { set_variable = { which = pe_private_share value = 80 } }
+		ai_weight = {
+			weight = 30
+			modifier = { factor = 5 has_authority = auth_corporate }
+		}
+	}
+}

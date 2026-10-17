@@ -1,0 +1,133 @@
+# Private jobs: like their state counterparts (same resource categories, so the same
+# technology and production bonuses apply), 15% more base output, and the player cannot
+# change their priority (like criminals). Job counts come only from firm deposits and
+# private buildings (job_<key>_add).
+
+# Like foundry: 3 alloys for 6 minerals.
+pe_private_metallurgist = {
+	category = specialist
+	can_set_priority = no
+	is_capped_by_modifier = yes
+
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_foundry_1
+		}
+	}
+
+	tags = { alloys }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible_precalc = can_fill_specialist_job
+	possible = {
+		hidden_trigger = { exists = owner }
+		owner = { is_gestalt = no }
+	}
+
+	resources = {
+		category = planet_metallurgists
+		produces = {
+			alloys = 3.45
+		}
+		upkeep = {
+			minerals = 6
+		}
+	}
+
+	weight = {
+		weight = @specialist_job_weight
+	}
+}
+
+# Like artisan: 6 consumer goods for 6 minerals.
+pe_private_artisan = {
+	category = specialist
+	can_set_priority = no
+	is_capped_by_modifier = yes
+
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_factory_1
+		}
+	}
+
+	tags = { consumer_goods }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible_precalc = can_fill_specialist_job
+	possible = {
+		hidden_trigger = { exists = owner }
+		owner = { is_gestalt = no }
+	}
+
+	resources = {
+		category = planet_artisans
+		produces = {
+			consumer_goods = 6.9
+		}
+		upkeep = {
+			minerals = 6
+		}
+	}
+
+	weight = {
+		weight = @specialist_job_weight
+	}
+}
+
+# Like trader: 8 trade for 1 consumer good.
+pe_private_trader = {
+	category = specialist
+	can_set_priority = no
+	is_capped_by_modifier = yes
+
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_commercial_zone
+		}
+	}
+
+	tags = { trade }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible_precalc = can_fill_specialist_job
+	possible = {
+		hidden_trigger = { exists = owner }
+		owner = { is_gestalt = no }
+	}
+
+	resources = {
+		category = planet_traders
+		produces = {
+			trade = 9.2
+		}
+		upkeep = {
+			consumer_goods = 1
+		}
+	}
+
+	weight = {
+		weight = @specialist_job_weight
+	}
+}

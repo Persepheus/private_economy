@@ -1,0 +1,5 @@
+# Private firms. Not a blocker category: the AI must not plan to clear them, and the
+# player cannot clear them (can_be_cleared = no on each firm).
+pe_deposit_cat_firms = {
+	important = yes
+}
