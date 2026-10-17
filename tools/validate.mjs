@@ -102,6 +102,7 @@ for (const k of need) for (const lang of languages) assert(loc[lang].has(k), `mi
 
 // 9. Icons: jobs and buildings are looked up by file name.
 for (const j of jobs) assert(fs.existsSync(path.join(root, `gfx/interface/icons/jobs/job_${j}.dds`)), `missing icon for job ${j}`);
+for (const j of jobs) assert(fs.existsSync(path.join(root, `gfx/interface/icons/modifiers/mod_job_${j}_add.dds`)), `missing modifier icon for job ${j}`);
 for (const b of buildings) assert(fs.existsSync(path.join(root, `gfx/interface/icons/buildings/${b}.dds`)), `missing icon for building ${b}`);
 
 console.log(`PASS: ${scripts.length} script files; no vanilla overrides; ${jobs.length} jobs, ${deposits.length} firm deposits, ${buildings.length} buildings, ${policies.length} policy; modifiers, references, variables, event types, localisation and icons checked.`);
