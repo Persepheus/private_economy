@@ -4,6 +4,8 @@
 #   event pe.3   private exchange building on your capital
 #   event pe.4   remove all firms and the private exchange from your capital
 #   event pe.5   conglomerate on every non-gestalt AI capital (to watch the AI)
+#   event pe.6   diagnosis popup: resource scores and the capital's district counts
+#   event pe.7   run the quarterly logic now and clear all planet cooldowns first
 namespace = pe
 
 country_event = {
@@ -46,6 +48,11 @@ country_event = {
 				count = 20
 				if = { limit = { has_deposit = d_pe_firm_steelworks } remove_deposit = d_pe_firm_steelworks }
 				if = { limit = { has_deposit = d_pe_firm_conglomerate } remove_deposit = d_pe_firm_conglomerate }
+				if = { limit = { has_deposit = d_pe_firm_factory } remove_deposit = d_pe_firm_factory }
+				if = { limit = { has_deposit = d_pe_firm_trading_house } remove_deposit = d_pe_firm_trading_house }
+				if = { limit = { has_deposit = d_pe_firm_mine } remove_deposit = d_pe_firm_mine }
+				if = { limit = { has_deposit = d_pe_firm_power_plant } remove_deposit = d_pe_firm_power_plant }
+				if = { limit = { has_deposit = d_pe_firm_farm } remove_deposit = d_pe_firm_farm }
 			}
 			if = {
 				limit = { has_building = pe_building_private_exchange }
@@ -66,5 +73,55 @@ country_event = {
 			capital_scope = { add_deposit = d_pe_firm_conglomerate }
 		}
 		log = "private_economy: pe.5 added d_pe_firm_conglomerate to every AI capital"
+	}
+}
+
+country_event = {
+	id = pe.6
+	title = pe.6.name
+	desc = pe.6.desc
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { NOT = { is_variable_set = pe_private_share } }
+			set_variable = { which = pe_private_share value = 0 }
+		}
+		pe_score_resource = { RES = alloys MARKET = yes }
+		pe_score_resource = { RES = consumer_goods MARKET = yes }
+		pe_score_resource = { RES = minerals MARKET = yes }
+		pe_score_resource = { RES = energy MARKET = yes }
+		pe_score_resource = { RES = food MARKET = yes }
+		pe_score_resource = { RES = trade }
+		capital_scope = {
+			pe_planet_counts = yes
+			if = {
+				limit = { free_district_slots > 0 }
+				pe_choose_sector = { MODE = found }
+			}
+			else = {
+				pe_choose_sector = { MODE = buy }
+			}
+			root = {
+				set_variable = { which = pe_diag_districts value = prev.pe_districts }
+				set_variable = { which = pe_diag_free value = prev.pe_free }
+				set_variable = { which = pe_diag_firms value = prev.pe_firms }
+				set_variable = { which = pe_diag_target value = prev.pe_target }
+			}
+		}
+		log = "private_economy: pe.6 share [Root.pe_private_share] districts [Root.pe_diag_districts] free [Root.pe_diag_free] firms [Root.pe_diag_firms] target [Root.pe_diag_target] best [Root.pe_best_sector]"
+	}
+	option = { name = pe.6.a }
+}
+
+country_event = {
+	id = pe.7
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_owned_planet = { remove_planet_flag = pe_cooldown }
+		set_variable = { which = pe_months value = 0 }
+		pe_quarterly = yes
+		log = "private_economy: pe.7 ran the quarterly logic"
 	}
 }

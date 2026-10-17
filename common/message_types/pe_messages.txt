@@ -1,0 +1,12 @@
+# Private economy news: firm founded, district bought, firm nationalised.
+# create_message calls always pass a target (the planet), as vanilla does.
+message_type = {
+    key = "pe_private_economy"
+    name = "pe_private_economy_title"
+    icon = "GFX_message_trade_deal"
+    icon_frame = 1
+    sound = "notification"
+    ping = "ping_notification_green"
+    category = economy
+    default_toast = yes
+}

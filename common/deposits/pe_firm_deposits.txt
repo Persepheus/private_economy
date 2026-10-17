@@ -34,3 +34,80 @@ d_pe_firm_conglomerate = {
 		job_pe_private_trader_add = 40
 	}
 }
+
+# Single-sector urban firms (one city district slot each).
+d_pe_firm_factory = {
+	icon = d_city
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		job_pe_private_artisan_add = 120
+	}
+}
+
+d_pe_firm_trading_house = {
+	icon = d_city
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		job_pe_private_trader_add = 120
+	}
+}
+
+# Rural firms: bound to the planet's deposits. Each also uses one capacity of its
+# district type, so they only exist where that district could be built. A rural
+# district gives 200 workforce; a rural firm 240.
+d_pe_firm_mine = {
+	icon = d_mineral_fields
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		district_mining_max_add = -1
+		job_pe_private_miner_add = 240
+	}
+}
+
+d_pe_firm_power_plant = {
+	icon = d_geothermal_vent
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		district_generator_max_add = -1
+		job_pe_private_technician_add = 240
+	}
+}
+
+d_pe_firm_farm = {
+	icon = d_fertile_lands
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		district_farming_max_add = -1
+		job_pe_private_farmer_add = 240
+	}
+}

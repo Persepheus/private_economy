@@ -75,6 +75,51 @@ for (const f of scripts) {
       if (types.has(id)) assert.equal(type, types.get(id), `${rel(f)}: ${id} is a ${types.get(id)}, called as ${type}`);
 }
 
+// 7b. Scripted effects and triggers: own calls exist, call depth stays at 4 or less
+//     (the engine initialises only 5 nested levels: "Max effects post init recursive
+//     depth of 5"), and messages carry a target (without one they are not shown).
+const blocksOf = text => {
+  const out = [];
+  for (const m of text.matchAll(/^(\w+) = \{/gm)) {
+    let depth = 0;
+    const i = text.indexOf('{', m.index);
+    for (let j = i; j < text.length; j++) { if (text[j] === '{') depth++; else if (text[j] === '}' && --depth === 0) { out.push([m[1], text.slice(i, j + 1)]); break; } }
+  }
+  return out;
+};
+const effectBodies = new Map(), ownEffects = new Set(), ownTriggers = new Set();
+for (const f of files(path.join(game, 'common/scripted_effects')).filter(f => f.endsWith('.txt')))
+  for (const [k, b] of blocksOf(strip(fs.readFileSync(f, 'utf8')))) effectBodies.set(k, b);
+for (const f of files(path.join(root, 'common/scripted_effects')).filter(f => f.endsWith('.txt')))
+  for (const [k, b] of blocksOf(strip(fs.readFileSync(f, 'utf8')))) { effectBodies.set(k, b); ownEffects.add(k); }
+for (const f of files(path.join(root, 'common/scripted_triggers')).filter(f => f.endsWith('.txt')))
+  for (const k of topLevel(fs.readFileSync(f, 'utf8'))) ownTriggers.add(k);
+{
+  const memo = new Map();
+  const depthOf = (k, seen = new Set()) => {
+    if (memo.has(k)) return memo.get(k);
+    if (seen.has(k)) return 1;
+    seen.add(k);
+    let d = 1;
+    for (const [, callee] of effectBodies.get(k).matchAll(/(\w+) = (?:yes|\{)/g))
+      if (callee !== k && effectBodies.has(callee)) d = Math.max(d, 1 + depthOf(callee, seen));
+    memo.set(k, d);
+    return d;
+  };
+  for (const k of ownEffects) assert(depthOf(k) <= 4, `scripted effect ${k} nests ${depthOf(k)} levels (engine limit 5)`);
+  for (const f of scripts) {
+    const text = strip(fs.readFileSync(f, 'utf8'));
+    for (const [, k] of text.matchAll(/(?<![:.\w])(pe_[a-z_]+) = (?:yes|\{)/g))
+      if (!/_$/.test(k)) assert(ownEffects.has(k) || ownTriggers.has(k) || /^pe_(order|economic|deposit|building|private|firm)/.test(k) || topLevel(text).includes(k), `${rel(f)}: unknown scripted effect/trigger ${k}`);
+    for (const [, sector] of text.matchAll(/pe_consider = \{ SECTOR = (\w+)/g))
+      for (const mode of ['found', 'buy']) assert(ownTriggers.has(`pe_can_${mode}_${sector}`), `missing trigger pe_can_${mode}_${sector}`);
+    for (const m of text.matchAll(/create_message = \{/g)) {
+      const [[, call]] = blocksOf('x' + text.slice(m.index + 'create_message'.length));
+      assert.match(call, /\btarget = /, `${rel(f)}: create_message without target`);
+    }
+  }
+}
+
 // 8. Localisation: BOM, header, line format, parity, and texts for every object.
 const languages = fs.readdirSync(path.join(root, 'localisation'));
 const loc = {};
@@ -98,6 +143,12 @@ const need = [
 ];
 for (const f of files(path.join(root, 'common/policies')))
   for (const [, o] of fs.readFileSync(f, 'utf8').matchAll(/name = "(\w+)"/g)) need.push(o, `${o}_name`, `${o}_desc`);
+for (const d of deposits) need.push(`pe_msg_found_${d}`, `pe_msg_buy_${d}`, `pe_msg_nat_${d}`);
+need.push(...defs('common/static_modifiers').flatMap(m => [m, `${m}_desc`]));
+for (const f of files(path.join(root, 'common/message_types')))
+  for (const [, n] of fs.readFileSync(f, 'utf8').matchAll(/name = "(\w+)"/g)) need.push(n);
+for (const f of files(path.join(root, 'events')).filter(f => f.endsWith('.txt')))
+  for (const [, k] of strip(fs.readFileSync(f, 'utf8')).matchAll(/\b(?:title|desc|text|name) = ([\w.]+)/g)) need.push(k);
 for (const k of need) for (const lang of languages) assert(loc[lang].has(k), `missing ${lang} localisation ${k}`);
 
 // 9. Icons: jobs and buildings are looked up by file name.

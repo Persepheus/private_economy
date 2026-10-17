@@ -1,0 +1,36 @@
+# Private Economy triggers.
+
+# Colony scope. Normal planets only for now; habitats, ring worlds, ecumenopolises and
+# other special planets get their own solution later.
+pe_planet_eligible = {
+	exists = owner
+	owner = { is_country_type = default is_gestalt = no }
+	planet_is_habitat_equivalent = no
+	planet_is_ecu_equivalent = no
+	planet_is_ring_world_equivalent = no
+	NOT = { has_planet_flag = pe_cooldown }
+}
+
+# Colony scope: can a firm of this sector be founded on a free slot?
+pe_can_found_alloys = { free_district_slots > 0 }
+pe_can_found_consumer_goods = { free_district_slots > 0 }
+pe_can_found_trade = { free_district_slots > 0 }
+pe_can_found_minerals = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
+pe_can_found_energy = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
+pe_can_found_food = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
+
+# Colony scope: is there a state district this sector could buy?
+pe_can_buy_alloys = { has_district = district_city }
+pe_can_buy_consumer_goods = { has_district = district_city }
+pe_can_buy_trade = { has_district = district_city }
+pe_can_buy_minerals = { has_district = district_mining }
+pe_can_buy_energy = { has_district = district_generator }
+pe_can_buy_food = { has_district = district_farming }
+
+# Country scope: private firms may buy state districts (Free Market and Laissez-faire).
+pe_buyout_allowed = {
+	OR = {
+		has_policy_flag = pe_order_free_market
+		has_policy_flag = pe_order_laissez_faire
+	}
+}

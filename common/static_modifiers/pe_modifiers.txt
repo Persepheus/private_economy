@@ -1,0 +1,4 @@
+# Planet: the government refused a private buyout offer.
+pe_buyout_refused = {
+	planet_stability_add = -5
+}

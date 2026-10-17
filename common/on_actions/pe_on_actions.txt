@@ -1,0 +1,6 @@
+# Additive: vanilla merges event lists of the same on_action.
+on_monthly_pulse_country = {
+	events = {
+		pe.100
+	}
+}

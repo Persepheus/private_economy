@@ -1,0 +1,52 @@
+# Private economy runtime events.
+#   pe.100  monthly pulse (on_monthly_pulse_country), runs the logic every third month
+#   pe.110  Free Market: a firm offers to buy a state district (human empires only)
+namespace = pe
+
+country_event = {
+	id = pe.100
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = default
+		is_gestalt = no
+		exists = capital_scope
+	}
+	immediate = {
+		change_variable = { which = pe_months value = 1 }
+		if = {
+			limit = { check_variable = { which = pe_months value >= 3 } }
+			set_variable = { which = pe_months value = 0 }
+			pe_quarterly = yes
+		}
+	}
+}
+
+# Scope: country. event_target:pe_offer_planet = the planet, pe_offer_sector = sector code.
+country_event = {
+	id = pe.110
+	title = pe.110.name
+	desc = { trigger = { check_variable = { which = pe_offer_sector value = 1 } } text = pe.110.desc.1 }
+	desc = { trigger = { check_variable = { which = pe_offer_sector value = 2 } } text = pe.110.desc.2 }
+	desc = { trigger = { check_variable = { which = pe_offer_sector value = 3 } } text = pe.110.desc.3 }
+	desc = { trigger = { check_variable = { which = pe_offer_sector value = 4 } } text = pe.110.desc.4 }
+	desc = { trigger = { check_variable = { which = pe_offer_sector value = 5 } } text = pe.110.desc.5 }
+	desc = { trigger = { check_variable = { which = pe_offer_sector value = 6 } } text = pe.110.desc.6 }
+	desc = { trigger = { check_variable = { which = pe_offer_sector value = 7 } } text = pe.110.desc.7 }
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+	location = event_target:pe_offer_planet
+
+	option = {
+		name = pe.110.a
+		event_target:pe_offer_planet = { pe_buyout_by_offer = yes }
+		remove_country_flag = pe_offer_pending
+	}
+	option = {
+		name = pe.110.b
+		event_target:pe_offer_planet = {
+			add_modifier = { modifier = pe_buyout_refused days = 720 }
+		}
+		remove_country_flag = pe_offer_pending
+	}
+}
