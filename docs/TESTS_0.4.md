@@ -84,3 +84,10 @@
 - **Behoben:** Forscher-Jobs nutzen den gültigen Tag `research`.
 - **Neu:** Die Ordnungs-Modifikatoren gelten auch für Unterhalter und Labore.
 - **Validator:** prüft jetzt verklebte Schlüssel, Job-Tags und die Parameter von Scripted Effects.
+
+## 0.4.2
+
+- **Housing von Stadtfirmen** wie ein Stadtdistrikt mit zwei Spezialisierungen. Vanilla gibt jedem Stadtdistrikt pro Urban-Zone +200 und pro anderer Zone −200.
+  - Industrie, Handel und Labore zählen als Nicht-Urban-Zonen: 600.
+  - Unterhaltungsanteile zählen anteilig als Urban-Zone: Ein reines Unterhaltungsunternehmen hat 1400, „Unterhaltung, Unterhaltung, Handel“ 1133.
+  - Dazu kommen wie bisher die Tech- und Zivik-Boni des Stadtdistrikts. Landfirmen sind unverändert.

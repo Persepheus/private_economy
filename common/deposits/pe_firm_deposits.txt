@@ -20,7 +20,7 @@ d_pe_firm_aaa = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 120
 	}
 
@@ -62,7 +62,7 @@ d_pe_firm_aaa_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 180
 	}
 
@@ -104,7 +104,7 @@ d_pe_firm_aaa_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 240
 	}
 
@@ -146,7 +146,7 @@ d_pe_firm_aac = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 80
 		job_pe_private_artisan_add = 40
 	}
@@ -189,7 +189,7 @@ d_pe_firm_aac_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 120
 		job_pe_private_artisan_add = 60
 	}
@@ -232,7 +232,7 @@ d_pe_firm_aac_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 160
 		job_pe_private_artisan_add = 80
 	}
@@ -275,7 +275,7 @@ d_pe_firm_aat = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 80
 		job_pe_private_trader_add = 40
 	}
@@ -318,7 +318,7 @@ d_pe_firm_aat_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 120
 		job_pe_private_trader_add = 60
 	}
@@ -361,7 +361,7 @@ d_pe_firm_aat_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 160
 		job_pe_private_trader_add = 80
 	}
@@ -404,7 +404,7 @@ d_pe_firm_aau = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_metallurgist_add = 80
 		job_pe_private_entertainer_add = 40
 	}
@@ -447,7 +447,7 @@ d_pe_firm_aau_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_metallurgist_add = 120
 		job_pe_private_entertainer_add = 60
 	}
@@ -490,7 +490,7 @@ d_pe_firm_aau_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_metallurgist_add = 160
 		job_pe_private_entertainer_add = 80
 	}
@@ -533,7 +533,7 @@ d_pe_firm_cca = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 40
 		job_pe_private_artisan_add = 80
 	}
@@ -576,7 +576,7 @@ d_pe_firm_cca_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 60
 		job_pe_private_artisan_add = 120
 	}
@@ -619,7 +619,7 @@ d_pe_firm_cca_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 80
 		job_pe_private_artisan_add = 160
 	}
@@ -662,7 +662,7 @@ d_pe_firm_act = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 40
 		job_pe_private_artisan_add = 40
 		job_pe_private_trader_add = 40
@@ -706,7 +706,7 @@ d_pe_firm_act_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 60
 		job_pe_private_artisan_add = 60
 		job_pe_private_trader_add = 60
@@ -750,7 +750,7 @@ d_pe_firm_act_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 80
 		job_pe_private_artisan_add = 80
 		job_pe_private_trader_add = 80
@@ -794,7 +794,7 @@ d_pe_firm_acu = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_metallurgist_add = 40
 		job_pe_private_artisan_add = 40
 		job_pe_private_entertainer_add = 40
@@ -838,7 +838,7 @@ d_pe_firm_acu_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_metallurgist_add = 60
 		job_pe_private_artisan_add = 60
 		job_pe_private_entertainer_add = 60
@@ -882,7 +882,7 @@ d_pe_firm_acu_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_metallurgist_add = 80
 		job_pe_private_artisan_add = 80
 		job_pe_private_entertainer_add = 80
@@ -926,7 +926,7 @@ d_pe_firm_tta = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 40
 		job_pe_private_trader_add = 80
 	}
@@ -969,7 +969,7 @@ d_pe_firm_tta_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 60
 		job_pe_private_trader_add = 120
 	}
@@ -1012,7 +1012,7 @@ d_pe_firm_tta_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_metallurgist_add = 80
 		job_pe_private_trader_add = 160
 	}
@@ -1055,7 +1055,7 @@ d_pe_firm_atu = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_metallurgist_add = 40
 		job_pe_private_trader_add = 40
 		job_pe_private_entertainer_add = 40
@@ -1099,7 +1099,7 @@ d_pe_firm_atu_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_metallurgist_add = 60
 		job_pe_private_trader_add = 60
 		job_pe_private_entertainer_add = 60
@@ -1143,7 +1143,7 @@ d_pe_firm_atu_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_metallurgist_add = 80
 		job_pe_private_trader_add = 80
 		job_pe_private_entertainer_add = 80
@@ -1187,7 +1187,7 @@ d_pe_firm_uua = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 1133
 		job_pe_private_metallurgist_add = 40
 		job_pe_private_entertainer_add = 80
 	}
@@ -1230,7 +1230,7 @@ d_pe_firm_uua_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 1133
 		job_pe_private_metallurgist_add = 60
 		job_pe_private_entertainer_add = 120
 	}
@@ -1273,7 +1273,7 @@ d_pe_firm_uua_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 1133
 		job_pe_private_metallurgist_add = 80
 		job_pe_private_entertainer_add = 160
 	}
@@ -1316,7 +1316,7 @@ d_pe_firm_ccc = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_artisan_add = 120
 	}
 
@@ -1358,7 +1358,7 @@ d_pe_firm_ccc_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_artisan_add = 180
 	}
 
@@ -1400,7 +1400,7 @@ d_pe_firm_ccc_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_artisan_add = 240
 	}
 
@@ -1442,7 +1442,7 @@ d_pe_firm_cct = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_artisan_add = 80
 		job_pe_private_trader_add = 40
 	}
@@ -1485,7 +1485,7 @@ d_pe_firm_cct_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_artisan_add = 120
 		job_pe_private_trader_add = 60
 	}
@@ -1528,7 +1528,7 @@ d_pe_firm_cct_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_artisan_add = 160
 		job_pe_private_trader_add = 80
 	}
@@ -1571,7 +1571,7 @@ d_pe_firm_ccu = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_artisan_add = 80
 		job_pe_private_entertainer_add = 40
 	}
@@ -1614,7 +1614,7 @@ d_pe_firm_ccu_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_artisan_add = 120
 		job_pe_private_entertainer_add = 60
 	}
@@ -1657,7 +1657,7 @@ d_pe_firm_ccu_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_artisan_add = 160
 		job_pe_private_entertainer_add = 80
 	}
@@ -1700,7 +1700,7 @@ d_pe_firm_ttc = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_artisan_add = 40
 		job_pe_private_trader_add = 80
 	}
@@ -1743,7 +1743,7 @@ d_pe_firm_ttc_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_artisan_add = 60
 		job_pe_private_trader_add = 120
 	}
@@ -1786,7 +1786,7 @@ d_pe_firm_ttc_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_artisan_add = 80
 		job_pe_private_trader_add = 160
 	}
@@ -1829,7 +1829,7 @@ d_pe_firm_ctu = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_artisan_add = 40
 		job_pe_private_trader_add = 40
 		job_pe_private_entertainer_add = 40
@@ -1873,7 +1873,7 @@ d_pe_firm_ctu_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_artisan_add = 60
 		job_pe_private_trader_add = 60
 		job_pe_private_entertainer_add = 60
@@ -1917,7 +1917,7 @@ d_pe_firm_ctu_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_artisan_add = 80
 		job_pe_private_trader_add = 80
 		job_pe_private_entertainer_add = 80
@@ -1961,7 +1961,7 @@ d_pe_firm_uuc = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 1133
 		job_pe_private_artisan_add = 40
 		job_pe_private_entertainer_add = 80
 	}
@@ -2004,7 +2004,7 @@ d_pe_firm_uuc_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 1133
 		job_pe_private_artisan_add = 60
 		job_pe_private_entertainer_add = 120
 	}
@@ -2047,7 +2047,7 @@ d_pe_firm_uuc_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 1133
 		job_pe_private_artisan_add = 80
 		job_pe_private_entertainer_add = 160
 	}
@@ -2090,7 +2090,7 @@ d_pe_firm_ttt = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_trader_add = 120
 	}
 
@@ -2132,7 +2132,7 @@ d_pe_firm_ttt_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_trader_add = 180
 	}
 
@@ -2174,7 +2174,7 @@ d_pe_firm_ttt_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_trader_add = 240
 	}
 
@@ -2216,7 +2216,7 @@ d_pe_firm_ttu = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_trader_add = 80
 		job_pe_private_entertainer_add = 40
 	}
@@ -2259,7 +2259,7 @@ d_pe_firm_ttu_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_trader_add = 120
 		job_pe_private_entertainer_add = 60
 	}
@@ -2302,7 +2302,7 @@ d_pe_firm_ttu_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 867
 		job_pe_private_trader_add = 160
 		job_pe_private_entertainer_add = 80
 	}
@@ -2345,7 +2345,7 @@ d_pe_firm_uut = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 1133
 		job_pe_private_trader_add = 40
 		job_pe_private_entertainer_add = 80
 	}
@@ -2388,7 +2388,7 @@ d_pe_firm_uut_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 1133
 		job_pe_private_trader_add = 60
 		job_pe_private_entertainer_add = 120
 	}
@@ -2431,7 +2431,7 @@ d_pe_firm_uut_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 1133
 		job_pe_private_trader_add = 80
 		job_pe_private_entertainer_add = 160
 	}
@@ -2474,7 +2474,7 @@ d_pe_firm_uuu = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 1400
 		job_pe_private_entertainer_add = 120
 	}
 
@@ -2516,7 +2516,7 @@ d_pe_firm_uuu_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 1400
 		job_pe_private_entertainer_add = 180
 	}
 
@@ -2558,7 +2558,7 @@ d_pe_firm_uuu_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 1400
 		job_pe_private_entertainer_add = 240
 	}
 
@@ -2600,7 +2600,7 @@ d_pe_firm_xxx = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_physicist_add = 120
 	}
 
@@ -2642,7 +2642,7 @@ d_pe_firm_xxx_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_physicist_add = 180
 	}
 
@@ -2684,7 +2684,7 @@ d_pe_firm_xxx_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_physicist_add = 240
 	}
 
@@ -2726,7 +2726,7 @@ d_pe_firm_yyy = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_biologist_add = 120
 	}
 
@@ -2768,7 +2768,7 @@ d_pe_firm_yyy_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_biologist_add = 180
 	}
 
@@ -2810,7 +2810,7 @@ d_pe_firm_yyy_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_biologist_add = 240
 	}
 
@@ -2852,7 +2852,7 @@ d_pe_firm_zzz = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_engineer_add = 120
 	}
 
@@ -2894,7 +2894,7 @@ d_pe_firm_zzz_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_engineer_add = 180
 	}
 
@@ -2936,7 +2936,7 @@ d_pe_firm_zzz_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_engineer_add = 240
 	}
 
@@ -2978,7 +2978,7 @@ d_pe_firm_xyz = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_physicist_add = 40
 		job_pe_private_biologist_add = 40
 		job_pe_private_engineer_add = 40
@@ -3022,7 +3022,7 @@ d_pe_firm_xyz_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_physicist_add = 60
 		job_pe_private_biologist_add = 60
 		job_pe_private_engineer_add = 60
@@ -3066,7 +3066,7 @@ d_pe_firm_xyz_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 1000
+		planet_housing_add = 600
 		job_pe_private_physicist_add = 80
 		job_pe_private_biologist_add = 80
 		job_pe_private_engineer_add = 80

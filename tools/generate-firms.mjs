@@ -168,6 +168,13 @@ const housingOf = district => {
   }
   return {base: out, blocks};
 };
+// City districts also get the planet's two zones: an urban zone adds housing, every other
+// zone removes it. A city firm counts as two zones: its entertainment shares as urban,
+// all other shares (industry, trade, labs) as specialised zones.
+const zoneVars = fs.readFileSync(path.join(game, 'common/scripted_variables/100_scripted_variables_zones.txt'), 'utf8');
+const zoneVar = n => Number(zoneVars.match(new RegExp(`^@${n} = (-?\\d+)`, 'm'))[1]);
+const ZONE_POS = zoneVar('zone_urban_housing_positive'), ZONE_NEG = zoneVar('zone_urban_housing_negative');
+const zoneHousing = v => Math.round(2 * ((v.counts.u || 0) / 3 * ZONE_POS + (1 - (v.counts.u || 0) / 3) * ZONE_NEG));
 const HOUSING = {u: housingOf('district_city'), m: housingOf('district_mining'), e: housingOf('district_generator'), f: housingOf('district_farming')};
 
 // --- Variants -------------------------------------------------------------------
@@ -223,7 +230,8 @@ let dep = header + `# Firm variants and stages: one district slot each (rural on
 `;
 for (const {v, s, key} of pairs) {
   const housing = HOUSING[v.cityLike ? 'u' : v.cls];
-  const mods = ['planet_max_districts_add = -1', ...housing.base];
+  const baseHousing = housing.base.reduce((sum, m) => sum + Number(m.split(' = ')[1]), 0) + (v.cityLike ? zoneHousing(v) : 0);
+  const mods = ['planet_max_districts_add = -1', ...(baseHousing ? [`planet_housing_add = ${baseHousing}`] : [])];
   if (!v.cityLike) mods.push(`${v.district}_max_add = -1`);
   for (const [job, wf] of Object.entries(v.workforce)) mods.push(`job_${job}_add = ${wf * stageMult(s)}`);
   dep += `
@@ -687,4 +695,5 @@ for (const [lang, lines] of Object.entries(loc))
 
 console.log(`${JOBS.length} jobs (defaults: ${JOBS.map(j => `${j.key.slice(11)} ${JSON.stringify(sumRes(j.base, j.noncat))}`).join('; ')})`);
 console.log(`${variants.length} variants x ${STAGES.length} stages = ${pairs.length} firm deposits; housing blocks: ${Object.entries(HOUSING).map(([k, h]) => `${k} ${h.base.length}+${h.blocks.length}`).join(', ')}`);
+console.log(`zone housing: ${ZONE_POS}/${ZONE_NEG}, e.g. aaa ${zoneHousing(variants[0])}, uuu ${zoneHousing(variants.find(v => v.key === 'd_pe_firm_uuu'))}`);
 console.log(`designations: ${LETTERS.map(l => `${l}=${specFor(l).length}`).join(' ')}`);
