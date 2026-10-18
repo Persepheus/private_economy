@@ -1,9 +1,9 @@
 # Prototype test events, fired from the console (country scope = your empire):
 #   event pe.1   private steelworks on your capital
-#   event pe.2   conglomerate on your capital
+#   event pe.2   private physics lab on your capital
 #   event pe.3   private exchange building on your capital
 #   event pe.4   remove all firms and the private exchange from your capital
-#   event pe.5   conglomerate on every non-gestalt AI capital (to watch the AI)
+#   event pe.5   steelworks with trade division on every non-gestalt AI capital
 #   event pe.6   diagnosis popup: capital, resource scores, the capital's counts and best firm
 #   event pe.7   run the quarterly logic now and clear all planet cooldowns first
 #   event pe.8   finish all private construction sites now
@@ -15,10 +15,10 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		capital_scope = {
-			add_deposit = d_pe_firm_aaa
+			add_deposit = d_pe_firm_aa
 			last_added_deposit = { set_variable = { which = pe_code value = 1 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = 10 } }
 		}
-		log = "private_economy: pe.1 added d_pe_firm_aaa to the capital"
+		log = "private_economy: pe.1 added d_pe_firm_aa to the capital"
 	}
 }
 
@@ -28,10 +28,10 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		capital_scope = {
-			add_deposit = d_pe_firm_act
-			last_added_deposit = { set_variable = { which = pe_code value = 5 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = 10 } }
+			add_deposit = d_pe_firm_xx
+			last_added_deposit = { set_variable = { which = pe_code value = 11 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = 10 } }
 		}
-		log = "private_economy: pe.2 added d_pe_firm_act to the capital"
+		log = "private_economy: pe.2 added d_pe_firm_xx to the capital"
 	}
 }
 
@@ -74,11 +74,11 @@ country_event = {
 		every_playable_country = {
 			limit = { is_ai = yes is_country_type = default is_gestalt = no exists = capital_scope }
 			capital_scope = {
-			add_deposit = d_pe_firm_act
-			last_added_deposit = { set_variable = { which = pe_code value = 5 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = 10 } }
+			add_deposit = d_pe_firm_at
+			last_added_deposit = { set_variable = { which = pe_code value = 3 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = 10 } }
 		}
 		}
-		log = "private_economy: pe.5 added d_pe_firm_act to every AI capital"
+		log = "private_economy: pe.5 added d_pe_firm_at to every AI capital"
 	}
 }
 

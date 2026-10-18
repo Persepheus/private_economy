@@ -2,129 +2,105 @@
 # Colony scope, per variant: can it be founded on a free slot, bought from the state,
 # or chosen by a firm of the same class that restructures? A rural side share needs
 # the planet to have that district type at all (its deposits).
-pe_can_found_d_pe_firm_aaa = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aaa = { has_district = district_city }
-pe_can_retool_d_pe_firm_aaa = { always = yes }
-pe_can_found_d_pe_firm_aac = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aac = { has_district = district_city }
-pe_can_retool_d_pe_firm_aac = { always = yes }
-pe_can_found_d_pe_firm_aat = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aat = { has_district = district_city }
-pe_can_retool_d_pe_firm_aat = { always = yes }
-pe_can_found_d_pe_firm_aau = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aau = { has_district = district_city }
-pe_can_retool_d_pe_firm_aau = { always = yes }
-pe_can_found_d_pe_firm_cca = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_cca = { has_district = district_city }
-pe_can_retool_d_pe_firm_cca = { always = yes }
-pe_can_found_d_pe_firm_act = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_act = { has_district = district_city }
-pe_can_retool_d_pe_firm_act = { always = yes }
-pe_can_found_d_pe_firm_acu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_acu = { has_district = district_city }
-pe_can_retool_d_pe_firm_acu = { always = yes }
-pe_can_found_d_pe_firm_tta = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_tta = { has_district = district_city }
-pe_can_retool_d_pe_firm_tta = { always = yes }
-pe_can_found_d_pe_firm_atu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_atu = { has_district = district_city }
-pe_can_retool_d_pe_firm_atu = { always = yes }
-pe_can_found_d_pe_firm_uua = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_uua = { has_district = district_city }
-pe_can_retool_d_pe_firm_uua = { always = yes }
-pe_can_found_d_pe_firm_ccc = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ccc = { has_district = district_city }
-pe_can_retool_d_pe_firm_ccc = { always = yes }
-pe_can_found_d_pe_firm_cct = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_cct = { has_district = district_city }
-pe_can_retool_d_pe_firm_cct = { always = yes }
-pe_can_found_d_pe_firm_ccu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ccu = { has_district = district_city }
-pe_can_retool_d_pe_firm_ccu = { always = yes }
-pe_can_found_d_pe_firm_ttc = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ttc = { has_district = district_city }
-pe_can_retool_d_pe_firm_ttc = { always = yes }
-pe_can_found_d_pe_firm_ctu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ctu = { has_district = district_city }
-pe_can_retool_d_pe_firm_ctu = { always = yes }
-pe_can_found_d_pe_firm_uuc = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_uuc = { has_district = district_city }
-pe_can_retool_d_pe_firm_uuc = { always = yes }
-pe_can_found_d_pe_firm_ttt = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ttt = { has_district = district_city }
-pe_can_retool_d_pe_firm_ttt = { always = yes }
-pe_can_found_d_pe_firm_ttu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ttu = { has_district = district_city }
-pe_can_retool_d_pe_firm_ttu = { always = yes }
-pe_can_found_d_pe_firm_uut = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_uut = { has_district = district_city }
-pe_can_retool_d_pe_firm_uut = { always = yes }
-pe_can_found_d_pe_firm_uuu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_uuu = { has_district = district_city }
-pe_can_retool_d_pe_firm_uuu = { always = yes }
-pe_can_found_d_pe_firm_xxx = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xxx = { has_district = district_city }
-pe_can_retool_d_pe_firm_xxx = { always = yes }
-pe_can_found_d_pe_firm_yyy = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_yyy = { has_district = district_city }
-pe_can_retool_d_pe_firm_yyy = { always = yes }
-pe_can_found_d_pe_firm_zzz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_zzz = { has_district = district_city }
-pe_can_retool_d_pe_firm_zzz = { always = yes }
-pe_can_found_d_pe_firm_xyz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xyz = { has_district = district_city }
-pe_can_retool_d_pe_firm_xyz = { always = yes }
-pe_can_found_d_pe_firm_mmm = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
-pe_can_buy_d_pe_firm_mmm = { has_district = district_mining }
-pe_can_retool_d_pe_firm_mmm = { always = yes }
-pe_can_found_d_pe_firm_mma = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
-pe_can_buy_d_pe_firm_mma = { has_district = district_mining }
-pe_can_retool_d_pe_firm_mma = { always = yes }
-pe_can_found_d_pe_firm_mmc = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
-pe_can_buy_d_pe_firm_mmc = { has_district = district_mining }
-pe_can_retool_d_pe_firm_mmc = { always = yes }
-pe_can_found_d_pe_firm_mmt = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
-pe_can_buy_d_pe_firm_mmt = { has_district = district_mining }
-pe_can_retool_d_pe_firm_mmt = { always = yes }
-pe_can_found_d_pe_firm_mme = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_buy_d_pe_firm_mme = { has_district = district_mining OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_retool_d_pe_firm_mme = { always = yes OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_found_d_pe_firm_mmf = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_buy_d_pe_firm_mmf = { has_district = district_mining OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_retool_d_pe_firm_mmf = { always = yes OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_found_d_pe_firm_eee = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
-pe_can_buy_d_pe_firm_eee = { has_district = district_generator }
-pe_can_retool_d_pe_firm_eee = { always = yes }
-pe_can_found_d_pe_firm_eea = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
-pe_can_buy_d_pe_firm_eea = { has_district = district_generator }
-pe_can_retool_d_pe_firm_eea = { always = yes }
-pe_can_found_d_pe_firm_eec = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
-pe_can_buy_d_pe_firm_eec = { has_district = district_generator }
-pe_can_retool_d_pe_firm_eec = { always = yes }
-pe_can_found_d_pe_firm_eet = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
-pe_can_buy_d_pe_firm_eet = { has_district = district_generator }
-pe_can_retool_d_pe_firm_eet = { always = yes }
-pe_can_found_d_pe_firm_eem = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_buy_d_pe_firm_eem = { has_district = district_generator OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_retool_d_pe_firm_eem = { always = yes OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_found_d_pe_firm_eef = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_buy_d_pe_firm_eef = { has_district = district_generator OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_retool_d_pe_firm_eef = { always = yes OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_found_d_pe_firm_fff = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
-pe_can_buy_d_pe_firm_fff = { has_district = district_farming }
-pe_can_retool_d_pe_firm_fff = { always = yes }
-pe_can_found_d_pe_firm_ffa = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
-pe_can_buy_d_pe_firm_ffa = { has_district = district_farming }
-pe_can_retool_d_pe_firm_ffa = { always = yes }
-pe_can_found_d_pe_firm_ffc = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
-pe_can_buy_d_pe_firm_ffc = { has_district = district_farming }
-pe_can_retool_d_pe_firm_ffc = { always = yes }
-pe_can_found_d_pe_firm_fft = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
-pe_can_buy_d_pe_firm_fft = { has_district = district_farming }
-pe_can_retool_d_pe_firm_fft = { always = yes }
-pe_can_found_d_pe_firm_ffm = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_buy_d_pe_firm_ffm = { has_district = district_farming OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_retool_d_pe_firm_ffm = { always = yes OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_found_d_pe_firm_ffe = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_buy_d_pe_firm_ffe = { has_district = district_farming OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_retool_d_pe_firm_ffe = { always = yes OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+pe_can_found_d_pe_firm_aa = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_aa = { has_district = district_city }
+pe_can_retool_d_pe_firm_aa = { always = yes }
+pe_can_found_d_pe_firm_ac = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_ac = { has_district = district_city }
+pe_can_retool_d_pe_firm_ac = { always = yes }
+pe_can_found_d_pe_firm_at = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_at = { has_district = district_city }
+pe_can_retool_d_pe_firm_at = { always = yes }
+pe_can_found_d_pe_firm_au = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_au = { has_district = district_city }
+pe_can_retool_d_pe_firm_au = { always = yes }
+pe_can_found_d_pe_firm_cc = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_cc = { has_district = district_city }
+pe_can_retool_d_pe_firm_cc = { always = yes }
+pe_can_found_d_pe_firm_ct = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_ct = { has_district = district_city }
+pe_can_retool_d_pe_firm_ct = { always = yes }
+pe_can_found_d_pe_firm_cu = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_cu = { has_district = district_city }
+pe_can_retool_d_pe_firm_cu = { always = yes }
+pe_can_found_d_pe_firm_tt = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_tt = { has_district = district_city }
+pe_can_retool_d_pe_firm_tt = { always = yes }
+pe_can_found_d_pe_firm_tu = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_tu = { has_district = district_city }
+pe_can_retool_d_pe_firm_tu = { always = yes }
+pe_can_found_d_pe_firm_uu = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_uu = { has_district = district_city }
+pe_can_retool_d_pe_firm_uu = { always = yes }
+pe_can_found_d_pe_firm_xx = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_xx = { has_district = district_city }
+pe_can_retool_d_pe_firm_xx = { always = yes }
+pe_can_found_d_pe_firm_xy = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_xy = { has_district = district_city }
+pe_can_retool_d_pe_firm_xy = { always = yes }
+pe_can_found_d_pe_firm_xz = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_xz = { has_district = district_city }
+pe_can_retool_d_pe_firm_xz = { always = yes }
+pe_can_found_d_pe_firm_yy = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_yy = { has_district = district_city }
+pe_can_retool_d_pe_firm_yy = { always = yes }
+pe_can_found_d_pe_firm_yz = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_yz = { has_district = district_city }
+pe_can_retool_d_pe_firm_yz = { always = yes }
+pe_can_found_d_pe_firm_zz = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_zz = { has_district = district_city }
+pe_can_retool_d_pe_firm_zz = { always = yes }
+pe_can_found_d_pe_firm_mm = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
+pe_can_buy_d_pe_firm_mm = { has_district = district_mining }
+pe_can_retool_d_pe_firm_mm = { always = yes }
+pe_can_found_d_pe_firm_ma = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
+pe_can_buy_d_pe_firm_ma = { has_district = district_mining }
+pe_can_retool_d_pe_firm_ma = { always = yes }
+pe_can_found_d_pe_firm_mc = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
+pe_can_buy_d_pe_firm_mc = { has_district = district_mining }
+pe_can_retool_d_pe_firm_mc = { always = yes }
+pe_can_found_d_pe_firm_mt = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
+pe_can_buy_d_pe_firm_mt = { has_district = district_mining }
+pe_can_retool_d_pe_firm_mt = { always = yes }
+pe_can_found_d_pe_firm_me = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+pe_can_buy_d_pe_firm_me = { has_district = district_mining OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+pe_can_retool_d_pe_firm_me = { always = yes OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+pe_can_found_d_pe_firm_mf = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
+pe_can_buy_d_pe_firm_mf = { has_district = district_mining OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
+pe_can_retool_d_pe_firm_mf = { always = yes OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
+pe_can_found_d_pe_firm_ee = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
+pe_can_buy_d_pe_firm_ee = { has_district = district_generator }
+pe_can_retool_d_pe_firm_ee = { always = yes }
+pe_can_found_d_pe_firm_ea = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
+pe_can_buy_d_pe_firm_ea = { has_district = district_generator }
+pe_can_retool_d_pe_firm_ea = { always = yes }
+pe_can_found_d_pe_firm_ec = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
+pe_can_buy_d_pe_firm_ec = { has_district = district_generator }
+pe_can_retool_d_pe_firm_ec = { always = yes }
+pe_can_found_d_pe_firm_et = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
+pe_can_buy_d_pe_firm_et = { has_district = district_generator }
+pe_can_retool_d_pe_firm_et = { always = yes }
+pe_can_found_d_pe_firm_em = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
+pe_can_buy_d_pe_firm_em = { has_district = district_generator OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
+pe_can_retool_d_pe_firm_em = { always = yes OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
+pe_can_found_d_pe_firm_ef = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
+pe_can_buy_d_pe_firm_ef = { has_district = district_generator OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
+pe_can_retool_d_pe_firm_ef = { always = yes OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
+pe_can_found_d_pe_firm_ff = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
+pe_can_buy_d_pe_firm_ff = { has_district = district_farming }
+pe_can_retool_d_pe_firm_ff = { always = yes }
+pe_can_found_d_pe_firm_fa = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
+pe_can_buy_d_pe_firm_fa = { has_district = district_farming }
+pe_can_retool_d_pe_firm_fa = { always = yes }
+pe_can_found_d_pe_firm_fc = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
+pe_can_buy_d_pe_firm_fc = { has_district = district_farming }
+pe_can_retool_d_pe_firm_fc = { always = yes }
+pe_can_found_d_pe_firm_ft = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
+pe_can_buy_d_pe_firm_ft = { has_district = district_farming }
+pe_can_retool_d_pe_firm_ft = { always = yes }
+pe_can_found_d_pe_firm_fm = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
+pe_can_buy_d_pe_firm_fm = { has_district = district_farming OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
+pe_can_retool_d_pe_firm_fm = { always = yes OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
+pe_can_found_d_pe_firm_fe = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+pe_can_buy_d_pe_firm_fe = { has_district = district_farming OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+pe_can_retool_d_pe_firm_fe = { always = yes OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }

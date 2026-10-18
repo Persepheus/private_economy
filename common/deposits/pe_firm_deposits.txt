@@ -3,7 +3,7 @@
 # their type). Placed only by script; cannot be cleared. Energy upkeep like the matching
 # district, scaled by stage; housing like the district.
 
-d_pe_firm_aaa = {
+d_pe_firm_aa = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -21,7 +21,7 @@ d_pe_firm_aaa = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 120
+		job_pe_private_metallurgist_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -45,7 +45,7 @@ d_pe_firm_aaa = {
 	}
 }
 
-d_pe_firm_aaa_2 = {
+d_pe_firm_aa_2 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -63,7 +63,7 @@ d_pe_firm_aaa_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 180
+		job_pe_private_metallurgist_add = 300
 	}
 
 	triggered_planet_modifier = {
@@ -87,7 +87,7 @@ d_pe_firm_aaa_2 = {
 	}
 }
 
-d_pe_firm_aaa_3 = {
+d_pe_firm_aa_3 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -105,7 +105,7 @@ d_pe_firm_aaa_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 240
+		job_pe_private_metallurgist_add = 400
 	}
 
 	triggered_planet_modifier = {
@@ -129,7 +129,7 @@ d_pe_firm_aaa_3 = {
 	}
 }
 
-d_pe_firm_aac = {
+d_pe_firm_ac = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -147,8 +147,8 @@ d_pe_firm_aac = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 80
-		job_pe_private_artisan_add = 40
+		job_pe_private_metallurgist_add = 100
+		job_pe_private_artisan_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -172,7 +172,7 @@ d_pe_firm_aac = {
 	}
 }
 
-d_pe_firm_aac_2 = {
+d_pe_firm_ac_2 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -190,8 +190,8 @@ d_pe_firm_aac_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 120
-		job_pe_private_artisan_add = 60
+		job_pe_private_metallurgist_add = 150
+		job_pe_private_artisan_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -215,7 +215,7 @@ d_pe_firm_aac_2 = {
 	}
 }
 
-d_pe_firm_aac_3 = {
+d_pe_firm_ac_3 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -233,8 +233,8 @@ d_pe_firm_aac_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 160
-		job_pe_private_artisan_add = 80
+		job_pe_private_metallurgist_add = 200
+		job_pe_private_artisan_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -258,7 +258,7 @@ d_pe_firm_aac_3 = {
 	}
 }
 
-d_pe_firm_aat = {
+d_pe_firm_at = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -276,8 +276,8 @@ d_pe_firm_aat = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 80
-		job_pe_private_trader_add = 40
+		job_pe_private_metallurgist_add = 100
+		job_pe_private_trader_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -301,7 +301,7 @@ d_pe_firm_aat = {
 	}
 }
 
-d_pe_firm_aat_2 = {
+d_pe_firm_at_2 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -319,8 +319,8 @@ d_pe_firm_aat_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 120
-		job_pe_private_trader_add = 60
+		job_pe_private_metallurgist_add = 150
+		job_pe_private_trader_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -344,7 +344,7 @@ d_pe_firm_aat_2 = {
 	}
 }
 
-d_pe_firm_aat_3 = {
+d_pe_firm_at_3 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -362,8 +362,8 @@ d_pe_firm_aat_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 160
-		job_pe_private_trader_add = 80
+		job_pe_private_metallurgist_add = 200
+		job_pe_private_trader_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -387,7 +387,7 @@ d_pe_firm_aat_3 = {
 	}
 }
 
-d_pe_firm_aau = {
+d_pe_firm_au = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -404,9 +404,9 @@ d_pe_firm_aau = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_metallurgist_add = 80
-		job_pe_private_entertainer_add = 40
+		planet_housing_add = 1000
+		job_pe_private_metallurgist_add = 100
+		job_pe_private_entertainer_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -430,7 +430,7 @@ d_pe_firm_aau = {
 	}
 }
 
-d_pe_firm_aau_2 = {
+d_pe_firm_au_2 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -447,9 +447,9 @@ d_pe_firm_aau_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_metallurgist_add = 120
-		job_pe_private_entertainer_add = 60
+		planet_housing_add = 1000
+		job_pe_private_metallurgist_add = 150
+		job_pe_private_entertainer_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -473,7 +473,7 @@ d_pe_firm_aau_2 = {
 	}
 }
 
-d_pe_firm_aau_3 = {
+d_pe_firm_au_3 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -490,9 +490,9 @@ d_pe_firm_aau_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_metallurgist_add = 160
-		job_pe_private_entertainer_add = 80
+		planet_housing_add = 1000
+		job_pe_private_metallurgist_add = 200
+		job_pe_private_entertainer_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -516,136 +516,7 @@ d_pe_firm_aau_3 = {
 	}
 }
 
-d_pe_firm_cca = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 2
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 40
-		job_pe_private_artisan_add = 80
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_cca_2 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 3
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 60
-		job_pe_private_artisan_add = 120
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_cca_3 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 4
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 80
-		job_pe_private_artisan_add = 160
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_act = {
+d_pe_firm_cc = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -663,9 +534,7 @@ d_pe_firm_act = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 40
-		job_pe_private_artisan_add = 40
-		job_pe_private_trader_add = 40
+		job_pe_private_artisan_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -689,7 +558,7 @@ d_pe_firm_act = {
 	}
 }
 
-d_pe_firm_act_2 = {
+d_pe_firm_cc_2 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -707,9 +576,7 @@ d_pe_firm_act_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 60
-		job_pe_private_artisan_add = 60
-		job_pe_private_trader_add = 60
+		job_pe_private_artisan_add = 300
 	}
 
 	triggered_planet_modifier = {
@@ -733,7 +600,7 @@ d_pe_firm_act_2 = {
 	}
 }
 
-d_pe_firm_act_3 = {
+d_pe_firm_cc_3 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -751,9 +618,7 @@ d_pe_firm_act_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 80
-		job_pe_private_artisan_add = 80
-		job_pe_private_trader_add = 80
+		job_pe_private_artisan_add = 400
 	}
 
 	triggered_planet_modifier = {
@@ -777,139 +642,7 @@ d_pe_firm_act_3 = {
 	}
 }
 
-d_pe_firm_acu = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 2
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_metallurgist_add = 40
-		job_pe_private_artisan_add = 40
-		job_pe_private_entertainer_add = 40
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_acu_2 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 3
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_metallurgist_add = 60
-		job_pe_private_artisan_add = 60
-		job_pe_private_entertainer_add = 60
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_acu_3 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 4
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_metallurgist_add = 80
-		job_pe_private_artisan_add = 80
-		job_pe_private_entertainer_add = 80
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_tta = {
+d_pe_firm_ct = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -927,8 +660,8 @@ d_pe_firm_tta = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 40
-		job_pe_private_trader_add = 80
+		job_pe_private_artisan_add = 100
+		job_pe_private_trader_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -952,7 +685,7 @@ d_pe_firm_tta = {
 	}
 }
 
-d_pe_firm_tta_2 = {
+d_pe_firm_ct_2 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -970,8 +703,8 @@ d_pe_firm_tta_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 60
-		job_pe_private_trader_add = 120
+		job_pe_private_artisan_add = 150
+		job_pe_private_trader_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -995,7 +728,7 @@ d_pe_firm_tta_2 = {
 	}
 }
 
-d_pe_firm_tta_3 = {
+d_pe_firm_ct_3 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -1013,8 +746,8 @@ d_pe_firm_tta_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_metallurgist_add = 80
-		job_pe_private_trader_add = 160
+		job_pe_private_artisan_add = 200
+		job_pe_private_trader_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -1038,7 +771,7 @@ d_pe_firm_tta_3 = {
 	}
 }
 
-d_pe_firm_atu = {
+d_pe_firm_cu = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -1055,10 +788,9 @@ d_pe_firm_atu = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_metallurgist_add = 40
-		job_pe_private_trader_add = 40
-		job_pe_private_entertainer_add = 40
+		planet_housing_add = 1000
+		job_pe_private_artisan_add = 100
+		job_pe_private_entertainer_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -1082,7 +814,7 @@ d_pe_firm_atu = {
 	}
 }
 
-d_pe_firm_atu_2 = {
+d_pe_firm_cu_2 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -1099,10 +831,9 @@ d_pe_firm_atu_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_metallurgist_add = 60
-		job_pe_private_trader_add = 60
-		job_pe_private_entertainer_add = 60
+		planet_housing_add = 1000
+		job_pe_private_artisan_add = 150
+		job_pe_private_entertainer_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -1126,7 +857,7 @@ d_pe_firm_atu_2 = {
 	}
 }
 
-d_pe_firm_atu_3 = {
+d_pe_firm_cu_3 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -1143,10 +874,9 @@ d_pe_firm_atu_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_metallurgist_add = 80
-		job_pe_private_trader_add = 80
-		job_pe_private_entertainer_add = 80
+		planet_housing_add = 1000
+		job_pe_private_artisan_add = 200
+		job_pe_private_entertainer_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -1170,136 +900,7 @@ d_pe_firm_atu_3 = {
 	}
 }
 
-d_pe_firm_uua = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 2
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 1133
-		job_pe_private_metallurgist_add = 40
-		job_pe_private_entertainer_add = 80
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_uua_2 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 3
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 1133
-		job_pe_private_metallurgist_add = 60
-		job_pe_private_entertainer_add = 120
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_uua_3 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 4
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 1133
-		job_pe_private_metallurgist_add = 80
-		job_pe_private_entertainer_add = 160
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ccc = {
+d_pe_firm_tt = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -1317,7 +918,7 @@ d_pe_firm_ccc = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_artisan_add = 120
+		job_pe_private_trader_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -1341,7 +942,7 @@ d_pe_firm_ccc = {
 	}
 }
 
-d_pe_firm_ccc_2 = {
+d_pe_firm_tt_2 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -1359,7 +960,7 @@ d_pe_firm_ccc_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_artisan_add = 180
+		job_pe_private_trader_add = 300
 	}
 
 	triggered_planet_modifier = {
@@ -1383,7 +984,7 @@ d_pe_firm_ccc_2 = {
 	}
 }
 
-d_pe_firm_ccc_3 = {
+d_pe_firm_tt_3 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -1401,7 +1002,7 @@ d_pe_firm_ccc_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_artisan_add = 240
+		job_pe_private_trader_add = 400
 	}
 
 	triggered_planet_modifier = {
@@ -1425,7 +1026,7 @@ d_pe_firm_ccc_3 = {
 	}
 }
 
-d_pe_firm_cct = {
+d_pe_firm_tu = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -1442,9 +1043,9 @@ d_pe_firm_cct = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_artisan_add = 80
-		job_pe_private_trader_add = 40
+		planet_housing_add = 1000
+		job_pe_private_trader_add = 100
+		job_pe_private_entertainer_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -1468,7 +1069,7 @@ d_pe_firm_cct = {
 	}
 }
 
-d_pe_firm_cct_2 = {
+d_pe_firm_tu_2 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -1485,9 +1086,9 @@ d_pe_firm_cct_2 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_artisan_add = 120
-		job_pe_private_trader_add = 60
+		planet_housing_add = 1000
+		job_pe_private_trader_add = 150
+		job_pe_private_entertainer_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -1511,7 +1112,7 @@ d_pe_firm_cct_2 = {
 	}
 }
 
-d_pe_firm_cct_3 = {
+d_pe_firm_tu_3 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -1528,9 +1129,9 @@ d_pe_firm_cct_3 = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_artisan_add = 160
-		job_pe_private_trader_add = 80
+		planet_housing_add = 1000
+		job_pe_private_trader_add = 200
+		job_pe_private_entertainer_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -1554,910 +1155,7 @@ d_pe_firm_cct_3 = {
 	}
 }
 
-d_pe_firm_ccu = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 2
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_artisan_add = 80
-		job_pe_private_entertainer_add = 40
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ccu_2 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 3
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_artisan_add = 120
-		job_pe_private_entertainer_add = 60
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ccu_3 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 4
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_artisan_add = 160
-		job_pe_private_entertainer_add = 80
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ttc = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 2
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_artisan_add = 40
-		job_pe_private_trader_add = 80
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ttc_2 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 3
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_artisan_add = 60
-		job_pe_private_trader_add = 120
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ttc_3 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 4
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_artisan_add = 80
-		job_pe_private_trader_add = 160
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ctu = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 2
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_artisan_add = 40
-		job_pe_private_trader_add = 40
-		job_pe_private_entertainer_add = 40
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ctu_2 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 3
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_artisan_add = 60
-		job_pe_private_trader_add = 60
-		job_pe_private_entertainer_add = 60
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ctu_3 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 4
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_artisan_add = 80
-		job_pe_private_trader_add = 80
-		job_pe_private_entertainer_add = 80
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_uuc = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 2
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 1133
-		job_pe_private_artisan_add = 40
-		job_pe_private_entertainer_add = 80
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_uuc_2 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 3
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 1133
-		job_pe_private_artisan_add = 60
-		job_pe_private_entertainer_add = 120
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_uuc_3 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 4
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 1133
-		job_pe_private_artisan_add = 80
-		job_pe_private_entertainer_add = 160
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ttt = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 2
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_trader_add = 120
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ttt_2 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 3
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_trader_add = 180
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ttt_3 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 4
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_trader_add = 240
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ttu = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 2
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_trader_add = 80
-		job_pe_private_entertainer_add = 40
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ttu_2 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 3
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_trader_add = 120
-		job_pe_private_entertainer_add = 60
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_ttu_3 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 4
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 867
-		job_pe_private_trader_add = 160
-		job_pe_private_entertainer_add = 80
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_uut = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 2
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 1133
-		job_pe_private_trader_add = 40
-		job_pe_private_entertainer_add = 80
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_uut_2 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 3
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 1133
-		job_pe_private_trader_add = 60
-		job_pe_private_entertainer_add = 120
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_uut_3 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 4
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 1133
-		job_pe_private_trader_add = 80
-		job_pe_private_entertainer_add = 160
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_uuu = {
+d_pe_firm_uu = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -2475,7 +1173,7 @@ d_pe_firm_uuu = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 1400
-		job_pe_private_entertainer_add = 120
+		job_pe_private_entertainer_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -2499,7 +1197,7 @@ d_pe_firm_uuu = {
 	}
 }
 
-d_pe_firm_uuu_2 = {
+d_pe_firm_uu_2 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -2517,7 +1215,7 @@ d_pe_firm_uuu_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 1400
-		job_pe_private_entertainer_add = 180
+		job_pe_private_entertainer_add = 300
 	}
 
 	triggered_planet_modifier = {
@@ -2541,7 +1239,7 @@ d_pe_firm_uuu_2 = {
 	}
 }
 
-d_pe_firm_uuu_3 = {
+d_pe_firm_uu_3 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -2559,7 +1257,7 @@ d_pe_firm_uuu_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 1400
-		job_pe_private_entertainer_add = 240
+		job_pe_private_entertainer_add = 400
 	}
 
 	triggered_planet_modifier = {
@@ -2583,7 +1281,7 @@ d_pe_firm_uuu_3 = {
 	}
 }
 
-d_pe_firm_xxx = {
+d_pe_firm_xx = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -2601,7 +1299,7 @@ d_pe_firm_xxx = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_physicist_add = 120
+		job_pe_private_physicist_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -2625,133 +1323,7 @@ d_pe_firm_xxx = {
 	}
 }
 
-d_pe_firm_xxx_2 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 3
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_physicist_add = 180
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_xxx_3 = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 4
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_physicist_add = 240
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_yyy = {
-	icon = d_city
-	is_for_colonizable = yes
-	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
-	potential = { always = no }
-	drop_weight = { weight = 0 }
-
-	resources = {
-		category = planet_deposits
-		upkeep = {
-			energy = 2
-		}
-	}
-
-	planet_modifier = {
-		planet_max_districts_add = -1
-		planet_housing_add = 600
-		job_pe_private_biologist_add = 120
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
-		planet_housing_add = -200
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
-		planet_housing_add = 100
-	}
-
-	triggered_planet_modifier = {
-		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
-		planet_housing_add = 200
-	}
-}
-
-d_pe_firm_yyy_2 = {
+d_pe_firm_xx_2 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -2769,7 +1341,7 @@ d_pe_firm_yyy_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_biologist_add = 180
+		job_pe_private_physicist_add = 300
 	}
 
 	triggered_planet_modifier = {
@@ -2793,7 +1365,7 @@ d_pe_firm_yyy_2 = {
 	}
 }
 
-d_pe_firm_yyy_3 = {
+d_pe_firm_xx_3 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -2811,7 +1383,7 @@ d_pe_firm_yyy_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_biologist_add = 240
+		job_pe_private_physicist_add = 400
 	}
 
 	triggered_planet_modifier = {
@@ -2835,7 +1407,7 @@ d_pe_firm_yyy_3 = {
 	}
 }
 
-d_pe_firm_zzz = {
+d_pe_firm_xy = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -2853,7 +1425,8 @@ d_pe_firm_zzz = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_engineer_add = 120
+		job_pe_private_physicist_add = 100
+		job_pe_private_biologist_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -2877,7 +1450,7 @@ d_pe_firm_zzz = {
 	}
 }
 
-d_pe_firm_zzz_2 = {
+d_pe_firm_xy_2 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -2895,7 +1468,8 @@ d_pe_firm_zzz_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_engineer_add = 180
+		job_pe_private_physicist_add = 150
+		job_pe_private_biologist_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -2919,7 +1493,7 @@ d_pe_firm_zzz_2 = {
 	}
 }
 
-d_pe_firm_zzz_3 = {
+d_pe_firm_xy_3 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -2937,7 +1511,8 @@ d_pe_firm_zzz_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_engineer_add = 240
+		job_pe_private_physicist_add = 200
+		job_pe_private_biologist_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -2961,7 +1536,7 @@ d_pe_firm_zzz_3 = {
 	}
 }
 
-d_pe_firm_xyz = {
+d_pe_firm_xz = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -2979,9 +1554,8 @@ d_pe_firm_xyz = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_physicist_add = 40
-		job_pe_private_biologist_add = 40
-		job_pe_private_engineer_add = 40
+		job_pe_private_physicist_add = 100
+		job_pe_private_engineer_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -3005,7 +1579,7 @@ d_pe_firm_xyz = {
 	}
 }
 
-d_pe_firm_xyz_2 = {
+d_pe_firm_xz_2 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3023,9 +1597,8 @@ d_pe_firm_xyz_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_physicist_add = 60
-		job_pe_private_biologist_add = 60
-		job_pe_private_engineer_add = 60
+		job_pe_private_physicist_add = 150
+		job_pe_private_engineer_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -3049,7 +1622,7 @@ d_pe_firm_xyz_2 = {
 	}
 }
 
-d_pe_firm_xyz_3 = {
+d_pe_firm_xz_3 = {
 	icon = d_city
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3067,9 +1640,8 @@ d_pe_firm_xyz_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		planet_housing_add = 600
-		job_pe_private_physicist_add = 80
-		job_pe_private_biologist_add = 80
-		job_pe_private_engineer_add = 80
+		job_pe_private_physicist_add = 200
+		job_pe_private_engineer_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -3093,7 +1665,388 @@ d_pe_firm_xyz_3 = {
 	}
 }
 
-d_pe_firm_mmm = {
+d_pe_firm_yy = {
+	icon = d_city
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = planet_deposits
+		upkeep = {
+			energy = 2
+		}
+	}
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		planet_housing_add = 600
+		job_pe_private_biologist_add = 200
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
+		planet_housing_add = -200
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
+		planet_housing_add = 200
+	}
+}
+
+d_pe_firm_yy_2 = {
+	icon = d_city
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = planet_deposits
+		upkeep = {
+			energy = 3
+		}
+	}
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		planet_housing_add = 600
+		job_pe_private_biologist_add = 300
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
+		planet_housing_add = -200
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
+		planet_housing_add = 200
+	}
+}
+
+d_pe_firm_yy_3 = {
+	icon = d_city
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = planet_deposits
+		upkeep = {
+			energy = 4
+		}
+	}
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		planet_housing_add = 600
+		job_pe_private_biologist_add = 400
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
+		planet_housing_add = -200
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
+		planet_housing_add = 200
+	}
+}
+
+d_pe_firm_yz = {
+	icon = d_city
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = planet_deposits
+		upkeep = {
+			energy = 2
+		}
+	}
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		planet_housing_add = 600
+		job_pe_private_biologist_add = 100
+		job_pe_private_engineer_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
+		planet_housing_add = -200
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
+		planet_housing_add = 200
+	}
+}
+
+d_pe_firm_yz_2 = {
+	icon = d_city
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = planet_deposits
+		upkeep = {
+			energy = 3
+		}
+	}
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		planet_housing_add = 600
+		job_pe_private_biologist_add = 150
+		job_pe_private_engineer_add = 150
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
+		planet_housing_add = -200
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
+		planet_housing_add = 200
+	}
+}
+
+d_pe_firm_yz_3 = {
+	icon = d_city
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = planet_deposits
+		upkeep = {
+			energy = 4
+		}
+	}
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		planet_housing_add = 600
+		job_pe_private_biologist_add = 200
+		job_pe_private_engineer_add = 200
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
+		planet_housing_add = -200
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
+		planet_housing_add = 200
+	}
+}
+
+d_pe_firm_zz = {
+	icon = d_city
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = planet_deposits
+		upkeep = {
+			energy = 2
+		}
+	}
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		planet_housing_add = 600
+		job_pe_private_engineer_add = 200
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
+		planet_housing_add = -200
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
+		planet_housing_add = 200
+	}
+}
+
+d_pe_firm_zz_2 = {
+	icon = d_city
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = planet_deposits
+		upkeep = {
+			energy = 3
+		}
+	}
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		planet_housing_add = 600
+		job_pe_private_engineer_add = 300
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
+		planet_housing_add = -200
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
+		planet_housing_add = 200
+	}
+}
+
+d_pe_firm_zz_3 = {
+	icon = d_city
+	is_for_colonizable = yes
+	category = pe_deposit_cat_firms
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = planet_deposits
+		upkeep = {
+			energy = 4
+		}
+	}
+
+	planet_modifier = {
+		planet_max_districts_add = -1
+		planet_housing_add = 600
+		job_pe_private_engineer_add = 400
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_valid_civic = civic_agrarian_idyll } }
+		planet_housing_add = -200
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_active_tradition = tr_prosperity_public_works } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_1 } }
+		planet_housing_add = 100
+	}
+
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { has_technology = tech_housing_2 NOT = { has_valid_civic = civic_agrarian_idyll } } }
+		planet_housing_add = 200
+	}
+}
+
+d_pe_firm_mm = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3112,11 +2065,11 @@ d_pe_firm_mmm = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 240
+		job_pe_private_miner_add = 200
 	}
 }
 
-d_pe_firm_mmm_2 = {
+d_pe_firm_mm_2 = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3135,11 +2088,11 @@ d_pe_firm_mmm_2 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 360
+		job_pe_private_miner_add = 300
 	}
 }
 
-d_pe_firm_mmm_3 = {
+d_pe_firm_mm_3 = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3158,11 +2111,11 @@ d_pe_firm_mmm_3 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 480
+		job_pe_private_miner_add = 400
 	}
 }
 
-d_pe_firm_mma = {
+d_pe_firm_ma = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3181,12 +2134,12 @@ d_pe_firm_mma = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 160
-		job_pe_private_metallurgist_add = 40
+		job_pe_private_miner_add = 100
+		job_pe_private_metallurgist_add = 100
 	}
 }
 
-d_pe_firm_mma_2 = {
+d_pe_firm_ma_2 = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3205,12 +2158,12 @@ d_pe_firm_mma_2 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 240
-		job_pe_private_metallurgist_add = 60
+		job_pe_private_miner_add = 150
+		job_pe_private_metallurgist_add = 150
 	}
 }
 
-d_pe_firm_mma_3 = {
+d_pe_firm_ma_3 = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3229,12 +2182,12 @@ d_pe_firm_mma_3 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 320
-		job_pe_private_metallurgist_add = 80
+		job_pe_private_miner_add = 200
+		job_pe_private_metallurgist_add = 200
 	}
 }
 
-d_pe_firm_mmc = {
+d_pe_firm_mc = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3253,12 +2206,12 @@ d_pe_firm_mmc = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 160
-		job_pe_private_artisan_add = 40
+		job_pe_private_miner_add = 100
+		job_pe_private_artisan_add = 100
 	}
 }
 
-d_pe_firm_mmc_2 = {
+d_pe_firm_mc_2 = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3277,12 +2230,12 @@ d_pe_firm_mmc_2 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 240
-		job_pe_private_artisan_add = 60
+		job_pe_private_miner_add = 150
+		job_pe_private_artisan_add = 150
 	}
 }
 
-d_pe_firm_mmc_3 = {
+d_pe_firm_mc_3 = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3301,12 +2254,12 @@ d_pe_firm_mmc_3 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 320
-		job_pe_private_artisan_add = 80
+		job_pe_private_miner_add = 200
+		job_pe_private_artisan_add = 200
 	}
 }
 
-d_pe_firm_mmt = {
+d_pe_firm_mt = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3325,12 +2278,12 @@ d_pe_firm_mmt = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 160
-		job_pe_private_trader_add = 40
+		job_pe_private_miner_add = 100
+		job_pe_private_trader_add = 100
 	}
 }
 
-d_pe_firm_mmt_2 = {
+d_pe_firm_mt_2 = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3349,12 +2302,12 @@ d_pe_firm_mmt_2 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 240
-		job_pe_private_trader_add = 60
+		job_pe_private_miner_add = 150
+		job_pe_private_trader_add = 150
 	}
 }
 
-d_pe_firm_mmt_3 = {
+d_pe_firm_mt_3 = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3373,12 +2326,12 @@ d_pe_firm_mmt_3 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 320
-		job_pe_private_trader_add = 80
+		job_pe_private_miner_add = 200
+		job_pe_private_trader_add = 200
 	}
 }
 
-d_pe_firm_mme = {
+d_pe_firm_me = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3397,12 +2350,12 @@ d_pe_firm_mme = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 160
-		job_pe_private_technician_add = 80
+		job_pe_private_miner_add = 100
+		job_pe_private_technician_add = 100
 	}
 }
 
-d_pe_firm_mme_2 = {
+d_pe_firm_me_2 = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3421,12 +2374,12 @@ d_pe_firm_mme_2 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 240
-		job_pe_private_technician_add = 120
+		job_pe_private_miner_add = 150
+		job_pe_private_technician_add = 150
 	}
 }
 
-d_pe_firm_mme_3 = {
+d_pe_firm_me_3 = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3445,12 +2398,12 @@ d_pe_firm_mme_3 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 320
-		job_pe_private_technician_add = 160
+		job_pe_private_miner_add = 200
+		job_pe_private_technician_add = 200
 	}
 }
 
-d_pe_firm_mmf = {
+d_pe_firm_mf = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3469,12 +2422,12 @@ d_pe_firm_mmf = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 160
-		job_pe_private_farmer_add = 80
+		job_pe_private_miner_add = 100
+		job_pe_private_farmer_add = 100
 	}
 }
 
-d_pe_firm_mmf_2 = {
+d_pe_firm_mf_2 = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3493,12 +2446,12 @@ d_pe_firm_mmf_2 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 240
-		job_pe_private_farmer_add = 120
+		job_pe_private_miner_add = 150
+		job_pe_private_farmer_add = 150
 	}
 }
 
-d_pe_firm_mmf_3 = {
+d_pe_firm_mf_3 = {
 	icon = d_mineral_fields
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3517,12 +2470,12 @@ d_pe_firm_mmf_3 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_mining_max_add = -1
-		job_pe_private_miner_add = 320
-		job_pe_private_farmer_add = 160
+		job_pe_private_miner_add = 200
+		job_pe_private_farmer_add = 200
 	}
 }
 
-d_pe_firm_eee = {
+d_pe_firm_ee = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3541,7 +2494,7 @@ d_pe_firm_eee = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 240
+		job_pe_private_technician_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -3555,7 +2508,7 @@ d_pe_firm_eee = {
 	}
 }
 
-d_pe_firm_eee_2 = {
+d_pe_firm_ee_2 = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3574,7 +2527,7 @@ d_pe_firm_eee_2 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 360
+		job_pe_private_technician_add = 300
 	}
 
 	triggered_planet_modifier = {
@@ -3588,7 +2541,7 @@ d_pe_firm_eee_2 = {
 	}
 }
 
-d_pe_firm_eee_3 = {
+d_pe_firm_ee_3 = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3607,7 +2560,7 @@ d_pe_firm_eee_3 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 480
+		job_pe_private_technician_add = 400
 	}
 
 	triggered_planet_modifier = {
@@ -3621,7 +2574,7 @@ d_pe_firm_eee_3 = {
 	}
 }
 
-d_pe_firm_eea = {
+d_pe_firm_ea = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3640,8 +2593,8 @@ d_pe_firm_eea = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 160
-		job_pe_private_metallurgist_add = 40
+		job_pe_private_technician_add = 100
+		job_pe_private_metallurgist_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -3655,7 +2608,7 @@ d_pe_firm_eea = {
 	}
 }
 
-d_pe_firm_eea_2 = {
+d_pe_firm_ea_2 = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3674,8 +2627,8 @@ d_pe_firm_eea_2 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 240
-		job_pe_private_metallurgist_add = 60
+		job_pe_private_technician_add = 150
+		job_pe_private_metallurgist_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -3689,7 +2642,7 @@ d_pe_firm_eea_2 = {
 	}
 }
 
-d_pe_firm_eea_3 = {
+d_pe_firm_ea_3 = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3708,8 +2661,8 @@ d_pe_firm_eea_3 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 320
-		job_pe_private_metallurgist_add = 80
+		job_pe_private_technician_add = 200
+		job_pe_private_metallurgist_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -3723,7 +2676,7 @@ d_pe_firm_eea_3 = {
 	}
 }
 
-d_pe_firm_eec = {
+d_pe_firm_ec = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3742,8 +2695,8 @@ d_pe_firm_eec = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 160
-		job_pe_private_artisan_add = 40
+		job_pe_private_technician_add = 100
+		job_pe_private_artisan_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -3757,7 +2710,7 @@ d_pe_firm_eec = {
 	}
 }
 
-d_pe_firm_eec_2 = {
+d_pe_firm_ec_2 = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3776,8 +2729,8 @@ d_pe_firm_eec_2 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 240
-		job_pe_private_artisan_add = 60
+		job_pe_private_technician_add = 150
+		job_pe_private_artisan_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -3791,7 +2744,7 @@ d_pe_firm_eec_2 = {
 	}
 }
 
-d_pe_firm_eec_3 = {
+d_pe_firm_ec_3 = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3810,8 +2763,8 @@ d_pe_firm_eec_3 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 320
-		job_pe_private_artisan_add = 80
+		job_pe_private_technician_add = 200
+		job_pe_private_artisan_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -3825,7 +2778,7 @@ d_pe_firm_eec_3 = {
 	}
 }
 
-d_pe_firm_eet = {
+d_pe_firm_et = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3844,8 +2797,8 @@ d_pe_firm_eet = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 160
-		job_pe_private_trader_add = 40
+		job_pe_private_technician_add = 100
+		job_pe_private_trader_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -3859,7 +2812,7 @@ d_pe_firm_eet = {
 	}
 }
 
-d_pe_firm_eet_2 = {
+d_pe_firm_et_2 = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3878,8 +2831,8 @@ d_pe_firm_eet_2 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 240
-		job_pe_private_trader_add = 60
+		job_pe_private_technician_add = 150
+		job_pe_private_trader_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -3893,7 +2846,7 @@ d_pe_firm_eet_2 = {
 	}
 }
 
-d_pe_firm_eet_3 = {
+d_pe_firm_et_3 = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3912,8 +2865,8 @@ d_pe_firm_eet_3 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 320
-		job_pe_private_trader_add = 80
+		job_pe_private_technician_add = 200
+		job_pe_private_trader_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -3927,7 +2880,7 @@ d_pe_firm_eet_3 = {
 	}
 }
 
-d_pe_firm_eem = {
+d_pe_firm_em = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3946,8 +2899,8 @@ d_pe_firm_eem = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 160
-		job_pe_private_miner_add = 80
+		job_pe_private_technician_add = 100
+		job_pe_private_miner_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -3961,7 +2914,7 @@ d_pe_firm_eem = {
 	}
 }
 
-d_pe_firm_eem_2 = {
+d_pe_firm_em_2 = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -3980,8 +2933,8 @@ d_pe_firm_eem_2 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 240
-		job_pe_private_miner_add = 120
+		job_pe_private_technician_add = 150
+		job_pe_private_miner_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -3995,7 +2948,7 @@ d_pe_firm_eem_2 = {
 	}
 }
 
-d_pe_firm_eem_3 = {
+d_pe_firm_em_3 = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4014,8 +2967,8 @@ d_pe_firm_eem_3 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 320
-		job_pe_private_miner_add = 160
+		job_pe_private_technician_add = 200
+		job_pe_private_miner_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -4029,7 +2982,7 @@ d_pe_firm_eem_3 = {
 	}
 }
 
-d_pe_firm_eef = {
+d_pe_firm_ef = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4048,8 +3001,8 @@ d_pe_firm_eef = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 160
-		job_pe_private_farmer_add = 80
+		job_pe_private_technician_add = 100
+		job_pe_private_farmer_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -4063,7 +3016,7 @@ d_pe_firm_eef = {
 	}
 }
 
-d_pe_firm_eef_2 = {
+d_pe_firm_ef_2 = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4082,8 +3035,8 @@ d_pe_firm_eef_2 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 240
-		job_pe_private_farmer_add = 120
+		job_pe_private_technician_add = 150
+		job_pe_private_farmer_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -4097,7 +3050,7 @@ d_pe_firm_eef_2 = {
 	}
 }
 
-d_pe_firm_eef_3 = {
+d_pe_firm_ef_3 = {
 	icon = d_geothermal_vent
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4116,8 +3069,8 @@ d_pe_firm_eef_3 = {
 		planet_max_districts_add = -1
 		planet_housing_add = 200
 		district_generator_max_add = -1
-		job_pe_private_technician_add = 320
-		job_pe_private_farmer_add = 160
+		job_pe_private_technician_add = 200
+		job_pe_private_farmer_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -4131,7 +3084,7 @@ d_pe_firm_eef_3 = {
 	}
 }
 
-d_pe_firm_fff = {
+d_pe_firm_ff = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4149,7 +3102,7 @@ d_pe_firm_fff = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 240
+		job_pe_private_farmer_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -4173,7 +3126,7 @@ d_pe_firm_fff = {
 	}
 }
 
-d_pe_firm_fff_2 = {
+d_pe_firm_ff_2 = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4191,7 +3144,7 @@ d_pe_firm_fff_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 360
+		job_pe_private_farmer_add = 300
 	}
 
 	triggered_planet_modifier = {
@@ -4215,7 +3168,7 @@ d_pe_firm_fff_2 = {
 	}
 }
 
-d_pe_firm_fff_3 = {
+d_pe_firm_ff_3 = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4233,7 +3186,7 @@ d_pe_firm_fff_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 480
+		job_pe_private_farmer_add = 400
 	}
 
 	triggered_planet_modifier = {
@@ -4257,7 +3210,7 @@ d_pe_firm_fff_3 = {
 	}
 }
 
-d_pe_firm_ffa = {
+d_pe_firm_fa = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4275,8 +3228,8 @@ d_pe_firm_ffa = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 160
-		job_pe_private_metallurgist_add = 40
+		job_pe_private_farmer_add = 100
+		job_pe_private_metallurgist_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -4300,7 +3253,7 @@ d_pe_firm_ffa = {
 	}
 }
 
-d_pe_firm_ffa_2 = {
+d_pe_firm_fa_2 = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4318,8 +3271,8 @@ d_pe_firm_ffa_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 240
-		job_pe_private_metallurgist_add = 60
+		job_pe_private_farmer_add = 150
+		job_pe_private_metallurgist_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -4343,7 +3296,7 @@ d_pe_firm_ffa_2 = {
 	}
 }
 
-d_pe_firm_ffa_3 = {
+d_pe_firm_fa_3 = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4361,8 +3314,8 @@ d_pe_firm_ffa_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 320
-		job_pe_private_metallurgist_add = 80
+		job_pe_private_farmer_add = 200
+		job_pe_private_metallurgist_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -4386,7 +3339,7 @@ d_pe_firm_ffa_3 = {
 	}
 }
 
-d_pe_firm_ffc = {
+d_pe_firm_fc = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4404,8 +3357,8 @@ d_pe_firm_ffc = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 160
-		job_pe_private_artisan_add = 40
+		job_pe_private_farmer_add = 100
+		job_pe_private_artisan_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -4429,7 +3382,7 @@ d_pe_firm_ffc = {
 	}
 }
 
-d_pe_firm_ffc_2 = {
+d_pe_firm_fc_2 = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4447,8 +3400,8 @@ d_pe_firm_ffc_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 240
-		job_pe_private_artisan_add = 60
+		job_pe_private_farmer_add = 150
+		job_pe_private_artisan_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -4472,7 +3425,7 @@ d_pe_firm_ffc_2 = {
 	}
 }
 
-d_pe_firm_ffc_3 = {
+d_pe_firm_fc_3 = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4490,8 +3443,8 @@ d_pe_firm_ffc_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 320
-		job_pe_private_artisan_add = 80
+		job_pe_private_farmer_add = 200
+		job_pe_private_artisan_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -4515,7 +3468,7 @@ d_pe_firm_ffc_3 = {
 	}
 }
 
-d_pe_firm_fft = {
+d_pe_firm_ft = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4533,8 +3486,8 @@ d_pe_firm_fft = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 160
-		job_pe_private_trader_add = 40
+		job_pe_private_farmer_add = 100
+		job_pe_private_trader_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -4558,7 +3511,7 @@ d_pe_firm_fft = {
 	}
 }
 
-d_pe_firm_fft_2 = {
+d_pe_firm_ft_2 = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4576,8 +3529,8 @@ d_pe_firm_fft_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 240
-		job_pe_private_trader_add = 60
+		job_pe_private_farmer_add = 150
+		job_pe_private_trader_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -4601,7 +3554,7 @@ d_pe_firm_fft_2 = {
 	}
 }
 
-d_pe_firm_fft_3 = {
+d_pe_firm_ft_3 = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4619,8 +3572,8 @@ d_pe_firm_fft_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 320
-		job_pe_private_trader_add = 80
+		job_pe_private_farmer_add = 200
+		job_pe_private_trader_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -4644,7 +3597,7 @@ d_pe_firm_fft_3 = {
 	}
 }
 
-d_pe_firm_ffm = {
+d_pe_firm_fm = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4662,8 +3615,8 @@ d_pe_firm_ffm = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 160
-		job_pe_private_miner_add = 80
+		job_pe_private_farmer_add = 100
+		job_pe_private_miner_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -4687,7 +3640,7 @@ d_pe_firm_ffm = {
 	}
 }
 
-d_pe_firm_ffm_2 = {
+d_pe_firm_fm_2 = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4705,8 +3658,8 @@ d_pe_firm_ffm_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 240
-		job_pe_private_miner_add = 120
+		job_pe_private_farmer_add = 150
+		job_pe_private_miner_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -4730,7 +3683,7 @@ d_pe_firm_ffm_2 = {
 	}
 }
 
-d_pe_firm_ffm_3 = {
+d_pe_firm_fm_3 = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4748,8 +3701,8 @@ d_pe_firm_ffm_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 320
-		job_pe_private_miner_add = 160
+		job_pe_private_farmer_add = 200
+		job_pe_private_miner_add = 200
 	}
 
 	triggered_planet_modifier = {
@@ -4773,7 +3726,7 @@ d_pe_firm_ffm_3 = {
 	}
 }
 
-d_pe_firm_ffe = {
+d_pe_firm_fe = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4791,8 +3744,8 @@ d_pe_firm_ffe = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 160
-		job_pe_private_technician_add = 80
+		job_pe_private_farmer_add = 100
+		job_pe_private_technician_add = 100
 	}
 
 	triggered_planet_modifier = {
@@ -4816,7 +3769,7 @@ d_pe_firm_ffe = {
 	}
 }
 
-d_pe_firm_ffe_2 = {
+d_pe_firm_fe_2 = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4834,8 +3787,8 @@ d_pe_firm_ffe_2 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 240
-		job_pe_private_technician_add = 120
+		job_pe_private_farmer_add = 150
+		job_pe_private_technician_add = 150
 	}
 
 	triggered_planet_modifier = {
@@ -4859,7 +3812,7 @@ d_pe_firm_ffe_2 = {
 	}
 }
 
-d_pe_firm_ffe_3 = {
+d_pe_firm_fe_3 = {
 	icon = d_fertile_lands
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
@@ -4877,8 +3830,8 @@ d_pe_firm_ffe_3 = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 		district_farming_max_add = -1
-		job_pe_private_farmer_add = 320
-		job_pe_private_technician_add = 160
+		job_pe_private_farmer_add = 200
+		job_pe_private_technician_add = 200
 	}
 
 	triggered_planet_modifier = {

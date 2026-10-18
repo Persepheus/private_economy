@@ -4,19 +4,18 @@ Stellaris 4.5: Eine Richtlinie **Wirtschaftsordnung** legt fest, wie viel der Wi
 
 Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools/validate.mjs` prüft das).
 
-## Stand 0.4.0
+## Stand 0.5.0
 
 Die Privatwirtschaft ist ein Kreislauf:
 
-- **Schattenpreise** aus Markt und Bedarf, mit Zielüberschüssen je Gut.
-- **Wertschöpfung pro Job:** gemessen an den echten Einnahmen.
-- **Gewinnanteil:** nach Wirtschaftsordnung.
-- **Kapital:** Firmenkapital und Investorenpool finanzieren Wachstum, Gründung, Aufkauf und Umbau.
-- **Bauzeit:** Firmen entstehen als Baustelle mit Vanilla-Bauzeit, eine pro Planet. Gegründet wird nur, wo freie Zivilisten sind. Firmen bieten Housing.
-- **Sektoren:** Industrie, Handel, Unterhaltung (Annehmlichkeiten nach Bedarf des Planeten), Labore (Forschung) und Landwirtschaft und Rohstoffe. Das sind 42 Varianten in 3 Stufen.
-- **Abwechslung:** Diversifikation, Zufall, Planetenspezialisierung und Optionswert der letzten Plätze.
+- **Schattenpreise** aus Markt und Bedarf. Investitionsgüter sättigen über das Lager, ein Defizit bringt einen starken Aufschlag.
+- **Wertschöpfung, Gewinnanteil und Kapital:** Firmenkapital und Investorenpool finanzieren Wachstum, Gründung, Aufkauf und Umbau.
+- **Firmen wie Distrikte:** 2 Anteile à 100 Arbeitskraft, wie ein Stadtdistrikt mit zwei Spezialisierungen. Housing pro Anteil wie eine Zone.
+- **Aufbau:** Baustellen mit Vanilla-Bauzeit, eine pro Planet. Gründung nur bei freien Zivilisten (nach Neuverteilung der Jobs).
+- **Aufkauf** nur, wenn die Firma mehr bringt als der ersetzte Distrikt.
+- **Sektoren:** Industrie, Handel, Unterhaltung, Labore, Rohstoffe. 34 Varianten in 3 Stufen.
 
-Testablauf: [docs/TESTS_0.4.md](docs/TESTS_0.4.md). Ältere Stände: [0.3](docs/TESTS_0.3.md), [0.2](docs/TESTS_0.2.md), [0.1](docs/TESTS_0.1.md), [Prototyp](docs/PROTOTYPE_TESTS.md).
+Testablauf: [docs/TESTS_0.5.md](docs/TESTS_0.5.md). Ältere Stände: [0.4](docs/TESTS_0.4.md), [0.3](docs/TESTS_0.3.md), [0.2](docs/TESTS_0.2.md), [0.1](docs/TESTS_0.1.md), [Prototyp](docs/PROTOTYPE_TESTS.md).
 
 ## Geplant
 

@@ -6,14 +6,14 @@
 // such as Catalytic Processing), but in an own economic category whose parent is the
 // vanilla one, so all technology and other bonuses still apply.
 //
-// Firms have 3 shares.
-//  - Urban firms (one city district slot): any mix of alloys, consumer goods, trade and
-//    entertainment, 40 workforce per share.
-//  - Labs (one city district slot): physics, society or engineering, or an institute
-//    with all three; 40 workforce per share. Labs only restructure into labs.
-//  - Rural firms (one slot plus one district of their primary type): 2 shares of the
-//    primary resource and one free share (alloys, consumer goods, trade or another
-//    rural resource); 80 workforce per rural share, 40 per urban share.
+// Firms have 2 shares of 100 workforce, like a city district with its two zones (one
+// zone gives 100 jobs per district) or a rural district (200 jobs).
+//  - Urban firms (one city district slot): alloys, consumer goods, trade, entertainment.
+//  - Labs (one city district slot): physics, society, engineering. City firms and labs
+//    can restructure into each other.
+//  - Rural firms (one slot plus one district of their primary type): the primary
+//    resource plus a second share of it or of alloys, consumer goods, trade or another
+//    rural resource.
 // Each variant exists in 3 stages (small / mid-size / corporation): workforce and upkeep
 // x1 / x1.5 / x2 on the same slot. Housing like the district the firm replaces.
 import fs from 'node:fs';
@@ -31,7 +31,7 @@ const blockAt = (text, open) => { let d = 0; for (let j = open; j < text.length;
 const topDef = (texts, key) => { for (const t of texts) { const i = t.search(new RegExp(`^${key} = \\{`, 'm')); if (i >= 0) return blockAt(t, t.indexOf('{', i)); } throw new Error(`no ${key}`); };
 
 // --- Balance --------------------------------------------------------------------
-const WEIGHTS = [1, 0.75, 0.5];                        // value of repeated shares
+const WEIGHTS = [1, 0.75];                             // value of a repeated share
 const FOUND = {u: 200, r: 120};                        // founding cost (private capital)
 const PRICE = {u: [500, 100], r: [300, 60]};           // buyout/nationalisation: minerals, trade (x stage)
 const UPKEEP = {u: 2, r: 1};                           // energy at stage 1, like the district
@@ -169,12 +169,12 @@ const housingOf = district => {
   return {base: out, blocks};
 };
 // City districts also get the planet's two zones: an urban zone adds housing, every other
-// zone removes it. A city firm counts as two zones: its entertainment shares as urban,
-// all other shares (industry, trade, labs) as specialised zones.
+// zone removes it. Each share of a city firm counts as one zone: entertainment as urban,
+// all others (industry, trade, labs) as specialised zones.
 const zoneVars = fs.readFileSync(path.join(game, 'common/scripted_variables/100_scripted_variables_zones.txt'), 'utf8');
 const zoneVar = n => Number(zoneVars.match(new RegExp(`^@${n} = (-?\\d+)`, 'm'))[1]);
 const ZONE_POS = zoneVar('zone_urban_housing_positive'), ZONE_NEG = zoneVar('zone_urban_housing_negative');
-const zoneHousing = v => Math.round(2 * ((v.counts.u || 0) / 3 * ZONE_POS + (1 - (v.counts.u || 0) / 3) * ZONE_NEG));
+const zoneHousing = v => (v.counts.u || 0) * ZONE_POS + (2 - (v.counts.u || 0)) * ZONE_NEG;
 const HOUSING = {u: housingOf('district_city'), m: housingOf('district_mining'), e: housingOf('district_generator'), f: housingOf('district_farming')};
 
 // --- Variants -------------------------------------------------------------------
@@ -183,9 +183,9 @@ const P = {
   c: {job: 'pe_private_artisan', urban: true, enArt: 'Private Factory', deArt: 'Private Fabrik', enDiv: 'Goods', deDiv: 'Konsumgüter'},
   t: {job: 'pe_private_trader', urban: true, enArt: 'Private Trading House', deArt: 'Privates Handelshaus', enDiv: 'Trade', deDiv: 'Handels'},
   u: {job: 'pe_private_entertainer', urban: true, enArt: 'Private Entertainment Company', deArt: 'Privates Unterhaltungsunternehmen', enDiv: 'Entertainment', deDiv: 'Unterhaltungs'},
-  x: {job: 'pe_private_physicist', urban: true, lab: true, enArt: 'Private Physics Lab', deArt: 'Privates Physiklabor'},
-  y: {job: 'pe_private_biologist', urban: true, lab: true, enArt: 'Private Biology Lab', deArt: 'Privates Biologielabor'},
-  z: {job: 'pe_private_engineer', urban: true, lab: true, enArt: 'Private Engineering Lab', deArt: 'Privates Ingenieurslabor'},
+  x: {job: 'pe_private_physicist', urban: true, lab: true, enArt: 'Private Physics Lab', deArt: 'Privates Physiklabor', enDiv: 'Physics', deDiv: 'Physik'},
+  y: {job: 'pe_private_biologist', urban: true, lab: true, enArt: 'Private Biology Lab', deArt: 'Privates Biologielabor', enDiv: 'Biology', deDiv: 'Biologie'},
+  z: {job: 'pe_private_engineer', urban: true, lab: true, enArt: 'Private Engineering Lab', deArt: 'Privates Ingenieurslabor', enDiv: 'Engineering', deDiv: 'Ingenieurs'},
   m: {job: 'pe_private_miner', district: 'district_mining', site: 'd_pe_site_mining', icon: 'd_mineral_fields', enArt: 'Private Mine', deArt: 'Private Mine', enDiv: 'Mining', deDiv: 'Bergbau', enDist: 'mining', deDist: 'Bergbau'},
   e: {job: 'pe_private_technician', district: 'district_generator', site: 'd_pe_site_generator', icon: 'd_geothermal_vent', enArt: 'Private Power Plant', deArt: 'Privates Kraftwerk', enDiv: 'Energy', deDiv: 'Energie', enDist: 'generator', deDist: 'Generator'},
   f: {job: 'pe_private_farmer', district: 'district_farming', site: 'd_pe_site_farming', icon: 'd_fertile_lands', enArt: 'Private Farm', deArt: 'Privater Agrarbetrieb', enDiv: 'Agricultural', deDiv: 'Agrar', enDist: 'farming', deDist: 'Landwirtschafts'},
@@ -198,22 +198,22 @@ const addVariant = (s, cls) => {
   const primary = ['u', 'l'].includes(cls) ? Object.keys(counts).sort((x, y) => counts[y] - counts[x])[0] : cls;
   variants.push({shares: s, counts, primary, cls});
 };
-for (let i = 0; i < 4; i++) for (let j = i; j < 4; j++) for (let k = j; k < 4; k++) addVariant([urban[i], urban[j], urban[k]], 'u');
-for (const x of labs) addVariant([x, x, x], 'l');
-addVariant(['x', 'y', 'z'], 'l');
-for (const r of rural) for (const x of [r, 'a', 'c', 't', ...rural.filter(y => y !== r)]) addVariant([r, r, x], r);
+for (let i = 0; i < 4; i++) for (let j = i; j < 4; j++) addVariant([urban[i], urban[j]], 'u');
+for (let i = 0; i < 3; i++) for (let j = i; j < 3; j++) addVariant([labs[i], labs[j]], 'l');
+for (const r of rural) for (const x of [r, 'a', 'c', 't', ...rural.filter(y => y !== r)]) addVariant([r, x], r);
 variants.forEach((v, i) => {
   v.code = i + 1;
   const side = Object.keys(v.counts).filter(x => x !== v.primary);
-  v.side = side.length === 1 && v.counts[v.primary] === 2 ? side[0] : null;
-  v.mixedAll = Object.keys(v.counts).length === 3;
+  v.side = side.length === 1 ? side[0] : null;
+  v.mixedAll = false;
   v.key = 'd_pe_firm_' + (v.mixedAll ? v.shares.join('') : v.primary.repeat(v.counts[v.primary]) + (v.side || ''));
   v.cityLike = v.cls === 'u' || v.cls === 'l';
   v.k = v.cityLike ? 'u' : 'r';
   v.clsNum = CLS_NUM[v.cls];
+  v.dcls = v.cityLike ? 'u' : v.cls;
   v.district = v.cityLike ? 'district_city' : P[v.cls].district;
   v.site = v.cityLike ? 'd_pe_site_city' : P[v.cls].site;
-  v.unitWf = x => (v.cityLike || P[x].urban ? 40 : 80);
+  v.unitWf = () => 100;
   v.workforce = {};
   for (const [x, n] of Object.entries(v.counts)) v.workforce[P[x].job] = n * v.unitWf(x);
   // Weighted entertainment units (planet-specific value) for choosing, raw units for profit.
@@ -302,6 +302,23 @@ const addRes = (res, job) => Object.entries(res).filter(([r, n]) => n && RES.inc
 // Expected market output of a variant at stage 1 (vanilla base, no catalytic).
 const variantOutput = v => { const o = {}; for (const [job, wf] of Object.entries(v.workforce)) for (const [r, n] of Object.entries(sumRes(jobByKey[job].base, jobByKey[job].noncat))) if (MARKET_RES.includes(r)) o[r] = (o[r] || 0) + n * wf / 100; return o; };
 const LETTERS = Object.keys(P);
+// City zones and the private job value that stands for their jobs (one job per zone).
+const RESEARCH3 = [['pe_private_physicist', 1 / 3], ['pe_private_biologist', 1 / 3], ['pe_private_engineer', 1 / 3]];
+const ZONES = [
+  ['zone_foundry', [['pe_private_metallurgist', 1]]],
+  ['zone_factory', [['pe_private_artisan', 1]]],
+  ['zone_industrial', [['pe_private_metallurgist', 0.5], ['pe_private_artisan', 0.5]]],
+  ['zone_trade', [['pe_private_trader', 1]]],
+  ['zone_research', RESEARCH3],
+  ['zone_research_physics', [['pe_private_physicist', 1]]],
+  ['zone_research_society', [['pe_private_biologist', 1]]],
+  ['zone_research_engineering', [['pe_private_engineer', 1]]],
+  ['zone_research_unity', RESEARCH3],
+  ['zone_unity', RESEARCH3],
+  ['zone_unity_spiritualist', RESEARCH3],
+  ['zone_unity_bio_trophy', RESEARCH3],
+  ['zone_resort_entertainment', [['pe_private_entertainer', 1]]],
+];
 
 // Designation -> favoured shares (matched on the designation key).
 const designations = [...new Set(readDir('common/colony_types').flatMap(t => [...t.matchAll(/^(col_\w+) = \{/gm)].map(m => m[1])))];
@@ -361,12 +378,12 @@ ${[...j.touches].map(r => `	pe_job_res = { CAT = ${j.key}s RES = ${r} }`).join('
 # Country scope. pe_va_<firm>: value added of the variant at stage 1, fully staffed
 # (entertainment is added per planet). pe_val_<firm>: the same with diminishing value for
 # repeated shares (${WEIGHTS.join(' / ')}) and -${DIVERSIFY * 100}% per existing firm with the same main
-# product (at least half), used to choose. Also the best variant of each city class.
+# product (at least half), used to choose. Also the best city variant (urban firms and
+# labs restructure into each other) and pe_dval_<rural> = value of a rural state district.
 pe_compute_values = {
-	set_variable = { which = pe_cls_val_u value = -100000 }
-	set_variable = { which = pe_cls_var_u value = 0 }
-	set_variable = { which = pe_cls_val_l value = -100000 }
-	set_variable = { which = pe_cls_var_l value = 0 }
+	set_variable = { which = pe_cls_val_city value = -100000 }
+	set_variable = { which = pe_cls_var_city value = 0 }
+${rural.map(r => `\tset_variable = { which = pe_dval_${r} value = pe_vaj_${P[r].job} }\n\tmultiply_variable = { which = pe_dval_${r} value = 2 }`).join('\n')}
 `;
 for (const v of variants) {
   eff += `\tset_variable = { which = pe_va_${v.key} value = 0 }\n\tset_variable = { which = pe_val_${v.key} value = 0 }\n`;
@@ -377,18 +394,22 @@ for (const v of variants) {
     eff += `\tset_variable = { which = pe_tmp value = pe_vaj_${job} }\n\tmultiply_variable = { which = pe_tmp value = ${+(units * w).toFixed(4)} }\n\tchange_variable = { which = pe_val_${v.key} value = pe_tmp }\n`;
   }
   eff += `\tset_variable = { which = pe_tmp value = pe_cnt_${v.primary} }\n\tmultiply_variable = { which = pe_tmp value = -${DIVERSIFY} }\n\tchange_variable = { which = pe_tmp value = 1 }\n\tif = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }\n\tmultiply_variable = { which = pe_val_${v.key} value = pe_tmp }\n`;
-  if (v.cityLike) eff += `\tif = { limit = { check_variable = { which = pe_val_${v.key} value > pe_cls_val_${v.cls} } } set_variable = { which = pe_cls_val_${v.cls} value = pe_val_${v.key} } set_variable = { which = pe_cls_var_${v.cls} value = ${v.code} } }\n`;
+  if (v.cityLike) eff += `\tif = { limit = { check_variable = { which = pe_val_${v.key} value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_${v.key} } set_variable = { which = pe_cls_var_city value = ${v.code} } }\n`;
 }
 eff += `}
 
-# Colony scope: planet-specific values in root variables. pe_ent_val = value of one
+# Colony scope: planet-specific values in root variables. pe_dval_u = value of one state
+# city district on this planet (from its zones). pe_ent_val = value of one
 # entertainer job here (amenity shortage), pe_spec_<letter> = ${SPEC_BONUS} for shares that match the
 # planet's designation, else 1.
 pe_planet_prepare = {
 	root = {
 ${LETTERS.map(l => `\t\tset_variable = { which = pe_spec_${l} value = 1 }`).join('\n')}
 		set_variable = { which = pe_ent_val value = 0.3 }
+		set_variable = { which = pe_dval_u value = 0 }
 	}
+	# Value of one state city district here: one job per zone (100 workforce each).
+${ZONES.map(([zone, parts]) => `\tif = { limit = { num_zones = { type = ${zone} value > 0 } } root = { ${parts.map(([job, w]) => `set_variable = { which = pe_tmp value = pe_vaj_${job} } multiply_variable = { which = pe_tmp value = ${+w.toFixed(4)} } change_variable = { which = pe_dval_u value = pe_tmp }`).join(' ')} } }`).join('\n')}
 	if = { limit = { free_amenities < 0 } root = { set_variable = { which = pe_ent_val value = 12 } } }
 	else_if = { limit = { free_amenities < 1000 } root = { set_variable = { which = pe_ent_val value = 4 } } }
 ${LETTERS.filter(l => specFor(l).length).map(l => `\tif = { limit = { OR = { ${specFor(l).map(d => `has_designation = ${d}`).join(' ')} } } root = { set_variable = { which = pe_spec_${l} value = ${SPEC_BONUS} } } }`).join('\n')}
@@ -414,7 +435,7 @@ pe_choose_variant = {
 		set_variable = { which = pe_best value = pe_best_min }
 		set_variable = { which = pe_best_variant value = 0 }
 	}
-${variants.map(v => `\tpe_consider_variant = { V = ${v.key} CODE = ${v.code} MODE = $MODE$ ENT = ${v.entChoose} PRIM = ${v.primary} }`).join('\n')}
+${variants.map(v => `\tpe_consider_variant = { V = ${v.key} CODE = ${v.code} MODE = $MODE$ ENT = ${v.entChoose} PRIM = ${v.primary} DCLS = ${v.dcls} }`).join('\n')}
 }
 
 # Colony scope: start building the chosen variant on a free slot.
@@ -437,7 +458,7 @@ ${ifChain(variants, v => rootIs('pe_best_variant', v.code), v => {
 			root = {
 				set_variable = { which = pe_offer_variant value = ${v.code} }
 				set_variable = { which = pe_offer_class value = ${v.clsNum} }
-				set_timed_country_flag = { flag = pe_offer_pending days = 90 }
+				set_timed_country_flag = { flag = pe_offer_pending days = 3600 }
 				country_event = { id = pe.110 }
 			}
 		}
@@ -570,7 +591,7 @@ ${variants.filter(v => !v.cityLike).map(v => `\tpe_retool_consider = { V = ${v.k
 		limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_val }
 		root = { change_variable = { which = pe_rid value = 1 } }
 		set_variable = { which = pe_rid value = root.pe_rid }
-${Object.entries(CLS_NUM).map(([c, n], i) => `\t\t${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_cls value = ${n} } } set_variable = { which = pe_gain value = root.pe_cls_val_${c} } set_variable = { which = pe_to value = root.pe_cls_var_${c} } }`).join('\n')}
+${Object.entries(CLS_NUM).map(([c, n], i) => { const k = ['u', 'l'].includes(c) ? 'city' : c; return `\t\t${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_cls value = ${n} } } set_variable = { which = pe_gain value = root.pe_cls_val_${k} } set_variable = { which = pe_to value = root.pe_cls_var_${k} } }`; }).join('\n')}
 		subtract_variable = { which = pe_gain value = pe_val }
 		if = {
 			limit = { check_variable = { which = pe_gain value > root.pe_best_gain } }
@@ -695,5 +716,5 @@ for (const [lang, lines] of Object.entries(loc))
 
 console.log(`${JOBS.length} jobs (defaults: ${JOBS.map(j => `${j.key.slice(11)} ${JSON.stringify(sumRes(j.base, j.noncat))}`).join('; ')})`);
 console.log(`${variants.length} variants x ${STAGES.length} stages = ${pairs.length} firm deposits; housing blocks: ${Object.entries(HOUSING).map(([k, h]) => `${k} ${h.base.length}+${h.blocks.length}`).join(', ')}`);
-console.log(`zone housing: ${ZONE_POS}/${ZONE_NEG}, e.g. aaa ${zoneHousing(variants[0])}, uuu ${zoneHousing(variants.find(v => v.key === 'd_pe_firm_uuu'))}`);
+console.log(`zone housing: ${ZONE_POS}/${ZONE_NEG}, e.g. aaa ${zoneHousing(variants[0])}, uu ${zoneHousing(variants.find(v => v.key === 'd_pe_firm_uu'))}`);
 console.log(`designations: ${LETTERS.map(l => `${l}=${specFor(l).length}`).join(' ')}`);

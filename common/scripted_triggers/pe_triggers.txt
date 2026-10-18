@@ -5,6 +5,9 @@
 # only limits actions; accounting runs every quarter.
 pe_planet_eligible = {
 	exists = owner
+	is_colony = yes
+	is_under_colonization = no
+	colony_age >= 6
 	owner = { is_country_type = default is_gestalt = no }
 	planet_is_habitat_equivalent = no
 	planet_is_ecu_equivalent = no
@@ -26,5 +29,5 @@ pe_buyout_allowed = {
 # Colony scope: idle workforce for new jobs. In 4.x jobless pops work the "civilian"
 # job; any of them count.
 pe_has_idle_pops = {
-	num_assigned_jobs = { job = civilian value > 0 }
+	num_assigned_jobs = { job = civilian value > 5 }
 }

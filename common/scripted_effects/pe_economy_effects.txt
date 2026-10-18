@@ -86,21 +86,24 @@ pe_quarterly = {
 }
 
 # Country scope: shadow price pe_s_<res> in trade per unit.
-#   Investment goods (always worth the buying price): alloys, food for empires with
-#   bio-ships, unity (1.5) and research (2.5 per point).
+#   Investment goods: alloys and food for empires with bio-ships are worth the buying
+#   price while the stock is below a quarter of the storage, falling to the selling price
+#   at three quarters and to a third of it when nearly full. Unity (2) and research
+#   (3.5 per point) have no stock and keep their value.
 #   Flow goods: the buying price while short, falling to the selling price at the
 #   target surplus (BAND, % of production); above it a dumping price (a third of the
-#   selling price), with a full stock less still. Food only needs to stay just above
+#   selling price), with a full stock less still. A deficit adds a premium. Food only
+#   needs to stay just above
 #   zero (5%), unless alloys are made from it (Catalytic Processing: 20%).
 #   Trade is money: worth 1, but a surplus only buys goods after market fees (0.7).
 pe_market = {
 	set_variable = { which = pe_emergency value = 0 }
 	set_variable = { which = pe_is_invest value = 1 }
 	pe_shadow = { RES = alloys BASE = 4 SELL = 0 BAND = 20 MARKET = yes PEND = yes }
-	pe_shadow = { RES = unity BASE = 1.5 SELL = 1.5 BAND = 20 }
-	pe_shadow = { RES = physics_research BASE = 2.5 SELL = 2.5 BAND = 20 }
-	pe_shadow = { RES = society_research BASE = 2.5 SELL = 2.5 BAND = 20 }
-	pe_shadow = { RES = engineering_research BASE = 2.5 SELL = 2.5 BAND = 20 }
+	pe_shadow = { RES = unity BASE = 2 SELL = 2 BAND = 20 }
+	pe_shadow = { RES = physics_research BASE = 3.5 SELL = 3.5 BAND = 20 }
+	pe_shadow = { RES = society_research BASE = 3.5 SELL = 3.5 BAND = 20 }
+	pe_shadow = { RES = engineering_research BASE = 3.5 SELL = 3.5 BAND = 20 }
 	set_variable = { which = pe_is_invest value = 0 }
 	if = {
 		limit = { country_uses_bio_ships = yes }
@@ -149,6 +152,29 @@ pe_shadow = {
 	set_variable = { which = pe_s_$RES$ value = pe_pbuy }
 	if = {
 		limit = {
+			check_variable = { which = pe_is_invest value = 1 }
+			check_variable = { which = pe_max value > 0 }
+		}
+		# Stock fraction f: pbuy - (pbuy - psell) * clamp((f - 0.25) / 0.5, 0, 1)
+		set_variable = { which = pe_frac value = pe_stock }
+		divide_variable = { which = pe_frac value = pe_max }
+		set_variable = { which = pe_tmp value = pe_frac }
+		change_variable = { which = pe_tmp value = -0.25 }
+		multiply_variable = { which = pe_tmp value = 2 }
+		if = { limit = { check_variable = { which = pe_tmp value < 0 } } set_variable = { which = pe_tmp value = 0 } }
+		if = { limit = { check_variable = { which = pe_tmp value > 1 } } set_variable = { which = pe_tmp value = 1 } }
+		set_variable = { which = pe_prem value = pe_pbuy }
+		subtract_variable = { which = pe_prem value = pe_psell }
+		multiply_variable = { which = pe_prem value = pe_tmp }
+		subtract_variable = { which = pe_s_$RES$ value = pe_prem }
+		if = {
+			limit = { check_variable = { which = pe_frac value >= 0.95 } }
+			set_variable = { which = pe_s_$RES$ value = pe_psell }
+			multiply_variable = { which = pe_s_$RES$ value = 0.33 }
+		}
+	}
+	if = {
+		limit = {
 			check_variable = { which = pe_is_invest value = 0 }
 			check_variable = { which = pe_net value >= 0 }
 		}
@@ -178,14 +204,17 @@ pe_shadow = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_net value < 0 } }
+		# Any deficit +25%, plus 4% per 1% of production missing (up to +200%), plus
+		# 50% if the stock lasts less than a year.
 		set_variable = { which = pe_prem value = pe_rel }
-		multiply_variable = { which = pe_prem value = -0.01 }
+		multiply_variable = { which = pe_prem value = -0.04 }
+		change_variable = { which = pe_prem value = 0.25 }
 		if = { limit = { check_variable = { which = pe_prem value > 2 } } set_variable = { which = pe_prem value = 2 } }
 		set_variable = { which = pe_runway value = pe_net }
 		multiply_variable = { which = pe_runway value = -12 }
 		if = {
 			limit = { check_variable = { which = pe_stock value < pe_runway } }
-			change_variable = { which = pe_prem value = 0.3 }
+			change_variable = { which = pe_prem value = 0.5 }
 			set_variable = { which = pe_emergency value = 1 }
 		}
 		change_variable = { which = pe_prem value = 1 }
@@ -262,6 +291,8 @@ pe_count_planet_job = {
 }
 
 pe_planet_step = {
+	# Assign new pops first, so idle civilians really are idle.
+	check_planet_employment = yes
 	pe_planet_counts = yes
 	pe_planet_prepare = yes
 	root = { set_variable = { which = pe_unemp value = 0 } }
@@ -285,7 +316,7 @@ pe_planet_step = {
 					}
 				}
 				# Option value: the last free slots are only used for clearly better firms.
-				root = { set_variable = { which = pe_best_min value = 0 } }
+				root = { set_variable = { which = pe_best_min value = 0 } set_variable = { which = pe_dmode value = 0 } }
 				if = { limit = { free_district_slots = 1 } root = { set_variable = { which = pe_best_min value = 8 } } }
 				else_if = { limit = { free_district_slots = 2 } root = { set_variable = { which = pe_best_min value = 4 } } }
 				pe_choose_variant = { MODE = found }
@@ -293,7 +324,8 @@ pe_planet_step = {
 			}
 			else_if = {
 				limit = { owner = { pe_buyout_allowed = yes } }
-				root = { set_variable = { which = pe_best_min value = 0 } }
+				# A firm must be worth clearly more than the state district it replaces.
+				root = { set_variable = { which = pe_best_min value = 2 } set_variable = { which = pe_dmode value = 1 } }
 				pe_choose_variant = { MODE = buy }
 				pe_buy_or_offer = yes
 			}
@@ -404,7 +436,8 @@ pe_firm_book = {
 }
 
 # Value of a variant on this planet: country value, plus entertainment need here, times
-# the designation bonus of its main share, times 0.8-1.2 (entrepreneurial spirit).
+# the designation bonus of its main share, times 0.8-1.2 (entrepreneurial spirit). When
+# buying, minus the value of the state district it replaces (weighted like a variant).
 pe_consider_variant = {
 	if = {
 		limit = { pe_can_$MODE$_$V$ = yes }
@@ -416,6 +449,12 @@ pe_consider_variant = {
 			multiply_variable = { which = pe_cand value = pe_spec_$PRIM$ }
 			set_variable_to_random_value = { which = pe_rnd min = 0.8 max = 1.2 }
 			multiply_variable = { which = pe_cand value = pe_rnd }
+			if = {
+				limit = { check_variable = { which = pe_dmode value = 1 } }
+				set_variable = { which = pe_tmp value = pe_dval_$DCLS$ }
+				multiply_variable = { which = pe_tmp value = 0.875 }
+				subtract_variable = { which = pe_cand value = pe_tmp }
+			}
 			if = {
 				limit = { check_variable = { which = pe_cand value > pe_best } }
 				set_variable = { which = pe_best value = pe_cand }
@@ -448,14 +487,22 @@ pe_found_firm = {
 	}
 }
 
-# The investor pool buys a state district, pays the state and converts it.
+# The investor pool buys a state district, pays the state and converts it. Only if the
+# district really went away (pe_before > pe_after); otherwise nothing happens.
 pe_buyout_execute = {
+	set_variable = { which = pe_before value = 0 }
+	set_variable = { which = pe_after value = 0 }
 	if = {
 		limit = {
 			has_district = $DISTRICT$
 			owner = { check_variable = { which = pe_capital value >= $PRICE$ } }
 		}
+		export_trigger_value_to_variable = { trigger = num_districts parameters = { type = $DISTRICT$ } variable = pe_before }
 		remove_district = $DISTRICT$
+		export_trigger_value_to_variable = { trigger = num_districts parameters = { type = $DISTRICT$ } variable = pe_after }
+	}
+	if = {
+		limit = { check_variable = { which = pe_before value > pe_after } }
 		add_deposit = $SITE$
 		last_added_deposit = {
 			set_variable = { which = pe_target value = $CODE$ }
