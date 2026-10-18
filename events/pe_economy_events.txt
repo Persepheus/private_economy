@@ -22,17 +22,13 @@ country_event = {
 	}
 }
 
-# Scope: country. event_target:pe_offer_planet = the planet, pe_offer_sector = sector code.
+# Scope: country. event_target:pe_offer_planet = the planet, pe_offer_variant = firm variant code,
+# pe_offer_class = 1 city, 2 mining, 3 generator, 4 farming.
 country_event = {
 	id = pe.110
 	title = pe.110.name
-	desc = { trigger = { check_variable = { which = pe_offer_sector value = 1 } } text = pe.110.desc.1 }
-	desc = { trigger = { check_variable = { which = pe_offer_sector value = 2 } } text = pe.110.desc.2 }
-	desc = { trigger = { check_variable = { which = pe_offer_sector value = 3 } } text = pe.110.desc.3 }
-	desc = { trigger = { check_variable = { which = pe_offer_sector value = 4 } } text = pe.110.desc.4 }
-	desc = { trigger = { check_variable = { which = pe_offer_sector value = 5 } } text = pe.110.desc.5 }
-	desc = { trigger = { check_variable = { which = pe_offer_sector value = 6 } } text = pe.110.desc.6 }
-	desc = { trigger = { check_variable = { which = pe_offer_sector value = 7 } } text = pe.110.desc.7 }
+	desc = { trigger = { check_variable = { which = pe_offer_class value = 1 } } text = pe.110.desc.urban }
+	desc = { trigger = { check_variable = { which = pe_offer_class value > 1 } } text = pe.110.desc.rural }
 	picture = GFX_evt_tradedeal
 	is_triggered_only = yes
 	location = event_target:pe_offer_planet

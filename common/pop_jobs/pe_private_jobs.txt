@@ -1,7 +1,8 @@
 # Private jobs: like their state counterparts (same resource categories, so the same
 # technology and production bonuses apply), 15% more base output, and the player cannot
 # change their priority (like criminals). Job counts come only from firm deposits and
-# private buildings (job_<key>_add).
+# private buildings (job_<key>_add). Each job pays 0.5 energy upkeep: the firms' profit,
+# which flows into the empire's private capital (pe_capital).
 
 # Like foundry: 3 alloys for 6 minerals.
 pe_private_metallurgist = {
@@ -37,6 +38,7 @@ pe_private_metallurgist = {
 			alloys = 3.45
 		}
 		upkeep = {
+			energy = 0.5
 			minerals = 6
 		}
 	}
@@ -80,6 +82,7 @@ pe_private_artisan = {
 			consumer_goods = 6.9
 		}
 		upkeep = {
+			energy = 0.5
 			minerals = 6
 		}
 	}
@@ -123,6 +126,7 @@ pe_private_trader = {
 			trade = 9.2
 		}
 		upkeep = {
+			energy = 0.5
 			consumer_goods = 1
 		}
 	}
@@ -165,6 +169,9 @@ pe_private_miner = {
 		produces = {
 			minerals = 4.6
 		}
+		upkeep = {
+			energy = 0.5
+		}
 	}
 
 	weight = {
@@ -205,6 +212,9 @@ pe_private_technician = {
 		produces = {
 			energy = 6.9
 		}
+		upkeep = {
+			energy = 0.5
+		}
 	}
 
 	weight = {
@@ -244,6 +254,9 @@ pe_private_farmer = {
 		category = planet_farmers
 		produces = {
 			food = 6.9
+		}
+		upkeep = {
+			energy = 0.5
 		}
 	}
 

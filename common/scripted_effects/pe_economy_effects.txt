@@ -1,45 +1,83 @@
 # Private economy logic. Runs quarterly per country (pe.100).
 # Call depth stays at 4 or less: the engine initialises only 5 nested levels.
-#   pe_quarterly (1) -> pe_score_resource (2)
+#   pe_quarterly (1) -> pe_capital_income (2) -> pe_count_job (3)
+#                    -> pe_scores (2) -> pe_score_resource (3)
+#                    -> pe_compute_values (2)
 #                    -> pe_planet_step (2) -> pe_planet_counts (3)
-#                                          -> pe_choose_sector (3) -> pe_consider (4)
-#                                          -> pe_found_sector (3) -> pe_found_firm (4)
-#                                          -> pe_buy_or_offer (3) -> pe_buyout_execute (4)
-#                                          -> pe_nationalise_one (3) -> pe_nationalise_firm (4)
+#                                          -> pe_choose_variant (3)  -> pe_consider_variant (4)
+#                                          -> pe_found_variant (3)   -> pe_found_firm (4)
+#                                          -> pe_buy_or_offer (3)    -> pe_buyout_execute (4)
+#                                          -> pe_nationalise_one (3) -> pe_nat_consider (4)
+#                                                                    -> pe_nationalise_firm (4)
+#                                          -> pe_restructure (3)     -> pe_retool_consider (4)
+#                                                                    -> pe_retool_gain (4)
+# Variant lists and dispatchers: pe_firm_effects_generated.txt (tools/generate-firms.mjs).
 #
-# Sector codes: 1 alloys, 2 consumer goods, 3 trade, 4 minerals, 5 energy, 6 food,
-# 7 mixed (conglomerate). Firm, bought district and sale price per sector:
-#   1 steelworks    city        500 minerals + 100 trade
-#   2 factory       city        500 + 100
-#   3 trading house city        500 + 100
-#   4 mine          mining      300 +  60
-#   5 power plant   generator   300 +  60
-#   6 farm          farming     300 +  60
-#   7 conglomerate  city        500 + 100
+# Private capital (country variable pe_capital): starts at 1000. Each private job pays
+# 0.5 energy upkeep per month as profit, which flows into the capital. Founding costs
+# 500 (city) / 300 (rural); a buyout costs the price paid to the state (600 / 360);
+# restructuring costs half the founding cost; nationalisation pays the price back in.
 
 # --- Country level ------------------------------------------------------------
 
-pe_quarterly = {
-	pe_score_resource = { RES = alloys MARKET = yes }
-	pe_score_resource = { RES = consumer_goods MARKET = yes }
-	pe_score_resource = { RES = minerals MARKET = yes }
-	pe_score_resource = { RES = energy MARKET = yes }
-	pe_score_resource = { RES = food MARKET = yes }
-	pe_score_resource = { RES = trade }
+pe_init = {
 	if = {
 		limit = { NOT = { is_variable_set = pe_private_share } }
 		set_variable = { which = pe_private_share value = 0 }
 	}
+	if = {
+		limit = { NOT = { is_variable_set = pe_capital } }
+		set_variable = { which = pe_capital value = 1000 }
+	}
+}
+
+pe_quarterly = {
+	pe_init = yes
+	pe_capital_income = yes
+	change_variable = { which = pe_capital value = pe_capital_income }
+	pe_scores = yes
+	pe_compute_values = yes
 	every_owned_colony = {
 		limit = { pe_planet_eligible = yes }
 		pe_planet_step = yes
 	}
 }
 
+pe_scores = {
+	pe_score_resource = { RES = alloys MARKET = yes ALWAYS = yes }
+	pe_score_resource = { RES = consumer_goods MARKET = yes }
+	pe_score_resource = { RES = minerals MARKET = yes }
+	pe_score_resource = { RES = energy MARKET = yes }
+	pe_score_resource = { RES = food MARKET = yes }
+	pe_score_resource = { RES = trade }
+}
+
+# Country scope: profit of the last quarter = filled private jobs x 0.5 energy x 3
+# months (100 workforce = one job).
+pe_capital_income = {
+	set_variable = { which = pe_jobs value = 0 }
+	pe_count_job = { JOB = pe_private_metallurgist }
+	pe_count_job = { JOB = pe_private_artisan }
+	pe_count_job = { JOB = pe_private_trader }
+	pe_count_job = { JOB = pe_private_miner }
+	pe_count_job = { JOB = pe_private_technician }
+	pe_count_job = { JOB = pe_private_farmer }
+	set_variable = { which = pe_capital_income value = pe_jobs }
+	multiply_variable = { which = pe_capital_income value = 0.015 }
+}
+
+pe_count_job = {
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = $JOB$ } variable = pe_tmp }
+	change_variable = { which = pe_jobs value = pe_tmp }
+}
+
 # Country scope. pe_score_<res>: how urgently the economy needs more of a resource.
-# Driven by the monthly net income (a deficit counts even if the stock was just
-# bought on the market), the stock's runway, a full stock, and the market price
-# relative to the first price this empire saw.
+#   deficit:  50 + deficit in % of gross production, +30 if the stock lasts < 12 months
+#   surplus:  25 - 0.75 x surplus in % of production (a small surplus still invites
+#             investment; zero at a 33% surplus)
+#   stock at 90% of its maximum: -50 (not for ALWAYS resources)
+#   ALWAYS (alloys): +40, always needed
+#   MARKET: +1 per 1% the market price is above the first price this empire saw
 pe_score_resource = {
 	export_resource_income_to_variable = { resource = $RES$ variable = pe_net }
 	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = $RES$ } variable = pe_gross }
@@ -51,15 +89,14 @@ pe_score_resource = {
 		limit = { check_variable = { which = pe_scale value < 10 } }
 		set_variable = { which = pe_scale value = 10 }
 	}
-	# Net relative to production, in percent; a deficit gives positive points.
+	# Net relative to production, in percent.
 	set_variable = { which = pe_rel value = pe_net }
 	divide_variable = { which = pe_rel value = pe_scale }
-	multiply_variable = { which = pe_rel value = -100 }
+	multiply_variable = { which = pe_rel value = 100 }
 	if = {
 		limit = { check_variable = { which = pe_net value < 0 } }
 		change_variable = { which = pe_score_$RES$ value = 50 }
-		change_variable = { which = pe_score_$RES$ value = pe_rel }
-		# Less than a year of stock left at the current deficit.
+		subtract_variable = { which = pe_score_$RES$ value = pe_rel }
 		set_variable = { which = pe_runway value = pe_net }
 		multiply_variable = { which = pe_runway value = -12 }
 		if = {
@@ -68,10 +105,14 @@ pe_score_resource = {
 		}
 	}
 	else = {
-		multiply_variable = { which = pe_rel value = 0.5 }
-		change_variable = { which = pe_score_$RES$ value = pe_rel }
+		change_variable = { which = pe_score_$RES$ value = 25 }
+		multiply_variable = { which = pe_rel value = 0.75 }
+		subtract_variable = { which = pe_score_$RES$ value = pe_rel }
 	}
-	# Full stock: nothing more needed.
+	[[ALWAYS]
+	change_variable = { which = pe_score_$RES$ value = 40 }
+	]
+	[[!ALWAYS]
 	if = {
 		limit = { check_variable = { which = pe_max value > 0 } }
 		set_variable = { which = pe_full value = pe_max }
@@ -81,8 +122,8 @@ pe_score_resource = {
 			change_variable = { which = pe_score_$RES$ value = -50 }
 		}
 	}
+	]
 	[[MARKET]
-	# Market price relative to the reference price: +1 point per 1% above it.
 	export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = $RES$ amount = 1 trade_type = market_buy } variable = pe_price }
 	if = {
 		limit = {
@@ -107,7 +148,7 @@ pe_score_resource = {
 
 # --- Planet level (colony scope, ROOT = owner) --------------------------------
 
-# Colony scope: district slots, firms, and how many firms the economic order allows.
+# District slots, firms, and how many firms the economic order allows.
 pe_planet_counts = {
 	export_trigger_value_to_variable = { trigger = num_districts parameters = { type = any } variable = pe_districts }
 	export_trigger_value_to_variable = { trigger = free_district_slots variable = pe_free }
@@ -126,12 +167,12 @@ pe_planet_step = {
 		limit = { check_variable = { which = pe_firms value < pe_target } }
 		if = {
 			limit = { free_district_slots > 0 }
-			pe_choose_sector = { MODE = found }
-			pe_found_sector = yes
+			pe_choose_variant = { MODE = found }
+			pe_found_variant = yes
 		}
 		else_if = {
 			limit = { owner = { pe_buyout_allowed = yes } }
-			pe_choose_sector = { MODE = buy }
+			pe_choose_variant = { MODE = buy }
 			pe_buy_or_offer = yes
 		}
 	}
@@ -139,119 +180,66 @@ pe_planet_step = {
 		limit = { check_variable = { which = pe_firms value > pe_target } }
 		pe_nationalise_one = yes
 	}
-}
-
-# Colony scope. Sets root.pe_best_sector to the most urgent sector available here.
-# The conglomerate (7) is the default when nothing scores above 25.
-pe_choose_sector = {
-	root = {
-		set_variable = { which = pe_best value = 25 }
-		set_variable = { which = pe_best_sector value = 7 }
-	}
-	pe_consider = { SECTOR = alloys CODE = 1 MODE = $MODE$ }
-	pe_consider = { SECTOR = consumer_goods CODE = 2 MODE = $MODE$ }
-	pe_consider = { SECTOR = trade CODE = 3 MODE = $MODE$ }
-	pe_consider = { SECTOR = minerals CODE = 4 MODE = $MODE$ }
-	pe_consider = { SECTOR = energy CODE = 5 MODE = $MODE$ }
-	pe_consider = { SECTOR = food CODE = 6 MODE = $MODE$ }
-	# A conglomerate needs a city district to buy.
+	# No action this year, and no room or no need to grow: firms may restructure.
 	if = {
 		limit = {
-			NOT = { pe_can_$MODE$_alloys = yes }
-			root = { check_variable = { which = pe_best_sector value = 7 } }
+			NOT = { has_planet_flag = pe_cooldown }
+			check_variable = { which = pe_firms value > 0 }
+			OR = {
+				check_variable = { which = pe_firms value >= pe_target }
+				free_district_slots = 0
+			}
 		}
-		root = { set_variable = { which = pe_best_sector value = 0 } }
+		pe_restructure = yes
 	}
 }
 
-pe_consider = {
+pe_consider_variant = {
 	if = {
-		limit = { pe_can_$MODE$_$SECTOR$ = yes }
+		limit = { pe_can_$MODE$_$V$ = yes }
 		root = {
 			if = {
-				limit = { check_variable = { which = pe_score_$SECTOR$ value > pe_best } }
-				set_variable = { which = pe_best value = pe_score_$SECTOR$ }
-				set_variable = { which = pe_best_sector value = $CODE$ }
+				limit = { check_variable = { which = pe_val_$V$ value > pe_best } }
+				set_variable = { which = pe_best value = pe_val_$V$ }
+				set_variable = { which = pe_best_variant value = $CODE$ }
 			}
 		}
 	}
 }
 
-# Colony scope: found the chosen firm on a free slot.
-pe_found_sector = {
-	if = { limit = { root = { check_variable = { which = pe_best_sector value = 1 } } } pe_found_firm = { FIRM = d_pe_firm_steelworks } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_sector value = 2 } } } pe_found_firm = { FIRM = d_pe_firm_factory } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_sector value = 3 } } } pe_found_firm = { FIRM = d_pe_firm_trading_house } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_sector value = 4 } } } pe_found_firm = { FIRM = d_pe_firm_mine } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_sector value = 5 } } } pe_found_firm = { FIRM = d_pe_firm_power_plant } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_sector value = 6 } } } pe_found_firm = { FIRM = d_pe_firm_farm } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_sector value = 7 } } } pe_found_firm = { FIRM = d_pe_firm_conglomerate } }
-}
-
 pe_found_firm = {
-	add_deposit = $FIRM$
-	set_timed_planet_flag = { flag = pe_cooldown days = 360 }
-	save_event_target_as = pe_msg_planet
-	owner = {
-		create_message = {
-			type = pe_private_economy
-			localization = pe_msg_found_$FIRM$
-			days = 30
-			target = event_target:pe_msg_planet
-			variable = { type = name localization = PLANET scope = event_target:pe_msg_planet }
-		}
-	}
-}
-
-# Colony scope: buy a state district. Human empires on Free Market get an offer;
-# AI empires accept; Laissez-faire buys without asking.
-pe_buy_or_offer = {
 	if = {
-		limit = {
-			root = { check_variable = { which = pe_best_sector value > 0 } }
-			owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } }
-		}
+		limit = { owner = { check_variable = { which = pe_capital value >= $COST$ } } }
+		add_deposit = $FIRM$
 		set_timed_planet_flag = { flag = pe_cooldown days = 360 }
-		save_event_target_as = pe_offer_planet
-		root = {
-			set_variable = { which = pe_offer_sector value = pe_best_sector }
-			set_timed_country_flag = { flag = pe_offer_pending days = 90 }
-			country_event = { id = pe.110 }
+		save_event_target_as = pe_msg_planet
+		owner = {
+			change_variable = { which = pe_capital value = -$COST$ }
+			create_message = {
+				type = pe_private_economy
+				localization = pe_msg_found_$FIRM$
+				days = 30
+				target = event_target:pe_msg_planet
+				variable = { type = name localization = PLANET scope = event_target:pe_msg_planet }
+			}
 		}
 	}
-	else_if = {
-		limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-		if = { limit = { root = { check_variable = { which = pe_best_sector value = 1 } } } pe_buyout_execute = { FIRM = d_pe_firm_steelworks DISTRICT = district_city MINERALS = 500 TRADE = 100 } }
-		else_if = { limit = { root = { check_variable = { which = pe_best_sector value = 2 } } } pe_buyout_execute = { FIRM = d_pe_firm_factory DISTRICT = district_city MINERALS = 500 TRADE = 100 } }
-		else_if = { limit = { root = { check_variable = { which = pe_best_sector value = 3 } } } pe_buyout_execute = { FIRM = d_pe_firm_trading_house DISTRICT = district_city MINERALS = 500 TRADE = 100 } }
-		else_if = { limit = { root = { check_variable = { which = pe_best_sector value = 4 } } } pe_buyout_execute = { FIRM = d_pe_firm_mine DISTRICT = district_mining MINERALS = 300 TRADE = 60 } }
-		else_if = { limit = { root = { check_variable = { which = pe_best_sector value = 5 } } } pe_buyout_execute = { FIRM = d_pe_firm_power_plant DISTRICT = district_generator MINERALS = 300 TRADE = 60 } }
-		else_if = { limit = { root = { check_variable = { which = pe_best_sector value = 6 } } } pe_buyout_execute = { FIRM = d_pe_firm_farm DISTRICT = district_farming MINERALS = 300 TRADE = 60 } }
-		else_if = { limit = { root = { check_variable = { which = pe_best_sector value = 7 } } } pe_buyout_execute = { FIRM = d_pe_firm_conglomerate DISTRICT = district_city MINERALS = 500 TRADE = 100 } }
-	}
 }
 
-# Event scope pe.110, colony = event_target:pe_offer_planet. Depth 1 -> 2.
-pe_buyout_by_offer = {
-	if = { limit = { root = { check_variable = { which = pe_offer_sector value = 1 } } } pe_buyout_execute = { FIRM = d_pe_firm_steelworks DISTRICT = district_city MINERALS = 500 TRADE = 100 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_sector value = 2 } } } pe_buyout_execute = { FIRM = d_pe_firm_factory DISTRICT = district_city MINERALS = 500 TRADE = 100 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_sector value = 3 } } } pe_buyout_execute = { FIRM = d_pe_firm_trading_house DISTRICT = district_city MINERALS = 500 TRADE = 100 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_sector value = 4 } } } pe_buyout_execute = { FIRM = d_pe_firm_mine DISTRICT = district_mining MINERALS = 300 TRADE = 60 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_sector value = 5 } } } pe_buyout_execute = { FIRM = d_pe_firm_power_plant DISTRICT = district_generator MINERALS = 300 TRADE = 60 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_sector value = 6 } } } pe_buyout_execute = { FIRM = d_pe_firm_farm DISTRICT = district_farming MINERALS = 300 TRADE = 60 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_sector value = 7 } } } pe_buyout_execute = { FIRM = d_pe_firm_conglomerate DISTRICT = district_city MINERALS = 500 TRADE = 100 } }
-}
-
-# Colony scope: the firm takes over a state district and pays its build cost plus trade.
+# The firm takes over a state district and pays the price from the private capital.
 pe_buyout_execute = {
 	if = {
-		limit = { has_district = $DISTRICT$ }
+		limit = {
+			has_district = $DISTRICT$
+			owner = { check_variable = { which = pe_capital value >= $PRICE$ } }
+		}
 		remove_district = $DISTRICT$
 		add_deposit = $FIRM$
 		set_timed_planet_flag = { flag = pe_cooldown days = 360 }
 		save_event_target_as = pe_msg_planet
 		owner = {
 			add_resource = { minerals = $MINERALS$ trade = $TRADE$ }
+			change_variable = { which = pe_capital value = -$PRICE$ }
 			create_message = {
 				type = pe_private_economy
 				localization = pe_msg_buy_$FIRM$
@@ -263,18 +251,20 @@ pe_buyout_execute = {
 	}
 }
 
-# Colony scope: more firms than the economic order allows. The state buys one back at
-# the same price and turns it into the matching district, if it can pay.
-pe_nationalise_one = {
-	if = { limit = { has_deposit = d_pe_firm_conglomerate } pe_nationalise_firm = { FIRM = d_pe_firm_conglomerate DISTRICT = district_city MINERALS = 500 TRADE = 100 } }
-	else_if = { limit = { has_deposit = d_pe_firm_trading_house } pe_nationalise_firm = { FIRM = d_pe_firm_trading_house DISTRICT = district_city MINERALS = 500 TRADE = 100 } }
-	else_if = { limit = { has_deposit = d_pe_firm_factory } pe_nationalise_firm = { FIRM = d_pe_firm_factory DISTRICT = district_city MINERALS = 500 TRADE = 100 } }
-	else_if = { limit = { has_deposit = d_pe_firm_steelworks } pe_nationalise_firm = { FIRM = d_pe_firm_steelworks DISTRICT = district_city MINERALS = 500 TRADE = 100 } }
-	else_if = { limit = { has_deposit = d_pe_firm_farm } pe_nationalise_firm = { FIRM = d_pe_firm_farm DISTRICT = district_farming MINERALS = 300 TRADE = 60 } }
-	else_if = { limit = { has_deposit = d_pe_firm_power_plant } pe_nationalise_firm = { FIRM = d_pe_firm_power_plant DISTRICT = district_generator MINERALS = 300 TRADE = 60 } }
-	else_if = { limit = { has_deposit = d_pe_firm_mine } pe_nationalise_firm = { FIRM = d_pe_firm_mine DISTRICT = district_mining MINERALS = 300 TRADE = 60 } }
+pe_nat_consider = {
+	if = {
+		limit = { has_deposit = $V$ }
+		root = {
+			if = {
+				limit = { check_variable = { which = pe_val_$V$ value < pe_worst } }
+				set_variable = { which = pe_worst value = pe_val_$V$ }
+				set_variable = { which = pe_worst_variant value = $CODE$ }
+			}
+		}
+	}
 }
 
+# The state buys a firm back at the buyout price (if it can pay) and rebuilds the district.
 pe_nationalise_firm = {
 	if = {
 		limit = {
@@ -289,12 +279,44 @@ pe_nationalise_firm = {
 		save_event_target_as = pe_msg_planet
 		owner = {
 			add_resource = { minerals = -$MINERALS$ trade = -$TRADE$ }
+			change_variable = { which = pe_capital value = $PRICE$ }
 			create_message = {
 				type = pe_private_economy
 				localization = pe_msg_nat_$FIRM$
 				days = 30
 				target = event_target:pe_msg_planet
 				variable = { type = name localization = PLANET scope = event_target:pe_msg_planet }
+			}
+		}
+	}
+}
+
+# Best variant per rural class on this planet (the side share depends on its deposits).
+pe_retool_consider = {
+	if = {
+		limit = { pe_can_retool_$V$ = yes }
+		root = {
+			if = {
+				limit = { check_variable = { which = pe_val_$V$ value > pe_cls_val_$CLS$ } }
+				set_variable = { which = pe_cls_val_$CLS$ value = pe_val_$V$ }
+				set_variable = { which = pe_cls_var_$CLS$ value = $CODE$ }
+			}
+		}
+	}
+}
+
+# Gain if this firm switched to the best variant of its class.
+pe_retool_gain = {
+	if = {
+		limit = { has_deposit = $V$ }
+		root = {
+			set_variable = { which = pe_tmp value = pe_cls_val_$CLS$ }
+			subtract_variable = { which = pe_tmp value = pe_val_$V$ }
+			if = {
+				limit = { check_variable = { which = pe_tmp value > pe_best_gain } }
+				set_variable = { which = pe_best_gain value = pe_tmp }
+				set_variable = { which = pe_from value = $CODE$ }
+				set_variable = { which = pe_to value = pe_cls_var_$CLS$ }
 			}
 		}
 	}

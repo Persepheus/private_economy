@@ -149,7 +149,24 @@ for (const f of files(path.join(root, 'common/message_types')))
   for (const [, n] of fs.readFileSync(f, 'utf8').matchAll(/name = "(\w+)"/g)) need.push(n);
 for (const f of files(path.join(root, 'events')).filter(f => f.endsWith('.txt')))
   for (const [, k] of strip(fs.readFileSync(f, 'utf8')).matchAll(/\b(?:title|desc|text|name) = ([\w.]+)/g)) need.push(k);
+const definedTexts = new Set();
+for (const f of files(path.join(root, 'common/scripted_loc')).filter(f => f.endsWith('.txt'))) {
+  const text = strip(fs.readFileSync(f, 'utf8'));
+  for (const [, n] of text.matchAll(/^\tname = (\w+)/gm)) definedTexts.add(n);
+  for (const [, k] of text.matchAll(/(?:localization_key|default) = (\w+)/g)) need.push(k);
+}
 for (const k of need) for (const lang of languages) assert(loc[lang].has(k), `missing ${lang} localisation ${k}`);
+for (const lang of languages)
+  for (const f of files(path.join(root, 'localisation', lang)))
+    for (const [, n] of fs.readFileSync(f, 'utf8').matchAll(/\[Root\.(GetPe\w+)\]/g)) assert(definedTexts.has(n), `${rel(f)}: unknown scripted loc ${n}`);
+// Generated files are up to date with the generator.
+{
+  const {execFileSync} = await import('node:child_process');
+  const gen = ['common/deposits/pe_firm_deposits.txt', 'common/scripted_triggers/pe_firm_triggers_generated.txt', 'common/scripted_effects/pe_firm_effects_generated.txt'];
+  const before = gen.map(g => fs.readFileSync(path.join(root, g), 'utf8'));
+  execFileSync(process.execPath, [path.join(root, 'tools/generate-firms.mjs')]);
+  gen.forEach((g, i) => assert.equal(fs.readFileSync(path.join(root, g), 'utf8'), before[i], `${g} is stale: run tools/generate-firms.mjs`));
+}
 
 // 9. Icons: jobs and buildings are looked up by file name.
 for (const j of jobs) assert(fs.existsSync(path.join(root, `gfx/interface/icons/jobs/job_${j}.dds`)), `missing icon for job ${j}`);

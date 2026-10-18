@@ -1,10 +1,10 @@
 # Prototype test events, fired from the console (country scope = your empire):
-#   event pe.1   steelworks on your capital
+#   event pe.1   private steelworks on your capital
 #   event pe.2   conglomerate on your capital
 #   event pe.3   private exchange building on your capital
 #   event pe.4   remove all firms and the private exchange from your capital
 #   event pe.5   conglomerate on every non-gestalt AI capital (to watch the AI)
-#   event pe.6   diagnosis popup: resource scores and the capital's district counts
+#   event pe.6   diagnosis popup: capital, resource scores, the capital's counts and best firm
 #   event pe.7   run the quarterly logic now and clear all planet cooldowns first
 namespace = pe
 
@@ -13,8 +13,8 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
-		capital_scope = { add_deposit = d_pe_firm_steelworks }
-		log = "private_economy: pe.1 added d_pe_firm_steelworks to the capital"
+		capital_scope = { add_deposit = d_pe_firm_aaa }
+		log = "private_economy: pe.1 added d_pe_firm_aaa to the capital"
 	}
 }
 
@@ -23,8 +23,8 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
-		capital_scope = { add_deposit = d_pe_firm_conglomerate }
-		log = "private_economy: pe.2 added d_pe_firm_conglomerate to the capital"
+		capital_scope = { add_deposit = d_pe_firm_act }
+		log = "private_economy: pe.2 added d_pe_firm_act to the capital"
 	}
 }
 
@@ -44,15 +44,9 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		capital_scope = {
-			while = {
-				count = 20
-				if = { limit = { has_deposit = d_pe_firm_steelworks } remove_deposit = d_pe_firm_steelworks }
-				if = { limit = { has_deposit = d_pe_firm_conglomerate } remove_deposit = d_pe_firm_conglomerate }
-				if = { limit = { has_deposit = d_pe_firm_factory } remove_deposit = d_pe_firm_factory }
-				if = { limit = { has_deposit = d_pe_firm_trading_house } remove_deposit = d_pe_firm_trading_house }
-				if = { limit = { has_deposit = d_pe_firm_mine } remove_deposit = d_pe_firm_mine }
-				if = { limit = { has_deposit = d_pe_firm_power_plant } remove_deposit = d_pe_firm_power_plant }
-				if = { limit = { has_deposit = d_pe_firm_farm } remove_deposit = d_pe_firm_farm }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms }
+				remove_deposit = yes
 			}
 			if = {
 				limit = { has_building = pe_building_private_exchange }
@@ -70,9 +64,9 @@ country_event = {
 	immediate = {
 		every_playable_country = {
 			limit = { is_ai = yes is_country_type = default is_gestalt = no exists = capital_scope }
-			capital_scope = { add_deposit = d_pe_firm_conglomerate }
+			capital_scope = { add_deposit = d_pe_firm_act }
 		}
-		log = "private_economy: pe.5 added d_pe_firm_conglomerate to every AI capital"
+		log = "private_economy: pe.5 added d_pe_firm_act to every AI capital"
 	}
 }
 
@@ -83,24 +77,18 @@ country_event = {
 	picture = GFX_evt_tradedeal
 	is_triggered_only = yes
 	immediate = {
-		if = {
-			limit = { NOT = { is_variable_set = pe_private_share } }
-			set_variable = { which = pe_private_share value = 0 }
-		}
-		pe_score_resource = { RES = alloys MARKET = yes }
-		pe_score_resource = { RES = consumer_goods MARKET = yes }
-		pe_score_resource = { RES = minerals MARKET = yes }
-		pe_score_resource = { RES = energy MARKET = yes }
-		pe_score_resource = { RES = food MARKET = yes }
-		pe_score_resource = { RES = trade }
+		pe_init = yes
+		pe_capital_income = yes
+		pe_scores = yes
+		pe_compute_values = yes
 		capital_scope = {
 			pe_planet_counts = yes
 			if = {
 				limit = { free_district_slots > 0 }
-				pe_choose_sector = { MODE = found }
+				pe_choose_variant = { MODE = found }
 			}
 			else = {
-				pe_choose_sector = { MODE = buy }
+				pe_choose_variant = { MODE = buy }
 			}
 			root = {
 				set_variable = { which = pe_diag_districts value = prev.pe_districts }
@@ -109,7 +97,7 @@ country_event = {
 				set_variable = { which = pe_diag_target value = prev.pe_target }
 			}
 		}
-		log = "private_economy: pe.6 share [Root.pe_private_share] districts [Root.pe_diag_districts] free [Root.pe_diag_free] firms [Root.pe_diag_firms] target [Root.pe_diag_target] best [Root.pe_best_sector]"
+		log = "private_economy: pe.6 share [Root.pe_private_share] districts [Root.pe_diag_districts] free [Root.pe_diag_free] firms [Root.pe_diag_firms] target [Root.pe_diag_target] best [Root.pe_best_variant] value [Root.pe_best] capital [Root.pe_capital] income [Root.pe_capital_income]"
 	}
 	option = { name = pe.6.a }
 }
