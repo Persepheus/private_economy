@@ -128,6 +128,18 @@ for (const f of files(path.join(root, 'common/scripted_triggers')).filter(f => f
   for (const f of scripts)
     for (const m of strip(fs.readFileSync(f, 'utf8')).matchAll(/\b([a-z]+if) = \{/g))
       assert(m[1] === 'else_if', `${rel(f)}: glued key ${m[1]}`);
+  // Effects inside a limit (a trigger block) are ignored or break the trigger.
+  for (const f of scripts) {
+    const text = strip(fs.readFileSync(f, 'utf8'));
+    for (const m of text.matchAll(/\blimit = \{/g)) {
+      let d = 0, j = text.indexOf('{', m.index);
+      const start = j;
+      for (; j < text.length; j++) { if (text[j] === '{') d++; else if (text[j] === '}' && --d === 0) break; }
+      const block = text.slice(start, j);
+      const e = block.match(/\b((?:set|change|multiply|subtract|divide|modulo|floor)_variable|add_resource|add_deposit|remove_deposit|remove_district|add_district)\b/);
+      assert(!e, `${rel(f)}: effect ${e && e[1]} inside a limit`);
+    }
+  }
   const vanillaTags = new Set();
   for (const f of files(path.join(game, 'common/pop_jobs')).filter(f => f.endsWith('.txt')))
     for (const [, t] of fs.readFileSync(f, 'utf8').matchAll(/tags = \{([^}]*)\}/g)) for (const x of t.trim().split(/\s+/)) vanillaTags.add(x);

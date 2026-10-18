@@ -28,8 +28,10 @@
 # lowers the price -> less profit -> restructuring or bankruptcy.
 #
 # Capital is counted in trade. Investor pool (country pe_capital): starts at 500, gets
-# half of each firm's profit (all of it from corporations) and pays foundings at the
-# state's district cost (city 500, rural 300), buyouts and restructuring when the firm
+# private savings (a share of the trade income, by economic order) and half of each
+# debt-free firm's profit (all of it from corporations). It pays 40% down on foundings
+# (the state's district cost: city 500, rural 300) and buyouts; the firm owes the rest
+# and repays it before it pays out or grows. It also pays restructuring when the firm
 # cannot. Firm capital (deposit pe_fcap): the other half; pays expansions and
 # restructuring, absorbs losses.
 #
@@ -57,6 +59,7 @@ pe_monthly_sites = {
 pe_init = {
 	if = { limit = { NOT = { is_variable_set = pe_private_share } } set_variable = { which = pe_private_share value = 0 } }
 	if = { limit = { NOT = { is_variable_set = pe_profit_share } } set_variable = { which = pe_profit_share value = 0 } }
+	if = { limit = { NOT = { is_variable_set = pe_savings_rate } } set_variable = { which = pe_savings_rate value = 0 } }
 	if = { limit = { NOT = { is_variable_set = pe_capital } } set_variable = { which = pe_capital value = 500 } }
 	if = { limit = { NOT = { is_variable_set = pe_pool_income } } set_variable = { which = pe_pool_income value = 0 } }
 	if = {
@@ -73,6 +76,7 @@ pe_init = {
 pe_quarterly = {
 	pe_init = yes
 	set_variable = { which = pe_pool_income value = 0 }
+	pe_savings = yes
 	pe_census = yes
 	pe_market = yes
 	pe_job_values = yes
@@ -86,6 +90,27 @@ pe_quarterly = {
 	every_owned_colony = {
 		limit = { pe_planet_eligible = yes NOT = { has_planet_flag = pe_stepped } }
 		pe_planet_step = yes
+	}
+}
+
+# Country scope: private savings. A share of the gross trade income (pe_savings_rate, set by
+# the economic order: 0/5/10/15/20%) leaves the state's stockpile for the investor pool
+# each quarter. Only if the stockpile can pay it.
+pe_savings = {
+	set_variable = { which = pe_savings_last value = 0 }
+	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = trade } variable = pe_sav }
+	multiply_variable = { which = pe_sav value = pe_savings_rate }
+	multiply_variable = { which = pe_sav value = 3 }
+	export_resource_stockpile_to_variable = { resource = trade variable = pe_stock }
+	if = {
+		limit = {
+			check_variable = { which = pe_sav value > 0 }
+			check_variable = { which = pe_stock value >= pe_sav }
+		}
+		add_resource = { trade = -1 mult = pe_sav }
+		change_variable = { which = pe_capital value = pe_sav }
+		change_variable = { which = pe_pool_income value = pe_sav }
+		set_variable = { which = pe_savings_last value = pe_sav }
 	}
 }
 
@@ -376,8 +401,9 @@ pe_firm_accounting = {
 }
 
 # Deposit scope. Quarterly profit = value added x stage size x fill x profit share,
-# minus overhead (0.3 per stage and month). Half goes to the firm, half to the investor
-# pool (all of it from corporations); losses hit the firm. Then at most one stage change
+# minus overhead (0.3 per stage and month). A firm in debt pays all of it back first.
+# Then half goes to the firm, half to the investor pool (all of it from corporations);
+# losses hit the firm. Then at most one stage change
 # per planet and quarter: expand (+100 workforce, half a district) when the firm can pay
 # half a district's cost (city 250, rural 150),
 # its jobs are filled and the planet has idle civilians; shrink or go bankrupt when its
@@ -395,7 +421,17 @@ pe_firm_book = {
 	subtract_variable = { which = pe_profit value = pe_tmp }
 	multiply_variable = { which = pe_profit value = 3 }
 	set_variable = { which = pe_pending value = 0 }
+	if = { limit = { NOT = { is_variable_set = pe_debt } } set_variable = { which = pe_debt value = 0 } }
 	if = {
+		# In debt: all profit pays the loan back; the rest of a final instalment is lost.
+		limit = {
+			check_variable = { which = pe_profit value > 0 }
+			check_variable = { which = pe_debt value > 0 }
+		}
+		subtract_variable = { which = pe_debt value = pe_profit }
+		if = { limit = { check_variable = { which = pe_debt value < 0 } } set_variable = { which = pe_debt value = 0 } }
+	}
+	else_if = {
 		limit = { check_variable = { which = pe_profit value > 0 } }
 		if = {
 			limit = { check_variable = { which = pe_stage value < 3 } }
@@ -430,6 +466,7 @@ pe_firm_book = {
 			limit = {
 				check_variable = { which = pe_stage value < 3 }
 				check_variable = { which = pe_profit value > 0 }
+				check_variable = { which = pe_debt value <= 0 }
 				root = {
 					check_variable = { which = pe_fill_cur value >= 0.9 }
 					check_variable = { which = pe_unemp value = 1 }
@@ -486,35 +523,47 @@ pe_consider_variant = {
 	}
 }
 
-# The investor pool starts a construction site on a free slot and pays what the district
-# would cost the state. The firm will start with 10 capital, enough to wait about three
+# The investor pool starts a construction site on a free slot. It costs what the district
+# would cost the state: the pool pays 40% down, the firm owes the rest (pe_debt) and pays
+# it back from its profit. The firm starts with 10 capital, enough to wait about three
 # years for workers.
 pe_found_firm = {
-	root = { set_variable = { which = pe_cost value = $COST$ } }
+	root = {
+		set_variable = { which = pe_down value = $COST$ }
+		multiply_variable = { which = pe_down value = 0.4 }
+		set_variable = { which = pe_loan value = $COST$ }
+		subtract_variable = { which = pe_loan value = pe_down }
+	}
 	if = {
-		limit = { root = { check_variable = { which = pe_capital value >= pe_cost } } }
+		limit = { root = { check_variable = { which = pe_capital value >= pe_down } } }
 		add_deposit = $SITE$
 		last_added_deposit = {
 			set_variable = { which = pe_target value = $CODE$ }
 			set_variable = { which = pe_tstage value = 1 }
 			set_variable = { which = pe_fcap value = 10 }
+			set_variable = { which = pe_debt value = root.pe_loan }
 			set_variable = { which = pe_left value = $MONTHS$ }
 			set_variable = { which = pe_kind value = 1 }
 		}
 		set_planet_flag = pe_site
-		root = { subtract_variable = { which = pe_capital value = pe_cost } }
+		root = { subtract_variable = { which = pe_capital value = pe_down } }
 	}
 }
 
-# The investor pool buys a state district, pays the state and converts it. Only if the
+# The investor pool buys a state district and converts it. The state gets the full price;
+# the pool pays 40% down, the firm owes the rest. Only if the
 # district really went away (pe_before > pe_after); otherwise nothing happens.
 pe_buyout_execute = {
 	set_variable = { which = pe_before value = 0 }
 	set_variable = { which = pe_after value = 0 }
+	owner = {
+		set_variable = { which = pe_down value = $PRICE$ }
+		multiply_variable = { which = pe_down value = 0.4 }
+	}
 	if = {
 		limit = {
 			has_district = $DISTRICT$
-			owner = { check_variable = { which = pe_capital value >= $PRICE$ } }
+			owner = { check_variable = { which = pe_capital value >= pe_down } }
 		}
 		export_trigger_value_to_variable = { trigger = num_districts parameters = { type = $DISTRICT$ } variable = pe_before }
 		remove_district = $DISTRICT$
@@ -528,6 +577,8 @@ pe_buyout_execute = {
 			set_variable = { which = pe_target value = $CODE$ }
 			set_variable = { which = pe_tstage value = 1 }
 			set_variable = { which = pe_fcap value = 10 }
+			set_variable = { which = pe_debt value = $PRICE$ }
+			multiply_variable = { which = pe_debt value = 0.6 }
 			set_variable = { which = pe_left value = $MONTHS$ }
 			set_variable = { which = pe_kind value = 2 }
 		}
@@ -536,7 +587,7 @@ pe_buyout_execute = {
 		save_event_target_as = pe_msg_planet
 		owner = {
 			add_resource = { minerals = $MINERALS$ trade = $TRADE$ }
-			change_variable = { which = pe_capital value = -$PRICE$ }
+			subtract_variable = { which = pe_capital value = pe_down }
 			create_message = {
 				type = pe_private_economy
 				localization = pe_msg_buy_$FIRM$

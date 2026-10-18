@@ -4,7 +4,7 @@ Stellaris 4.5: Eine Richtlinie **Wirtschaftsordnung** legt fest, wie viel der Wi
 
 Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools/validate.mjs` prüft das).
 
-## Stand 0.6.0
+## Stand 0.7.0
 
 Die Privatwirtschaft ist ein Kreislauf:
 
@@ -14,10 +14,10 @@ Die Privatwirtschaft ist ein Kreislauf:
   - Stadt höchstens 150 pro Produkt.
   - Land 200, oder 150 plus 50 Sparte.
 - **Defizit-Sperre:** Keine Firmen, die eine Ressource im Defizit verbrauchen. Bestehende werden zuerst umgebaut, auch über Klassengrenzen.
-- **Kosten** wie für den Staat.
+- **Kosten** wie für den Staat. Finanziert über private Ersparnisse (Anteil am Handelseinkommen, nach Ordnung) und Kredit (40 % Anzahlung, Rest aus dem Firmengewinn).
 - **Abwechslung** durch Pseudo-Zufall, Diversifikation und Spezialisierung.
 
-Testablauf: [docs/TESTS_0.6.md](docs/TESTS_0.6.md). Ältere Stände: [0.5](docs/TESTS_0.5.md), [0.4](docs/TESTS_0.4.md), [0.3](docs/TESTS_0.3.md), [0.2](docs/TESTS_0.2.md), [0.1](docs/TESTS_0.1.md), [Prototyp](docs/PROTOTYPE_TESTS.md).
+Testablauf: [docs/TESTS_0.7.md](docs/TESTS_0.7.md). Ältere Stände: [0.6](docs/TESTS_0.6.md), [0.5](docs/TESTS_0.5.md), [0.4](docs/TESTS_0.4.md), [0.3](docs/TESTS_0.3.md), [0.2](docs/TESTS_0.2.md), [0.1](docs/TESTS_0.1.md), [Prototyp](docs/PROTOTYPE_TESTS.md).
 
 ## Geplant
 

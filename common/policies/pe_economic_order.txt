@@ -1,8 +1,9 @@
-# Economic order: share of district slots run by private firms (0/20/40/60/80%).
-# Stored as pe_private_share (percent) for the private economy logic. The firms keep a
-# profit share of their output (pe_profit_share: 0/15/20/25/35%): private output is
-# +15% more efficient, and the modifier lowers it by the profit share, so the state
-# nets about 100/95/90/80% of a state job's output while the firms fund their growth.
+# Economic order: share of district slots run by private firms (0/20/40/60/80%), stored as
+# pe_private_share (percent). The firms keep a profit share of their output
+# (pe_profit_share: 0/15/20/25/35%): private output is +15% more efficient and the modifier
+# lowers it by the profit share, so the state nets about 100/95/90/80% of a state job's
+# output. A share of the trade income goes to the investor pool as private savings
+# (pe_savings_rate: 0/5/10/15/20%).
 pe_economic_order = {
 	category = economy
 
@@ -18,6 +19,7 @@ pe_economic_order = {
 			set_variable = { which = pe_private_share value = 0 }
 			set_variable = { which = pe_profit_share value = 0 }
 			set_variable = { which = pe_profit_pct value = 0 }
+			set_variable = { which = pe_savings_rate value = 0 }
 		}
 		ai_weight = {
 			weight = 50
@@ -31,6 +33,7 @@ pe_economic_order = {
 			set_variable = { which = pe_private_share value = 20 }
 			set_variable = { which = pe_profit_share value = 0.15 }
 			set_variable = { which = pe_profit_pct value = 15 }
+			set_variable = { which = pe_savings_rate value = 0.05 }
 		}
 		ai_weight = {
 			weight = 80
@@ -44,6 +47,7 @@ pe_economic_order = {
 			set_variable = { which = pe_private_share value = 40 }
 			set_variable = { which = pe_profit_share value = 0.2 }
 			set_variable = { which = pe_profit_pct value = 20 }
+			set_variable = { which = pe_savings_rate value = 0.1 }
 		}
 		modifier = {
 			pe_private_metallurgists_produces_mult = -0.05
@@ -68,6 +72,7 @@ pe_economic_order = {
 			set_variable = { which = pe_private_share value = 60 }
 			set_variable = { which = pe_profit_share value = 0.25 }
 			set_variable = { which = pe_profit_pct value = 25 }
+			set_variable = { which = pe_savings_rate value = 0.15 }
 		}
 		modifier = {
 			pe_private_metallurgists_produces_mult = -0.1
@@ -94,6 +99,7 @@ pe_economic_order = {
 			set_variable = { which = pe_private_share value = 80 }
 			set_variable = { which = pe_profit_share value = 0.35 }
 			set_variable = { which = pe_profit_pct value = 35 }
+			set_variable = { which = pe_savings_rate value = 0.2 }
 		}
 		modifier = {
 			pe_private_metallurgists_produces_mult = -0.2

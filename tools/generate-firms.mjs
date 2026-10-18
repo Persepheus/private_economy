@@ -34,6 +34,7 @@ const topDef = (texts, key) => { for (const t of texts) { const i = t.search(new
 const WEIGHTS = [1, 0.9, 0.8, 0.7];                    // value of repeated 50-workforce units
 const FOUND = {u: 500, r: 300};                        // founding cost (private capital) = what a district costs the state
 const RETOOL = {u: 250, r: 150};                       // restructuring cost x stage size
+const DOWN = 0.4;                                      // down payment from the investor pool; the rest is the firm's debt
 const PRICE = {u: [500, 100], r: [300, 60]};           // buyout/nationalisation: minerals, trade (x stage)
 const UPKEEP = {u: 2, r: 1};                           // energy at stage 1, like the district
 const BUILD_MONTHS = {u: 16, r: 8};                    // vanilla district build time (480 / 240 days)
@@ -329,7 +330,7 @@ write('common/scripted_triggers/pe_firm_triggers_generated.txt', trg);
 const ifChain = (items, cond, body, ind = '\t') => items.map((it, i) => `${ind}${i ? 'else_if' : 'if'} = { limit = { ${cond(it)} } ${body(it)} }`).join('\n');
 const rootIs = (name, val) => `root = { check_variable = { which = ${name} value = ${val} } }`;
 const msg = loc => `owner = { create_message = { type = pe_private_economy localization = ${loc} days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }`;
-const initFirm = (code, stage, fcap) => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } }`;
+const initFirm = (code, stage, fcap, debt) => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } set_variable = { which = pe_debt value = ${debt} } }`;
 const addRes = (res, job) => Object.entries(res).filter(([r, n]) => n && RES.includes(r)).map(([r, n]) => `set_variable = { which = pe_tmp value = pe_s_${r} } multiply_variable = { which = pe_tmp value = ${n} } change_variable = { which = pe_vaj_${job} value = pe_tmp }`).join(' ');
 // Expected market output of a variant at stage 1 (vanilla base, no catalytic).
 const variantOutput = v => { const o = {}; for (const [job, wf] of Object.entries(v.workforce)) for (const [r, n] of Object.entries(sumRes(jobByKey[job].base, jobByKey[job].noncat))) if (MARKET_RES.includes(r)) o[r] = (o[r] || 0) + n * wf / 100; return o; };
@@ -448,6 +449,7 @@ ${LETTERS.filter(l => specFor(l).length).map(l => `\tif = { limit = { OR = { ${s
 pe_firm_identify = {
 ${ifChain(pairs, p => `is_deposit_type = ${p.key}`, p => `set_variable = { which = pe_code value = ${p.v.code} } set_variable = { which = pe_stage value = ${p.s} }`)}
 	if = { limit = { NOT = { is_variable_set = pe_fcap } } set_variable = { which = pe_fcap value = 0 } }
+	if = { limit = { NOT = { is_variable_set = pe_debt } } set_variable = { which = pe_debt value = 0 } }
 }
 
 # Deposit scope: this quarter's values of the firm's variant (entertainment valued for
@@ -481,7 +483,7 @@ ${ifChain(variants, v => rootIs('pe_best_variant', v.code), v => {
   return `
 		if = {
 			limit = {
-				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= ${m + t} } }
+				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= ${(m + t) * DOWN} } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
 			save_event_target_as = pe_offer_planet
@@ -518,6 +520,7 @@ pe_site_complete = {
 			set_variable = { which = pe_chg_code value = prev.pe_target }
 			set_variable = { which = pe_chg_stage value = prev.pe_tstage }
 			set_variable = { which = pe_chg_fcap value = prev.pe_fcap }
+			set_variable = { which = pe_chg_debt value = prev.pe_debt }
 			set_variable = { which = pe_chg_type value = prev.pe_kind }
 		}
 		remove_deposit = yes
@@ -526,7 +529,7 @@ pe_site_complete = {
 		limit = { root = { check_variable = { which = pe_site_done value = 1 } } }
 		save_event_target_as = pe_msg_planet
 ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = ${p.v.code} } check_variable = { which = pe_chg_stage value = ${p.s} } }`, p =>
-  `add_deposit = ${p.key} ${initFirm(p.v.code, p.s, 'root.pe_chg_fcap')} if = { limit = { ${rootIs('pe_chg_type', 3)} } ${msg(`pe_msg_retool_${p.key}`)} }${p.s === 1 ? ` else = { ${msg(`pe_msg_found_${p.key}`)} }` : ''}`, '\t\t')}
+  `add_deposit = ${p.key} ${initFirm(p.v.code, p.s, 'root.pe_chg_fcap', 'root.pe_chg_debt')} if = { limit = { ${rootIs('pe_chg_type', 3)} } ${msg(`pe_msg_retool_${p.key}`)} }${p.s === 1 ? ` else = { ${msg(`pe_msg_found_${p.key}`)} }` : ''}`, '\t\t')}
 		if = {
 			limit = { count_deposits = { category = pe_deposit_cat_sites count < 1 } }
 			remove_planet_flag = pe_site
@@ -548,14 +551,15 @@ pe_firm_change = {
 				set_variable = { which = pe_chg_code value = prev.pe_code }
 				set_variable = { which = pe_chg_stage value = prev.pe_stage }
 				set_variable = { which = pe_chg_fcap value = prev.pe_fcap }
+				set_variable = { which = pe_chg_debt value = prev.pe_debt }
 			}
 			remove_deposit = yes
 		}
 		root = { set_variable = { which = pe_pend_any value = 0 } }
 		save_event_target_as = pe_msg_planet
 ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = ${p.v.code} } check_variable = { which = pe_chg_stage value = ${p.s} } }`, p => [
-  p.s < 3 ? `if = { limit = { ${rootIs('pe_chg_type', 1)} } add_deposit = ${keyOf(p.v, p.s + 1)} ${initFirm(p.v.code, p.s + 1, 'root.pe_chg_fcap')} ${msg(`pe_msg_up_${keyOf(p.v, p.s + 1)}`)} }` : '',
-  p.s > 1 ? `if = { limit = { ${rootIs('pe_chg_type', 2)} } add_deposit = ${keyOf(p.v, p.s - 1)} ${initFirm(p.v.code, p.s - 1, 'root.pe_chg_fcap')} ${msg(`pe_msg_down_${keyOf(p.v, p.s - 1)}`)} }` : '',
+  p.s < 3 ? `if = { limit = { ${rootIs('pe_chg_type', 1)} } add_deposit = ${keyOf(p.v, p.s + 1)} ${initFirm(p.v.code, p.s + 1, 'root.pe_chg_fcap', 'root.pe_chg_debt')} ${msg(`pe_msg_up_${keyOf(p.v, p.s + 1)}`)} }` : '',
+  p.s > 1 ? `if = { limit = { ${rootIs('pe_chg_type', 2)} } add_deposit = ${keyOf(p.v, p.s - 1)} ${initFirm(p.v.code, p.s - 1, 'root.pe_chg_fcap', 'root.pe_chg_debt')} ${msg(`pe_msg_down_${keyOf(p.v, p.s - 1)}`)} }` : '',
   p.s === 1 ? `if = { limit = { ${rootIs('pe_chg_type', 3)} } ${msg(`pe_msg_bankrupt_${p.key}`)} }` : '',
 ].filter(Boolean).join(' '), '\t\t')}
 		check_planet_employment = yes
@@ -563,7 +567,8 @@ ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = $
 }
 
 # Colony scope: the state buys back the least valuable firm at the buyout price x stage
-# (if it can pay) and rebuilds the district. The firm's capital goes to the investors.
+# (if it can pay) and rebuilds the district. The investors get the price plus the firm's
+# capital minus its remaining debt.
 pe_nationalise_one = {
 	root = {
 		set_variable = { which = pe_worst value = 100000 }
@@ -588,7 +593,7 @@ pe_nationalise_one = {
 ${[1, 2, 3, 4, 5].flatMap(c => STAGES.map(s => ({c, s}))).map(({c, s}, i) => {
   const [m, t] = PRICE[c === 1 || c === 5 ? 'u' : 'r'].map(x => x * stageMult(s));
   return `\t\t${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_cls value = ${c} } check_variable = { which = pe_stage value = ${s} } planet_owner = { has_resource = { type = minerals amount >= ${m} } has_resource = { type = trade amount >= ${t} } } }
-			planet_owner = { add_resource = { minerals = -${m} trade = -${t} } change_variable = { which = pe_capital value = ${m + t} } change_variable = { which = pe_capital value = prev.pe_fcap } }
+			planet_owner = { add_resource = { minerals = -${m} trade = -${t} } change_variable = { which = pe_capital value = ${m + t} } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = ${c} } set_variable = { which = pe_nat_stage value = ${s} } }
 			remove_deposit = yes
 		}`;
@@ -660,6 +665,7 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} }`).
 				set_variable = { which = pe_chg_code value = prev.pe_code }
 				set_variable = { which = pe_chg_stage value = prev.pe_stage }
 				set_variable = { which = pe_chg_fcap value = prev.pe_fcap }
+				set_variable = { which = pe_chg_debt value = prev.pe_debt }
 				set_variable = { which = pe_chg_cost value = prev.pe_cost }
 			}
 			remove_deposit = yes
@@ -668,7 +674,7 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} }`).
 	if = {
 		limit = { root = { check_variable = { which = pe_retool_ok value = 1 } } }
 ${ifChain(variants, v => rootIs('pe_cls_var_all', v.code), v => {
-  const site = `add_deposit = ${v.site} last_added_deposit = { set_variable = { which = pe_target value = ${v.code} } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = ${BUILD_MONTHS[v.k] / 2} } set_variable = { which = pe_kind value = 3 } }`;
+  const site = `add_deposit = ${v.site} last_added_deposit = { set_variable = { which = pe_target value = ${v.code} } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_debt value = root.pe_chg_debt } set_variable = { which = pe_left value = ${BUILD_MONTHS[v.k] / 2} } set_variable = { which = pe_kind value = 3 } }`;
   return v.cityLike ? site : `if = { limit = { num_free_districts = { type = ${v.district} value > 0 } } ${site} } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_${v.cls} days = 360 } }`;
 }, '\t\t')}
 		if = {
@@ -676,7 +682,7 @@ ${ifChain(variants, v => rootIs('pe_cls_var_all', v.code), v => {
 			# No room for the rural target: restore the old firm and pay the cost back.
 			if = { limit = { ${rootIs('pe_paid', 1)} } root = { change_variable = { which = pe_chg_fcap value = pe_chg_cost } } }
 			if = { limit = { ${rootIs('pe_paid', 2)} } root = { change_variable = { which = pe_capital value = pe_chg_cost } } }
-${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = ${p.v.code} } check_variable = { which = pe_chg_stage value = ${p.s} } }`, p => `add_deposit = ${p.key} ${initFirm(p.v.code, p.s, 'root.pe_chg_fcap')}`, '\t\t\t')}
+${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = ${p.v.code} } check_variable = { which = pe_chg_stage value = ${p.s} } }`, p => `add_deposit = ${p.key} ${initFirm(p.v.code, p.s, 'root.pe_chg_fcap', 'root.pe_chg_debt')}`, '\t\t\t')}
 		}
 		else = {
 			set_planet_flag = pe_site
