@@ -31,7 +31,7 @@ const blockAt = (text, open) => { let d = 0; for (let j = open; j < text.length;
 const topDef = (texts, key) => { for (const t of texts) { const i = t.search(new RegExp(`^${key} = \\{`, 'm')); if (i >= 0) return blockAt(t, t.indexOf('{', i)); } throw new Error(`no ${key}`); };
 
 // --- Balance --------------------------------------------------------------------
-const WEIGHTS = [1, 0.75];                             // value of a repeated share
+const WEIGHTS = [1, 0.9, 0.8, 0.7];                    // value of repeated 50-workforce units
 const FOUND = {u: 500, r: 300};                        // founding cost (private capital) = what a district costs the state
 const RETOOL = {u: 250, r: 150};                       // restructuring cost x stage size
 const PRICE = {u: [500, 100], r: [300, 60]};           // buyout/nationalisation: minerals, trade (x stage)
@@ -170,12 +170,12 @@ const housingOf = district => {
   return {base: out, blocks};
 };
 // City districts also get the planet's two zones: an urban zone adds housing, every other
-// zone removes it. Each share of a city firm counts as one zone: entertainment as urban,
-// all others (industry, trade, labs) as specialised zones.
+// zone removes it. Every 100 workforce of a city firm count as one zone: entertainment as
+// urban, all others (industry, trade, labs) as specialised zones.
 const zoneVars = fs.readFileSync(path.join(game, 'common/scripted_variables/100_scripted_variables_zones.txt'), 'utf8');
 const zoneVar = n => Number(zoneVars.match(new RegExp(`^@${n} = (-?\\d+)`, 'm'))[1]);
 const ZONE_POS = zoneVar('zone_urban_housing_positive'), ZONE_NEG = zoneVar('zone_urban_housing_negative');
-const zoneHousing = v => (v.counts.u || 0) * ZONE_POS + (2 - (v.counts.u || 0)) * ZONE_NEG;
+const zoneHousing = v => ((v.counts.u || 0) * ZONE_POS + (4 - (v.counts.u || 0)) * ZONE_NEG) / 2;
 const HOUSING = {u: housingOf('district_city'), m: housingOf('district_mining'), e: housingOf('district_generator'), f: housingOf('district_farming')};
 
 // --- Variants -------------------------------------------------------------------
@@ -193,28 +193,41 @@ const P = {
 };
 const urban = ['a', 'c', 't', 'u'], labs = ['x', 'y', 'z'], rural = ['m', 'e', 'f'];
 const CLS_NUM = {u: 1, m: 2, e: 3, f: 4, l: 5};
+const ORDER = Object.keys(P);
 const variants = [];
 const addVariant = (s, cls) => {
   const counts = {}; for (const x of s) counts[x] = (counts[x] || 0) + 1;
-  const primary = ['u', 'l'].includes(cls) ? Object.keys(counts).sort((x, y) => counts[y] - counts[x])[0] : cls;
-  variants.push({shares: s, counts, primary, cls});
+  const order = Object.keys(counts).sort((x, y) => counts[y] - counts[x] || ORDER.indexOf(x) - ORDER.indexOf(y));
+  variants.push({shares: s, counts, order, primary: cls === 'u' || cls === 'l' ? order[0] : cls, cls});
 };
-for (let i = 0; i < 4; i++) for (let j = i; j < 4; j++) addVariant([urban[i], urban[j]], 'u');
-for (let i = 0; i < 3; i++) for (let j = i; j < 3; j++) addVariant([labs[i], labs[j]], 'l');
-for (const r of rural) for (const x of [r, 'a', 'c', 't', ...rural.filter(y => y !== r)]) addVariant([r, x], r);
+// All ways to fill n units from the letters, at most max of one letter.
+const multisets = (letters, n, max) => {
+  const out = [];
+  const rec = (i, left, acc) => {
+    if (i === letters.length) { if (!left) out.push(acc); return; }
+    for (let k = Math.min(left, max); k >= 0; k--) rec(i + 1, left - k, [...acc, ...Array(k).fill(letters[i])]);
+  };
+  rec(0, n, []);
+  return out;
+};
+// 4 units of 50 workforce. City firms and labs: at most 150 of one product. Rural firms:
+// 200 of their resource, or 150 plus a 50 division.
+for (const sh of multisets(urban, 4, 3)) addVariant(sh, 'u');
+for (const sh of multisets(labs, 4, 3)) addVariant(sh, 'l');
+for (const r of rural) for (const x of [r, 'a', 'c', 't', ...rural.filter(y => y !== r)]) addVariant(x === r ? [r, r, r, r] : [r, r, r, x], r);
 variants.forEach((v, i) => {
   v.code = i + 1;
-  const side = Object.keys(v.counts).filter(x => x !== v.primary);
-  v.side = side.length === 1 ? side[0] : null;
+  v.side = v.cityLike = null;
+  v.side = v.cls === 'u' || v.cls === 'l' ? null : (v.order.find(x => x !== v.cls) || null);
   v.mixedAll = false;
-  v.key = 'd_pe_firm_' + (v.mixedAll ? v.shares.join('') : v.primary.repeat(v.counts[v.primary]) + (v.side || ''));
+  v.key = 'd_pe_firm_' + v.order.map(l => l.repeat(v.counts[l])).join('');
   v.cityLike = v.cls === 'u' || v.cls === 'l';
   v.k = v.cityLike ? 'u' : 'r';
   v.clsNum = CLS_NUM[v.cls];
   v.dcls = v.cityLike ? 'u' : v.cls;
   v.district = v.cityLike ? 'district_city' : P[v.cls].district;
   v.site = v.cityLike ? 'd_pe_site_city' : P[v.cls].site;
-  v.unitWf = () => 100;
+  v.unitWf = () => 50;
   v.workforce = {};
   for (const [x, n] of Object.entries(v.counts)) v.workforce[P[x].job] = n * v.unitWf(x);
   // Weighted entertainment units (planet-specific value) for choosing, raw units for profit.
@@ -291,6 +304,24 @@ for (const v of variants) {
     trg += `pe_can_found_${v.key} = { free_district_slots > 0 num_free_districts = { type = ${v.district} value > 0 }${s} }\n`;
     trg += `pe_can_buy_${v.key} = { has_district = ${v.district}${s} }\npe_can_retool_${v.key} = { NOT = { has_planet_flag = pe_noroom_${v.cls} } OR = { has_district = ${v.district} num_free_districts = { type = ${v.district} value > 0 } root = { check_variable = { which = pe_here_${v.cls} value = 1 } } }${s} }\n`;
   }
+}
+// pe_ok_<firm>: none of its inputs is in deficit (pe_def_<res>, set when pricing).
+// Inputs differ with Catalytic Processing (food instead of minerals).
+trg += `\n# Colony or deposit scope (reads root): the variant consumes nothing the empire is short of.\n`;
+for (const v of variants) {
+  const both = new Set(), nonCat = new Set(), catOnly = new Set();
+  for (const job of Object.keys(v.workforce)) {
+    const j = jobByKey[job];
+    const nc = Object.entries(sumRes(j.base, j.noncat)).filter(([r, n]) => n < 0 && MARKET_RES.includes(r)).map(([r]) => r);
+    const ca = Object.entries(sumRes(j.base, j.cat_)).filter(([r, n]) => n < 0 && MARKET_RES.includes(r)).map(([r]) => r);
+    for (const r of nc) (ca.includes(r) ? both : nonCat).add(r);
+    for (const r of ca) if (!nc.includes(r)) catOnly.add(r);
+  }
+  const notDef = r => `root = { NOT = { check_variable = { which = pe_def_${r} value = 1 } } }`;
+  const conds = [...[...both].map(notDef),
+    ...[...nonCat].filter(r => !both.has(r)).map(r => `OR = { root = { is_catalytic_empire = yes } ${notDef(r)} }`),
+    ...[...catOnly].filter(r => !both.has(r)).map(r => `OR = { root = { is_catalytic_empire = no } ${notDef(r)} }`)];
+  trg += `pe_ok_${v.key} = { ${conds.length ? conds.join(' ') : 'always = yes'} }\n`;
 }
 write('common/scripted_triggers/pe_firm_triggers_generated.txt', trg);
 
@@ -420,9 +451,10 @@ ${ifChain(pairs, p => `is_deposit_type = ${p.key}`, p => `set_variable = { which
 }
 
 # Deposit scope: this quarter's values of the firm's variant (entertainment valued for
-# this planet), and its class (1 city, 2 mining, 3 generator, 4 farming, 5 lab).
+# this planet; -1000 if it consumes a resource in deficit, so it restructures first), and
+# its class (1 city, 2 mining, 3 generator, 4 farming, 5 lab).
 pe_deposit_fetch = {
-${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }`, v => `set_variable = { which = pe_va value = root.pe_va_${v.key} } set_variable = { which = pe_val value = root.pe_val_${v.key} } set_variable = { which = pe_cls value = ${v.clsNum} }${v.entRaw ? ` set_variable = { which = pe_tmp value = root.pe_ent_val } multiply_variable = { which = pe_tmp value = ${v.entRaw} } change_variable = { which = pe_va value = pe_tmp }` : ''}`)}
+${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }`, v => `set_variable = { which = pe_va value = root.pe_va_${v.key} } set_variable = { which = pe_val value = root.pe_val_${v.key} } if = { limit = { NOT = { pe_ok_${v.key} = yes } } set_variable = { which = pe_val value = -1000 } } set_variable = { which = pe_cls value = ${v.clsNum} }${v.entRaw ? ` set_variable = { which = pe_tmp value = root.pe_ent_val } multiply_variable = { which = pe_tmp value = ${v.entRaw} } change_variable = { which = pe_va value = pe_tmp }` : ''}`)}
 }
 
 # Colony scope: root.pe_best_variant = most valuable variant available here, above
@@ -672,13 +704,16 @@ write('common/scripted_loc/pe_scripted_loc_generated.txt', header +
 
 // --- Localisation -------------------------------------------------------------------
 const nameOf = (v, s, L) => {
+  const o = v.order, c = o.map(l => v.counts[l]);
+  const art = l => P[l][L ? 'enArt' : 'deArt'], div = l => P[l][L ? 'enDiv' : 'deDiv'];
   let base;
-  if (v.cls === 'l' && v.mixedAll) base = L ? 'Private Research Institute' : 'Privates Forschungsinstitut';
-  else if (v.mixedAll) base = `${L ? 'Private Conglomerate' : 'Privater Mischkonzern'} (${v.shares.map(x => P[x][L ? 'enDiv' : 'deDiv'].replace(/s$/, L ? 's' : '')).join(', ')})`;
-  else {
-    base = P[v.primary][L ? 'enArt' : 'deArt'];
-    if (v.side) base = L ? `${base} with ${P[v.side].enDiv} Division` : `${base} mit ${P[v.side].deDiv}sparte`;
-  }
+  if (o.length === 1) base = art(o[0]);
+  else if (c[0] === 3) base = L ? `${art(o[0])} with ${div(o[1])} Division` : `${art(o[0])} mit ${div(o[1])}sparte`;
+  else if (c[0] === 2 && c[1] === 2) base = v.cls === 'l'
+    ? (L ? `Private ${div(o[0])} and ${div(o[1])} Lab` : `Privates ${div(o[0])}- und ${div(o[1])}labor`)
+    : (L ? `Private ${div(o[0])} and ${div(o[1])} Company` : `Privates ${div(o[0])}- und ${div(o[1])}unternehmen`);
+  else if (c[0] === 2) base = L ? `${art(o[0])} with ${div(o[1])} and ${div(o[2])} Divisions` : `${art(o[0])} mit ${div(o[1])}- und ${div(o[2])}sparte`;
+  else base = L ? 'Private Conglomerate' : 'Privater Mischkonzern';
   return base + ['', L ? ' (Mid-size)' : ' (Mittelstand)', L ? ' (Corporation)' : ' (Konzern)'][s - 1];
 };
 const distName = (c, L) => c === 1 || c === 5 ? (L ? 'city' : 'Stadt') : P[rural[c - 2]][L ? 'enDist' : 'deDist'];
@@ -738,5 +773,5 @@ for (const [lang, lines] of Object.entries(loc))
 
 console.log(`${JOBS.length} jobs (defaults: ${JOBS.map(j => `${j.key.slice(11)} ${JSON.stringify(sumRes(j.base, j.noncat))}`).join('; ')})`);
 console.log(`${variants.length} variants x ${STAGES.length} stages = ${pairs.length} firm deposits; housing blocks: ${Object.entries(HOUSING).map(([k, h]) => `${k} ${h.base.length}+${h.blocks.length}`).join(', ')}`);
-console.log(`zone housing: ${ZONE_POS}/${ZONE_NEG}, e.g. aaa ${zoneHousing(variants[0])}, uu ${zoneHousing(variants.find(v => v.key === 'd_pe_firm_uu'))}`);
+console.log(`zone housing: ${ZONE_POS}/${ZONE_NEG}, e.g. ${variants[0].key.slice(10)} ${zoneHousing(variants[0])}`);
 console.log(`designations: ${LETTERS.map(l => `${l}=${specFor(l).length}`).join(' ')}`);

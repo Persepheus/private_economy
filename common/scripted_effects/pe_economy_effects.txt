@@ -59,6 +59,10 @@ pe_init = {
 	if = { limit = { NOT = { is_variable_set = pe_profit_share } } set_variable = { which = pe_profit_share value = 0 } }
 	if = { limit = { NOT = { is_variable_set = pe_capital } } set_variable = { which = pe_capital value = 500 } }
 	if = { limit = { NOT = { is_variable_set = pe_pool_income } } set_variable = { which = pe_pool_income value = 0 } }
+	if = {
+		limit = { NOT = { is_variable_set = pe_seed } }
+		set_variable_to_random_value = { which = pe_seed min = 0 max = 1008 rounded = yes }
+	}
 	# Spread the empires over the three months of a quarter.
 	if = {
 		limit = { NOT = { is_variable_set = pe_months } }
@@ -149,6 +153,10 @@ pe_shadow = {
 	set_variable = { which = pe_pbuy value = $BASE$ }
 	set_variable = { which = pe_psell value = $SELL$ }
 	]
+	# pe_def_<res>: in deficit (pending supply included). Firms that consume it are not
+	# founded and are the first to restructure.
+	set_variable = { which = pe_def_$RES$ value = 0 }
+	if = { limit = { check_variable = { which = pe_net value < 0 } } set_variable = { which = pe_def_$RES$ value = 1 } }
 	set_variable = { which = pe_s_$RES$ value = pe_pbuy }
 	if = {
 		limit = {
@@ -335,16 +343,13 @@ pe_planet_step = {
 			pe_nationalise_one = yes
 		}
 	}
-	# Nothing built or changed, and no room or no need to grow: firms may restructure.
+	# Nothing started on this planet this quarter: firms may restructure (a firm that
+	# consumes a resource in deficit first).
 	if = {
 		limit = {
 			NOT = { has_planet_flag = pe_site }
 			NOT = { has_planet_flag = pe_cooldown }
 			check_variable = { which = pe_firms_real value > 0 }
-			OR = {
-				check_variable = { which = pe_firms value >= pe_target }
-				free_district_slots = 0
-			}
 		}
 		pe_restructure = yes
 	}
@@ -449,14 +454,22 @@ pe_firm_book = {
 # buying, minus the value of the state district it replaces (weighted like a variant).
 pe_consider_variant = {
 	if = {
-		limit = { pe_can_$MODE$_$V$ = yes }
+		limit = { pe_can_$MODE$_$V$ = yes pe_ok_$V$ = yes }
 		root = {
 			set_variable = { which = pe_cand value = pe_val_$V$ }
 			set_variable = { which = pe_tmp value = pe_ent_val }
 			multiply_variable = { which = pe_tmp value = $ENT$ }
 			change_variable = { which = pe_cand value = pe_tmp }
 			multiply_variable = { which = pe_cand value = pe_spec_$PRIM$ }
-			set_variable_to_random_value = { which = pe_rnd min = 0.8 max = 1.2 }
+			# Pseudo-random 0.8-1.2: the engine's random value repeats within a day, so a
+			# small linear congruential sequence (mod 1009) varies it per candidate.
+			multiply_variable = { which = pe_seed value = 17 }
+			change_variable = { which = pe_seed value = $CODE$ }
+			change_variable = { which = pe_seed value = 23 }
+			modulo_variable = { which = pe_seed value = 1009 }
+			set_variable = { which = pe_rnd value = pe_seed }
+			divide_variable = { which = pe_rnd value = 2522.5 }
+			change_variable = { which = pe_rnd value = 0.8 }
 			multiply_variable = { which = pe_cand value = pe_rnd }
 			if = {
 				limit = { check_variable = { which = pe_dmode value = 1 } }
@@ -506,6 +519,7 @@ pe_buyout_execute = {
 		export_trigger_value_to_variable = { trigger = num_districts parameters = { type = $DISTRICT$ } variable = pe_before }
 		remove_district = $DISTRICT$
 		export_trigger_value_to_variable = { trigger = num_districts parameters = { type = $DISTRICT$ } variable = pe_after }
+		if = { limit = { NOT = { is_variable_set = pe_after } } set_variable = { which = pe_after value = 0 } }
 	}
 	if = {
 		limit = { check_variable = { which = pe_before value > pe_after } }
@@ -538,7 +552,7 @@ pe_buyout_execute = {
 # district type here, side shares their deposits).
 pe_retool_consider = {
 	if = {
-		limit = { pe_can_retool_$V$ = yes }
+		limit = { pe_can_retool_$V$ = yes pe_ok_$V$ = yes }
 		root = {
 			if = {
 				limit = { check_variable = { which = pe_val_$V$ value > pe_cls_val_all } }

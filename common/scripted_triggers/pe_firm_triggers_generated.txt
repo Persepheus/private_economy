@@ -2,105 +2,249 @@
 # Colony scope, per variant: can it be founded on a free slot, bought from the state,
 # or chosen by a firm that restructures? A rural side share needs
 # the planet to have that district type at all (its deposits).
-pe_can_found_d_pe_firm_aa = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aa = { has_district = district_city }
-pe_can_retool_d_pe_firm_aa = { always = yes }
-pe_can_found_d_pe_firm_ac = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ac = { has_district = district_city }
-pe_can_retool_d_pe_firm_ac = { always = yes }
-pe_can_found_d_pe_firm_at = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_at = { has_district = district_city }
-pe_can_retool_d_pe_firm_at = { always = yes }
-pe_can_found_d_pe_firm_au = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_au = { has_district = district_city }
-pe_can_retool_d_pe_firm_au = { always = yes }
-pe_can_found_d_pe_firm_cc = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_cc = { has_district = district_city }
-pe_can_retool_d_pe_firm_cc = { always = yes }
-pe_can_found_d_pe_firm_ct = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ct = { has_district = district_city }
-pe_can_retool_d_pe_firm_ct = { always = yes }
-pe_can_found_d_pe_firm_cu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_cu = { has_district = district_city }
-pe_can_retool_d_pe_firm_cu = { always = yes }
-pe_can_found_d_pe_firm_tt = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_tt = { has_district = district_city }
-pe_can_retool_d_pe_firm_tt = { always = yes }
-pe_can_found_d_pe_firm_tu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_tu = { has_district = district_city }
-pe_can_retool_d_pe_firm_tu = { always = yes }
-pe_can_found_d_pe_firm_uu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_uu = { has_district = district_city }
-pe_can_retool_d_pe_firm_uu = { always = yes }
-pe_can_found_d_pe_firm_xx = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xx = { has_district = district_city }
-pe_can_retool_d_pe_firm_xx = { always = yes }
-pe_can_found_d_pe_firm_xy = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xy = { has_district = district_city }
-pe_can_retool_d_pe_firm_xy = { always = yes }
-pe_can_found_d_pe_firm_xz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xz = { has_district = district_city }
-pe_can_retool_d_pe_firm_xz = { always = yes }
-pe_can_found_d_pe_firm_yy = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_yy = { has_district = district_city }
-pe_can_retool_d_pe_firm_yy = { always = yes }
-pe_can_found_d_pe_firm_yz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_yz = { has_district = district_city }
-pe_can_retool_d_pe_firm_yz = { always = yes }
-pe_can_found_d_pe_firm_zz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_zz = { has_district = district_city }
-pe_can_retool_d_pe_firm_zz = { always = yes }
-pe_can_found_d_pe_firm_mm = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
-pe_can_buy_d_pe_firm_mm = { has_district = district_mining }
-pe_can_retool_d_pe_firm_mm = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } }
-pe_can_found_d_pe_firm_ma = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
-pe_can_buy_d_pe_firm_ma = { has_district = district_mining }
-pe_can_retool_d_pe_firm_ma = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } }
-pe_can_found_d_pe_firm_mc = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
-pe_can_buy_d_pe_firm_mc = { has_district = district_mining }
-pe_can_retool_d_pe_firm_mc = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } }
-pe_can_found_d_pe_firm_mt = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
-pe_can_buy_d_pe_firm_mt = { has_district = district_mining }
-pe_can_retool_d_pe_firm_mt = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } }
-pe_can_found_d_pe_firm_me = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_buy_d_pe_firm_me = { has_district = district_mining OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_retool_d_pe_firm_me = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_found_d_pe_firm_mf = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_buy_d_pe_firm_mf = { has_district = district_mining OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_retool_d_pe_firm_mf = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_found_d_pe_firm_ee = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
-pe_can_buy_d_pe_firm_ee = { has_district = district_generator }
-pe_can_retool_d_pe_firm_ee = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } }
-pe_can_found_d_pe_firm_ea = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
-pe_can_buy_d_pe_firm_ea = { has_district = district_generator }
-pe_can_retool_d_pe_firm_ea = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } }
-pe_can_found_d_pe_firm_ec = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
-pe_can_buy_d_pe_firm_ec = { has_district = district_generator }
-pe_can_retool_d_pe_firm_ec = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } }
-pe_can_found_d_pe_firm_et = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
-pe_can_buy_d_pe_firm_et = { has_district = district_generator }
-pe_can_retool_d_pe_firm_et = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } }
-pe_can_found_d_pe_firm_em = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_buy_d_pe_firm_em = { has_district = district_generator OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_retool_d_pe_firm_em = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_found_d_pe_firm_ef = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_buy_d_pe_firm_ef = { has_district = district_generator OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_retool_d_pe_firm_ef = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_found_d_pe_firm_ff = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
-pe_can_buy_d_pe_firm_ff = { has_district = district_farming }
-pe_can_retool_d_pe_firm_ff = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } }
-pe_can_found_d_pe_firm_fa = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
-pe_can_buy_d_pe_firm_fa = { has_district = district_farming }
-pe_can_retool_d_pe_firm_fa = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } }
-pe_can_found_d_pe_firm_fc = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
-pe_can_buy_d_pe_firm_fc = { has_district = district_farming }
-pe_can_retool_d_pe_firm_fc = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } }
-pe_can_found_d_pe_firm_ft = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
-pe_can_buy_d_pe_firm_ft = { has_district = district_farming }
-pe_can_retool_d_pe_firm_ft = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } }
-pe_can_found_d_pe_firm_fm = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_buy_d_pe_firm_fm = { has_district = district_farming OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_retool_d_pe_firm_fm = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_found_d_pe_firm_fe = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_buy_d_pe_firm_fe = { has_district = district_farming OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_retool_d_pe_firm_fe = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+pe_can_found_d_pe_firm_aaac = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_aaac = { has_district = district_city }
+pe_can_retool_d_pe_firm_aaac = { always = yes }
+pe_can_found_d_pe_firm_aaat = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_aaat = { has_district = district_city }
+pe_can_retool_d_pe_firm_aaat = { always = yes }
+pe_can_found_d_pe_firm_aaau = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_aaau = { has_district = district_city }
+pe_can_retool_d_pe_firm_aaau = { always = yes }
+pe_can_found_d_pe_firm_aacc = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_aacc = { has_district = district_city }
+pe_can_retool_d_pe_firm_aacc = { always = yes }
+pe_can_found_d_pe_firm_aact = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_aact = { has_district = district_city }
+pe_can_retool_d_pe_firm_aact = { always = yes }
+pe_can_found_d_pe_firm_aacu = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_aacu = { has_district = district_city }
+pe_can_retool_d_pe_firm_aacu = { always = yes }
+pe_can_found_d_pe_firm_aatt = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_aatt = { has_district = district_city }
+pe_can_retool_d_pe_firm_aatt = { always = yes }
+pe_can_found_d_pe_firm_aatu = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_aatu = { has_district = district_city }
+pe_can_retool_d_pe_firm_aatu = { always = yes }
+pe_can_found_d_pe_firm_aauu = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_aauu = { has_district = district_city }
+pe_can_retool_d_pe_firm_aauu = { always = yes }
+pe_can_found_d_pe_firm_ccca = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_ccca = { has_district = district_city }
+pe_can_retool_d_pe_firm_ccca = { always = yes }
+pe_can_found_d_pe_firm_ccat = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_ccat = { has_district = district_city }
+pe_can_retool_d_pe_firm_ccat = { always = yes }
+pe_can_found_d_pe_firm_ccau = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_ccau = { has_district = district_city }
+pe_can_retool_d_pe_firm_ccau = { always = yes }
+pe_can_found_d_pe_firm_ttac = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_ttac = { has_district = district_city }
+pe_can_retool_d_pe_firm_ttac = { always = yes }
+pe_can_found_d_pe_firm_actu = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_actu = { has_district = district_city }
+pe_can_retool_d_pe_firm_actu = { always = yes }
+pe_can_found_d_pe_firm_uuac = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_uuac = { has_district = district_city }
+pe_can_retool_d_pe_firm_uuac = { always = yes }
+pe_can_found_d_pe_firm_ttta = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_ttta = { has_district = district_city }
+pe_can_retool_d_pe_firm_ttta = { always = yes }
+pe_can_found_d_pe_firm_ttau = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_ttau = { has_district = district_city }
+pe_can_retool_d_pe_firm_ttau = { always = yes }
+pe_can_found_d_pe_firm_uuat = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_uuat = { has_district = district_city }
+pe_can_retool_d_pe_firm_uuat = { always = yes }
+pe_can_found_d_pe_firm_uuua = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_uuua = { has_district = district_city }
+pe_can_retool_d_pe_firm_uuua = { always = yes }
+pe_can_found_d_pe_firm_ccct = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_ccct = { has_district = district_city }
+pe_can_retool_d_pe_firm_ccct = { always = yes }
+pe_can_found_d_pe_firm_cccu = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_cccu = { has_district = district_city }
+pe_can_retool_d_pe_firm_cccu = { always = yes }
+pe_can_found_d_pe_firm_cctt = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_cctt = { has_district = district_city }
+pe_can_retool_d_pe_firm_cctt = { always = yes }
+pe_can_found_d_pe_firm_cctu = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_cctu = { has_district = district_city }
+pe_can_retool_d_pe_firm_cctu = { always = yes }
+pe_can_found_d_pe_firm_ccuu = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_ccuu = { has_district = district_city }
+pe_can_retool_d_pe_firm_ccuu = { always = yes }
+pe_can_found_d_pe_firm_tttc = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_tttc = { has_district = district_city }
+pe_can_retool_d_pe_firm_tttc = { always = yes }
+pe_can_found_d_pe_firm_ttcu = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_ttcu = { has_district = district_city }
+pe_can_retool_d_pe_firm_ttcu = { always = yes }
+pe_can_found_d_pe_firm_uuct = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_uuct = { has_district = district_city }
+pe_can_retool_d_pe_firm_uuct = { always = yes }
+pe_can_found_d_pe_firm_uuuc = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_uuuc = { has_district = district_city }
+pe_can_retool_d_pe_firm_uuuc = { always = yes }
+pe_can_found_d_pe_firm_tttu = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_tttu = { has_district = district_city }
+pe_can_retool_d_pe_firm_tttu = { always = yes }
+pe_can_found_d_pe_firm_ttuu = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_ttuu = { has_district = district_city }
+pe_can_retool_d_pe_firm_ttuu = { always = yes }
+pe_can_found_d_pe_firm_uuut = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_uuut = { has_district = district_city }
+pe_can_retool_d_pe_firm_uuut = { always = yes }
+pe_can_found_d_pe_firm_xxxy = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_xxxy = { has_district = district_city }
+pe_can_retool_d_pe_firm_xxxy = { always = yes }
+pe_can_found_d_pe_firm_xxxz = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_xxxz = { has_district = district_city }
+pe_can_retool_d_pe_firm_xxxz = { always = yes }
+pe_can_found_d_pe_firm_xxyy = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_xxyy = { has_district = district_city }
+pe_can_retool_d_pe_firm_xxyy = { always = yes }
+pe_can_found_d_pe_firm_xxyz = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_xxyz = { has_district = district_city }
+pe_can_retool_d_pe_firm_xxyz = { always = yes }
+pe_can_found_d_pe_firm_xxzz = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_xxzz = { has_district = district_city }
+pe_can_retool_d_pe_firm_xxzz = { always = yes }
+pe_can_found_d_pe_firm_yyyx = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_yyyx = { has_district = district_city }
+pe_can_retool_d_pe_firm_yyyx = { always = yes }
+pe_can_found_d_pe_firm_yyxz = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_yyxz = { has_district = district_city }
+pe_can_retool_d_pe_firm_yyxz = { always = yes }
+pe_can_found_d_pe_firm_zzxy = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_zzxy = { has_district = district_city }
+pe_can_retool_d_pe_firm_zzxy = { always = yes }
+pe_can_found_d_pe_firm_zzzx = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_zzzx = { has_district = district_city }
+pe_can_retool_d_pe_firm_zzzx = { always = yes }
+pe_can_found_d_pe_firm_yyyz = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_yyyz = { has_district = district_city }
+pe_can_retool_d_pe_firm_yyyz = { always = yes }
+pe_can_found_d_pe_firm_yyzz = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_yyzz = { has_district = district_city }
+pe_can_retool_d_pe_firm_yyzz = { always = yes }
+pe_can_found_d_pe_firm_zzzy = { free_district_slots > 0 }
+pe_can_buy_d_pe_firm_zzzy = { has_district = district_city }
+pe_can_retool_d_pe_firm_zzzy = { always = yes }
+pe_can_found_d_pe_firm_mmmm = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
+pe_can_buy_d_pe_firm_mmmm = { has_district = district_mining }
+pe_can_retool_d_pe_firm_mmmm = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } }
+pe_can_found_d_pe_firm_mmma = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
+pe_can_buy_d_pe_firm_mmma = { has_district = district_mining }
+pe_can_retool_d_pe_firm_mmma = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } }
+pe_can_found_d_pe_firm_mmmc = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
+pe_can_buy_d_pe_firm_mmmc = { has_district = district_mining }
+pe_can_retool_d_pe_firm_mmmc = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } }
+pe_can_found_d_pe_firm_mmmt = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
+pe_can_buy_d_pe_firm_mmmt = { has_district = district_mining }
+pe_can_retool_d_pe_firm_mmmt = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } }
+pe_can_found_d_pe_firm_mmme = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+pe_can_buy_d_pe_firm_mmme = { has_district = district_mining OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+pe_can_retool_d_pe_firm_mmme = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+pe_can_found_d_pe_firm_mmmf = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
+pe_can_buy_d_pe_firm_mmmf = { has_district = district_mining OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
+pe_can_retool_d_pe_firm_mmmf = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
+pe_can_found_d_pe_firm_eeee = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
+pe_can_buy_d_pe_firm_eeee = { has_district = district_generator }
+pe_can_retool_d_pe_firm_eeee = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } }
+pe_can_found_d_pe_firm_eeea = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
+pe_can_buy_d_pe_firm_eeea = { has_district = district_generator }
+pe_can_retool_d_pe_firm_eeea = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } }
+pe_can_found_d_pe_firm_eeec = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
+pe_can_buy_d_pe_firm_eeec = { has_district = district_generator }
+pe_can_retool_d_pe_firm_eeec = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } }
+pe_can_found_d_pe_firm_eeet = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
+pe_can_buy_d_pe_firm_eeet = { has_district = district_generator }
+pe_can_retool_d_pe_firm_eeet = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } }
+pe_can_found_d_pe_firm_eeem = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
+pe_can_buy_d_pe_firm_eeem = { has_district = district_generator OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
+pe_can_retool_d_pe_firm_eeem = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
+pe_can_found_d_pe_firm_eeef = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
+pe_can_buy_d_pe_firm_eeef = { has_district = district_generator OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
+pe_can_retool_d_pe_firm_eeef = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
+pe_can_found_d_pe_firm_ffff = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
+pe_can_buy_d_pe_firm_ffff = { has_district = district_farming }
+pe_can_retool_d_pe_firm_ffff = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } }
+pe_can_found_d_pe_firm_fffa = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
+pe_can_buy_d_pe_firm_fffa = { has_district = district_farming }
+pe_can_retool_d_pe_firm_fffa = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } }
+pe_can_found_d_pe_firm_fffc = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
+pe_can_buy_d_pe_firm_fffc = { has_district = district_farming }
+pe_can_retool_d_pe_firm_fffc = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } }
+pe_can_found_d_pe_firm_ffft = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
+pe_can_buy_d_pe_firm_ffft = { has_district = district_farming }
+pe_can_retool_d_pe_firm_ffft = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } }
+pe_can_found_d_pe_firm_fffm = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
+pe_can_buy_d_pe_firm_fffm = { has_district = district_farming OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
+pe_can_retool_d_pe_firm_fffm = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
+pe_can_found_d_pe_firm_fffe = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+pe_can_buy_d_pe_firm_fffe = { has_district = district_farming OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+pe_can_retool_d_pe_firm_fffe = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+
+# Colony or deposit scope (reads root): the variant consumes nothing the empire is short of.
+pe_ok_d_pe_firm_aaac = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_aaat = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_aaau = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_aacc = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_aact = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_aacu = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_aatt = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_aatu = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_aauu = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_ccca = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_ccat = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_ccau = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_ttac = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_actu = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_uuac = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_ttta = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_ttau = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_uuat = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_uuua = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_ccct = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_cccu = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_cctt = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_cctu = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_ccuu = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_tttc = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_ttcu = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_uuct = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_uuuc = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_tttu = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_ttuu = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_uuut = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_xxxy = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_xxxz = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_xxyy = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_xxyz = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_xxzz = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_yyyx = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_yyxz = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_zzxy = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_zzzx = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_yyyz = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_yyzz = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_zzzy = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_mmmm = { always = yes }
+pe_ok_d_pe_firm_mmma = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_mmmc = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_mmmt = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_mmme = { always = yes }
+pe_ok_d_pe_firm_mmmf = { always = yes }
+pe_ok_d_pe_firm_eeee = { always = yes }
+pe_ok_d_pe_firm_eeea = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_eeec = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_eeet = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_eeem = { always = yes }
+pe_ok_d_pe_firm_eeef = { always = yes }
+pe_ok_d_pe_firm_ffff = { always = yes }
+pe_ok_d_pe_firm_fffa = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_fffc = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
+pe_ok_d_pe_firm_ffft = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
+pe_ok_d_pe_firm_fffm = { always = yes }
+pe_ok_d_pe_firm_fffe = { always = yes }
