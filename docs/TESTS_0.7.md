@@ -34,3 +34,22 @@ Früh (ein Planet, Gemischt, etwa 40 Handel brutto im Monat) kommen über Erspar
 3. Nach einer Gründung sinkt der Pool nur um die Anzahlung (200 bzw. 120).
 4. Eine neue Firma schüttet erst nach Jahren aus. Der Pool wächst bis dahin vor allem aus Ersparnissen.
 5. Logs: error.log nach `pe_`, `pe_debt` und `add_resource` durchsuchen.
+
+## 0.7.1 – Korrekturen nach dem Test
+
+- **Dauernotfall behoben:** Forschung hat kein Lager. Die Defizitlogik meldete deshalb ständig „Lager reicht kein Jahr“, also einen Notfall, und Forschung kostete 10,5 statt 3,5. Forschung (3,5) und Einheit (2) haben jetzt feste Werte. Der Notfall hatte Gründungen ohne Arbeiter erlaubt, etwa die Farm und das Kraftwerk auf dem zweiten Planeten.
+- **Gründung:** nur noch mit freien Zivilisten **und** wenn die Privatjobs des Planeten zu mindestens 80 % besetzt sind. Keine Notfall-Ausnahme mehr.
+- **Defizit-Sperre:** gilt nur noch für neue Firmen und Umbau-Ziele. Bisher bekamen auch gesunde bestehende Firmen den Wert −1000, etwa alle Labore bei Konsumgüter-Defizit. Das war die Ursache der Umbau-Welle.
+- **Umbau:**
+  - Nur aus eigenem Firmenkapital, nie auf Kredit oder aus dem Pool. Firmen mit Schulden bauen nicht um.
+  - Das Ziel muss mindestens 30 % besser sein (mindestens +3).
+  - Nur wenn die Privatjobs des Planeten zu mindestens 80 % besetzt sind.
+  - Danach 2 Jahre Pause auf diesem Planeten.
+- **Aufkauf:** nie den letzten Distrikt eines Typs, sonst gingen dessen Gebäude verloren.
+- **Annehmlichkeiten:** Bei Mangel ist ein Unterhalter-Job 30 wert (vorher 12), bei knappen Annehmlichkeiten 8 (vorher 4).
+
+**Prüfen:**
+1. `pe.6` zeigt Forschung 3,5 und Notfall 0.
+2. Auf einem Planeten mit Arbeitermangel entstehen keine Gründungen und keine Umbauten.
+3. Auf der Hauptwelt mit Annehmlichkeiten im Minus enthalten neue Firmen Unterhaltung.
+4. Es gibt deutlich weniger Umbauten, und jeder ist ein klarer Gewinn.

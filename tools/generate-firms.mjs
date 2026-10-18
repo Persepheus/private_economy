@@ -293,17 +293,18 @@ ${key} = {
 // --- Triggers -------------------------------------------------------------------
 const sideOk = v => v.side && !P[v.side].urban && !v.cityLike
   ? ` OR = { has_district = ${P[v.side].district} num_free_districts = { type = ${P[v.side].district} value > 0 } }` : '';
-let trg = header + `# Colony scope, per variant: can it be founded on a free slot, bought from the state,
+let trg = header + `# Colony scope, per variant: can it be founded on a free slot, bought from the state (never
+# the last district of a type: its buildings would be lost),
 # or chosen by a firm that restructures? A rural side share needs
 # the planet to have that district type at all (its deposits).
 `;
 for (const v of variants) {
   const s = sideOk(v);
   if (v.cityLike) {
-    trg += `pe_can_found_${v.key} = { free_district_slots > 0 }\npe_can_buy_${v.key} = { has_district = district_city }\npe_can_retool_${v.key} = { always = yes }\n`;
+    trg += `pe_can_found_${v.key} = { free_district_slots > 0 }\npe_can_buy_${v.key} = { num_districts = { type = district_city value >= 2 } }\npe_can_retool_${v.key} = { always = yes }\n`;
   } else {
     trg += `pe_can_found_${v.key} = { free_district_slots > 0 num_free_districts = { type = ${v.district} value > 0 }${s} }\n`;
-    trg += `pe_can_buy_${v.key} = { has_district = ${v.district}${s} }\npe_can_retool_${v.key} = { NOT = { has_planet_flag = pe_noroom_${v.cls} } OR = { has_district = ${v.district} num_free_districts = { type = ${v.district} value > 0 } root = { check_variable = { which = pe_here_${v.cls} value = 1 } } }${s} }\n`;
+    trg += `pe_can_buy_${v.key} = { num_districts = { type = ${v.district} value >= 2 }${s} }\npe_can_retool_${v.key} = { NOT = { has_planet_flag = pe_noroom_${v.cls} } OR = { has_district = ${v.district} num_free_districts = { type = ${v.district} value > 0 } root = { check_variable = { which = pe_here_${v.cls} value = 1 } } }${s} }\n`;
   }
 }
 // pe_ok_<firm>: none of its inputs is in deficit (pe_def_<res>, set when pricing).
@@ -440,8 +441,8 @@ ${LETTERS.map(l => `\t\tset_variable = { which = pe_spec_${l} value = 1 }`).join
 	}
 	# Value of one state city district here: one job per zone (100 workforce each).
 ${ZONES.map(([zone, parts]) => `\tif = { limit = { num_zones = { type = ${zone} value > 0 } } root = { ${parts.map(([job, w]) => `set_variable = { which = pe_tmp value = pe_vaj_${job} } multiply_variable = { which = pe_tmp value = ${+w.toFixed(4)} } change_variable = { which = pe_dval_u value = pe_tmp }`).join(' ')} } }`).join('\n')}
-	if = { limit = { free_amenities < 0 } root = { set_variable = { which = pe_ent_val value = 12 } } }
-	else_if = { limit = { free_amenities < 1000 } root = { set_variable = { which = pe_ent_val value = 4 } } }
+	if = { limit = { free_amenities < 0 } root = { set_variable = { which = pe_ent_val value = 30 } } }
+	else_if = { limit = { free_amenities < 1000 } root = { set_variable = { which = pe_ent_val value = 8 } } }
 ${LETTERS.filter(l => specFor(l).length).map(l => `\tif = { limit = { OR = { ${specFor(l).map(d => `has_designation = ${d}`).join(' ')} } } root = { set_variable = { which = pe_spec_${l} value = ${SPEC_BONUS} } } }`).join('\n')}
 }
 
@@ -453,10 +454,9 @@ ${ifChain(pairs, p => `is_deposit_type = ${p.key}`, p => `set_variable = { which
 }
 
 # Deposit scope: this quarter's values of the firm's variant (entertainment valued for
-# this planet; -1000 if it consumes a resource in deficit, so it restructures first), and
-# its class (1 city, 2 mining, 3 generator, 4 farming, 5 lab).
+# this planet), and its class (1 city, 2 mining, 3 generator, 4 farming, 5 lab).
 pe_deposit_fetch = {
-${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }`, v => `set_variable = { which = pe_va value = root.pe_va_${v.key} } set_variable = { which = pe_val value = root.pe_val_${v.key} } if = { limit = { NOT = { pe_ok_${v.key} = yes } } set_variable = { which = pe_val value = -1000 } } set_variable = { which = pe_cls value = ${v.clsNum} }${v.entRaw ? ` set_variable = { which = pe_tmp value = root.pe_ent_val } multiply_variable = { which = pe_tmp value = ${v.entRaw} } change_variable = { which = pe_va value = pe_tmp }` : ''}`)}
+${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }`, v => `set_variable = { which = pe_va value = root.pe_va_${v.key} } set_variable = { which = pe_val value = root.pe_val_${v.key} } set_variable = { which = pe_cls value = ${v.clsNum} }${v.entRaw ? ` set_variable = { which = pe_tmp value = root.pe_ent_val } multiply_variable = { which = pe_tmp value = ${v.entRaw} } change_variable = { which = pe_va value = pe_tmp }` : ''}`)}
 }
 
 # Colony scope: root.pe_best_variant = most valuable variant available here, above
@@ -609,15 +609,16 @@ ${[1, 2, 3, 4, 5].flatMap(c => STAGES.map(s => `\t\tif = { limit = { root = { ch
 	}
 }
 
-# Colony scope: the firm with the largest gain switches to the best variant available here
-# (any class, same stage) if the gain is at least 3 trade per month. It closes for half the
-# build time (a construction site). Cost: city ${RETOOL.u} / rural ${RETOOL.r} x stage size, paid from the
-# firm's capital, otherwise from the investor pool. A rural target needs a free district of
+# Colony scope: the debt-free firm with the largest gain switches to the best variant
+# available here (any class, same stage) if that is clearly better (+30% of its value, at
+# least +3 trade per month). It closes for half the build time (a construction site), and
+# the planet pauses restructuring for two years. Cost: city ${RETOOL.u} / rural ${RETOOL.r} x stage size, paid
+# from the firm's own capital only (never on credit). A rural target needs a free district of
 # its type once the old firm is gone; if there is none, the old firm is restored, the
 # cost paid back, and that rural type is not tried again on this planet for a year.
 pe_restructure = {
 	root = {
-		set_variable = { which = pe_best_gain value = 3 }
+		set_variable = { which = pe_best_gain value = 0 }
 		set_variable = { which = pe_rid value = 0 }
 		set_variable = { which = pe_rid_best value = 0 }
 		set_variable = { which = pe_retool_ok value = 0 }
@@ -633,8 +634,16 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} }`).
 		set_variable = { which = pe_rid value = root.pe_rid }
 		set_variable = { which = pe_gain value = root.pe_cls_val_all }
 		subtract_variable = { which = pe_gain value = pe_val }
+		# Clearly better: at least 30% of the current value, and at least 3.
+		set_variable = { which = pe_thr value = pe_val }
+		multiply_variable = { which = pe_thr value = 0.3 }
+		if = { limit = { check_variable = { which = pe_thr value < 3 } } set_variable = { which = pe_thr value = 3 } }
 		if = {
-			limit = { check_variable = { which = pe_gain value > root.pe_best_gain } }
+			limit = {
+				check_variable = { which = pe_debt value <= 0 }
+				check_variable = { which = pe_gain value > pe_thr }
+				check_variable = { which = pe_gain value > root.pe_best_gain }
+			}
 			root = {
 				set_variable = { which = pe_best_gain value = prev.pe_gain }
 				set_variable = { which = pe_rid_best value = prev.pe_rid }
@@ -654,10 +663,6 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} }`).
 			limit = { check_variable = { which = pe_fcap value >= pe_cost } }
 			subtract_variable = { which = pe_fcap value = pe_cost }
 			root = { set_variable = { which = pe_retool_ok value = 1 } set_variable = { which = pe_paid value = 1 } }
-		}
-		else_if = {
-			limit = { root = { check_variable = { which = pe_capital value >= prev.pe_cost } } }
-			root = { subtract_variable = { which = pe_capital value = prev.pe_cost } set_variable = { which = pe_retool_ok value = 1 } set_variable = { which = pe_paid value = 2 } }
 		}
 		if = {
 			limit = { root = { check_variable = { which = pe_retool_ok value = 1 } } }
@@ -686,6 +691,7 @@ ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = $
 		}
 		else = {
 			set_planet_flag = pe_site
+			set_timed_planet_flag = { flag = pe_retool_cd days = 720 }
 		}
 		check_planet_employment = yes
 	}

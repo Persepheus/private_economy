@@ -37,9 +37,10 @@
 #
 # Building: a firm is first a construction site (vanilla district build time: city 16,
 # rural 8 months; buyouts and restructuring half of that). One site per planet. New
-# firms only where civilians are idle (4.x has no unemployed), unless a resource is in an emergency (deficit
-# with less than a year of stock); otherwise investors buy state districts (Free Market,
-# Laissez-faire). Every change of jobs re-runs the planet's employment.
+# firms only where civilians are idle (4.x has no unemployed) and the planet's private
+# jobs are at least 80% filled; otherwise investors buy state districts (Free Market,
+# Laissez-faire), never the last one of a type. New firms and restructuring targets may
+# not consume a resource in deficit. Every change of jobs re-runs the planet's employment.
 
 # --- Monthly ------------------------------------------------------------------
 
@@ -129,10 +130,11 @@ pe_market = {
 	set_variable = { which = pe_emergency value = 0 }
 	set_variable = { which = pe_is_invest value = 1 }
 	pe_shadow = { RES = alloys BASE = 4 SELL = 0 BAND = 20 MARKET = yes PEND = yes }
-	pe_shadow = { RES = unity BASE = 2 SELL = 2 BAND = 20 }
-	pe_shadow = { RES = physics_research BASE = 3.5 SELL = 3.5 BAND = 20 }
-	pe_shadow = { RES = society_research BASE = 3.5 SELL = 3.5 BAND = 20 }
-	pe_shadow = { RES = engineering_research BASE = 3.5 SELL = 3.5 BAND = 20 }
+	# No stock and no deficit for research and unity: fixed values.
+	set_variable = { which = pe_s_unity value = 2 }
+	set_variable = { which = pe_s_physics_research value = 3.5 }
+	set_variable = { which = pe_s_society_research value = 3.5 }
+	set_variable = { which = pe_s_engineering_research value = 3.5 }
 	set_variable = { which = pe_is_invest value = 0 }
 	if = {
 		limit = { country_uses_bio_ships = yes }
@@ -343,10 +345,8 @@ pe_planet_step = {
 			if = {
 				limit = {
 					free_district_slots > 0
-					OR = {
-						pe_has_idle_pops = yes
-						root = { check_variable = { which = pe_emergency value = 1 } }
-					}
+					pe_has_idle_pops = yes
+					root = { check_variable = { which = pe_fill_cur value >= 0.8 } }
 				}
 				# Option value: the last free slots are only used for clearly better firms.
 				root = { set_variable = { which = pe_best_min value = 0 } set_variable = { which = pe_dmode value = 0 } }
@@ -368,13 +368,15 @@ pe_planet_step = {
 			pe_nationalise_one = yes
 		}
 	}
-	# Nothing started on this planet this quarter: firms may restructure (a firm that
-	# consumes a resource in deficit first).
+	# Nothing started on this planet this quarter, its private jobs are filled, and no
+	# restructuring in the last two years: one firm may restructure.
 	if = {
 		limit = {
 			NOT = { has_planet_flag = pe_site }
 			NOT = { has_planet_flag = pe_cooldown }
+			NOT = { has_planet_flag = pe_retool_cd }
 			check_variable = { which = pe_firms_real value > 0 }
+			root = { check_variable = { which = pe_fill_cur value >= 0.8 } }
 		}
 		pe_restructure = yes
 	}
