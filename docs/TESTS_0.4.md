@@ -60,7 +60,7 @@
 
 1. **Baustelle:** Gemischte Wirtschaft, Hauptstadt mit freiem Platz und Zivilisten, dann `pe.7`. Eine **Private Baustelle** erscheint, ohne Nachricht. Nach `pe.8` wird daraus eine Firma, mit Nachricht. Die Jobs werden sofort besetzt.
 2. **Eine pro Planet:** Ein zweites `pe.7` bei laufender Baustelle startet auf diesem Planeten nichts Neues.
-3. **Keine Arbeitslosen:** Hauptstadt ohne freie Zivilisten, kein Notfall, dann `pe.7`. Es entsteht keine Baustelle. Bei Freier Marktwirtschaft kommt stattdessen ein Aufkaufangebot.
+3. **Keine freien Zivilisten:** Hauptstadt ohne freie Zivilisten, kein Notfall, dann `pe.7`. Es entsteht keine Baustelle. Bei Freier Marktwirtschaft kommt stattdessen ein Aufkaufangebot.
 4. **Housing:** Eine fertige Stadtfirma hebt das Housing des Planeten wie ein Stadtdistrikt.
 5. **Unterhaltung:** Planet mit Annehmlichkeitsmangel. In `pe.6` steht +12, und die beste Firma enthält Unterhaltung.
 6. **Labore:** Bei Forschungswelten oder wenig anderem Bedarf entstehen Labore. Ihre Forschung erscheint im Forschungs-Tooltip.
