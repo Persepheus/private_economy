@@ -78,7 +78,7 @@
 
 ## 0.4.1
 
-- **Zivilisten statt Arbeitslose:** 4.x kennt keine Arbeitslosen mehr; jobfreie Pops arbeiten als Zivilisten. „Freie Pops“ heißt jetzt: mindestens 100 Zivilisten auf dem Planeten (`num_assigned_jobs = { job = civilian }`).
+- **Zivilisten statt Arbeitslose:** 4.x kennt keine Arbeitslosen mehr; jobfreie Pops arbeiten als Zivilisten. „Freie Pops“ heißt jetzt: Zivilisten auf dem Planeten (ab 0.4.3 schon ab 1, vorher ab 100) (`num_assigned_jobs = { job = civilian }`).
 - **Behoben:** Gründungen schlugen fehl („missing args: FIRM“), deshalb wurde nur aufgekauft.
 - **Behoben:** Ein angenommenes Aufkaufangebot tat seit 0.3 nichts („ownerif“).
 - **Behoben:** Forscher-Jobs nutzen den gültigen Tag `research`.

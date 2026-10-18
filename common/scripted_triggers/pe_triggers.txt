@@ -24,7 +24,7 @@ pe_buyout_allowed = {
 }
 
 # Colony scope: idle workforce for new jobs. In 4.x jobless pops work the "civilian"
-# job; at least one job's worth (100) of them counts.
+# job; any of them count.
 pe_has_idle_pops = {
-	num_assigned_jobs = { job = civilian value >= 100 }
+	num_assigned_jobs = { job = civilian value > 0 }
 }
