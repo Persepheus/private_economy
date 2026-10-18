@@ -6,7 +6,6 @@ pe_private_metallurgists = {
 	parent = planet_metallurgists
 	generate_mult_modifiers = {
 		produces
-		upkeep
 	}
 	modifier_category = colony
 }
@@ -15,7 +14,6 @@ pe_private_artisans = {
 	parent = planet_artisans
 	generate_mult_modifiers = {
 		produces
-		upkeep
 	}
 	modifier_category = colony
 }
@@ -24,7 +22,38 @@ pe_private_traders = {
 	parent = planet_traders
 	generate_mult_modifiers = {
 		produces
-		upkeep
+	}
+	modifier_category = colony
+}
+
+pe_private_entertainers = {
+	parent = planet_entertainers
+	generate_mult_modifiers = {
+		produces
+	}
+	modifier_category = colony
+}
+
+pe_private_physicists = {
+	parent = planet_physicists
+	generate_mult_modifiers = {
+		produces
+	}
+	modifier_category = colony
+}
+
+pe_private_biologists = {
+	parent = planet_biologists
+	generate_mult_modifiers = {
+		produces
+	}
+	modifier_category = colony
+}
+
+pe_private_engineers = {
+	parent = planet_engineers
+	generate_mult_modifiers = {
+		produces
 	}
 	modifier_category = colony
 }
@@ -33,7 +62,6 @@ pe_private_miners = {
 	parent = planet_miners
 	generate_mult_modifiers = {
 		produces
-		upkeep
 	}
 	modifier_category = colony
 }
@@ -42,7 +70,6 @@ pe_private_technicians = {
 	parent = planet_technician
 	generate_mult_modifiers = {
 		produces
-		upkeep
 	}
 	modifier_category = colony
 }
@@ -51,7 +78,6 @@ pe_private_farmers = {
 	parent = planet_farmers
 	generate_mult_modifiers = {
 		produces
-		upkeep
 	}
 	modifier_category = colony
 }

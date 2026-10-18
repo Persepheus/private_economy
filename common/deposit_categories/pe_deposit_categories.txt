@@ -3,3 +3,8 @@
 pe_deposit_cat_firms = {
 	important = yes
 }
+
+# Construction sites of private firms (not a blocker category either).
+pe_deposit_cat_sites = {
+	important = yes
+}

@@ -1,5 +1,6 @@
 # Private economy runtime events.
-#   pe.100  monthly pulse (on_monthly_pulse_country), runs the logic every third month
+#   pe.100  monthly pulse (on_monthly_pulse_country): construction sites advance monthly,
+#           the private economy decides every third month
 #   pe.110  Free Market: a firm offers to buy a state district (human empires only)
 namespace = pe
 
@@ -14,6 +15,7 @@ country_event = {
 	}
 	immediate = {
 		pe_init = yes
+		pe_monthly_sites = yes
 		change_variable = { which = pe_months value = 1 }
 		if = {
 			limit = { check_variable = { which = pe_months value >= 3 } }
@@ -28,8 +30,8 @@ country_event = {
 country_event = {
 	id = pe.110
 	title = pe.110.name
-	desc = { trigger = { check_variable = { which = pe_offer_class value = 1 } } text = pe.110.desc.urban }
-	desc = { trigger = { check_variable = { which = pe_offer_class value > 1 } } text = pe.110.desc.rural }
+	desc = { trigger = { OR = { check_variable = { which = pe_offer_class value = 1 } check_variable = { which = pe_offer_class value = 5 } } } text = pe.110.desc.urban }
+	desc = { trigger = { check_variable = { which = pe_offer_class value > 1 } check_variable = { which = pe_offer_class value < 5 } } text = pe.110.desc.rural }
 	picture = GFX_evt_tradedeal
 	is_triggered_only = yes
 	location = event_target:pe_offer_planet

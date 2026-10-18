@@ -169,7 +169,7 @@ for (const lang of languages)
 // Generated files are up to date with the generator.
 {
   const {execFileSync} = await import('node:child_process');
-  const gen = ['common/deposits/pe_firm_deposits.txt', 'common/scripted_triggers/pe_firm_triggers_generated.txt', 'common/scripted_effects/pe_firm_effects_generated.txt',
+  const gen = ['common/deposits/pe_firm_deposits.txt', 'common/deposits/pe_site_deposits.txt', 'common/scripted_triggers/pe_firm_triggers_generated.txt', 'common/scripted_effects/pe_firm_effects_generated.txt',
     'common/pop_jobs/pe_private_jobs.txt', 'common/economic_categories/pe_categories_generated.txt', 'common/scripted_loc/pe_scripted_loc_generated.txt'];
   const before = gen.map(g => fs.readFileSync(path.join(root, g), 'utf8'));
   execFileSync(process.execPath, [path.join(root, 'tools/generate-firms.mjs'), game]);

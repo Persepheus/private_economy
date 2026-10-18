@@ -219,6 +219,297 @@ pe_private_trader = {
 	}
 }
 
+pe_private_entertainer = {
+	category = specialist
+	can_set_priority = no
+	is_capped_by_modifier = yes
+
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_holo_theatres
+		}
+	}
+
+	tags = { amenities }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible_precalc = can_fill_specialist_job
+	possible = {
+		hidden_trigger = { exists = owner }
+		owner = { is_gestalt = no }
+	}
+
+	resources = {
+		category = pe_private_entertainers
+		produces = {
+			unity = 0.5
+		}
+		upkeep = {
+			trigger = {
+				entertainer_is_duelist_trigger = no
+			}
+			consumer_goods = 1
+		}
+		# Job Swap - Curator
+		produces = {
+			trigger = {
+				entertainer_is_curator_trigger = yes
+			}
+			society_research = 0.5
+		}
+		upkeep = {
+			trigger = {
+				entertainer_is_curator_trigger = yes
+				entertainer_is_duelist_trigger = no
+			}
+			consumer_goods = 1
+		}
+		upkeep = {
+			trigger = {
+				entertainer_is_curator_trigger = yes
+				entertainer_is_duelist_trigger = yes
+			}
+			alloys = 0.5
+		}
+		# Job Swap - Duelist
+		produces = {
+			trigger = {
+				entertainer_is_duelist_trigger = yes
+			}
+			unity = 0.5
+		}
+		upkeep = {
+			trigger = {
+				entertainer_is_duelist_trigger = yes
+				entertainer_is_storm_dancer_trigger = no
+			}
+			alloys = 0.5
+		}
+		# Job Swap - Storm Dancer
+		produces = {
+			trigger = {
+				entertainer_is_storm_dancer_trigger = yes
+			}
+			unity = 1.5
+		}
+		upkeep = {
+			trigger = {
+				entertainer_is_storm_dancer_trigger = yes
+				entertainer_is_duelist_trigger = no
+			}
+			consumer_goods = 1
+		}
+		upkeep = {
+			trigger = {
+				entertainer_is_storm_dancer_trigger = yes
+				entertainer_is_duelist_trigger = yes
+			}
+			alloys = 1
+		}
+	}
+
+	triggered_planet_modifier = {
+		potential = {
+			owner? = { NOT = { has_valid_civic = civic_dystopian_society } }
+		}
+		planet_amenities_add = 1250
+		mult = value:scripted_modifier_mult|MODIFIER|pop_job_amenities_mult|
+	}
+
+	weight = {
+		weight = @specialist_job_weight
+	}
+}
+
+pe_private_physicist = {
+	category = specialist
+	can_set_priority = no
+	is_capped_by_modifier = yes
+
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_research_lab_1
+		}
+	}
+
+	tags = { physics_research }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible_precalc = can_fill_specialist_job
+	possible = {
+		hidden_trigger = { exists = owner }
+		owner = { is_gestalt = no }
+	}
+
+	resources = {
+		category = pe_private_physicists
+		produces = {
+			physics_research = 3
+		}
+		# Astrometrorologists
+		produces = {
+			trigger = {
+				colony? = {
+					physicist_is_astrometeorologist_trigger = yes
+					solar_system? = {
+						OR = {
+							has_environmental_effects = yes
+							has_star_flag = storm_system
+						}
+					}
+				}
+			}
+			physics_research = 2
+		}
+		upkeep = {
+			consumer_goods = 1.5
+		}
+		# Space-Time Researcher
+		produces = {
+			trigger = {
+				physicist_is_space_time_researcher_trigger = yes
+			}
+			physics_research = 1
+			sr_dark_matter = 0.2
+		}
+		upkeep = {
+			trigger = {
+				physicist_is_space_time_researcher_trigger = yes
+			}
+			consumer_goods = 1.5
+		}
+		inline_script = "output/researcher_output"
+	}
+
+	weight = {
+		weight = @specialist_job_weight
+	}
+}
+
+pe_private_biologist = {
+	category = specialist
+	can_set_priority = no
+	is_capped_by_modifier = yes
+
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_research_lab_1
+		}
+	}
+
+	tags = { society_research }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible_precalc = can_fill_specialist_job
+	possible = {
+		hidden_trigger = { exists = owner }
+		owner = { is_gestalt = no }
+	}
+
+	resources = {
+		category = pe_private_biologists
+		produces = {
+			society_research = 3
+		}
+		produces = {
+			trigger = {
+				biologist_is_zookeeper_trigger = yes
+			}
+			society_research = 0.5
+		}
+		upkeep = {
+			trigger = {
+				biologist_is_zookeeper_trigger = yes
+			}
+			consumer_goods = 0.5
+		}
+		upkeep = {
+			consumer_goods = 1.5
+		}
+		inline_script = "output/researcher_output"
+	}
+
+	weight = {
+		weight = @specialist_job_weight
+	}
+}
+
+pe_private_engineer = {
+	category = specialist
+	can_set_priority = no
+	is_capped_by_modifier = yes
+
+	swappable_data = {
+		default = {
+			condition_string = SPECIALIST_JOB_TRIGGER
+			building_icon = building_research_lab_1
+		}
+	}
+
+	tags = { engineering_research }
+
+	possible_pre_triggers = {
+		has_owner = yes
+		is_being_purged = no
+		is_being_assimilated = no
+		is_sapient = yes
+	}
+
+	possible_precalc = can_fill_specialist_job
+	possible = {
+		hidden_trigger = { exists = owner }
+		owner = { is_gestalt = no }
+	}
+
+	resources = {
+		category = pe_private_engineers
+		produces = {
+			engineering_research = 3
+		}
+		produces = {
+			trigger = {
+				engineer_is_nanotech_researcher_trigger = yes
+			}
+			engineering_research = 1
+		}
+		upkeep = {
+			consumer_goods = 1.5
+		}
+		upkeep = {
+			trigger = {
+				engineer_is_nanotech_researcher_trigger = yes
+			}
+			nanites = 1
+		}
+		inline_script = "output/researcher_output"
+	}
+
+	weight = {
+		weight = @specialist_job_weight
+	}
+}
+
 pe_private_miner = {
 	category = worker
 	can_set_priority = no

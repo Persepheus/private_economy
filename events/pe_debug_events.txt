@@ -6,6 +6,7 @@
 #   event pe.5   conglomerate on every non-gestalt AI capital (to watch the AI)
 #   event pe.6   diagnosis popup: capital, resource scores, the capital's counts and best firm
 #   event pe.7   run the quarterly logic now and clear all planet cooldowns first
+#   event pe.8   finish all private construction sites now
 namespace = pe
 
 country_event = {
@@ -51,9 +52,11 @@ country_event = {
 	immediate = {
 		capital_scope = {
 			every_deposit = {
-				limit = { has_deposit_category = pe_deposit_cat_firms }
+				limit = { OR = { has_deposit_category = pe_deposit_cat_firms has_deposit_category = pe_deposit_cat_sites } }
 				remove_deposit = yes
 			}
+			remove_planet_flag = pe_site
+			check_planet_employment = yes
 			if = {
 				limit = { has_building = pe_building_private_exchange }
 				remove_building = pe_building_private_exchange
@@ -87,12 +90,15 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		pe_init = yes
+		pe_census = yes
 		pe_market = yes
 		pe_job_values = yes
 		pe_compute_values = yes
 		capital_scope = {
 			pe_planet_counts = yes
+			pe_planet_prepare = yes
 			pe_planet_fill = yes
+			root = { set_variable = { which = pe_best_min value = 0 } }
 			if = {
 				limit = { free_district_slots > 0 }
 				pe_choose_variant = { MODE = found }
@@ -107,7 +113,7 @@ country_event = {
 				set_variable = { which = pe_diag_target value = prev.pe_target }
 			}
 		}
-		log = "private_economy: pe.6 share [Root.pe_private_share] districts [Root.pe_diag_districts] free [Root.pe_diag_free] firms [Root.pe_diag_firms] target [Root.pe_diag_target] best [Root.pe_best_variant] value [Root.pe_best] fill [Root.pe_fill_cur] pool [Root.pe_capital] pool income [Root.pe_pool_income] prices alloys [Root.pe_s_alloys] goods [Root.pe_s_consumer_goods] minerals [Root.pe_s_minerals] energy [Root.pe_s_energy] food [Root.pe_s_food] va metallurgist [Root.pe_vaj_pe_private_metallurgist] artisan [Root.pe_vaj_pe_private_artisan] trader [Root.pe_vaj_pe_private_trader] miner [Root.pe_vaj_pe_private_miner] technician [Root.pe_vaj_pe_private_technician] farmer [Root.pe_vaj_pe_private_farmer]"
+		log = "private_economy: pe.6 share [Root.pe_private_share] districts [Root.pe_diag_districts] free [Root.pe_diag_free] firms [Root.pe_diag_firms] target [Root.pe_diag_target] best [Root.pe_best_variant] value [Root.pe_best] fill [Root.pe_fill_cur] pool [Root.pe_capital] pool income [Root.pe_pool_income] prices alloys [Root.pe_s_alloys] goods [Root.pe_s_consumer_goods] minerals [Root.pe_s_minerals] energy [Root.pe_s_energy] food [Root.pe_s_food] trade [Root.pe_s_trade] research [Root.pe_s_physics_research] emergency [Root.pe_emergency] amenity value [Root.pe_ent_val] va metallurgist [Root.pe_vaj_pe_private_metallurgist] artisan [Root.pe_vaj_pe_private_artisan] trader [Root.pe_vaj_pe_private_trader] miner [Root.pe_vaj_pe_private_miner] technician [Root.pe_vaj_pe_private_technician] farmer [Root.pe_vaj_pe_private_farmer]"
 	}
 	option = { name = pe.6.a }
 }
@@ -118,8 +124,26 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		every_owned_planet = { remove_planet_flag = pe_cooldown }
+		pe_monthly_sites = yes
 		set_variable = { which = pe_months value = 0 }
 		pe_quarterly = yes
 		log = "private_economy: pe.7 ran the quarterly logic"
+	}
+}
+
+country_event = {
+	id = pe.8
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_owned_colony = {
+			limit = { has_planet_flag = pe_site }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_sites }
+				set_variable = { which = pe_left value = 1 }
+			}
+		}
+		pe_monthly_sites = yes
+		log = "private_economy: pe.8 finished the construction sites"
 	}
 }

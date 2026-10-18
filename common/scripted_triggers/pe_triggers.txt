@@ -9,6 +9,8 @@ pe_planet_eligible = {
 	planet_is_habitat_equivalent = no
 	planet_is_ecu_equivalent = no
 	planet_is_ring_world_equivalent = no
+	# Nomad arkships (their carrier is a ship) wait for the special-planet solution.
+	NOT = { carrier_is_type = ship }
 }
 
 # Per-variant triggers (pe_can_found_/buy_/retool_<firm>): pe_firm_triggers_generated.txt.
