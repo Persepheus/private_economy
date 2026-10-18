@@ -311,11 +311,9 @@ pe_job_values = {
 # Country scope. pe_va_<firm>: value added of the variant at stage 1, fully staffed
 # (entertainment is added per planet). pe_val_<firm>: the same with diminishing value for
 # repeated shares (1 / 0.75) and -5% per existing firm with the same main
-# product (at least half), used to choose. Also the best city variant (urban firms and
-# labs restructure into each other) and pe_dval_<rural> = value of a rural state district.
+# product (at least half), used to choose. Also pe_dval_<rural> = value of a rural state
+# district.
 pe_compute_values = {
-	set_variable = { which = pe_cls_val_city value = -100000 }
-	set_variable = { which = pe_cls_var_city value = 0 }
 	set_variable = { which = pe_dval_m value = pe_vaj_pe_private_miner }
 	multiply_variable = { which = pe_dval_m value = 2 }
 	set_variable = { which = pe_dval_e value = pe_vaj_pe_private_technician }
@@ -335,7 +333,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_aa value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_aa value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_aa } set_variable = { which = pe_cls_var_city value = 1 } }
 	set_variable = { which = pe_va_d_pe_firm_ac value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_ac value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_metallurgist }
@@ -355,7 +352,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_ac value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_ac value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_ac } set_variable = { which = pe_cls_var_city value = 2 } }
 	set_variable = { which = pe_va_d_pe_firm_at value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_at value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_metallurgist }
@@ -375,7 +371,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_at value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_at value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_at } set_variable = { which = pe_cls_var_city value = 3 } }
 	set_variable = { which = pe_va_d_pe_firm_au value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_au value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_metallurgist }
@@ -395,7 +390,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_au value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_au value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_au } set_variable = { which = pe_cls_var_city value = 4 } }
 	set_variable = { which = pe_va_d_pe_firm_cc value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_cc value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_artisan }
@@ -409,7 +403,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_cc value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_cc value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_cc } set_variable = { which = pe_cls_var_city value = 5 } }
 	set_variable = { which = pe_va_d_pe_firm_ct value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_ct value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_artisan }
@@ -429,7 +422,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_ct value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_ct value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_ct } set_variable = { which = pe_cls_var_city value = 6 } }
 	set_variable = { which = pe_va_d_pe_firm_cu value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_cu value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_artisan }
@@ -449,7 +441,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_cu value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_cu value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_cu } set_variable = { which = pe_cls_var_city value = 7 } }
 	set_variable = { which = pe_va_d_pe_firm_tt value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_tt value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_trader }
@@ -463,7 +454,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_tt value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_tt value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_tt } set_variable = { which = pe_cls_var_city value = 8 } }
 	set_variable = { which = pe_va_d_pe_firm_tu value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_tu value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_trader }
@@ -483,7 +473,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_tu value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_tu value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_tu } set_variable = { which = pe_cls_var_city value = 9 } }
 	set_variable = { which = pe_va_d_pe_firm_uu value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_uu value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_entertainer }
@@ -497,7 +486,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_uu value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_uu value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_uu } set_variable = { which = pe_cls_var_city value = 10 } }
 	set_variable = { which = pe_va_d_pe_firm_xx value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_xx value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_physicist }
@@ -511,7 +499,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_xx value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_xx value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_xx } set_variable = { which = pe_cls_var_city value = 11 } }
 	set_variable = { which = pe_va_d_pe_firm_xy value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_xy value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_physicist }
@@ -531,7 +518,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_xy value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_xy value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_xy } set_variable = { which = pe_cls_var_city value = 12 } }
 	set_variable = { which = pe_va_d_pe_firm_xz value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_xz value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_physicist }
@@ -551,7 +537,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_xz value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_xz value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_xz } set_variable = { which = pe_cls_var_city value = 13 } }
 	set_variable = { which = pe_va_d_pe_firm_yy value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_yy value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_biologist }
@@ -565,7 +550,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_yy value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_yy value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_yy } set_variable = { which = pe_cls_var_city value = 14 } }
 	set_variable = { which = pe_va_d_pe_firm_yz value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_yz value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_biologist }
@@ -585,7 +569,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_yz value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_yz value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_yz } set_variable = { which = pe_cls_var_city value = 15 } }
 	set_variable = { which = pe_va_d_pe_firm_zz value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_zz value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_engineer }
@@ -599,7 +582,6 @@ pe_compute_values = {
 	change_variable = { which = pe_tmp value = 1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0.5 } } set_variable = { which = pe_tmp value = 0.5 } }
 	multiply_variable = { which = pe_val_d_pe_firm_zz value = pe_tmp }
-	if = { limit = { check_variable = { which = pe_val_d_pe_firm_zz value > pe_cls_val_city } } set_variable = { which = pe_cls_val_city value = pe_val_d_pe_firm_zz } set_variable = { which = pe_cls_var_city value = 16 } }
 	set_variable = { which = pe_va_d_pe_firm_mm value = 0 }
 	set_variable = { which = pe_val_d_pe_firm_mm value = 0 }
 	set_variable = { which = pe_tmp value = pe_vaj_pe_private_miner }
@@ -1165,40 +1147,40 @@ pe_choose_variant = {
 
 # Colony scope: start building the chosen variant on a free slot.
 pe_found_variant = {
-	if = { limit = { root = { check_variable = { which = pe_best_variant value = 1 } } } pe_found_firm = { CODE = 1 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 2 } } } pe_found_firm = { CODE = 2 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 3 } } } pe_found_firm = { CODE = 3 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 4 } } } pe_found_firm = { CODE = 4 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 5 } } } pe_found_firm = { CODE = 5 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 6 } } } pe_found_firm = { CODE = 6 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 7 } } } pe_found_firm = { CODE = 7 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 8 } } } pe_found_firm = { CODE = 8 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 9 } } } pe_found_firm = { CODE = 9 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 10 } } } pe_found_firm = { CODE = 10 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 11 } } } pe_found_firm = { CODE = 11 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 12 } } } pe_found_firm = { CODE = 12 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 13 } } } pe_found_firm = { CODE = 13 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 14 } } } pe_found_firm = { CODE = 14 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 15 } } } pe_found_firm = { CODE = 15 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 16 } } } pe_found_firm = { CODE = 16 COST = 200 SITE = d_pe_site_city MONTHS = 16 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 17 } } } pe_found_firm = { CODE = 17 COST = 120 SITE = d_pe_site_mining MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 18 } } } pe_found_firm = { CODE = 18 COST = 120 SITE = d_pe_site_mining MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 19 } } } pe_found_firm = { CODE = 19 COST = 120 SITE = d_pe_site_mining MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 20 } } } pe_found_firm = { CODE = 20 COST = 120 SITE = d_pe_site_mining MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 21 } } } pe_found_firm = { CODE = 21 COST = 120 SITE = d_pe_site_mining MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 22 } } } pe_found_firm = { CODE = 22 COST = 120 SITE = d_pe_site_mining MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 23 } } } pe_found_firm = { CODE = 23 COST = 120 SITE = d_pe_site_generator MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 24 } } } pe_found_firm = { CODE = 24 COST = 120 SITE = d_pe_site_generator MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 25 } } } pe_found_firm = { CODE = 25 COST = 120 SITE = d_pe_site_generator MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 26 } } } pe_found_firm = { CODE = 26 COST = 120 SITE = d_pe_site_generator MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 27 } } } pe_found_firm = { CODE = 27 COST = 120 SITE = d_pe_site_generator MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 28 } } } pe_found_firm = { CODE = 28 COST = 120 SITE = d_pe_site_generator MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 29 } } } pe_found_firm = { CODE = 29 COST = 120 SITE = d_pe_site_farming MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 30 } } } pe_found_firm = { CODE = 30 COST = 120 SITE = d_pe_site_farming MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 31 } } } pe_found_firm = { CODE = 31 COST = 120 SITE = d_pe_site_farming MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 32 } } } pe_found_firm = { CODE = 32 COST = 120 SITE = d_pe_site_farming MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 33 } } } pe_found_firm = { CODE = 33 COST = 120 SITE = d_pe_site_farming MONTHS = 8 } }
-	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 34 } } } pe_found_firm = { CODE = 34 COST = 120 SITE = d_pe_site_farming MONTHS = 8 } }
+	if = { limit = { root = { check_variable = { which = pe_best_variant value = 1 } } } pe_found_firm = { CODE = 1 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 2 } } } pe_found_firm = { CODE = 2 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 3 } } } pe_found_firm = { CODE = 3 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 4 } } } pe_found_firm = { CODE = 4 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 5 } } } pe_found_firm = { CODE = 5 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 6 } } } pe_found_firm = { CODE = 6 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 7 } } } pe_found_firm = { CODE = 7 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 8 } } } pe_found_firm = { CODE = 8 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 9 } } } pe_found_firm = { CODE = 9 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 10 } } } pe_found_firm = { CODE = 10 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 11 } } } pe_found_firm = { CODE = 11 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 12 } } } pe_found_firm = { CODE = 12 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 13 } } } pe_found_firm = { CODE = 13 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 14 } } } pe_found_firm = { CODE = 14 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 15 } } } pe_found_firm = { CODE = 15 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 16 } } } pe_found_firm = { CODE = 16 COST = 500 SITE = d_pe_site_city MONTHS = 16 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 17 } } } pe_found_firm = { CODE = 17 COST = 300 SITE = d_pe_site_mining MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 18 } } } pe_found_firm = { CODE = 18 COST = 300 SITE = d_pe_site_mining MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 19 } } } pe_found_firm = { CODE = 19 COST = 300 SITE = d_pe_site_mining MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 20 } } } pe_found_firm = { CODE = 20 COST = 300 SITE = d_pe_site_mining MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 21 } } } pe_found_firm = { CODE = 21 COST = 300 SITE = d_pe_site_mining MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 22 } } } pe_found_firm = { CODE = 22 COST = 300 SITE = d_pe_site_mining MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 23 } } } pe_found_firm = { CODE = 23 COST = 300 SITE = d_pe_site_generator MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 24 } } } pe_found_firm = { CODE = 24 COST = 300 SITE = d_pe_site_generator MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 25 } } } pe_found_firm = { CODE = 25 COST = 300 SITE = d_pe_site_generator MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 26 } } } pe_found_firm = { CODE = 26 COST = 300 SITE = d_pe_site_generator MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 27 } } } pe_found_firm = { CODE = 27 COST = 300 SITE = d_pe_site_generator MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 28 } } } pe_found_firm = { CODE = 28 COST = 300 SITE = d_pe_site_generator MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 29 } } } pe_found_firm = { CODE = 29 COST = 300 SITE = d_pe_site_farming MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 30 } } } pe_found_firm = { CODE = 30 COST = 300 SITE = d_pe_site_farming MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 31 } } } pe_found_firm = { CODE = 31 COST = 300 SITE = d_pe_site_farming MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 32 } } } pe_found_firm = { CODE = 32 COST = 300 SITE = d_pe_site_farming MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 33 } } } pe_found_firm = { CODE = 33 COST = 300 SITE = d_pe_site_farming MONTHS = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 34 } } } pe_found_firm = { CODE = 34 COST = 300 SITE = d_pe_site_farming MONTHS = 8 } }
 }
 
 # Colony scope: buy a state district. Human empires on Free Market get an offer (one per
@@ -2268,118 +2250,247 @@ pe_nationalise_one = {
 	}
 }
 
-# Colony scope: the firm with the largest gain switches to the best variant of its class
-# (same footprint and stage) if the gain is at least 3 trade per month. It closes for
-# half the build time (a construction site). Paid from the firm's capital, otherwise from
-# the investor pool: 100 (city) / 60 (rural) x stage.
+# Colony scope: the firm with the largest gain switches to the best variant available here
+# (any class, same stage) if the gain is at least 3 trade per month. It closes for half the
+# build time (a construction site). Cost: city 250 / rural 150 x stage size, paid from the
+# firm's capital, otherwise from the investor pool. A rural target needs a free district of
+# its type once the old firm is gone; if there is none, the old firm is restored, the
+# cost paid back, and that rural type is not tried again on this planet for a year.
 pe_restructure = {
 	root = {
 		set_variable = { which = pe_best_gain value = 3 }
 		set_variable = { which = pe_rid value = 0 }
 		set_variable = { which = pe_rid_best value = 0 }
 		set_variable = { which = pe_retool_ok value = 0 }
-		set_variable = { which = pe_cls_val_m value = -100000 }
-		set_variable = { which = pe_cls_var_m value = 0 }
-		set_variable = { which = pe_cls_val_e value = -100000 }
-		set_variable = { which = pe_cls_var_e value = 0 }
-		set_variable = { which = pe_cls_val_f value = -100000 }
-		set_variable = { which = pe_cls_var_f value = 0 }
+		set_variable = { which = pe_rollback value = 0 }
+		set_variable = { which = pe_paid value = 0 }
+		set_variable = { which = pe_cls_val_all value = -100000 }
+		set_variable = { which = pe_cls_var_all value = 0 }
 	}
-	pe_retool_consider = { V = d_pe_firm_mm CODE = 17 CLS = m }
-	pe_retool_consider = { V = d_pe_firm_ma CODE = 18 CLS = m }
-	pe_retool_consider = { V = d_pe_firm_mc CODE = 19 CLS = m }
-	pe_retool_consider = { V = d_pe_firm_mt CODE = 20 CLS = m }
-	pe_retool_consider = { V = d_pe_firm_me CODE = 21 CLS = m }
-	pe_retool_consider = { V = d_pe_firm_mf CODE = 22 CLS = m }
-	pe_retool_consider = { V = d_pe_firm_ee CODE = 23 CLS = e }
-	pe_retool_consider = { V = d_pe_firm_ea CODE = 24 CLS = e }
-	pe_retool_consider = { V = d_pe_firm_ec CODE = 25 CLS = e }
-	pe_retool_consider = { V = d_pe_firm_et CODE = 26 CLS = e }
-	pe_retool_consider = { V = d_pe_firm_em CODE = 27 CLS = e }
-	pe_retool_consider = { V = d_pe_firm_ef CODE = 28 CLS = e }
-	pe_retool_consider = { V = d_pe_firm_ff CODE = 29 CLS = f }
-	pe_retool_consider = { V = d_pe_firm_fa CODE = 30 CLS = f }
-	pe_retool_consider = { V = d_pe_firm_fc CODE = 31 CLS = f }
-	pe_retool_consider = { V = d_pe_firm_ft CODE = 32 CLS = f }
-	pe_retool_consider = { V = d_pe_firm_fm CODE = 33 CLS = f }
-	pe_retool_consider = { V = d_pe_firm_fe CODE = 34 CLS = f }
+	pe_retool_consider = { V = d_pe_firm_aa CODE = 1 }
+	pe_retool_consider = { V = d_pe_firm_ac CODE = 2 }
+	pe_retool_consider = { V = d_pe_firm_at CODE = 3 }
+	pe_retool_consider = { V = d_pe_firm_au CODE = 4 }
+	pe_retool_consider = { V = d_pe_firm_cc CODE = 5 }
+	pe_retool_consider = { V = d_pe_firm_ct CODE = 6 }
+	pe_retool_consider = { V = d_pe_firm_cu CODE = 7 }
+	pe_retool_consider = { V = d_pe_firm_tt CODE = 8 }
+	pe_retool_consider = { V = d_pe_firm_tu CODE = 9 }
+	pe_retool_consider = { V = d_pe_firm_uu CODE = 10 }
+	pe_retool_consider = { V = d_pe_firm_xx CODE = 11 }
+	pe_retool_consider = { V = d_pe_firm_xy CODE = 12 }
+	pe_retool_consider = { V = d_pe_firm_xz CODE = 13 }
+	pe_retool_consider = { V = d_pe_firm_yy CODE = 14 }
+	pe_retool_consider = { V = d_pe_firm_yz CODE = 15 }
+	pe_retool_consider = { V = d_pe_firm_zz CODE = 16 }
+	pe_retool_consider = { V = d_pe_firm_mm CODE = 17 }
+	pe_retool_consider = { V = d_pe_firm_ma CODE = 18 }
+	pe_retool_consider = { V = d_pe_firm_mc CODE = 19 }
+	pe_retool_consider = { V = d_pe_firm_mt CODE = 20 }
+	pe_retool_consider = { V = d_pe_firm_me CODE = 21 }
+	pe_retool_consider = { V = d_pe_firm_mf CODE = 22 }
+	pe_retool_consider = { V = d_pe_firm_ee CODE = 23 }
+	pe_retool_consider = { V = d_pe_firm_ea CODE = 24 }
+	pe_retool_consider = { V = d_pe_firm_ec CODE = 25 }
+	pe_retool_consider = { V = d_pe_firm_et CODE = 26 }
+	pe_retool_consider = { V = d_pe_firm_em CODE = 27 }
+	pe_retool_consider = { V = d_pe_firm_ef CODE = 28 }
+	pe_retool_consider = { V = d_pe_firm_ff CODE = 29 }
+	pe_retool_consider = { V = d_pe_firm_fa CODE = 30 }
+	pe_retool_consider = { V = d_pe_firm_fc CODE = 31 }
+	pe_retool_consider = { V = d_pe_firm_ft CODE = 32 }
+	pe_retool_consider = { V = d_pe_firm_fm CODE = 33 }
+	pe_retool_consider = { V = d_pe_firm_fe CODE = 34 }
 	every_deposit = {
 		limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_val }
 		root = { change_variable = { which = pe_rid value = 1 } }
 		set_variable = { which = pe_rid value = root.pe_rid }
-		if = { limit = { check_variable = { which = pe_cls value = 1 } } set_variable = { which = pe_gain value = root.pe_cls_val_city } set_variable = { which = pe_to value = root.pe_cls_var_city } }
-		else_if = { limit = { check_variable = { which = pe_cls value = 2 } } set_variable = { which = pe_gain value = root.pe_cls_val_m } set_variable = { which = pe_to value = root.pe_cls_var_m } }
-		else_if = { limit = { check_variable = { which = pe_cls value = 3 } } set_variable = { which = pe_gain value = root.pe_cls_val_e } set_variable = { which = pe_to value = root.pe_cls_var_e } }
-		else_if = { limit = { check_variable = { which = pe_cls value = 4 } } set_variable = { which = pe_gain value = root.pe_cls_val_f } set_variable = { which = pe_to value = root.pe_cls_var_f } }
-		else_if = { limit = { check_variable = { which = pe_cls value = 5 } } set_variable = { which = pe_gain value = root.pe_cls_val_city } set_variable = { which = pe_to value = root.pe_cls_var_city } }
+		set_variable = { which = pe_gain value = root.pe_cls_val_all }
 		subtract_variable = { which = pe_gain value = pe_val }
 		if = {
 			limit = { check_variable = { which = pe_gain value > root.pe_best_gain } }
 			root = {
 				set_variable = { which = pe_best_gain value = prev.pe_gain }
 				set_variable = { which = pe_rid_best value = prev.pe_rid }
-				set_variable = { which = pe_to value = prev.pe_to }
 			}
 		}
 	}
 	random_deposit = {
 		limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_val check_variable = { which = pe_rid value = root.pe_rid_best } }
-		if = { limit = { check_variable = { which = pe_cls value = 1 } } set_variable = { which = pe_cost value = 100 } }
-		else_if = { limit = { check_variable = { which = pe_cls value = 5 } } set_variable = { which = pe_cost value = 100 } }
-		else = { set_variable = { which = pe_cost value = 60 } }
-		multiply_variable = { which = pe_cost value = pe_stage }
+		if = { limit = { check_variable = { which = pe_cls value = 1 } } set_variable = { which = pe_cost value = 250 } }
+		else_if = { limit = { check_variable = { which = pe_cls value = 5 } } set_variable = { which = pe_cost value = 250 } }
+		else = { set_variable = { which = pe_cost value = 150 } }
+		set_variable = { which = pe_tmp value = pe_stage }
+		change_variable = { which = pe_tmp value = 1 }
+		multiply_variable = { which = pe_tmp value = 0.5 }
+		multiply_variable = { which = pe_cost value = pe_tmp }
 		if = {
 			limit = { check_variable = { which = pe_fcap value >= pe_cost } }
 			subtract_variable = { which = pe_fcap value = pe_cost }
-			root = { set_variable = { which = pe_retool_ok value = 1 } }
+			root = { set_variable = { which = pe_retool_ok value = 1 } set_variable = { which = pe_paid value = 1 } }
 		}
 		else_if = {
 			limit = { root = { check_variable = { which = pe_capital value >= prev.pe_cost } } }
-			root = { subtract_variable = { which = pe_capital value = prev.pe_cost } set_variable = { which = pe_retool_ok value = 1 } }
+			root = { subtract_variable = { which = pe_capital value = prev.pe_cost } set_variable = { which = pe_retool_ok value = 1 } set_variable = { which = pe_paid value = 2 } }
 		}
 		if = {
 			limit = { root = { check_variable = { which = pe_retool_ok value = 1 } } }
-			root = { set_variable = { which = pe_chg_stage value = prev.pe_stage } set_variable = { which = pe_chg_fcap value = prev.pe_fcap } }
+			root = {
+				set_variable = { which = pe_chg_code value = prev.pe_code }
+				set_variable = { which = pe_chg_stage value = prev.pe_stage }
+				set_variable = { which = pe_chg_fcap value = prev.pe_fcap }
+				set_variable = { which = pe_chg_cost value = prev.pe_cost }
+			}
 			remove_deposit = yes
 		}
 	}
 	if = {
 		limit = { root = { check_variable = { which = pe_retool_ok value = 1 } } }
-		set_planet_flag = pe_site
-		if = { limit = { root = { check_variable = { which = pe_to value = 1 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 1 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 2 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 2 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 3 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 3 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 4 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 4 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 5 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 5 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 6 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 6 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 7 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 7 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 8 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 8 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 9 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 9 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 10 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 10 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 11 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 11 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 12 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 12 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 13 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 13 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 14 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 14 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 15 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 15 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 16 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 16 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 17 } } } add_deposit = d_pe_site_mining last_added_deposit = { set_variable = { which = pe_target value = 17 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 18 } } } add_deposit = d_pe_site_mining last_added_deposit = { set_variable = { which = pe_target value = 18 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 19 } } } add_deposit = d_pe_site_mining last_added_deposit = { set_variable = { which = pe_target value = 19 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 20 } } } add_deposit = d_pe_site_mining last_added_deposit = { set_variable = { which = pe_target value = 20 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 21 } } } add_deposit = d_pe_site_mining last_added_deposit = { set_variable = { which = pe_target value = 21 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 22 } } } add_deposit = d_pe_site_mining last_added_deposit = { set_variable = { which = pe_target value = 22 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 23 } } } add_deposit = d_pe_site_generator last_added_deposit = { set_variable = { which = pe_target value = 23 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 24 } } } add_deposit = d_pe_site_generator last_added_deposit = { set_variable = { which = pe_target value = 24 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 25 } } } add_deposit = d_pe_site_generator last_added_deposit = { set_variable = { which = pe_target value = 25 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 26 } } } add_deposit = d_pe_site_generator last_added_deposit = { set_variable = { which = pe_target value = 26 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 27 } } } add_deposit = d_pe_site_generator last_added_deposit = { set_variable = { which = pe_target value = 27 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 28 } } } add_deposit = d_pe_site_generator last_added_deposit = { set_variable = { which = pe_target value = 28 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 29 } } } add_deposit = d_pe_site_farming last_added_deposit = { set_variable = { which = pe_target value = 29 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 30 } } } add_deposit = d_pe_site_farming last_added_deposit = { set_variable = { which = pe_target value = 30 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 31 } } } add_deposit = d_pe_site_farming last_added_deposit = { set_variable = { which = pe_target value = 31 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 32 } } } add_deposit = d_pe_site_farming last_added_deposit = { set_variable = { which = pe_target value = 32 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 33 } } } add_deposit = d_pe_site_farming last_added_deposit = { set_variable = { which = pe_target value = 33 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
-		else_if = { limit = { root = { check_variable = { which = pe_to value = 34 } } } add_deposit = d_pe_site_farming last_added_deposit = { set_variable = { which = pe_target value = 34 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } }
+		if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 1 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 1 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 2 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 2 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 3 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 3 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 4 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 4 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 5 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 5 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 6 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 6 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 7 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 7 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 8 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 8 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 9 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 9 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 10 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 10 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 11 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 11 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 12 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 12 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 13 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 13 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 14 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 14 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 15 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 15 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 16 } } } add_deposit = d_pe_site_city last_added_deposit = { set_variable = { which = pe_target value = 16 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 8 } set_variable = { which = pe_kind value = 3 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 17 } } } if = { limit = { num_free_districts = { type = district_mining value > 0 } } add_deposit = d_pe_site_mining last_added_deposit = { set_variable = { which = pe_target value = 17 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_m days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 18 } } } if = { limit = { num_free_districts = { type = district_mining value > 0 } } add_deposit = d_pe_site_mining last_added_deposit = { set_variable = { which = pe_target value = 18 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_m days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 19 } } } if = { limit = { num_free_districts = { type = district_mining value > 0 } } add_deposit = d_pe_site_mining last_added_deposit = { set_variable = { which = pe_target value = 19 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_m days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 20 } } } if = { limit = { num_free_districts = { type = district_mining value > 0 } } add_deposit = d_pe_site_mining last_added_deposit = { set_variable = { which = pe_target value = 20 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_m days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 21 } } } if = { limit = { num_free_districts = { type = district_mining value > 0 } } add_deposit = d_pe_site_mining last_added_deposit = { set_variable = { which = pe_target value = 21 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_m days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 22 } } } if = { limit = { num_free_districts = { type = district_mining value > 0 } } add_deposit = d_pe_site_mining last_added_deposit = { set_variable = { which = pe_target value = 22 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_m days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 23 } } } if = { limit = { num_free_districts = { type = district_generator value > 0 } } add_deposit = d_pe_site_generator last_added_deposit = { set_variable = { which = pe_target value = 23 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_e days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 24 } } } if = { limit = { num_free_districts = { type = district_generator value > 0 } } add_deposit = d_pe_site_generator last_added_deposit = { set_variable = { which = pe_target value = 24 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_e days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 25 } } } if = { limit = { num_free_districts = { type = district_generator value > 0 } } add_deposit = d_pe_site_generator last_added_deposit = { set_variable = { which = pe_target value = 25 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_e days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 26 } } } if = { limit = { num_free_districts = { type = district_generator value > 0 } } add_deposit = d_pe_site_generator last_added_deposit = { set_variable = { which = pe_target value = 26 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_e days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 27 } } } if = { limit = { num_free_districts = { type = district_generator value > 0 } } add_deposit = d_pe_site_generator last_added_deposit = { set_variable = { which = pe_target value = 27 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_e days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 28 } } } if = { limit = { num_free_districts = { type = district_generator value > 0 } } add_deposit = d_pe_site_generator last_added_deposit = { set_variable = { which = pe_target value = 28 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_e days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 29 } } } if = { limit = { num_free_districts = { type = district_farming value > 0 } } add_deposit = d_pe_site_farming last_added_deposit = { set_variable = { which = pe_target value = 29 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_f days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 30 } } } if = { limit = { num_free_districts = { type = district_farming value > 0 } } add_deposit = d_pe_site_farming last_added_deposit = { set_variable = { which = pe_target value = 30 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_f days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 31 } } } if = { limit = { num_free_districts = { type = district_farming value > 0 } } add_deposit = d_pe_site_farming last_added_deposit = { set_variable = { which = pe_target value = 31 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_f days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 32 } } } if = { limit = { num_free_districts = { type = district_farming value > 0 } } add_deposit = d_pe_site_farming last_added_deposit = { set_variable = { which = pe_target value = 32 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_f days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 33 } } } if = { limit = { num_free_districts = { type = district_farming value > 0 } } add_deposit = d_pe_site_farming last_added_deposit = { set_variable = { which = pe_target value = 33 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_f days = 360 } } }
+		else_if = { limit = { root = { check_variable = { which = pe_cls_var_all value = 34 } } } if = { limit = { num_free_districts = { type = district_farming value > 0 } } add_deposit = d_pe_site_farming last_added_deposit = { set_variable = { which = pe_target value = 34 } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_left value = 4 } set_variable = { which = pe_kind value = 3 } } } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_f days = 360 } } }
+		if = {
+			limit = { root = { check_variable = { which = pe_rollback value = 1 } } }
+			# No room for the rural target: restore the old firm and pay the cost back.
+			if = { limit = { root = { check_variable = { which = pe_paid value = 1 } } } root = { change_variable = { which = pe_chg_fcap value = pe_chg_cost } } }
+			if = { limit = { root = { check_variable = { which = pe_paid value = 2 } } } root = { change_variable = { which = pe_capital value = pe_chg_cost } } }
+			if = { limit = { root = { check_variable = { which = pe_chg_code value = 1 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_aa last_added_deposit = { set_variable = { which = pe_code value = 1 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 1 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_aa_2 last_added_deposit = { set_variable = { which = pe_code value = 1 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 1 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_aa_3 last_added_deposit = { set_variable = { which = pe_code value = 1 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 2 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_ac last_added_deposit = { set_variable = { which = pe_code value = 2 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 2 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_ac_2 last_added_deposit = { set_variable = { which = pe_code value = 2 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 2 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_ac_3 last_added_deposit = { set_variable = { which = pe_code value = 2 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 3 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_at last_added_deposit = { set_variable = { which = pe_code value = 3 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 3 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_at_2 last_added_deposit = { set_variable = { which = pe_code value = 3 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 3 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_at_3 last_added_deposit = { set_variable = { which = pe_code value = 3 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 4 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_au last_added_deposit = { set_variable = { which = pe_code value = 4 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 4 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_au_2 last_added_deposit = { set_variable = { which = pe_code value = 4 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 4 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_au_3 last_added_deposit = { set_variable = { which = pe_code value = 4 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 5 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_cc last_added_deposit = { set_variable = { which = pe_code value = 5 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 5 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_cc_2 last_added_deposit = { set_variable = { which = pe_code value = 5 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 5 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_cc_3 last_added_deposit = { set_variable = { which = pe_code value = 5 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 6 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_ct last_added_deposit = { set_variable = { which = pe_code value = 6 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 6 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_ct_2 last_added_deposit = { set_variable = { which = pe_code value = 6 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 6 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_ct_3 last_added_deposit = { set_variable = { which = pe_code value = 6 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 7 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_cu last_added_deposit = { set_variable = { which = pe_code value = 7 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 7 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_cu_2 last_added_deposit = { set_variable = { which = pe_code value = 7 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 7 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_cu_3 last_added_deposit = { set_variable = { which = pe_code value = 7 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 8 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_tt last_added_deposit = { set_variable = { which = pe_code value = 8 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 8 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_tt_2 last_added_deposit = { set_variable = { which = pe_code value = 8 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 8 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_tt_3 last_added_deposit = { set_variable = { which = pe_code value = 8 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 9 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_tu last_added_deposit = { set_variable = { which = pe_code value = 9 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 9 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_tu_2 last_added_deposit = { set_variable = { which = pe_code value = 9 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 9 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_tu_3 last_added_deposit = { set_variable = { which = pe_code value = 9 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 10 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_uu last_added_deposit = { set_variable = { which = pe_code value = 10 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 10 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_uu_2 last_added_deposit = { set_variable = { which = pe_code value = 10 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 10 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_uu_3 last_added_deposit = { set_variable = { which = pe_code value = 10 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 11 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_xx last_added_deposit = { set_variable = { which = pe_code value = 11 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 11 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_xx_2 last_added_deposit = { set_variable = { which = pe_code value = 11 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 11 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_xx_3 last_added_deposit = { set_variable = { which = pe_code value = 11 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 12 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_xy last_added_deposit = { set_variable = { which = pe_code value = 12 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 12 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_xy_2 last_added_deposit = { set_variable = { which = pe_code value = 12 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 12 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_xy_3 last_added_deposit = { set_variable = { which = pe_code value = 12 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 13 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_xz last_added_deposit = { set_variable = { which = pe_code value = 13 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 13 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_xz_2 last_added_deposit = { set_variable = { which = pe_code value = 13 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 13 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_xz_3 last_added_deposit = { set_variable = { which = pe_code value = 13 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 14 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_yy last_added_deposit = { set_variable = { which = pe_code value = 14 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 14 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_yy_2 last_added_deposit = { set_variable = { which = pe_code value = 14 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 14 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_yy_3 last_added_deposit = { set_variable = { which = pe_code value = 14 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 15 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_yz last_added_deposit = { set_variable = { which = pe_code value = 15 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 15 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_yz_2 last_added_deposit = { set_variable = { which = pe_code value = 15 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 15 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_yz_3 last_added_deposit = { set_variable = { which = pe_code value = 15 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 16 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_zz last_added_deposit = { set_variable = { which = pe_code value = 16 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 16 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_zz_2 last_added_deposit = { set_variable = { which = pe_code value = 16 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 16 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_zz_3 last_added_deposit = { set_variable = { which = pe_code value = 16 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 17 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_mm last_added_deposit = { set_variable = { which = pe_code value = 17 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 17 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_mm_2 last_added_deposit = { set_variable = { which = pe_code value = 17 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 17 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_mm_3 last_added_deposit = { set_variable = { which = pe_code value = 17 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 18 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_ma last_added_deposit = { set_variable = { which = pe_code value = 18 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 18 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_ma_2 last_added_deposit = { set_variable = { which = pe_code value = 18 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 18 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_ma_3 last_added_deposit = { set_variable = { which = pe_code value = 18 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 19 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_mc last_added_deposit = { set_variable = { which = pe_code value = 19 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 19 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_mc_2 last_added_deposit = { set_variable = { which = pe_code value = 19 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 19 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_mc_3 last_added_deposit = { set_variable = { which = pe_code value = 19 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 20 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_mt last_added_deposit = { set_variable = { which = pe_code value = 20 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 20 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_mt_2 last_added_deposit = { set_variable = { which = pe_code value = 20 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 20 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_mt_3 last_added_deposit = { set_variable = { which = pe_code value = 20 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 21 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_me last_added_deposit = { set_variable = { which = pe_code value = 21 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 21 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_me_2 last_added_deposit = { set_variable = { which = pe_code value = 21 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 21 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_me_3 last_added_deposit = { set_variable = { which = pe_code value = 21 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 22 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_mf last_added_deposit = { set_variable = { which = pe_code value = 22 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 22 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_mf_2 last_added_deposit = { set_variable = { which = pe_code value = 22 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 22 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_mf_3 last_added_deposit = { set_variable = { which = pe_code value = 22 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 23 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_ee last_added_deposit = { set_variable = { which = pe_code value = 23 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 23 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_ee_2 last_added_deposit = { set_variable = { which = pe_code value = 23 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 23 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_ee_3 last_added_deposit = { set_variable = { which = pe_code value = 23 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 24 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_ea last_added_deposit = { set_variable = { which = pe_code value = 24 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 24 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_ea_2 last_added_deposit = { set_variable = { which = pe_code value = 24 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 24 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_ea_3 last_added_deposit = { set_variable = { which = pe_code value = 24 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 25 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_ec last_added_deposit = { set_variable = { which = pe_code value = 25 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 25 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_ec_2 last_added_deposit = { set_variable = { which = pe_code value = 25 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 25 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_ec_3 last_added_deposit = { set_variable = { which = pe_code value = 25 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 26 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_et last_added_deposit = { set_variable = { which = pe_code value = 26 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 26 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_et_2 last_added_deposit = { set_variable = { which = pe_code value = 26 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 26 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_et_3 last_added_deposit = { set_variable = { which = pe_code value = 26 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 27 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_em last_added_deposit = { set_variable = { which = pe_code value = 27 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 27 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_em_2 last_added_deposit = { set_variable = { which = pe_code value = 27 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 27 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_em_3 last_added_deposit = { set_variable = { which = pe_code value = 27 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 28 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_ef last_added_deposit = { set_variable = { which = pe_code value = 28 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 28 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_ef_2 last_added_deposit = { set_variable = { which = pe_code value = 28 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 28 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_ef_3 last_added_deposit = { set_variable = { which = pe_code value = 28 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 29 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_ff last_added_deposit = { set_variable = { which = pe_code value = 29 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 29 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_ff_2 last_added_deposit = { set_variable = { which = pe_code value = 29 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 29 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_ff_3 last_added_deposit = { set_variable = { which = pe_code value = 29 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 30 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_fa last_added_deposit = { set_variable = { which = pe_code value = 30 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 30 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_fa_2 last_added_deposit = { set_variable = { which = pe_code value = 30 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 30 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_fa_3 last_added_deposit = { set_variable = { which = pe_code value = 30 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 31 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_fc last_added_deposit = { set_variable = { which = pe_code value = 31 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 31 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_fc_2 last_added_deposit = { set_variable = { which = pe_code value = 31 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 31 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_fc_3 last_added_deposit = { set_variable = { which = pe_code value = 31 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 32 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_ft last_added_deposit = { set_variable = { which = pe_code value = 32 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 32 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_ft_2 last_added_deposit = { set_variable = { which = pe_code value = 32 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 32 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_ft_3 last_added_deposit = { set_variable = { which = pe_code value = 32 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 33 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_fm last_added_deposit = { set_variable = { which = pe_code value = 33 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 33 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_fm_2 last_added_deposit = { set_variable = { which = pe_code value = 33 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 33 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_fm_3 last_added_deposit = { set_variable = { which = pe_code value = 33 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 34 } check_variable = { which = pe_chg_stage value = 1 } } } add_deposit = d_pe_firm_fe last_added_deposit = { set_variable = { which = pe_code value = 34 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 34 } check_variable = { which = pe_chg_stage value = 2 } } } add_deposit = d_pe_firm_fe_2 last_added_deposit = { set_variable = { which = pe_code value = 34 } set_variable = { which = pe_stage value = 2 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+			else_if = { limit = { root = { check_variable = { which = pe_chg_code value = 34 } check_variable = { which = pe_chg_stage value = 3 } } } add_deposit = d_pe_firm_fe_3 last_added_deposit = { set_variable = { which = pe_code value = 34 } set_variable = { which = pe_stage value = 3 } set_variable = { which = pe_fcap value = root.pe_chg_fcap } } }
+		}
+		else = {
+			set_planet_flag = pe_site
+		}
 		check_planet_employment = yes
 	}
 }

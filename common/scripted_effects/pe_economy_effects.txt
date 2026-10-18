@@ -27,10 +27,10 @@
 # new firms and buys districts -> more supply (construction sites count in advance)
 # lowers the price -> less profit -> restructuring or bankruptcy.
 #
-# Capital is counted in trade. Investor pool (country pe_capital): starts at 1000, gets
-# half of each firm's profit (all of it from corporations) and pays foundings (city 200,
-# rural 120, half price on planets with idle civilians), buyouts and restructuring when the
-# firm cannot. Firm capital (deposit pe_fcap): the other half; pays expansions and
+# Capital is counted in trade. Investor pool (country pe_capital): starts at 500, gets
+# half of each firm's profit (all of it from corporations) and pays foundings at the
+# state's district cost (city 500, rural 300), buyouts and restructuring when the firm
+# cannot. Firm capital (deposit pe_fcap): the other half; pays expansions and
 # restructuring, absorbs losses.
 #
 # Building: a firm is first a construction site (vanilla district build time: city 16,
@@ -57,7 +57,7 @@ pe_monthly_sites = {
 pe_init = {
 	if = { limit = { NOT = { is_variable_set = pe_private_share } } set_variable = { which = pe_private_share value = 0 } }
 	if = { limit = { NOT = { is_variable_set = pe_profit_share } } set_variable = { which = pe_profit_share value = 0 } }
-	if = { limit = { NOT = { is_variable_set = pe_capital } } set_variable = { which = pe_capital value = 1000 } }
+	if = { limit = { NOT = { is_variable_set = pe_capital } } set_variable = { which = pe_capital value = 500 } }
 	if = { limit = { NOT = { is_variable_set = pe_pool_income } } set_variable = { which = pe_pool_income value = 0 } }
 	# Spread the empires over the three months of a quarter.
 	if = {
@@ -352,19 +352,29 @@ pe_planet_step = {
 
 # Every firm books its quarter.
 pe_firm_accounting = {
-	root = { set_variable = { which = pe_pend_any value = 0 } }
+	root = {
+		set_variable = { which = pe_pend_any value = 0 }
+		set_variable = { which = pe_here_m value = 0 }
+		set_variable = { which = pe_here_e value = 0 }
+		set_variable = { which = pe_here_f value = 0 }
+	}
 	every_deposit = {
 		limit = { has_deposit_category = pe_deposit_cat_firms }
 		if = { limit = { NOT = { is_variable_set = pe_code } } pe_firm_identify = yes }
 		pe_deposit_fetch = yes
 		pe_firm_book = yes
+		# Rural classes present (a private mine frees its mining district when it restructures).
+		if = { limit = { check_variable = { which = pe_cls value = 2 } } root = { set_variable = { which = pe_here_m value = 1 } } }
+		if = { limit = { check_variable = { which = pe_cls value = 3 } } root = { set_variable = { which = pe_here_e value = 1 } } }
+		if = { limit = { check_variable = { which = pe_cls value = 4 } } root = { set_variable = { which = pe_here_f value = 1 } } }
 	}
 }
 
 # Deposit scope. Quarterly profit = value added x stage size x fill x profit share,
 # minus overhead (0.3 per stage and month). Half goes to the firm, half to the investor
 # pool (all of it from corporations); losses hit the firm. Then at most one stage change
-# per planet and quarter: expand when the firm can pay (city 150, rural 100, x stage),
+# per planet and quarter: expand (+100 workforce, half a district) when the firm can pay
+# half a district's cost (city 250, rural 150),
 # its jobs are filled and the planet has idle civilians; shrink or go bankrupt when its
 # capital runs out.
 pe_firm_book = {
@@ -420,11 +430,10 @@ pe_firm_book = {
 					check_variable = { which = pe_unemp value = 1 }
 				}
 			}
-			if = { limit = { check_variable = { which = pe_cls value = 2 } } set_variable = { which = pe_tmp value = 100 } }
-			else_if = { limit = { check_variable = { which = pe_cls value = 3 } } set_variable = { which = pe_tmp value = 100 } }
-			else_if = { limit = { check_variable = { which = pe_cls value = 4 } } set_variable = { which = pe_tmp value = 100 } }
-			else = { set_variable = { which = pe_tmp value = 150 } }
-			multiply_variable = { which = pe_tmp value = pe_stage }
+			if = { limit = { check_variable = { which = pe_cls value = 2 } } set_variable = { which = pe_tmp value = 150 } }
+			else_if = { limit = { check_variable = { which = pe_cls value = 3 } } set_variable = { which = pe_tmp value = 150 } }
+			else_if = { limit = { check_variable = { which = pe_cls value = 4 } } set_variable = { which = pe_tmp value = 150 } }
+			else = { set_variable = { which = pe_tmp value = 250 } }
 			if = {
 				limit = { check_variable = { which = pe_fcap value >= pe_tmp } }
 				subtract_variable = { which = pe_fcap value = pe_tmp }
@@ -464,14 +473,11 @@ pe_consider_variant = {
 	}
 }
 
-# The investor pool starts a construction site on a free slot. The firm will start with
-# 10 capital, enough to wait about three years for workers.
+# The investor pool starts a construction site on a free slot and pays what the district
+# would cost the state. The firm will start with 10 capital, enough to wait about three
+# years for workers.
 pe_found_firm = {
 	root = { set_variable = { which = pe_cost value = $COST$ } }
-	if = {
-		limit = { pe_has_idle_pops = yes }
-		root = { multiply_variable = { which = pe_cost value = 0.5 } }
-	}
 	if = {
 		limit = { root = { check_variable = { which = pe_capital value >= pe_cost } } }
 		add_deposit = $SITE$
@@ -528,15 +534,16 @@ pe_buyout_execute = {
 	}
 }
 
-# Best variant per rural class on this planet (the side share depends on its deposits).
+# Best variant a firm on this planet could restructure into (rural ones need their
+# district type here, side shares their deposits).
 pe_retool_consider = {
 	if = {
 		limit = { pe_can_retool_$V$ = yes }
 		root = {
 			if = {
-				limit = { check_variable = { which = pe_val_$V$ value > pe_cls_val_$CLS$ } }
-				set_variable = { which = pe_cls_val_$CLS$ value = pe_val_$V$ }
-				set_variable = { which = pe_cls_var_$CLS$ value = $CODE$ }
+				limit = { check_variable = { which = pe_val_$V$ value > pe_cls_val_all } }
+				set_variable = { which = pe_cls_val_all value = pe_val_$V$ }
+				set_variable = { which = pe_cls_var_all value = $CODE$ }
 			}
 		}
 	}

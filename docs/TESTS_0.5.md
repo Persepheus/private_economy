@@ -61,3 +61,29 @@
 6. **Neue Kolonie:** Beim Kolonisieren entsteht keine Firma.
 7. **Abwechslung:** Labore entstehen neben Industrie, besonders mit vollem Legierungslager.
 8. **Logs:** error.log nach `pe_`, `num_zones`, `is_under_colonization` und `check_planet_employment` durchsuchen.
+
+## 0.5.1 – Werte
+
+Die Privatwirtschaft zahlt jetzt, was ein Distrikt dich kostet. Dadurch wird alles deutlich langsamer.
+
+| | vorher | jetzt |
+|---|---|---|
+| Startkapital Investorenpool | 1000 | **500** |
+| Gründung Stadt / Land | 200 / 120, halber Preis bei freien Zivilisten | **500 / 300**, kein Rabatt |
+| Stufenaufstieg (+100 Arbeitskraft, ein halber Distrikt) | 150 / 100 × Stufe | **250 / 150** |
+| Umbau | 100 / 60 × Stufe | **250 / 150 × Stufengröße** (1 / 1,5 / 2) |
+
+Planeten mit freien Zivilisten kommen weiterhin zuerst dran.
+
+**Umbau über Klassengrenzen:**
+- Jede Firma kann in die beste Variante wechseln, die auf dem Planeten möglich ist, also auch ein Stahlwerk in eine Mine.
+- Für eine Landfirma muss nach dem Abbau der alten Firma ein Distrikt ihres Typs frei sein.
+- Ist das nicht der Fall, wird die alte Firma wiederhergestellt und die Kosten erstattet. Dieser Landtyp wird auf dem Planeten dann ein Jahr nicht mehr versucht.
+
+**Aufkauf:** Eine Mine mit Stahlsparte statt einer staatlichen Mine ist erlaubt, wenn sie mehr wert ist. Bei genug Mineralien ist das der Fall.
+
+Ein laufendes 0.5-Spiel kann weiterlaufen. Das Startkapital gilt nur für Reiche, die noch keins haben.
+
+**Prüfen:**
+1. Hauptstadt voller Stahlwerke, Mineralien im Minus, noch Platz für Bergbaudistrikte: Ein Stahlwerk wird über eine Baustelle zur Mine. Mit `pe.7` und `pe.8` lässt sich das beschleunigen.
+2. Wie oben, aber ohne freien Bergbauplatz: Das Stahlwerk bleibt, ohne Kosten und ohne Fehler im error.log.
