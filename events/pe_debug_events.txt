@@ -13,7 +13,10 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
-		capital_scope = { add_deposit = d_pe_firm_aaa }
+		capital_scope = {
+			add_deposit = d_pe_firm_aaa
+			last_added_deposit = { set_variable = { which = pe_code value = 1 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = 10 } }
+		}
 		log = "private_economy: pe.1 added d_pe_firm_aaa to the capital"
 	}
 }
@@ -23,7 +26,10 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
-		capital_scope = { add_deposit = d_pe_firm_act }
+		capital_scope = {
+			add_deposit = d_pe_firm_act
+			last_added_deposit = { set_variable = { which = pe_code value = 5 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = 10 } }
+		}
 		log = "private_economy: pe.2 added d_pe_firm_act to the capital"
 	}
 }
@@ -64,7 +70,10 @@ country_event = {
 	immediate = {
 		every_playable_country = {
 			limit = { is_ai = yes is_country_type = default is_gestalt = no exists = capital_scope }
-			capital_scope = { add_deposit = d_pe_firm_act }
+			capital_scope = {
+			add_deposit = d_pe_firm_act
+			last_added_deposit = { set_variable = { which = pe_code value = 5 } set_variable = { which = pe_stage value = 1 } set_variable = { which = pe_fcap value = 10 } }
+		}
 		}
 		log = "private_economy: pe.5 added d_pe_firm_act to every AI capital"
 	}
@@ -78,11 +87,12 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		pe_init = yes
-		pe_capital_income = yes
-		pe_scores = yes
+		pe_market = yes
+		pe_job_values = yes
 		pe_compute_values = yes
 		capital_scope = {
 			pe_planet_counts = yes
+			pe_planet_fill = yes
 			if = {
 				limit = { free_district_slots > 0 }
 				pe_choose_variant = { MODE = found }
@@ -97,7 +107,7 @@ country_event = {
 				set_variable = { which = pe_diag_target value = prev.pe_target }
 			}
 		}
-		log = "private_economy: pe.6 share [Root.pe_private_share] districts [Root.pe_diag_districts] free [Root.pe_diag_free] firms [Root.pe_diag_firms] target [Root.pe_diag_target] best [Root.pe_best_variant] value [Root.pe_best] capital [Root.pe_capital] income [Root.pe_capital_income]"
+		log = "private_economy: pe.6 share [Root.pe_private_share] districts [Root.pe_diag_districts] free [Root.pe_diag_free] firms [Root.pe_diag_firms] target [Root.pe_diag_target] best [Root.pe_best_variant] value [Root.pe_best] fill [Root.pe_fill_cur] pool [Root.pe_capital] pool income [Root.pe_pool_income] prices alloys [Root.pe_s_alloys] goods [Root.pe_s_consumer_goods] minerals [Root.pe_s_minerals] energy [Root.pe_s_energy] food [Root.pe_s_food] va metallurgist [Root.pe_vaj_pe_private_metallurgist] artisan [Root.pe_vaj_pe_private_artisan] trader [Root.pe_vaj_pe_private_trader] miner [Root.pe_vaj_pe_private_miner] technician [Root.pe_vaj_pe_private_technician] farmer [Root.pe_vaj_pe_private_farmer]"
 	}
 	option = { name = pe.6.a }
 }

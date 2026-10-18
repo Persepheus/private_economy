@@ -1,14 +1,14 @@
 # Private Economy triggers.
 
 # Colony scope. Normal planets only for now; habitats, ring worlds, ecumenopolises and
-# other special planets get their own solution later.
+# other special planets get their own solution later. The yearly cooldown (pe_cooldown)
+# only limits actions; accounting runs every quarter.
 pe_planet_eligible = {
 	exists = owner
 	owner = { is_country_type = default is_gestalt = no }
 	planet_is_habitat_equivalent = no
 	planet_is_ecu_equivalent = no
 	planet_is_ring_world_equivalent = no
-	NOT = { has_planet_flag = pe_cooldown }
 }
 
 # Per-variant triggers (pe_can_found_/buy_/retool_<firm>): pe_firm_triggers_generated.txt.

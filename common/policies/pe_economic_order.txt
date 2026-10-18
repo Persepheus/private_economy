@@ -1,5 +1,8 @@
 # Economic order: share of district slots run by private firms (0/20/40/60/80%).
-# Stored as pe_private_share (percent) for the private economy logic.
+# Stored as pe_private_share (percent) for the private economy logic. The firms keep a
+# profit share of their output (pe_profit_share: 0/15/20/25/35%): private output is
+# +15% more efficient, and the modifier lowers it by the profit share, so the state
+# nets about 100/95/90/80% of a state job's output while the firms fund their growth.
 pe_economic_order = {
 	category = economy
 
@@ -11,7 +14,11 @@ pe_economic_order = {
 	option = {
 		name = "pe_order_planned"
 		policy_flags = { pe_order_planned }
-		on_enabled = { set_variable = { which = pe_private_share value = 0 } }
+		on_enabled = {
+			set_variable = { which = pe_private_share value = 0 }
+			set_variable = { which = pe_profit_share value = 0 }
+			set_variable = { which = pe_profit_pct value = 0 }
+		}
 		ai_weight = {
 			weight = 50
 			modifier = { factor = 3 is_authoritarian = yes }
@@ -20,7 +27,11 @@ pe_economic_order = {
 	option = {
 		name = "pe_order_guided"
 		policy_flags = { pe_order_guided }
-		on_enabled = { set_variable = { which = pe_private_share value = 20 } }
+		on_enabled = {
+			set_variable = { which = pe_private_share value = 20 }
+			set_variable = { which = pe_profit_share value = 0.15 }
+			set_variable = { which = pe_profit_pct value = 15 }
+		}
 		ai_weight = {
 			weight = 80
 			modifier = { factor = 2 is_authoritarian = yes }
@@ -29,7 +40,19 @@ pe_economic_order = {
 	option = {
 		name = "pe_order_mixed"
 		policy_flags = { pe_order_mixed }
-		on_enabled = { set_variable = { which = pe_private_share value = 40 } }
+		on_enabled = {
+			set_variable = { which = pe_private_share value = 40 }
+			set_variable = { which = pe_profit_share value = 0.2 }
+			set_variable = { which = pe_profit_pct value = 20 }
+		}
+		modifier = {
+			pe_private_metallurgists_produces_mult = -0.05
+			pe_private_artisans_produces_mult = -0.05
+			pe_private_traders_produces_mult = -0.05
+			pe_private_miners_produces_mult = -0.05
+			pe_private_technicians_produces_mult = -0.05
+			pe_private_farmers_produces_mult = -0.05
+		}
 		ai_weight = {
 			weight = 100
 		}
@@ -37,7 +60,19 @@ pe_economic_order = {
 	option = {
 		name = "pe_order_free_market"
 		policy_flags = { pe_order_free_market }
-		on_enabled = { set_variable = { which = pe_private_share value = 60 } }
+		on_enabled = {
+			set_variable = { which = pe_private_share value = 60 }
+			set_variable = { which = pe_profit_share value = 0.25 }
+			set_variable = { which = pe_profit_pct value = 25 }
+		}
+		modifier = {
+			pe_private_metallurgists_produces_mult = -0.1
+			pe_private_artisans_produces_mult = -0.1
+			pe_private_traders_produces_mult = -0.1
+			pe_private_miners_produces_mult = -0.1
+			pe_private_technicians_produces_mult = -0.1
+			pe_private_farmers_produces_mult = -0.1
+		}
 		ai_weight = {
 			weight = 80
 			modifier = { factor = 2 is_egalitarian = yes }
@@ -47,7 +82,19 @@ pe_economic_order = {
 	option = {
 		name = "pe_order_laissez_faire"
 		policy_flags = { pe_order_laissez_faire }
-		on_enabled = { set_variable = { which = pe_private_share value = 80 } }
+		on_enabled = {
+			set_variable = { which = pe_private_share value = 80 }
+			set_variable = { which = pe_profit_share value = 0.35 }
+			set_variable = { which = pe_profit_pct value = 35 }
+		}
+		modifier = {
+			pe_private_metallurgists_produces_mult = -0.2
+			pe_private_artisans_produces_mult = -0.2
+			pe_private_traders_produces_mult = -0.2
+			pe_private_miners_produces_mult = -0.2
+			pe_private_technicians_produces_mult = -0.2
+			pe_private_farmers_produces_mult = -0.2
+		}
 		ai_weight = {
 			weight = 30
 			modifier = { factor = 5 has_authority = auth_corporate }

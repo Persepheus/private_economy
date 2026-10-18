@@ -1,149 +1,177 @@
 # Private economy logic. Runs quarterly per country (pe.100).
 # Call depth stays at 4 or less: the engine initialises only 5 nested levels.
-#   pe_quarterly (1) -> pe_capital_income (2) -> pe_count_job (3)
-#                    -> pe_scores (2) -> pe_score_resource (3)
+#   pe_quarterly (1) -> pe_init (2)
+#                    -> pe_market (2) -> pe_shadow (3)
+#                    -> pe_job_values (2) -> pe_job_value (3) -> pe_job_res (4)
 #                    -> pe_compute_values (2)
 #                    -> pe_planet_step (2) -> pe_planet_counts (3)
-#                                          -> pe_choose_variant (3)  -> pe_consider_variant (4)
-#                                          -> pe_found_variant (3)   -> pe_found_firm (4)
-#                                          -> pe_buy_or_offer (3)    -> pe_buyout_execute (4)
-#                                          -> pe_nationalise_one (3) -> pe_nat_consider (4)
-#                                                                    -> pe_nationalise_firm (4)
-#                                          -> pe_restructure (3)     -> pe_retool_consider (4)
-#                                                                    -> pe_retool_gain (4)
+#                                          -> pe_planet_fill (3)      -> pe_count_planet_job (4)
+#                                          -> pe_firm_accounting (3)  -> pe_firm_identify (4)
+#                                                                     -> pe_deposit_fetch (4)
+#                                                                     -> pe_firm_book (4)
+#                                          -> pe_firm_change (3)
+#                                          -> pe_choose_variant (3)   -> pe_consider_variant (4)
+#                                          -> pe_found_variant (3)    -> pe_found_firm (4)
+#                                          -> pe_buy_or_offer (3)     -> pe_buyout_execute (4)
+#                                          -> pe_nationalise_one (3)
+#                                          -> pe_restructure (3)      -> pe_retool_consider (4)
 # Variant lists and dispatchers: pe_firm_effects_generated.txt (tools/generate-firms.mjs).
 #
-# Private capital (country variable pe_capital): starts at 1000. Each private job pays
-# 0.5 energy upkeep per month as profit, which flows into the capital. Founding costs
-# 500 (city) / 300 (rural); a buyout costs the price paid to the state (600 / 360);
-# restructuring costs half the founding cost; nationalisation pays the price back in.
+# The loop: shadow prices (market price plus need) -> value added per private job ->
+# the firms keep a profit share of it (the economic order lowers private output by the
+# same share) -> firm capital and investor pool -> firms grow in stages, the pool founds
+# new firms and buys districts -> more supply lowers the price -> less profit ->
+# restructuring or bankruptcy.
+#
+# Capital is counted in trade. Investor pool (country pe_capital): starts at 1000, gets
+# half of each firm's profit (all of it from corporations) and pays foundings (city 200,
+# rural 120, half price on planets with unemployment), buyouts and restructuring when the
+# firm cannot. Firm capital (deposit pe_fcap): the other half; pays expansions and
+# restructuring, absorbs losses.
 
 # --- Country level ------------------------------------------------------------
 
 pe_init = {
+	if = { limit = { NOT = { is_variable_set = pe_private_share } } set_variable = { which = pe_private_share value = 0 } }
+	if = { limit = { NOT = { is_variable_set = pe_profit_share } } set_variable = { which = pe_profit_share value = 0 } }
+	if = { limit = { NOT = { is_variable_set = pe_capital } } set_variable = { which = pe_capital value = 1000 } }
+	if = { limit = { NOT = { is_variable_set = pe_pool_income } } set_variable = { which = pe_pool_income value = 0 } }
+	# Spread the empires over the three months of a quarter.
 	if = {
-		limit = { NOT = { is_variable_set = pe_private_share } }
-		set_variable = { which = pe_private_share value = 0 }
-	}
-	if = {
-		limit = { NOT = { is_variable_set = pe_capital } }
-		set_variable = { which = pe_capital value = 1000 }
+		limit = { NOT = { is_variable_set = pe_months } }
+		set_variable_to_random_value = { which = pe_months min = 0 max = 2 rounded = yes }
 	}
 }
 
 pe_quarterly = {
 	pe_init = yes
-	pe_capital_income = yes
-	change_variable = { which = pe_capital value = pe_capital_income }
-	pe_scores = yes
+	set_variable = { which = pe_pool_income value = 0 }
+	pe_market = yes
+	pe_job_values = yes
 	pe_compute_values = yes
+	# Planets with unemployment first: founders start where workers are idle.
 	every_owned_colony = {
-		limit = { pe_planet_eligible = yes }
+		limit = { pe_planet_eligible = yes num_unemployed > 0 }
+		set_timed_planet_flag = { flag = pe_stepped days = 1 }
+		pe_planet_step = yes
+	}
+	every_owned_colony = {
+		limit = { pe_planet_eligible = yes NOT = { has_planet_flag = pe_stepped } }
 		pe_planet_step = yes
 	}
 }
 
-pe_scores = {
-	pe_score_resource = { RES = alloys MARKET = yes ALWAYS = yes }
-	pe_score_resource = { RES = consumer_goods MARKET = yes }
-	pe_score_resource = { RES = minerals MARKET = yes }
-	pe_score_resource = { RES = energy MARKET = yes }
-	pe_score_resource = { RES = food MARKET = yes }
-	pe_score_resource = { RES = trade }
+# Country scope: shadow price pe_s_<res> in trade per unit. Alloys are an investment
+# good (always worth the buying price); so is food for empires with bio-ships, whose
+# growth costs thousands of food.
+pe_market = {
+	set_variable = { which = pe_is_invest value = 1 }
+	pe_shadow = { RES = alloys BASE = 4 MARKET = yes }
+	set_variable = { which = pe_is_invest value = 0 }
+	if = { limit = { country_uses_bio_ships = yes } set_variable = { which = pe_is_invest value = 1 } }
+	pe_shadow = { RES = food BASE = 1 MARKET = yes }
+	set_variable = { which = pe_is_invest value = 0 }
+	pe_shadow = { RES = consumer_goods BASE = 2 MARKET = yes }
+	pe_shadow = { RES = minerals BASE = 1 MARKET = yes }
+	pe_shadow = { RES = energy BASE = 1 MARKET = yes }
+	pe_shadow = { RES = trade BASE = 1 }
 }
 
-# Country scope: profit of the last quarter = filled private jobs x 0.5 energy x 3
-# months (100 workforce = one job).
-pe_capital_income = {
-	set_variable = { which = pe_jobs value = 0 }
-	pe_count_job = { JOB = pe_private_metallurgist }
-	pe_count_job = { JOB = pe_private_artisan }
-	pe_count_job = { JOB = pe_private_trader }
-	pe_count_job = { JOB = pe_private_miner }
-	pe_count_job = { JOB = pe_private_technician }
-	pe_count_job = { JOB = pe_private_farmer }
-	set_variable = { which = pe_capital_income value = pe_jobs }
-	multiply_variable = { which = pe_capital_income value = 0.015 }
-}
-
-pe_count_job = {
-	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = $JOB$ } variable = pe_tmp }
-	change_variable = { which = pe_jobs value = pe_tmp }
-}
-
-# Country scope. pe_score_<res>: how urgently the economy needs more of a resource.
-#   deficit:  50 + deficit in % of gross production, +30 if the stock lasts < 12 months
-#   surplus:  25 - 0.75 x surplus in % of production (a small surplus still invites
-#             investment; zero at a 33% surplus)
-#   stock at 90% of its maximum: -50 (not for ALWAYS resources)
-#   ALWAYS (alloys): +40, always needed
-#   MARKET: +1 per 1% the market price is above the first price this empire saw
-pe_score_resource = {
+# Flow goods are worth the buying price while short, then less with the surplus down to
+# the selling price at a 33% surplus or a full stock. A deficit adds a premium (its size
+# in % of production, up to +200%, +30% if the stock lasts less than a year).
+pe_shadow = {
 	export_resource_income_to_variable = { resource = $RES$ variable = pe_net }
 	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = $RES$ } variable = pe_gross }
 	export_resource_stockpile_to_variable = { resource = $RES$ variable = pe_stock }
 	export_resource_maximum_to_variable = { resource = $RES$ variable = pe_max }
-	set_variable = { which = pe_score_$RES$ value = 0 }
 	set_variable = { which = pe_scale value = pe_gross }
-	if = {
-		limit = { check_variable = { which = pe_scale value < 10 } }
-		set_variable = { which = pe_scale value = 10 }
-	}
-	# Net relative to production, in percent.
+	if = { limit = { check_variable = { which = pe_scale value < 10 } } set_variable = { which = pe_scale value = 10 } }
 	set_variable = { which = pe_rel value = pe_net }
 	divide_variable = { which = pe_rel value = pe_scale }
 	multiply_variable = { which = pe_rel value = 100 }
+	[[MARKET]
+	export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = $RES$ amount = 100 trade_type = market_buy } variable = pe_pbuy }
+	divide_variable = { which = pe_pbuy value = 100 }
+	if = { limit = { check_variable = { which = pe_pbuy value <= 0 } } set_variable = { which = pe_pbuy value = $BASE$ } multiply_variable = { which = pe_pbuy value = 1.3 } }
+	export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = $RES$ amount = 100 trade_type = market_sell } variable = pe_psell }
+	divide_variable = { which = pe_psell value = 100 }
+	if = { limit = { check_variable = { which = pe_psell value <= 0 } } set_variable = { which = pe_psell value = $BASE$ } multiply_variable = { which = pe_psell value = 0.7 } }
+	]
+	[[!MARKET]
+	set_variable = { which = pe_pbuy value = $BASE$ }
+	set_variable = { which = pe_psell value = $BASE$ }
+	]
+	set_variable = { which = pe_s_$RES$ value = pe_pbuy }
+	if = {
+		limit = {
+			check_variable = { which = pe_is_invest value = 0 }
+			check_variable = { which = pe_net value >= 0 }
+		}
+		if = {
+			limit = { check_variable = { which = pe_rel value >= 33 } }
+			set_variable = { which = pe_s_$RES$ value = pe_psell }
+		}
+		else = {
+			# pbuy - (pbuy - psell) * rel / 33
+			set_variable = { which = pe_tmp value = pe_pbuy }
+			subtract_variable = { which = pe_tmp value = pe_psell }
+			multiply_variable = { which = pe_tmp value = pe_rel }
+			divide_variable = { which = pe_tmp value = 33 }
+			subtract_variable = { which = pe_s_$RES$ value = pe_tmp }
+		}
+		if = {
+			limit = { check_variable = { which = pe_max value > 0 } }
+			set_variable = { which = pe_full value = pe_max }
+			multiply_variable = { which = pe_full value = 0.9 }
+			if = {
+				limit = { check_variable = { which = pe_stock value >= pe_full } }
+				set_variable = { which = pe_s_$RES$ value = pe_psell }
+			}
+		}
+	}
 	if = {
 		limit = { check_variable = { which = pe_net value < 0 } }
-		change_variable = { which = pe_score_$RES$ value = 50 }
-		subtract_variable = { which = pe_score_$RES$ value = pe_rel }
+		set_variable = { which = pe_prem value = pe_rel }
+		multiply_variable = { which = pe_prem value = -0.01 }
+		if = { limit = { check_variable = { which = pe_prem value > 2 } } set_variable = { which = pe_prem value = 2 } }
 		set_variable = { which = pe_runway value = pe_net }
 		multiply_variable = { which = pe_runway value = -12 }
 		if = {
 			limit = { check_variable = { which = pe_stock value < pe_runway } }
-			change_variable = { which = pe_score_$RES$ value = 30 }
+			change_variable = { which = pe_prem value = 0.3 }
 		}
+		change_variable = { which = pe_prem value = 1 }
+		multiply_variable = { which = pe_s_$RES$ value = pe_prem }
 	}
-	else = {
-		change_variable = { which = pe_score_$RES$ value = 25 }
-		multiply_variable = { which = pe_rel value = 0.75 }
-		subtract_variable = { which = pe_score_$RES$ value = pe_rel }
-	}
-	[[ALWAYS]
-	change_variable = { which = pe_score_$RES$ value = 40 }
-	]
-	[[!ALWAYS]
+}
+
+# Country scope: pe_vaj_<job> = value added per filled job of this private category,
+# from its real revenue and expenses (pe_jobn = filled jobs; below 0.5 the generated
+# caller uses the vanilla base output instead).
+pe_job_value = {
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = $JOB$ } variable = pe_jobn }
+	divide_variable = { which = pe_jobn value = 100 }
+	set_variable = { which = pe_va_tmp value = 0 }
+	pe_job_res = { CAT = $CAT$ RES = alloys }
+	pe_job_res = { CAT = $CAT$ RES = consumer_goods }
+	pe_job_res = { CAT = $CAT$ RES = trade }
+	pe_job_res = { CAT = $CAT$ RES = minerals }
+	pe_job_res = { CAT = $CAT$ RES = energy }
+	pe_job_res = { CAT = $CAT$ RES = food }
 	if = {
-		limit = { check_variable = { which = pe_max value > 0 } }
-		set_variable = { which = pe_full value = pe_max }
-		multiply_variable = { which = pe_full value = 0.9 }
-		if = {
-			limit = { check_variable = { which = pe_stock value >= pe_full } }
-			change_variable = { which = pe_score_$RES$ value = -50 }
-		}
+		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
+		set_variable = { which = pe_vaj_$JOB$ value = pe_va_tmp }
+		divide_variable = { which = pe_vaj_$JOB$ value = pe_jobn }
 	}
-	]
-	[[MARKET]
-	export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = $RES$ amount = 1 trade_type = market_buy } variable = pe_price }
-	if = {
-		limit = {
-			check_variable = { which = pe_price value > 0 }
-			NOT = { is_variable_set = pe_price_ref_$RES$ }
-		}
-		set_variable = { which = pe_price_ref_$RES$ value = pe_price }
-	}
-	if = {
-		limit = {
-			check_variable = { which = pe_price value > 0 }
-			check_variable = { which = pe_price_ref_$RES$ value > 0 }
-		}
-		set_variable = { which = pe_ratio value = pe_price }
-		divide_variable = { which = pe_ratio value = pe_price_ref_$RES$ }
-		change_variable = { which = pe_ratio value = -1 }
-		multiply_variable = { which = pe_ratio value = 100 }
-		change_variable = { which = pe_score_$RES$ value = pe_ratio }
-	}
-	]
+}
+
+pe_job_res = {
+	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = $RES$ category = $CAT$ } variable = pe_r }
+	export_trigger_value_to_variable = { trigger = resource_expenses_compare parameters = { resource = $RES$ category = $CAT$ } variable = pe_x }
+	subtract_variable = { which = pe_r value = pe_x }
+	multiply_variable = { which = pe_r value = pe_s_$RES$ }
+	change_variable = { which = pe_va_tmp value = pe_r }
 }
 
 # --- Planet level (colony scope, ROOT = owner) --------------------------------
@@ -161,24 +189,61 @@ pe_planet_counts = {
 	floor_variable = pe_target
 }
 
-pe_planet_step = {
-	pe_planet_counts = yes
-	if = {
-		limit = { check_variable = { which = pe_firms value < pe_target } }
+# root.pe_fill_cur = share of this planet's private jobs that are filled.
+pe_planet_fill = {
+	root = {
+		set_variable = { which = pe_fa value = 0 }
+		set_variable = { which = pe_ff value = 0 }
+	}
+	pe_count_planet_job = { JOB = pe_private_metallurgist }
+	pe_count_planet_job = { JOB = pe_private_artisan }
+	pe_count_planet_job = { JOB = pe_private_trader }
+	pe_count_planet_job = { JOB = pe_private_miner }
+	pe_count_planet_job = { JOB = pe_private_technician }
+	pe_count_planet_job = { JOB = pe_private_farmer }
+	root = {
+		set_variable = { which = pe_fill_cur value = 1 }
+		set_variable = { which = pe_tmp value = pe_fa }
+		change_variable = { which = pe_tmp value = pe_ff }
 		if = {
-			limit = { free_district_slots > 0 }
-			pe_choose_variant = { MODE = found }
-			pe_found_variant = yes
-		}
-		else_if = {
-			limit = { owner = { pe_buyout_allowed = yes } }
-			pe_choose_variant = { MODE = buy }
-			pe_buy_or_offer = yes
+			limit = { check_variable = { which = pe_tmp value > 0 } }
+			set_variable = { which = pe_fill_cur value = pe_fa }
+			divide_variable = { which = pe_fill_cur value = pe_tmp }
 		}
 	}
-	else_if = {
-		limit = { check_variable = { which = pe_firms value > pe_target } }
-		pe_nationalise_one = yes
+}
+
+pe_count_planet_job = {
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = $JOB$ } variable = pe_tmp }
+	root = { change_variable = { which = pe_fa value = prev.pe_tmp } }
+	export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = $JOB$ } variable = pe_tmp }
+	root = { change_variable = { which = pe_ff value = prev.pe_tmp } }
+}
+
+pe_planet_step = {
+	pe_planet_counts = yes
+	pe_planet_fill = yes
+	pe_firm_accounting = yes
+	pe_firm_change = yes
+	if = {
+		limit = { NOT = { has_planet_flag = pe_cooldown } }
+		if = {
+			limit = { check_variable = { which = pe_firms value < pe_target } }
+			if = {
+				limit = { free_district_slots > 0 }
+				pe_choose_variant = { MODE = found }
+				pe_found_variant = yes
+			}
+			else_if = {
+				limit = { owner = { pe_buyout_allowed = yes } }
+				pe_choose_variant = { MODE = buy }
+				pe_buy_or_offer = yes
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_firms value > pe_target } }
+			pe_nationalise_one = yes
+		}
 	}
 	# No action this year, and no room or no need to grow: firms may restructure.
 	if = {
@@ -191,6 +256,85 @@ pe_planet_step = {
 			}
 		}
 		pe_restructure = yes
+	}
+}
+
+# Every firm books its quarter.
+pe_firm_accounting = {
+	root = { set_variable = { which = pe_pend_any value = 0 } }
+	every_deposit = {
+		limit = { has_deposit_category = pe_deposit_cat_firms }
+		if = { limit = { NOT = { is_variable_set = pe_code } } pe_firm_identify = yes }
+		pe_deposit_fetch = yes
+		pe_firm_book = yes
+	}
+}
+
+# Deposit scope. Quarterly profit = value added x stage size x fill x profit share,
+# minus overhead (0.3 per stage and month). Half goes to the firm, half to the investor
+# pool (all of it from corporations); losses hit the firm. Then at most one stage change
+# per planet and quarter: expand when the firm can pay (city 150, rural 100, x stage)
+# and its jobs are filled; shrink or go bankrupt when its capital runs out.
+pe_firm_book = {
+	set_variable = { which = pe_profit value = pe_va }
+	set_variable = { which = pe_tmp value = pe_stage }
+	change_variable = { which = pe_tmp value = 1 }
+	multiply_variable = { which = pe_tmp value = 0.5 }
+	multiply_variable = { which = pe_profit value = pe_tmp }
+	multiply_variable = { which = pe_profit value = root.pe_fill_cur }
+	multiply_variable = { which = pe_profit value = root.pe_profit_share }
+	set_variable = { which = pe_tmp value = pe_stage }
+	multiply_variable = { which = pe_tmp value = 0.3 }
+	subtract_variable = { which = pe_profit value = pe_tmp }
+	multiply_variable = { which = pe_profit value = 3 }
+	set_variable = { which = pe_pending value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_profit value > 0 } }
+		if = {
+			limit = { check_variable = { which = pe_stage value < 3 } }
+			set_variable = { which = pe_tmp value = pe_profit }
+			multiply_variable = { which = pe_tmp value = 0.5 }
+			change_variable = { which = pe_fcap value = pe_tmp }
+			root = {
+				change_variable = { which = pe_capital value = prev.pe_tmp }
+				change_variable = { which = pe_pool_income value = prev.pe_tmp }
+			}
+		}
+		else = {
+			root = {
+				change_variable = { which = pe_capital value = prev.pe_profit }
+				change_variable = { which = pe_pool_income value = prev.pe_profit }
+			}
+		}
+	}
+	else = {
+		change_variable = { which = pe_fcap value = pe_profit }
+	}
+	if = {
+		limit = { root = { check_variable = { which = pe_pend_any value = 0 } } }
+		if = {
+			limit = { check_variable = { which = pe_fcap value < 0 } }
+			set_variable = { which = pe_fcap value = 0 }
+			if = { limit = { check_variable = { which = pe_stage value > 1 } } set_variable = { which = pe_pending value = 2 } }
+			else = { set_variable = { which = pe_pending value = 3 } }
+			root = { set_variable = { which = pe_pend_any value = 1 } }
+		}
+		else_if = {
+			limit = {
+				check_variable = { which = pe_stage value < 3 }
+				check_variable = { which = pe_profit value > 0 }
+				root = { check_variable = { which = pe_fill_cur value >= 0.9 } }
+			}
+			if = { limit = { check_variable = { which = pe_cls value = 1 } } set_variable = { which = pe_tmp value = 150 } }
+			else = { set_variable = { which = pe_tmp value = 100 } }
+			multiply_variable = { which = pe_tmp value = pe_stage }
+			if = {
+				limit = { check_variable = { which = pe_fcap value >= pe_tmp } }
+				subtract_variable = { which = pe_fcap value = pe_tmp }
+				set_variable = { which = pe_pending value = 1 }
+				root = { set_variable = { which = pe_pend_any value = 1 } }
+			}
+		}
 	}
 }
 
@@ -207,14 +351,26 @@ pe_consider_variant = {
 	}
 }
 
+# The investor pool founds a firm on a free slot. A new firm starts with 10 capital,
+# enough to wait about three years for workers.
 pe_found_firm = {
+	root = { set_variable = { which = pe_cost value = $COST$ } }
 	if = {
-		limit = { owner = { check_variable = { which = pe_capital value >= $COST$ } } }
+		limit = { num_unemployed > 0 }
+		root = { multiply_variable = { which = pe_cost value = 0.5 } }
+	}
+	if = {
+		limit = { root = { check_variable = { which = pe_capital value >= pe_cost } } }
 		add_deposit = $FIRM$
+		last_added_deposit = {
+			set_variable = { which = pe_code value = $CODE$ }
+			set_variable = { which = pe_stage value = 1 }
+			set_variable = { which = pe_fcap value = 10 }
+		}
 		set_timed_planet_flag = { flag = pe_cooldown days = 360 }
 		save_event_target_as = pe_msg_planet
+		root = { subtract_variable = { which = pe_capital value = pe_cost } }
 		owner = {
-			change_variable = { which = pe_capital value = -$COST$ }
 			create_message = {
 				type = pe_private_economy
 				localization = pe_msg_found_$FIRM$
@@ -226,7 +382,7 @@ pe_found_firm = {
 	}
 }
 
-# The firm takes over a state district and pays the price from the private capital.
+# The investor pool buys a state district for a new firm and pays the state.
 pe_buyout_execute = {
 	if = {
 		limit = {
@@ -235,6 +391,11 @@ pe_buyout_execute = {
 		}
 		remove_district = $DISTRICT$
 		add_deposit = $FIRM$
+		last_added_deposit = {
+			set_variable = { which = pe_code value = $CODE$ }
+			set_variable = { which = pe_stage value = 1 }
+			set_variable = { which = pe_fcap value = 10 }
+		}
 		set_timed_planet_flag = { flag = pe_cooldown days = 360 }
 		save_event_target_as = pe_msg_planet
 		owner = {
@@ -243,46 +404,6 @@ pe_buyout_execute = {
 			create_message = {
 				type = pe_private_economy
 				localization = pe_msg_buy_$FIRM$
-				days = 30
-				target = event_target:pe_msg_planet
-				variable = { type = name localization = PLANET scope = event_target:pe_msg_planet }
-			}
-		}
-	}
-}
-
-pe_nat_consider = {
-	if = {
-		limit = { has_deposit = $V$ }
-		root = {
-			if = {
-				limit = { check_variable = { which = pe_val_$V$ value < pe_worst } }
-				set_variable = { which = pe_worst value = pe_val_$V$ }
-				set_variable = { which = pe_worst_variant value = $CODE$ }
-			}
-		}
-	}
-}
-
-# The state buys a firm back at the buyout price (if it can pay) and rebuilds the district.
-pe_nationalise_firm = {
-	if = {
-		limit = {
-			owner = {
-				has_resource = { type = minerals amount >= $MINERALS$ }
-				has_resource = { type = trade amount >= $TRADE$ }
-			}
-		}
-		remove_deposit = $FIRM$
-		add_district = $DISTRICT$
-		set_timed_planet_flag = { flag = pe_cooldown days = 360 }
-		save_event_target_as = pe_msg_planet
-		owner = {
-			add_resource = { minerals = -$MINERALS$ trade = -$TRADE$ }
-			change_variable = { which = pe_capital value = $PRICE$ }
-			create_message = {
-				type = pe_private_economy
-				localization = pe_msg_nat_$FIRM$
 				days = 30
 				target = event_target:pe_msg_planet
 				variable = { type = name localization = PLANET scope = event_target:pe_msg_planet }
@@ -300,23 +421,6 @@ pe_retool_consider = {
 				limit = { check_variable = { which = pe_val_$V$ value > pe_cls_val_$CLS$ } }
 				set_variable = { which = pe_cls_val_$CLS$ value = pe_val_$V$ }
 				set_variable = { which = pe_cls_var_$CLS$ value = $CODE$ }
-			}
-		}
-	}
-}
-
-# Gain if this firm switched to the best variant of its class.
-pe_retool_gain = {
-	if = {
-		limit = { has_deposit = $V$ }
-		root = {
-			set_variable = { which = pe_tmp value = pe_cls_val_$CLS$ }
-			subtract_variable = { which = pe_tmp value = pe_val_$V$ }
-			if = {
-				limit = { check_variable = { which = pe_tmp value > pe_best_gain } }
-				set_variable = { which = pe_best_gain value = pe_tmp }
-				set_variable = { which = pe_from value = $CODE$ }
-				set_variable = { which = pe_to value = pe_cls_var_$CLS$ }
 			}
 		}
 	}

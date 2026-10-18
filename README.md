@@ -4,22 +4,25 @@ Stellaris 4.5: Eine Richtlinie **Wirtschaftsordnung** legt fest, wie viel der Wi
 
 Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools/validate.mjs` prüft das).
 
-## Stand 0.2.0
+## Stand 0.3.0
 
-Die Privatwirtschaft läuft automatisch, jedes Quartal pro Reich.
+Die Privatwirtschaft ist ein Kreislauf:
 
-- **Firmen:** 28 Varianten aus je 3 Anteilen, nämlich Stadtfirmen aus Legierungen, Konsumgütern und Handel sowie Landfirmen mit Nebensparte. Ein Generator erzeugt sie: `tools/generate-firms.mjs`.
-- **Bewertung:** Mischungen und reine Firmen werden nach denselben Dringlichkeitsregeln bewertet, mit abnehmendem Ertrag wiederholter Anteile.
-- **Kosten:** Gründung, Aufkauf und Umbau zahlt ein Privatkapital. Es speist sich aus dem Gewinn der Privatjobs (Energie-Unterhalt). Firmen haben Unterhalt wie Distrikte.
-- **Volle Planeten:** Firmen strukturieren um.
-- **Aufkauf und Verstaatlichung:** wie in 0.1.
+- **Schattenpreise** aus Markt und Bedarf. Investitionsgüter sind Legierungen und bei Bioschiffen auch Nahrung.
+- **Wertschöpfung pro Job:** gemessen an den echten Einnahmen der Privatkategorien.
+- **Gewinnanteil:** gekoppelt an die Wirtschaftsordnung und echt vom Privat-Output abgezogen.
+- **Firmen:**
+  - Sie haben eigenes Kapital und wachsen in 3 Stufen, schrumpfen oder gehen pleite.
+  - Ein Investorenpool aus Ausschüttungen gründet neue Firmen, bevorzugt auf Planeten mit Arbeitslosen, und kauft Distrikte.
+- **Privatjobs:** Sie kopieren die Vanilla-Jobs inklusive Job-Swaps, in eigenen Wirtschaftskategorien mit Vanilla-Eltern.
+- **Generator:** `tools/generate-firms.mjs` erzeugt Jobs, Kategorien, 84 Firmen-Deposits (28 Varianten × 3 Stufen), Verteiler und Texte.
 
-Testablauf: [docs/TESTS_0.2.md](docs/TESTS_0.2.md). Ältere Stände: [docs/TESTS_0.1.md](docs/TESTS_0.1.md), [docs/PROTOTYPE_TESTS.md](docs/PROTOTYPE_TESTS.md).
+Testablauf: [docs/TESTS_0.3.md](docs/TESTS_0.3.md). Ältere Stände: [0.2](docs/TESTS_0.2.md), [0.1](docs/TESTS_0.1.md), [Prototyp](docs/PROTOTYPE_TESTS.md).
 
 ## Geplant
 
 - **Später**: Lösung für Habitate, Ringwelten, Ökumenopolen und Spezialplaneten.
-- **Nächste Schritte**: Review von Kapitalwachstum und Gewichten; Steuern als Hebel auf den Gewinn; Pleiten; Forschung und Einheit als Sektoren.
+- **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Forschung und Einheit als Sektoren; Firmennamen und Ereignisse.
 - **v0.3**: Privatgebäude, Technologieabhängigkeit (Techs schalten Firmenjobs frei, Firmen subventionieren benötigte Techs), Spielerhebel (Steuern, Subventionen, Regulierung, Verstaatlichung), Firmennamen und Ereignisse.
 
 Ziel: Die Privatwirtschaft soll gut genug entscheiden, dass sie auch KI-Reichen hilft.

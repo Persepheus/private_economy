@@ -13,6 +13,7 @@ country_event = {
 		exists = capital_scope
 	}
 	immediate = {
+		pe_init = yes
 		change_variable = { which = pe_months value = 1 }
 		if = {
 			limit = { check_variable = { which = pe_months value >= 3 } }

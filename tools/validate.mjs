@@ -31,13 +31,14 @@ for (const f of scripts) {
 // 3. Definitions of this mod.
 const defs = dir => files(path.join(root, dir)).filter(f => f.endsWith('.txt')).flatMap(f => topLevel(fs.readFileSync(f, 'utf8')));
 const jobs = defs('common/pop_jobs'), deposits = defs('common/deposits'), buildings = defs('common/buildings');
-const policies = defs('common/policies'), categories = defs('common/deposit_categories');
+const policies = defs('common/policies'), categories = defs('common/deposit_categories'), econCats = defs('common/economic_categories');
 for (const [kind, list] of [['job', jobs], ['deposit', deposits], ['building', buildings], ['policy', policies]])
   for (const k of list) assert(k.startsWith(kind === 'deposit' ? 'd_pe_' : 'pe_'), `${kind} ${k} lacks the pe_ prefix`);
 
 // 4. Modifier keys exist (engine list, or job_<own job>_add).
 const modifiers = new Set([...fs.readFileSync(path.join(docs, 'modifiers.log'), 'utf8').matchAll(/^- (\w+),/gm)].map(m => m[1]));
 for (const j of jobs) modifiers.add(`job_${j}_add`);
+for (const c of econCats) for (const k of ['produces', 'upkeep']) modifiers.add(`${c}_${k}_mult`);
 for (const f of scripts) {
   const text = strip(fs.readFileSync(f, 'utf8'));
   for (const m of text.matchAll(/\b(?:planet_modifier|country_modifier|modifier) = \{([^{}]*)\}/g))
@@ -50,7 +51,7 @@ for (const f of scripts) {
   const text = strip(fs.readFileSync(f, 'utf8'));
   for (const [, k] of text.matchAll(/(?:add_deposit|remove_deposit|has_deposit) = (\w+)/g)) assert(deposits.includes(k) || !k.startsWith('d_pe_'), `${rel(f)}: unknown deposit ${k}`);
   for (const [, k] of text.matchAll(/(?:add_building|remove_building|has_building) = (\w+)/g)) assert(buildings.includes(k) || !k.startsWith('pe_'), `${rel(f)}: unknown building ${k}`);
-  for (const [, k] of text.matchAll(/category = (pe_\w+)/g)) assert(categories.includes(k), `${rel(f)}: unknown deposit category ${k}`);
+  for (const [, k] of text.matchAll(/category = (pe_\w+)/g)) assert(categories.includes(k) || econCats.includes(k), `${rel(f)}: unknown category ${k}`);
 }
 
 // 6. @variables defined globally or locally.
@@ -143,7 +144,13 @@ const need = [
 ];
 for (const f of files(path.join(root, 'common/policies')))
   for (const [, o] of fs.readFileSync(f, 'utf8').matchAll(/name = "(\w+)"/g)) need.push(o, `${o}_name`, `${o}_desc`);
-for (const d of deposits) need.push(`pe_msg_found_${d}`, `pe_msg_buy_${d}`, `pe_msg_nat_${d}`);
+need.push(...econCats.flatMap(c => [c, `mod_${c}_produces_mult`]));
+for (const f of scripts) {
+  const text = strip(fs.readFileSync(f, 'utf8'));
+  for (const [, k] of text.matchAll(/localization = (pe_msg_\w+)/g)) if (!k.endsWith('_')) need.push(k);
+  for (const [, k] of text.matchAll(/pe_found_firm = \{ FIRM = (\w+)/g)) need.push(`pe_msg_found_${k}`);
+  for (const [, k] of text.matchAll(/pe_buyout_execute = \{ FIRM = (\w+)/g)) need.push(`pe_msg_buy_${k}`);
+}
 need.push(...defs('common/static_modifiers').flatMap(m => [m, `${m}_desc`]));
 for (const f of files(path.join(root, 'common/message_types')))
   for (const [, n] of fs.readFileSync(f, 'utf8').matchAll(/name = "(\w+)"/g)) need.push(n);
@@ -162,9 +169,10 @@ for (const lang of languages)
 // Generated files are up to date with the generator.
 {
   const {execFileSync} = await import('node:child_process');
-  const gen = ['common/deposits/pe_firm_deposits.txt', 'common/scripted_triggers/pe_firm_triggers_generated.txt', 'common/scripted_effects/pe_firm_effects_generated.txt'];
+  const gen = ['common/deposits/pe_firm_deposits.txt', 'common/scripted_triggers/pe_firm_triggers_generated.txt', 'common/scripted_effects/pe_firm_effects_generated.txt',
+    'common/pop_jobs/pe_private_jobs.txt', 'common/economic_categories/pe_categories_generated.txt', 'common/scripted_loc/pe_scripted_loc_generated.txt'];
   const before = gen.map(g => fs.readFileSync(path.join(root, g), 'utf8'));
-  execFileSync(process.execPath, [path.join(root, 'tools/generate-firms.mjs')]);
+  execFileSync(process.execPath, [path.join(root, 'tools/generate-firms.mjs'), game]);
   gen.forEach((g, i) => assert.equal(fs.readFileSync(path.join(root, g), 'utf8'), before[i], `${g} is stale: run tools/generate-firms.mjs`));
 }
 
