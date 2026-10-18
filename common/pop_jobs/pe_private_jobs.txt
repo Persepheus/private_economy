@@ -340,7 +340,7 @@ pe_private_physicist = {
 		}
 	}
 
-	tags = { physics_research }
+	tags = { research }
 
 	possible_pre_triggers = {
 		has_owner = yes
@@ -412,7 +412,7 @@ pe_private_biologist = {
 		}
 	}
 
-	tags = { society_research }
+	tags = { research }
 
 	possible_pre_triggers = {
 		has_owner = yes
@@ -467,7 +467,7 @@ pe_private_engineer = {
 		}
 	}
 
-	tags = { engineering_research }
+	tags = { research }
 
 	possible_pre_triggers = {
 		has_owner = yes

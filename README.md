@@ -12,7 +12,7 @@ Die Privatwirtschaft ist ein Kreislauf:
 - **Wertschöpfung pro Job:** gemessen an den echten Einnahmen.
 - **Gewinnanteil:** nach Wirtschaftsordnung.
 - **Kapital:** Firmenkapital und Investorenpool finanzieren Wachstum, Gründung, Aufkauf und Umbau.
-- **Bauzeit:** Firmen entstehen als Baustelle mit Vanilla-Bauzeit, eine pro Planet. Gegründet wird nur, wo Pops arbeitslos sind. Firmen bieten Housing.
+- **Bauzeit:** Firmen entstehen als Baustelle mit Vanilla-Bauzeit, eine pro Planet. Gegründet wird nur, wo freie Zivilisten sind. Firmen bieten Housing.
 - **Sektoren:** Industrie, Handel, Unterhaltung (Annehmlichkeiten nach Bedarf des Planeten), Labore (Forschung) und Landwirtschaft und Rohstoffe. Das sind 42 Varianten in 3 Stufen.
 - **Abwechslung:** Diversifikation, Zufall, Planetenspezialisierung und Optionswert der letzten Plätze.
 

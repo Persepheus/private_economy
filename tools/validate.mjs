@@ -121,6 +121,38 @@ for (const f of files(path.join(root, 'common/scripted_triggers')).filter(f => f
   }
 }
 
+// 7c. Typos the engine only reports at runtime: glued keys ("ownerif = {"), job tags
+//     that do not exist, and scripted effect calls whose parameters do not match the
+//     effect (missing $ARG$, or an argument the effect does not use).
+{
+  for (const f of scripts)
+    for (const m of strip(fs.readFileSync(f, 'utf8')).matchAll(/\b([a-z]+if) = \{/g))
+      assert(m[1] === 'else_if', `${rel(f)}: glued key ${m[1]}`);
+  const vanillaTags = new Set();
+  for (const f of files(path.join(game, 'common/pop_jobs')).filter(f => f.endsWith('.txt')))
+    for (const [, t] of fs.readFileSync(f, 'utf8').matchAll(/tags = \{([^}]*)\}/g)) for (const x of t.trim().split(/\s+/)) vanillaTags.add(x);
+  for (const f of files(path.join(root, 'common/pop_jobs')))
+    for (const [, t] of strip(fs.readFileSync(f, 'utf8')).matchAll(/tags = \{([^}]*)\}/g))
+      for (const x of t.trim().split(/\s+/)) assert(vanillaTags.has(x), `${rel(f)}: unknown job tag ${x}`);
+  const params = new Map();
+  for (const k of ownEffects) {
+    const body = effectBodies.get(k);
+    const optional = new Set([...body.matchAll(/\[\[!?(\w+)\]/g)].map(m => m[1]));
+    const required = new Set([...body.replace(/\[\[!?\w+\][\s\S]*?\n\s*\]/g, '').matchAll(/\$(\w+)\$/g)].map(m => m[1]));
+    const all = new Set([...body.matchAll(/\$(\w+)\$/g)].map(m => m[1]));
+    params.set(k, {required, known: new Set([...all, ...optional])});
+  }
+  for (const f of scripts) {
+    const text = strip(fs.readFileSync(f, 'utf8'));
+    for (const [, k, args] of text.matchAll(/\b(pe_\w+) = \{ ((?:[A-Z_]+ = \S+ ?)+)\}/g)) {
+      if (!params.has(k)) continue;
+      const passed = new Set([...args.matchAll(/([A-Z_]+) = /g)].map(m => m[1]));
+      for (const r of params.get(k).required) assert(passed.has(r), `${rel(f)}: ${k} called without ${r}`);
+      for (const p of passed) assert(params.get(k).known.has(p), `${rel(f)}: ${k} does not use ${p}`);
+    }
+  }
+}
+
 // 8. Localisation: BOM, header, line format, parity, and texts for every object.
 const languages = fs.readdirSync(path.join(root, 'localisation'));
 const loc = {};

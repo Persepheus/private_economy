@@ -29,13 +29,13 @@
 #
 # Capital is counted in trade. Investor pool (country pe_capital): starts at 1000, gets
 # half of each firm's profit (all of it from corporations) and pays foundings (city 200,
-# rural 120, half price on planets with unemployment), buyouts and restructuring when the
+# rural 120, half price on planets with idle civilians), buyouts and restructuring when the
 # firm cannot. Firm capital (deposit pe_fcap): the other half; pays expansions and
 # restructuring, absorbs losses.
 #
 # Building: a firm is first a construction site (vanilla district build time: city 16,
 # rural 8 months; buyouts and restructuring half of that). One site per planet. New
-# firms only where pops are unemployed, unless a resource is in an emergency (deficit
+# firms only where civilians are idle (4.x has no unemployed), unless a resource is in an emergency (deficit
 # with less than a year of stock); otherwise investors buy state districts (Free Market,
 # Laissez-faire). Every change of jobs re-runs the planet's employment.
 
@@ -73,9 +73,9 @@ pe_quarterly = {
 	pe_market = yes
 	pe_job_values = yes
 	pe_compute_values = yes
-	# Planets with unemployment first: founders start where workers are idle.
+	# Planets with idle civilians first: founders start where workers are available.
 	every_owned_colony = {
-		limit = { pe_planet_eligible = yes num_unemployed > 0 }
+		limit = { pe_planet_eligible = yes pe_has_idle_pops = yes }
 		set_timed_planet_flag = { flag = pe_stepped days = 1 }
 		pe_planet_step = yes
 	}
@@ -265,7 +265,7 @@ pe_planet_step = {
 	pe_planet_counts = yes
 	pe_planet_prepare = yes
 	root = { set_variable = { which = pe_unemp value = 0 } }
-	if = { limit = { num_unemployed > 0 } root = { set_variable = { which = pe_unemp value = 1 } } }
+	if = { limit = { pe_has_idle_pops = yes } root = { set_variable = { which = pe_unemp value = 1 } } }
 	pe_planet_fill = yes
 	pe_firm_accounting = yes
 	pe_firm_change = yes
@@ -280,7 +280,7 @@ pe_planet_step = {
 				limit = {
 					free_district_slots > 0
 					OR = {
-						num_unemployed > 0
+						pe_has_idle_pops = yes
 						root = { check_variable = { which = pe_emergency value = 1 } }
 					}
 				}
@@ -333,7 +333,7 @@ pe_firm_accounting = {
 # minus overhead (0.3 per stage and month). Half goes to the firm, half to the investor
 # pool (all of it from corporations); losses hit the firm. Then at most one stage change
 # per planet and quarter: expand when the firm can pay (city 150, rural 100, x stage),
-# its jobs are filled and the planet has unemployed pops; shrink or go bankrupt when its
+# its jobs are filled and the planet has idle civilians; shrink or go bankrupt when its
 # capital runs out.
 pe_firm_book = {
 	set_variable = { which = pe_profit value = pe_va }
@@ -430,7 +430,7 @@ pe_consider_variant = {
 pe_found_firm = {
 	root = { set_variable = { which = pe_cost value = $COST$ } }
 	if = {
-		limit = { num_unemployed > 0 }
+		limit = { pe_has_idle_pops = yes }
 		root = { multiply_variable = { which = pe_cost value = 0.5 } }
 	}
 	if = {

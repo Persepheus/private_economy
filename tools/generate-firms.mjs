@@ -47,13 +47,13 @@ const JOBS = [
   {key: 'pe_private_entertainer', vanilla: 'entertainer', cat: 'planet_entertainers', kind: 'specialist', icon: 'building_holo_theatres', tag: 'amenities', extra: /planet_amenities_add/,
     en: ['Private Entertainer', 'Private Entertainers', 'Entertainers employed by a private company: shows, clubs and holo-theatres for profit.'],
     de: ['Privater Unterhalter', 'Private Unterhalter', 'Unterhalter im Dienst eines privaten Unternehmens: Shows, Clubs und Holo-Theater mit Gewinnabsicht.']},
-  {key: 'pe_private_physicist', vanilla: 'physicist', cat: 'planet_physicists', kind: 'specialist', icon: 'building_research_lab_1', tag: 'physics_research',
+  {key: 'pe_private_physicist', vanilla: 'physicist', cat: 'planet_physicists', kind: 'specialist', icon: 'building_research_lab_1', tag: 'research',
     en: ['Private Physicist', 'Private Physicists', 'Physicists in a private laboratory. Their results flow into our research.'],
     de: ['Privater Physiker', 'Private Physiker', 'Physiker in einem privaten Labor. Ihre Ergebnisse fließen in unsere Forschung.']},
-  {key: 'pe_private_biologist', vanilla: 'biologist', cat: 'planet_biologists', kind: 'specialist', icon: 'building_research_lab_1', tag: 'society_research',
+  {key: 'pe_private_biologist', vanilla: 'biologist', cat: 'planet_biologists', kind: 'specialist', icon: 'building_research_lab_1', tag: 'research',
     en: ['Private Biologist', 'Private Biologists', 'Biologists in a private laboratory. Their results flow into our research.'],
     de: ['Privater Biologe', 'Private Biologen', 'Biologen in einem privaten Labor. Ihre Ergebnisse fließen in unsere Forschung.']},
-  {key: 'pe_private_engineer', vanilla: 'engineer', cat: 'planet_engineers', kind: 'specialist', icon: 'building_research_lab_1', tag: 'engineering_research',
+  {key: 'pe_private_engineer', vanilla: 'engineer', cat: 'planet_engineers', kind: 'specialist', icon: 'building_research_lab_1', tag: 'research',
     en: ['Private Engineer', 'Private Engineers', 'Engineers in a private laboratory. Their results flow into our research.'],
     de: ['Privater Ingenieur', 'Private Ingenieure', 'Ingenieure in einem privaten Labor. Ihre Ergebnisse fließen in unsere Forschung.']},
   {key: 'pe_private_miner', vanilla: 'miner', cat: 'planet_miners', kind: 'worker', icon: 'building_mineral_purification_plant', tag: 'minerals'},
@@ -411,7 +411,7 @@ ${variants.map(v => `\tpe_consider_variant = { V = ${v.key} CODE = ${v.code} MOD
 
 # Colony scope: start building the chosen variant on a free slot.
 pe_found_variant = {
-${ifChain(variants, v => rootIs('pe_best_variant', v.code), v => `pe_found_firm = { FIRM = ${v.key} CODE = ${v.code} COST = ${FOUND[v.k]} SITE = ${v.site} MONTHS = ${BUILD_MONTHS[v.k]} }`)}
+${ifChain(variants, v => rootIs('pe_best_variant', v.code), v => `pe_found_firm = { CODE = ${v.code} COST = ${FOUND[v.k]} SITE = ${v.site} MONTHS = ${BUILD_MONTHS[v.k]} }`)}
 }
 
 # Colony scope: buy a state district. Human empires on Free Market get an offer (one per
@@ -446,7 +446,7 @@ pe_buyout_by_offer = {
 ${ifChain(variants, v => rootIs('pe_offer_variant', v.code), v => {
   const [m, t] = PRICE[v.k];
   return `pe_buyout_execute = { FIRM = ${v.key} CODE = ${v.code} DISTRICT = ${v.district} SITE = ${v.site} MONTHS = ${BUILD_MONTHS[v.k] / 2} MINERALS = ${m} TRADE = ${t} PRICE = ${m + t} }`;
-}, 'owner')}
+})}
 }
 
 # Colony scope, monthly: a finished construction site becomes its firm.

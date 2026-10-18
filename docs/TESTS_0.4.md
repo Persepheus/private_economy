@@ -12,9 +12,9 @@
 - Wachstum (Stufen) bleibt sofort.
 
 ### Pops und Jobs
-- **Gründung:** nur auf Planeten mit Arbeitslosen. Ausnahme ist ein **Notfall**: Eine Ressource ist im Defizit und das Lager reicht kein Jahr mehr.
-- **Ohne Arbeitslose:** Aufkauf staatlicher Distrikte, wie bisher nur bei Freier Marktwirtschaft und Laissez-faire.
-- **Stufenaufstieg:** braucht jetzt auch Arbeitslose auf dem Planeten, sonst würden Pops von anderen Jobs abgezogen.
+- **Gründung:** nur auf Planeten mit freien Zivilisten. Ausnahme ist ein **Notfall**: Eine Ressource ist im Defizit und das Lager reicht kein Jahr mehr.
+- **Ohne freie Zivilisten:** Aufkauf staatlicher Distrikte, wie bisher nur bei Freier Marktwirtschaft und Laissez-faire.
+- **Stufenaufstieg:** braucht jetzt auch freie Zivilisten auf dem Planeten, sonst würden Pops von anderen Jobs abgezogen.
 - **Neue Pop-Zuordnung:** Nach jeder Änderung an Jobs (Eröffnung, Umbau, Aufkauf, Stufe, Pleite, Verstaatlichung) läuft `check_planet_employment`.
 - **Housing:** Firmen bieten Housing wie der ersetzte Distrikt, inklusive der Tech- und Zivik-Boni.
 
@@ -58,9 +58,9 @@
 
 ## Prüfen
 
-1. **Baustelle:** Gemischte Wirtschaft, Hauptstadt mit freiem Platz und Arbeitslosen, dann `pe.7`. Eine **Private Baustelle** erscheint, ohne Nachricht. Nach `pe.8` wird daraus eine Firma, mit Nachricht. Die Jobs werden sofort besetzt.
+1. **Baustelle:** Gemischte Wirtschaft, Hauptstadt mit freiem Platz und Zivilisten, dann `pe.7`. Eine **Private Baustelle** erscheint, ohne Nachricht. Nach `pe.8` wird daraus eine Firma, mit Nachricht. Die Jobs werden sofort besetzt.
 2. **Eine pro Planet:** Ein zweites `pe.7` bei laufender Baustelle startet auf diesem Planeten nichts Neues.
-3. **Keine Arbeitslosen:** Hauptstadt ohne Arbeitslose, kein Notfall, dann `pe.7`. Es entsteht keine Baustelle. Bei Freier Marktwirtschaft kommt stattdessen ein Aufkaufangebot.
+3. **Keine Arbeitslosen:** Hauptstadt ohne freie Zivilisten, kein Notfall, dann `pe.7`. Es entsteht keine Baustelle. Bei Freier Marktwirtschaft kommt stattdessen ein Aufkaufangebot.
 4. **Housing:** Eine fertige Stadtfirma hebt das Housing des Planeten wie ein Stadtdistrikt.
 5. **Unterhaltung:** Planet mit Annehmlichkeitsmangel. In `pe.6` steht +12, und die beste Firma enthält Unterhaltung.
 6. **Labore:** Bei Forschungswelten oder wenig anderem Bedarf entstehen Labore. Ihre Forschung erscheint im Forschungs-Tooltip.
@@ -75,3 +75,12 @@
 - Die Einheit von `free_amenities` (Schwellen 0 und 1000).
 - Ob `planet_housing_add` in `triggered_planet_modifier` auf Deposits greift; Punkt 4 zeigt es.
 - Ob die Baustellen-Deposits beim Entfernen und neuen Hinzufügen im selben Monat sauber Plätze freigeben.
+
+## 0.4.1
+
+- **Zivilisten statt Arbeitslose:** 4.x kennt keine Arbeitslosen mehr; jobfreie Pops arbeiten als Zivilisten. „Freie Pops“ heißt jetzt: mindestens 100 Zivilisten auf dem Planeten (`num_assigned_jobs = { job = civilian }`).
+- **Behoben:** Gründungen schlugen fehl („missing args: FIRM“), deshalb wurde nur aufgekauft.
+- **Behoben:** Ein angenommenes Aufkaufangebot tat seit 0.3 nichts („ownerif“).
+- **Behoben:** Forscher-Jobs nutzen den gültigen Tag `research`.
+- **Neu:** Die Ordnungs-Modifikatoren gelten auch für Unterhalter und Labore.
+- **Validator:** prüft jetzt verklebte Schlüssel, Job-Tags und die Parameter von Scripted Effects.
