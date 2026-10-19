@@ -40,7 +40,8 @@ const PRICE = {u: [500, 100], r: [300, 60]};           // buyout/nationalisation
 const UPKEEP = {u: 2, r: 1};                           // energy at stage 1, like the district
 const BUILD_MONTHS = {u: 16, r: 8};                    // vanilla district build time (480 / 240 days)
 const DIVERSIFY = 0.05;                                // value -5% per existing firm with the same main product
-const SPEC_BONUS = 1.25;                               // matching planet designation
+const SPEC_BONUS = 1.6;                                // share matching the planet designation
+const SPEC_MALUS = 0.8;                                // other shares on a planet with a matching designation
 
 // --- Jobs -----------------------------------------------------------------------
 const JOBS = [
@@ -452,7 +453,7 @@ eff += `}
 # Colony scope: planet-specific values in root variables. pe_dval_u = value of one state
 # city district on this planet (from its zones). pe_ent_val = value of one
 # entertainer job here (amenity shortage), pe_spec_<letter> = ${SPEC_BONUS} for shares that match the
-# planet's designation, else 1.
+# planet's designation, ${SPEC_MALUS} for the other shares on such a specialised planet, else 1.
 pe_planet_prepare = {
 	root = {
 ${LETTERS.map(l => `\t\tset_variable = { which = pe_spec_${l} value = 1 }`).join('\n')}
@@ -463,6 +464,13 @@ ${LETTERS.map(l => `\t\tset_variable = { which = pe_spec_${l} value = 1 }`).join
 ${ZONES.map(([zone, parts]) => `\tif = { limit = { num_zones = { type = ${zone} value > 0 } } root = { ${parts.map(([job, w]) => `set_variable = { which = pe_tmp value = pe_vaj_${job} } multiply_variable = { which = pe_tmp value = ${+w.toFixed(4)} } change_variable = { which = pe_dval_u value = pe_tmp }`).join(' ')} } }`).join('\n')}
 	if = { limit = { free_amenities < 0 } root = { set_variable = { which = pe_ent_val value = 30 } } }
 	else_if = { limit = { free_amenities < 1000 } root = { set_variable = { which = pe_ent_val value = 8 } } }
+	# A specialised planet: all shares ${SPEC_MALUS} first, the matching ones ${SPEC_BONUS}.
+	if = {
+		limit = { OR = { ${[...new Set(LETTERS.flatMap(specFor))].map(d => `has_designation = ${d}`).join(' ')} } }
+		root = {
+${LETTERS.map(l => `\t\t\tset_variable = { which = pe_spec_${l} value = ${SPEC_MALUS} }`).join('\n')}
+		}
+	}
 ${LETTERS.filter(l => specFor(l).length).map(l => `\tif = { limit = { OR = { ${specFor(l).map(d => `has_designation = ${d}`).join(' ')} } } root = { set_variable = { which = pe_spec_${l} value = ${SPEC_BONUS} } } }`).join('\n')}
 }
 

@@ -161,6 +161,13 @@ pe_shadow = {
 	change_variable = { which = pe_net value = pe_pend_$RES$ }
 	]
 	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = $RES$ } variable = pe_gross }
+	# Shortage margin: below max(5, 5% of gross production), at most 50, a resource counts
+	# as short, so the economy keeps a buffer instead of sliding into the minus.
+	set_variable = { which = pe_margin value = pe_gross }
+	multiply_variable = { which = pe_margin value = 0.05 }
+	if = { limit = { check_variable = { which = pe_margin value < 5 } } set_variable = { which = pe_margin value = 5 } }
+	if = { limit = { check_variable = { which = pe_margin value > 50 } } set_variable = { which = pe_margin value = 50 } }
+	subtract_variable = { which = pe_net value = pe_margin }
 	export_resource_stockpile_to_variable = { resource = $RES$ variable = pe_stock }
 	export_resource_maximum_to_variable = { resource = $RES$ variable = pe_max }
 	set_variable = { which = pe_scale value = pe_gross }
@@ -524,12 +531,13 @@ pe_automation = {
 # Colony scope. Like the vanilla automation buildings: level I +25% automated workforce
 # (tech_assembly_pattern, 600, upkeep 8 per month), level II +50% (tech_construction_templates,
 # 800 more, upkeep 10). A joint investment of the firms with this job here, paid from
-# their capital by capital share; no upkeep for the state. Automated jobs need no pops and
+# their capital by capital share (the investor pool adds what they lack); no upkeep for
+# the state; the upkeep is valued at the energy shadow price. Automated jobs need no pops and
 # no wages, so the firms keep their whole value: each quarter the automated value minus
 # the upkeep is booked to the firms by workforce share (a loss by capital share); if they
 # cannot carry the loss, the level drops. New levels only when workers are short (no idle
-# civilians), there are at least 400 private jobs of the type here, and the automated
-# value is at least 1.5 times the upkeep.
+# civilians), there are at least 200 private jobs of the type here, and the automated
+# value covers the upkeep.
 pe_auto_job = {
 	root = {
 		set_variable = { which = pe_acap value = 0 }
@@ -554,6 +562,7 @@ pe_auto_job = {
 		set_variable = { which = pe_aup value = 0 }
 		if = { limit = { check_variable = { which = pe_alvl value = 1 } } set_variable = { which = pe_aup value = 8 } }
 		if = { limit = { check_variable = { which = pe_alvl value = 2 } } set_variable = { which = pe_aup value = 10 } }
+		multiply_variable = { which = pe_aup value = pe_s_energy }
 		set_variable = { which = pe_anet value = pe_aval }
 		subtract_variable = { which = pe_anet value = pe_aup }
 		multiply_variable = { which = pe_anet value = 3 }
@@ -612,19 +621,27 @@ pe_auto_job = {
 		multiply_variable = { which = pe_anext value = pe_tmp }
 		multiply_variable = { which = pe_anext value = pe_vaj_pe_private_$JOB$ }
 		set_variable = { which = pe_acost value = 600 }
-		set_variable = { which = pe_aupn value = 12 }
+		set_variable = { which = pe_aupn value = 8 }
 		if = {
 			limit = { check_variable = { which = pe_alvl value = 1 } }
 			set_variable = { which = pe_acost value = 800 }
-			set_variable = { which = pe_aupn value = 15 }
+			set_variable = { which = pe_aupn value = 10 }
 		}
+		multiply_variable = { which = pe_aupn value = pe_s_energy }
+		# The firms pay what they can (by capital share), the investor pool the rest.
+		set_variable = { which = pe_atot value = pe_apool }
+		change_variable = { which = pe_atot value = pe_capital }
+		set_variable = { which = pe_afirm value = pe_acost }
+		if = { limit = { check_variable = { which = pe_afirm value > pe_apool } } set_variable = { which = pe_afirm value = pe_apool } }
+		set_variable = { which = pe_arest value = pe_acost }
+		subtract_variable = { which = pe_arest value = pe_afirm }
 	}
 	if = {
 		limit = {
 			root = {
 				check_variable = { which = pe_unemp value = 0 }
-				check_variable = { which = pe_acap value >= 400 }
-				check_variable = { which = pe_apool value >= pe_acost }
+				check_variable = { which = pe_acap value >= 200 }
+				check_variable = { which = pe_atot value >= pe_acost }
 				check_variable = { which = pe_anext value >= pe_aupn }
 			}
 			OR = {
@@ -638,13 +655,17 @@ pe_auto_job = {
 				}
 			}
 		}
-		every_deposit = {
-			limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_wf_$JOB$ value > 0 } }
-			set_variable = { which = pe_tmp value = root.pe_acost }
-			multiply_variable = { which = pe_tmp value = pe_fcap }
-			divide_variable = { which = pe_tmp value = root.pe_apool }
-			subtract_variable = { which = pe_fcap value = pe_tmp }
+		if = {
+			limit = { root = { check_variable = { which = pe_apool value > 0 } } }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_wf_$JOB$ value > 0 } }
+				set_variable = { which = pe_tmp value = root.pe_afirm }
+				multiply_variable = { which = pe_tmp value = pe_fcap }
+				divide_variable = { which = pe_tmp value = root.pe_apool }
+				subtract_variable = { which = pe_fcap value = pe_tmp }
+			}
 		}
+		root = { subtract_variable = { which = pe_capital value = pe_arest } }
 		save_event_target_as = pe_msg_planet
 		if = {
 			limit = { root = { check_variable = { which = pe_alvl value = 0 } } }

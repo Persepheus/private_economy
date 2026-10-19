@@ -1621,8 +1621,8 @@ pe_compute_values = {
 
 # Colony scope: planet-specific values in root variables. pe_dval_u = value of one state
 # city district on this planet (from its zones). pe_ent_val = value of one
-# entertainer job here (amenity shortage), pe_spec_<letter> = 1.25 for shares that match the
-# planet's designation, else 1.
+# entertainer job here (amenity shortage), pe_spec_<letter> = 1.6 for shares that match the
+# planet's designation, 0.8 for the other shares on such a specialised planet, else 1.
 pe_planet_prepare = {
 	root = {
 		set_variable = { which = pe_spec_a value = 1 }
@@ -1654,16 +1654,32 @@ pe_planet_prepare = {
 	if = { limit = { num_zones = { type = zone_resort_entertainment value > 0 } } root = { set_variable = { which = pe_tmp value = pe_vaj_pe_private_entertainer } multiply_variable = { which = pe_tmp value = 1 } change_variable = { which = pe_dval_u value = pe_tmp } } }
 	if = { limit = { free_amenities < 0 } root = { set_variable = { which = pe_ent_val value = 30 } } }
 	else_if = { limit = { free_amenities < 1000 } root = { set_variable = { which = pe_ent_val value = 8 } } }
-	if = { limit = { OR = { has_designation = col_industrial has_designation = col_foundry has_designation = col_capital_foundry } } root = { set_variable = { which = pe_spec_a value = 1.25 } } }
-	if = { limit = { OR = { has_designation = col_industrial has_designation = col_factory has_designation = col_capital_factory } } root = { set_variable = { which = pe_spec_c value = 1.25 } } }
-	if = { limit = { OR = { has_designation = col_city has_designation = col_capital_trade } } root = { set_variable = { which = pe_spec_t value = 1.25 } } }
-	if = { limit = { OR = { has_designation = col_resort has_designation = col_pleasure } } root = { set_variable = { which = pe_spec_u value = 1.25 } } }
-	if = { limit = { OR = { has_designation = col_research } } root = { set_variable = { which = pe_spec_x value = 1.25 } } }
-	if = { limit = { OR = { has_designation = col_research } } root = { set_variable = { which = pe_spec_y value = 1.25 } } }
-	if = { limit = { OR = { has_designation = col_research } } root = { set_variable = { which = pe_spec_z value = 1.25 } } }
-	if = { limit = { OR = { has_designation = col_mining has_designation = col_capital_extraction } } root = { set_variable = { which = pe_spec_m value = 1.25 } } }
-	if = { limit = { OR = { has_designation = col_generator } } root = { set_variable = { which = pe_spec_e value = 1.25 } } }
-	if = { limit = { OR = { has_designation = col_farming } } root = { set_variable = { which = pe_spec_f value = 1.25 } } }
+	# A specialised planet: all shares 0.8 first, the matching ones 1.6.
+	if = {
+		limit = { OR = { has_designation = col_industrial has_designation = col_foundry has_designation = col_capital_foundry has_designation = col_factory has_designation = col_capital_factory has_designation = col_city has_designation = col_capital_trade has_designation = col_resort has_designation = col_pleasure has_designation = col_research has_designation = col_mining has_designation = col_capital_extraction has_designation = col_generator has_designation = col_farming } }
+		root = {
+			set_variable = { which = pe_spec_a value = 0.8 }
+			set_variable = { which = pe_spec_c value = 0.8 }
+			set_variable = { which = pe_spec_t value = 0.8 }
+			set_variable = { which = pe_spec_u value = 0.8 }
+			set_variable = { which = pe_spec_x value = 0.8 }
+			set_variable = { which = pe_spec_y value = 0.8 }
+			set_variable = { which = pe_spec_z value = 0.8 }
+			set_variable = { which = pe_spec_m value = 0.8 }
+			set_variable = { which = pe_spec_e value = 0.8 }
+			set_variable = { which = pe_spec_f value = 0.8 }
+		}
+	}
+	if = { limit = { OR = { has_designation = col_industrial has_designation = col_foundry has_designation = col_capital_foundry } } root = { set_variable = { which = pe_spec_a value = 1.6 } } }
+	if = { limit = { OR = { has_designation = col_industrial has_designation = col_factory has_designation = col_capital_factory } } root = { set_variable = { which = pe_spec_c value = 1.6 } } }
+	if = { limit = { OR = { has_designation = col_city has_designation = col_capital_trade } } root = { set_variable = { which = pe_spec_t value = 1.6 } } }
+	if = { limit = { OR = { has_designation = col_resort has_designation = col_pleasure } } root = { set_variable = { which = pe_spec_u value = 1.6 } } }
+	if = { limit = { OR = { has_designation = col_research } } root = { set_variable = { which = pe_spec_x value = 1.6 } } }
+	if = { limit = { OR = { has_designation = col_research } } root = { set_variable = { which = pe_spec_y value = 1.6 } } }
+	if = { limit = { OR = { has_designation = col_research } } root = { set_variable = { which = pe_spec_z value = 1.6 } } }
+	if = { limit = { OR = { has_designation = col_mining has_designation = col_capital_extraction } } root = { set_variable = { which = pe_spec_m value = 1.6 } } }
+	if = { limit = { OR = { has_designation = col_generator } } root = { set_variable = { which = pe_spec_e value = 1.6 } } }
+	if = { limit = { OR = { has_designation = col_farming } } root = { set_variable = { which = pe_spec_f value = 1.6 } } }
 }
 
 # Deposit scope: recognise a firm that was placed without variables (e.g. console).
