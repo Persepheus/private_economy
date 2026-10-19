@@ -116,10 +116,11 @@ pe_savings = {
 }
 
 # Country scope: shadow price pe_s_<res> in trade per unit.
-#   Investment goods: alloys and food for empires with bio-ships are worth the buying
-#   price while the stock is below a quarter of the storage, falling to the selling price
-#   at three quarters and to a third of it when nearly full. Unity (2) and research
-#   (3.5 per point) have no stock and keep their value.
+#   Investment goods: alloys and food for empires with bio-ships are worth their base
+#   value (4 / 1) while the stock is below a quarter of the storage, falling to the selling
+#   price at three quarters and to a third of it when nearly full. Unity (3) and research
+#   (3.5 per point) have no stock. Alloys, research and unity are then balanced against
+#   each other (pe_triad).
 #   Flow goods: the buying price while short, falling to the selling price at the
 #   target surplus (BAND, % of production); above it a dumping price (a third of the
 #   selling price), with a full stock less still. A deficit adds a premium. Food only
@@ -131,7 +132,7 @@ pe_market = {
 	set_variable = { which = pe_is_invest value = 1 }
 	pe_shadow = { RES = alloys BASE = 4 SELL = 0 BAND = 20 MARKET = yes PEND = yes }
 	# No stock and no deficit for research and unity: fixed values.
-	set_variable = { which = pe_s_unity value = 2 }
+	set_variable = { which = pe_s_unity value = 3 }
 	set_variable = { which = pe_s_physics_research value = 3.5 }
 	set_variable = { which = pe_s_society_research value = 3.5 }
 	set_variable = { which = pe_s_engineering_research value = 3.5 }
@@ -153,6 +154,67 @@ pe_market = {
 	pe_shadow = { RES = minerals BASE = 1 SELL = 0 BAND = 20 MARKET = yes PEND = yes }
 	pe_shadow = { RES = energy BASE = 1 SELL = 0 BAND = 20 MARKET = yes PEND = yes }
 	pe_shadow = { RES = trade BASE = 1 SELL = 0.7 BAND = 20 PEND = yes }
+	pe_triad = yes
+}
+
+# Country scope: the investment triad. Alloys, research and unity are all needed; each
+# gets a target share of the empire's investment output (valued at 4 / 3.5 / 3 per unit):
+# 35 / 45 / 20%, shifted by ethics (militarist or at war: alloys, pacifist: less alloys,
+# materialist: research, spiritualist: unity). Below its target a good is worth more,
+# above it less: factor 0.5 + 0.5 x target / share, between 0.5 and 2.
+pe_triad = {
+	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = alloys } variable = pe_tri_a }
+	multiply_variable = { which = pe_tri_a value = 4 }
+	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = physics_research } variable = pe_tri_r }
+	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = society_research } variable = pe_tmp }
+	change_variable = { which = pe_tri_r value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = engineering_research } variable = pe_tmp }
+	change_variable = { which = pe_tri_r value = pe_tmp }
+	multiply_variable = { which = pe_tri_r value = 3.5 }
+	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = unity } variable = pe_tri_u }
+	multiply_variable = { which = pe_tri_u value = 3 }
+	set_variable = { which = pe_tri_sum value = pe_tri_a }
+	change_variable = { which = pe_tri_sum value = pe_tri_r }
+	change_variable = { which = pe_tri_sum value = pe_tri_u }
+	# Targets in percent.
+	set_variable = { which = pe_tgt_a value = 35 }
+	set_variable = { which = pe_tgt_r value = 45 }
+	set_variable = { which = pe_tgt_u value = 20 }
+	if = { limit = { is_militarist = yes } change_variable = { which = pe_tgt_a value = 10 } change_variable = { which = pe_tgt_r value = -5 } change_variable = { which = pe_tgt_u value = -5 } }
+	if = { limit = { is_pacifist = yes } change_variable = { which = pe_tgt_a value = -10 } change_variable = { which = pe_tgt_r value = 5 } change_variable = { which = pe_tgt_u value = 5 } }
+	if = { limit = { is_materialist = yes } change_variable = { which = pe_tgt_r value = 10 } change_variable = { which = pe_tgt_a value = -5 } change_variable = { which = pe_tgt_u value = -5 } }
+	if = { limit = { is_spiritualist = yes } change_variable = { which = pe_tgt_u value = 10 } change_variable = { which = pe_tgt_a value = -5 } change_variable = { which = pe_tgt_r value = -5 } }
+	if = { limit = { is_at_war = yes } change_variable = { which = pe_tgt_a value = 10 } change_variable = { which = pe_tgt_r value = -5 } change_variable = { which = pe_tgt_u value = -5 } }
+	pe_triad_factor = { L = a }
+	pe_triad_factor = { L = r }
+	pe_triad_factor = { L = u }
+	multiply_variable = { which = pe_s_alloys value = pe_tri_f_a }
+	multiply_variable = { which = pe_s_physics_research value = pe_tri_f_r }
+	multiply_variable = { which = pe_s_society_research value = pe_tri_f_r }
+	multiply_variable = { which = pe_s_engineering_research value = pe_tri_f_r }
+	multiply_variable = { which = pe_s_unity value = pe_tri_f_u }
+}
+
+# Country scope: share pe_tri_pct_<L> (percent of the triad) and factor pe_tri_f_<L>.
+pe_triad_factor = {
+	if = { limit = { check_variable = { which = pe_tgt_$L$ value < 10 } } set_variable = { which = pe_tgt_$L$ value = 10 } }
+	set_variable = { which = pe_tri_f_$L$ value = 2 }
+	set_variable = { which = pe_tri_pct_$L$ value = 0 }
+	if = {
+		limit = {
+			check_variable = { which = pe_tri_sum value > 0 }
+			check_variable = { which = pe_tri_$L$ value > 0 }
+		}
+		set_variable = { which = pe_tri_pct_$L$ value = pe_tri_$L$ }
+		divide_variable = { which = pe_tri_pct_$L$ value = pe_tri_sum }
+		multiply_variable = { which = pe_tri_pct_$L$ value = 100 }
+		set_variable = { which = pe_tri_f_$L$ value = pe_tgt_$L$ }
+		divide_variable = { which = pe_tri_f_$L$ value = pe_tri_pct_$L$ }
+		multiply_variable = { which = pe_tri_f_$L$ value = 0.5 }
+		change_variable = { which = pe_tri_f_$L$ value = 0.5 }
+		if = { limit = { check_variable = { which = pe_tri_f_$L$ value > 2 } } set_variable = { which = pe_tri_f_$L$ value = 2 } }
+		if = { limit = { check_variable = { which = pe_tri_f_$L$ value < 0.5 } } set_variable = { which = pe_tri_f_$L$ value = 0.5 } }
+	}
 }
 
 pe_shadow = {
@@ -191,6 +253,8 @@ pe_shadow = {
 	# founded and are the first to restructure.
 	set_variable = { which = pe_def_$RES$ value = 0 }
 	if = { limit = { check_variable = { which = pe_net value < 0 } } set_variable = { which = pe_def_$RES$ value = 1 } }
+	# Investment goods start from their base value, not the market buying price with fees.
+	if = { limit = { check_variable = { which = pe_is_invest value = 1 } } set_variable = { which = pe_pbuy value = $BASE$ } }
 	set_variable = { which = pe_s_$RES$ value = pe_pbuy }
 	if = {
 		limit = {
@@ -310,6 +374,7 @@ pe_planet_fill = {
 	pe_count_planet_job = { JOB = pe_private_physicist }
 	pe_count_planet_job = { JOB = pe_private_biologist }
 	pe_count_planet_job = { JOB = pe_private_engineer }
+	pe_count_planet_job = { JOB = pe_private_bureaucrat }
 	pe_count_planet_job = { JOB = pe_private_miner }
 	pe_count_planet_job = { JOB = pe_private_technician }
 	pe_count_planet_job = { JOB = pe_private_farmer }

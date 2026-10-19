@@ -60,6 +60,9 @@ const JOBS = [
   {key: 'pe_private_engineer', vanilla: 'engineer', cat: 'planet_engineers', kind: 'specialist', icon: 'building_research_lab_1', tag: 'research',
     en: ['Private Engineer', 'Private Engineers', 'Engineers in a private laboratory. Their results flow into our research.'],
     de: ['Privater Ingenieur', 'Private Ingenieure', 'Ingenieure in einem privaten Labor. Ihre Ergebnisse fließen in unsere Forschung.']},
+  {key: 'pe_private_bureaucrat', vanilla: 'bureaucrat', cat: 'planet_bureaucrats', kind: 'specialist', icon: 'building_bureaucratic_1', tag: 'unity',
+    en: ['Private Media Worker', 'Private Media Workers', 'Journalists, publishers and broadcasters of a private media house. They shape our culture and unity.'],
+    de: ['Private Medienschaffende', 'Private Medienschaffende', 'Journalisten, Verleger und Sender eines privaten Medienhauses. Sie prägen unsere Kultur und Einheit.']},
   {key: 'pe_private_miner', vanilla: 'miner', cat: 'planet_miners', kind: 'worker', icon: 'building_mineral_purification_plant', tag: 'minerals'},
   {key: 'pe_private_technician', vanilla: 'technician', cat: 'planet_technician', kind: 'worker', icon: 'building_energy_grid', tag: 'energy'},
   {key: 'pe_private_farmer', vanilla: 'farmer', cat: 'planet_farmers', kind: 'worker', icon: 'building_food_processing_facility', tag: 'food'},
@@ -190,11 +193,12 @@ const P = {
   x: {job: 'pe_private_physicist', urban: true, lab: true, enArt: 'Private Physics Lab', deArt: 'Privates Physiklabor', enDiv: 'Physics', deDiv: 'Physik'},
   y: {job: 'pe_private_biologist', urban: true, lab: true, enArt: 'Private Biology Lab', deArt: 'Privates Biologielabor', enDiv: 'Biology', deDiv: 'Biologie'},
   z: {job: 'pe_private_engineer', urban: true, lab: true, enArt: 'Private Engineering Lab', deArt: 'Privates Ingenieurslabor', enDiv: 'Engineering', deDiv: 'Ingenieurs'},
+  b: {job: 'pe_private_bureaucrat', urban: true, lab: true, enArt: 'Private Media House', deArt: 'Privates Medienhaus', enDiv: 'Media', deDiv: 'Medien'},
   m: {job: 'pe_private_miner', district: 'district_mining', site: 'd_pe_site_mining', icon: 'd_mineral_fields', enArt: 'Private Mine', deArt: 'Private Mine', enDiv: 'Mining', deDiv: 'Bergbau', enDist: 'mining', deDist: 'Bergbau'},
   e: {job: 'pe_private_technician', district: 'district_generator', site: 'd_pe_site_generator', icon: 'd_geothermal_vent', enArt: 'Private Power Plant', deArt: 'Privates Kraftwerk', enDiv: 'Energy', deDiv: 'Energie', enDist: 'generator', deDist: 'Generator'},
   f: {job: 'pe_private_farmer', district: 'district_farming', site: 'd_pe_site_farming', icon: 'd_fertile_lands', enArt: 'Private Farm', deArt: 'Privater Agrarbetrieb', enDiv: 'Agricultural', deDiv: 'Agrar', enDist: 'farming', deDist: 'Landwirtschafts'},
 };
-const urban = ['a', 'c', 't', 'u'], labs = ['x', 'y', 'z'], rural = ['m', 'e', 'f'];
+const urban = ['a', 'c', 't', 'u'], labs = ['x', 'y', 'z', 'b'], rural = ['m', 'e', 'f'];
 const CLS_NUM = {u: 1, m: 2, e: 3, f: 4, l: 5};
 const ORDER = Object.keys(P);
 const variants = [];
@@ -368,16 +372,16 @@ const ZONES = [
   ['zone_research_physics', [['pe_private_physicist', 1]]],
   ['zone_research_society', [['pe_private_biologist', 1]]],
   ['zone_research_engineering', [['pe_private_engineer', 1]]],
-  ['zone_research_unity', RESEARCH3],
-  ['zone_unity', RESEARCH3],
-  ['zone_unity_spiritualist', RESEARCH3],
-  ['zone_unity_bio_trophy', RESEARCH3],
+  ['zone_research_unity', [...RESEARCH3.map(([j, w]) => [j, w / 2]), ['pe_private_bureaucrat', 0.5]]],
+  ['zone_unity', [['pe_private_bureaucrat', 1]]],
+  ['zone_unity_spiritualist', [['pe_private_bureaucrat', 1]]],
+  ['zone_unity_bio_trophy', [['pe_private_bureaucrat', 1]]],
   ['zone_resort_entertainment', [['pe_private_entertainer', 1]]],
 ];
 
 // Designation -> favoured shares (matched on the designation key).
 const designations = [...new Set(readDir('common/colony_types').flatMap(t => [...t.matchAll(/^(col_\w+) = \{/gm)].map(m => m[1])))];
-const SPEC = [[/foundry|forge/, ['a']], [/factory/, ['c']], [/industrial/, ['a', 'c']], [/trade|^col_city$/, ['t']], [/mining|extraction|refinery/, ['m']], [/generator|energy/, ['e']], [/farming/, ['f']], [/research/, ['x', 'y', 'z']], [/resort|pleasure/, ['u']]];
+const SPEC = [[/foundry|forge/, ['a']], [/factory/, ['c']], [/industrial/, ['a', 'c']], [/trade|^col_city$/, ['t']], [/mining|extraction|refinery/, ['m']], [/generator|energy/, ['e']], [/farming/, ['f']], [/research/, ['x', 'y', 'z']], [/bureau/, ['b']], [/resort|pleasure/, ['u']]];
 const specFor = l => designations.filter(d => !/nomad|habitat|ring|ecu|hiv|mac|pre_ftl|fe_|wilderness/.test(d) && SPEC.some(([re, ls]) => re.test(d) && ls.includes(l)));
 
 let eff = header + `# Call depths (see pe_economy_effects.txt): pe_census 2, pe_job_values 2,
@@ -758,9 +762,10 @@ const nameOf = (v, s, L) => {
   if (o.length === 1) base = art(o[0]);
   else if (c[0] === 3) base = L ? `${art(o[0])} with ${div(o[1])} Division` : `${art(o[0])} mit ${div(o[1])}sparte`;
   else if (c[0] === 2 && c[1] === 2) base = v.cls === 'l'
-    ? (L ? `Private ${div(o[0])} and ${div(o[1])} Lab` : `Privates ${div(o[0])}- und ${div(o[1])}labor`)
+    ? (L ? `Private ${div(o[0])} and ${div(o[1])} Institute` : `Privates ${div(o[0])}- und ${div(o[1])}institut`)
     : (L ? `Private ${div(o[0])} and ${div(o[1])} Company` : `Privates ${div(o[0])}- und ${div(o[1])}unternehmen`);
   else if (c[0] === 2) base = L ? `${art(o[0])} with ${div(o[1])} and ${div(o[2])} Divisions` : `${art(o[0])} mit ${div(o[1])}- und ${div(o[2])}sparte`;
+  else if (v.cls === 'l') base = L ? 'Private Research and Media Institute' : 'Privates Forschungs- und Medieninstitut';
   else base = L ? 'Private Conglomerate' : 'Privater Mischkonzern';
   return base + ['', L ? ' (Mid-size)' : ' (Mittelstand)', L ? ' (Corporation)' : ' (Konzern)'][s - 1];
 };

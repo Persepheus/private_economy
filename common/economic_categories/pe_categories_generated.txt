@@ -58,6 +58,14 @@ pe_private_engineers = {
 	modifier_category = colony
 }
 
+pe_private_bureaucrats = {
+	parent = planet_bureaucrats
+	generate_mult_modifiers = {
+		produces
+	}
+	modifier_category = colony
+}
+
 pe_private_miners = {
 	parent = planet_miners
 	generate_mult_modifiers = {

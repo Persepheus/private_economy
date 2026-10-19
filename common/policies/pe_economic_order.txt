@@ -60,6 +60,7 @@ pe_economic_order = {
 			pe_private_physicists_produces_mult = -0.05
 			pe_private_biologists_produces_mult = -0.05
 			pe_private_engineers_produces_mult = -0.05
+			pe_private_bureaucrats_produces_mult = -0.05
 		}
 		ai_weight = {
 			weight = 100
@@ -85,6 +86,7 @@ pe_economic_order = {
 			pe_private_physicists_produces_mult = -0.1
 			pe_private_biologists_produces_mult = -0.1
 			pe_private_engineers_produces_mult = -0.1
+			pe_private_bureaucrats_produces_mult = -0.1
 		}
 		ai_weight = {
 			weight = 80
@@ -112,6 +114,7 @@ pe_economic_order = {
 			pe_private_physicists_produces_mult = -0.2
 			pe_private_biologists_produces_mult = -0.2
 			pe_private_engineers_produces_mult = -0.2
+			pe_private_bureaucrats_produces_mult = -0.2
 		}
 		ai_weight = {
 			weight = 30
