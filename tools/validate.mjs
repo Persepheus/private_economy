@@ -195,6 +195,7 @@ for (const f of scripts) {
   for (const [, k] of text.matchAll(/pe_found_firm = \{ FIRM = (\w+)/g)) need.push(`pe_msg_found_${k}`);
   for (const [, k] of text.matchAll(/pe_buyout_execute = \{ FIRM = (\w+)/g)) need.push(`pe_msg_buy_${k}`);
 }
+for (const f of files(path.join(root, 'common/pop_jobs'))) for (const [, n] of strip(fs.readFileSync(f, 'utf8')).matchAll(/\bname = (pe_private_\w+)/g)) need.push(`job_${n}`, `job_${n}_plural`, `job_${n}_desc`);
 need.push(...defs('common/static_modifiers').flatMap(m => [m, `${m}_desc`]));
 for (const f of files(path.join(root, 'common/message_types')))
   for (const [, n] of fs.readFileSync(f, 'utf8').matchAll(/name = "(\w+)"/g)) need.push(n);
@@ -214,7 +215,7 @@ for (const lang of languages)
 {
   const {execFileSync} = await import('node:child_process');
   const gen = ['common/deposits/pe_firm_deposits.txt', 'common/deposits/pe_automation_deposits.txt', 'common/deposits/pe_site_deposits.txt', 'common/scripted_triggers/pe_firm_triggers_generated.txt', 'common/scripted_effects/pe_firm_effects_generated.txt',
-    'common/pop_jobs/pe_private_jobs.txt', 'common/economic_categories/pe_categories_generated.txt', 'common/scripted_loc/pe_scripted_loc_generated.txt'];
+    'common/pop_jobs/pe_private_jobs.txt', 'common/scripted_loc/pe_scripted_loc_generated.txt'];
   const before = gen.map(g => fs.readFileSync(path.join(root, g), 'utf8'));
   execFileSync(process.execPath, [path.join(root, 'tools/generate-firms.mjs'), game]);
   gen.forEach((g, i) => assert.equal(fs.readFileSync(path.join(root, g), 'utf8'), before[i], `${g} is stale: run tools/generate-firms.mjs`));

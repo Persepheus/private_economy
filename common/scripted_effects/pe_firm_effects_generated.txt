@@ -198,15 +198,16 @@ pe_census = {
 	}
 }
 
-# Country scope: value added per filled private job, in trade per month at shadow
-# prices. Measured from the private categories' real revenue and expenses; while no
-# job of a type is filled, from the vanilla base output.
+# Country scope: value added per filled job, in trade per month at shadow prices.
+# Private jobs share the vanilla category, so it is measured from the category's real
+# revenue and expenses per filled vanilla or private job; while none is filled, from the
+# vanilla base output.
 pe_job_values = {
 	set_variable = { which = pe_va_tmp value = 0 }
-	pe_job_count = { JOB = pe_private_metallurgist }
-	pe_job_res = { CAT = pe_private_metallurgists RES = alloys }
-	pe_job_res = { CAT = pe_private_metallurgists RES = minerals }
-	pe_job_res = { CAT = pe_private_metallurgists RES = food }
+	pe_job_count = { JOB = pe_private_metallurgist VJOB = foundry }
+	pe_job_res = { CAT = planet_metallurgists RES = alloys }
+	pe_job_res = { CAT = planet_metallurgists RES = minerals }
+	pe_job_res = { CAT = planet_metallurgists RES = food }
 	if = {
 		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
 		set_variable = { which = pe_vaj_pe_private_metallurgist value = pe_va_tmp }
@@ -223,11 +224,11 @@ pe_job_values = {
 		}
 	}
 	set_variable = { which = pe_va_tmp value = 0 }
-	pe_job_count = { JOB = pe_private_artisan }
-	pe_job_res = { CAT = pe_private_artisans RES = consumer_goods }
-	pe_job_res = { CAT = pe_private_artisans RES = trade }
-	pe_job_res = { CAT = pe_private_artisans RES = minerals }
-	pe_job_res = { CAT = pe_private_artisans RES = food }
+	pe_job_count = { JOB = pe_private_artisan VJOB = artisan }
+	pe_job_res = { CAT = planet_artisans RES = consumer_goods }
+	pe_job_res = { CAT = planet_artisans RES = trade }
+	pe_job_res = { CAT = planet_artisans RES = minerals }
+	pe_job_res = { CAT = planet_artisans RES = food }
 	if = {
 		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
 		set_variable = { which = pe_vaj_pe_private_artisan value = pe_va_tmp }
@@ -244,9 +245,9 @@ pe_job_values = {
 		}
 	}
 	set_variable = { which = pe_va_tmp value = 0 }
-	pe_job_count = { JOB = pe_private_trader }
-	pe_job_res = { CAT = pe_private_traders RES = trade }
-	pe_job_res = { CAT = pe_private_traders RES = consumer_goods }
+	pe_job_count = { JOB = pe_private_trader VJOB = trader }
+	pe_job_res = { CAT = planet_traders RES = trade }
+	pe_job_res = { CAT = planet_traders RES = consumer_goods }
 	if = {
 		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
 		set_variable = { which = pe_vaj_pe_private_trader value = pe_va_tmp }
@@ -263,11 +264,11 @@ pe_job_values = {
 		}
 	}
 	set_variable = { which = pe_va_tmp value = 0 }
-	pe_job_count = { JOB = pe_private_entertainer }
-	pe_job_res = { CAT = pe_private_entertainers RES = unity }
-	pe_job_res = { CAT = pe_private_entertainers RES = consumer_goods }
-	pe_job_res = { CAT = pe_private_entertainers RES = society_research }
-	pe_job_res = { CAT = pe_private_entertainers RES = alloys }
+	pe_job_count = { JOB = pe_private_entertainer VJOB = entertainer }
+	pe_job_res = { CAT = planet_entertainers RES = unity }
+	pe_job_res = { CAT = planet_entertainers RES = consumer_goods }
+	pe_job_res = { CAT = planet_entertainers RES = society_research }
+	pe_job_res = { CAT = planet_entertainers RES = alloys }
 	if = {
 		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
 		set_variable = { which = pe_vaj_pe_private_entertainer value = pe_va_tmp }
@@ -284,9 +285,9 @@ pe_job_values = {
 		}
 	}
 	set_variable = { which = pe_va_tmp value = 0 }
-	pe_job_count = { JOB = pe_private_physicist }
-	pe_job_res = { CAT = pe_private_physicists RES = physics_research }
-	pe_job_res = { CAT = pe_private_physicists RES = consumer_goods }
+	pe_job_count = { JOB = pe_private_physicist VJOB = physicist }
+	pe_job_res = { CAT = planet_physicists RES = physics_research }
+	pe_job_res = { CAT = planet_physicists RES = consumer_goods }
 	if = {
 		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
 		set_variable = { which = pe_vaj_pe_private_physicist value = pe_va_tmp }
@@ -303,9 +304,9 @@ pe_job_values = {
 		}
 	}
 	set_variable = { which = pe_va_tmp value = 0 }
-	pe_job_count = { JOB = pe_private_biologist }
-	pe_job_res = { CAT = pe_private_biologists RES = society_research }
-	pe_job_res = { CAT = pe_private_biologists RES = consumer_goods }
+	pe_job_count = { JOB = pe_private_biologist VJOB = biologist }
+	pe_job_res = { CAT = planet_biologists RES = society_research }
+	pe_job_res = { CAT = planet_biologists RES = consumer_goods }
 	if = {
 		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
 		set_variable = { which = pe_vaj_pe_private_biologist value = pe_va_tmp }
@@ -322,9 +323,9 @@ pe_job_values = {
 		}
 	}
 	set_variable = { which = pe_va_tmp value = 0 }
-	pe_job_count = { JOB = pe_private_engineer }
-	pe_job_res = { CAT = pe_private_engineers RES = engineering_research }
-	pe_job_res = { CAT = pe_private_engineers RES = consumer_goods }
+	pe_job_count = { JOB = pe_private_engineer VJOB = engineer }
+	pe_job_res = { CAT = planet_engineers RES = engineering_research }
+	pe_job_res = { CAT = planet_engineers RES = consumer_goods }
 	if = {
 		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
 		set_variable = { which = pe_vaj_pe_private_engineer value = pe_va_tmp }
@@ -341,13 +342,13 @@ pe_job_values = {
 		}
 	}
 	set_variable = { which = pe_va_tmp value = 0 }
-	pe_job_count = { JOB = pe_private_bureaucrat }
-	pe_job_res = { CAT = pe_private_bureaucrats RES = unity }
-	pe_job_res = { CAT = pe_private_bureaucrats RES = consumer_goods }
-	pe_job_res = { CAT = pe_private_bureaucrats RES = trade }
-	pe_job_res = { CAT = pe_private_bureaucrats RES = society_research }
-	pe_job_res = { CAT = pe_private_bureaucrats RES = engineering_research }
-	pe_job_res = { CAT = pe_private_bureaucrats RES = physics_research }
+	pe_job_count = { JOB = pe_private_bureaucrat VJOB = bureaucrat }
+	pe_job_res = { CAT = planet_bureaucrats RES = unity }
+	pe_job_res = { CAT = planet_bureaucrats RES = consumer_goods }
+	pe_job_res = { CAT = planet_bureaucrats RES = trade }
+	pe_job_res = { CAT = planet_bureaucrats RES = society_research }
+	pe_job_res = { CAT = planet_bureaucrats RES = engineering_research }
+	pe_job_res = { CAT = planet_bureaucrats RES = physics_research }
 	if = {
 		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
 		set_variable = { which = pe_vaj_pe_private_bureaucrat value = pe_va_tmp }
@@ -364,11 +365,11 @@ pe_job_values = {
 		}
 	}
 	set_variable = { which = pe_va_tmp value = 0 }
-	pe_job_count = { JOB = pe_private_miner }
-	pe_job_res = { CAT = pe_private_miners RES = minerals }
-	pe_job_res = { CAT = pe_private_miners RES = alloys }
-	pe_job_res = { CAT = pe_private_miners RES = food }
-	pe_job_res = { CAT = pe_private_miners RES = energy }
+	pe_job_count = { JOB = pe_private_miner VJOB = miner }
+	pe_job_res = { CAT = planet_miners RES = minerals }
+	pe_job_res = { CAT = planet_miners RES = alloys }
+	pe_job_res = { CAT = planet_miners RES = food }
+	pe_job_res = { CAT = planet_miners RES = energy }
 	if = {
 		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
 		set_variable = { which = pe_vaj_pe_private_miner value = pe_va_tmp }
@@ -385,8 +386,8 @@ pe_job_values = {
 		}
 	}
 	set_variable = { which = pe_va_tmp value = 0 }
-	pe_job_count = { JOB = pe_private_technician }
-	pe_job_res = { CAT = pe_private_technicians RES = energy }
+	pe_job_count = { JOB = pe_private_technician VJOB = technician }
+	pe_job_res = { CAT = planet_technician RES = energy }
 	if = {
 		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
 		set_variable = { which = pe_vaj_pe_private_technician value = pe_va_tmp }
@@ -403,10 +404,10 @@ pe_job_values = {
 		}
 	}
 	set_variable = { which = pe_va_tmp value = 0 }
-	pe_job_count = { JOB = pe_private_farmer }
-	pe_job_res = { CAT = pe_private_farmers RES = food }
-	pe_job_res = { CAT = pe_private_farmers RES = trade }
-	pe_job_res = { CAT = pe_private_farmers RES = alloys }
+	pe_job_count = { JOB = pe_private_farmer VJOB = farmer }
+	pe_job_res = { CAT = planet_farmers RES = food }
+	pe_job_res = { CAT = planet_farmers RES = trade }
+	pe_job_res = { CAT = planet_farmers RES = alloys }
 	if = {
 		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
 		set_variable = { which = pe_vaj_pe_private_farmer value = pe_va_tmp }
@@ -2708,7 +2709,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_aaac CODE = 1 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_aaac CODE = 1 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 2 } } } 
@@ -2727,7 +2728,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_aaat CODE = 2 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_aaat CODE = 2 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 3 } } } 
@@ -2746,7 +2747,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_aaau CODE = 3 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_aaau CODE = 3 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 4 } } } 
@@ -2765,7 +2766,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_aacc CODE = 4 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_aacc CODE = 4 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 5 } } } 
@@ -2784,7 +2785,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_aact CODE = 5 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_aact CODE = 5 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 6 } } } 
@@ -2803,7 +2804,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_aacu CODE = 6 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_aacu CODE = 6 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 7 } } } 
@@ -2822,7 +2823,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_aatt CODE = 7 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_aatt CODE = 7 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 8 } } } 
@@ -2841,7 +2842,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_aatu CODE = 8 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_aatu CODE = 8 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 9 } } } 
@@ -2860,7 +2861,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_aauu CODE = 9 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_aauu CODE = 9 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 10 } } } 
@@ -2879,7 +2880,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_ccca CODE = 10 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_ccca CODE = 10 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 11 } } } 
@@ -2898,7 +2899,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_ccat CODE = 11 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_ccat CODE = 11 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 12 } } } 
@@ -2917,7 +2918,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_ccau CODE = 12 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_ccau CODE = 12 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 13 } } } 
@@ -2936,7 +2937,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_ttac CODE = 13 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_ttac CODE = 13 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 14 } } } 
@@ -2955,7 +2956,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_actu CODE = 14 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_actu CODE = 14 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 15 } } } 
@@ -2974,7 +2975,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_uuac CODE = 15 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_uuac CODE = 15 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 16 } } } 
@@ -2993,7 +2994,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_ttta CODE = 16 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_ttta CODE = 16 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 17 } } } 
@@ -3012,7 +3013,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_ttau CODE = 17 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_ttau CODE = 17 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 18 } } } 
@@ -3031,7 +3032,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_uuat CODE = 18 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_uuat CODE = 18 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 19 } } } 
@@ -3050,7 +3051,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_uuua CODE = 19 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_uuua CODE = 19 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 20 } } } 
@@ -3069,7 +3070,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_ccct CODE = 20 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_ccct CODE = 20 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 21 } } } 
@@ -3088,7 +3089,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_cccu CODE = 21 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_cccu CODE = 21 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 22 } } } 
@@ -3107,7 +3108,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_cctt CODE = 22 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_cctt CODE = 22 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 23 } } } 
@@ -3126,7 +3127,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_cctu CODE = 23 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_cctu CODE = 23 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 24 } } } 
@@ -3145,7 +3146,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_ccuu CODE = 24 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_ccuu CODE = 24 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 25 } } } 
@@ -3164,7 +3165,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_tttc CODE = 25 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_tttc CODE = 25 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 26 } } } 
@@ -3183,7 +3184,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_ttcu CODE = 26 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_ttcu CODE = 26 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 27 } } } 
@@ -3202,7 +3203,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_uuct CODE = 27 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_uuct CODE = 27 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 28 } } } 
@@ -3221,7 +3222,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_uuuc CODE = 28 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_uuuc CODE = 28 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 29 } } } 
@@ -3240,7 +3241,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_tttu CODE = 29 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_tttu CODE = 29 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 30 } } } 
@@ -3259,7 +3260,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_ttuu CODE = 30 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_ttuu CODE = 30 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 31 } } } 
@@ -3278,7 +3279,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_uuut CODE = 31 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_uuut CODE = 31 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 32 } } } 
@@ -3297,7 +3298,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_xxxy CODE = 32 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_xxxy CODE = 32 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 33 } } } 
@@ -3316,7 +3317,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_xxxz CODE = 33 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_xxxz CODE = 33 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 34 } } } 
@@ -3335,7 +3336,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_xxxb CODE = 34 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_xxxb CODE = 34 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 35 } } } 
@@ -3354,7 +3355,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_xxyy CODE = 35 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_xxyy CODE = 35 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 36 } } } 
@@ -3373,7 +3374,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_xxyz CODE = 36 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_xxyz CODE = 36 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 37 } } } 
@@ -3392,7 +3393,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_xxyb CODE = 37 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_xxyb CODE = 37 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 38 } } } 
@@ -3411,7 +3412,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_xxzz CODE = 38 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_xxzz CODE = 38 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 39 } } } 
@@ -3430,7 +3431,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_xxzb CODE = 39 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_xxzb CODE = 39 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 40 } } } 
@@ -3449,7 +3450,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_xxbb CODE = 40 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_xxbb CODE = 40 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 41 } } } 
@@ -3468,7 +3469,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_yyyx CODE = 41 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_yyyx CODE = 41 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 42 } } } 
@@ -3487,7 +3488,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_yyxz CODE = 42 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_yyxz CODE = 42 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 43 } } } 
@@ -3506,7 +3507,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_yyxb CODE = 43 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_yyxb CODE = 43 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 44 } } } 
@@ -3525,7 +3526,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_zzxy CODE = 44 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_zzxy CODE = 44 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 45 } } } 
@@ -3544,7 +3545,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_xyzb CODE = 45 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_xyzb CODE = 45 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 46 } } } 
@@ -3563,7 +3564,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_bbxy CODE = 46 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_bbxy CODE = 46 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 47 } } } 
@@ -3582,7 +3583,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_zzzx CODE = 47 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_zzzx CODE = 47 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 48 } } } 
@@ -3601,7 +3602,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_zzxb CODE = 48 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_zzxb CODE = 48 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 49 } } } 
@@ -3620,7 +3621,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_bbxz CODE = 49 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_bbxz CODE = 49 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 50 } } } 
@@ -3639,7 +3640,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_bbbx CODE = 50 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_bbbx CODE = 50 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 51 } } } 
@@ -3658,7 +3659,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_yyyz CODE = 51 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_yyyz CODE = 51 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 52 } } } 
@@ -3677,7 +3678,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_yyyb CODE = 52 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_yyyb CODE = 52 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 53 } } } 
@@ -3696,7 +3697,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_yyzz CODE = 53 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_yyzz CODE = 53 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 54 } } } 
@@ -3715,7 +3716,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_yyzb CODE = 54 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_yyzb CODE = 54 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 55 } } } 
@@ -3734,7 +3735,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_yybb CODE = 55 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_yybb CODE = 55 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 56 } } } 
@@ -3753,7 +3754,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_zzzy CODE = 56 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_zzzy CODE = 56 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 57 } } } 
@@ -3772,7 +3773,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_zzyb CODE = 57 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_zzyb CODE = 57 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 58 } } } 
@@ -3791,7 +3792,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_bbyz CODE = 58 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_bbyz CODE = 58 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 59 } } } 
@@ -3810,7 +3811,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_bbby CODE = 59 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_bbby CODE = 59 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 60 } } } 
@@ -3829,7 +3830,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_zzzb CODE = 60 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_zzzb CODE = 60 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 61 } } } 
@@ -3848,7 +3849,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_zzbb CODE = 61 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_zzbb CODE = 61 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 62 } } } 
@@ -3867,7 +3868,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_bbbz CODE = 62 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 }
+			pe_buyout_execute = { FIRM = d_pe_firm_bbbz CODE = 62 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 63 } } } 
@@ -3886,7 +3887,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_mmmm CODE = 63 DISTRICT = district_mining SITE = d_pe_site_mining MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_mmmm CODE = 63 DISTRICT = district_mining MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 64 } } } 
@@ -3905,7 +3906,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_mmma CODE = 64 DISTRICT = district_mining SITE = d_pe_site_mining MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_mmma CODE = 64 DISTRICT = district_mining MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 65 } } } 
@@ -3924,7 +3925,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_mmmc CODE = 65 DISTRICT = district_mining SITE = d_pe_site_mining MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_mmmc CODE = 65 DISTRICT = district_mining MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 66 } } } 
@@ -3943,7 +3944,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_mmmt CODE = 66 DISTRICT = district_mining SITE = d_pe_site_mining MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_mmmt CODE = 66 DISTRICT = district_mining MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 67 } } } 
@@ -3962,7 +3963,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_mmme CODE = 67 DISTRICT = district_mining SITE = d_pe_site_mining MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_mmme CODE = 67 DISTRICT = district_mining MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 68 } } } 
@@ -3981,7 +3982,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_mmmf CODE = 68 DISTRICT = district_mining SITE = d_pe_site_mining MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_mmmf CODE = 68 DISTRICT = district_mining MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 69 } } } 
@@ -4000,7 +4001,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_eeee CODE = 69 DISTRICT = district_generator SITE = d_pe_site_generator MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_eeee CODE = 69 DISTRICT = district_generator MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 70 } } } 
@@ -4019,7 +4020,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_eeea CODE = 70 DISTRICT = district_generator SITE = d_pe_site_generator MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_eeea CODE = 70 DISTRICT = district_generator MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 71 } } } 
@@ -4038,7 +4039,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_eeec CODE = 71 DISTRICT = district_generator SITE = d_pe_site_generator MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_eeec CODE = 71 DISTRICT = district_generator MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 72 } } } 
@@ -4057,7 +4058,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_eeet CODE = 72 DISTRICT = district_generator SITE = d_pe_site_generator MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_eeet CODE = 72 DISTRICT = district_generator MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 73 } } } 
@@ -4076,7 +4077,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_eeem CODE = 73 DISTRICT = district_generator SITE = d_pe_site_generator MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_eeem CODE = 73 DISTRICT = district_generator MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 74 } } } 
@@ -4095,7 +4096,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_eeef CODE = 74 DISTRICT = district_generator SITE = d_pe_site_generator MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_eeef CODE = 74 DISTRICT = district_generator MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 75 } } } 
@@ -4114,7 +4115,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_ffff CODE = 75 DISTRICT = district_farming SITE = d_pe_site_farming MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_ffff CODE = 75 DISTRICT = district_farming MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 76 } } } 
@@ -4133,7 +4134,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_fffa CODE = 76 DISTRICT = district_farming SITE = d_pe_site_farming MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_fffa CODE = 76 DISTRICT = district_farming MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 77 } } } 
@@ -4152,7 +4153,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_fffc CODE = 77 DISTRICT = district_farming SITE = d_pe_site_farming MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_fffc CODE = 77 DISTRICT = district_farming MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 78 } } } 
@@ -4171,7 +4172,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_ffft CODE = 78 DISTRICT = district_farming SITE = d_pe_site_farming MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_ffft CODE = 78 DISTRICT = district_farming MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 79 } } } 
@@ -4190,7 +4191,7 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_fffm CODE = 79 DISTRICT = district_farming SITE = d_pe_site_farming MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_fffm CODE = 79 DISTRICT = district_farming MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 80 } } } 
@@ -4209,93 +4210,93 @@ pe_buy_or_offer = {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = d_pe_firm_fffe CODE = 80 DISTRICT = district_farming SITE = d_pe_site_farming MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 }
+			pe_buyout_execute = { FIRM = d_pe_firm_fffe CODE = 80 DISTRICT = district_farming MINERALS = 300 TRADE = 60 PRICE = 360 }
 		}
 	 }
 }
 
 # Event pe.110 scope (country), colony = event_target:pe_offer_planet.
 pe_buyout_by_offer = {
-	if = { limit = { root = { check_variable = { which = pe_offer_variant value = 1 } } } pe_buyout_execute = { FIRM = d_pe_firm_aaac CODE = 1 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 2 } } } pe_buyout_execute = { FIRM = d_pe_firm_aaat CODE = 2 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 3 } } } pe_buyout_execute = { FIRM = d_pe_firm_aaau CODE = 3 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 4 } } } pe_buyout_execute = { FIRM = d_pe_firm_aacc CODE = 4 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 5 } } } pe_buyout_execute = { FIRM = d_pe_firm_aact CODE = 5 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 6 } } } pe_buyout_execute = { FIRM = d_pe_firm_aacu CODE = 6 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 7 } } } pe_buyout_execute = { FIRM = d_pe_firm_aatt CODE = 7 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 8 } } } pe_buyout_execute = { FIRM = d_pe_firm_aatu CODE = 8 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 9 } } } pe_buyout_execute = { FIRM = d_pe_firm_aauu CODE = 9 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 10 } } } pe_buyout_execute = { FIRM = d_pe_firm_ccca CODE = 10 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 11 } } } pe_buyout_execute = { FIRM = d_pe_firm_ccat CODE = 11 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 12 } } } pe_buyout_execute = { FIRM = d_pe_firm_ccau CODE = 12 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 13 } } } pe_buyout_execute = { FIRM = d_pe_firm_ttac CODE = 13 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 14 } } } pe_buyout_execute = { FIRM = d_pe_firm_actu CODE = 14 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 15 } } } pe_buyout_execute = { FIRM = d_pe_firm_uuac CODE = 15 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 16 } } } pe_buyout_execute = { FIRM = d_pe_firm_ttta CODE = 16 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 17 } } } pe_buyout_execute = { FIRM = d_pe_firm_ttau CODE = 17 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 18 } } } pe_buyout_execute = { FIRM = d_pe_firm_uuat CODE = 18 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 19 } } } pe_buyout_execute = { FIRM = d_pe_firm_uuua CODE = 19 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 20 } } } pe_buyout_execute = { FIRM = d_pe_firm_ccct CODE = 20 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 21 } } } pe_buyout_execute = { FIRM = d_pe_firm_cccu CODE = 21 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 22 } } } pe_buyout_execute = { FIRM = d_pe_firm_cctt CODE = 22 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 23 } } } pe_buyout_execute = { FIRM = d_pe_firm_cctu CODE = 23 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 24 } } } pe_buyout_execute = { FIRM = d_pe_firm_ccuu CODE = 24 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 25 } } } pe_buyout_execute = { FIRM = d_pe_firm_tttc CODE = 25 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 26 } } } pe_buyout_execute = { FIRM = d_pe_firm_ttcu CODE = 26 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 27 } } } pe_buyout_execute = { FIRM = d_pe_firm_uuct CODE = 27 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 28 } } } pe_buyout_execute = { FIRM = d_pe_firm_uuuc CODE = 28 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 29 } } } pe_buyout_execute = { FIRM = d_pe_firm_tttu CODE = 29 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 30 } } } pe_buyout_execute = { FIRM = d_pe_firm_ttuu CODE = 30 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 31 } } } pe_buyout_execute = { FIRM = d_pe_firm_uuut CODE = 31 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 32 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxxy CODE = 32 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 33 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxxz CODE = 33 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 34 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxxb CODE = 34 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 35 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxyy CODE = 35 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 36 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxyz CODE = 36 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 37 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxyb CODE = 37 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 38 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxzz CODE = 38 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 39 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxzb CODE = 39 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 40 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxbb CODE = 40 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 41 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyyx CODE = 41 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 42 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyxz CODE = 42 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 43 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyxb CODE = 43 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 44 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzxy CODE = 44 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 45 } } } pe_buyout_execute = { FIRM = d_pe_firm_xyzb CODE = 45 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 46 } } } pe_buyout_execute = { FIRM = d_pe_firm_bbxy CODE = 46 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 47 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzzx CODE = 47 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 48 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzxb CODE = 48 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 49 } } } pe_buyout_execute = { FIRM = d_pe_firm_bbxz CODE = 49 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 50 } } } pe_buyout_execute = { FIRM = d_pe_firm_bbbx CODE = 50 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 51 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyyz CODE = 51 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 52 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyyb CODE = 52 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 53 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyzz CODE = 53 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 54 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyzb CODE = 54 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 55 } } } pe_buyout_execute = { FIRM = d_pe_firm_yybb CODE = 55 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 56 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzzy CODE = 56 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 57 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzyb CODE = 57 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 58 } } } pe_buyout_execute = { FIRM = d_pe_firm_bbyz CODE = 58 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 59 } } } pe_buyout_execute = { FIRM = d_pe_firm_bbby CODE = 59 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 60 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzzb CODE = 60 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 61 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzbb CODE = 61 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 62 } } } pe_buyout_execute = { FIRM = d_pe_firm_bbbz CODE = 62 DISTRICT = district_city SITE = d_pe_site_city MONTHS = 8 MINERALS = 500 TRADE = 100 PRICE = 600 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 63 } } } pe_buyout_execute = { FIRM = d_pe_firm_mmmm CODE = 63 DISTRICT = district_mining SITE = d_pe_site_mining MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 64 } } } pe_buyout_execute = { FIRM = d_pe_firm_mmma CODE = 64 DISTRICT = district_mining SITE = d_pe_site_mining MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 65 } } } pe_buyout_execute = { FIRM = d_pe_firm_mmmc CODE = 65 DISTRICT = district_mining SITE = d_pe_site_mining MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 66 } } } pe_buyout_execute = { FIRM = d_pe_firm_mmmt CODE = 66 DISTRICT = district_mining SITE = d_pe_site_mining MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 67 } } } pe_buyout_execute = { FIRM = d_pe_firm_mmme CODE = 67 DISTRICT = district_mining SITE = d_pe_site_mining MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 68 } } } pe_buyout_execute = { FIRM = d_pe_firm_mmmf CODE = 68 DISTRICT = district_mining SITE = d_pe_site_mining MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 69 } } } pe_buyout_execute = { FIRM = d_pe_firm_eeee CODE = 69 DISTRICT = district_generator SITE = d_pe_site_generator MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 70 } } } pe_buyout_execute = { FIRM = d_pe_firm_eeea CODE = 70 DISTRICT = district_generator SITE = d_pe_site_generator MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 71 } } } pe_buyout_execute = { FIRM = d_pe_firm_eeec CODE = 71 DISTRICT = district_generator SITE = d_pe_site_generator MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 72 } } } pe_buyout_execute = { FIRM = d_pe_firm_eeet CODE = 72 DISTRICT = district_generator SITE = d_pe_site_generator MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 73 } } } pe_buyout_execute = { FIRM = d_pe_firm_eeem CODE = 73 DISTRICT = district_generator SITE = d_pe_site_generator MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 74 } } } pe_buyout_execute = { FIRM = d_pe_firm_eeef CODE = 74 DISTRICT = district_generator SITE = d_pe_site_generator MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 75 } } } pe_buyout_execute = { FIRM = d_pe_firm_ffff CODE = 75 DISTRICT = district_farming SITE = d_pe_site_farming MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 76 } } } pe_buyout_execute = { FIRM = d_pe_firm_fffa CODE = 76 DISTRICT = district_farming SITE = d_pe_site_farming MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 77 } } } pe_buyout_execute = { FIRM = d_pe_firm_fffc CODE = 77 DISTRICT = district_farming SITE = d_pe_site_farming MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 78 } } } pe_buyout_execute = { FIRM = d_pe_firm_ffft CODE = 78 DISTRICT = district_farming SITE = d_pe_site_farming MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 79 } } } pe_buyout_execute = { FIRM = d_pe_firm_fffm CODE = 79 DISTRICT = district_farming SITE = d_pe_site_farming MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
-	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 80 } } } pe_buyout_execute = { FIRM = d_pe_firm_fffe CODE = 80 DISTRICT = district_farming SITE = d_pe_site_farming MONTHS = 4 MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	if = { limit = { root = { check_variable = { which = pe_offer_variant value = 1 } } } pe_buyout_execute = { FIRM = d_pe_firm_aaac CODE = 1 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 2 } } } pe_buyout_execute = { FIRM = d_pe_firm_aaat CODE = 2 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 3 } } } pe_buyout_execute = { FIRM = d_pe_firm_aaau CODE = 3 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 4 } } } pe_buyout_execute = { FIRM = d_pe_firm_aacc CODE = 4 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 5 } } } pe_buyout_execute = { FIRM = d_pe_firm_aact CODE = 5 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 6 } } } pe_buyout_execute = { FIRM = d_pe_firm_aacu CODE = 6 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 7 } } } pe_buyout_execute = { FIRM = d_pe_firm_aatt CODE = 7 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 8 } } } pe_buyout_execute = { FIRM = d_pe_firm_aatu CODE = 8 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 9 } } } pe_buyout_execute = { FIRM = d_pe_firm_aauu CODE = 9 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 10 } } } pe_buyout_execute = { FIRM = d_pe_firm_ccca CODE = 10 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 11 } } } pe_buyout_execute = { FIRM = d_pe_firm_ccat CODE = 11 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 12 } } } pe_buyout_execute = { FIRM = d_pe_firm_ccau CODE = 12 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 13 } } } pe_buyout_execute = { FIRM = d_pe_firm_ttac CODE = 13 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 14 } } } pe_buyout_execute = { FIRM = d_pe_firm_actu CODE = 14 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 15 } } } pe_buyout_execute = { FIRM = d_pe_firm_uuac CODE = 15 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 16 } } } pe_buyout_execute = { FIRM = d_pe_firm_ttta CODE = 16 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 17 } } } pe_buyout_execute = { FIRM = d_pe_firm_ttau CODE = 17 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 18 } } } pe_buyout_execute = { FIRM = d_pe_firm_uuat CODE = 18 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 19 } } } pe_buyout_execute = { FIRM = d_pe_firm_uuua CODE = 19 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 20 } } } pe_buyout_execute = { FIRM = d_pe_firm_ccct CODE = 20 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 21 } } } pe_buyout_execute = { FIRM = d_pe_firm_cccu CODE = 21 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 22 } } } pe_buyout_execute = { FIRM = d_pe_firm_cctt CODE = 22 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 23 } } } pe_buyout_execute = { FIRM = d_pe_firm_cctu CODE = 23 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 24 } } } pe_buyout_execute = { FIRM = d_pe_firm_ccuu CODE = 24 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 25 } } } pe_buyout_execute = { FIRM = d_pe_firm_tttc CODE = 25 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 26 } } } pe_buyout_execute = { FIRM = d_pe_firm_ttcu CODE = 26 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 27 } } } pe_buyout_execute = { FIRM = d_pe_firm_uuct CODE = 27 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 28 } } } pe_buyout_execute = { FIRM = d_pe_firm_uuuc CODE = 28 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 29 } } } pe_buyout_execute = { FIRM = d_pe_firm_tttu CODE = 29 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 30 } } } pe_buyout_execute = { FIRM = d_pe_firm_ttuu CODE = 30 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 31 } } } pe_buyout_execute = { FIRM = d_pe_firm_uuut CODE = 31 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 32 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxxy CODE = 32 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 33 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxxz CODE = 33 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 34 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxxb CODE = 34 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 35 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxyy CODE = 35 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 36 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxyz CODE = 36 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 37 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxyb CODE = 37 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 38 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxzz CODE = 38 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 39 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxzb CODE = 39 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 40 } } } pe_buyout_execute = { FIRM = d_pe_firm_xxbb CODE = 40 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 41 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyyx CODE = 41 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 42 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyxz CODE = 42 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 43 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyxb CODE = 43 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 44 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzxy CODE = 44 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 45 } } } pe_buyout_execute = { FIRM = d_pe_firm_xyzb CODE = 45 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 46 } } } pe_buyout_execute = { FIRM = d_pe_firm_bbxy CODE = 46 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 47 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzzx CODE = 47 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 48 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzxb CODE = 48 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 49 } } } pe_buyout_execute = { FIRM = d_pe_firm_bbxz CODE = 49 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 50 } } } pe_buyout_execute = { FIRM = d_pe_firm_bbbx CODE = 50 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 51 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyyz CODE = 51 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 52 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyyb CODE = 52 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 53 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyzz CODE = 53 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 54 } } } pe_buyout_execute = { FIRM = d_pe_firm_yyzb CODE = 54 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 55 } } } pe_buyout_execute = { FIRM = d_pe_firm_yybb CODE = 55 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 56 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzzy CODE = 56 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 57 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzyb CODE = 57 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 58 } } } pe_buyout_execute = { FIRM = d_pe_firm_bbyz CODE = 58 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 59 } } } pe_buyout_execute = { FIRM = d_pe_firm_bbby CODE = 59 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 60 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzzb CODE = 60 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 61 } } } pe_buyout_execute = { FIRM = d_pe_firm_zzbb CODE = 61 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 62 } } } pe_buyout_execute = { FIRM = d_pe_firm_bbbz CODE = 62 DISTRICT = district_city MINERALS = 500 TRADE = 100 PRICE = 600 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 63 } } } pe_buyout_execute = { FIRM = d_pe_firm_mmmm CODE = 63 DISTRICT = district_mining MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 64 } } } pe_buyout_execute = { FIRM = d_pe_firm_mmma CODE = 64 DISTRICT = district_mining MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 65 } } } pe_buyout_execute = { FIRM = d_pe_firm_mmmc CODE = 65 DISTRICT = district_mining MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 66 } } } pe_buyout_execute = { FIRM = d_pe_firm_mmmt CODE = 66 DISTRICT = district_mining MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 67 } } } pe_buyout_execute = { FIRM = d_pe_firm_mmme CODE = 67 DISTRICT = district_mining MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 68 } } } pe_buyout_execute = { FIRM = d_pe_firm_mmmf CODE = 68 DISTRICT = district_mining MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 69 } } } pe_buyout_execute = { FIRM = d_pe_firm_eeee CODE = 69 DISTRICT = district_generator MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 70 } } } pe_buyout_execute = { FIRM = d_pe_firm_eeea CODE = 70 DISTRICT = district_generator MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 71 } } } pe_buyout_execute = { FIRM = d_pe_firm_eeec CODE = 71 DISTRICT = district_generator MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 72 } } } pe_buyout_execute = { FIRM = d_pe_firm_eeet CODE = 72 DISTRICT = district_generator MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 73 } } } pe_buyout_execute = { FIRM = d_pe_firm_eeem CODE = 73 DISTRICT = district_generator MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 74 } } } pe_buyout_execute = { FIRM = d_pe_firm_eeef CODE = 74 DISTRICT = district_generator MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 75 } } } pe_buyout_execute = { FIRM = d_pe_firm_ffff CODE = 75 DISTRICT = district_farming MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 76 } } } pe_buyout_execute = { FIRM = d_pe_firm_fffa CODE = 76 DISTRICT = district_farming MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 77 } } } pe_buyout_execute = { FIRM = d_pe_firm_fffc CODE = 77 DISTRICT = district_farming MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 78 } } } pe_buyout_execute = { FIRM = d_pe_firm_ffft CODE = 78 DISTRICT = district_farming MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 79 } } } pe_buyout_execute = { FIRM = d_pe_firm_fffm CODE = 79 DISTRICT = district_farming MINERALS = 300 TRADE = 60 PRICE = 360 } }
+	else_if = { limit = { root = { check_variable = { which = pe_offer_variant value = 80 } } } pe_buyout_execute = { FIRM = d_pe_firm_fffe CODE = 80 DISTRICT = district_farming MINERALS = 300 TRADE = 60 PRICE = 360 } }
 }
 
 # Colony scope, monthly: a finished construction site becomes its firm.

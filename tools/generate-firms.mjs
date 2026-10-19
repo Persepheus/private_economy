@@ -71,24 +71,55 @@ const JOBS = [
 const RES = ['alloys', 'consumer_goods', 'trade', 'minerals', 'energy', 'food', 'unity', 'physics_research', 'society_research', 'engineering_research'];
 const MARKET_RES = ['alloys', 'consumer_goods', 'trade', 'minerals', 'energy', 'food'];
 const jobTexts = readDir('common/pop_jobs');
+// Vanilla job texts, to name the private swap variants after them.
+const vanillaLoc = {};
+for (const lang of ['english', 'german']) {
+  vanillaLoc[lang] = new Set();
+  const d = path.join(game, 'localisation', lang);
+  for (const f of fs.readdirSync(d, {recursive: true}).filter(f => String(f).endsWith('.yml')))
+    for (const [, k] of fs.readFileSync(path.join(d, String(f)), 'utf8').matchAll(/^ ([\w.]+):/gm)) vanillaLoc[lang].add(k);
+}
+const swapLoc = [];
 for (const j of JOBS) {
   const def = topDef(jobTexts, j.vanilla);
   const m = def.match(new RegExp(`\\tresources = \\{\\s*category = ${j.cat}\\b`));
   if (!m) throw new Error(`no ${j.cat} resources in ${j.vanilla}`);
-  j.resources = 'resources = ' + blockAt(def, def.indexOf('{', m.index)).replace(`category = ${j.cat}`, `category = ${j.key}s`);
-  j.extraBlocks = [];
-  if (j.extra) for (const tm of def.matchAll(/\ttriggered_planet_modifier = \{/g)) {
-    const blk = blockAt(def, def.indexOf('{', tm.index));
-    if (j.extra.test(blk)) j.extraBlocks.push('triggered_planet_modifier = ' + blk);
+  j.resources = 'resources = ' + blockAt(def, def.indexOf('{', m.index));
+  // The whole vanilla job: same swaps, tags, triggers, modifiers, weights and economic
+  // category (so every _add and _mult bonus of the vanilla job applies). Only the player
+  // cannot set its priority, and its count comes from the firms.
+  let body = def.slice(1, -1)
+    .replace(/^\tcan_set_priority = \w+\n/gm, '')
+    .replace(/^\tis_capped_by_modifier = \w+\n/gm, '')
+    .replace(/^(\tcategory = \w+\n)/m, '$1\tcan_set_priority = no\n\tis_capped_by_modifier = yes\n');
+  // Swap variants get private names that point at the vanilla texts; their icon stays
+  // the vanilla one (set explicitly, the engine would look it up by the new name).
+  let out = '', last = 0;
+  for (const sm of body.matchAll(/\tswap_type = \{/g)) {
+    const open = body.indexOf('{', sm.index);
+    if (open < last) continue;
+    let blk = blockAt(body, open);
+    const nm = blk.match(/\n\t+name = (\w+)/);
+    if (nm && vanillaLoc.english.has(`job_${nm[1]}`)) {
+      const name = nm[1];
+      swapLoc.push(name);
+      blk = blk.replace(nm[0], nm[0].replace(`name = ${name}`, `name = pe_private_${name}`));
+      if (!/\n\t+icon = /.test(blk) && fs.existsSync(path.join(game, `gfx/interface/icons/jobs/job_${name}.dds`)))
+        blk = blk.replace(/(\n\t+)(name = pe_private_\w+)/, `$1$2$1icon = ${name}`);
+    }
+    out += body.slice(last, open) + blk;
+    last = open + blockAt(body, open).length;
   }
-  // Default output per job (used while no private job of this type is filled):
+  body = out + body.slice(last);
+  j.def = `${j.key} = {${body}}`;
+  // Default output per job (used while no job of this type is filled):
   // untriggered blocks plus the ones that only check Catalytic Processing.
-  let body = j.resources;
-  for (const [, file] of body.matchAll(/inline_script = "([\w/]+)"/g))
-    body += fs.readFileSync(path.join(game, 'common/inline_scripts', file + '.txt'), 'utf8');
+  let res = j.resources;
+  for (const [, file] of res.matchAll(/inline_script = "([\w/]+)"/g))
+    res += fs.readFileSync(path.join(game, 'common/inline_scripts', file + '.txt'), 'utf8');
   j.base = {}; j.cat_ = {}; j.noncat = {}; j.touches = new Set();
-  for (const bm of body.matchAll(/\b(produces|upkeep) = \{/g)) {
-    let blk = blockAt(body, body.indexOf('{', bm.index)).slice(1, -1);
+  for (const bm of res.matchAll(/\b(produces|upkeep) = \{/g)) {
+    let blk = blockAt(res, res.indexOf('{', bm.index)).slice(1, -1);
     let trig = '';
     const ti = blk.search(/\btrigger = \{/);
     if (ti >= 0) { const tb = blockAt(blk, blk.indexOf('{', ti)); trig = tb.replace(/\s+/g, ' ').trim(); blk = blk.slice(0, ti) + blk.slice(ti + 'trigger = '.length + tb.length); }
@@ -102,58 +133,11 @@ for (const j of JOBS) {
 const sumRes = (...xs) => { const o = {}; for (const x of xs) for (const [k, v] of Object.entries(x)) o[k] = (o[k] || 0) + v; return o; };
 const jobByKey = Object.fromEntries(JOBS.map(j => [j.key, j]));
 
-let jobsOut = header + `# Private jobs: the vanilla job's resources in an own economic category (parent: the
-# vanilla category, so all its bonuses apply). The player cannot change their priority.
-# Job counts come only from firm deposits and private buildings (job_<key>_add).
-`;
-for (const j of JOBS) jobsOut += `
-${j.key} = {
-	category = ${j.kind}
-	can_set_priority = no
-	is_capped_by_modifier = yes
-
-	swappable_data = {
-		default = {
-			condition_string = ${j.kind === 'worker' ? 'WORKER' : 'SPECIALIST'}_JOB_TRIGGER
-			building_icon = ${j.icon}
-		}
-	}
-
-	tags = { ${j.tag} }
-
-	possible_pre_triggers = {
-		has_owner = yes
-		is_being_purged = no
-		is_being_assimilated = no
-		is_sapient = yes
-	}
-
-	possible_precalc = can_fill_${j.kind}_job
-	possible = {
-		hidden_trigger = { exists = owner }
-		owner = { is_gestalt = no }
-	}
-
-	${j.resources}
-${j.extraBlocks.map(b => `\n\t${b}\n`).join('')}
-	weight = {
-		weight = @${j.kind}_job_weight
-	}
-}
-`;
-write('common/pop_jobs/pe_private_jobs.txt', jobsOut);
-
-write('common/economic_categories/pe_categories_generated.txt', header + `# One category per private job, child of the vanilla category. The economic order
-# sets <category>_produces_mult: private efficiency minus the firms' profit.
-` + JOBS.map(j => `
-${j.key}s = {
-	parent = ${j.cat}
-	generate_mult_modifiers = {
-		produces
-	}
-	modifier_category = colony
-}
-`).join(''));
+write('common/pop_jobs/pe_private_jobs.txt', header + `# Private jobs: complete copies of the vanilla jobs (swaps such as anglers, pearl divers
+# or priests, triggered modifiers, weights) in the vanilla economic category, so every
+# bonus of the vanilla job applies. The player cannot set their priority; their count
+# comes only from firm deposits and private buildings (job_<key>_add).
+` + JOBS.map(j => '\n' + j.def + '\n').join(''));
 
 // --- Housing like the replaced district (with its technology bonuses) -----------------
 const districtTexts = readDir('common/districts');
@@ -410,13 +394,14 @@ ${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }
 	}
 }
 
-# Country scope: value added per filled private job, in trade per month at shadow
-# prices. Measured from the private categories' real revenue and expenses; while no
-# job of a type is filled, from the vanilla base output.
+# Country scope: value added per filled job, in trade per month at shadow prices.
+# Private jobs share the vanilla category, so it is measured from the category's real
+# revenue and expenses per filled vanilla or private job; while none is filled, from the
+# vanilla base output.
 pe_job_values = {
 ${JOBS.map(j => `	set_variable = { which = pe_va_tmp value = 0 }
-	pe_job_count = { JOB = ${j.key} }
-${[...j.touches].map(r => `	pe_job_res = { CAT = ${j.key}s RES = ${r} }`).join('\n')}
+	pe_job_count = { JOB = ${j.key} VJOB = ${j.vanilla} }
+${[...j.touches].map(r => `	pe_job_res = { CAT = ${j.cat} RES = ${r} }`).join('\n')}
 	if = {
 		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
 		set_variable = { which = pe_vaj_${j.key} value = pe_va_tmp }
@@ -536,7 +521,7 @@ ${ifChain(variants, v => rootIs('pe_best_variant', v.code), v => {
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = ${v.key} CODE = ${v.code} DISTRICT = ${v.district} SITE = ${v.site} MONTHS = ${BUILD_MONTHS[v.k] / 2} MINERALS = ${m} TRADE = ${t} PRICE = ${m + t} }
+			pe_buyout_execute = { FIRM = ${v.key} CODE = ${v.code} DISTRICT = ${v.district} MINERALS = ${m} TRADE = ${t} PRICE = ${m + t} }
 		}
 	`;
 })}
@@ -546,7 +531,7 @@ ${ifChain(variants, v => rootIs('pe_best_variant', v.code), v => {
 pe_buyout_by_offer = {
 ${ifChain(variants, v => rootIs('pe_offer_variant', v.code), v => {
   const [m, t] = PRICE[v.k];
-  return `pe_buyout_execute = { FIRM = ${v.key} CODE = ${v.code} DISTRICT = ${v.district} SITE = ${v.site} MONTHS = ${BUILD_MONTHS[v.k] / 2} MINERALS = ${m} TRADE = ${t} PRICE = ${m + t} }`;
+  return `pe_buyout_execute = { FIRM = ${v.key} CODE = ${v.code} DISTRICT = ${v.district} MINERALS = ${m} TRADE = ${t} PRICE = ${m + t} }`;
 })}
 }
 
@@ -796,10 +781,12 @@ for (const a of AUTO_JOBS) {
   loc.english.push(` pe_msg_autodown_${a}:0 "The private firms on $PLANET$ can no longer afford their automation (${en}) and have scaled it back."`);
   loc.german.push(` pe_msg_autodown_${a}:0 "Die Privatfirmen auf $PLANET$ können ihre Automatisierung (${de}) nicht mehr bezahlen und haben sie zurückgefahren."`);
 }
+for (const name of [...new Set(swapLoc)]) {
+  const de = vanillaLoc.german.has(`job_${name}`);
+  loc.english.push(` pe_private_${name}:0 "$job_pe_private_${name}$"`, ` job_pe_private_${name}:0 "Private $job_${name}$"`, ` job_pe_private_${name}_plural:0 "Private $job_${name}_plural$"`, ` job_pe_private_${name}_desc:0 "$job_${name}_desc$"`);
+  loc.german.push(` pe_private_${name}:0 "$job_pe_private_${name}$"`, ` job_pe_private_${name}:0 "$job_${name}$ (privat)"`, ` job_pe_private_${name}_plural:0 "$job_${name}_plural$ (privat)"`, ` job_pe_private_${name}_desc:0 "$job_${name}_desc$"`);
+}
 for (const j of JOBS) {
-  const name = j.key.replace('pe_private_', '');
-  loc.english.push(` ${j.key}s:0 "Private ${name[0].toUpperCase() + name.slice(1)} Jobs"`, ` mod_${j.key}s_produces_mult:0 "$job_${j.key}_plural$: Output"`);
-  loc.german.push(` ${j.key}s:0 "$job_${j.key}_plural$"`, ` mod_${j.key}s_produces_mult:0 "$job_${j.key}_plural$: Ertrag"`);
   if (j.en) {
     for (const [lang, [n, p, d]] of [['english', j.en], ['german', j.de]])
       loc[lang].push(` job_${j.key}:0 "${n}"`, ` job_${j.key}_plural:0 "${p}"`, ` job_${j.key}_desc:0 "${d}"`, ` mod_job_${j.key}_add:0 "[${j.key}.GetName] ${lang === 'english' ? 'Jobs' : 'Arbeitsplätze'}"`);
@@ -817,10 +804,10 @@ for (const {v, s, key} of pairs) {
     ` pe_msg_retool_${key}:0 "Ein Unternehmen auf $PLANET$ hat umstrukturiert: jetzt §Y$${key}$§!."`);
   if (s === 1) {
     loc.english.push(` pe_msg_found_${key}:0 "A §Y$${key}$§! has opened on $PLANET$."`,
-      ` pe_msg_buy_${key}:0 "Investors bought a ${enD} district on $PLANET$ for a future §Y$${key}$§! and paid §G${m}§! £minerals£ and §G${t}§! £trade£. Conversion has begun."`,
+      ` pe_msg_buy_${key}:0 "Investors bought a ${enD} district on $PLANET$ and turned it into a §Y$${key}$§!. They paid §G${m}§! £minerals£ and §G${t}§! £trade£."`,
       ` pe_msg_bankrupt_${key}:0 "A §Y$${key}$§! on $PLANET$ has gone bankrupt. Its district slot is free."`);
     loc.german.push(` pe_msg_found_${key}:0 "Auf $PLANET$ hat ein Unternehmen eröffnet: §Y$${key}$§!."`,
-      ` pe_msg_buy_${key}:0 "Investoren haben auf $PLANET$ einen ${deD}distrikt für ein künftiges Unternehmen gekauft (§Y$${key}$§!) und §G${m}§! £minerals£ und §G${t}§! £trade£ gezahlt. Der Umbau hat begonnen."`,
+      ` pe_msg_buy_${key}:0 "Investoren haben auf $PLANET$ einen ${deD}distrikt gekauft und daraus ein Unternehmen gemacht: §Y$${key}$§!. Sie haben §G${m}§! £minerals£ und §G${t}§! £trade£ gezahlt."`,
       ` pe_msg_bankrupt_${key}:0 "§Y$${key}$§! auf $PLANET$ ist pleite. Der Distriktplatz ist frei."`);
   }
   if (s > 1) {

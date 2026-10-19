@@ -77,6 +77,7 @@ pe_init = {
 pe_quarterly = {
 	pe_init = yes
 	set_variable = { which = pe_pool_income value = 0 }
+	set_variable = { which = pe_profit_due value = 0 }
 	pe_savings = yes
 	pe_census = yes
 	pe_market = yes
@@ -92,11 +93,26 @@ pe_quarterly = {
 		limit = { pe_planet_eligible = yes NOT = { has_planet_flag = pe_stepped } }
 		pe_planet_step = yes
 	}
+	pe_pay_profits = yes
+}
+
+# Country scope: the firms' profits of this quarter are paid by the state in trade (as far
+# as the stockpile allows). Private jobs produce like state jobs; this is what the private
+# economy costs.
+pe_pay_profits = {
+	export_resource_stockpile_to_variable = { resource = trade variable = pe_stock }
+	if = { limit = { check_variable = { which = pe_profit_due value > pe_stock } } set_variable = { which = pe_profit_due value = pe_stock } }
+	if = {
+		limit = { check_variable = { which = pe_profit_due value > 0 } }
+		add_resource = { trade = -1 mult = pe_profit_due }
+	}
+	set_variable = { which = pe_profit_paid value = pe_profit_due }
 }
 
 # Country scope: private savings. A share of the gross trade income (pe_savings_rate, set by
 # the economic order: 0/5/10/15/20%) leaves the state's stockpile for the investor pool
-# each quarter. Only if the stockpile can pay it.
+# each quarter. Only if the stockpile can pay it, and only while the pool holds less than
+# 3000 (otherwise it could not spend it).
 pe_savings = {
 	set_variable = { which = pe_savings_last value = 0 }
 	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = trade } variable = pe_sav }
@@ -107,6 +123,8 @@ pe_savings = {
 		limit = {
 			check_variable = { which = pe_sav value > 0 }
 			check_variable = { which = pe_stock value >= pe_sav }
+			# A full pool (it has nothing to spend it on) saves no more.
+			check_variable = { which = pe_capital value < 3000 }
 		}
 		add_resource = { trade = -1 mult = pe_sav }
 		change_variable = { which = pe_capital value = pe_sav }
@@ -328,9 +346,12 @@ pe_shadow = {
 	}
 }
 
-# Country scope: pe_jobn = filled private jobs of this type (100 workforce = one job).
+# Country scope: pe_jobn = filled vanilla and private jobs of this type (100 workforce =
+# one job); both share the vanilla economic category.
 pe_job_count = {
 	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = $JOB$ } variable = pe_jobn }
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = $VJOB$ } variable = pe_tmp }
+	change_variable = { which = pe_jobn value = pe_tmp }
 	divide_variable = { which = pe_jobn value = 100 }
 }
 
@@ -499,6 +520,7 @@ pe_firm_book = {
 	multiply_variable = { which = pe_profit value = 3 }
 	set_variable = { which = pe_pending value = 0 }
 	if = { limit = { NOT = { is_variable_set = pe_debt } } set_variable = { which = pe_debt value = 0 } }
+	if = { limit = { check_variable = { which = pe_profit value > 0 } } root = { change_variable = { which = pe_profit_due value = prev.pe_profit } } }
 	if = {
 		# In debt: all profit pays the loan back; the rest of a final instalment is lost.
 		limit = {
@@ -588,26 +610,30 @@ pe_firm_book = {
 # buying, minus the value of the state district it replaces (weighted like a variant).
 # Colony scope: private automation of the three worker jobs vanilla automates.
 pe_automation = {
-	pe_auto_job = { JOB = miner }
-	pe_auto_job = { JOB = technician }
-	pe_auto_job = { JOB = farmer }
+	pe_auto_book = { JOB = miner }
+	pe_auto_invest = { JOB = miner }
+	pe_auto_book = { JOB = technician }
+	pe_auto_invest = { JOB = technician }
+	pe_auto_book = { JOB = farmer }
+	pe_auto_invest = { JOB = farmer }
 }
 
 # Colony scope. Like the vanilla automation buildings: level I +25% automated workforce
-# (tech_assembly_pattern, 600, upkeep 8 per month), level II +50% (tech_construction_templates,
-# 800 more, upkeep 10). A joint investment of the firms with this job here, paid from
-# their capital by capital share (the investor pool adds what they lack); no upkeep for
-# the state; the upkeep is valued at the energy shadow price. Automated jobs need no pops and
-# no wages, so the firms keep their whole value: each quarter the automated value minus
-# the upkeep is booked to the firms by workforce share (a loss by capital share); if they
-# cannot carry the loss, the level drops. New levels only when workers are short (no idle
-# civilians), there are at least 200 private jobs of the type here, and the automated
-# value covers the upkeep.
-pe_auto_job = {
+# (tech_assembly_pattern, 600), level II +50% (tech_construction_templates, 800 more). A
+# joint investment of the firms with this job here, paid from their capital by capital
+# share (the investor pool adds what they lack). The state pays the engine's energy upkeep
+# for automated jobs (4 per automated worker job a month); the firms pay it back each
+# quarter, valued at the energy shadow price. Automated jobs need no pops and no wages, so
+# the firms keep their whole value: each quarter the automated value minus the upkeep is
+# booked to the firms by workforce share (a loss by capital share). The level drops if
+# they cannot carry a loss, or after two quarters with idle civilians on the planet
+# (pops are there, automation is not needed).
+pe_auto_book = {
 	root = {
 		set_variable = { which = pe_acap value = 0 }
 		set_variable = { which = pe_apool value = 0 }
 		set_variable = { which = pe_alvl value = 0 }
+		set_variable = { which = pe_adown value = 0 }
 	}
 	every_deposit = {
 		limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_wf_$JOB$ value > 0 } }
@@ -619,14 +645,16 @@ pe_auto_job = {
 	if = { limit = { has_deposit = d_pe_auto_$JOB$_1 } root = { set_variable = { which = pe_alvl value = 1 } } }
 	if = { limit = { has_deposit = d_pe_auto_$JOB$_2 } root = { set_variable = { which = pe_alvl value = 2 } } }
 	root = {
-		# Quarterly net of the current level: (jobs x 25% x level x value added - upkeep) x 3
+		# Automated value per month: jobs x 25% x level x value added per job.
 		set_variable = { which = pe_aval value = pe_acap }
 		multiply_variable = { which = pe_aval value = 0.0025 }
 		multiply_variable = { which = pe_aval value = pe_alvl }
 		multiply_variable = { which = pe_aval value = pe_vaj_pe_private_$JOB$ }
-		set_variable = { which = pe_aup value = 0 }
-		if = { limit = { check_variable = { which = pe_alvl value = 1 } } set_variable = { which = pe_aup value = 8 } }
-		if = { limit = { check_variable = { which = pe_alvl value = 2 } } set_variable = { which = pe_aup value = 10 } }
+		# Energy upkeep per month: 4 per automated job = jobs x 0.01 x level.
+		set_variable = { which = pe_aen value = pe_acap }
+		multiply_variable = { which = pe_aen value = 0.01 }
+		multiply_variable = { which = pe_aen value = pe_alvl }
+		set_variable = { which = pe_aup value = pe_aen }
 		multiply_variable = { which = pe_aup value = pe_s_energy }
 		set_variable = { which = pe_anet value = pe_aval }
 		subtract_variable = { which = pe_anet value = pe_aup }
@@ -645,6 +673,12 @@ pe_auto_job = {
 					}
 				}
 			}
+			# The firms reimburse the state's energy upkeep of this quarter.
+			root = {
+				set_variable = { which = pe_tmp value = pe_aen }
+				multiply_variable = { which = pe_tmp value = 3 }
+				add_resource = { energy = 1 mult = pe_tmp }
+			}
 			every_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_wf_$JOB$ value > 0 } }
 				if = {
@@ -662,22 +696,46 @@ pe_auto_job = {
 			}
 		}
 		else = {
-			save_event_target_as = pe_msg_planet
-			if = { limit = { has_deposit = d_pe_auto_$JOB$_2 } remove_deposit = d_pe_auto_$JOB$_2 add_deposit = d_pe_auto_$JOB$_1 }
-			else = { remove_deposit = d_pe_auto_$JOB$_1 }
-			check_planet_employment = yes
-			owner = {
-				create_message = {
-					type = pe_private_economy
-					localization = pe_msg_autodown_$JOB$
-					days = 30
-					target = event_target:pe_msg_planet
-					variable = { type = name localization = PLANET scope = event_target:pe_msg_planet }
-				}
+			root = { set_variable = { which = pe_adown value = 1 } }
+		}
+		if = {
+			limit = { root = { check_variable = { which = pe_unemp value = 1 } } }
+			change_variable = { which = pe_idleq_$JOB$ value = 1 }
+		}
+		else = { set_variable = { which = pe_idleq_$JOB$ value = 0 } }
+		if = {
+			limit = { check_variable = { which = pe_idleq_$JOB$ value >= 2 } }
+			set_variable = { which = pe_idleq_$JOB$ value = 0 }
+			root = { set_variable = { which = pe_adown value = 1 } }
+		}
+	}
+	# Drop one level.
+	if = {
+		limit = { root = { check_variable = { which = pe_adown value = 1 } } }
+		save_event_target_as = pe_msg_planet
+		if = { limit = { has_deposit = d_pe_auto_$JOB$_2 } remove_deposit = d_pe_auto_$JOB$_2 add_deposit = d_pe_auto_$JOB$_1 }
+		else = { remove_deposit = d_pe_auto_$JOB$_1 }
+		check_planet_employment = yes
+		owner = {
+			create_message = {
+				type = pe_private_economy
+				localization = pe_msg_autodown_$JOB$
+				days = 30
+				target = event_target:pe_msg_planet
+				variable = { type = name localization = PLANET scope = event_target:pe_msg_planet }
 			}
 		}
 	}
-	# Invest in the next level.
+}
+
+# Colony scope: invest in the next automation level of one job (uses pe_auto_book's
+# numbers). Only for unfilled private jobs, without idle civilians, from 200 private jobs
+# of the type, if the automated value covers the energy upkeep.
+pe_auto_invest = {
+	# Unfilled private jobs of this type here (automation only fills empty jobs).
+	export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = pe_private_$JOB$ } variable = pe_afree }
+	if = { limit = { NOT = { is_variable_set = pe_afree } } set_variable = { which = pe_afree value = 0 } }
+	root = { set_variable = { which = pe_afree value = prev.pe_afree } }
 	root = {
 		set_variable = { which = pe_anext value = pe_acap }
 		multiply_variable = { which = pe_anext value = 0.0025 }
@@ -686,12 +744,11 @@ pe_auto_job = {
 		multiply_variable = { which = pe_anext value = pe_tmp }
 		multiply_variable = { which = pe_anext value = pe_vaj_pe_private_$JOB$ }
 		set_variable = { which = pe_acost value = 600 }
-		set_variable = { which = pe_aupn value = 8 }
-		if = {
-			limit = { check_variable = { which = pe_alvl value = 1 } }
-			set_variable = { which = pe_acost value = 800 }
-			set_variable = { which = pe_aupn value = 10 }
-		}
+		if = { limit = { check_variable = { which = pe_alvl value = 1 } } set_variable = { which = pe_acost value = 800 } }
+		# Upkeep of the next level: 4 energy per automated job.
+		set_variable = { which = pe_aupn value = pe_acap }
+		multiply_variable = { which = pe_aupn value = 0.01 }
+		multiply_variable = { which = pe_aupn value = pe_tmp }
 		multiply_variable = { which = pe_aupn value = pe_s_energy }
 		# The firms pay what they can (by capital share), the investor pool the rest.
 		set_variable = { which = pe_atot value = pe_apool }
@@ -705,6 +762,8 @@ pe_auto_job = {
 		limit = {
 			root = {
 				check_variable = { which = pe_unemp value = 0 }
+				check_variable = { which = pe_adown value = 0 }
+				check_variable = { which = pe_afree value > 0 }
 				check_variable = { which = pe_acap value >= 200 }
 				check_variable = { which = pe_atot value >= pe_acost }
 				check_variable = { which = pe_anext value >= pe_aupn }
@@ -807,8 +866,9 @@ pe_found_firm = {
 	}
 }
 
-# The investor pool buys a state district and converts it. The state gets the full price;
-# the pool pays 40% down, the firm owes the rest. Only if the
+# The investor pool buys a state district, which becomes the firm at once (no construction
+# time). The state gets the full price; the pool pays 40% down, the firm owes the rest. Then
+# a year's pause on the planet. Only if the
 # district really went away (pe_before > pe_after); otherwise nothing happens.
 pe_buyout_execute = {
 	set_variable = { which = pe_before value = 0 }
@@ -829,17 +889,15 @@ pe_buyout_execute = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_before value > pe_after } }
-		add_deposit = $SITE$
+		add_deposit = $FIRM$
 		last_added_deposit = {
-			set_variable = { which = pe_target value = $CODE$ }
-			set_variable = { which = pe_tstage value = 1 }
+			set_variable = { which = pe_code value = $CODE$ }
+			set_variable = { which = pe_stage value = 1 }
 			set_variable = { which = pe_fcap value = 10 }
 			set_variable = { which = pe_debt value = $PRICE$ }
 			multiply_variable = { which = pe_debt value = 0.6 }
-			set_variable = { which = pe_left value = $MONTHS$ }
-			set_variable = { which = pe_kind value = 2 }
 		}
-		set_planet_flag = pe_site
+		set_timed_planet_flag = { flag = pe_cooldown days = 360 }
 		check_planet_employment = yes
 		save_event_target_as = pe_msg_planet
 		owner = {
