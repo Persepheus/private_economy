@@ -24,6 +24,12 @@ Testablauf: [docs/TESTS_0.8.md](docs/TESTS_0.8.md). Ältere Stände: [0.7](docs/
 
 - **Später**: Lösung für Habitate, Ringwelten, Ökumenopolen, Arkships und Spezialplaneten.
 - **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen und Ereignisse, z. B. eine **Anwerbekampagne**: Firmen mit unbesetzten Jobs werben Zivilisten von anderen Welten an (`planet_resettlement_unemployed_destination_mult`). Du kannst mitfinanzieren (stärker), es den Firmen überlassen (schwächer) oder ablehnen.
+- **Später, mit den Flair-Events – Ideen gegen Arbeitermangel**:
+  - Modernisierung: Firmen investieren in Produktivität statt Jobs, über die Kategorie-Modifikatoren.
+  - Private Robotik: Firmen beschleunigen die Roboterfertigung.
+  - Rationalisierung: weniger Jobs bei mehr Ertrag.
+  - Spezialisten-Automatisierung hinter späten Techs.
+  - Kapitalertragssteuer: überschüssiges Pool-Kapital fließt als Handel an den Staat zurück.
 - **v0.3**: Privatgebäude, Technologieabhängigkeit (Techs schalten Firmenjobs frei, Firmen subventionieren benötigte Techs), Spielerhebel (Steuern, Subventionen, Regulierung, Verstaatlichung), Firmennamen und Ereignisse.
 
 Ziel: Die Privatwirtschaft soll gut genug entscheiden, dass sie auch KI-Reichen hilft.
