@@ -34,3 +34,29 @@ Ein laufendes 0.9-Spiel kann weiterlaufen. Für saubere Zahlen empfehle ich ein 
 4. **Aufkauf:** Distrikt weg, Firma sofort da, Jobs sofort besetzbar.
 5. **Automatisierung:** Der Energie-Unterhalt im Tooltip bleibt, wird aber pro Quartal als Gutschrift erstattet. Bei freien Zivilisten wird nach zwei Quartalen zurückgebaut.
 6. **Logs:** error.log nach `pe_private_`, `swap`, `pe_auto` und `pe_profit` durchsuchen.
+
+## 0.10.1 – Sichtbare Zahlungen
+
+- **Bisher unsichtbar:** Gewinne und Ersparnisse wurden einmal pro Quartal per Skript abgebucht. Das erschien nicht im Monatseinkommen, deshalb stieg dein Lager trotz angezeigter +27 nicht.
+- **Jetzt als Monatsunterhalt im Handels-Budget:**
+  - **„Gewinne der Privatfirmen“:** ein Kassenbuch-Deposit pro Planet mit Firmen. Es zahlt den Gewinnanteil der Firmen dieses Planeten.
+  - **„Private Ersparnisse“:** ein Kassenbuch-Deposit auf der Hauptstadt.
+  - Der Betrag wird jedes Quartal neu gesetzt und gilt für die nächsten drei Monate, auf 0,5 genau.
+- **Deckel:** Gewinne und Ersparnisse zusammen höchstens die Hälfte deines Brutto-Handels.
+- **Damit gilt:** Die Anzeige „+X Handel pro Monat“ stimmt wieder mit dem Lager.
+- `pe.6` zeigt die Monatsbeträge.
+
+**Beispiele (Gemischt: 20 % Gewinnanteil, 10 % Ersparnis):**
+
+| | Gewinn pro Monat |
+|---|---|
+| Labor, Stufe 1 (Wertschöpfung ~15) | 15 × 0,2 − 0,3 ≈ 2,7 |
+| Stahlwerk, Stufe 1 (~20) | ≈ 3,7 |
+| Stahlwerk-Konzern (×2) | ≈ 7,1 |
+| 15 gemischte Firmen | ≈ 50 |
+| Ersparnisse bei 150 Handel brutto | 15 (bis der Pool 3000 erreicht) |
+
+**Prüfen:**
+1. Der Handels-Tooltip in der Topbar zeigt die zwei neuen Zeilen.
+2. Das Lager entwickelt sich wie die Monatsanzeige.
+3. Planeten mit Firmen haben ein Deposit „Private Gewinne“.

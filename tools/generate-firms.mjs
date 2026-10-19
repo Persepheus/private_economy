@@ -299,6 +299,54 @@ d_pe_auto_${a}_${l} = {
 }
 `)).join(''));
 
+// Ledgers: the firms' profits (one per planet with firms) and the private savings (on the
+// capital) as monthly trade upkeep, so they show in the budget. The amount is split into
+// bits (planet variables pe_<ledger>_b<i>, set each quarter); each bit is one upkeep line.
+const LEDGER_BITS = [0.5, 1, 2, 4, 8, 16, 32, 64, 128, 256];
+let eff_ledger_bits = '';
+write('common/economic_categories/pe_ledger_categories.txt', header + `# Budget lines of the private economy.
+pe_private_profits = {
+	use_for_ai_budget = no
+}
+pe_private_savings = {
+	use_for_ai_budget = no
+}
+`);
+write('common/deposits/pe_ledger_deposits.txt', header + `# Ledgers of the private economy: what the state pays each month, as trade upkeep (see
+# pe_ledgers). No district slot.
+` + [['d_pe_ledger_profit', 'pe_private_profits', 'lp'], ['d_pe_ledger_savings', 'pe_private_savings', 'ls']].map(([key, cat, v]) => `
+${key} = {
+	icon = d_tradestation_interior
+	is_for_colonizable = yes
+	category = pe_deposit_cat_ledger
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = ${cat}
+${LEDGER_BITS.map((b, i) => `		upkeep = {
+			trigger = { planet = { check_variable = { which = pe_${v}_b${i} value = 1 } } }
+			trade = ${b}
+		}`).join('\n')}
+	}
+}
+`).join(''));
+
+// Colony scope: split root.pe_lv (trade per month) into the bits of a ledger.
+eff_ledger_bits = `
+# Colony scope: split root.pe_lv (trade per month, rounded down to 0.5) into the bit
+# variables pe_$V$_b<i> of a ledger deposit.
+pe_ledger_bits = {
+${[...LEDGER_BITS.entries()].reverse().map(([i, b]) => `	if = {
+		limit = { root = { check_variable = { which = pe_lv value >= ${b} } } }
+		set_variable = { which = pe_$V$_b${i} value = 1 }
+		root = { change_variable = { which = pe_lv value = -${b} } }
+	}
+	else = { set_variable = { which = pe_$V$_b${i} value = 0 } }`).join('\n')}
+}
+`;
+
 // --- Triggers -------------------------------------------------------------------
 const sideOk = v => v.side && !P[v.side].urban && !v.cityLike
   ? ` OR = { has_district = ${P[v.side].district} num_free_districts = { type = ${P[v.side].district} value > 0 } }` : '';
@@ -722,7 +770,7 @@ ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = $
 	}
 }
 `;
-write('common/scripted_effects/pe_firm_effects_generated.txt', eff);
+write('common/scripted_effects/pe_firm_effects_generated.txt', eff + eff_ledger_bits);
 
 // --- Scripted localisation (country scope) --------------------------------------
 const dtext = (name, varName, entries, fallback) => `defined_text = {
@@ -766,6 +814,14 @@ for (const [key, en, de] of [['d_pe_site_city', 'city', 'Stadt'], ['d_pe_site_mi
 }
 const AUTO_NAMES = {miner: ['Mining', 'Bergbau'], technician: ['Energy', 'Energie'], farmer: ['Agriculture', 'Landwirtschaft']};
 loc.english.push(' pe_deposit_cat_automation:0 "Private Automation"');
+loc.english.push(' pe_deposit_cat_ledger:0 "Private Economy"');
+loc.german.push(' pe_deposit_cat_ledger:0 "Privatwirtschaft"');
+loc.english.push(' pe_private_profits:0 "Private Firms\' Profits"', ' pe_private_savings:0 "Private Savings"',
+  ' d_pe_ledger_profit:0 "Private Profits"', ' d_pe_ledger_profit_desc:0 "What the private firms on this planet earn as their profit share; the state pays it every month in trade."',
+  ' d_pe_ledger_savings:0 "Private Savings"', ' d_pe_ledger_savings_desc:0 "The part of the trade income that flows into private investment every month (by economic order)."');
+loc.german.push(' pe_private_profits:0 "Gewinne der Privatfirmen"', ' pe_private_savings:0 "Private Ersparnisse"',
+  ' d_pe_ledger_profit:0 "Private Gewinne"', ' d_pe_ledger_profit_desc:0 "Der Gewinnanteil der Privatfirmen auf diesem Planeten; der Staat zahlt ihn monatlich in Handel."',
+  ' d_pe_ledger_savings:0 "Private Ersparnisse"', ' d_pe_ledger_savings_desc:0 "Der Teil des Handelseinkommens, der monatlich in private Investitionen fließt (nach Wirtschaftsordnung)."');
 loc.german.push(' pe_deposit_cat_automation:0 "Private Automatisierung"');
 for (const a of AUTO_JOBS) for (const l of [1, 2]) {
   const [en, de] = AUTO_NAMES[a], lv = l === 1 ? 'I' : 'II';

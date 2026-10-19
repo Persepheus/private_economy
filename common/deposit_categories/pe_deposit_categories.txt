@@ -13,3 +13,8 @@ pe_deposit_cat_sites = {
 pe_deposit_cat_automation = {
 	important = yes
 }
+
+# Ledgers: monthly trade the state pays to the private economy (profits, savings).
+pe_deposit_cat_ledger = {
+	important = no
+}
