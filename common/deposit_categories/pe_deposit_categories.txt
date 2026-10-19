@@ -8,3 +8,8 @@ pe_deposit_cat_firms = {
 pe_deposit_cat_sites = {
 	important = yes
 }
+
+# Private automation of a worker job (joint investment of the firms on a planet).
+pe_deposit_cat_automation = {
+	important = yes
+}

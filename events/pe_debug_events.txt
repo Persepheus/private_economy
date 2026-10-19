@@ -52,7 +52,7 @@ country_event = {
 	immediate = {
 		capital_scope = {
 			every_deposit = {
-				limit = { OR = { has_deposit_category = pe_deposit_cat_firms has_deposit_category = pe_deposit_cat_sites } }
+				limit = { OR = { has_deposit_category = pe_deposit_cat_firms has_deposit_category = pe_deposit_cat_sites has_deposit_category = pe_deposit_cat_automation } }
 				remove_deposit = yes
 			}
 			remove_planet_flag = pe_site

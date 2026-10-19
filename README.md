@@ -4,7 +4,7 @@ Stellaris 4.5: Eine Richtlinie **Wirtschaftsordnung** legt fest, wie viel der Wi
 
 Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools/validate.mjs` prüft das).
 
-## Stand 0.7.0
+## Stand 0.8.0
 
 Die Privatwirtschaft ist ein Kreislauf:
 
@@ -16,13 +16,14 @@ Die Privatwirtschaft ist ein Kreislauf:
 - **Defizit-Sperre:** Keine Firmen, die eine Ressource im Defizit verbrauchen. Bestehende werden zuerst umgebaut, auch über Klassengrenzen.
 - **Kosten** wie für den Staat. Finanziert über private Ersparnisse (Anteil am Handelseinkommen, nach Ordnung) und Kredit (40 % Anzahlung, Rest aus dem Firmengewinn).
 - **Abwechslung** durch Pseudo-Zufall, Diversifikation und Spezialisierung.
+- **Arbeitermangel:** Firmen automatisieren Bergbau, Energie und Landwirtschaft, wie die Vanilla-Gebäude, aber auf eigene Kosten. Firmen behalten eine Rücklage, der Rest geht an den Pool.
 
-Testablauf: [docs/TESTS_0.7.md](docs/TESTS_0.7.md). Ältere Stände: [0.6](docs/TESTS_0.6.md), [0.5](docs/TESTS_0.5.md), [0.4](docs/TESTS_0.4.md), [0.3](docs/TESTS_0.3.md), [0.2](docs/TESTS_0.2.md), [0.1](docs/TESTS_0.1.md), [Prototyp](docs/PROTOTYPE_TESTS.md).
+Testablauf: [docs/TESTS_0.8.md](docs/TESTS_0.8.md). Ältere Stände: [0.7](docs/TESTS_0.7.md), [0.6](docs/TESTS_0.6.md), [0.5](docs/TESTS_0.5.md), [0.4](docs/TESTS_0.4.md), [0.3](docs/TESTS_0.3.md), [0.2](docs/TESTS_0.2.md), [0.1](docs/TESTS_0.1.md), [Prototyp](docs/PROTOTYPE_TESTS.md).
 
 ## Geplant
 
 - **Später**: Lösung für Habitate, Ringwelten, Ökumenopolen, Arkships und Spezialplaneten.
-- **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen und Ereignisse.
-- **v0.3**: Privatgebäude, Technologieabhängigkeit (Techs schalten Firmenjobs frei, Firmen subventionieren benötigte Techs), Spielerhebel (Steuern, Subventionen, Regulierung, Verstaatlichung), Firmennamen und Ereignisse.
+- **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen und Ereignisse, z. B. eine **Anwerbekampagne**: Firmen mit unbesetzten Jobs werben Zivilisten von anderen Welten an (`planet_resettlement_unemployed_destination_mult`). Du kannst mitfinanzieren (stärker), es den Firmen überlassen (schwächer) oder ablehnen.
+- **v0.3**: Privatgebäude, Technologieabhängigkeit (Techs schalten Firmenjobs frei, Firmen subventionieren benötigte Techs), Spielerhebel (Steuern, Subventionen, Regulierung, Verstaatlichung), Firmennamen und Ereignisse, z. B. eine **Anwerbekampagne**: Firmen mit unbesetzten Jobs werben Zivilisten von anderen Welten an (`planet_resettlement_unemployed_destination_mult`). Du kannst mitfinanzieren (stärker), es den Firmen überlassen (schwächer) oder ablehnen.
 
 Ziel: Die Privatwirtschaft soll gut genug entscheiden, dass sie auch KI-Reichen hilft.

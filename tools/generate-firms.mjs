@@ -34,6 +34,7 @@ const topDef = (texts, key) => { for (const t of texts) { const i = t.search(new
 const WEIGHTS = [1, 0.9, 0.8, 0.7];                    // value of repeated 50-workforce units
 const FOUND = {u: 500, r: 300};                        // founding cost (private capital) = what a district costs the state
 const RETOOL = {u: 250, r: 150};                       // restructuring cost x stage size
+const AUTO_JOBS = ['miner', 'technician', 'farmer'];        // worker jobs vanilla automates (and so do the firms)
 const DOWN = 0.4;                                      // down payment from the investor pool; the rest is the firm's debt
 const PRICE = {u: [500, 100], r: [300, 60]};           // buyout/nationalisation: minerals, trade (x stage)
 const UPKEEP = {u: 2, r: 1};                           // energy at stage 1, like the district
@@ -290,6 +291,25 @@ ${key} = {
 }
 `).join(''));
 
+write('common/deposits/pe_automation_deposits.txt', header + `# Private automation of a worker job on a planet, like the vanilla automation buildings
+# (level I +25%, level II +50% automated workforce). A joint investment of the firms with
+# that job on the planet; they pay its cost and upkeep from their capital (no upkeep for
+# the state). No district slot.
+` + AUTO_JOBS.flatMap(a => [1, 2].map(l => `
+d_pe_auto_${a}_${l} = {
+	icon = d_pe_automation_${l}
+	is_for_colonizable = yes
+	category = pe_deposit_cat_automation
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	planet_modifier = {
+		job_pe_private_${a}_automated_workforce_mult = ${l * 0.25}
+	}
+}
+`)).join(''));
+
 // --- Triggers -------------------------------------------------------------------
 const sideOk = v => v.side && !P[v.side].urban && !v.cityLike
   ? ` OR = { has_district = ${P[v.side].district} num_free_districts = { type = ${P[v.side].district} value > 0 } }` : '';
@@ -454,9 +474,17 @@ ${ifChain(pairs, p => `is_deposit_type = ${p.key}`, p => `set_variable = { which
 }
 
 # Deposit scope: this quarter's values of the firm's variant (entertainment valued for
-# this planet), and its class (1 city, 2 mining, 3 generator, 4 farming, 5 lab).
+# this planet), its class (1 city, 2 mining, 3 generator, 4 farming, 5 lab), and its
+# workforce in the automatable worker jobs (pe_wf_<job>, scaled by stage).
 pe_deposit_fetch = {
-${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }`, v => `set_variable = { which = pe_va value = root.pe_va_${v.key} } set_variable = { which = pe_val value = root.pe_val_${v.key} } set_variable = { which = pe_cls value = ${v.clsNum} }${v.entRaw ? ` set_variable = { which = pe_tmp value = root.pe_ent_val } multiply_variable = { which = pe_tmp value = ${v.entRaw} } change_variable = { which = pe_va value = pe_tmp }` : ''}`)}
+${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }`, v => `${AUTO_JOBS.map(a => `set_variable = { which = pe_wf_${a} value = ${v.workforce['pe_private_' + a] || 0} }`).join(' ')} set_variable = { which = pe_va value = root.pe_va_${v.key} } set_variable = { which = pe_val value = root.pe_val_${v.key} } set_variable = { which = pe_cls value = ${v.clsNum} }${v.entRaw ? ` set_variable = { which = pe_tmp value = root.pe_ent_val } multiply_variable = { which = pe_tmp value = ${v.entRaw} } change_variable = { which = pe_va value = pe_tmp }` : ''}`)}
+}
+
+pe_deposit_fetch_scale = {
+	set_variable = { which = pe_tmp value = pe_stage }
+	change_variable = { which = pe_tmp value = 1 }
+	multiply_variable = { which = pe_tmp value = 0.5 }
+${AUTO_JOBS.map(a => `	multiply_variable = { which = pe_wf_${a} value = pe_tmp }`).join('\n')}
 }
 
 # Colony scope: root.pe_best_variant = most valuable variant available here, above
@@ -737,6 +765,23 @@ loc.german.push(' pe_no_firm:0 "keine"', ' pe_dist_city:0 "Stadtdistrikt"', ' pe
 for (const [key, en, de] of [['d_pe_site_city', 'city', 'Stadt'], ['d_pe_site_mining', 'mining', 'Bergbau'], ['d_pe_site_generator', 'generator', 'Generator'], ['d_pe_site_farming', 'farming', 'Landwirtschafts']]) {
   loc.english.push(` ${key}:0 "Private Construction Site"`, ` ${key}_desc:0 "Investors are building or converting a private firm here. It occupies a district slot${key === 'd_pe_site_city' ? '' : ` and one ${en} district`} until it opens."`);
   loc.german.push(` ${key}:0 "Private Baustelle"`, ` ${key}_desc:0 "Investoren bauen hier ein Privatunternehmen oder bauen einen Distrikt um. Sie belegt einen Distriktplatz${key === 'd_pe_site_city' ? '' : ` und einen ${de}distrikt`}, bis es eröffnet."`);
+}
+const AUTO_NAMES = {miner: ['Mining', 'Bergbau'], technician: ['Energy', 'Energie'], farmer: ['Agriculture', 'Landwirtschaft']};
+loc.english.push(' pe_deposit_cat_automation:0 "Private Automation"');
+loc.german.push(' pe_deposit_cat_automation:0 "Private Automatisierung"');
+for (const a of AUTO_JOBS) for (const l of [1, 2]) {
+  const [en, de] = AUTO_NAMES[a], lv = l === 1 ? 'I' : 'II';
+  loc.english.push(` d_pe_auto_${a}_${l}:0 "Private Automation (${en}) ${lv}"`,
+    ` d_pe_auto_${a}_${l}_desc:0 "The private firms here have automated part of their work: ${l * 25}% of their $job_pe_private_${a}_plural$ jobs need no pops. The firms pay for it from their own capital."`,
+    ` pe_msg_auto_${a}_${l}:0 "Lacking workers, the private firms on $PLANET$ have invested in §YPrivate Automation (${en}) ${lv}§!."`);
+  loc.german.push(` d_pe_auto_${a}_${l}:0 "Private Automatisierung (${de}) ${lv}"`,
+    ` d_pe_auto_${a}_${l}_desc:0 "Die Privatfirmen hier haben einen Teil ihrer Arbeit automatisiert: ${l * 25} % ihrer Arbeitsplätze als $job_pe_private_${a}_plural$ brauchen keine Pops. Die Firmen zahlen das aus eigenem Kapital."`,
+    ` pe_msg_auto_${a}_${l}:0 "Mangels Arbeitskräften haben die Privatfirmen auf $PLANET$ in §YPrivate Automatisierung (${de}) ${lv}§! investiert."`);
+}
+for (const a of AUTO_JOBS) {
+  const [en, de] = AUTO_NAMES[a];
+  loc.english.push(` pe_msg_autodown_${a}:0 "The private firms on $PLANET$ can no longer afford their automation (${en}) and have scaled it back."`);
+  loc.german.push(` pe_msg_autodown_${a}:0 "Die Privatfirmen auf $PLANET$ können ihre Automatisierung (${de}) nicht mehr bezahlen und haben sie zurückgefahren."`);
 }
 for (const j of JOBS) {
   const name = j.key.replace('pe_private_', '');

@@ -49,7 +49,7 @@ for (const f of scripts) {
 // 5. Effects/triggers referencing our objects point at existing definitions.
 for (const f of scripts) {
   const text = strip(fs.readFileSync(f, 'utf8'));
-  for (const [, k] of text.matchAll(/(?:add_deposit|remove_deposit|has_deposit) = (\w+)/g)) assert(deposits.includes(k) || !k.startsWith('d_pe_'), `${rel(f)}: unknown deposit ${k}`);
+  for (const [, k] of text.matchAll(/(?:add_deposit|remove_deposit|has_deposit) = (\w+)(?![\w$])/g)) assert(deposits.includes(k) || !k.startsWith('d_pe_'), `${rel(f)}: unknown deposit ${k}`);
   for (const [, k] of text.matchAll(/(?:add_building|remove_building|has_building) = (\w+)/g)) assert(buildings.includes(k) || !k.startsWith('pe_'), `${rel(f)}: unknown building ${k}`);
   for (const [, k] of text.matchAll(/category = (pe_\w+)/g)) assert(categories.includes(k) || econCats.includes(k), `${rel(f)}: unknown category ${k}`);
 }
@@ -213,7 +213,7 @@ for (const lang of languages)
 // Generated files are up to date with the generator.
 {
   const {execFileSync} = await import('node:child_process');
-  const gen = ['common/deposits/pe_firm_deposits.txt', 'common/deposits/pe_site_deposits.txt', 'common/scripted_triggers/pe_firm_triggers_generated.txt', 'common/scripted_effects/pe_firm_effects_generated.txt',
+  const gen = ['common/deposits/pe_firm_deposits.txt', 'common/deposits/pe_automation_deposits.txt', 'common/deposits/pe_site_deposits.txt', 'common/scripted_triggers/pe_firm_triggers_generated.txt', 'common/scripted_effects/pe_firm_effects_generated.txt',
     'common/pop_jobs/pe_private_jobs.txt', 'common/economic_categories/pe_categories_generated.txt', 'common/scripted_loc/pe_scripted_loc_generated.txt'];
   const before = gen.map(g => fs.readFileSync(path.join(root, g), 'utf8'));
   execFileSync(process.execPath, [path.join(root, 'tools/generate-firms.mjs'), game]);
@@ -224,6 +224,9 @@ for (const lang of languages)
 for (const j of jobs) assert(fs.existsSync(path.join(root, `gfx/interface/icons/jobs/job_${j}.dds`)), `missing icon for job ${j}`);
 for (const j of jobs) assert(fs.existsSync(path.join(root, `gfx/interface/icons/modifiers/mod_job_${j}_add.dds`)), `missing modifier icon for job ${j}`);
 for (const b of buildings) assert(fs.existsSync(path.join(root, `gfx/interface/icons/buildings/${b}.dds`)), `missing icon for building ${b}`);
+for (const f of files(path.join(root, 'common/deposits')).filter(f => f.endsWith('.txt')))
+  for (const [, icon] of strip(fs.readFileSync(f, 'utf8')).matchAll(/\bicon = (\w+)/g))
+    assert([root, game].some(d => fs.existsSync(path.join(d, `gfx/interface/icons/deposits/${icon}.dds`))), `${rel(f)}: missing deposit icon ${icon}`);
 
 console.log(`PASS: ${scripts.length} script files; no vanilla overrides; ${jobs.length} jobs, ${deposits.length} firm deposits, ${buildings.length} buildings, ${policies.length} policy; modifiers, references, variables, event types, localisation and icons checked.`);
 console.log('NOT TESTED: engine load, job filling, district slot blocking, AI behaviour.');
