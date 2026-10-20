@@ -15,6 +15,7 @@
  d_pe_site_farming_desc:0 "Investors are building or converting a private firm here. It occupies a district slot and one farming district until it opens."
  pe_deposit_cat_automation:0 "Private Automation"
  pe_deposit_cat_ledger:0 "Private Economy"
+ pe_msg_relocate:0 "A private firm has moved from $PLANET$ to $DEST$, whose designation suits it better. Its workers came along."
  pe_private_profits:0 "Private Firms' Profits"
  pe_private_savings:0 "Private Savings"
  d_pe_ledger_profit:0 "Private Profits"

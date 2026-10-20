@@ -19,6 +19,7 @@
 #                                          -> pe_buy_or_offer (3)     -> pe_buyout_execute (4)
 #                                          -> pe_nationalise_one (3)
 #                                          -> pe_restructure (3)      -> pe_retool_consider (4)
+#                    -> pe_relocate (2) -> pe_relocate_from (3) -> pe_relocate_exec (4)
 #                    -> pe_ledgers (2) -> pe_ledger_planet (3) -> pe_ledger_bits (4)
 #                                      -> pe_ledger_bits (3)
 # Variant lists and dispatchers: pe_firm_effects_generated.txt (tools/generate-firms.mjs).
@@ -95,7 +96,100 @@ pe_quarterly = {
 		limit = { pe_planet_eligible = yes NOT = { has_planet_flag = pe_stepped } }
 		pe_planet_step = yes
 	}
+	pe_relocate = yes
 	pe_ledgers = yes
+}
+
+# Country scope: when a planet is stuck (no free district slot, no idle civilians, no
+# construction), one city firm or lab whose main share does not suit the planet's
+# designation may move to a planet that suits it, with its workers. At most once a year
+# per empire. The destination needs a free slot, no construction site, and free housing
+# and amenities for all workers; the firm pays the move like a restructuring (250 x stage
+# size) from its own capital.
+pe_relocate = {
+	set_variable = { which = pe_rl_done value = 0 }
+	if = {
+		limit = { NOT = { has_country_flag = pe_relocated } }
+		every_owned_colony = {
+			limit = {
+				pe_planet_eligible = yes
+				free_district_slots = 0
+				NOT = { pe_has_idle_pops = yes }
+				NOT = { has_planet_flag = pe_site }
+				count_deposits = { category = pe_deposit_cat_firms count > 0 }
+			}
+			if = {
+				limit = { root = { check_variable = { which = pe_rl_done value = 0 } } }
+				pe_relocate_from = yes
+			}
+		}
+	}
+}
+
+# Colony scope (a stuck planet): find a firm and a destination, then move it.
+pe_relocate_from = {
+	save_event_target_as pe_rl_src
+	every_deposit = {
+		limit = {
+			has_deposit_category = pe_deposit_cat_firms
+			is_variable_set = pe_prim
+			OR = {
+				check_variable = { which = pe_cls value = 1 }
+				check_variable = { which = pe_cls value = 5 }
+			}
+		}
+		set_variable = { which = pe_rl_cand value = 0 }
+		if = {
+			limit = { root = { check_variable = { which = pe_rl_done value = 0 } } }
+			# Workers (200 x stage size) and the moving cost (250 x stage size).
+			set_variable = { which = pe_tmp value = pe_stage }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = 0.5 }
+			root = {
+				set_variable = { which = pe_rl_prim value = prev.pe_prim }
+				set_variable = { which = pe_rl_wf value = prev.pe_tmp }
+				multiply_variable = { which = pe_rl_wf value = 200 }
+				set_variable = { which = pe_rl_cost value = prev.pe_tmp }
+				multiply_variable = { which = pe_rl_cost value = 250 }
+			}
+			if = {
+				limit = {
+					check_variable = { which = pe_fcap value >= root.pe_rl_cost }
+					event_target:pe_rl_src = { NOT = { pe_desig_prim = yes } }
+				}
+				root = {
+					every_owned_colony = {
+						limit = {
+							pe_planet_eligible = yes
+							NOT = { is_same_value = event_target:pe_rl_src }
+							free_district_slots > 0
+							NOT = { has_planet_flag = pe_site }
+							pe_desig_prim = yes
+						}
+						export_trigger_value_to_variable = { trigger = free_housing variable = pe_fh }
+						export_trigger_value_to_variable = { trigger = free_amenities variable = pe_fa }
+						if = {
+							limit = {
+								root = { check_variable = { which = pe_rl_done value = 0 } }
+								check_variable = { which = pe_fh value >= root.pe_rl_wf }
+								check_variable = { which = pe_fa value >= root.pe_rl_wf }
+							}
+							save_event_target_as pe_rl_dst
+							root = { set_variable = { which = pe_rl_done value = 1 } }
+						}
+					}
+				}
+				if = {
+					limit = { root = { check_variable = { which = pe_rl_done value = 1 } } }
+					set_variable = { which = pe_rl_cand value = 1 }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { root = { check_variable = { which = pe_rl_done value = 1 } } }
+		pe_relocate_exec = yes
+	}
 }
 
 # Country scope: what the private economy costs the state, as monthly trade upkeep that

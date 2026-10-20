@@ -13,6 +13,7 @@
  d_pe_site_generator_desc:0 "Investoren bauen hier ein Privatunternehmen oder bauen einen Distrikt um. Sie belegt einen Distriktplatz und einen Generatordistrikt, bis es eröffnet."
  d_pe_site_farming:0 "Private Baustelle"
  d_pe_site_farming_desc:0 "Investoren bauen hier ein Privatunternehmen oder bauen einen Distrikt um. Sie belegt einen Distriktplatz und einen Landwirtschaftsdistrikt, bis es eröffnet."
+ pe_msg_relocate:0 "Ein Privatunternehmen ist von $PLANET$ nach $DEST$ umgezogen, dessen Spezialisierung besser passt. Seine Arbeiter sind mitgezogen."
  pe_deposit_cat_ledger:0 "Privatwirtschaft"
  pe_private_profits:0 "Gewinne der Privatfirmen"
  pe_private_savings:0 "Private Ersparnisse"

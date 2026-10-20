@@ -325,3 +325,20 @@ pe_ok_d_pe_firm_fffc = { OR = { root = { is_catalytic_empire = yes } root = { NO
 pe_ok_d_pe_firm_ffft = { root = { NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } } }
 pe_ok_d_pe_firm_fffm = { always = yes }
 pe_ok_d_pe_firm_fffe = { always = yes }
+
+# Colony scope: the planet's designation suits the main share root.pe_rl_prim.
+pe_desig_prim = {
+	OR = {
+		AND = { root = { check_variable = { which = pe_rl_prim value = 1 } } OR = { has_designation = col_industrial has_designation = col_foundry has_designation = col_capital_foundry } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 2 } } OR = { has_designation = col_industrial has_designation = col_factory has_designation = col_capital_factory } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 3 } } OR = { has_designation = col_city has_designation = col_capital_trade } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 4 } } OR = { has_designation = col_resort has_designation = col_pleasure } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 5 } } OR = { has_designation = col_research } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 6 } } OR = { has_designation = col_research } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 7 } } OR = { has_designation = col_research } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 8 } } OR = { has_designation = col_bureau has_designation = col_bureau_spiritualist } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 9 } } OR = { has_designation = col_mining has_designation = col_capital_extraction } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 10 } } OR = { has_designation = col_generator } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 11 } } OR = { has_designation = col_farming } }
+	}
+}

@@ -382,7 +382,6 @@ for (const v of variants) {
     ...[...catOnly].filter(r => !both.has(r)).map(r => `OR = { root = { is_catalytic_empire = no } ${notDef(r)} }`)];
   trg += `pe_ok_${v.key} = { ${conds.length ? conds.join(' ') : 'always = yes'} }\n`;
 }
-write('common/scripted_triggers/pe_firm_triggers_generated.txt', trg);
 
 // --- Effects --------------------------------------------------------------------
 const ifChain = (items, cond, body, ind = '\t') => items.map((it, i) => `${ind}${i ? 'else_if' : 'if'} = { limit = { ${cond(it)} } ${body(it)} }`).join('\n');
@@ -522,7 +521,7 @@ ${ifChain(pairs, p => `is_deposit_type = ${p.key}`, p => `set_variable = { which
 # this planet), its class (1 city, 2 mining, 3 generator, 4 farming, 5 lab), and its
 # workforce in the automatable worker jobs (pe_wf_<job>, scaled by stage).
 pe_deposit_fetch = {
-${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }`, v => `${AUTO_JOBS.map(a => `set_variable = { which = pe_wf_${a} value = ${v.workforce['pe_private_' + a] || 0} }`).join(' ')} set_variable = { which = pe_va value = root.pe_va_${v.key} } set_variable = { which = pe_val value = root.pe_val_${v.key} } set_variable = { which = pe_cls value = ${v.clsNum} }${v.entRaw ? ` set_variable = { which = pe_tmp value = root.pe_ent_val } multiply_variable = { which = pe_tmp value = ${v.entRaw} } change_variable = { which = pe_va value = pe_tmp }` : ''}`)}
+${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }`, v => `${AUTO_JOBS.map(a => `set_variable = { which = pe_wf_${a} value = ${v.workforce['pe_private_' + a] || 0} }`).join(' ')} set_variable = { which = pe_prim value = ${LETTERS.indexOf(v.primary) + 1} } set_variable = { which = pe_va value = root.pe_va_${v.key} } set_variable = { which = pe_val value = root.pe_val_${v.key} } set_variable = { which = pe_cls value = ${v.clsNum} }${v.entRaw ? ` set_variable = { which = pe_tmp value = root.pe_ent_val } multiply_variable = { which = pe_tmp value = ${v.entRaw} } change_variable = { which = pe_va value = pe_tmp }` : ''}`)}
 }
 
 pe_deposit_fetch_scale = {
@@ -770,7 +769,95 @@ ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = $
 	}
 }
 `;
-write('common/scripted_effects/pe_firm_effects_generated.txt', eff + eff_ledger_bits);
+// Relocation of a firm with its workers (see pe_relocate).
+trg += `
+# Colony scope: the planet's designation suits the main share root.pe_rl_prim.
+pe_desig_prim = {
+	OR = {
+${LETTERS.filter(l => specFor(l).length).map(l => `		AND = { root = { check_variable = { which = pe_rl_prim value = ${LETTERS.indexOf(l) + 1} } } OR = { ${specFor(l).map(d => `has_designation = ${d}`).join(' ')} } }`).join('\n')}
+	}
+}
+`;
+write('common/scripted_triggers/pe_firm_triggers_generated.txt', trg);
+const eff_relocate = `
+# Colony scope (the source planet): move the marked firm (pe_rl_cand) to
+# event_target:pe_rl_dst with its workers. The firm closes here, its workers become
+# civilians, and as many civilians move along (in groups of 10, only groups for whom the
+# destination is at least as habitable); the firm reopens there at once with its stage,
+# capital and debt. Like vanilla resettle_pop_group, inlined (call depth).
+pe_relocate_exec = {
+	save_event_target_as pe_rl_src
+	random_deposit = {
+		limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_rl_cand value = 1 } }
+		root = {
+			set_variable = { which = pe_chg_code value = prev.pe_code }
+			set_variable = { which = pe_chg_stage value = prev.pe_stage }
+			set_variable = { which = pe_chg_fcap value = prev.pe_fcap }
+			set_variable = { which = pe_chg_debt value = prev.pe_debt }
+		}
+		remove_deposit = yes
+	}
+	root = {
+		subtract_variable = { which = pe_chg_fcap value = pe_rl_cost }
+		set_variable = { which = pe_rl_left value = pe_rl_wf }
+		set_variable = { which = pe_rl_moved value = 0 }
+	}
+	check_planet_employment = yes
+	every_owned_pop_job = {
+		limit = { has_job_type = civilian }
+		every_job_pop_group = {
+			save_event_target_as pe_rl_pg
+			event_target:pe_rl_src = {
+				export_trigger_value_to_variable = { trigger = habitability parameters = { who = event_target:pe_rl_pg } variable = pe_hab }
+				root = { set_variable = { which = pe_hs value = prev.pe_hab } }
+			}
+			event_target:pe_rl_dst = {
+				export_trigger_value_to_variable = { trigger = habitability parameters = { who = event_target:pe_rl_pg } variable = pe_hab }
+				root = { set_variable = { which = pe_hd value = prev.pe_hab } }
+			}
+			if = {
+				limit = { root = { check_variable = { which = pe_hd value >= pe_hs } } }
+				while = {
+					limit = {
+						pop_group_size >= 10
+						root = { check_variable = { which = pe_rl_left value >= 10 } }
+					}
+					event_target:pe_rl_dst = {
+						create_pop_group = {
+							pop_group = event_target:pe_rl_pg
+							size = 0
+							effect = {
+								transfer_pop_amount = { source = event_target:pe_rl_pg target = this amount = 10 }
+							}
+						}
+					}
+					root = {
+						change_variable = { which = pe_rl_left value = -10 }
+						change_variable = { which = pe_rl_moved value = 10 }
+					}
+				}
+			}
+		}
+	}
+	event_target:pe_rl_dst = {
+${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = ${p.v.code} } check_variable = { which = pe_chg_stage value = ${p.s} } }`, p => `add_deposit = ${p.key} ${initFirm(p.v.code, p.s, 'root.pe_chg_fcap', 'root.pe_chg_debt')}`, '\t\t')}
+		check_planet_employment = yes
+	}
+	check_planet_employment = yes
+	root = { set_timed_country_flag = { flag = pe_relocated days = 360 } }
+	owner = {
+		create_message = {
+			type = pe_private_economy
+			localization = pe_msg_relocate
+			days = 30
+			target = event_target:pe_rl_dst
+			variable = { type = name localization = PLANET scope = event_target:pe_rl_src }
+			variable = { type = name localization = DEST scope = event_target:pe_rl_dst }
+		}
+	}
+}
+`;
+write('common/scripted_effects/pe_firm_effects_generated.txt', eff + eff_ledger_bits + eff_relocate);
 
 // --- Scripted localisation (country scope) --------------------------------------
 const dtext = (name, varName, entries, fallback) => `defined_text = {
@@ -814,7 +901,8 @@ for (const [key, en, de] of [['d_pe_site_city', 'city', 'Stadt'], ['d_pe_site_mi
 }
 const AUTO_NAMES = {miner: ['Mining', 'Bergbau'], technician: ['Energy', 'Energie'], farmer: ['Agriculture', 'Landwirtschaft']};
 loc.english.push(' pe_deposit_cat_automation:0 "Private Automation"');
-loc.english.push(' pe_deposit_cat_ledger:0 "Private Economy"');
+loc.english.push(' pe_deposit_cat_ledger:0 "Private Economy"', ' pe_msg_relocate:0 "A private firm has moved from $PLANET$ to $DEST$, whose designation suits it better. Its workers came along."');
+loc.german.push(' pe_msg_relocate:0 "Ein Privatunternehmen ist von $PLANET$ nach $DEST$ umgezogen, dessen Spezialisierung besser passt. Seine Arbeiter sind mitgezogen."');
 loc.german.push(' pe_deposit_cat_ledger:0 "Privatwirtschaft"');
 loc.english.push(' pe_private_profits:0 "Private Firms\' Profits"', ' pe_private_savings:0 "Private Savings"',
   ' d_pe_ledger_profit:0 "Private Profits"', ' d_pe_ledger_profit_desc:0 "What the private firms on this planet earn as their profit share; the state pays it every month in trade."',

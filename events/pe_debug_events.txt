@@ -7,6 +7,7 @@
 #   event pe.6   diagnosis popup: capital, resource scores, the capital's counts and best firm
 #   event pe.7   run the quarterly logic now and clear all planet cooldowns first
 #   event pe.8   finish all private construction sites now
+#   event pe.9   try a firm relocation now (stuck planet, ignores the yearly limit)
 namespace = pe
 
 country_event = {
@@ -145,5 +146,18 @@ country_event = {
 		}
 		pe_monthly_sites = yes
 		log = "private_economy: pe.8 finished the construction sites"
+	}
+}
+
+# event pe.9: try a firm relocation now (ignores the yearly limit)
+country_event = {
+	id = pe.9
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		remove_country_flag = pe_relocated
+		pe_init = yes
+		pe_relocate = yes
+		log = "private_economy: pe.9 relocation done [Root.pe_rl_done] moved [Root.pe_rl_moved] of [Root.pe_rl_wf] workers"
 	}
 }
