@@ -60,3 +60,9 @@ Ein laufendes 0.9-Spiel kann weiterlaufen. Für saubere Zahlen empfehle ich ein 
 1. Der Handels-Tooltip in der Topbar zeigt die zwei neuen Zeilen.
 2. Das Lager entwickelt sich wie die Monatsanzeige.
 3. Planeten mit Firmen haben ein Deposit „Private Gewinne“.
+
+## 0.10.2 – Automatisierung tragfähiger
+
+- **Verluste:** Verluste der Automatisierung trägt zuerst das Firmenkapital, dann der Investorenpool. Die Stufe fällt erst weg, wenn beide nicht zahlen können. Bisher reichte schon das Firmenkapital nicht: Die Automatisierung behebt den Mangel, die Ressource gerät in den Überschuss, ihr Wert fällt, und es entsteht Verlust.
+- **Investition:** nur, wenn der automatisierte Wert die Energie um 25 % übersteigt.
+- **Lokalisierung:** Die Automatisierungs-Modifikatoren der Privatjobs sind jetzt übersetzt (Fehler im error.log).

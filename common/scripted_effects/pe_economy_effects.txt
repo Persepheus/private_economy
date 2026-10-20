@@ -683,8 +683,9 @@ pe_automation = {
 # for automated jobs (4 per automated worker job a month); the firms pay it back each
 # quarter, valued at the energy shadow price. Automated jobs need no pops and no wages, so
 # the firms keep their whole value: each quarter the automated value minus the upkeep is
-# booked to the firms by workforce share (a loss by capital share). The level drops if
-# they cannot carry a loss, or after two quarters with idle civilians on the planet
+# booked to the firms by workforce share; a loss is carried by their capital (by capital
+# share), then by the investor pool. The level drops if neither can carry a loss, or
+# after two quarters with idle civilians on the planet
 # (pops are there, automation is not needed).
 pe_auto_book = {
 	root = {
@@ -719,6 +720,13 @@ pe_auto_book = {
 		multiply_variable = { which = pe_anet value = 3 }
 		set_variable = { which = pe_aloss value = pe_anet }
 		multiply_variable = { which = pe_aloss value = -1 }
+		# A loss is carried by the firms' capital first, then by the investor pool.
+		set_variable = { which = pe_afloss value = pe_aloss }
+		if = { limit = { check_variable = { which = pe_afloss value > pe_apool } } set_variable = { which = pe_afloss value = pe_apool } }
+		set_variable = { which = pe_aploss value = pe_aloss }
+		subtract_variable = { which = pe_aploss value = pe_afloss }
+		set_variable = { which = pe_acover value = pe_apool }
+		change_variable = { which = pe_acover value = pe_capital }
 	}
 	if = {
 		limit = { root = { check_variable = { which = pe_alvl value > 0 } } }
@@ -727,7 +735,7 @@ pe_auto_book = {
 				root = {
 					OR = {
 						check_variable = { which = pe_anet value >= 0 }
-						check_variable = { which = pe_apool value >= pe_aloss }
+						check_variable = { which = pe_acover value >= pe_aloss }
 					}
 				}
 			}
@@ -745,12 +753,19 @@ pe_auto_book = {
 					multiply_variable = { which = pe_tmp value = pe_wf_$JOB$ }
 					divide_variable = { which = pe_tmp value = root.pe_acap }
 				}
-				else = {
-					set_variable = { which = pe_tmp value = root.pe_anet }
+				else_if = {
+					limit = { root = { check_variable = { which = pe_apool value > 0 } } }
+					set_variable = { which = pe_tmp value = root.pe_afloss }
 					multiply_variable = { which = pe_tmp value = pe_fcap }
 					divide_variable = { which = pe_tmp value = root.pe_apool }
+					multiply_variable = { which = pe_tmp value = -1 }
 				}
+				else = { set_variable = { which = pe_tmp value = 0 } }
 				change_variable = { which = pe_fcap value = pe_tmp }
+			}
+			if = {
+				limit = { root = { check_variable = { which = pe_anet value < 0 } } }
+				root = { subtract_variable = { which = pe_capital value = pe_aploss } }
 			}
 		}
 		else = {
@@ -788,7 +803,7 @@ pe_auto_book = {
 
 # Colony scope: invest in the next automation level of one job (uses pe_auto_book's
 # numbers). Only for unfilled private jobs, without idle civilians, from 200 private jobs
-# of the type, if the automated value covers the energy upkeep.
+# of the type, if the automated value covers the energy upkeep by 25%.
 pe_auto_invest = {
 	# Unfilled private jobs of this type here (automation only fills empty jobs).
 	export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = pe_private_$JOB$ } variable = pe_afree }
@@ -808,6 +823,8 @@ pe_auto_invest = {
 		multiply_variable = { which = pe_aupn value = 0.01 }
 		multiply_variable = { which = pe_aupn value = pe_tmp }
 		multiply_variable = { which = pe_aupn value = pe_s_energy }
+		# Safety margin: the value must cover the upkeep by 25%.
+		multiply_variable = { which = pe_aupn value = 1.25 }
 		# The firms pay what they can (by capital share), the investor pool the rest.
 		set_variable = { which = pe_atot value = pe_apool }
 		change_variable = { which = pe_atot value = pe_capital }

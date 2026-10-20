@@ -833,6 +833,10 @@ for (const a of AUTO_JOBS) for (const l of [1, 2]) {
     ` pe_msg_auto_${a}_${l}:0 "Mangels Arbeitskräften haben die Privatfirmen auf $PLANET$ in §YPrivate Automatisierung (${de}) ${lv}§! investiert."`);
 }
 for (const a of AUTO_JOBS) {
+  loc.english.push(` mod_job_pe_private_${a}_automated_workforce_mult:0 "$job_pe_private_${a}_plural$ $MOD_PLANET_AUTOMATED_WORKFORCE$"`);
+  loc.german.push(` mod_job_pe_private_${a}_automated_workforce_mult:0 "$MOD_PLANET_AUTOMATED_WORKFORCE$ ($job_pe_private_${a}_plural$)"`);
+}
+for (const a of AUTO_JOBS) {
   const [en, de] = AUTO_NAMES[a];
   loc.english.push(` pe_msg_autodown_${a}:0 "The private firms on $PLANET$ can no longer afford their automation (${en}) and have scaled it back."`);
   loc.german.push(` pe_msg_autodown_${a}:0 "Die Privatfirmen auf $PLANET$ können ihre Automatisierung (${de}) nicht mehr bezahlen und haben sie zurückgefahren."`);
