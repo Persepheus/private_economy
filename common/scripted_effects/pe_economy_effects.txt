@@ -21,6 +21,7 @@
 #                                          -> pe_restructure (3)      -> pe_retool_consider (4)
 #                    -> pe_relocate (2) -> pe_relocate_from (3) -> pe_relocate_exec (4)
 #                                                             -> pe_relocate_check_dest (4)
+#                    -> pe_patron (2) -> pe_patron_fire (3)   (pe_patron_effects.txt)
 #                    -> pe_ledgers (2) -> pe_ledger_planet (3) -> pe_ledger_bits (4)
 #                                      -> pe_ledger_bits (3)
 # Variant lists and dispatchers: pe_firm_effects_generated.txt (tools/generate-firms.mjs).
@@ -98,6 +99,7 @@ pe_quarterly = {
 		pe_planet_step = yes
 	}
 	pe_relocate = yes
+	pe_patron = yes
 	pe_ledgers = yes
 }
 

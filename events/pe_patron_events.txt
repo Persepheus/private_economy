@@ -1,0 +1,271 @@
+# Patron events: rich private people spend the investor pool (see pe_patron_effects.txt).
+#   pe.200 gala            pe.201 gala scandal (follow-up)
+#   pe.202 foundation      pe.203 prototype   pe.206 prototype result
+#   pe.204 charity         pe.205 recruitment campaign
+# Scope: country. root.pe_pat_spend = what the magnate puts in (already taken from the
+# investor pool; declining options pay it back). event_target:pe_pat_planet = the planet.
+namespace = pe
+
+# The gala of the century
+country_event = {
+	id = pe.200
+	title = pe.200.name
+	desc = pe.200.desc
+	picture = GFX_evt_city_planet
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.200.a
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_gala days = 1800 } }
+		change_variable = { which = pe_mag_rep value = 1 }
+		hidden_effect = {
+			random = {
+				chance = 25
+				country_event = { id = pe.201 days = 180 }
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 2 is_egalitarian = no }
+		}
+	}
+	option = {
+		name = pe.200.b
+		set_variable = { which = pe_tmp value = pe_pat_spend }
+		multiply_variable = { which = pe_tmp value = 0.3 }
+		add_resource = { unity = 1 mult = pe_tmp }
+		change_variable = { which = pe_mag_rep value = -1 }
+		ai_chance = {
+			factor = 30
+			modifier = { factor = 3 is_egalitarian = yes }
+			modifier = { factor = 2 is_spiritualist = yes }
+		}
+	}
+	option = {
+		name = pe.200.c
+		set_variable = { which = pe_tmp value = pe_pat_spend }
+		multiply_variable = { which = pe_tmp value = 0.25 }
+		add_resource = { trade = 1 mult = pe_tmp }
+		change_variable = { which = pe_mag_rep value = -1 }
+		ai_chance = {
+			factor = 30
+			modifier = { factor = 2 is_authoritarian = yes }
+		}
+	}
+}
+
+# A scandal at the gala
+country_event = {
+	id = pe.201
+	title = pe.201.name
+	desc = pe.201.desc
+	picture = GFX_evt_burning_city
+	is_triggered_only = yes
+
+	option = {
+		name = pe.201.a
+		allow = { has_resource = { type = trade amount >= 150 } }
+		add_resource = { trade = -150 }
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = pe.201.b
+		capital_scope = { add_modifier = { modifier = pe_gala_scandal days = 720 } }
+		add_resource = { unity = 100 }
+		change_variable = { which = pe_mag_rep value = -2 }
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 2 is_egalitarian = yes }
+		}
+	}
+}
+
+# A foundation for science
+country_event = {
+	id = pe.202
+	title = pe.202.name
+	desc = pe.202.desc
+	picture = GFX_evt_scientific_experiments
+	is_triggered_only = yes
+
+	immediate = {
+		set_variable = { which = pe_pat_res value = pe_pat_spend }
+		multiply_variable = { which = pe_pat_res value = 0.4 }
+	}
+	# Free research: a quarter more, in a field the foundation picks.
+	option = {
+		name = pe.202.a
+		multiply_variable = { which = pe_pat_res value = 1.25 }
+		random_list = {
+			1 = { add_resource = { physics_research = 1 mult = pe_pat_res } }
+			1 = { add_resource = { society_research = 1 mult = pe_pat_res } }
+			1 = { add_resource = { engineering_research = 1 mult = pe_pat_res } }
+		}
+		change_variable = { which = pe_mag_rep value = 1 }
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 2 is_egalitarian = yes }
+		}
+	}
+	option = {
+		name = pe.202.b
+		add_resource = { physics_research = 1 mult = pe_pat_res }
+		ai_chance = {
+			factor = 20
+			modifier = { factor = 2 is_materialist = yes }
+		}
+	}
+	option = {
+		name = pe.202.c
+		add_resource = { society_research = 1 mult = pe_pat_res }
+		ai_chance = { factor = 20 }
+	}
+	option = {
+		name = pe.202.d
+		add_resource = { engineering_research = 1 mult = pe_pat_res }
+		ai_chance = {
+			factor = 20
+			modifier = { factor = 2 is_militarist = yes }
+		}
+	}
+}
+
+# The prototype
+country_event = {
+	id = pe.203
+	title = pe.203.name
+	desc = pe.203.desc
+	picture = GFX_evt_engineering_research
+	is_triggered_only = yes
+
+	option = {
+		name = pe.203.a
+		random_list = {
+			40 = { set_variable = { which = pe_proto_result value = 1 } }
+			40 = { set_variable = { which = pe_proto_result value = 2 } }
+			20 = { set_variable = { which = pe_proto_result value = 3 } }
+		}
+		country_event = { id = pe.206 }
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = pe.203.b
+		allow = { has_resource = { type = alloys amount >= 250 } }
+		add_resource = { alloys = -250 }
+		random_list = {
+			70 = { set_variable = { which = pe_proto_result value = 1 } }
+			25 = { set_variable = { which = pe_proto_result value = 2 } }
+			5 = { set_variable = { which = pe_proto_result value = 3 } }
+		}
+		country_event = { id = pe.206 }
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 2 is_militarist = yes }
+		}
+	}
+}
+
+# The prototype: result
+country_event = {
+	id = pe.206
+	title = pe.206.name
+	desc = { trigger = { check_variable = { which = pe_proto_result value = 1 } } text = pe.206.desc.success }
+	desc = { trigger = { check_variable = { which = pe_proto_result value = 2 } } text = pe.206.desc.partial }
+	desc = { trigger = { check_variable = { which = pe_proto_result value = 3 } } text = pe.206.desc.failure }
+	picture = GFX_evt_engineering_bay
+	is_triggered_only = yes
+
+	immediate = {
+		set_variable = { which = pe_pat_res value = pe_pat_spend }
+		if = {
+			limit = { check_variable = { which = pe_proto_result value = 1 } }
+			multiply_variable = { which = pe_pat_res value = 0.6 }
+			add_resource = { engineering_research = 1 mult = pe_pat_res }
+			change_variable = { which = pe_mag_rep value = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_proto_result value = 2 } }
+			multiply_variable = { which = pe_pat_res value = 0.2 }
+			add_resource = { engineering_research = 1 mult = pe_pat_res }
+		}
+		else = {
+			capital_scope = { add_modifier = { modifier = pe_prototype_accident days = 720 } }
+			change_variable = { which = pe_mag_rep value = -1 }
+		}
+	}
+	option = { name = pe.206.a }
+}
+
+# Charity
+country_event = {
+	id = pe.204
+	title = pe.204.name
+	desc = pe.204.desc
+	picture = GFX_evt_alien_city
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.204.a
+		event_target:pe_pat_planet = {
+			add_modifier = { modifier = pe_charity days = 1800 }
+			if = {
+				limit = { owner = { is_authoritarian = yes } }
+				add_modifier = { modifier = pe_charity_mistrust days = 720 }
+			}
+		}
+		change_variable = { which = pe_mag_rep value = 1 }
+		ai_chance = {
+			factor = 70
+			modifier = { factor = 2 is_egalitarian = yes }
+		}
+	}
+	option = {
+		name = pe.204.b
+		change_variable = { which = pe_capital value = pe_pat_spend }
+		add_resource = { unity = 50 }
+		change_variable = { which = pe_mag_rep value = -1 }
+		ai_chance = {
+			factor = 30
+			modifier = { factor = 2 is_authoritarian = yes }
+		}
+	}
+}
+
+# Recruitment campaign
+country_event = {
+	id = pe.205
+	title = pe.205.name
+	desc = pe.205.desc
+	picture = GFX_evt_colony_settlement
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.205.a
+		allow = { has_resource = { type = trade amount >= 150 } }
+		add_resource = { trade = -150 }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_recruit_strong days = 1800 } }
+		change_variable = { which = pe_mag_rep value = 1 }
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = pe.205.b
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_recruit_weak days = 1080 } }
+		ai_chance = { factor = 40 }
+	}
+	option = {
+		name = pe.205.c
+		change_variable = { which = pe_capital value = pe_pat_spend }
+		if = {
+			limit = { pe_buyout_allowed = yes }
+			event_target:pe_pat_planet = { add_modifier = { modifier = pe_recruit_refused days = 720 } }
+		}
+		change_variable = { which = pe_mag_rep value = -1 }
+		ai_chance = {
+			factor = 10
+			modifier = { factor = 3 is_xenophobe = yes }
+		}
+	}
+}

@@ -2,3 +2,33 @@
 pe_buyout_refused = {
 	planet_stability_add = -5
 }
+
+# Patron events (pe_patron_events.txt).
+pe_gala = {
+	planet_stability_add = 5
+	planet_amenities_add = 1000
+}
+pe_gala_scandal = {
+	planet_stability_add = -5
+}
+pe_prototype_accident = {
+	planet_stability_add = -5
+	planet_amenities_add = -500
+}
+pe_charity = {
+	planet_housing_add = 500
+	planet_amenities_add = 1000
+}
+pe_charity_mistrust = {
+	planet_stability_add = -2
+}
+pe_recruit_strong = {
+	planet_resettlement_unemployed_destination_mult = 1
+	planet_stability_add = 2
+}
+pe_recruit_weak = {
+	planet_resettlement_unemployed_destination_mult = 0.5
+}
+pe_recruit_refused = {
+	planet_stability_add = -3
+}

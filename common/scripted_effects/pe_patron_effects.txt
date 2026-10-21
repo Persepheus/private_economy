@@ -1,0 +1,82 @@
+# Patrons: rich private people spend the investor pool on galas, foundations, prototypes,
+# charity and recruitment (events pe.200-pe.206). They are recurring figures (pe_mag_id,
+# reputation pe_mag_rep); a magnate retires after four events and a new one appears.
+#   pe_quarterly (1) -> pe_patron (2) -> pe_patron_fire (3)
+
+# Country scope, quarterly: with a full investor pool (3000 or more) and no patron event
+# in the last two years, a 25% chance per quarter of a patron event.
+pe_patron = {
+	if = {
+		limit = {
+			check_variable = { which = pe_capital value >= 3000 }
+			NOT = { has_country_flag = pe_patron_cd }
+		}
+		random = {
+			chance = 25
+			pe_patron_fire = yes
+		}
+	}
+}
+
+# Country scope: a patron event. The magnate puts 30% of the investor pool into it
+# (pe_pat_spend); options that decline it pay it back.
+pe_patron_fire = {
+	set_timed_country_flag = { flag = pe_patron_cd days = 730 }
+	if = {
+		limit = {
+			OR = {
+				NOT = { is_variable_set = pe_mag_id }
+				check_variable = { which = pe_mag_events value >= 4 }
+			}
+		}
+		set_variable_to_random_value = { which = pe_mag_id min = 1 max = 16 rounded = yes }
+		set_variable = { which = pe_mag_events value = 0 }
+		set_variable = { which = pe_mag_rep value = 0 }
+	}
+	change_variable = { which = pe_mag_events value = 1 }
+	set_variable = { which = pe_pat_spend value = pe_capital }
+	multiply_variable = { which = pe_pat_spend value = 0.3 }
+	subtract_variable = { which = pe_capital value = pe_pat_spend }
+	capital_scope = { save_event_target_as = pe_pat_planet }
+	random_list = {
+		25 = { country_event = { id = pe.200 } }
+		25 = { country_event = { id = pe.202 } }
+		20 = { country_event = { id = pe.203 } }
+		15 = {
+			modifier = {
+				factor = 0
+				NOT = { any_owned_colony = { pe_planet_eligible = yes OR = { free_housing < 0 free_amenities < 0 } } }
+			}
+			random_owned_colony = {
+				limit = { pe_planet_eligible = yes OR = { free_housing < 0 free_amenities < 0 } }
+				save_event_target_as = pe_pat_planet
+			}
+			country_event = { id = pe.204 }
+		}
+		15 = {
+			modifier = {
+				factor = 0
+				NOT = {
+					any_owned_colony = {
+						pe_planet_eligible = yes
+						free_jobs >= 200
+						count_deposits = { category = pe_deposit_cat_firms count > 0 }
+					}
+				}
+			}
+			modifier = {
+				factor = 0
+				NOT = { any_owned_colony = { pe_has_idle_pops = yes } }
+			}
+			random_owned_colony = {
+				limit = {
+					pe_planet_eligible = yes
+					free_jobs >= 200
+					count_deposits = { category = pe_deposit_cat_firms count > 0 }
+				}
+				save_event_target_as = pe_pat_planet
+			}
+			country_event = { id = pe.205 }
+		}
+	}
+}

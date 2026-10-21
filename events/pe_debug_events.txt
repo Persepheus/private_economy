@@ -8,6 +8,7 @@
 #   event pe.7   run the quarterly logic now and clear all planet cooldowns first
 #   event pe.8   finish all private construction sites now
 #   event pe.9   try a firm relocation now (stuck planet, ignores the yearly limit)
+#   event pe.10  fire a patron event now
 namespace = pe
 
 country_event = {
@@ -159,5 +160,17 @@ country_event = {
 		pe_init = yes
 		pe_relocate = yes
 		log = "private_economy: pe.9 relocation done [Root.pe_rl_done] moved [Root.pe_rl_moved] of [Root.pe_rl_wf] workers"
+	}
+}
+
+# event pe.10: fire a patron event now (ignores the pool threshold, chance and pause)
+country_event = {
+	id = pe.10
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_init = yes
+		pe_patron_fire = yes
+		log = "private_economy: pe.10 patron [Root.pe_mag_id] events [Root.pe_mag_events] spend [Root.pe_pat_spend]"
 	}
 }
