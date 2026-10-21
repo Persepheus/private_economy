@@ -132,3 +132,8 @@ pe_gentrification = {
 pe_farewell = {
 	planet_stability_add = 3
 }
+
+# A private firm was cleared under the Mixed economy.
+pe_expropriation = {
+	planet_stability_add = -5
+}

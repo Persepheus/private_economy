@@ -53,6 +53,11 @@
 pe_monthly_sites = {
 	every_owned_colony = {
 		limit = { has_planet_flag = pe_site }
+		# A site the player cleared leaves the flag behind.
+		if = {
+			limit = { count_deposits = { category = pe_deposit_cat_sites count < 1 } }
+			remove_planet_flag = pe_site
+		}
 		every_deposit = {
 			limit = { has_deposit_category = pe_deposit_cat_sites }
 			change_variable = { which = pe_left value = -1 }
@@ -1356,5 +1361,28 @@ pe_retool_consider = {
 				}
 			}
 		}
+	}
+}
+
+# Colony scope (on_cleared of a firm or construction site the player cleared, Guided or
+# Mixed economy). Its workers become civilians, and no new firm opens here for five years.
+# Under the Guided economy the investors simply lose the firm. Under the Mixed economy the
+# trade the state paid goes to them as compensation ($COMP$), and the planet resents it.
+pe_firm_cleared = {
+	if = {
+		limit = { owner = { has_policy_flag = pe_order_mixed } }
+		custom_tooltip = pe_clear_mixed_tt
+		add_modifier = { modifier = pe_expropriation days = 1080 }
+		hidden_effect = {
+			owner = {
+				change_variable = { which = pe_capital value = $COMP$ }
+				if = { limit = { is_variable_set = pe_mag_id } change_variable = { which = pe_mag_rep value = -1 } }
+			}
+		}
+	}
+	else = { custom_tooltip = pe_clear_guided_tt }
+	hidden_effect = {
+		set_timed_planet_flag = { flag = pe_cooldown days = 1800 }
+		check_planet_employment = yes
 	}
 }

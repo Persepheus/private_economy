@@ -235,9 +235,31 @@ const keyOf = (v, s) => s === 1 ? v.key : `${v.key}_${s}`;
 const pairs = variants.flatMap(v => STAGES.map(s => ({v, s, key: keyOf(v, s)})));
 
 // --- Deposits -------------------------------------------------------------------
+// Clearing a firm or construction site like a blocker (Guided and Mixed economy only, never
+// by the AI): influence x stage size; under Mixed more influence plus trade, which the
+// investors get as compensation (what the district costs: city 500 / rural 300 x stage
+// size). See pe_firm_cleared.
+const CLEAR_INF = {guided: 30, mixed: 50};
+const CLEAR_DAYS = 180;
+const CLEAR_ORDERS = 'exists = owner owner = { OR = { has_policy_flag = pe_order_guided has_policy_flag = pe_order_mixed } }';
+const clearCosts = (k, s) => `		cost = {
+			trigger = { planet = { owner = { has_policy_flag = pe_order_guided } } }
+			influence = ${CLEAR_INF.guided * stageMult(s)}
+		}
+		cost = {
+			trigger = { planet = { owner = { has_policy_flag = pe_order_mixed } } }
+			influence = ${CLEAR_INF.mixed * stageMult(s)}
+			trade = ${FOUND[k] * stageMult(s)}
+		}`;
+const clearing = (k, s) => `	time = ${CLEAR_DAYS}
+	can_be_cleared_potential = { ${CLEAR_ORDERS} }
+	can_be_cleared = { ${CLEAR_ORDERS} }
+	ai_weight = { weight = 0 }
+	on_cleared = { pe_firm_cleared = { COMP = ${FOUND[k] * stageMult(s)} } }`;
 let dep = header + `# Firm variants and stages: one district slot each (rural ones also one district of
-# their type). Placed only by script; cannot be cleared. Energy upkeep like the matching
-# district, scaled by stage; housing like the district.
+# their type). Placed only by script. Under the Guided and Mixed economy the player can
+# clear them like blockers (influence; under Mixed also trade as compensation). Energy
+# upkeep like the matching district, scaled by stage; housing like the district.
 `;
 for (const {v, s, key} of pairs) {
   const housing = HOUSING[v.cityLike ? 'u' : v.cls];
@@ -250,15 +272,16 @@ ${key} = {
 	icon = ${v.cityLike ? 'd_city' : P[v.cls].icon}
 	is_for_colonizable = yes
 	category = pe_deposit_cat_firms
-	can_be_cleared = { always = no }
 	potential = { always = no }
 	drop_weight = { weight = 0 }
+${clearing(v.k, s)}
 
 	resources = {
 		category = planet_deposits
 		upkeep = {
 			energy = ${UPKEEP[v.k] * stageMult(s)}
 		}
+${clearCosts(v.k, s)}
 	}
 
 	planet_modifier = {
@@ -270,15 +293,21 @@ ${housing.blocks.map(b => '\n\t' + b + '\n').join('')}}
 write('common/deposits/pe_firm_deposits.txt', dep);
 
 write('common/deposits/pe_site_deposits.txt', header + `# Construction sites of private firms: they hold the slot (and the rural district) while
-# a firm is built, bought into a district or restructured. No jobs, no housing.
+# a firm is built, bought into a district or restructured. No jobs, no housing. They can be
+# cleared like a small firm (Guided and Mixed economy).
 ` + [['d_pe_site_city', 'd_city', null], ['d_pe_site_mining', 'd_mineral_fields', 'district_mining'], ['d_pe_site_generator', 'd_geothermal_vent', 'district_generator'], ['d_pe_site_farming', 'd_fertile_lands', 'district_farming']].map(([key, icon, d]) => `
 ${key} = {
 	icon = ${icon}
 	is_for_colonizable = yes
 	category = pe_deposit_cat_sites
-	can_be_cleared = { always = no }
 	potential = { always = no }
 	drop_weight = { weight = 0 }
+${clearing(d ? 'r' : 'u', 1)}
+
+	resources = {
+		category = planet_deposits
+${clearCosts(d ? 'r' : 'u', 1)}
+	}
 
 	planet_modifier = {
 		planet_max_districts_add = -1${d ? `\n\t\t${d}_max_add = -1` : ''}

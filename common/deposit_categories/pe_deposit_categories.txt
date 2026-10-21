@@ -1,11 +1,14 @@
-# Private firms. Not a blocker category: the AI must not plan to clear them, and the
-# player cannot clear them (can_be_cleared = no on each firm).
+# Private firms. A blocker category, so the player gets the clear button (only under the
+# Guided and Mixed economy, see can_be_cleared_potential on each firm). The AI never
+# clears them (ai_weight 0 on each firm); it nationalises instead.
 pe_deposit_cat_firms = {
+	blocker = yes
 	important = yes
 }
 
-# Construction sites of private firms (not a blocker category either).
+# Construction sites of private firms (clearable like a small firm).
 pe_deposit_cat_sites = {
+	blocker = yes
 	important = yes
 }
 
