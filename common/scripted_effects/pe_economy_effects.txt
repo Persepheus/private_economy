@@ -20,6 +20,7 @@
 #                                          -> pe_nationalise_one (3)
 #                                          -> pe_restructure (3)      -> pe_retool_consider (4)
 #                    -> pe_relocate (2) -> pe_relocate_from (3) -> pe_relocate_exec (4)
+#                                                             -> pe_relocate_check_dest (4)
 #                    -> pe_ledgers (2) -> pe_ledger_planet (3) -> pe_ledger_bits (4)
 #                                      -> pe_ledger_bits (3)
 # Variant lists and dispatchers: pe_firm_effects_generated.txt (tools/generate-firms.mjs).
@@ -100,12 +101,15 @@ pe_quarterly = {
 	pe_ledgers = yes
 }
 
-# Country scope: when a planet is stuck (no free district slot, no idle civilians, no
-# construction), one city firm or lab whose main share does not suit the planet's
-# designation may move to a planet that suits it, with its workers. At most once a year
-# per empire. The destination needs a free slot, no construction site, and free housing
-# and amenities for all workers; the firm pays the move like a restructuring (250 x stage
-# size) from its own capital.
+# Country scope: a firm moves to another planet with its workers, at most once a year per
+# empire. Source: a planet that is stuck (no free district slot, no idle civilians) or
+# short of housing or amenities, without construction. Firm: its main share does not suit
+# the source's designation, or the source is short of housing or amenities. Destination:
+# the firm could be founded there (free slot; rural firms a free district of their type
+# with its deposits), no construction, free housing and amenities for all workers (200 x
+# stage size), and a designation that suits the firm (if the source is short of housing
+# or amenities, any destination will do when none suits). The firm pays the move like a
+# restructuring (city 250 / rural 150 x stage size) from its own capital.
 pe_relocate = {
 	set_variable = { which = pe_rl_done value = 0 }
 	if = {
@@ -113,10 +117,16 @@ pe_relocate = {
 		every_owned_colony = {
 			limit = {
 				pe_planet_eligible = yes
-				free_district_slots = 0
-				NOT = { pe_has_idle_pops = yes }
 				NOT = { has_planet_flag = pe_site }
 				count_deposits = { category = pe_deposit_cat_firms count > 0 }
+				OR = {
+					AND = {
+						free_district_slots = 0
+						NOT = { pe_has_idle_pops = yes }
+					}
+					free_amenities < 0
+					free_housing < 0
+				}
 			}
 			if = {
 				limit = { root = { check_variable = { which = pe_rl_done value = 0 } } }
@@ -126,56 +136,77 @@ pe_relocate = {
 	}
 }
 
-# Colony scope (a stuck planet): find a firm and a destination, then move it.
+# Colony scope (the source planet): find a firm and a destination, then move it.
 pe_relocate_from = {
-	save_event_target_as pe_rl_src
+	save_event_target_as = pe_rl_src
+	root = { set_variable = { which = pe_rl_srcdef value = 0 } }
+	if = {
+		limit = { OR = { free_amenities < 0 free_housing < 0 } }
+		root = { set_variable = { which = pe_rl_srcdef value = 1 } }
+	}
 	every_deposit = {
 		limit = {
 			has_deposit_category = pe_deposit_cat_firms
 			is_variable_set = pe_prim
-			OR = {
-				check_variable = { which = pe_cls value = 1 }
-				check_variable = { which = pe_cls value = 5 }
-			}
 		}
 		set_variable = { which = pe_rl_cand value = 0 }
 		if = {
 			limit = { root = { check_variable = { which = pe_rl_done value = 0 } } }
-			# Workers (200 x stage size) and the moving cost (250 x stage size).
+			# Workers (200 x stage size) and the moving cost (city 250 / rural 150 x stage size).
 			set_variable = { which = pe_tmp value = pe_stage }
 			change_variable = { which = pe_tmp value = 1 }
 			multiply_variable = { which = pe_tmp value = 0.5 }
+			if = {
+				limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } }
+				set_variable = { which = pe_rl_c value = 250 }
+			}
+			else = { set_variable = { which = pe_rl_c value = 150 } }
+			multiply_variable = { which = pe_rl_c value = pe_tmp }
 			root = {
 				set_variable = { which = pe_rl_prim value = prev.pe_prim }
+				set_variable = { which = pe_rl_code value = prev.pe_code }
 				set_variable = { which = pe_rl_wf value = prev.pe_tmp }
 				multiply_variable = { which = pe_rl_wf value = 200 }
-				set_variable = { which = pe_rl_cost value = prev.pe_tmp }
-				multiply_variable = { which = pe_rl_cost value = 250 }
+				set_variable = { which = pe_rl_cost value = prev.pe_rl_c }
 			}
 			if = {
 				limit = {
-					check_variable = { which = pe_fcap value >= root.pe_rl_cost }
-					event_target:pe_rl_src = { NOT = { pe_desig_prim = yes } }
+					check_variable = { which = pe_fcap value >= pe_rl_c }
+					OR = {
+						planet = { NOT = { pe_desig_prim = yes } }
+						root = { check_variable = { which = pe_rl_srcdef value = 1 } }
+					}
 				}
+				# A destination that suits the firm's main share ...
 				root = {
 					every_owned_colony = {
 						limit = {
 							pe_planet_eligible = yes
 							NOT = { is_same_value = event_target:pe_rl_src }
-							free_district_slots > 0
 							NOT = { has_planet_flag = pe_site }
+							pe_rl_target_fits = yes
 							pe_desig_prim = yes
 						}
-						export_trigger_value_to_variable = { trigger = free_housing variable = pe_fh }
-						export_trigger_value_to_variable = { trigger = free_amenities variable = pe_fa }
-						if = {
+						pe_relocate_check_dest = yes
+					}
+				}
+				# ... or, from a planet short of housing or amenities, any destination.
+				if = {
+					limit = {
+						root = {
+							check_variable = { which = pe_rl_done value = 0 }
+							check_variable = { which = pe_rl_srcdef value = 1 }
+						}
+					}
+					root = {
+						every_owned_colony = {
 							limit = {
-								root = { check_variable = { which = pe_rl_done value = 0 } }
-								check_variable = { which = pe_fh value >= root.pe_rl_wf }
-								check_variable = { which = pe_fa value >= root.pe_rl_wf }
+								pe_planet_eligible = yes
+								NOT = { is_same_value = event_target:pe_rl_src }
+								NOT = { has_planet_flag = pe_site }
+								pe_rl_target_fits = yes
 							}
-							save_event_target_as pe_rl_dst
-							root = { set_variable = { which = pe_rl_done value = 1 } }
+							pe_relocate_check_dest = yes
 						}
 					}
 				}
@@ -189,6 +220,21 @@ pe_relocate_from = {
 	if = {
 		limit = { root = { check_variable = { which = pe_rl_done value = 1 } } }
 		pe_relocate_exec = yes
+	}
+}
+
+# Colony scope (a possible destination): free housing and amenities for all workers.
+pe_relocate_check_dest = {
+	export_trigger_value_to_variable = { trigger = free_housing variable = pe_fh }
+	export_trigger_value_to_variable = { trigger = free_amenities variable = pe_fa }
+	if = {
+		limit = {
+			root = { check_variable = { which = pe_rl_done value = 0 } }
+			check_variable = { which = pe_fh value >= root.pe_rl_wf }
+			check_variable = { which = pe_fa value >= root.pe_rl_wf }
+		}
+		save_event_target_as = pe_rl_dst
+		root = { set_variable = { which = pe_rl_done value = 1 } }
 	}
 }
 
@@ -778,9 +824,9 @@ pe_automation = {
 # quarter, valued at the energy shadow price. Automated jobs need no pops and no wages, so
 # the firms keep their whole value: each quarter the automated value minus the upkeep is
 # booked to the firms by workforce share; a loss is carried by their capital (by capital
-# share), then by the investor pool. The level drops if neither can carry a loss, or
-# after two quarters with idle civilians on the planet
-# (pops are there, automation is not needed).
+# share), then by the investor pool. The level drops if neither can carry a loss (then no
+# new automation of this job here for 3 years), or after two quarters with idle civilians
+# on the planet (pops are there, automation is not needed; then 2 years).
 pe_auto_book = {
 	root = {
 		set_variable = { which = pe_acap value = 0 }
@@ -864,6 +910,7 @@ pe_auto_book = {
 		}
 		else = {
 			root = { set_variable = { which = pe_adown value = 1 } }
+			set_timed_planet_flag = { flag = pe_auto_cd_$JOB$ days = 1080 }
 		}
 		if = {
 			limit = { root = { check_variable = { which = pe_unemp value = 1 } } }
@@ -874,6 +921,7 @@ pe_auto_book = {
 			limit = { check_variable = { which = pe_idleq_$JOB$ value >= 2 } }
 			set_variable = { which = pe_idleq_$JOB$ value = 0 }
 			root = { set_variable = { which = pe_adown value = 1 } }
+			set_timed_planet_flag = { flag = pe_auto_cd_$JOB$ days = 720 }
 		}
 	}
 	# Drop one level.
@@ -932,6 +980,9 @@ pe_auto_invest = {
 			root = {
 				check_variable = { which = pe_unemp value = 0 }
 				check_variable = { which = pe_adown value = 0 }
+			}
+			NOT = { has_planet_flag = pe_auto_cd_$JOB$ }
+			root = {
 				check_variable = { which = pe_afree value > 0 }
 				check_variable = { which = pe_acap value >= 200 }
 				check_variable = { which = pe_atot value >= pe_acost }

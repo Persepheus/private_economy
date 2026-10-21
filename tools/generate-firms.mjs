@@ -594,6 +594,15 @@ pe_site_complete = {
 			set_variable = { which = pe_chg_fcap value = prev.pe_fcap }
 			set_variable = { which = pe_chg_debt value = prev.pe_debt }
 			set_variable = { which = pe_chg_type value = prev.pe_kind }
+			set_variable = { which = pe_old_code value = 0 }
+			set_variable = { which = pe_old_stage value = 0 }
+		}
+		if = {
+			limit = { is_variable_set = pe_old_code }
+			root = {
+				set_variable = { which = pe_old_code value = prev.pe_old_code }
+				set_variable = { which = pe_old_stage value = prev.pe_old_stage }
+			}
 		}
 		remove_deposit = yes
 	}
@@ -601,7 +610,9 @@ pe_site_complete = {
 		limit = { root = { check_variable = { which = pe_site_done value = 1 } } }
 		save_event_target_as = pe_msg_planet
 ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = ${p.v.code} } check_variable = { which = pe_chg_stage value = ${p.s} } }`, p =>
-  `add_deposit = ${p.key} ${initFirm(p.v.code, p.s, 'root.pe_chg_fcap', 'root.pe_chg_debt')} if = { limit = { ${rootIs('pe_chg_type', 3)} } ${msg(`pe_msg_retool_${p.key}`)} }${p.s === 1 ? ` else = { ${msg(`pe_msg_found_${p.key}`)} }` : ''}`, '\t\t')}
+  `add_deposit = ${p.key} ${initFirm(p.v.code, p.s, 'root.pe_chg_fcap', 'root.pe_chg_debt')} if = { limit = { ${rootIs('pe_chg_type', 3)} } root = { set_variable = { which = pe_new_code value = ${p.v.code} } set_variable = { which = pe_new_stage value = ${p.s} } } }${p.s === 1 ? ` else = { ${msg(`pe_msg_found_${p.key}`)} }` : ''}`, '\t\t')}
+		# Restructured: name the old and the new firm.
+		if = { limit = { ${rootIs('pe_chg_type', 3)} } pe_retool_message = yes }
 		if = {
 			limit = { count_deposits = { category = pe_deposit_cat_sites count < 1 } }
 			remove_planet_flag = pe_site
@@ -751,7 +762,7 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} }`).
 	if = {
 		limit = { root = { check_variable = { which = pe_retool_ok value = 1 } } }
 ${ifChain(variants, v => rootIs('pe_cls_var_all', v.code), v => {
-  const site = `add_deposit = ${v.site} last_added_deposit = { set_variable = { which = pe_target value = ${v.code} } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_debt value = root.pe_chg_debt } set_variable = { which = pe_left value = ${BUILD_MONTHS[v.k] / 2} } set_variable = { which = pe_kind value = 3 } }`;
+  const site = `add_deposit = ${v.site} last_added_deposit = { set_variable = { which = pe_target value = ${v.code} } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_debt value = root.pe_chg_debt } set_variable = { which = pe_left value = ${BUILD_MONTHS[v.k] / 2} } set_variable = { which = pe_kind value = 3 } set_variable = { which = pe_old_code value = root.pe_chg_code } set_variable = { which = pe_old_stage value = root.pe_chg_stage } }`;
   return v.cityLike ? site : `if = { limit = { num_free_districts = { type = ${v.district} value > 0 } } ${site} } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_${v.cls} days = 360 } }`;
 }, '\t\t')}
 		if = {
@@ -771,6 +782,15 @@ ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = $
 `;
 // Relocation of a firm with its workers (see pe_relocate).
 trg += `
+# Colony scope: the firm root.pe_rl_code could be founded here (free slot; rural firms
+# also a free district of their type and the deposits of their side share).
+pe_rl_target_fits = {
+	OR = {
+${variants.map(v => `		AND = { root = { check_variable = { which = pe_rl_code value = ${v.code} } } pe_can_found_${v.key} = yes }`).join('\n')}
+	}
+}
+`;
+trg += `
 # Colony scope: the planet's designation suits the main share root.pe_rl_prim.
 pe_desig_prim = {
 	OR = {
@@ -786,7 +806,7 @@ const eff_relocate = `
 # destination is at least as habitable); the firm reopens there at once with its stage,
 # capital and debt. Like vanilla resettle_pop_group, inlined (call depth).
 pe_relocate_exec = {
-	save_event_target_as pe_rl_src
+	save_event_target_as = pe_rl_src
 	random_deposit = {
 		limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_rl_cand value = 1 } }
 		root = {
@@ -806,7 +826,7 @@ pe_relocate_exec = {
 	every_owned_pop_job = {
 		limit = { has_job_type = civilian }
 		every_job_pop_group = {
-			save_event_target_as pe_rl_pg
+			save_event_target_as = pe_rl_pg
 			event_target:pe_rl_src = {
 				export_trigger_value_to_variable = { trigger = habitability parameters = { who = event_target:pe_rl_pg } variable = pe_hab }
 				root = { set_variable = { which = pe_hs value = prev.pe_hab } }
@@ -857,7 +877,19 @@ ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = $
 	}
 }
 `;
-write('common/scripted_effects/pe_firm_effects_generated.txt', eff + eff_ledger_bits + eff_relocate);
+const eff_retool_msg = `
+# Colony scope: message for a finished restructuring, naming the old and the new firm.
+pe_retool_message = {
+${ifChain(pairs, p => `root = { check_variable = { which = pe_new_code value = ${p.v.code} } check_variable = { which = pe_new_stage value = ${p.s} } }`, p => `pe_retool_message_old = { NEW = ${p.key} }`)}
+}
+
+# The old firm (root.pe_old_code / pe_old_stage) as the key variable OLD.
+pe_retool_message_old = {
+${ifChain(pairs, p => `root = { check_variable = { which = pe_old_code value = ${p.v.code} } check_variable = { which = pe_old_stage value = ${p.s} } }`, p => `owner = { create_message = { type = pe_private_economy localization = pe_msg_retool_$NEW$ days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = ${p.key} localization = OLD } } }`)}
+	else = { owner = { create_message = { type = pe_private_economy localization = pe_msg_retool_$NEW$ days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_no_firm localization = OLD } } } }
+}
+`;
+write('common/scripted_effects/pe_firm_effects_generated.txt', eff + eff_ledger_bits + eff_relocate + eff_retool_msg);
 
 // --- Scripted localisation (country scope) --------------------------------------
 const dtext = (name, varName, entries, fallback) => `defined_text = {
@@ -946,10 +978,10 @@ for (const {v, s, key} of pairs) {
   const enD = distName(v.clsNum, true), deD = distName(v.clsNum, false);
   loc.english.push(` ${key}:0 "${nameOf(v, s, true)}"`,
     ` ${key}_desc:0 "A private company that decides itself what it produces. It occupies a district slot${v.cityLike ? '' : ` and one ${enD} district`} and provides housing like that district. Workforce: ${wf}."`,
-    ` pe_msg_retool_${key}:0 "A firm on $PLANET$ has restructured into a §Y$${key}$§!."`);
+    ` pe_msg_retool_${key}:0 "A §Y$OLD$§! on $PLANET$ has restructured into a §Y$${key}$§!."`);
   loc.german.push(` ${key}:0 "${nameOf(v, s, false)}"`,
     ` ${key}_desc:0 "Ein privates Unternehmen, das selbst entscheidet, was es produziert. Es belegt einen Distriktplatz${v.cityLike ? '' : ` und einen ${deD}distrikt`} und bietet Wohnraum wie dieser Distrikt. Arbeitskraft: ${wf}."`,
-    ` pe_msg_retool_${key}:0 "Ein Unternehmen auf $PLANET$ hat umstrukturiert: jetzt §Y$${key}$§!."`);
+    ` pe_msg_retool_${key}:0 "§Y$OLD$§! auf $PLANET$ hat umstrukturiert und ist jetzt §Y$${key}$§!."`);
   if (s === 1) {
     loc.english.push(` pe_msg_found_${key}:0 "A §Y$${key}$§! has opened on $PLANET$."`,
       ` pe_msg_buy_${key}:0 "Investors bought a ${enD} district on $PLANET$ and turned it into a §Y$${key}$§!. They paid §G${m}§! £minerals£ and §G${t}§! £trade£."`,

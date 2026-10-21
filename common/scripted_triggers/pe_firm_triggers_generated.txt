@@ -326,6 +326,93 @@ pe_ok_d_pe_firm_ffft = { root = { NOT = { check_variable = { which = pe_def_cons
 pe_ok_d_pe_firm_fffm = { always = yes }
 pe_ok_d_pe_firm_fffe = { always = yes }
 
+# Colony scope: the firm root.pe_rl_code could be founded here (free slot; rural firms
+# also a free district of their type and the deposits of their side share).
+pe_rl_target_fits = {
+	OR = {
+		AND = { root = { check_variable = { which = pe_rl_code value = 1 } } pe_can_found_d_pe_firm_aaac = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 2 } } pe_can_found_d_pe_firm_aaat = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 3 } } pe_can_found_d_pe_firm_aaau = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 4 } } pe_can_found_d_pe_firm_aacc = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 5 } } pe_can_found_d_pe_firm_aact = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 6 } } pe_can_found_d_pe_firm_aacu = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 7 } } pe_can_found_d_pe_firm_aatt = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 8 } } pe_can_found_d_pe_firm_aatu = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 9 } } pe_can_found_d_pe_firm_aauu = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 10 } } pe_can_found_d_pe_firm_ccca = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 11 } } pe_can_found_d_pe_firm_ccat = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 12 } } pe_can_found_d_pe_firm_ccau = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 13 } } pe_can_found_d_pe_firm_ttac = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 14 } } pe_can_found_d_pe_firm_actu = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 15 } } pe_can_found_d_pe_firm_uuac = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 16 } } pe_can_found_d_pe_firm_ttta = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 17 } } pe_can_found_d_pe_firm_ttau = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 18 } } pe_can_found_d_pe_firm_uuat = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 19 } } pe_can_found_d_pe_firm_uuua = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 20 } } pe_can_found_d_pe_firm_ccct = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 21 } } pe_can_found_d_pe_firm_cccu = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 22 } } pe_can_found_d_pe_firm_cctt = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 23 } } pe_can_found_d_pe_firm_cctu = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 24 } } pe_can_found_d_pe_firm_ccuu = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 25 } } pe_can_found_d_pe_firm_tttc = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 26 } } pe_can_found_d_pe_firm_ttcu = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 27 } } pe_can_found_d_pe_firm_uuct = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 28 } } pe_can_found_d_pe_firm_uuuc = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 29 } } pe_can_found_d_pe_firm_tttu = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 30 } } pe_can_found_d_pe_firm_ttuu = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 31 } } pe_can_found_d_pe_firm_uuut = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 32 } } pe_can_found_d_pe_firm_xxxy = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 33 } } pe_can_found_d_pe_firm_xxxz = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 34 } } pe_can_found_d_pe_firm_xxxb = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 35 } } pe_can_found_d_pe_firm_xxyy = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 36 } } pe_can_found_d_pe_firm_xxyz = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 37 } } pe_can_found_d_pe_firm_xxyb = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 38 } } pe_can_found_d_pe_firm_xxzz = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 39 } } pe_can_found_d_pe_firm_xxzb = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 40 } } pe_can_found_d_pe_firm_xxbb = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 41 } } pe_can_found_d_pe_firm_yyyx = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 42 } } pe_can_found_d_pe_firm_yyxz = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 43 } } pe_can_found_d_pe_firm_yyxb = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 44 } } pe_can_found_d_pe_firm_zzxy = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 45 } } pe_can_found_d_pe_firm_xyzb = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 46 } } pe_can_found_d_pe_firm_bbxy = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 47 } } pe_can_found_d_pe_firm_zzzx = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 48 } } pe_can_found_d_pe_firm_zzxb = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 49 } } pe_can_found_d_pe_firm_bbxz = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 50 } } pe_can_found_d_pe_firm_bbbx = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 51 } } pe_can_found_d_pe_firm_yyyz = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 52 } } pe_can_found_d_pe_firm_yyyb = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 53 } } pe_can_found_d_pe_firm_yyzz = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 54 } } pe_can_found_d_pe_firm_yyzb = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 55 } } pe_can_found_d_pe_firm_yybb = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 56 } } pe_can_found_d_pe_firm_zzzy = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 57 } } pe_can_found_d_pe_firm_zzyb = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 58 } } pe_can_found_d_pe_firm_bbyz = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 59 } } pe_can_found_d_pe_firm_bbby = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 60 } } pe_can_found_d_pe_firm_zzzb = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 61 } } pe_can_found_d_pe_firm_zzbb = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 62 } } pe_can_found_d_pe_firm_bbbz = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 63 } } pe_can_found_d_pe_firm_mmmm = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 64 } } pe_can_found_d_pe_firm_mmma = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 65 } } pe_can_found_d_pe_firm_mmmc = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 66 } } pe_can_found_d_pe_firm_mmmt = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 67 } } pe_can_found_d_pe_firm_mmme = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 68 } } pe_can_found_d_pe_firm_mmmf = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 69 } } pe_can_found_d_pe_firm_eeee = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 70 } } pe_can_found_d_pe_firm_eeea = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 71 } } pe_can_found_d_pe_firm_eeec = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 72 } } pe_can_found_d_pe_firm_eeet = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 73 } } pe_can_found_d_pe_firm_eeem = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 74 } } pe_can_found_d_pe_firm_eeef = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 75 } } pe_can_found_d_pe_firm_ffff = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 76 } } pe_can_found_d_pe_firm_fffa = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 77 } } pe_can_found_d_pe_firm_fffc = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 78 } } pe_can_found_d_pe_firm_ffft = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 79 } } pe_can_found_d_pe_firm_fffm = yes }
+		AND = { root = { check_variable = { which = pe_rl_code value = 80 } } pe_can_found_d_pe_firm_fffe = yes }
+	}
+}
+
 # Colony scope: the planet's designation suits the main share root.pe_rl_prim.
 pe_desig_prim = {
 	OR = {
