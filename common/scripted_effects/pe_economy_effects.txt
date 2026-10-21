@@ -167,8 +167,9 @@ pe_quarterly = {
 # Country scope: a firm moves to another planet with its workers, at most once a year per
 # empire. Source: a planet that is stuck (no idle civilians, so no new firm can open; free
 # district slots do not help without workers) or short of housing or amenities, without
-# construction. The capital only gives firms away when it is short of housing or
-# amenities (its designation suits no firm). Firm: its main share does not suit
+# construction. The capital (its designation suits no firm) is stuck only while firms hold
+# at least 2/3 of its used district slots (pe_firm_heavy); short of housing or amenities
+# it always gives firms away. Firm: its main share does not suit
 # the source's designation, or the source is short of housing or amenities. Destination:
 # the firm could be founded there (free slot; rural firms a free district of their type
 # with its deposits), no construction, free housing and amenities for all workers (200 x
@@ -186,8 +187,11 @@ pe_relocate = {
 				count_deposits = { category = pe_deposit_cat_firms count > 0 }
 				OR = {
 					AND = {
-						is_capital = no
 						NOT = { pe_has_idle_pops = yes }
+						OR = {
+							is_capital = no
+							check_variable = { which = pe_firm_heavy value = 1 }
+						}
 					}
 					free_amenities < 0
 					free_housing < 0
@@ -696,6 +700,19 @@ pe_planet_counts = {
 	multiply_variable = { which = pe_target value = root.pe_private_share }
 	divide_variable = { which = pe_target value = 100 }
 	floor_variable = pe_target
+	# pe_firm_heavy: firms hold at least 2/3 of the used district slots (state districts
+	# plus firms and sites). The capital only gives firms away then (pe_relocate).
+	set_variable = { which = pe_ftmp value = pe_districts }
+	change_variable = { which = pe_ftmp value = pe_firms }
+	multiply_variable = { which = pe_ftmp value = 0.6667 }
+	set_variable = { which = pe_firm_heavy value = 0 }
+	if = {
+		limit = {
+			check_variable = { which = pe_firms_real value > 0 }
+			check_variable = { which = pe_firms_real value >= pe_ftmp }
+		}
+		set_variable = { which = pe_firm_heavy value = 1 }
+	}
 }
 
 # root.pe_fill_cur = share of this planet's private jobs that are filled.
