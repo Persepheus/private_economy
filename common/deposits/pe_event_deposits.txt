@@ -1,0 +1,22 @@
+# Deposits from private economy events.
+
+# Hydroponics start-up (pe.215): urban food farms that need no farmers. Produces food
+# directly; removed after ten years (pe_hydro flag, see pe_planet_step).
+d_pe_hydroponics = {
+	icon = d_fertile_lands
+	is_for_colonizable = yes
+	category = pe_deposit_cat_ledger
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = planet_deposits
+		produces = {
+			food = 15
+		}
+		upkeep = {
+			energy = 3
+		}
+	}
+}

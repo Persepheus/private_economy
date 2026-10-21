@@ -31,3 +31,12 @@ pe_buyout_allowed = {
 pe_has_idle_pops = {
 	num_assigned_jobs = { job = civilian value > 5 }
 }
+
+# Colony scope: private worker jobs stand empty here (at least one job's worth).
+pe_rural_short = {
+	OR = {
+		free_jobs_of_type = { job = pe_private_miner value >= 100 }
+		free_jobs_of_type = { job = pe_private_technician value >= 100 }
+		free_jobs_of_type = { job = pe_private_farmer value >= 100 }
+	}
+}

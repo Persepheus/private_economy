@@ -9,6 +9,7 @@
 #   event pe.8   finish all private construction sites now
 #   event pe.9   try a firm relocation now (stuck planet, ignores the yearly limit)
 #   event pe.10  fire a patron event now
+#   event pe.11  fire a labour event now (a planet with empty private worker jobs)
 namespace = pe
 
 country_event = {
@@ -174,3 +175,19 @@ country_event = {
 		log = "private_economy: pe.10 patron [Root.pe_mag_id] events [Root.pe_mag_events] spend [Root.pe_pat_spend]"
 	}
 }
+
+# event pe.11: fire a labour event now (needs a planet with empty private worker jobs)
+country_event = {
+	id = pe.11
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_init = yes
+		if = {
+			limit = { any_owned_colony = { pe_planet_eligible = yes pe_rural_short = yes } }
+			pe_labour_fire = yes
+		}
+		log = "private_economy: pe.11 labour event, job [Root.pe_lab_job] spend [Root.pe_pat_spend]"
+	}
+}
+

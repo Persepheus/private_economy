@@ -100,6 +100,7 @@ pe_quarterly = {
 	}
 	pe_relocate = yes
 	pe_patron = yes
+	pe_labour = yes
 	pe_ledgers = yes
 }
 
@@ -264,6 +265,8 @@ pe_ledgers = {
 		set_variable = { which = pe_lscale value = pe_lcap }
 		divide_variable = { which = pe_lscale value = pe_ltot }
 	}
+	# Gratitude after disaster relief (pe.226): the firms take half their profit share.
+	if = { limit = { has_country_flag = pe_gratitude } multiply_variable = { which = pe_lscale value = 0.5 } }
 	every_owned_colony = { pe_ledger_planet = yes }
 	set_variable = { which = pe_sav_month value = pe_savings_last }
 	multiply_variable = { which = pe_sav_month value = pe_lscale }
@@ -619,6 +622,11 @@ pe_count_planet_job = {
 pe_planet_step = {
 	# Assign new pops first, so idle civilians really are idle.
 	check_planet_employment = yes
+	# Event deposits that expired.
+	if = {
+		limit = { has_deposit = d_pe_hydroponics NOT = { has_planet_flag = pe_hydro } }
+		remove_deposit = d_pe_hydroponics
+	}
 	pe_planet_counts = yes
 	pe_planet_prepare = yes
 	root = { set_variable = { which = pe_unemp value = 0 } }
@@ -887,11 +895,15 @@ pe_auto_book = {
 					}
 				}
 			}
-			# The firms reimburse the state's energy upkeep of this quarter.
-			root = {
-				set_variable = { which = pe_tmp value = pe_aen }
-				multiply_variable = { which = pe_tmp value = 3 }
-				add_resource = { energy = 1 mult = pe_tmp }
+			# The firms reimburse the state's energy upkeep of this quarter (not while machines
+			# are leased here: then the engine charges no upkeep on this planet).
+			if = {
+				limit = { NOT = { has_modifier = pe_leasing_$JOB$ } }
+				root = {
+					set_variable = { which = pe_tmp value = pe_aen }
+					multiply_variable = { which = pe_tmp value = 3 }
+					add_resource = { energy = 1 mult = pe_tmp }
+				}
 			}
 			every_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_wf_$JOB$ value > 0 } }

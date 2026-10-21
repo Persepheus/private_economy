@@ -32,3 +32,75 @@ pe_recruit_weak = {
 pe_recruit_refused = {
 	planet_stability_add = -3
 }
+
+# Labour events (pe_labour_events.txt).
+pe_overtime_miner = {
+	planet_miners_produces_mult = 0.2
+	planet_amenities_add = -500
+}
+pe_overtime_technician = {
+	planet_technician_produces_mult = 0.2
+	planet_amenities_add = -500
+}
+pe_overtime_farmer = {
+	planet_farmers_produces_mult = 0.2
+	planet_amenities_add = -500
+}
+pe_guest_unrest = {
+	planet_stability_add = -3
+}
+pe_leasing_miner = {
+	job_pe_private_miner_automated_workforce_mult = 0.25
+	planet_automated_jobs_upkeep_mult = -1
+}
+pe_leasing_technician = {
+	job_pe_private_technician_automated_workforce_mult = 0.25
+	planet_automated_jobs_upkeep_mult = -1
+}
+pe_leasing_farmer = {
+	job_pe_private_farmer_automated_workforce_mult = 0.25
+	planet_automated_jobs_upkeep_mult = -1
+}
+pe_strike = {
+	planet_jobs_produces_mult = -0.15
+}
+pe_strike_crushed = {
+	planet_stability_add = -5
+}
+pe_strike_crushed_mild = {
+	planet_stability_add = -2
+}
+
+# More patron events.
+pe_business_upset = {
+	planet_stability_add = -2
+}
+pe_art = {
+	planet_amenities_add = 500
+	planet_stability_add = 2
+}
+pe_league = {
+	planet_amenities_add = 500
+}
+pe_bet_scandal = {
+	planet_stability_add = -3
+}
+pe_corruption = {
+	planet_crime_add = 10
+}
+pe_university = {
+	planet_researchers_produces_mult = 0.1
+}
+pe_elite_academy = {
+	planet_researchers_produces_mult = 0.15
+	planet_stability_add = -2
+}
+pe_tourism = {
+	planet_amenities_add = 500
+}
+pe_tourism_accident = {
+	planet_stability_add = -3
+}
+pe_relief = {
+	planet_stability_add = 10
+}

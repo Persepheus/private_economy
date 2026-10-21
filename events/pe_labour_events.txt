@@ -1,0 +1,189 @@
+# Labour events: private worker jobs stand empty (see pe_patron_effects.txt, pe_labour).
+#   pe.210 overtime   pe.211 guest workers   pe.212 machine leasing   pe.213 strike
+# Scope: country. event_target:pe_pat_planet = the planet; root.pe_lab_job = the job with
+# the most empty places there (1 miner, 2 technician, 3 farmer); root.pe_pat_spend = what
+# the firms put in (already taken from the investor pool; declining options pay it back).
+namespace = pe
+
+# Overtime for better wages
+country_event = {
+	id = pe.210
+	title = pe.210.name
+	desc = {
+		trigger = { check_variable = { which = pe_lab_job value = 1 } }
+		text = pe.210.desc.miner
+	}
+	desc = {
+		trigger = { check_variable = { which = pe_lab_job value = 2 } }
+		text = pe.210.desc.technician
+	}
+	desc = {
+		trigger = { check_variable = { which = pe_lab_job value = 3 } }
+		text = pe.210.desc.farmer
+	}
+	picture = GFX_evt_engineering_bay
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.210.a
+		event_target:pe_pat_planet = {
+			if = { limit = { root = { check_variable = { which = pe_lab_job value = 1 } } } add_modifier = { modifier = pe_overtime_miner days = 1800 } }
+			else_if = { limit = { root = { check_variable = { which = pe_lab_job value = 2 } } } add_modifier = { modifier = pe_overtime_technician days = 1800 } }
+			else = { add_modifier = { modifier = pe_overtime_farmer days = 1800 } }
+		}
+		ai_chance = { factor = 70 }
+	}
+	option = {
+		name = pe.210.b
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_spend }
+			random = {
+				chance = 30
+				set_country_flag = pe_strike_delayed
+				country_event = { id = pe.213 days = 360 }
+			}
+		}
+		ai_chance = { factor = 30 }
+	}
+}
+
+# Guest workers
+country_event = {
+	id = pe.211
+	title = pe.211.name
+	desc = pe.211.desc
+	picture = GFX_evt_colony_settlement
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	# The guests must find the planet habitable and must not be purged here.
+	trigger = {
+		exists = event_target:pe_gw_species
+		event_target:pe_pat_planet = { habitability = { who = event_target:pe_gw_species value >= 0.6 } }
+		event_target:pe_gw_species = {
+			NOT = { has_citizenship_type = { country = root type = citizenship_purge } }
+		}
+	}
+
+	option = {
+		name = pe.211.a
+		allow = { has_resource = { type = trade amount >= 100 } }
+		add_resource = { trade = -100 }
+		event_target:pe_pat_planet = {
+			create_pop_group = {
+				species = event_target:pe_gw_species
+				size = 200
+			}
+			if = {
+				limit = { owner = { is_xenophobe = yes } }
+				add_modifier = { modifier = pe_guest_unrest days = 1080 }
+			}
+			check_planet_employment = yes
+		}
+		ai_chance = {
+			factor = 60
+			modifier = { factor = 0.1 is_xenophobe = yes }
+			modifier = { factor = 2 is_xenophile = yes }
+		}
+	}
+	option = {
+		name = pe.211.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = {
+			factor = 40
+			modifier = { factor = 5 is_xenophobe = yes }
+		}
+	}
+}
+
+# Machine leasing
+country_event = {
+	id = pe.212
+	title = pe.212.name
+	desc = {
+		trigger = { check_variable = { which = pe_lab_job value = 1 } }
+		text = pe.212.desc.miner
+	}
+	desc = {
+		trigger = { check_variable = { which = pe_lab_job value = 2 } }
+		text = pe.212.desc.technician
+	}
+	desc = {
+		trigger = { check_variable = { which = pe_lab_job value = 3 } }
+		text = pe.212.desc.farmer
+	}
+	picture = GFX_evt_engineering_research
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.212.a
+		event_target:pe_pat_planet = {
+			if = { limit = { root = { check_variable = { which = pe_lab_job value = 1 } } } add_modifier = { modifier = pe_leasing_miner days = 1800 } }
+			else_if = { limit = { root = { check_variable = { which = pe_lab_job value = 2 } } } add_modifier = { modifier = pe_leasing_technician days = 1800 } }
+			else = { add_modifier = { modifier = pe_leasing_farmer days = 1800 } }
+			check_planet_employment = yes
+		}
+		ai_chance = { factor = 80 }
+	}
+	option = {
+		name = pe.212.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = { factor = 20 }
+	}
+}
+
+# Strike
+country_event = {
+	id = pe.213
+	title = pe.213.name
+	desc = pe.213.desc
+	picture = GFX_evt_night_raid
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	immediate = {
+		if = {
+			limit = { NOT = { exists = event_target:pe_pat_planet } }
+			capital_scope = { save_event_target_as = pe_pat_planet }
+		}
+		# A strike after declined overtime: the wage money was paid back then, take it now.
+		if = {
+			limit = { has_country_flag = pe_strike_delayed }
+			remove_country_flag = pe_strike_delayed
+			if = {
+				limit = { check_variable = { which = pe_capital value < pe_pat_spend } }
+				set_variable = { which = pe_pat_spend value = pe_capital }
+			}
+			subtract_variable = { which = pe_capital value = pe_pat_spend }
+		}
+	}
+
+	# The firms raise wages from the investor pool; the strike ends.
+	option = {
+		name = pe.213.a
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = pe.213.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_strike days = 360 } }
+		ai_chance = { factor = 30 }
+	}
+	option = {
+		name = pe.213.c
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		event_target:pe_pat_planet = {
+			if = {
+				limit = { owner = { is_authoritarian = yes } }
+				add_modifier = { modifier = pe_strike_crushed_mild days = 720 }
+			}
+			else = { add_modifier = { modifier = pe_strike_crushed days = 720 } }
+		}
+		ai_chance = {
+			factor = 20
+			modifier = { factor = 3 is_authoritarian = yes }
+		}
+	}
+}

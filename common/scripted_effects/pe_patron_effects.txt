@@ -1,7 +1,12 @@
-# Patrons: rich private people spend the investor pool on galas, foundations, prototypes,
-# charity and recruitment (events pe.200-pe.206). They are recurring figures (pe_mag_id,
-# reputation pe_mag_rep); a magnate retires after four events and a new one appears.
-#   pe_quarterly (1) -> pe_patron (2) -> pe_patron_fire (3)
+# Story events of the private economy.
+#   Patrons (pe_patron_events.txt): rich private people spend the investor pool. They are
+#   recurring figures (pe_mag_id, reputation pe_mag_rep); a magnate retires after four
+#   events and a new one appears.
+#   Labour (pe_labour_events.txt): private worker jobs stay empty; firms and workers react.
+#   pe_quarterly (1) -> pe_patron (2) -> pe_patron_fire (3) -> pe_pat_amounts (4)
+#                    -> pe_labour (2) -> pe_labour_fire (3) -> pe_pat_amounts (4)
+
+# --- Patrons ------------------------------------------------------------------------
 
 # Country scope, quarterly: with a full investor pool (3000 or more) and no patron event
 # in the last two years, a 25% chance per quarter of a patron event.
@@ -22,6 +27,85 @@ pe_patron = {
 # (pe_pat_spend); options that decline it pay it back.
 pe_patron_fire = {
 	set_timed_country_flag = { flag = pe_patron_cd days = 730 }
+	pe_pat_amounts = yes
+	capital_scope = { save_event_target_as = pe_pat_planet }
+	owner_main_species = { save_event_target_as = pe_main_species }
+	random_list = {
+		10 = { country_event = { id = pe.200 } }
+		10 = { country_event = { id = pe.202 } }
+		8 = { country_event = { id = pe.203 } }
+		8 = {
+			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes OR = { free_housing < 0 free_amenities < 0 } } } }
+			random_owned_colony = {
+				limit = { pe_planet_eligible = yes OR = { free_housing < 0 free_amenities < 0 } }
+				save_event_target_as = pe_pat_planet
+			}
+			country_event = { id = pe.204 }
+		}
+		8 = {
+			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes free_jobs >= 200 count_deposits = { category = pe_deposit_cat_firms count > 0 } } } }
+			modifier = { factor = 0 NOT = { any_owned_colony = { pe_has_idle_pops = yes } } }
+			random_owned_colony = {
+				limit = { pe_planet_eligible = yes free_jobs >= 200 count_deposits = { category = pe_deposit_cat_firms count > 0 } }
+				save_event_target_as = pe_pat_planet
+			}
+			country_event = { id = pe.205 }
+		}
+		# Prospecting find on a planet.
+		8 = {
+			random_owned_colony = { limit = { pe_planet_eligible = yes } save_event_target_as = pe_pat_planet }
+			country_event = { id = pe.214 }
+		}
+		# Hydroponics while food is short.
+		8 = {
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_food value = 1 } } }
+			country_event = { id = pe.215 }
+		}
+		8 = { country_event = { id = pe.220 } }
+		8 = { country_event = { id = pe.221 } }
+		6 = { country_event = { id = pe.222 } }
+		# Private colonists: a colonisable planet in our borders that suits our main species.
+		6 = {
+			modifier = {
+				factor = 0
+				NOT = {
+					any_planet_within_border = {
+						is_colonizable = yes
+						NOT = { exists = owner }
+						habitability = { who = event_target:pe_main_species value >= 0.6 }
+					}
+				}
+			}
+			random_planet_within_border = {
+				limit = {
+					is_colonizable = yes
+					NOT = { exists = owner }
+					habitability = { who = event_target:pe_main_species value >= 0.6 }
+				}
+				save_event_target_as = pe_pat_colony
+			}
+			country_event = { id = pe.223 }
+		}
+		8 = { country_event = { id = pe.224 } }
+		8 = {
+			random_owned_colony = { limit = { pe_planet_eligible = yes } save_event_target_as = pe_pat_planet }
+			country_event = { id = pe.225 }
+		}
+		# Disaster relief for a planet in crisis.
+		8 = {
+			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes planet_stability < 25 } } }
+			random_owned_colony = {
+				limit = { pe_planet_eligible = yes planet_stability < 25 }
+				save_event_target_as = pe_pat_planet
+			}
+			country_event = { id = pe.226 }
+		}
+	}
+}
+
+# Country scope: the magnate (a new one after four events), the amount (30% of the
+# investor pool, taken from it) and what the options give, all rounded.
+pe_pat_amounts = {
 	if = {
 		limit = {
 			OR = {
@@ -38,7 +122,6 @@ pe_patron_fire = {
 	multiply_variable = { which = pe_pat_spend value = 0.3 }
 	round_variable = pe_pat_spend
 	subtract_variable = { which = pe_capital value = pe_pat_spend }
-	# What the options give, rounded (shown in their tooltips).
 	set_variable = { which = pe_pat_unity value = pe_pat_spend }
 	multiply_variable = { which = pe_pat_unity value = 0.3 }
 	round_variable = pe_pat_unity
@@ -48,8 +131,8 @@ pe_patron_fire = {
 	set_variable = { which = pe_pat_res value = pe_pat_spend }
 	multiply_variable = { which = pe_pat_res value = 0.4 }
 	round_variable = pe_pat_res
-	set_variable = { which = pe_pat_res_free value = pe_pat_res }
-	multiply_variable = { which = pe_pat_res_free value = 1.25 }
+	set_variable = { which = pe_pat_res_free value = pe_pat_spend }
+	multiply_variable = { which = pe_pat_res_free value = 0.5 }
 	round_variable = pe_pat_res_free
 	set_variable = { which = pe_pat_proto_full value = pe_pat_spend }
 	multiply_variable = { which = pe_pat_proto_full value = 0.6 }
@@ -57,46 +140,90 @@ pe_patron_fire = {
 	set_variable = { which = pe_pat_proto_part value = pe_pat_spend }
 	multiply_variable = { which = pe_pat_proto_part value = 0.2 }
 	round_variable = pe_pat_proto_part
-	capital_scope = { save_event_target_as = pe_pat_planet }
-	random_list = {
-		25 = { country_event = { id = pe.200 } }
-		25 = { country_event = { id = pe.202 } }
-		20 = { country_event = { id = pe.203 } }
-		15 = {
-			modifier = {
-				factor = 0
-				NOT = { any_owned_colony = { pe_planet_eligible = yes OR = { free_housing < 0 free_amenities < 0 } } }
-			}
-			random_owned_colony = {
-				limit = { pe_planet_eligible = yes OR = { free_housing < 0 free_amenities < 0 } }
-				save_event_target_as = pe_pat_planet
-			}
-			country_event = { id = pe.204 }
+	set_variable = { which = pe_pat_art value = pe_pat_spend }
+	multiply_variable = { which = pe_pat_art value = 0.2 }
+	round_variable = pe_pat_art
+	set_variable = { which = pe_pat_art_state value = pe_pat_spend }
+	multiply_variable = { which = pe_pat_art_state value = 0.4 }
+	round_variable = pe_pat_art_state
+	set_variable = { which = pe_pat_tour value = pe_pat_spend }
+	multiply_variable = { which = pe_pat_tour value = 0.2 }
+	round_variable = pe_pat_tour
+	set_variable = { which = pe_pat_half value = pe_pat_spend }
+	multiply_variable = { which = pe_pat_half value = 0.5 }
+	round_variable = pe_pat_half
+	set_variable = { which = pe_pat_influence value = pe_pat_spend }
+	multiply_variable = { which = pe_pat_influence value = 0.05 }
+	round_variable = pe_pat_influence
+	if = { limit = { check_variable = { which = pe_pat_influence value > 150 } } set_variable = { which = pe_pat_influence value = 150 } }
+}
+
+# --- Labour -------------------------------------------------------------------------
+
+# Colony scope: private worker jobs stand empty here (at least one job's worth).
+# (Trigger in pe_triggers.txt: pe_rural_short.)
+
+# Country scope, quarterly: when private worker jobs stand empty somewhere and the pool
+# can pay wages (1000 or more), a 25% chance per quarter of a labour event; then two
+# years' pause.
+pe_labour = {
+	if = {
+		limit = {
+			check_variable = { which = pe_capital value >= 1000 }
+			NOT = { has_country_flag = pe_labour_cd }
+			any_owned_colony = { pe_planet_eligible = yes pe_rural_short = yes }
 		}
-		15 = {
+		random = {
+			chance = 25
+			pe_labour_fire = yes
+		}
+	}
+}
+
+# Country scope: a labour event on a planet with empty private worker jobs. pe_lab_job:
+# the job with the most empty places there (1 miner, 2 technician, 3 farmer).
+pe_labour_fire = {
+	set_timed_country_flag = { flag = pe_labour_cd days = 730 }
+	pe_pat_amounts = yes
+	random_owned_colony = {
+		limit = { pe_planet_eligible = yes pe_rural_short = yes }
+		save_event_target_as = pe_pat_planet
+		export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = pe_private_miner } variable = pe_lf_m }
+		export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = pe_private_technician } variable = pe_lf_e }
+		export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = pe_private_farmer } variable = pe_lf_f }
+		root = {
+			set_variable = { which = pe_lab_job value = 1 }
+			set_variable = { which = pe_tmp value = prev.pe_lf_m }
+			if = { limit = { check_variable = { which = pe_tmp value < prev.pe_lf_e } } set_variable = { which = pe_lab_job value = 2 } set_variable = { which = pe_tmp value = prev.pe_lf_e } }
+			if = { limit = { check_variable = { which = pe_tmp value < prev.pe_lf_f } } set_variable = { which = pe_lab_job value = 3 } }
+		}
+	}
+	random_list = {
+		30 = { country_event = { id = pe.210 } }
+		# Guest workers: an empire we know, whose founder species finds the planet
+		# habitable and would not be purged here.
+		25 = {
 			modifier = {
 				factor = 0
 				NOT = {
-					any_owned_colony = {
-						pe_planet_eligible = yes
-						free_jobs >= 200
-						count_deposits = { category = pe_deposit_cat_firms count > 0 }
+					any_country = {
+						is_country_type = default
+						NOT = { is_same_value = root }
+						has_communications = root
 					}
 				}
 			}
-			modifier = {
-				factor = 0
-				NOT = { any_owned_colony = { pe_has_idle_pops = yes } }
-			}
-			random_owned_colony = {
+			random_country = {
 				limit = {
-					pe_planet_eligible = yes
-					free_jobs >= 200
-					count_deposits = { category = pe_deposit_cat_firms count > 0 }
+					is_country_type = default
+					NOT = { is_same_value = root }
+					has_communications = root
 				}
-				save_event_target_as = pe_pat_planet
+				founder_species = { save_event_target_as = pe_gw_species }
 			}
-			country_event = { id = pe.205 }
+			country_event = { id = pe.211 }
 		}
+		25 = { country_event = { id = pe.212 } }
+		20 = { country_event = { id = pe.213 } }
 	}
 }

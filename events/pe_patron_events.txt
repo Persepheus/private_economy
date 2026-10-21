@@ -2,6 +2,9 @@
 #   pe.200 gala            pe.201 gala scandal (follow-up)
 #   pe.202 foundation      pe.203 prototype   pe.206 prototype result
 #   pe.204 charity         pe.205 recruitment campaign
+#   pe.214 prospecting find   pe.215 hydroponics   pe.220 arts   pe.221 league   pe.227 betting scandal
+#   pe.222 party donations   pe.223 private colonists   pe.224 university
+#   pe.225 space tourism   pe.228 tourist accident   pe.226 disaster relief
 # Scope: country. root.pe_pat_spend = what the magnate puts in (already taken from the
 # investor pool; declining options pay it back). event_target:pe_pat_planet = the planet.
 namespace = pe
@@ -259,5 +262,357 @@ country_event = {
 			factor = 10
 			modifier = { factor = 3 is_xenophobe = yes }
 		}
+	}
+}
+
+# A prospecting find
+country_event = {
+	id = pe.214
+	title = pe.214.name
+	desc = pe.214.desc
+	picture = GFX_evt_engineering_cache
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	immediate = {
+		hidden_effect = {
+			random_list = {
+				1 = { set_variable = { which = pe_find value = 1 } }
+				1 = { set_variable = { which = pe_find value = 2 } }
+				1 = { set_variable = { which = pe_find value = 3 } }
+			}
+		}
+	}
+	# The prospectors mine it themselves: the deposit and, if there is room, a private
+	# firm on it at once.
+	option = {
+		name = pe.214.a
+		event_target:pe_pat_planet = {
+			if = {
+				limit = { root = { check_variable = { which = pe_find value = 1 } } }
+				add_deposit = d_mineral_fields
+				if = { limit = { free_district_slots > 0 } add_deposit = d_pe_firm_mmmm last_added_deposit = { pe_firm_identify = yes set_variable = { which = pe_fcap value = 10 } } }
+			}
+			else_if = {
+				limit = { root = { check_variable = { which = pe_find value = 2 } } }
+				add_deposit = d_geothermal_vent
+				if = { limit = { free_district_slots > 0 } add_deposit = d_pe_firm_eeee last_added_deposit = { pe_firm_identify = yes set_variable = { which = pe_fcap value = 10 } } }
+			}
+			else = {
+				add_deposit = d_fertile_lands
+				if = { limit = { free_district_slots > 0 } add_deposit = d_pe_firm_ffff last_added_deposit = { pe_firm_identify = yes set_variable = { which = pe_fcap value = 10 } } }
+			}
+			check_planet_employment = yes
+		}
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = { factor = 50 }
+	}
+	# The state takes the find; half of the money comes back, the firms are upset.
+	option = {
+		name = pe.214.b
+		event_target:pe_pat_planet = {
+			if = { limit = { root = { check_variable = { which = pe_find value = 1 } } } add_deposit = d_mineral_fields }
+			else_if = { limit = { root = { check_variable = { which = pe_find value = 2 } } } add_deposit = d_geothermal_vent }
+			else = { add_deposit = d_fertile_lands }
+			add_modifier = { modifier = pe_business_upset days = 720 }
+		}
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_half }
+			change_variable = { which = pe_mag_rep value = -1 }
+		}
+		ai_chance = {
+			factor = 30
+			modifier = { factor = 2 is_authoritarian = yes }
+		}
+	}
+	option = {
+		name = pe.214.c
+		add_resource = { unity = 1 mult = pe_pat_art }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = -1 } }
+		ai_chance = {
+			factor = 20
+			modifier = { factor = 3 is_spiritualist = yes }
+		}
+	}
+}
+
+# Hydroponics start-up
+country_event = {
+	id = pe.215
+	title = pe.215.name
+	desc = pe.215.desc
+	picture = GFX_evt_society_research
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.215.a
+		event_target:pe_pat_planet = {
+			if = { limit = { NOT = { has_deposit = d_pe_hydroponics } } add_deposit = d_pe_hydroponics }
+			set_timed_planet_flag = { flag = pe_hydro days = 3600 }
+		}
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = { factor = 80 }
+	}
+	option = {
+		name = pe.215.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = { factor = 20 }
+	}
+}
+
+# Patron of the arts
+country_event = {
+	id = pe.220
+	title = pe.220.name
+	desc = pe.220.desc
+	picture = GFX_evt_city_planet
+	is_triggered_only = yes
+
+	option = {
+		name = pe.220.a
+		add_resource = { unity = 1 mult = pe_pat_art }
+		capital_scope = { add_modifier = { modifier = pe_art days = 1800 } }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 2 is_egalitarian = yes }
+		}
+	}
+	option = {
+		name = pe.220.b
+		add_resource = { unity = 1 mult = pe_pat_art_state }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = -1 } }
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 2 is_authoritarian = yes }
+		}
+	}
+}
+
+# The league
+country_event = {
+	id = pe.221
+	title = pe.221.name
+	desc = pe.221.desc
+	picture = GFX_evt_galactic_community
+	is_triggered_only = yes
+
+	option = {
+		name = pe.221.a
+		capital_scope = { add_modifier = { modifier = pe_league days = 1800 } }
+		random_owned_colony = {
+			limit = { pe_planet_eligible = yes is_capital = no }
+			add_modifier = { modifier = pe_league days = 1800 }
+		}
+		random_owned_colony = {
+			limit = { pe_planet_eligible = yes is_capital = no NOT = { has_modifier = pe_league } }
+			add_modifier = { modifier = pe_league days = 1800 }
+		}
+		hidden_effect = {
+			change_variable = { which = pe_mag_rep value = 1 }
+			random = {
+				chance = 20
+				country_event = { id = pe.227 days = 360 }
+			}
+		}
+		ai_chance = { factor = 60 }
+	}
+	option = {
+		name = pe.221.b
+		add_resource = { trade = 1 mult = pe_pat_tax }
+		ai_chance = { factor = 40 }
+	}
+}
+
+# Party donations
+country_event = {
+	id = pe.222
+	title = pe.222.name
+	desc = pe.222.desc
+	picture = GFX_evt_galactic_senate
+	is_triggered_only = yes
+
+	option = {
+		name = pe.222.a
+		add_resource = { influence = 1 mult = pe_pat_influence }
+		capital_scope = { add_modifier = { modifier = pe_corruption days = 1080 } }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = {
+			factor = 40
+			modifier = { factor = 0.5 is_egalitarian = yes }
+		}
+	}
+	option = {
+		name = pe.222.b
+		capital_scope = { add_modifier = { modifier = pe_business_upset days = 720 } }
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_spend }
+			change_variable = { which = pe_mag_rep value = -1 }
+		}
+		ai_chance = { factor = 30 }
+	}
+	option = {
+		name = pe.222.c
+		add_resource = { unity = 1 mult = pe_pat_art }
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_spend }
+			change_variable = { which = pe_mag_rep value = -2 }
+		}
+		ai_chance = {
+			factor = 30
+			modifier = { factor = 2 is_egalitarian = yes }
+		}
+	}
+}
+
+# Private colonists
+country_event = {
+	id = pe.223
+	title = pe.223.name
+	desc = pe.223.desc
+	picture = GFX_evt_colony_settlement
+	is_triggered_only = yes
+
+	trigger = {
+		exists = event_target:pe_pat_colony
+		event_target:pe_pat_colony = { NOT = { exists = owner } }
+	}
+
+	option = {
+		name = pe.223.a
+		event_target:pe_pat_colony = {
+			create_colony = {
+				owner = root
+				species = event_target:pe_main_species
+				ethos = owner
+			}
+		}
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = { factor = 80 }
+	}
+	option = {
+		name = pe.223.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = { factor = 20 }
+	}
+}
+
+# A university
+country_event = {
+	id = pe.224
+	title = pe.224.name
+	desc = pe.224.desc
+	picture = GFX_evt_physics_research
+	is_triggered_only = yes
+
+	option = {
+		name = pe.224.a
+		capital_scope = { add_modifier = { modifier = pe_university days = 3600 } }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 2 is_egalitarian = yes }
+		}
+	}
+	option = {
+		name = pe.224.b
+		capital_scope = { add_modifier = { modifier = pe_elite_academy days = 3600 } }
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 2 is_authoritarian = yes }
+		}
+	}
+}
+
+# Space tourism
+country_event = {
+	id = pe.225
+	title = pe.225.name
+	desc = pe.225.desc
+	picture = GFX_evt_inf_science_ship
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.225.a
+		add_resource = { trade = 1 mult = pe_pat_tour }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_tourism days = 1800 } }
+		hidden_effect = {
+			change_variable = { which = pe_mag_rep value = 1 }
+			random = {
+				chance = 15
+				country_event = { id = pe.228 days = 540 }
+			}
+		}
+		ai_chance = { factor = 70 }
+	}
+	option = {
+		name = pe.225.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = {
+			factor = 30
+			modifier = { factor = 3 is_xenophobe = yes }
+		}
+	}
+}
+
+# Disaster relief
+country_event = {
+	id = pe.226
+	title = pe.226.name
+	desc = pe.226.desc
+	picture = GFX_evt_burning_city
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.226.a
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_relief days = 720 } }
+		set_timed_country_flag = { flag = pe_gratitude days = 720 }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 2 } }
+		ai_chance = { factor = 80 }
+	}
+	option = {
+		name = pe.226.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = { factor = 20 }
+	}
+}
+
+# The betting scandal (follow-up of the league)
+country_event = {
+	id = pe.227
+	title = pe.227.name
+	desc = pe.227.desc
+	picture = GFX_evt_galactic_community
+	is_triggered_only = yes
+
+	option = {
+		name = pe.227.a
+		allow = { has_resource = { type = trade amount >= 100 } }
+		add_resource = { trade = -100 }
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = pe.227.b
+		capital_scope = { add_modifier = { modifier = pe_bet_scandal days = 360 } }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = -1 } }
+		ai_chance = { factor = 50 }
+	}
+}
+
+# A tourist accident (follow-up of space tourism)
+country_event = {
+	id = pe.228
+	title = pe.228.name
+	desc = pe.228.desc
+	picture = GFX_evt_large_explosion
+	is_triggered_only = yes
+
+	option = {
+		name = pe.228.a
+		capital_scope = { add_modifier = { modifier = pe_tourism_accident days = 360 } }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = -1 } }
 	}
 }
