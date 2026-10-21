@@ -36,3 +36,13 @@ Die Wirkung von Forschung, Einheit und Steuer skaliert mit dem eingesetzten Betr
 2. Der Pool sinkt pro Event um 30 %. Bei abgelehnter Hilfe oder verbotener Anwerbung steigt er wieder.
 3. Die Stiftung bringt sichtbar Forschungsfortschritt. Ein Prototyp-Unfall setzt den Modifikator auf die Hauptstadt.
 4. Logs: error.log nach `pe.20`, `pe_pat`, `GetPeMagnate` und `pe_mag` durchsuchen.
+
+## 0.12.1
+
+- **Umzugs-Nachricht:**
+  - Sie nennt jetzt die Firma.
+  - Sie unterscheidet den Grund: „besser passende Spezialisierung“ oder „Herkunft ohne genug Wohnraum oder Annehmlichkeiten“.
+- **Mäzen-Events:**
+  - Alle internen Variablen (Ruf, Pool, Würfelwurf beim Prototyp) ändern sich unsichtbar.
+  - Alle Beträge in Text und Tooltips sind ganze Zahlen; sie werden beim Auslösen berechnet und gerundet.
+- **Automatisierung erst ab 600 Privat-Arbeitskraft des Typs** (vorher 200), also ab etwa drei Landfirmen auf dem Planeten. Mit nur einer Firma war der Ertrag zu klein und die Automatisierung schnell wieder weg.

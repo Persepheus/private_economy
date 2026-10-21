@@ -181,6 +181,7 @@ pe_relocate_from = {
 				}
 				# A destination that suits the firm's main share ...
 				root = {
+					set_variable = { which = pe_rl_pass value = 1 }
 					every_owned_colony = {
 						limit = {
 							pe_planet_eligible = yes
@@ -201,6 +202,7 @@ pe_relocate_from = {
 						}
 					}
 					root = {
+						set_variable = { which = pe_rl_pass value = 2 }
 						every_owned_colony = {
 							limit = {
 								pe_planet_eligible = yes
@@ -236,7 +238,11 @@ pe_relocate_check_dest = {
 			check_variable = { which = pe_fa value >= root.pe_rl_wf }
 		}
 		save_event_target_as = pe_rl_dst
-		root = { set_variable = { which = pe_rl_done value = 1 } }
+		root = {
+			set_variable = { which = pe_rl_done value = 1 }
+			# 1 = designation, 2 = the source lacks housing or amenities (for the message)
+			set_variable = { which = pe_rl_reason value = pe_rl_pass }
+		}
 	}
 }
 
@@ -946,7 +952,7 @@ pe_auto_book = {
 }
 
 # Colony scope: invest in the next automation level of one job (uses pe_auto_book's
-# numbers). Only for unfilled private jobs, without idle civilians, from 200 private jobs
+# numbers). Only for unfilled private jobs, without idle civilians, from 600 private jobs
 # of the type, if the automated value covers the energy upkeep by 25%.
 pe_auto_invest = {
 	# Unfilled private jobs of this type here (automation only fills empty jobs).
@@ -986,7 +992,7 @@ pe_auto_invest = {
 			NOT = { has_planet_flag = pe_auto_cd_$JOB$ }
 			root = {
 				check_variable = { which = pe_afree value > 0 }
-				check_variable = { which = pe_acap value >= 200 }
+				check_variable = { which = pe_acap value >= 600 }
 				check_variable = { which = pe_atot value >= pe_acost }
 				check_variable = { which = pe_anext value >= pe_aupn }
 			}

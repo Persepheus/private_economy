@@ -860,21 +860,11 @@ pe_relocate_exec = {
 		}
 	}
 	event_target:pe_rl_dst = {
-${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = ${p.v.code} } check_variable = { which = pe_chg_stage value = ${p.s} } }`, p => `add_deposit = ${p.key} ${initFirm(p.v.code, p.s, 'root.pe_chg_fcap', 'root.pe_chg_debt')}`, '\t\t')}
+${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = ${p.v.code} } check_variable = { which = pe_chg_stage value = ${p.s} } }`, p => `add_deposit = ${p.key} ${initFirm(p.v.code, p.s, 'root.pe_chg_fcap', 'root.pe_chg_debt')} ${['', '_need'].map(r => r ? `else = { owner = { create_message = { type = pe_private_economy localization = pe_msg_relocate${r} days = 30 target = event_target:pe_rl_dst variable = { type = name localization = PLANET scope = event_target:pe_rl_src } variable = { type = name localization = DEST scope = event_target:pe_rl_dst } variable = { type = key value = ${p.key} localization = FIRM } } } }` : `if = { limit = { ${rootIs('pe_rl_reason', 1)} } owner = { create_message = { type = pe_private_economy localization = pe_msg_relocate${r} days = 30 target = event_target:pe_rl_dst variable = { type = name localization = PLANET scope = event_target:pe_rl_src } variable = { type = name localization = DEST scope = event_target:pe_rl_dst } variable = { type = key value = ${p.key} localization = FIRM } } } }`).join(' ')}`, '\t\t')}
 		check_planet_employment = yes
 	}
 	check_planet_employment = yes
 	root = { set_timed_country_flag = { flag = pe_relocated days = 360 } }
-	owner = {
-		create_message = {
-			type = pe_private_economy
-			localization = pe_msg_relocate
-			days = 30
-			target = event_target:pe_rl_dst
-			variable = { type = name localization = PLANET scope = event_target:pe_rl_src }
-			variable = { type = name localization = DEST scope = event_target:pe_rl_dst }
-		}
-	}
 }
 `;
 const eff_retool_msg = `
@@ -933,8 +923,8 @@ for (const [key, en, de] of [['d_pe_site_city', 'city', 'Stadt'], ['d_pe_site_mi
 }
 const AUTO_NAMES = {miner: ['Mining', 'Bergbau'], technician: ['Energy', 'Energie'], farmer: ['Agriculture', 'Landwirtschaft']};
 loc.english.push(' pe_deposit_cat_automation:0 "Private Automation"');
-loc.english.push(' pe_deposit_cat_ledger:0 "Private Economy"', ' pe_msg_relocate:0 "A private firm has moved from $PLANET$ to $DEST$, whose designation suits it better. Its workers came along."');
-loc.german.push(' pe_msg_relocate:0 "Ein Privatunternehmen ist von $PLANET$ nach $DEST$ umgezogen, dessen Spezialisierung besser passt. Seine Arbeiter sind mitgezogen."');
+loc.english.push(' pe_deposit_cat_ledger:0 "Private Economy"', ' pe_msg_relocate:0 "§Y$FIRM$§! has moved from $PLANET$ to $DEST$, whose designation suits it better. Its workers came along."', ' pe_msg_relocate_need:0 "§Y$FIRM$§! has moved from $PLANET$, which lacks housing or amenities, to $DEST$. Its workers came along."');
+loc.german.push(' pe_msg_relocate:0 "§Y$FIRM$§! ist von $PLANET$ nach $DEST$ umgezogen, dessen Spezialisierung besser passt. Die Arbeiter sind mitgezogen."', ' pe_msg_relocate_need:0 "§Y$FIRM$§! ist von $PLANET$, wo Wohnraum oder Annehmlichkeiten fehlen, nach $DEST$ umgezogen. Die Arbeiter sind mitgezogen."');
 loc.german.push(' pe_deposit_cat_ledger:0 "Privatwirtschaft"');
 loc.english.push(' pe_private_profits:0 "Private Firms\' Profits"', ' pe_private_savings:0 "Private Savings"',
   ' d_pe_ledger_profit:0 "Private Profits"', ' d_pe_ledger_profit_desc:0 "What the private firms on this planet earn as their profit share; the state pays it every month in trade."',

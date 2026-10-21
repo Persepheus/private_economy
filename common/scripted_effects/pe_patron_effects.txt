@@ -36,7 +36,27 @@ pe_patron_fire = {
 	change_variable = { which = pe_mag_events value = 1 }
 	set_variable = { which = pe_pat_spend value = pe_capital }
 	multiply_variable = { which = pe_pat_spend value = 0.3 }
+	round_variable = pe_pat_spend
 	subtract_variable = { which = pe_capital value = pe_pat_spend }
+	# What the options give, rounded (shown in their tooltips).
+	set_variable = { which = pe_pat_unity value = pe_pat_spend }
+	multiply_variable = { which = pe_pat_unity value = 0.3 }
+	round_variable = pe_pat_unity
+	set_variable = { which = pe_pat_tax value = pe_pat_spend }
+	multiply_variable = { which = pe_pat_tax value = 0.25 }
+	round_variable = pe_pat_tax
+	set_variable = { which = pe_pat_res value = pe_pat_spend }
+	multiply_variable = { which = pe_pat_res value = 0.4 }
+	round_variable = pe_pat_res
+	set_variable = { which = pe_pat_res_free value = pe_pat_res }
+	multiply_variable = { which = pe_pat_res_free value = 1.25 }
+	round_variable = pe_pat_res_free
+	set_variable = { which = pe_pat_proto_full value = pe_pat_spend }
+	multiply_variable = { which = pe_pat_proto_full value = 0.6 }
+	round_variable = pe_pat_proto_full
+	set_variable = { which = pe_pat_proto_part value = pe_pat_spend }
+	multiply_variable = { which = pe_pat_proto_part value = 0.2 }
+	round_variable = pe_pat_proto_part
 	capital_scope = { save_event_target_as = pe_pat_planet }
 	random_list = {
 		25 = { country_event = { id = pe.200 } }
