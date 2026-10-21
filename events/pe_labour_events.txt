@@ -37,6 +37,7 @@ country_event = {
 	}
 	option = {
 		name = pe.210.b
+		custom_tooltip = pe.210.b.tt
 		hidden_effect = {
 			change_variable = { which = pe_capital value = pe_pat_spend }
 			random = {
@@ -164,6 +165,7 @@ country_event = {
 	# The firms raise wages from the investor pool; the strike ends.
 	option = {
 		name = pe.213.a
+		custom_tooltip = pe.213.a.tt
 		ai_chance = { factor = 50 }
 	}
 	option = {

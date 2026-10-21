@@ -369,7 +369,7 @@ pe_savings = {
 			check_variable = { which = pe_sav value > 0 }
 			check_variable = { which = pe_stock value >= pe_sav }
 			# A full pool (it has nothing to spend it on) saves no more.
-			check_variable = { which = pe_capital value < 3000 }
+			check_variable = { which = pe_capital value < 4500 }
 		}
 		change_variable = { which = pe_capital value = pe_sav }
 		change_variable = { which = pe_pool_income value = pe_sav }
@@ -672,8 +672,16 @@ pe_planet_step = {
 	}
 	pe_planet_counts = yes
 	pe_planet_prepare = yes
+	# Idle pops: civilians minus the jobs still open here (they would take those first).
+	# At least 50 of them for a new firm or a growth step.
 	root = { set_variable = { which = pe_unemp value = 0 } }
-	if = { limit = { pe_has_idle_pops = yes } root = { set_variable = { which = pe_unemp value = 1 } } }
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = civilian } variable = pe_civ }
+	export_trigger_value_to_variable = { trigger = free_jobs variable = pe_fj }
+	if = { limit = { NOT = { is_variable_set = pe_civ } } set_variable = { which = pe_civ value = 0 } }
+	if = { limit = { NOT = { is_variable_set = pe_fj } } set_variable = { which = pe_fj value = 0 } }
+	set_variable = { which = pe_idle value = pe_civ }
+	subtract_variable = { which = pe_idle value = pe_fj }
+	if = { limit = { check_variable = { which = pe_idle value >= 50 } } root = { set_variable = { which = pe_unemp value = 1 } } }
 	pe_planet_fill = yes
 	pe_firm_accounting = yes
 	pe_firm_change = yes
@@ -688,8 +696,10 @@ pe_planet_step = {
 			if = {
 				limit = {
 					free_district_slots > 0
-					pe_has_idle_pops = yes
-					root = { check_variable = { which = pe_fill_cur value >= 0.8 } }
+					root = {
+						check_variable = { which = pe_unemp value = 1 }
+						check_variable = { which = pe_fill_cur value >= 0.8 }
+					}
 				}
 				# Option value: the last free slots are only used for clearly better firms.
 				root = { set_variable = { which = pe_best_min value = 0 } set_variable = { which = pe_dmode value = 0 } }
@@ -805,10 +815,10 @@ pe_firm_book = {
 		# Reserve: the firm keeps what its own restructuring would cost (city 250 / rural
 		# 150 x stage size), plus its next growth step below a corporation. The rest goes
 		# to the investor pool.
-		if = { limit = { check_variable = { which = pe_cls value = 2 } } set_variable = { which = pe_res value = 150 } }
-		else_if = { limit = { check_variable = { which = pe_cls value = 3 } } set_variable = { which = pe_res value = 150 } }
-		else_if = { limit = { check_variable = { which = pe_cls value = 4 } } set_variable = { which = pe_res value = 150 } }
-		else = { set_variable = { which = pe_res value = 250 } }
+		if = { limit = { check_variable = { which = pe_cls value = 2 } } set_variable = { which = pe_res value = 225 } }
+		else_if = { limit = { check_variable = { which = pe_cls value = 3 } } set_variable = { which = pe_res value = 225 } }
+		else_if = { limit = { check_variable = { which = pe_cls value = 4 } } set_variable = { which = pe_res value = 225 } }
+		else = { set_variable = { which = pe_res value = 375 } }
 		set_variable = { which = pe_tmp value = pe_stage }
 		change_variable = { which = pe_tmp value = 1 }
 		multiply_variable = { which = pe_tmp value = 0.5 }
@@ -848,10 +858,10 @@ pe_firm_book = {
 					check_variable = { which = pe_unemp value = 1 }
 				}
 			}
-			if = { limit = { check_variable = { which = pe_cls value = 2 } } set_variable = { which = pe_tmp value = 150 } }
-			else_if = { limit = { check_variable = { which = pe_cls value = 3 } } set_variable = { which = pe_tmp value = 150 } }
-			else_if = { limit = { check_variable = { which = pe_cls value = 4 } } set_variable = { which = pe_tmp value = 150 } }
-			else = { set_variable = { which = pe_tmp value = 250 } }
+			if = { limit = { check_variable = { which = pe_cls value = 2 } } set_variable = { which = pe_tmp value = 225 } }
+			else_if = { limit = { check_variable = { which = pe_cls value = 3 } } set_variable = { which = pe_tmp value = 225 } }
+			else_if = { limit = { check_variable = { which = pe_cls value = 4 } } set_variable = { which = pe_tmp value = 225 } }
+			else = { set_variable = { which = pe_tmp value = 375 } }
 			if = {
 				limit = { check_variable = { which = pe_fcap value >= pe_tmp } }
 				subtract_variable = { which = pe_fcap value = pe_tmp }
@@ -1216,6 +1226,17 @@ pe_retool_consider = {
 				limit = { check_variable = { which = pe_val_$V$ value > pe_cls_val_all } }
 				set_variable = { which = pe_cls_val_all value = pe_val_$V$ }
 				set_variable = { which = pe_cls_var_all value = $CODE$ }
+			}
+		}
+		# The best one that suits the planet's designation (for firms that suit it).
+		if = {
+			limit = { pe_desig_$PRIM$ = yes }
+			root = {
+				if = {
+					limit = { check_variable = { which = pe_val_$V$ value > pe_cls_val_fit } }
+					set_variable = { which = pe_cls_val_fit value = pe_val_$V$ }
+					set_variable = { which = pe_cls_var_fit value = $CODE$ }
+				}
 			}
 		}
 	}

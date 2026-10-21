@@ -326,6 +326,19 @@ pe_ok_d_pe_firm_ffft = { root = { NOT = { check_variable = { which = pe_def_cons
 pe_ok_d_pe_firm_fffm = { always = yes }
 pe_ok_d_pe_firm_fffe = { always = yes }
 
+# Colony scope, per main share: the planet's designation suits it.
+pe_desig_a = { OR = { has_designation = col_industrial has_designation = col_foundry has_designation = col_capital_foundry } }
+pe_desig_c = { OR = { has_designation = col_industrial has_designation = col_factory has_designation = col_capital_factory } }
+pe_desig_t = { OR = { has_designation = col_city has_designation = col_capital_trade } }
+pe_desig_u = { OR = { has_designation = col_resort has_designation = col_pleasure } }
+pe_desig_x = { OR = { has_designation = col_research } }
+pe_desig_y = { OR = { has_designation = col_research } }
+pe_desig_z = { OR = { has_designation = col_research } }
+pe_desig_b = { OR = { has_designation = col_bureau has_designation = col_bureau_spiritualist } }
+pe_desig_m = { OR = { has_designation = col_mining has_designation = col_capital_extraction } }
+pe_desig_e = { OR = { has_designation = col_generator } }
+pe_desig_f = { OR = { has_designation = col_farming } }
+
 # Colony scope: the firm root.pe_rl_code could be founded here (free slot; rural firms
 # also a free district of their type and the deposits of their side share).
 pe_rl_target_fits = {

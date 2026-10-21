@@ -14,7 +14,7 @@
 pe_patron = {
 	if = {
 		limit = {
-			check_variable = { which = pe_capital value >= 3000 }
+			check_variable = { which = pe_capital value >= 4500 }
 			NOT = { has_country_flag = pe_patron_cd }
 		}
 		random = {
@@ -30,7 +30,7 @@ pe_patron_fire = {
 	set_timed_country_flag = { flag = pe_patron_cd days = 730 }
 	pe_pat_amounts = yes
 	capital_scope = { save_event_target_as = pe_pat_planet }
-	owner_main_species = { save_event_target_as = pe_main_species }
+	capital_scope = { owner_main_species = { save_event_target_as = pe_main_species } }
 	# Monopoly (pe.244): one main product has 40% of at least eight firms.
 	set_variable = { which = pe_mono value = 0 }
 	set_variable = { which = pe_mono_min value = pe_n_firms }
@@ -256,7 +256,7 @@ pe_pat_amounts = {
 pe_labour = {
 	if = {
 		limit = {
-			check_variable = { which = pe_capital value >= 1000 }
+			check_variable = { which = pe_capital value >= 1500 }
 			NOT = { has_country_flag = pe_labour_cd }
 			any_owned_colony = { pe_planet_eligible = yes pe_rural_short = yes }
 		}

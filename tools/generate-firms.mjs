@@ -33,10 +33,10 @@ const topDef = (texts, key) => { for (const t of texts) { const i = t.search(new
 // --- Balance --------------------------------------------------------------------
 const WEIGHTS = [1, 0.9, 0.8, 0.7];                    // value of repeated 50-workforce units
 const FOUND = {u: 500, r: 300};                        // founding cost (private capital) = what a district costs the state
-const RETOOL = {u: 250, r: 150};                       // restructuring cost x stage size
+const RETOOL = {u: 375, r: 225};                       // restructuring cost x stage size
 const AUTO_JOBS = ['miner', 'technician', 'farmer'];        // worker jobs vanilla automates (and so do the firms)
 const DOWN = 0.4;                                      // down payment from the investor pool; the rest is the firm's debt
-const PRICE = {u: [500, 100], r: [300, 60]};           // buyout/nationalisation: minerals, trade (x stage)
+const PRICE = {u: [750, 150], r: [450, 90]};           // buyout/nationalisation: minerals, trade (x stage)
 const UPKEEP = {u: 2, r: 1};                           // energy at stage 1, like the district
 const BUILD_MONTHS = {u: 16, r: 8};                    // vanilla district build time (480 / 240 days)
 const DIVERSIFY = 0.05;                                // value -5% per existing firm with the same main product
@@ -699,7 +699,7 @@ ${[1, 2, 3, 4, 5].flatMap(c => STAGES.map(s => ({c, s}))).map(({c, s}, i) => {
 		limit = { root = { check_variable = { which = pe_nat_cls value > 0 } } }
 		set_timed_planet_flag = { flag = pe_cooldown days = 180 }
 		save_event_target_as = pe_msg_planet
-${[1, 2, 3, 4, 5].map((c, i) => `\t\t${i ? 'else_if' : 'if'} = { limit = { ${rootIs('pe_nat_cls', c)} } add_district = ${c === 1 || c === 5 ? 'district_city' : P[rural[c - 2]].district} }`).join('\n')}
+${[1, 2, 3, 4, 5].map((c, i) => `\t\t${i ? 'else_if' : 'if'} = { limit = { ${rootIs('pe_nat_cls', c)} } add_district = { district_type = ${c === 1 || c === 5 ? 'district_city' : P[rural[c - 2]].district} ignore_cap = yes } }`).join('\n')}
 ${[1, 2, 3, 4, 5].flatMap(c => STAGES.map(s => `\t\tif = { limit = { root = { check_variable = { which = pe_nat_cls value = ${c} } check_variable = { which = pe_nat_stage value = ${s} } } } ${msg(`pe_msg_nat_${c === 5 ? 1 : c}_${s}`)} }`)).join('\n')}
 		check_planet_employment = yes
 	}
@@ -722,13 +722,27 @@ pe_restructure = {
 		set_variable = { which = pe_paid value = 0 }
 		set_variable = { which = pe_cls_val_all value = -100000 }
 		set_variable = { which = pe_cls_var_all value = 0 }
+		set_variable = { which = pe_cls_val_fit value = -100000 }
+		set_variable = { which = pe_cls_var_fit value = 0 }
+		set_variable = { which = pe_to value = 0 }
 	}
-${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} }`).join('\n')}
+${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM = ${v.primary} }`).join('\n')}
 	every_deposit = {
 		limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_val }
 		root = { change_variable = { which = pe_rid value = 1 } }
 		set_variable = { which = pe_rid value = root.pe_rid }
-		set_variable = { which = pe_gain value = root.pe_cls_val_all }
+		# A firm that suits the planet's designation only restructures into a variant that
+		# suits it too.
+		root = { set_variable = { which = pe_rl_prim value = prev.pe_prim } }
+		if = {
+			limit = { planet = { pe_desig_prim = yes } }
+			set_variable = { which = pe_gain value = root.pe_cls_val_fit }
+			set_variable = { which = pe_to_c value = root.pe_cls_var_fit }
+		}
+		else = {
+			set_variable = { which = pe_gain value = root.pe_cls_val_all }
+			set_variable = { which = pe_to_c value = root.pe_cls_var_all }
+		}
 		subtract_variable = { which = pe_gain value = pe_val }
 		# Clearly better: at least 30% of the current value, and at least 3.
 		set_variable = { which = pe_thr value = pe_val }
@@ -743,6 +757,7 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} }`).
 			root = {
 				set_variable = { which = pe_best_gain value = prev.pe_gain }
 				set_variable = { which = pe_rid_best value = prev.pe_rid }
+				set_variable = { which = pe_to value = prev.pe_to_c }
 			}
 		}
 	}
@@ -774,7 +789,7 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} }`).
 	}
 	if = {
 		limit = { root = { check_variable = { which = pe_retool_ok value = 1 } } }
-${ifChain(variants, v => rootIs('pe_cls_var_all', v.code), v => {
+${ifChain(variants, v => rootIs('pe_to', v.code), v => {
   const site = `add_deposit = ${v.site} last_added_deposit = { set_variable = { which = pe_target value = ${v.code} } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_debt value = root.pe_chg_debt } set_variable = { which = pe_left value = ${BUILD_MONTHS[v.k] / 2} } set_variable = { which = pe_kind value = 3 } set_variable = { which = pe_old_code value = root.pe_chg_code } set_variable = { which = pe_old_stage value = root.pe_chg_stage } }`;
   return v.cityLike ? site : `if = { limit = { num_free_districts = { type = ${v.district} value > 0 } } ${site} } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_${v.cls} days = 360 } }`;
 }, '\t\t')}
@@ -792,6 +807,11 @@ ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = $
 		check_planet_employment = yes
 	}
 }
+`;
+// Designation per main share: does the planet's designation suit it?
+trg += `
+# Colony scope, per main share: the planet's designation suits it.
+${LETTERS.map(l => `pe_desig_${l} = { ${specFor(l).length ? `OR = { ${specFor(l).map(d => `has_designation = ${d}`).join(' ')} }` : 'always = no'} }`).join('\n')}
 `;
 // Relocation of a firm with its workers (see pe_relocate).
 trg += `

@@ -291,6 +291,8 @@ country_event = {
 	# firm on it at once.
 	option = {
 		name = pe.214.a
+		custom_tooltip = pe.214.a.tt
+		hidden_effect = {
 		event_target:pe_pat_planet = {
 			if = {
 				limit = { root = { check_variable = { which = pe_find value = 1 } } }
@@ -308,17 +310,21 @@ country_event = {
 			}
 			check_planet_employment = yes
 		}
-		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		change_variable = { which = pe_mag_rep value = 1 }
+		}
 		ai_chance = { factor = 50 }
 	}
 	# The state takes the find; half of the money comes back, the firms are upset.
 	option = {
 		name = pe.214.b
-		event_target:pe_pat_planet = {
-			if = { limit = { root = { check_variable = { which = pe_find value = 1 } } } add_deposit = d_mineral_fields }
-			else_if = { limit = { root = { check_variable = { which = pe_find value = 2 } } } add_deposit = d_geothermal_vent }
-			else = { add_deposit = d_fertile_lands }
-			add_modifier = { modifier = pe_business_upset days = 720 }
+		custom_tooltip = pe.214.b.tt
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_business_upset days = 720 } }
+		hidden_effect = {
+			event_target:pe_pat_planet = {
+				if = { limit = { root = { check_variable = { which = pe_find value = 1 } } } add_deposit = d_mineral_fields }
+				else_if = { limit = { root = { check_variable = { which = pe_find value = 2 } } } add_deposit = d_geothermal_vent }
+				else = { add_deposit = d_fertile_lands }
+			}
 		}
 		hidden_effect = {
 			change_variable = { which = pe_capital value = pe_pat_half }
@@ -490,8 +496,8 @@ country_event = {
 		event_target:pe_pat_colony = {
 			create_colony = {
 				owner = root
-				species = event_target:pe_main_species
-				ethos = owner
+				species = root
+				ethos = root
 			}
 		}
 		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }

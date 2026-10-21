@@ -46,6 +46,7 @@ country_event = {
 	}
 	option = {
 		name = pe.240.c
+		custom_tooltip = pe.240.c.tt
 		hidden_effect = {
 			change_variable = { which = pe_capital value = pe_fw_amt }
 			set_variable = { which = pe_mag_rep value = pe_mag_old_rep }
@@ -69,6 +70,7 @@ country_event = {
 		name = pe.241.a
 		allow = { has_resource = { type = trade amount >= 500 } }
 		add_resource = { trade = -500 }
+		custom_tooltip = pe.241.a.tt
 		hidden_effect = {
 			change_variable = { which = pe_shares value = 1 }
 			change_variable = { which = pe_capital value = 500 }
@@ -80,6 +82,7 @@ country_event = {
 		name = pe.241.b
 		allow = { has_resource = { type = trade amount >= 1500 } }
 		add_resource = { trade = -1500 }
+		custom_tooltip = pe.241.b.tt
 		hidden_effect = {
 			change_variable = { which = pe_shares value = 3 }
 			change_variable = { which = pe_capital value = 1500 }
@@ -112,6 +115,7 @@ country_event = {
 	option = {
 		name = pe.242.a
 		add_resource = { trade = 1 mult = pe_pat_spend }
+		custom_tooltip = pe.242.a.tt
 		hidden_effect = {
 			if = { limit = { NOT = { check_variable = { which = pe_bond_left value > 0 } } } set_variable = { which = pe_bond_month value = 0 } }
 			change_variable = { which = pe_bond_month value = pe_bond_new }
@@ -137,19 +141,32 @@ country_event = {
 
 	option = {
 		name = pe.243.a
-		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
-		event_target:pe_pat_planet = {
-			random_deposit = {
-				limit = { has_deposit_category = pe_deposit_cat_firms }
-				root = { set_variable = { which = pe_to_fcap value = prev.pe_fcap } }
-				remove_deposit = yes
+		custom_tooltip = pe.243.a.tt
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_spend }
+			# The smallest firm here is bought by one at least as big.
+			set_variable = { which = pe_to_min value = 3 }
+			set_variable = { which = pe_to_fcap value = 0 }
+			event_target:pe_pat_planet = {
+				every_deposit = {
+					limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_stage }
+					if = {
+						limit = { check_variable = { which = pe_stage value < root.pe_to_min } }
+						root = { set_variable = { which = pe_to_min value = prev.pe_stage } }
+					}
+				}
+				random_deposit = {
+					limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_stage check_variable = { which = pe_stage value = root.pe_to_min } }
+					if = { limit = { is_variable_set = pe_fcap } root = { set_variable = { which = pe_to_fcap value = prev.pe_fcap } } }
+					remove_deposit = yes
+				}
+				random_deposit = {
+					limit = { has_deposit_category = pe_deposit_cat_firms }
+					change_variable = { which = pe_fcap value = root.pe_to_fcap }
+					change_variable = { which = pe_fcap value = 100 }
+				}
+				check_planet_employment = yes
 			}
-			random_deposit = {
-				limit = { has_deposit_category = pe_deposit_cat_firms }
-				change_variable = { which = pe_fcap value = root.pe_to_fcap }
-				change_variable = { which = pe_fcap value = 100 }
-			}
-			check_planet_employment = yes
 		}
 		ai_chance = { factor = 50 }
 	}
@@ -172,11 +189,13 @@ country_event = {
 	immediate = { hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } } }
 	option = {
 		name = pe.244.a
-		set_timed_country_flag = { flag = pe_monopoly days = 1800 }
+		custom_tooltip = pe.244.a.tt
+		hidden_effect = { set_timed_country_flag = { flag = pe_monopoly days = 1800 } }
 		ai_chance = { factor = 30 }
 	}
 	option = {
 		name = pe.244.b
+		custom_tooltip = pe.244.b.tt
 		hidden_effect = { multiply_variable = { which = pe_capital value = 0.8 } }
 		capital_scope = { add_modifier = { modifier = pe_business_upset days = 720 } }
 		ai_chance = { factor = 40 }
@@ -353,7 +372,8 @@ country_event = {
 	}
 	option = {
 		name = pe.249.b
-		set_timed_country_flag = { flag = pe_bubble days = 1080 }
+		custom_tooltip = pe.249.b.tt
+		hidden_effect = { set_timed_country_flag = { flag = pe_bubble days = 1080 } }
 		ai_chance = { factor = 40 }
 	}
 }
