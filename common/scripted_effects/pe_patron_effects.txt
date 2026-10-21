@@ -3,6 +3,7 @@
 #   recurring figures (pe_mag_id, reputation pe_mag_rep); a magnate retires after four
 #   events and a new one appears.
 #   Labour (pe_labour_events.txt): private worker jobs stay empty; firms and workers react.
+#   Market (pe_market_events.txt): shares, bonds, takeovers, monopolies, crashes ...
 #   pe_quarterly (1) -> pe_patron (2) -> pe_patron_fire (3) -> pe_pat_amounts (4)
 #                    -> pe_labour (2) -> pe_labour_fire (3) -> pe_pat_amounts (4)
 
@@ -30,6 +31,24 @@ pe_patron_fire = {
 	pe_pat_amounts = yes
 	capital_scope = { save_event_target_as = pe_pat_planet }
 	owner_main_species = { save_event_target_as = pe_main_species }
+	# Monopoly (pe.244): one main product has 40% of at least eight firms.
+	set_variable = { which = pe_mono value = 0 }
+	set_variable = { which = pe_mono_min value = pe_n_firms }
+	multiply_variable = { which = pe_mono_min value = 0.4 }
+	if = {
+		limit = { check_variable = { which = pe_n_firms value >= 8 } }
+		if = { limit = { check_variable = { which = pe_cnt_a value >= pe_mono_min } } set_variable = { which = pe_mono value = 1 } }
+		if = { limit = { check_variable = { which = pe_cnt_c value >= pe_mono_min } } set_variable = { which = pe_mono value = 1 } }
+		if = { limit = { check_variable = { which = pe_cnt_t value >= pe_mono_min } } set_variable = { which = pe_mono value = 1 } }
+		if = { limit = { check_variable = { which = pe_cnt_u value >= pe_mono_min } } set_variable = { which = pe_mono value = 1 } }
+		if = { limit = { check_variable = { which = pe_cnt_x value >= pe_mono_min } } set_variable = { which = pe_mono value = 1 } }
+		if = { limit = { check_variable = { which = pe_cnt_y value >= pe_mono_min } } set_variable = { which = pe_mono value = 1 } }
+		if = { limit = { check_variable = { which = pe_cnt_z value >= pe_mono_min } } set_variable = { which = pe_mono value = 1 } }
+		if = { limit = { check_variable = { which = pe_cnt_b value >= pe_mono_min } } set_variable = { which = pe_mono value = 1 } }
+		if = { limit = { check_variable = { which = pe_cnt_m value >= pe_mono_min } } set_variable = { which = pe_mono value = 1 } }
+		if = { limit = { check_variable = { which = pe_cnt_e value >= pe_mono_min } } set_variable = { which = pe_mono value = 1 } }
+		if = { limit = { check_variable = { which = pe_cnt_f value >= pe_mono_min } } set_variable = { which = pe_mono value = 1 } }
+	}
 	random_list = {
 		10 = { country_event = { id = pe.200 } }
 		10 = { country_event = { id = pe.202 } }
@@ -100,6 +119,67 @@ pe_patron_fire = {
 			}
 			country_event = { id = pe.226 }
 		}
+		# Market and corporate events (pe_market_events.txt).
+		6 = {
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_n_corp value > 0 } } }
+			country_event = { id = pe.241 }
+		}
+		6 = { country_event = { id = pe.242 } }
+		6 = {
+			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes count_deposits = { category = pe_deposit_cat_firms count >= 2 } } } }
+			random_owned_colony = {
+				limit = { pe_planet_eligible = yes count_deposits = { category = pe_deposit_cat_firms count >= 2 } }
+				save_event_target_as = pe_pat_planet
+			}
+			country_event = { id = pe.243 }
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_mono value = 1 } } }
+			country_event = { id = pe.244 }
+		}
+		5 = {
+			modifier = { factor = 0 NOT = { any_country = { is_country_type = default NOT = { is_same_value = root } has_communications = root } } }
+			random_country = {
+				limit = { is_country_type = default NOT = { is_same_value = root } has_communications = root }
+				save_event_target_as = pe_pat_country
+			}
+			country_event = { id = pe.245 }
+		}
+		5 = {
+			modifier = { factor = 0 NOT = { any_country = { is_country_type = default NOT = { is_same_value = root } has_communications = root NOT = { is_at_war_with = root } } } }
+			random_country = {
+				limit = { is_country_type = default NOT = { is_same_value = root } has_communications = root NOT = { is_at_war_with = root } }
+				save_event_target_as = pe_pat_country
+			}
+			country_event = { id = pe.246 }
+		}
+		6 = {
+			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes OR = { has_district = district_mining has_district = district_farming has_district = district_generator } count_deposits = { category = pe_deposit_cat_firms count > 0 } } } }
+			random_owned_colony = {
+				limit = { pe_planet_eligible = yes OR = { has_district = district_mining has_district = district_farming has_district = district_generator } count_deposits = { category = pe_deposit_cat_firms count > 0 } }
+				save_event_target_as = pe_pat_planet
+			}
+			country_event = { id = pe.247 }
+		}
+		# A crash: rare, only with a big pool; three times as likely after a bubble.
+		2 = {
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_capital value >= 7000 } } }
+			modifier = { factor = 3 has_country_flag = pe_bubble }
+			country_event = { id = pe.248 }
+		}
+		4 = {
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_capital value >= 3500 } } }
+			country_event = { id = pe.249 }
+		}
+		4 = { country_event = { id = pe.250 } }
+		5 = {
+			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes free_housing > 300 } } }
+			random_owned_colony = {
+				limit = { pe_planet_eligible = yes free_housing > 300 }
+				save_event_target_as = pe_pat_planet
+			}
+			country_event = { id = pe.251 }
+		}
 	}
 }
 
@@ -112,6 +192,13 @@ pe_pat_amounts = {
 				NOT = { is_variable_set = pe_mag_id }
 				check_variable = { which = pe_mag_events value >= 4 }
 			}
+		}
+		# A magnate retires: their farewell (pe.240) a month later.
+		if = {
+			limit = { is_variable_set = pe_mag_id }
+			set_variable = { which = pe_mag_old value = pe_mag_id }
+			set_variable = { which = pe_mag_old_rep value = pe_mag_rep }
+			country_event = { id = pe.240 days = 30 }
 		}
 		set_variable_to_random_value = { which = pe_mag_id min = 1 max = 16 rounded = yes }
 		set_variable = { which = pe_mag_events value = 0 }
@@ -225,5 +312,18 @@ pe_labour_fire = {
 		}
 		25 = { country_event = { id = pe.212 } }
 		20 = { country_event = { id = pe.213 } }
+		# Company housing where housing is short.
+		20 = {
+			modifier = { factor = 0 NOT = { event_target:pe_pat_planet = { free_housing < 300 } } }
+			country_event = { id = pe.230 }
+		}
+		# Robot start-up: the empire builds robots.
+		20 = {
+			modifier = { factor = 0 NOT = { has_technology = tech_robotic_workers } }
+			modifier = { factor = 0 has_policy_flag = robots_outlawed }
+			country_event = { id = pe.231 }
+		}
+		30 = { country_event = { id = pe.232 } }
+		15 = { country_event = { id = pe.233 } }
 	}
 }

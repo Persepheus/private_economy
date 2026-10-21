@@ -107,3 +107,56 @@ d_pe_ledger_savings = {
 		}
 	}
 }
+
+d_pe_ledger_dividend = {
+	icon = d_tradestation_interior
+	is_for_colonizable = yes
+	category = pe_deposit_cat_ledger
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = pe_private_dividends
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_ld_b0 value = 1 } } }
+			trade = 0.5
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_ld_b1 value = 1 } } }
+			trade = 1
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_ld_b2 value = 1 } } }
+			trade = 2
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_ld_b3 value = 1 } } }
+			trade = 4
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_ld_b4 value = 1 } } }
+			trade = 8
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_ld_b5 value = 1 } } }
+			trade = 16
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_ld_b6 value = 1 } } }
+			trade = 32
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_ld_b7 value = 1 } } }
+			trade = 64
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_ld_b8 value = 1 } } }
+			trade = 128
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_ld_b9 value = 1 } } }
+			trade = 256
+		}
+	}
+}

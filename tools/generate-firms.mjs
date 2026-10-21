@@ -111,6 +111,12 @@ for (const j of JOBS) {
     last = open + blockAt(body, open).length;
   }
   body = out + body.slice(last);
+  if (j.kind === 'worker') {
+    const wi = body.search(/\n\tweight = \{/);
+    if (wi < 0) throw new Error(`no weight block in ${j.vanilla}`);
+    const open = body.indexOf('\n', body.indexOf('weight = ', body.indexOf('{', wi)));
+    body = body.slice(0, open) + `\n\t\t# Rural premium (pe.232): above specialist jobs (weight 10), so pops stay or come back.\n\t\tmodifier = {\n\t\t\tfactor = 12\n\t\t\tplanet = { has_modifier = pe_rural_premium }\n\t\t}` + body.slice(open);
+  }
   j.def = `${j.key} = {${body}}`;
   // Default output per job (used while no job of this type is filled):
   // untriggered blocks plus the ones that only check Catalytic Processing.
@@ -311,10 +317,13 @@ pe_private_profits = {
 pe_private_savings = {
 	use_for_ai_budget = no
 }
+pe_private_dividends = {
+	use_for_ai_budget = no
+}
 `);
 write('common/deposits/pe_ledger_deposits.txt', header + `# Ledgers of the private economy: what the state pays each month, as trade upkeep (see
 # pe_ledgers). No district slot.
-` + [['d_pe_ledger_profit', 'pe_private_profits', 'lp'], ['d_pe_ledger_savings', 'pe_private_savings', 'ls']].map(([key, cat, v]) => `
+` + [['d_pe_ledger_profit', 'pe_private_profits', 'lp', 'upkeep'], ['d_pe_ledger_savings', 'pe_private_savings', 'ls', 'upkeep'], ['d_pe_ledger_dividend', 'pe_private_dividends', 'ld', 'produces']].map(([key, cat, v, kind]) => `
 ${key} = {
 	icon = d_tradestation_interior
 	is_for_colonizable = yes
@@ -325,7 +334,7 @@ ${key} = {
 
 	resources = {
 		category = ${cat}
-${LEDGER_BITS.map((b, i) => `		upkeep = {
+${LEDGER_BITS.map((b, i) => `		${kind} = {
 			trigger = { planet = { check_variable = { which = pe_${v}_b${i} value = 1 } } }
 			trade = ${b}
 		}`).join('\n')}
@@ -427,6 +436,8 @@ let eff = header + `# Call depths (see pe_economy_effects.txt): pe_census 2, pe_
 pe_census = {
 ${MARKET_RES.map(r => `\tset_variable = { which = pe_pend_${r} value = 0 }`).join('\n')}
 ${LETTERS.map(l => `\tset_variable = { which = pe_cnt_${l} value = 0 }`).join('\n')}
+	set_variable = { which = pe_n_firms value = 0 }
+	set_variable = { which = pe_n_corp value = 0 }
 	every_owned_colony = {
 		every_deposit = {
 			limit = { OR = { has_deposit_category = pe_deposit_cat_firms has_deposit_category = pe_deposit_cat_sites } }
@@ -436,6 +447,8 @@ ${ifChain(variants, v => `check_variable = { which = pe_target value = ${v.code}
 			}
 			else = {
 ${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }`, v => `root = { change_variable = { which = pe_cnt_${v.primary} value = 1 } }`, '\t\t\t\t')}
+				root = { change_variable = { which = pe_n_firms value = 1 } }
+				if = { limit = { check_variable = { which = pe_stage value = 3 } } root = { change_variable = { which = pe_n_corp value = 1 } } }
 			}
 		}
 	}
@@ -926,6 +939,8 @@ loc.english.push(' pe_deposit_cat_automation:0 "Private Automation"');
 loc.english.push(' pe_deposit_cat_ledger:0 "Private Economy"', ' pe_msg_relocate:0 "§Y$FIRM$§! has moved from $PLANET$ to $DEST$, whose designation suits it better. Its workers came along."', ' pe_msg_relocate_need:0 "§Y$FIRM$§! has moved from $PLANET$, which lacks housing or amenities, to $DEST$. Its workers came along."');
 loc.german.push(' pe_msg_relocate:0 "§Y$FIRM$§! ist von $PLANET$ nach $DEST$ umgezogen, dessen Spezialisierung besser passt. Die Arbeiter sind mitgezogen."', ' pe_msg_relocate_need:0 "§Y$FIRM$§! ist von $PLANET$, wo Wohnraum oder Annehmlichkeiten fehlen, nach $DEST$ umgezogen. Die Arbeiter sind mitgezogen."');
 loc.german.push(' pe_deposit_cat_ledger:0 "Privatwirtschaft"');
+loc.english.push(' pe_private_dividends:0 "Dividends from Shares"', ' d_pe_ledger_dividend:0 "State Shareholdings"', ' d_pe_ledger_dividend_desc:0 "Shares the state bought in private corporations; they pay dividends every month."');
+loc.german.push(' pe_private_dividends:0 "Dividenden aus Aktien"', ' d_pe_ledger_dividend:0 "Staatliche Aktienbeteiligungen"', ' d_pe_ledger_dividend_desc:0 "Aktien, die der Staat an Privatkonzernen hält; sie zahlen monatlich Dividende."');
 loc.english.push(' pe_private_profits:0 "Private Firms\' Profits"', ' pe_private_savings:0 "Private Savings"',
   ' d_pe_ledger_profit:0 "Private Profits"', ' d_pe_ledger_profit_desc:0 "What the private firms on this planet earn as their profit share; the state pays it every month in trade."',
   ' d_pe_ledger_savings:0 "Private Savings"', ' d_pe_ledger_savings_desc:0 "The part of the trade income that flows into private investment every month (by economic order)."');

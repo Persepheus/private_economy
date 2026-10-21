@@ -13,9 +13,11 @@ namespace = pe
 country_event = {
 	id = pe.200
 	title = pe.200.name
-	desc = pe.200.desc
+	desc = { trigger = { check_variable = { which = pe_seen_200 value <= 1 } } text = pe.200.desc }
+	desc = { trigger = { check_variable = { which = pe_seen_200 value > 1 } } text = pe.200.desc.again }
 	picture = GFX_evt_city_planet
 	is_triggered_only = yes
+	immediate = { hidden_effect = { change_variable = { which = pe_seen_200 value = 1 } } }
 	location = event_target:pe_pat_planet
 
 	option = {
@@ -84,9 +86,11 @@ country_event = {
 country_event = {
 	id = pe.202
 	title = pe.202.name
-	desc = pe.202.desc
+	desc = { trigger = { check_variable = { which = pe_seen_202 value <= 1 } } text = pe.202.desc }
+	desc = { trigger = { check_variable = { which = pe_seen_202 value > 1 } } text = pe.202.desc.again }
 	picture = GFX_evt_scientific_experiments
 	is_triggered_only = yes
+	immediate = { hidden_effect = { change_variable = { which = pe_seen_202 value = 1 } } }
 
 	# Free research: a quarter more, in a field the foundation picks.
 	option = {
@@ -394,9 +398,11 @@ country_event = {
 country_event = {
 	id = pe.221
 	title = pe.221.name
-	desc = pe.221.desc
+	desc = { trigger = { check_variable = { which = pe_seen_221 value <= 1 } } text = pe.221.desc }
+	desc = { trigger = { check_variable = { which = pe_seen_221 value > 1 } } text = pe.221.desc.again }
 	picture = GFX_evt_galactic_community
 	is_triggered_only = yes
+	immediate = { hidden_effect = { change_variable = { which = pe_seen_221 value = 1 } } }
 
 	option = {
 		name = pe.221.a
@@ -502,9 +508,11 @@ country_event = {
 country_event = {
 	id = pe.224
 	title = pe.224.name
-	desc = pe.224.desc
+	desc = { trigger = { check_variable = { which = pe_seen_224 value <= 1 } } text = pe.224.desc }
+	desc = { trigger = { check_variable = { which = pe_seen_224 value > 1 } } text = pe.224.desc.again }
 	picture = GFX_evt_physics_research
 	is_triggered_only = yes
+	immediate = { hidden_effect = { change_variable = { which = pe_seen_224 value = 1 } } }
 
 	option = {
 		name = pe.224.a

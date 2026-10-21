@@ -80,3 +80,72 @@ defined_text = {
 	}
 	default = pe_mag_rep_mixed
 }
+
+defined_text = {
+	name = GetPeMagnateOld
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 1 } }
+		localization_key = pe_magnate_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 2 } }
+		localization_key = pe_magnate_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 3 } }
+		localization_key = pe_magnate_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 4 } }
+		localization_key = pe_magnate_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 5 } }
+		localization_key = pe_magnate_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 6 } }
+		localization_key = pe_magnate_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 7 } }
+		localization_key = pe_magnate_7
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 8 } }
+		localization_key = pe_magnate_8
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 9 } }
+		localization_key = pe_magnate_9
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 10 } }
+		localization_key = pe_magnate_10
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 11 } }
+		localization_key = pe_magnate_11
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 12 } }
+		localization_key = pe_magnate_12
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 13 } }
+		localization_key = pe_magnate_13
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 14 } }
+		localization_key = pe_magnate_14
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 15 } }
+		localization_key = pe_magnate_15
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mag_old value = 16 } }
+		localization_key = pe_magnate_16
+	}
+	default = pe_magnate_1
+}

@@ -139,7 +139,9 @@ pe_relocate = {
 	}
 }
 
-# Colony scope (the source planet): find a firm and a destination, then move it.
+# Colony scope (the source planet): find a firm and the best destination, then move it.
+# Only firms whose main share does not suit the source's designation move: a firm that
+# suits its planet stays, even when the planet is short of housing or amenities.
 pe_relocate_from = {
 	save_event_target_as = pe_rl_src
 	root = { set_variable = { which = pe_rl_srcdef value = 0 } }
@@ -171,16 +173,14 @@ pe_relocate_from = {
 				set_variable = { which = pe_rl_wf value = prev.pe_tmp }
 				multiply_variable = { which = pe_rl_wf value = 200 }
 				set_variable = { which = pe_rl_cost value = prev.pe_rl_c }
+				set_variable = { which = pe_rl_best value = -1 }
 			}
 			if = {
 				limit = {
 					check_variable = { which = pe_fcap value >= pe_rl_c }
-					OR = {
-						planet = { NOT = { pe_desig_prim = yes } }
-						root = { check_variable = { which = pe_rl_srcdef value = 1 } }
-					}
+					planet = { NOT = { pe_desig_prim = yes } }
 				}
-				# A destination that suits the firm's main share ...
+				# The best destination that suits the firm's main share ...
 				root = {
 					set_variable = { which = pe_rl_pass value = 1 }
 					every_owned_colony = {
@@ -194,11 +194,11 @@ pe_relocate_from = {
 						pe_relocate_check_dest = yes
 					}
 				}
-				# ... or, from a planet short of housing or amenities, any destination.
+				# ... or, from a planet short of housing or amenities, the best other one.
 				if = {
 					limit = {
 						root = {
-							check_variable = { which = pe_rl_done value = 0 }
+							check_variable = { which = pe_rl_best value < 0 }
 							check_variable = { which = pe_rl_srcdef value = 1 }
 						}
 					}
@@ -216,8 +216,9 @@ pe_relocate_from = {
 					}
 				}
 				if = {
-					limit = { root = { check_variable = { which = pe_rl_done value = 1 } } }
+					limit = { root = { check_variable = { which = pe_rl_best value >= 0 } } }
 					set_variable = { which = pe_rl_cand value = 1 }
+					root = { set_variable = { which = pe_rl_done value = 1 } }
 				}
 			}
 		}
@@ -228,19 +229,25 @@ pe_relocate_from = {
 	}
 }
 
-# Colony scope (a possible destination): free housing and amenities for all workers.
+# Colony scope (a possible destination): enough free housing and amenities for all
+# workers with a margin, so it is not short itself after the move. The destination with
+# the most room left (the smaller of the two) wins.
 pe_relocate_check_dest = {
 	export_trigger_value_to_variable = { trigger = free_housing variable = pe_fh }
 	export_trigger_value_to_variable = { trigger = free_amenities variable = pe_fa }
+	subtract_variable = { which = pe_fh value = root.pe_rl_wf }
+	subtract_variable = { which = pe_fa value = root.pe_rl_wf }
+	set_variable = { which = pe_room value = pe_fh }
+	if = { limit = { check_variable = { which = pe_fa value < pe_room } } set_variable = { which = pe_room value = pe_fa } }
 	if = {
 		limit = {
-			root = { check_variable = { which = pe_rl_done value = 0 } }
-			check_variable = { which = pe_fh value >= root.pe_rl_wf }
-			check_variable = { which = pe_fa value >= root.pe_rl_wf }
+			check_variable = { which = pe_fh value >= 100 }
+			check_variable = { which = pe_fa value >= 200 }
+			check_variable = { which = pe_room value > root.pe_rl_best }
 		}
 		save_event_target_as = pe_rl_dst
 		root = {
-			set_variable = { which = pe_rl_done value = 1 }
+			set_variable = { which = pe_rl_best value = prev.pe_room }
 			# 1 = designation, 2 = the source lacks housing or amenities (for the message)
 			set_variable = { which = pe_rl_reason value = pe_rl_pass }
 		}
@@ -265,16 +272,52 @@ pe_ledgers = {
 		set_variable = { which = pe_lscale value = pe_lcap }
 		divide_variable = { which = pe_lscale value = pe_ltot }
 	}
-	# Gratitude after disaster relief (pe.226): the firms take half their profit share.
-	if = { limit = { has_country_flag = pe_gratitude } multiply_variable = { which = pe_lscale value = 0.5 } }
+	# Profits: half after disaster relief (pe.226, gratitude), a quarter more under a
+	# monopoly (pe.244).
+	set_variable = { which = pe_lprof value = pe_lscale }
+	if = { limit = { has_country_flag = pe_gratitude } multiply_variable = { which = pe_lprof value = 0.5 } }
+	if = { limit = { has_country_flag = pe_monopoly } multiply_variable = { which = pe_lprof value = 1.25 } }
 	every_owned_colony = { pe_ledger_planet = yes }
 	set_variable = { which = pe_sav_month value = pe_savings_last }
 	multiply_variable = { which = pe_sav_month value = pe_lscale }
 	divide_variable = { which = pe_sav_month value = 3 }
 	set_variable = { which = pe_profit_month value = pe_profit_due }
-	multiply_variable = { which = pe_profit_month value = pe_lscale }
+	multiply_variable = { which = pe_profit_month value = pe_lprof }
 	divide_variable = { which = pe_profit_month value = 3 }
+	# State bonds (pe.242): the state repays the investor pool monthly, shown with the savings.
+	if = {
+		limit = { check_variable = { which = pe_bond_left value > 0 } }
+		change_variable = { which = pe_sav_month value = pe_bond_month }
+		set_variable = { which = pe_tmp value = pe_bond_month }
+		multiply_variable = { which = pe_tmp value = 3 }
+		change_variable = { which = pe_capital value = pe_tmp }
+		change_variable = { which = pe_bond_left value = -3 }
+	}
+	# Shares (pe.241): 10 trade a month per share, paid by the investor pool as long as it can.
+	set_variable = { which = pe_div_month value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_shares value > 0 } }
+		set_variable = { which = pe_div_month value = pe_shares }
+		multiply_variable = { which = pe_div_month value = 10 }
+		set_variable = { which = pe_tmp value = pe_div_month }
+		multiply_variable = { which = pe_tmp value = 3 }
+		if = {
+			limit = { check_variable = { which = pe_capital value >= pe_tmp } }
+			subtract_variable = { which = pe_capital value = pe_tmp }
+		}
+		else = { set_variable = { which = pe_div_month value = 0 } }
+	}
 	capital_scope = {
+		root = { set_variable = { which = pe_lv value = pe_div_month } }
+		pe_ledger_bits = { V = ld }
+		if = {
+			limit = { root = { check_variable = { which = pe_div_month value >= 0.5 } } }
+			if = { limit = { NOT = { has_deposit = d_pe_ledger_dividend } } add_deposit = d_pe_ledger_dividend }
+		}
+		else_if = {
+			limit = { has_deposit = d_pe_ledger_dividend }
+			remove_deposit = d_pe_ledger_dividend
+		}
 		root = { set_variable = { which = pe_lv value = pe_sav_month } }
 		pe_ledger_bits = { V = ls }
 		if = {
@@ -297,7 +340,7 @@ pe_ledger_planet = {
 	if = { limit = { NOT = { is_variable_set = pe_pl_profit } } set_variable = { which = pe_pl_profit value = 0 } }
 	root = {
 		set_variable = { which = pe_lv value = prev.pe_pl_profit }
-		multiply_variable = { which = pe_lv value = pe_lscale }
+		multiply_variable = { which = pe_lv value = pe_lprof }
 		divide_variable = { which = pe_lv value = 3 }
 	}
 	pe_ledger_bits = { V = lp }
@@ -857,6 +900,19 @@ pe_auto_book = {
 			change_variable = { which = pe_apool value = prev.pe_fcap }
 		}
 	}
+	# Leased machines (pe.212): the lease includes the energy the engine charges for the
+	# automated jobs (25% of the private jobs, 4 energy per job a month); the investor pool
+	# pays it back to the state each quarter.
+	if = {
+		limit = { has_modifier = pe_leasing_$JOB$ }
+		root = {
+			set_variable = { which = pe_tmp value = pe_acap }
+			multiply_variable = { which = pe_tmp value = 0.03 }
+			add_resource = { energy = 1 mult = pe_tmp }
+			multiply_variable = { which = pe_tmp value = pe_s_energy }
+			subtract_variable = { which = pe_capital value = pe_tmp }
+		}
+	}
 	if = { limit = { has_deposit = d_pe_auto_$JOB$_1 } root = { set_variable = { which = pe_alvl value = 1 } } }
 	if = { limit = { has_deposit = d_pe_auto_$JOB$_2 } root = { set_variable = { which = pe_alvl value = 2 } } }
 	root = {
@@ -895,15 +951,11 @@ pe_auto_book = {
 					}
 				}
 			}
-			# The firms reimburse the state's energy upkeep of this quarter (not while machines
-			# are leased here: then the engine charges no upkeep on this planet).
-			if = {
-				limit = { NOT = { has_modifier = pe_leasing_$JOB$ } }
-				root = {
-					set_variable = { which = pe_tmp value = pe_aen }
-					multiply_variable = { which = pe_tmp value = 3 }
-					add_resource = { energy = 1 mult = pe_tmp }
-				}
+			# The firms reimburse the state's energy upkeep of this quarter.
+			root = {
+				set_variable = { which = pe_tmp value = pe_aen }
+				multiply_variable = { which = pe_tmp value = 3 }
+				add_resource = { energy = 1 mult = pe_tmp }
 			}
 			every_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_wf_$JOB$ value > 0 } }

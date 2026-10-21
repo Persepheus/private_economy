@@ -6,3 +6,6 @@ pe_private_profits = {
 pe_private_savings = {
 	use_for_ai_budget = no
 }
+pe_private_dividends = {
+	use_for_ai_budget = no
+}

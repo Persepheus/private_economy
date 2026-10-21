@@ -2061,6 +2061,11 @@ pe_private_miner = {
 
 	weight = {
 		weight = @worker_job_weight
+		# Rural premium (pe.232): above specialist jobs (weight 10), so pops stay or come back.
+		modifier = {
+			factor = 12
+			planet = { has_modifier = pe_rural_premium }
+		}
 		modifier = {
 			factor = 10
 			is_enslaved = yes
@@ -2186,6 +2191,11 @@ pe_private_technician = {
 
 	weight = {
 		weight = @worker_job_weight
+		# Rural premium (pe.232): above specialist jobs (weight 10), so pops stay or come back.
+		modifier = {
+			factor = 12
+			planet = { has_modifier = pe_rural_premium }
+		}
 		modifier = {
 			factor = 100
 			OR = {
@@ -2362,6 +2372,11 @@ pe_private_farmer = {
 
 	weight = {
 		weight = @worker_job_weight
+		# Rural premium (pe.232): above specialist jobs (weight 10), so pops stay or come back.
+		modifier = {
+			factor = 12
+			planet = { has_modifier = pe_rural_premium }
+		}
 		modifier = {
 			factor = 1.1
 			owner = { has_valid_civic = civic_agrarian_idyll }

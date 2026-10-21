@@ -26,6 +26,8 @@ pe_census = {
 	set_variable = { which = pe_cnt_m value = 0 }
 	set_variable = { which = pe_cnt_e value = 0 }
 	set_variable = { which = pe_cnt_f value = 0 }
+	set_variable = { which = pe_n_firms value = 0 }
+	set_variable = { which = pe_n_corp value = 0 }
 	every_owned_colony = {
 		every_deposit = {
 			limit = { OR = { has_deposit_category = pe_deposit_cat_firms has_deposit_category = pe_deposit_cat_sites } }
@@ -193,6 +195,8 @@ pe_census = {
 				else_if = { limit = { check_variable = { which = pe_code value = 78 } } root = { change_variable = { which = pe_cnt_f value = 1 } } }
 				else_if = { limit = { check_variable = { which = pe_code value = 79 } } root = { change_variable = { which = pe_cnt_f value = 1 } } }
 				else_if = { limit = { check_variable = { which = pe_code value = 80 } } root = { change_variable = { which = pe_cnt_f value = 1 } } }
+				root = { change_variable = { which = pe_n_firms value = 1 } }
+				if = { limit = { check_variable = { which = pe_stage value = 3 } } root = { change_variable = { which = pe_n_corp value = 1 } } }
 			}
 		}
 	}

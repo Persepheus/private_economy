@@ -51,15 +51,12 @@ pe_guest_unrest = {
 }
 pe_leasing_miner = {
 	job_pe_private_miner_automated_workforce_mult = 0.25
-	planet_automated_jobs_upkeep_mult = -1
 }
 pe_leasing_technician = {
 	job_pe_private_technician_automated_workforce_mult = 0.25
-	planet_automated_jobs_upkeep_mult = -1
 }
 pe_leasing_farmer = {
 	job_pe_private_farmer_automated_workforce_mult = 0.25
-	planet_automated_jobs_upkeep_mult = -1
 }
 pe_strike = {
 	planet_jobs_produces_mult = -0.15
@@ -103,4 +100,34 @@ pe_tourism_accident = {
 }
 pe_relief = {
 	planet_stability_add = 10
+}
+
+# Labour shortage events (2).
+pe_robot_startup = {
+	planet_pop_assembly_add = 2
+}
+pe_rural_premium = {
+	planet_amenities_add = 250
+}
+pe_family = {
+	logistic_growth_mult = 0.25
+}
+
+# Market and corporate events (pe_market_events.txt).
+pe_export_boom = {
+	country_trade_produces_mult = 0.05
+}
+pe_pollution = {
+	planet_stability_add = -3
+	planet_amenities_add = -500
+}
+pe_recession = {
+	planet_jobs_produces_mult = -0.05
+}
+pe_gentrification = {
+	planet_amenities_add = 1000
+	planet_housing_add = -300
+}
+pe_farewell = {
+	planet_stability_add = 3
 }

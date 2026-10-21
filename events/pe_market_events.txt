@@ -1,0 +1,410 @@
+# Market and corporate events (see pe_patron_effects.txt).
+#   pe.240 a magnate's farewell   pe.241 IPO (shares)        pe.242 state bonds
+#   pe.243 hostile takeover        pe.244 monopoly            pe.245 industrial espionage
+#   pe.246 export boom             pe.247 environmental scandal
+#   pe.248 stock market crash      pe.249 stock market rally  pe.250 insider trading
+#   pe.251 gentrification
+# Scope: country. root.pe_pat_spend = what the investors put in (already taken from the
+# pool; options that decline it pay it back). Events that are not an investment pay it
+# back at once.
+namespace = pe
+
+# A magnate's farewell
+country_event = {
+	id = pe.240
+	title = pe.240.name
+	desc = pe.240.desc
+	picture = GFX_evt_city_planet
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			set_variable = { which = pe_fw_amt value = pe_capital }
+			multiply_variable = { which = pe_fw_amt value = 0.15 }
+			round_variable = pe_fw_amt
+			subtract_variable = { which = pe_capital value = pe_fw_amt }
+			set_variable = { which = pe_fw_res value = pe_fw_amt }
+			multiply_variable = { which = pe_fw_res value = 0.15 }
+			round_variable = pe_fw_res
+			set_variable = { which = pe_fw_tax value = pe_fw_amt }
+			multiply_variable = { which = pe_fw_tax value = 0.4 }
+			round_variable = pe_fw_tax
+		}
+	}
+	option = {
+		name = pe.240.a
+		add_resource = { physics_research = 1 mult = pe_fw_res }
+		add_resource = { society_research = 1 mult = pe_fw_res }
+		add_resource = { engineering_research = 1 mult = pe_fw_res }
+		capital_scope = { add_modifier = { modifier = pe_farewell days = 360 } }
+		ai_chance = { factor = 40 }
+	}
+	option = {
+		name = pe.240.b
+		add_resource = { trade = 1 mult = pe_fw_tax }
+		ai_chance = { factor = 40 }
+	}
+	option = {
+		name = pe.240.c
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_fw_amt }
+			set_variable = { which = pe_mag_rep value = pe_mag_old_rep }
+			divide_variable = { which = pe_mag_rep value = 2 }
+			round_variable = pe_mag_rep
+		}
+		ai_chance = { factor = 20 }
+	}
+}
+
+# Going public
+country_event = {
+	id = pe.241
+	title = pe.241.name
+	desc = pe.241.desc
+	picture = GFX_evt_galactic_senate
+	is_triggered_only = yes
+
+	immediate = { hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } } }
+	option = {
+		name = pe.241.a
+		allow = { has_resource = { type = trade amount >= 500 } }
+		add_resource = { trade = -500 }
+		hidden_effect = {
+			change_variable = { which = pe_shares value = 1 }
+			change_variable = { which = pe_capital value = 500 }
+			change_variable = { which = pe_mag_rep value = 1 }
+		}
+		ai_chance = { factor = 40 }
+	}
+	option = {
+		name = pe.241.b
+		allow = { has_resource = { type = trade amount >= 1500 } }
+		add_resource = { trade = -1500 }
+		hidden_effect = {
+			change_variable = { which = pe_shares value = 3 }
+			change_variable = { which = pe_capital value = 1500 }
+			change_variable = { which = pe_mag_rep value = 1 }
+		}
+		ai_chance = { factor = 20 }
+	}
+	option = {
+		name = pe.241.c
+		ai_chance = { factor = 40 }
+	}
+}
+
+# State bonds
+country_event = {
+	id = pe.242
+	title = pe.242.name
+	desc = pe.242.desc
+	picture = GFX_evt_galactic_senate
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			# Repayment: 120% over five years, monthly.
+			set_variable = { which = pe_bond_new value = pe_pat_spend }
+			multiply_variable = { which = pe_bond_new value = 0.02 }
+			round_variable = pe_bond_new
+		}
+	}
+	option = {
+		name = pe.242.a
+		add_resource = { trade = 1 mult = pe_pat_spend }
+		hidden_effect = {
+			if = { limit = { NOT = { check_variable = { which = pe_bond_left value > 0 } } } set_variable = { which = pe_bond_month value = 0 } }
+			change_variable = { which = pe_bond_month value = pe_bond_new }
+			set_variable = { which = pe_bond_left value = 60 }
+		}
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = pe.242.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = { factor = 50 }
+	}
+}
+
+# Hostile takeover
+country_event = {
+	id = pe.243
+	title = pe.243.name
+	desc = pe.243.desc
+	picture = GFX_evt_galactic_senate
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.243.a
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		event_target:pe_pat_planet = {
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms }
+				root = { set_variable = { which = pe_to_fcap value = prev.pe_fcap } }
+				remove_deposit = yes
+			}
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms }
+				change_variable = { which = pe_fcap value = root.pe_to_fcap }
+				change_variable = { which = pe_fcap value = 100 }
+			}
+			check_planet_employment = yes
+		}
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = pe.243.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_business_upset days = 720 } }
+		ai_chance = { factor = 50 }
+	}
+}
+
+# Monopoly
+country_event = {
+	id = pe.244
+	title = pe.244.name
+	desc = pe.244.desc
+	picture = GFX_evt_galactic_senate
+	is_triggered_only = yes
+
+	immediate = { hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } } }
+	option = {
+		name = pe.244.a
+		set_timed_country_flag = { flag = pe_monopoly days = 1800 }
+		ai_chance = { factor = 30 }
+	}
+	option = {
+		name = pe.244.b
+		hidden_effect = { multiply_variable = { which = pe_capital value = 0.8 } }
+		capital_scope = { add_modifier = { modifier = pe_business_upset days = 720 } }
+		ai_chance = { factor = 40 }
+	}
+	option = {
+		name = pe.244.c
+		allow = { has_resource = { type = influence amount >= 50 } }
+		add_resource = { influence = -50 }
+		ai_chance = { factor = 30 }
+	}
+}
+
+# Industrial espionage
+country_event = {
+	id = pe.245
+	title = pe.245.name
+	desc = pe.245.desc
+	picture = GFX_evt_night_raid
+	is_triggered_only = yes
+
+	option = {
+		name = pe.245.a
+		add_resource = { engineering_research = 1 mult = pe_pat_res }
+		hidden_effect = {
+			random = {
+				chance = 30
+				add_resource = { influence = -50 }
+				country_event = { id = pe.252 }
+			}
+		}
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 0.5 is_pacifist = yes }
+		}
+	}
+	option = {
+		name = pe.245.b
+		add_resource = { unity = 50 }
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = { factor = 50 }
+	}
+}
+
+# Espionage exposed (follow-up)
+country_event = {
+	id = pe.252
+	title = pe.252.name
+	desc = pe.252.desc
+	picture = GFX_evt_night_raid
+	is_triggered_only = yes
+
+	option = { name = pe.252.a }
+}
+
+# Export boom
+country_event = {
+	id = pe.246
+	title = pe.246.name
+	desc = pe.246.desc
+	picture = GFX_evt_galactic_community
+	is_triggered_only = yes
+
+	option = {
+		name = pe.246.a
+		add_modifier = { modifier = pe_export_boom days = 1800 }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = { factor = 80 }
+	}
+	option = {
+		name = pe.246.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = {
+			factor = 20
+			modifier = { factor = 3 is_xenophobe = yes }
+		}
+	}
+}
+
+# Environmental scandal
+country_event = {
+	id = pe.247
+	title = pe.247.name
+	desc = pe.247.desc
+	picture = GFX_evt_burning_city
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.247.a
+		hidden_effect = { change_variable = { which = pe_mag_rep value = -1 } }
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = pe.247.b
+		allow = { has_resource = { type = trade amount >= 150 } }
+		add_resource = { trade = -150 }
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = { factor = 30 }
+	}
+	option = {
+		name = pe.247.c
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_spend }
+			change_variable = { which = pe_mag_rep value = -1 }
+		}
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_pollution days = 1080 } }
+		ai_chance = { factor = 20 }
+	}
+}
+
+# Stock market crash
+country_event = {
+	id = pe.248
+	title = pe.248.name
+	desc = pe.248.desc
+	picture = GFX_evt_large_explosion
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_spend }
+			multiply_variable = { which = pe_capital value = 0.5 }
+			every_owned_colony = {
+				every_deposit = {
+					limit = { has_deposit_category = pe_deposit_cat_firms }
+					multiply_variable = { which = pe_fcap value = 0.5 }
+				}
+			}
+			if = {
+				limit = { check_variable = { which = pe_shares value > 0 } }
+				divide_variable = { which = pe_shares value = 2 }
+				floor_variable = pe_shares
+			}
+			remove_country_flag = pe_bubble
+		}
+	}
+	option = {
+		name = pe.248.a
+		allow = { has_resource = { type = trade amount >= 300 } }
+		add_resource = { trade = -300 }
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = pe.248.b
+		add_modifier = { modifier = pe_recession days = 360 }
+		ai_chance = { factor = 50 }
+	}
+}
+
+# Stock market rally
+country_event = {
+	id = pe.249
+	title = pe.249.name
+	desc = pe.249.desc
+	picture = GFX_evt_galactic_senate
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_spend }
+			set_variable = { which = pe_rally value = pe_capital }
+			multiply_variable = { which = pe_rally value = 0.25 }
+			round_variable = pe_rally
+			change_variable = { which = pe_capital value = pe_rally }
+			set_variable = { which = pe_rally_tax value = pe_rally }
+			multiply_variable = { which = pe_rally_tax value = 0.1 }
+			round_variable = pe_rally_tax
+		}
+	}
+	option = {
+		name = pe.249.a
+		add_resource = { trade = 1 mult = pe_rally_tax }
+		ai_chance = { factor = 60 }
+	}
+	option = {
+		name = pe.249.b
+		set_timed_country_flag = { flag = pe_bubble days = 1080 }
+		ai_chance = { factor = 40 }
+	}
+}
+
+# Insider trading
+country_event = {
+	id = pe.250
+	title = pe.250.name
+	desc = pe.250.desc
+	picture = GFX_evt_night_raid
+	is_triggered_only = yes
+
+	immediate = { hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } } }
+	option = {
+		name = pe.250.a
+		add_resource = { unity = 100 }
+		capital_scope = { add_modifier = { modifier = pe_business_upset days = 720 } }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = -2 } }
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 2 is_egalitarian = yes }
+		}
+	}
+	option = {
+		name = pe.250.b
+		capital_scope = { add_modifier = { modifier = pe_corruption days = 1080 } }
+		ai_chance = { factor = 50 }
+	}
+}
+
+# Gentrification
+country_event = {
+	id = pe.251
+	title = pe.251.name
+	desc = pe.251.desc
+	picture = GFX_evt_city_planet
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.251.a
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_gentrification days = 1800 } }
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = pe.251.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_business_upset days = 720 } }
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 2 is_egalitarian = yes }
+		}
+	}
+}

@@ -1,5 +1,6 @@
 # Labour events: private worker jobs stand empty (see pe_patron_effects.txt, pe_labour).
 #   pe.210 overtime   pe.211 guest workers   pe.212 machine leasing   pe.213 strike
+#   pe.230 company housing   pe.231 robot start-up   pe.232 rural premium   pe.233 family support
 # Scope: country. event_target:pe_pat_planet = the planet; root.pe_lab_job = the job with
 # the most empty places there (1 miner, 2 technician, 3 farmer); root.pe_pat_spend = what
 # the firms put in (already taken from the investor pool; declining options pay it back).
@@ -185,5 +186,106 @@ country_event = {
 			factor = 20
 			modifier = { factor = 3 is_authoritarian = yes }
 		}
+	}
+}
+
+# Company housing
+country_event = {
+	id = pe.230
+	title = pe.230.name
+	desc = pe.230.desc
+	picture = GFX_evt_city_planet
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.230.a
+		event_target:pe_pat_planet = { add_deposit = d_pe_company_housing }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = { factor = 80 }
+	}
+	option = {
+		name = pe.230.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = { factor = 20 }
+	}
+}
+
+# Robot start-up
+country_event = {
+	id = pe.231
+	title = pe.231.name
+	desc = pe.231.desc
+	picture = GFX_evt_engineering_bay
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.231.a
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_robot_startup days = 1800 } }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = { factor = 70 }
+	}
+	option = {
+		name = pe.231.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = {
+			factor = 30
+			modifier = { factor = 3 is_spiritualist = yes }
+		}
+	}
+}
+
+# Rural premium
+country_event = {
+	id = pe.232
+	title = pe.232.name
+	desc = pe.232.desc
+	picture = GFX_evt_colony_settlement
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.232.a
+		event_target:pe_pat_planet = {
+			add_modifier = { modifier = pe_rural_premium days = 1800 }
+			check_planet_employment = yes
+		}
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = { factor = 70 }
+	}
+	option = {
+		name = pe.232.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = { factor = 30 }
+	}
+}
+
+# Family support
+country_event = {
+	id = pe.233
+	title = pe.233.name
+	desc = pe.233.desc
+	picture = GFX_evt_alien_city
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.233.a
+		allow = { has_resource = { type = trade amount >= 100 } }
+		add_resource = { trade = -100 }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_family days = 3600 } }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = { factor = 60 }
+	}
+	option = {
+		name = pe.233.b
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_family days = 1800 } }
+		ai_chance = { factor = 30 }
+	}
+	option = {
+		name = pe.233.c
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = { factor = 10 }
 	}
 }
