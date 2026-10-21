@@ -29,9 +29,10 @@ country_event = {
 	option = {
 		name = pe.210.a
 		event_target:pe_pat_planet = {
-			if = { limit = { root = { check_variable = { which = pe_lab_job value = 1 } } } add_modifier = { modifier = pe_overtime_miner days = 1800 } }
-			else_if = { limit = { root = { check_variable = { which = pe_lab_job value = 2 } } } add_modifier = { modifier = pe_overtime_technician days = 1800 } }
-			else = { add_modifier = { modifier = pe_overtime_farmer days = 1800 } }
+			if = { limit = { root = { check_variable = { which = pe_lab_job value = 1 } } } add_modifier = { modifier = pe_overtime_miner days = 1800 multiplier = root.pe_pat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_lab_job value = 2 } } } add_modifier = { modifier = pe_overtime_technician days = 1800 multiplier = root.pe_pat_mult } }
+			else = { add_modifier = { modifier = pe_overtime_farmer days = 1800 multiplier = root.pe_pat_mult } }
+			add_modifier = { modifier = pe_overtime_tired days = 1800 }
 		}
 		ai_chance = { factor = 70 }
 	}
@@ -73,9 +74,10 @@ country_event = {
 		allow = { has_resource = { type = trade amount >= 100 } }
 		add_resource = { trade = -100 }
 		event_target:pe_pat_planet = {
+			set_variable = { which = pe_gw_pops value = root.pe_gw_pops }
 			create_pop_group = {
 				species = event_target:pe_gw_species
-				size = 200
+				size = pe_gw_pops
 			}
 			if = {
 				limit = { owner = { is_xenophobe = yes } }
@@ -122,9 +124,10 @@ country_event = {
 	option = {
 		name = pe.212.a
 		event_target:pe_pat_planet = {
-			if = { limit = { root = { check_variable = { which = pe_lab_job value = 1 } } } add_modifier = { modifier = pe_leasing_miner days = 1800 } }
-			else_if = { limit = { root = { check_variable = { which = pe_lab_job value = 2 } } } add_modifier = { modifier = pe_leasing_technician days = 1800 } }
-			else = { add_modifier = { modifier = pe_leasing_farmer days = 1800 } }
+			set_variable = { which = pe_lease_m value = root.pe_lease_mult }
+			if = { limit = { root = { check_variable = { which = pe_lab_job value = 1 } } } add_modifier = { modifier = pe_leasing_miner days = 1800 multiplier = root.pe_lease_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_lab_job value = 2 } } } add_modifier = { modifier = pe_leasing_technician days = 1800 multiplier = root.pe_lease_mult } }
+			else = { add_modifier = { modifier = pe_leasing_farmer days = 1800 multiplier = root.pe_lease_mult } }
 			check_planet_employment = yes
 		}
 		ai_chance = { factor = 80 }
@@ -202,7 +205,11 @@ country_event = {
 
 	option = {
 		name = pe.230.a
-		event_target:pe_pat_planet = { add_deposit = d_pe_company_housing }
+		event_target:pe_pat_planet = {
+			if = { limit = { root = { check_variable = { which = pe_find_n value = 1 } } } add_deposit = d_pe_company_housing }
+			else_if = { limit = { root = { check_variable = { which = pe_find_n value = 2 } } } add_deposit = d_pe_company_housing_2 }
+			else = { add_deposit = d_pe_company_housing_3 }
+		}
 		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
 		ai_chance = { factor = 80 }
 	}
@@ -224,7 +231,7 @@ country_event = {
 
 	option = {
 		name = pe.231.a
-		event_target:pe_pat_planet = { add_modifier = { modifier = pe_robot_startup days = 1800 } }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_robot_startup days = 1800 multiplier = root.pe_pat_mult } }
 		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
 		ai_chance = { factor = 70 }
 	}
@@ -250,7 +257,7 @@ country_event = {
 	option = {
 		name = pe.232.a
 		event_target:pe_pat_planet = {
-			add_modifier = { modifier = pe_rural_premium days = 1800 }
+			add_modifier = { modifier = pe_rural_premium days = 1800 multiplier = root.pe_pat_mult }
 			check_planet_employment = yes
 		}
 		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
@@ -276,13 +283,13 @@ country_event = {
 		name = pe.233.a
 		allow = { has_resource = { type = trade amount >= 100 } }
 		add_resource = { trade = -100 }
-		event_target:pe_pat_planet = { add_modifier = { modifier = pe_family days = 3600 } }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_family days = 3600 multiplier = root.pe_pat_mult } }
 		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
 		ai_chance = { factor = 60 }
 	}
 	option = {
 		name = pe.233.b
-		event_target:pe_pat_planet = { add_modifier = { modifier = pe_family days = 1800 } }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_family days = 1800 multiplier = root.pe_pat_mult } }
 		ai_chance = { factor = 30 }
 	}
 	option = {

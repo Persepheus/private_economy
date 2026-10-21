@@ -1024,13 +1024,16 @@ pe_auto_book = {
 		}
 	}
 	# Leased machines (pe.212): the lease includes the energy the engine charges for the
-	# automated jobs (25% of the private jobs, 4 energy per job a month); the investor pool
-	# pays it back to the state each quarter.
+	# automated jobs (25% of the private jobs x the lease size, 4 energy per job a month);
+	# the investor pool pays it back to the state each quarter.
 	if = {
 		limit = { has_modifier = pe_leasing_$JOB$ }
+		# Size of the lease (pe.212; 1 for leases from before 0.16).
+		if = { limit = { NOT = { is_variable_set = pe_lease_m } } set_variable = { which = pe_lease_m value = 1 } }
 		root = {
 			set_variable = { which = pe_tmp value = pe_acap }
 			multiply_variable = { which = pe_tmp value = 0.03 }
+			multiply_variable = { which = pe_tmp value = prev.pe_lease_m }
 			add_resource = { energy = 1 mult = pe_tmp }
 			multiply_variable = { which = pe_tmp value = pe_s_energy }
 			subtract_variable = { which = pe_capital value = pe_tmp }

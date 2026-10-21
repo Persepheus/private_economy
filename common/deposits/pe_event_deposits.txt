@@ -61,6 +61,7 @@ d_pe_hydroponics = {
 }
 
 # Company housing (pe.230): housing the private firms built for their workers. Permanent.
+# Three sizes, by what the firms put in.
 d_pe_company_housing = {
 	icon = d_city
 	is_for_colonizable = yes
@@ -71,5 +72,31 @@ d_pe_company_housing = {
 
 	planet_modifier = {
 		planet_housing_add = 500
+	}
+}
+
+d_pe_company_housing_2 = {
+	icon = d_city
+	is_for_colonizable = yes
+	category = pe_deposit_cat_ledger
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	planet_modifier = {
+		planet_housing_add = 1000
+	}
+}
+
+d_pe_company_housing_3 = {
+	icon = d_city
+	is_for_colonizable = yes
+	category = pe_deposit_cat_ledger
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	planet_modifier = {
+		planet_housing_add = 1500
 	}
 }

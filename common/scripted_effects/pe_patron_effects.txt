@@ -268,6 +268,15 @@ pe_pat_amounts = {
 	if = { limit = { check_variable = { which = pe_pat_mult value >= 2.5 } } set_variable = { which = pe_find_n value = 3 } }
 	set_variable = { which = pe_hydro_food value = pe_find_n }
 	multiply_variable = { which = pe_hydro_food value = 15 }
+	# Company housing (pe.230): 500 x the same size.
+	set_variable = { which = pe_house value = pe_find_n }
+	multiply_variable = { which = pe_house value = 500 }
+	# Guest workers (pe.211): 200 x scale.
+	set_variable = { which = pe_gw_pops value = pe_pat_u100 }
+	multiply_variable = { which = pe_gw_pops value = 2 }
+	# Leased machines (pe.212): at most twice the base lease (25% -> 50% automated).
+	set_variable = { which = pe_lease_mult value = pe_pat_mult }
+	if = { limit = { check_variable = { which = pe_lease_mult value > 2 } } set_variable = { which = pe_lease_mult value = 2 } }
 }
 
 # --- Labour -------------------------------------------------------------------------

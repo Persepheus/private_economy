@@ -34,16 +34,17 @@ pe_recruit_refused = {
 }
 
 # Labour events (pe_labour_events.txt).
+# Overtime: the output grows with the wage money (multiplier), the tiredness does not.
 pe_overtime_miner = {
 	planet_miners_produces_mult = 0.2
-	planet_amenities_add = -500
 }
 pe_overtime_technician = {
 	planet_technician_produces_mult = 0.2
-	planet_amenities_add = -500
 }
 pe_overtime_farmer = {
 	planet_farmers_produces_mult = 0.2
+}
+pe_overtime_tired = {
 	planet_amenities_add = -500
 }
 pe_guest_unrest = {
