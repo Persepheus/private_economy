@@ -27,9 +27,10 @@ pe_buyout_allowed = {
 }
 
 # Colony scope: idle workforce for new jobs. In 4.x jobless pops work the "civilian"
-# job; any of them count.
+# job. Idle pops = civilians minus the jobs still open on the planet (pe_idle, set each
+# quarter in pe_planet_step); at least 50 count.
 pe_has_idle_pops = {
-	num_assigned_jobs = { job = civilian value > 5 }
+	check_variable = { which = pe_idle value >= 50 }
 }
 
 # Colony scope: private worker jobs stand empty here (at least one job's worth).
