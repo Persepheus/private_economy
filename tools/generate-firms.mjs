@@ -396,7 +396,13 @@ for (const v of variants) {
 const ifChain = (items, cond, body, ind = '\t') => items.map((it, i) => `${ind}${i ? 'else_if' : 'if'} = { limit = { ${cond(it)} } ${body(it)} }`).join('\n');
 const rootIs = (name, val) => `root = { check_variable = { which = ${name} value = ${val} } }`;
 const msg = loc => `owner = { create_message = { type = pe_private_economy localization = ${loc} days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }`;
-const initFirm = (code, stage, fcap, debt) => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } set_variable = { which = pe_debt value = ${debt} } }`;
+// pe_age: quarters since the firm was founded or restructured (a stage change or a move keeps it).
+const initFirm = (code, stage, fcap, debt, age = 'root.pe_chg_age') => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } set_variable = { which = pe_debt value = ${debt} } set_variable = { which = pe_age value = ${age} } }`;
+const RETOOL_AGE = 40;                                 // quarters (10 years) before a firm may restructure
+const RETOOL_CD = 1800;                                // days (5 years) between two restructurings on a planet
+// Real net output per filled job (one job = 100 workforce) of each private job, measured
+// from its category like the value added: country variables pe_o_<job>_<res>.
+const outVar = (job, r) => `pe_o_${job.replace('pe_private_', '')}_${r}`;
 const addRes = (res, job) => Object.entries(res).filter(([r, n]) => n && RES.includes(r)).map(([r, n]) => `set_variable = { which = pe_tmp value = pe_s_${r} } multiply_variable = { which = pe_tmp value = ${n} } change_variable = { which = pe_vaj_${job} value = pe_tmp }`).join(' ');
 // Expected market output of a variant at stage 1 (vanilla base, no catalytic).
 const variantOutput = v => { const o = {}; for (const [job, wf] of Object.entries(v.workforce)) for (const [r, n] of Object.entries(sumRes(jobByKey[job].base, jobByKey[job].noncat))) if (MARKET_RES.includes(r)) o[r] = (o[r] || 0) + n * wf / 100; return o; };
@@ -427,7 +433,7 @@ const specFor = l => designations.filter(d => !/nomad|habitat|ring|ecu|hiv|mac|p
 let eff = header + `# Call depths (see pe_economy_effects.txt): pe_census 2, pe_job_values 2,
 # pe_compute_values 2, pe_planet_prepare 3, pe_firm_identify 4, pe_deposit_fetch 4,
 # pe_choose_variant 3, pe_found_variant 3, pe_buy_or_offer 3, pe_firm_change 3,
-# pe_nationalise_one 3, pe_restructure 3, pe_site_complete 2 (monthly),
+# pe_nationalise_one 3, pe_restructure 3, pe_retool_guard 4, pe_site_complete 2 (monthly),
 # pe_buyout_by_offer 1 (from pe.110).
 
 # Country scope: expected market output of all construction sites (pe_pend_<res>, counts
@@ -461,20 +467,23 @@ ${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }
 pe_job_values = {
 ${JOBS.map(j => `	set_variable = { which = pe_va_tmp value = 0 }
 	pe_job_count = { JOB = ${j.key} VJOB = ${j.vanilla} }
-${[...j.touches].map(r => `	pe_job_res = { CAT = ${j.cat} RES = ${r} }`).join('\n')}
+${[...j.touches].map(r => `	pe_job_res = { CAT = ${j.cat} RES = ${r} }\n	set_variable = { which = ${outVar(j.key, r)} value = pe_q }`).join('\n')}
 	if = {
 		limit = { check_variable = { which = pe_jobn value >= 0.5 } }
 		set_variable = { which = pe_vaj_${j.key} value = pe_va_tmp }
 		divide_variable = { which = pe_vaj_${j.key} value = pe_jobn }
+${[...j.touches].map(r => `		divide_variable = { which = ${outVar(j.key, r)} value = pe_jobn }`).join('\n')}
 	}
 	else = {
 		set_variable = { which = pe_vaj_${j.key} value = 0 }
 		if = {
 			limit = { is_catalytic_empire = yes }
 			${addRes(sumRes(j.base, j.cat_), j.key)}
+			${[...j.touches].map(r => `set_variable = { which = ${outVar(j.key, r)} value = ${+(sumRes(j.base, j.cat_)[r] || 0).toFixed(3)} }`).join(' ')}
 		}
 		else = {
 			${addRes(sumRes(j.base, j.noncat), j.key)}
+			${[...j.touches].map(r => `set_variable = { which = ${outVar(j.key, r)} value = ${+(sumRes(j.base, j.noncat)[r] || 0).toFixed(3)} }`).join(' ')}
 		}
 	}`).join('\n')}
 }
@@ -595,11 +604,12 @@ ${ifChain(variants, v => rootIs('pe_offer_variant', v.code), v => {
 })}
 }
 
-# Colony scope, monthly: a finished construction site becomes its firm.
+# Colony scope, monthly: a finished construction site becomes its firm (unless it waits for
+# workers, pe_hold, see pe_monthly_sites).
 pe_site_complete = {
 	root = { set_variable = { which = pe_site_done value = 0 } }
 	random_deposit = {
-		limit = { has_deposit_category = pe_deposit_cat_sites check_variable = { which = pe_left value <= 0 } }
+		limit = { has_deposit_category = pe_deposit_cat_sites check_variable = { which = pe_left value <= 0 } NOT = { check_variable = { which = pe_hold value = 1 } } }
 		root = {
 			set_variable = { which = pe_site_done value = 1 }
 			set_variable = { which = pe_chg_code value = prev.pe_target }
@@ -623,7 +633,7 @@ pe_site_complete = {
 		limit = { root = { check_variable = { which = pe_site_done value = 1 } } }
 		save_event_target_as = pe_msg_planet
 ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = ${p.v.code} } check_variable = { which = pe_chg_stage value = ${p.s} } }`, p =>
-  `add_deposit = ${p.key} ${initFirm(p.v.code, p.s, 'root.pe_chg_fcap', 'root.pe_chg_debt')} if = { limit = { ${rootIs('pe_chg_type', 3)} } root = { set_variable = { which = pe_new_code value = ${p.v.code} } set_variable = { which = pe_new_stage value = ${p.s} } } }${p.s === 1 ? ` else = { ${msg(`pe_msg_found_${p.key}`)} }` : ''}`, '\t\t')}
+  `add_deposit = ${p.key} ${initFirm(p.v.code, p.s, 'root.pe_chg_fcap', 'root.pe_chg_debt', 0)} if = { limit = { ${rootIs('pe_chg_type', 3)} } root = { set_variable = { which = pe_new_code value = ${p.v.code} } set_variable = { which = pe_new_stage value = ${p.s} } } }${p.s === 1 ? ` else = { ${msg(`pe_msg_found_${p.key}`)} }` : ''}`, '\t\t')}
 		# Restructured: name the old and the new firm.
 		if = { limit = { ${rootIs('pe_chg_type', 3)} } pe_retool_message = yes }
 		if = {
@@ -648,6 +658,7 @@ pe_firm_change = {
 				set_variable = { which = pe_chg_stage value = prev.pe_stage }
 				set_variable = { which = pe_chg_fcap value = prev.pe_fcap }
 				set_variable = { which = pe_chg_debt value = prev.pe_debt }
+				set_variable = { which = pe_chg_age value = prev.pe_age }
 			}
 			remove_deposit = yes
 		}
@@ -707,8 +718,10 @@ ${[1, 2, 3, 4, 5].flatMap(c => STAGES.map(s => `\t\tif = { limit = { root = { ch
 
 # Colony scope: the debt-free firm with the largest gain switches to the best variant
 # available here (any class, same stage) if that is clearly better (+30% of its value, at
-# least +3 trade per month). It closes for half the build time (a construction site), and
-# the planet pauses restructuring for two years. Cost: city ${RETOOL.u} / rural ${RETOOL.r} x stage size, paid
+# least +3 trade per month), the firm is at least ${RETOOL_AGE / 4} years old (founded or last
+# restructured), and nothing it makes becomes short by the switch (pe_retool_guard). It
+# closes for half the build time (a construction site), and the planet pauses
+# restructuring for ${RETOOL_CD / 360} years. Cost: city ${RETOOL.u} / rural ${RETOOL.r} x stage size, paid
 # from the firm's own capital only (never on credit). A rural target needs a free district of
 # its type once the old firm is gone; if there is none, the old firm is restored, the
 # cost paid back, and that rural type is not tried again on this planet for a year.
@@ -751,13 +764,18 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM
 		if = {
 			limit = {
 				check_variable = { which = pe_debt value <= 0 }
+				check_variable = { which = pe_age value >= ${RETOOL_AGE} }
 				check_variable = { which = pe_gain value > pe_thr }
 				check_variable = { which = pe_gain value > root.pe_best_gain }
 			}
-			root = {
-				set_variable = { which = pe_best_gain value = prev.pe_gain }
-				set_variable = { which = pe_rid_best value = prev.pe_rid }
-				set_variable = { which = pe_to value = prev.pe_to_c }
+			pe_retool_guard = yes
+			if = {
+				limit = { root = { check_variable = { which = pe_guard_ok value = 1 } } }
+				root = {
+					set_variable = { which = pe_best_gain value = prev.pe_gain }
+					set_variable = { which = pe_rid_best value = prev.pe_rid }
+					set_variable = { which = pe_to value = prev.pe_to_c }
+				}
 			}
 		}
 	}
@@ -783,6 +801,7 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM
 				set_variable = { which = pe_chg_fcap value = prev.pe_fcap }
 				set_variable = { which = pe_chg_debt value = prev.pe_debt }
 				set_variable = { which = pe_chg_cost value = prev.pe_cost }
+				set_variable = { which = pe_chg_age value = prev.pe_age }
 			}
 			remove_deposit = yes
 		}
@@ -802,7 +821,7 @@ ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = $
 		}
 		else = {
 			set_planet_flag = pe_site
-			set_timed_planet_flag = { flag = pe_retool_cd days = 720 }
+			set_timed_planet_flag = { flag = pe_retool_cd days = ${RETOOL_CD} }
 		}
 		check_planet_employment = yes
 	}
@@ -847,6 +866,7 @@ pe_relocate_exec = {
 			set_variable = { which = pe_chg_stage value = prev.pe_stage }
 			set_variable = { which = pe_chg_fcap value = prev.pe_fcap }
 			set_variable = { which = pe_chg_debt value = prev.pe_debt }
+			set_variable = { which = pe_chg_age value = prev.pe_age }
 		}
 		remove_deposit = yes
 	}
@@ -900,6 +920,52 @@ ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = $
 	root = { set_timed_country_flag = { flag = pe_relocated days = 360 } }
 }
 `;
+// Change per month of the variant's real output (sign -1 for the old firm, +1 for the new).
+const guardContrib = (v, sign) => `root = { ${Object.entries(v.workforce).flatMap(([job, wf]) => [...jobByKey[job].touches].map(r => `set_variable = { which = pe_tmp value = ${outVar(job, r)} } multiply_variable = { which = pe_tmp value = ${sign * wf / 100} } multiply_variable = { which = pe_tmp value = prev.pe_sf } change_variable = { which = pe_gd_${r} value = pe_tmp }`)).join(' ')} }`;
+const TRIAD = [['a', ['alloys'], 4], ['r', ['physics_research', 'society_research', 'engineering_research'], 3.5], ['u', ['unity'], 3]];
+const eff_guard = `
+# Deposit scope: a firm that could restructure into pe_to_c. Would the switch make anything
+# short that the old firm made (or that the new one uses)? The change per month, new minus
+# old variant at this stage with the real output per job: root.pe_gd_<res>. Where it falls,
+# a market good must stay above its shortage margin (pe_netm_<res>, construction sites
+# included), and alloys, research and unity must not fall below their target share of the
+# investment triad. Otherwise the old firm would soon be worth more again.
+# root.pe_guard_ok = 1 if nothing becomes short.
+pe_retool_guard = {
+	set_variable = { which = pe_sf value = pe_stage }
+	change_variable = { which = pe_sf value = 1 }
+	multiply_variable = { which = pe_sf value = 0.5 }
+	root = {
+${RES.map(r => `\t\tset_variable = { which = pe_gd_${r} value = 0 }`).join('\n')}
+	}
+${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }`, v => guardContrib(v, -1))}
+${ifChain(variants, v => `check_variable = { which = pe_to_c value = ${v.code} }`, v => guardContrib(v, 1))}
+	root = {
+		set_variable = { which = pe_guard_ok value = 1 }
+${MARKET_RES.map(r => `		if = {
+			limit = { check_variable = { which = pe_gd_${r} value < 0 } }
+			set_variable = { which = pe_tmp value = pe_netm_${r} }
+			change_variable = { which = pe_tmp value = pe_gd_${r} }
+			if = { limit = { check_variable = { which = pe_tmp value < 0 } } set_variable = { which = pe_guard_ok value = 0 } }
+		}`).join('\n')}
+		# Investment triad after the switch (valued like pe_triad).
+${TRIAD.map(([l, rs, price]) => `		set_variable = { which = pe_g_${l} value = 0 }
+${rs.map(r => `		change_variable = { which = pe_g_${l} value = pe_gd_${r} }`).join('\n')}
+		multiply_variable = { which = pe_g_${l} value = ${price} }`).join('\n')}
+		set_variable = { which = pe_g_sum value = pe_tri_sum }
+${TRIAD.map(([l]) => `		change_variable = { which = pe_g_sum value = pe_g_${l} }`).join('\n')}
+${TRIAD.map(([l]) => `		if = {
+			limit = { check_variable = { which = pe_g_${l} value < 0 } }
+			set_variable = { which = pe_tmp value = pe_tri_${l} }
+			change_variable = { which = pe_tmp value = pe_g_${l} }
+			multiply_variable = { which = pe_tmp value = 100 }
+			set_variable = { which = pe_tmp2 value = pe_g_sum }
+			multiply_variable = { which = pe_tmp2 value = pe_tgt_${l} }
+			if = { limit = { check_variable = { which = pe_tmp value < pe_tmp2 } } set_variable = { which = pe_guard_ok value = 0 } }
+		}`).join('\n')}
+	}
+}
+`;
 const eff_retool_msg = `
 # Colony scope: message for a finished restructuring, naming the old and the new firm.
 pe_retool_message = {
@@ -912,7 +978,7 @@ ${ifChain(pairs, p => `root = { check_variable = { which = pe_old_code value = $
 	else = { owner = { create_message = { type = pe_private_economy localization = pe_msg_retool_$NEW$ days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_no_firm localization = OLD } } } }
 }
 `;
-write('common/scripted_effects/pe_firm_effects_generated.txt', eff + eff_ledger_bits + eff_relocate + eff_retool_msg);
+write('common/scripted_effects/pe_firm_effects_generated.txt', eff + eff_ledger_bits + eff_relocate + eff_guard + eff_retool_msg);
 
 // --- Scripted localisation (country scope) --------------------------------------
 const dtext = (name, varName, entries, fallback) => `defined_text = {
@@ -959,6 +1025,8 @@ loc.english.push(' pe_deposit_cat_automation:0 "Private Automation"');
 loc.english.push(' pe_deposit_cat_ledger:0 "Private Economy"', ' pe_msg_relocate:0 "§Y$FIRM$§! has moved from $PLANET$ to $DEST$, whose designation suits it better. Its workers came along."', ' pe_msg_relocate_need:0 "§Y$FIRM$§! has moved from $PLANET$, which lacks housing or amenities, to $DEST$. Its workers came along."');
 loc.german.push(' pe_msg_relocate:0 "§Y$FIRM$§! ist von $PLANET$ nach $DEST$ umgezogen, dessen Spezialisierung besser passt. Die Arbeiter sind mitgezogen."', ' pe_msg_relocate_need:0 "§Y$FIRM$§! ist von $PLANET$, wo Wohnraum oder Annehmlichkeiten fehlen, nach $DEST$ umgezogen. Die Arbeiter sind mitgezogen."');
 loc.german.push(' pe_deposit_cat_ledger:0 "Privatwirtschaft"');
+loc.english.push(' pe_msg_site_cancel:0 "Investors have given up a construction site on $PLANET$: for two years there were no workers for the new firm. They got their down payment back."');
+loc.german.push(' pe_msg_site_cancel:0 "Investoren haben eine Baustelle auf $PLANET$ aufgegeben: Zwei Jahre lang fanden sich keine Arbeiter für die neue Firma. Sie haben ihre Anzahlung zurückbekommen."');
 loc.english.push(' pe_private_dividends:0 "Dividends from Shares"', ' d_pe_ledger_dividend:0 "State Shareholdings"', ' d_pe_ledger_dividend_desc:0 "Shares the state bought in private corporations; they pay dividends every month."');
 loc.german.push(' pe_private_dividends:0 "Dividenden aus Aktien"', ' d_pe_ledger_dividend:0 "Staatliche Aktienbeteiligungen"', ' d_pe_ledger_dividend_desc:0 "Aktien, die der Staat an Privatkonzernen hält; sie zahlen monatlich Dividende."');
 loc.english.push(' pe_private_profits:0 "Private Firms\' Profits"', ' pe_private_savings:0 "Private Savings"',

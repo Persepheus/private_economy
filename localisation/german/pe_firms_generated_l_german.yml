@@ -16,6 +16,7 @@
  pe_msg_relocate:0 "§Y$FIRM$§! ist von $PLANET$ nach $DEST$ umgezogen, dessen Spezialisierung besser passt. Die Arbeiter sind mitgezogen."
  pe_msg_relocate_need:0 "§Y$FIRM$§! ist von $PLANET$, wo Wohnraum oder Annehmlichkeiten fehlen, nach $DEST$ umgezogen. Die Arbeiter sind mitgezogen."
  pe_deposit_cat_ledger:0 "Privatwirtschaft"
+ pe_msg_site_cancel:0 "Investoren haben eine Baustelle auf $PLANET$ aufgegeben: Zwei Jahre lang fanden sich keine Arbeiter für die neue Firma. Sie haben ihre Anzahlung zurückbekommen."
  pe_private_dividends:0 "Dividenden aus Aktien"
  d_pe_ledger_dividend:0 "Staatliche Aktienbeteiligungen"
  d_pe_ledger_dividend_desc:0 "Aktien, die der Staat an Privatkonzernen hält; sie zahlen monatlich Dividende."

@@ -22,7 +22,7 @@ country_event = {
 
 	option = {
 		name = pe.200.a
-		event_target:pe_pat_planet = { add_modifier = { modifier = pe_gala days = 1800 } }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_gala days = 1800 multiplier = root.pe_pat_mult } }
 		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
 		hidden_effect = {
 			random = {
@@ -73,7 +73,7 @@ country_event = {
 	option = {
 		name = pe.201.b
 		capital_scope = { add_modifier = { modifier = pe_gala_scandal days = 720 } }
-		add_resource = { unity = 100 }
+		add_resource = { unity = 1 mult = pe_pat_u100 }
 		hidden_effect = { change_variable = { which = pe_mag_rep value = -2 } }
 		ai_chance = {
 			factor = 50
@@ -208,7 +208,7 @@ country_event = {
 	option = {
 		name = pe.204.a
 		event_target:pe_pat_planet = {
-			add_modifier = { modifier = pe_charity days = 1800 }
+			add_modifier = { modifier = pe_charity days = 1800 multiplier = root.pe_pat_mult }
 			if = {
 				limit = { owner = { is_authoritarian = yes } }
 				add_modifier = { modifier = pe_charity_mistrust days = 720 }
@@ -223,7 +223,7 @@ country_event = {
 	option = {
 		name = pe.204.b
 		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
-		add_resource = { unity = 50 }
+		add_resource = { unity = 1 mult = pe_pat_u50 }
 		hidden_effect = { change_variable = { which = pe_mag_rep value = -1 } }
 		ai_chance = {
 			factor = 30
@@ -245,13 +245,13 @@ country_event = {
 		name = pe.205.a
 		allow = { has_resource = { type = trade amount >= 150 } }
 		add_resource = { trade = -150 }
-		event_target:pe_pat_planet = { add_modifier = { modifier = pe_recruit_strong days = 1800 } }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_recruit_strong days = 1800 multiplier = root.pe_pat_mult } }
 		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
 		ai_chance = { factor = 50 }
 	}
 	option = {
 		name = pe.205.b
-		event_target:pe_pat_planet = { add_modifier = { modifier = pe_recruit_weak days = 1080 } }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_recruit_weak days = 1080 multiplier = root.pe_pat_mult } }
 		ai_chance = { factor = 40 }
 	}
 	option = {
@@ -297,16 +297,22 @@ country_event = {
 			if = {
 				limit = { root = { check_variable = { which = pe_find value = 1 } } }
 				add_deposit = d_mineral_fields
-				if = { limit = { free_district_slots > 0 } add_deposit = d_pe_firm_mmmm last_added_deposit = { pe_firm_identify = yes set_variable = { which = pe_fcap value = 10 } } }
+				if = { limit = { root = { check_variable = { which = pe_find_n value >= 2 } } } add_deposit = d_mineral_fields }
+				if = { limit = { root = { check_variable = { which = pe_find_n value >= 3 } } } add_deposit = d_mineral_fields }
+				if = { limit = { free_district_slots > 0 check_variable = { which = pe_idle value >= 50 } } add_deposit = d_pe_firm_mmmm last_added_deposit = { pe_firm_identify = yes set_variable = { which = pe_fcap value = 10 } set_variable = { which = pe_age value = 0 } } }
 			}
 			else_if = {
 				limit = { root = { check_variable = { which = pe_find value = 2 } } }
 				add_deposit = d_geothermal_vent
-				if = { limit = { free_district_slots > 0 } add_deposit = d_pe_firm_eeee last_added_deposit = { pe_firm_identify = yes set_variable = { which = pe_fcap value = 10 } } }
+				if = { limit = { root = { check_variable = { which = pe_find_n value >= 2 } } } add_deposit = d_geothermal_vent }
+				if = { limit = { root = { check_variable = { which = pe_find_n value >= 3 } } } add_deposit = d_geothermal_vent }
+				if = { limit = { free_district_slots > 0 check_variable = { which = pe_idle value >= 50 } } add_deposit = d_pe_firm_eeee last_added_deposit = { pe_firm_identify = yes set_variable = { which = pe_fcap value = 10 } set_variable = { which = pe_age value = 0 } } }
 			}
 			else = {
 				add_deposit = d_fertile_lands
-				if = { limit = { free_district_slots > 0 } add_deposit = d_pe_firm_ffff last_added_deposit = { pe_firm_identify = yes set_variable = { which = pe_fcap value = 10 } } }
+				if = { limit = { root = { check_variable = { which = pe_find_n value >= 2 } } } add_deposit = d_fertile_lands }
+				if = { limit = { root = { check_variable = { which = pe_find_n value >= 3 } } } add_deposit = d_fertile_lands }
+				if = { limit = { free_district_slots > 0 check_variable = { which = pe_idle value >= 50 } } add_deposit = d_pe_firm_ffff last_added_deposit = { pe_firm_identify = yes set_variable = { which = pe_fcap value = 10 } set_variable = { which = pe_age value = 0 } } }
 			}
 			check_planet_employment = yes
 		}
@@ -321,9 +327,23 @@ country_event = {
 		event_target:pe_pat_planet = { add_modifier = { modifier = pe_business_upset days = 720 } }
 		hidden_effect = {
 			event_target:pe_pat_planet = {
-				if = { limit = { root = { check_variable = { which = pe_find value = 1 } } } add_deposit = d_mineral_fields }
-				else_if = { limit = { root = { check_variable = { which = pe_find value = 2 } } } add_deposit = d_geothermal_vent }
-				else = { add_deposit = d_fertile_lands }
+				if = {
+					limit = { root = { check_variable = { which = pe_find value = 1 } } }
+					add_deposit = d_mineral_fields
+					if = { limit = { root = { check_variable = { which = pe_find_n value >= 2 } } } add_deposit = d_mineral_fields }
+					if = { limit = { root = { check_variable = { which = pe_find_n value >= 3 } } } add_deposit = d_mineral_fields }
+				}
+				else_if = {
+					limit = { root = { check_variable = { which = pe_find value = 2 } } }
+					add_deposit = d_geothermal_vent
+					if = { limit = { root = { check_variable = { which = pe_find_n value >= 2 } } } add_deposit = d_geothermal_vent }
+					if = { limit = { root = { check_variable = { which = pe_find_n value >= 3 } } } add_deposit = d_geothermal_vent }
+				}
+				else = {
+					add_deposit = d_fertile_lands
+					if = { limit = { root = { check_variable = { which = pe_find_n value >= 2 } } } add_deposit = d_fertile_lands }
+					if = { limit = { root = { check_variable = { which = pe_find_n value >= 3 } } } add_deposit = d_fertile_lands }
+				}
 			}
 		}
 		hidden_effect = {
@@ -358,7 +378,12 @@ country_event = {
 	option = {
 		name = pe.215.a
 		event_target:pe_pat_planet = {
-			if = { limit = { NOT = { has_deposit = d_pe_hydroponics } } add_deposit = d_pe_hydroponics }
+			if = { limit = { has_deposit = d_pe_hydroponics } remove_deposit = d_pe_hydroponics }
+			if = { limit = { has_deposit = d_pe_hydroponics_2 } remove_deposit = d_pe_hydroponics_2 }
+			if = { limit = { has_deposit = d_pe_hydroponics_3 } remove_deposit = d_pe_hydroponics_3 }
+			if = { limit = { root = { check_variable = { which = pe_find_n value = 1 } } } add_deposit = d_pe_hydroponics }
+			else_if = { limit = { root = { check_variable = { which = pe_find_n value = 2 } } } add_deposit = d_pe_hydroponics_2 }
+			else = { add_deposit = d_pe_hydroponics_3 }
 			set_timed_planet_flag = { flag = pe_hydro days = 3600 }
 		}
 		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
@@ -382,7 +407,7 @@ country_event = {
 	option = {
 		name = pe.220.a
 		add_resource = { unity = 1 mult = pe_pat_art }
-		capital_scope = { add_modifier = { modifier = pe_art days = 1800 } }
+		capital_scope = { add_modifier = { modifier = pe_art days = 1800 multiplier = root.pe_pat_mult } }
 		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
 		ai_chance = {
 			factor = 50
@@ -412,14 +437,14 @@ country_event = {
 
 	option = {
 		name = pe.221.a
-		capital_scope = { add_modifier = { modifier = pe_league days = 1800 } }
+		capital_scope = { add_modifier = { modifier = pe_league days = 1800 multiplier = root.pe_pat_mult } }
 		random_owned_colony = {
 			limit = { pe_planet_eligible = yes is_capital = no }
-			add_modifier = { modifier = pe_league days = 1800 }
+			add_modifier = { modifier = pe_league days = 1800 multiplier = root.pe_pat_mult }
 		}
 		random_owned_colony = {
 			limit = { pe_planet_eligible = yes is_capital = no NOT = { has_modifier = pe_league } }
-			add_modifier = { modifier = pe_league days = 1800 }
+			add_modifier = { modifier = pe_league days = 1800 multiplier = root.pe_pat_mult }
 		}
 		hidden_effect = {
 			change_variable = { which = pe_mag_rep value = 1 }
@@ -497,7 +522,11 @@ country_event = {
 			create_colony = {
 				owner = root
 				species = root
-				ethos = root
+			}
+			set_variable = { which = pe_col_pops value = root.pe_col_pops }
+			create_pop_group = {
+				species = owner_main_species
+				size = pe_col_pops
 			}
 		}
 		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
@@ -522,7 +551,7 @@ country_event = {
 
 	option = {
 		name = pe.224.a
-		capital_scope = { add_modifier = { modifier = pe_university days = 3600 } }
+		capital_scope = { add_modifier = { modifier = pe_university days = 3600 multiplier = root.pe_pat_mult } }
 		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
 		ai_chance = {
 			factor = 50
@@ -531,7 +560,7 @@ country_event = {
 	}
 	option = {
 		name = pe.224.b
-		capital_scope = { add_modifier = { modifier = pe_elite_academy days = 3600 } }
+		capital_scope = { add_modifier = { modifier = pe_elite_academy days = 3600 multiplier = root.pe_pat_mult } }
 		ai_chance = {
 			factor = 50
 			modifier = { factor = 2 is_authoritarian = yes }
@@ -551,7 +580,7 @@ country_event = {
 	option = {
 		name = pe.225.a
 		add_resource = { trade = 1 mult = pe_pat_tour }
-		event_target:pe_pat_planet = { add_modifier = { modifier = pe_tourism days = 1800 } }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_tourism days = 1800 multiplier = root.pe_pat_mult } }
 		hidden_effect = {
 			change_variable = { which = pe_mag_rep value = 1 }
 			random = {
@@ -582,7 +611,7 @@ country_event = {
 
 	option = {
 		name = pe.226.a
-		event_target:pe_pat_planet = { add_modifier = { modifier = pe_relief days = 720 } }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_relief days = 720 multiplier = root.pe_pat_mult } }
 		set_timed_country_flag = { flag = pe_gratitude days = 720 }
 		hidden_effect = { change_variable = { which = pe_mag_rep value = 2 } }
 		ai_chance = { factor = 80 }

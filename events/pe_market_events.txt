@@ -260,7 +260,7 @@ country_event = {
 
 	option = {
 		name = pe.246.a
-		add_modifier = { modifier = pe_export_boom days = 1800 }
+		add_modifier = { modifier = pe_export_boom days = 1800 multiplier = root.pe_pat_mult }
 		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
 		ai_chance = { factor = 80 }
 	}
@@ -415,7 +415,7 @@ country_event = {
 
 	option = {
 		name = pe.251.a
-		event_target:pe_pat_planet = { add_modifier = { modifier = pe_gentrification days = 1800 } }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_gentrification days = 1800 multiplier = root.pe_pat_mult } }
 		ai_chance = { factor = 50 }
 	}
 	option = {

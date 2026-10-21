@@ -9,7 +9,7 @@
 
 # --- Patrons ------------------------------------------------------------------------
 
-# Country scope, quarterly: with a full investor pool (3000 or more) and no patron event
+# Country scope, quarterly: with a full investor pool (4500 or more) and no patron event
 # in the last two years, a 25% chance per quarter of a patron event.
 pe_patron = {
 	if = {
@@ -25,7 +25,8 @@ pe_patron = {
 }
 
 # Country scope: a patron event. The magnate puts 30% of the investor pool into it
-# (pe_pat_spend); options that decline it pay it back.
+# (pe_pat_spend); options that decline it pay it back. The results grow with it: amounts
+# directly, modifiers, deposits and settlers by pe_pat_mult (see pe_pat_amounts).
 pe_patron_fire = {
 	set_timed_country_flag = { flag = pe_patron_cd days = 730 }
 	pe_pat_amounts = yes
@@ -243,6 +244,30 @@ pe_pat_amounts = {
 	multiply_variable = { which = pe_pat_influence value = 0.05 }
 	round_variable = pe_pat_influence
 	if = { limit = { check_variable = { which = pe_pat_influence value > 150 } } set_variable = { which = pe_pat_influence value = 150 } }
+	# Scale of the results that are no amounts (modifiers, deposits, settlers): the spend in
+	# units of 1500 (30% of a pool of 5000), between 0.5 and 3, to one decimal.
+	set_variable = { which = pe_pat_mult value = pe_pat_spend }
+	divide_variable = { which = pe_pat_mult value = 150 }
+	round_variable = pe_pat_mult
+	divide_variable = { which = pe_pat_mult value = 10 }
+	if = { limit = { check_variable = { which = pe_pat_mult value < 0.5 } } set_variable = { which = pe_pat_mult value = 0.5 } }
+	if = { limit = { check_variable = { which = pe_pat_mult value > 3 } } set_variable = { which = pe_pat_mult value = 3 } }
+	# Follow-ups and small amounts that used to be fixed.
+	set_variable = { which = pe_pat_u50 value = pe_pat_mult }
+	multiply_variable = { which = pe_pat_u50 value = 50 }
+	round_variable = pe_pat_u50
+	set_variable = { which = pe_pat_u100 value = pe_pat_mult }
+	multiply_variable = { which = pe_pat_u100 value = 100 }
+	round_variable = pe_pat_u100
+	# Settlers of a private colony (pe.223): 100 x scale.
+	set_variable = { which = pe_col_pops value = pe_pat_u100 }
+	# Deposits of a prospecting find (pe.214) and size of the hydroponic farms (pe.215):
+	# 1, 2 from scale 1.5, 3 from scale 2.5.
+	set_variable = { which = pe_find_n value = 1 }
+	if = { limit = { check_variable = { which = pe_pat_mult value >= 1.5 } } set_variable = { which = pe_find_n value = 2 } }
+	if = { limit = { check_variable = { which = pe_pat_mult value >= 2.5 } } set_variable = { which = pe_find_n value = 3 } }
+	set_variable = { which = pe_hydro_food value = pe_find_n }
+	multiply_variable = { which = pe_hydro_food value = 15 }
 }
 
 # --- Labour -------------------------------------------------------------------------
