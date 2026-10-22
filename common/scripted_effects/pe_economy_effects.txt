@@ -13,6 +13,7 @@
 #                                          -> pe_firm_accounting (3)  -> pe_firm_identify (4)
 #                                                                     -> pe_deposit_fetch (4)
 #                                                                     -> pe_firm_book (4)
+#                                          -> pe_cluster_counts (3), pe_cluster_apply (3)
 #                                          -> pe_firm_change (3)
 #                                          -> pe_choose_variant (3)   -> pe_consider_variant (4)
 #                                          -> pe_found_variant (3)    -> pe_found_firm (4)
@@ -21,6 +22,8 @@
 #                                          -> pe_restructure (3)      -> pe_retool_consider (4)
 #                                                                     -> pe_retool_guard (4)
 #                    -> pe_command_economy (2) -> pe_firm_identify (3), pe_deposit_fetch (3)
+#                    -> pe_corp_step (2) -> pe_corp_census, _dissolve, _found, _acquire,
+#                                           _rivalry, _branches (3) -> pe_corp_free, pe_corp_msg (4)
 #                    -> pe_relocate (2) -> pe_relocate_from (3) -> pe_relocate_exec (4)
 #                                                             -> pe_relocate_check_dest (4)
 #                    -> pe_patron (2) -> pe_patron_fire (3)   (pe_patron_effects.txt)
@@ -179,6 +182,7 @@ pe_quarterly = {
 		pe_planet_step = yes
 	}
 	pe_relocate = yes
+	pe_corp_step = yes
 	pe_patron = yes
 	pe_labour = yes
 	pe_deal = yes
@@ -821,6 +825,9 @@ pe_planet_step = {
 	if = { limit = { check_variable = { which = pe_idle value >= 50 } } root = { set_variable = { which = pe_unemp value = 1 } } }
 	pe_planet_fill = yes
 	pe_firm_accounting = yes
+	# Firms per main product, sector group and corporation; cluster modifiers.
+	pe_cluster_counts = yes
+	pe_cluster_apply = yes
 	root = { set_variable = { which = pe_chg_type value = 0 } }
 	pe_firm_change = yes
 	# A growth step (+100 jobs) uses idle pops too.
@@ -895,6 +902,7 @@ pe_firm_accounting = {
 		# Age in quarters (firms from before 0.16 count as old enough to restructure).
 		if = { limit = { NOT = { is_variable_set = pe_age } } set_variable = { which = pe_age value = 40 } }
 		change_variable = { which = pe_age value = 1 }
+		if = { limit = { NOT = { is_variable_set = pe_corp } } set_variable = { which = pe_corp value = 0 } }
 		pe_deposit_fetch = yes
 		pe_deposit_fetch_scale = yes
 		pe_firm_book = yes
@@ -937,6 +945,18 @@ pe_firm_book = {
 		}
 		# The firm only gets what the state pays (capped ledgers, see pe_ledgers).
 		multiply_variable = { which = pe_profit value = root.pe_lpay }
+		# A price war of its corporation: 30% less profit.
+		if = {
+			limit = { check_variable = { which = pe_corp value > 0 } }
+		if = { limit = { check_variable = { which = pe_corp value = 1 } root = { check_variable = { which = pe_c1_war value > 0 } } } multiply_variable = { which = pe_profit value = 0.7 } }
+		if = { limit = { check_variable = { which = pe_corp value = 2 } root = { check_variable = { which = pe_c2_war value > 0 } } } multiply_variable = { which = pe_profit value = 0.7 } }
+		if = { limit = { check_variable = { which = pe_corp value = 3 } root = { check_variable = { which = pe_c3_war value > 0 } } } multiply_variable = { which = pe_profit value = 0.7 } }
+		if = { limit = { check_variable = { which = pe_corp value = 4 } root = { check_variable = { which = pe_c4_war value > 0 } } } multiply_variable = { which = pe_profit value = 0.7 } }
+		if = { limit = { check_variable = { which = pe_corp value = 5 } root = { check_variable = { which = pe_c5_war value > 0 } } } multiply_variable = { which = pe_profit value = 0.7 } }
+		if = { limit = { check_variable = { which = pe_corp value = 6 } root = { check_variable = { which = pe_c6_war value > 0 } } } multiply_variable = { which = pe_profit value = 0.7 } }
+		if = { limit = { check_variable = { which = pe_corp value = 7 } root = { check_variable = { which = pe_c7_war value > 0 } } } multiply_variable = { which = pe_profit value = 0.7 } }
+		if = { limit = { check_variable = { which = pe_corp value = 8 } root = { check_variable = { which = pe_c8_war value > 0 } } } multiply_variable = { which = pe_profit value = 0.7 } }
+		}
 	}
 	if = {
 		# In debt: all profit pays the loan back; the rest of a final instalment is lost.
@@ -954,6 +974,19 @@ pe_firm_book = {
 			set_variable = { which = pe_tmp value = pe_profit }
 			multiply_variable = { which = pe_tmp value = 0.5 }
 			change_variable = { which = pe_fcap value = pe_tmp }
+			# A member of a corporation sends half of it to the corporation's cash.
+			if = {
+				limit = { check_variable = { which = pe_corp value > 0 } }
+				multiply_variable = { which = pe_tmp value = 0.5 }
+				if = { limit = { check_variable = { which = pe_corp value = 1 } } root = { change_variable = { which = pe_c1_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 2 } } root = { change_variable = { which = pe_c2_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 3 } } root = { change_variable = { which = pe_c3_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 4 } } root = { change_variable = { which = pe_c4_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 5 } } root = { change_variable = { which = pe_c5_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 6 } } root = { change_variable = { which = pe_c6_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 7 } } root = { change_variable = { which = pe_c7_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 8 } } root = { change_variable = { which = pe_c8_cash value = prev.pe_tmp } } }
+			}
 			root = {
 				change_variable = { which = pe_capital value = prev.pe_tmp }
 				change_variable = { which = pe_pool_income value = prev.pe_tmp }
@@ -980,6 +1013,18 @@ pe_firm_book = {
 			set_variable = { which = pe_tmp value = pe_fcap }
 			subtract_variable = { which = pe_tmp value = pe_res2 }
 			set_variable = { which = pe_fcap value = pe_res2 }
+			if = {
+				limit = { check_variable = { which = pe_corp value > 0 } }
+				multiply_variable = { which = pe_tmp value = 0.5 }
+				if = { limit = { check_variable = { which = pe_corp value = 1 } } root = { change_variable = { which = pe_c1_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 2 } } root = { change_variable = { which = pe_c2_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 3 } } root = { change_variable = { which = pe_c3_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 4 } } root = { change_variable = { which = pe_c4_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 5 } } root = { change_variable = { which = pe_c5_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 6 } } root = { change_variable = { which = pe_c6_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 7 } } root = { change_variable = { which = pe_c7_cash value = prev.pe_tmp } } }
+				if = { limit = { check_variable = { which = pe_corp value = 8 } } root = { change_variable = { which = pe_c8_cash value = prev.pe_tmp } } }
+			}
 			root = {
 				change_variable = { which = pe_capital value = prev.pe_tmp }
 				change_variable = { which = pe_pool_income value = prev.pe_tmp }
@@ -1269,6 +1314,12 @@ pe_consider_variant = {
 			multiply_variable = { which = pe_tmp value = $ENT$ }
 			change_variable = { which = pe_cand value = pe_tmp }
 			multiply_variable = { which = pe_cand value = pe_spec_$PRIM$ }
+			# Cluster: +5% for each firm with the same main product here (at most +15%).
+			set_variable = { which = pe_tmp value = prev.pe_cn_$PRIM$ }
+			if = { limit = { check_variable = { which = pe_tmp value > 3 } } set_variable = { which = pe_tmp value = 3 } }
+			multiply_variable = { which = pe_tmp value = 0.05 }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_cand value = pe_tmp }
 			# Pseudo-random 0.8-1.2: the engine's random value repeats within a day, so a
 			# small linear congruential sequence (mod 1009) varies it per candidate.
 			multiply_variable = { which = pe_seed value = 17 }
@@ -1481,8 +1532,25 @@ pe_command_economy = {
 		remove_planet_flag = pe_site
 		check_planet_employment = yes
 	}
+	pe_corp_reset = yes
 	set_variable = { which = pe_capital value = 0 }
 	set_variable = { which = pe_shares value = 0 }
 	set_variable = { which = pe_bond_left value = 0 }
 	set_variable = { which = pe_profit_due value = 0 }
+}
+
+# Country scope, quarterly: the corporations (see pe_corp_effects_generated.txt). Up to 8 per
+# empire, each with a name, a chief executive, headquarters, member firms and cash (half of
+# what its members would send to the investor pool). They form from independent stage-3
+# firms, take over independent firms of their sector group, fight price wars and merge.
+pe_corp_step = {
+	pe_corp_census = yes
+	pe_corp_dissolve = yes
+	pe_corp_found = yes
+	pe_corp_acquire = yes
+	pe_corp_rivalry = yes
+	every_owned_colony = {
+		limit = { is_variable_set = pe_mem_1 }
+		pe_corp_branches = yes
+	}
 }

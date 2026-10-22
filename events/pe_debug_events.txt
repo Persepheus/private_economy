@@ -12,6 +12,8 @@
 #   event pe.11  fire a labour event now (a planet with empty private worker jobs)
 #   event pe.12  offer a supply deal now, also without a shortage (a private firm must make the good)
 #   event pe.13  the Command Economy now: every firm becomes a state district
+#   event pe.14  found a corporation now (needs an independent stage-3 firm; run pe.7 first)
+#   event pe.273 the register of corporations
 namespace = pe
 
 country_event = {
@@ -218,5 +220,16 @@ country_event = {
 	immediate = {
 		pe_command_economy = yes
 		log = "private_economy: pe.13 command economy, pool [Root.pe_capital]"
+	}
+}
+
+# event pe.14: a corporation now (pe.7 first, so the planets have counted their firms).
+country_event = {
+	id = pe.14
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_corp_found = yes
+		log = "private_economy: pe.14 corporation slot [Root.pe_corp_new] name [Root.pe_corp_cur_name] group [Root.pe_corp_grp]"
 	}
 }

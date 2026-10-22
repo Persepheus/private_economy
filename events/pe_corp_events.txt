@@ -1,0 +1,86 @@
+# Corporation events (see pe_corp_effects_generated.txt, pe_corp_step).
+#   pe.270 a corporation is founded   pe.271 a price war   pe.272 a merger
+#   pe.273 the register of corporations (console: event pe.273)
+# Scope: country. pe_corp_cur_name / pe_corp_a_name / pe_corp_b_name: name ids for the texts;
+# pe_mg_s / pe_mg_w: the stronger and the weaker corporation (slots).
+namespace = pe
+
+# A corporation is founded (pe_corp_found): event_target:pe_corp_planet = headquarters.
+country_event = {
+	id = pe.270
+	title = pe.270.name
+	desc = pe.270.desc
+	picture = GFX_evt_city_planet
+	is_triggered_only = yes
+	location = event_target:pe_corp_planet
+
+	option = { name = pe.270.a }
+}
+
+# A price war between two corporations of the same sector (pe_mg_s, pe_mg_w).
+country_event = {
+	id = pe.271
+	title = pe.271.name
+	desc = pe.271.desc
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+
+	option = {
+		name = pe.271.a
+		custom_tooltip = pe.271.a.tt
+		ai_chance = { factor = 60 }
+	}
+	# Mediation: the war ends after a year.
+	option = {
+		name = pe.271.b
+		allow = { has_resource = { type = influence amount >= 25 } }
+		add_resource = { influence = -25 }
+		custom_tooltip = pe.271.b.tt
+		hidden_effect = {
+			set_variable = { which = pe_war_len value = 4 }
+			pe_corp_set_war = yes
+		}
+		ai_chance = { factor = 40 }
+	}
+}
+
+# The price war is over: the stronger corporation (pe_mg_s) wants to take over the weaker
+# one (pe_mg_w).
+country_event = {
+	id = pe.272
+	title = pe.272.name
+	desc = pe.272.desc
+	picture = GFX_evt_galactic_senate
+	is_triggered_only = yes
+
+	option = {
+		name = pe.272.a
+		custom_tooltip = pe.272.a.tt
+		hidden_effect = { pe_corp_merge = yes }
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 2 has_policy_flag = pe_order_laissez_faire }
+		}
+	}
+	option = {
+		name = pe.272.b
+		custom_tooltip = pe.272.b.tt
+		hidden_effect = { pe_corp_fine = yes }
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 2 is_egalitarian = yes }
+		}
+	}
+}
+
+# The register of corporations (console: event pe.273).
+country_event = {
+	id = pe.273
+	title = pe.273.name
+	desc = pe.273.desc
+	picture = GFX_evt_galactic_senate
+	is_triggered_only = yes
+
+	immediate = { hidden_effect = { pe_corp_census = yes } }
+	option = { name = pe.273.a }
+}
