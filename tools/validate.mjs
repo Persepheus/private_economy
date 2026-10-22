@@ -63,6 +63,8 @@ for (const f of scripts) {
   for (const m of text.matchAll(/\b(?:planet_modifier|country_modifier|modifier) = \{([^{}]*)\}/g))
     for (const [, key] of m[1].matchAll(/(\w+) = -?[\d.@]/g)) checkModifier(f, key);
 }
+// The monthly pulse drives the whole private economy: pe.100 must stay registered.
+assert(files(path.join(root, 'common/on_actions')).some(f => /on_monthly_pulse_country = \{\s*events = \{[^}]*\bpe\.100\b/.test(strip(fs.readFileSync(f, 'utf8')))), 'pe.100 is not in on_monthly_pulse_country');
 // Event pictures exist (vanilla or mod sprite names).
 const sprites = new Set();
 for (const f of [...files(path.join(game, 'interface')), ...files(path.join(root, 'interface'))].filter(f => f.endsWith('.gfx')))

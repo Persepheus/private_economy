@@ -4,3 +4,10 @@ on_monthly_pulse_country = {
 		pe.100
 	}
 }
+
+# A lost science or construction ship (for the patron's donation, pe.291).
+on_ship_destroyed_victim = {
+	events = {
+		pe.290
+	}
+}

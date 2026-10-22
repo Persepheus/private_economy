@@ -665,3 +665,38 @@ country_event = {
 		hidden_effect = { change_variable = { which = pe_mag_rep value = -1 } }
 	}
 }
+
+# A ship donation (pe_don_type 1 science ship, 2 construction ship).
+country_event = {
+	id = pe.291
+	title = pe.291.name
+	desc = { trigger = { check_variable = { which = pe_don_type value = 1 } } text = pe.291.desc.sci }
+	desc = { trigger = { check_variable = { which = pe_don_type value = 2 } } text = pe.291.desc.con }
+	picture = GFX_evt_ship_in_orbit
+	is_triggered_only = yes
+
+	option = {
+		name = pe.291.a
+		custom_tooltip = pe.291.a.tt
+		hidden_effect = {
+			create_fleet = {
+				name = random
+				effect = {
+					set_owner = root
+					if = { limit = { root = { check_variable = { which = pe_don_type value = 1 } } } create_ship = { name = random random_existing_design = science } }
+					else = { create_ship = { name = random random_existing_design = constructor } }
+					set_location = root.capital_scope
+				}
+			}
+			change_variable = { which = pe_mag_rep value = 1 }
+			remove_country_flag = pe_ship_lost
+			remove_country_flag = pe_ship_lost_sci
+		}
+		ai_chance = { factor = 90 }
+	}
+	option = {
+		name = pe.291.b
+		hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } }
+		ai_chance = { factor = 10 }
+	}
+}

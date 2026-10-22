@@ -2,3 +2,20 @@
 pe_monster_system = {
 	any_fleet_in_system = { owner = { OR = { is_amoeba_country_type = yes is_crystal_country_type = yes is_drone_country_type = yes is_voidworms_hostile_country_type = yes } } }
 }
+
+# Corporate fleets: pirates or marauder raiders in this system (system scope).
+pe_pirate_system = {
+	any_fleet_in_system = { owner = { OR = { is_country_type = pirate is_country_type = marauder_raiders } } }
+}
+
+# Corporate Dyson swarm: a single star without a megastructure (system scope).
+pe_swarm_system = {
+	is_binary_star = no
+	is_trinary_star = no
+	NOR = {
+		is_star_class = sc_black_hole
+		is_star_class = sc_neutron_star
+		is_star_class = sc_pulsar
+	}
+	any_system_planet = { is_star = yes NOT = { has_planet_flag = has_megastructure } }
+}

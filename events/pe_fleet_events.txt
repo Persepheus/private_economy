@@ -1,5 +1,7 @@
 # Corporate fleets (see pe_fleet_effects.txt).
 #   pe.282 war lease offer   pe.283 war lease ends   pe.284 clearing offer   pe.285 clearing result
+#   pe.286 exploration charter   pe.287 / 288 convoy protection   pe.289 salvage
+#   pe.290 ship lost (on_action)   pe.292 corporate Dyson swarm
 # Scope: country. pe_corp_cur_name = the corporation's name id.
 namespace = pe
 
@@ -65,4 +67,101 @@ country_event = {
 	is_triggered_only = yes
 
 	option = { name = pe.285.a }
+}
+
+# A science or construction ship was lost (on_ship_destroyed_victim: this = owner, fromfrom =
+# the ship): remember it for two years (patron donation pe.291).
+country_event = {
+	id = pe.290
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = default
+		fromfrom = { OR = { is_ship_size = science is_ship_size = constructor } }
+	}
+	immediate = {
+		set_timed_country_flag = { flag = pe_ship_lost days = 720 }
+		if = {
+			limit = { fromfrom = { is_ship_size = science } }
+			set_timed_country_flag = { flag = pe_ship_lost_sci days = 720 }
+		}
+	}
+}
+
+# Exploration charter offer.
+country_event = {
+	id = pe.286
+	title = pe.286.name
+	desc = pe.286.desc
+	picture = GFX_evt_inf_science_ship
+	is_triggered_only = yes
+
+	option = {
+		name = pe.286.a
+		custom_tooltip = pe.286.a.tt
+		hidden_effect = { pe_corp_charter_start = yes }
+	}
+	option = { name = pe.286.b }
+}
+
+# Convoy protection offer.
+country_event = {
+	id = pe.287
+	title = pe.287.name
+	desc = pe.287.desc
+	picture = GFX_evt_federation_fleet
+	is_triggered_only = yes
+	location = event_target:pe_cv_sys
+
+	option = {
+		name = pe.287.a
+		custom_tooltip = pe.287.a.tt
+		hidden_effect = { pe_corp_convoy_start = yes }
+	}
+	option = { name = pe.287.b }
+}
+
+# Convoy protection result.
+country_event = {
+	id = pe.288
+	title = pe.288.name
+	desc = { trigger = { check_variable = { which = pe_cv_done value = 1 } } text = pe.288.desc.ok }
+	desc = { trigger = { check_variable = { which = pe_cv_done value = 2 } } text = pe.288.desc.no }
+	picture = GFX_evt_federation_fleet
+	is_triggered_only = yes
+
+	option = { name = pe.288.a }
+}
+
+# Salvage offer.
+country_event = {
+	id = pe.289
+	title = pe.289.name
+	desc = pe.289.desc
+	picture = GFX_evt_debris
+	is_triggered_only = yes
+
+	option = {
+		name = pe.289.a
+		custom_tooltip = pe.289.a.tt
+		hidden_effect = { pe_corp_salvage_exec = yes }
+	}
+	option = { name = pe.289.b }
+}
+
+# A corporate Dyson swarm (Free Market, Mixed).
+country_event = {
+	id = pe.292
+	title = pe.292.name
+	desc = pe.292.desc
+	picture = GFX_evt_dyson_swarm
+	is_triggered_only = yes
+	location = event_target:pe_sw_star
+
+	option = {
+		name = pe.292.a
+		custom_tooltip = pe.292.a.tt
+		hidden_effect = { pe_corp_swarm_exec = yes }
+	}
+	option = { name = pe.292.b }
 }

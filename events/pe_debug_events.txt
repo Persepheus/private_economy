@@ -15,7 +15,8 @@
 #   event pe.14  found a corporation now (needs an independent stage-3 firm; run pe.7 first)
 #   event pe.273 the register of corporations
 #   event pe.274 a corporation takes a station now (holdings created if needed)
-#   event pe.277 corporate fleet offers now (war lease also in peace, clearing if creatures are near)
+#   event pe.277 corporate offers now: war lease (also in peace), clearing, exploration charter,
+#                convoy protection, salvage, Dyson swarm (each only where its condition holds)
 namespace = pe
 
 country_event = {
@@ -274,6 +275,14 @@ country_event = {
 		remove_country_flag = pe_lease_clear_cd
 		set_country_flag = pe_fl_debug_war
 		pe_corp_fleets = yes
+		remove_country_flag = pe_charter_cd
+		remove_country_flag = pe_convoy_cd
+		remove_country_flag = pe_salvage_cd
+		remove_country_flag = pe_swarm_cd
+		pe_corp_charter = yes
+		pe_corp_convoy = yes
+		pe_corp_salvage = yes
+		pe_corp_swarm = yes
 		remove_country_flag = pe_fl_debug_war
 		set_variable = { which = pe_fl_force value = 0 }
 		log = "private_economy: pe.277 fleets: corporation [Root.pe_fl_k], war lease [Root.pe_lease_war_q], clearing [Root.pe_lease_clear_q]"

@@ -1250,7 +1250,7 @@ ${CORPS.map(k => `\tif = { limit = { NOT = { is_variable_set = ${C(k, 'cash')} }
 # Country scope: free the slot root.pe_corp_free_k (its headquarters, its name, its rival);
 # its stations return to us. Its firms are not touched (they must have left or merged).
 pe_corp_free = {
-${corpChain('pe_corp_free_k', k => `set_variable = { which = pe_corp_free_name value = ${C(k, 'name')} } set_variable = { which = ${C(k, 'on')} value = 0 } set_variable = { which = ${C(k, 'cash')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'firms')} value = 0 } every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } remove_planet_flag = pe_hq_${k} } set_variable = { which = ${C(k, 'scd')} value = 0 } set_variable = { which = ${C(k, 'sv')} value = 0 } set_variable = { which = ${C(k, 'st')} value = 0 } every_planet_within_border = { limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_${k} } } orbital_station = { remove_fleet_flag = pe_stc_${k} remove_fleet_flag = pe_st_share set_owner = root } }`, '\t')}
+${corpChain('pe_corp_free_k', k => `set_variable = { which = pe_corp_free_name value = ${C(k, 'name')} } set_variable = { which = ${C(k, 'on')} value = 0 } set_variable = { which = ${C(k, 'cash')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'firms')} value = 0 } every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } remove_planet_flag = pe_hq_${k} } set_variable = { which = ${C(k, 'scd')} value = 0 } set_variable = { which = ${C(k, 'sv')} value = 0 } set_variable = { which = ${C(k, 'st')} value = 0 } set_variable = { which = ${C(k, 'sw')} value = 0 } set_variable = { which = ${C(k, 'right')} value = 0 } every_planet_within_border = { limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_${k} } } orbital_station = { remove_fleet_flag = pe_stc_${k} remove_fleet_flag = pe_st_share set_owner = root } }`, '\t')}
 ${CORPS.map(k => `\tif = { limit = { check_variable = { which = ${C(k, 'rival')} value = root.pe_corp_free_k } } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } }`).join('\n')}
 ${nameChain('pe_corp_free_name', id => `remove_country_flag = pe_cname_${id} remove_global_flag = pe_gcname_${id} every_owned_colony = { limit = { has_modifier = pe_corp_hq_${id} } remove_modifier = pe_corp_hq_${id} } every_owned_colony = { limit = { has_deposit = d_pe_hq_${id} } remove_deposit = d_pe_hq_${id} } every_owned_colony = { limit = { has_modifier = pe_corp_br_${id} } remove_modifier = pe_corp_br_${id} }`, '\t')}
 }
@@ -1761,7 +1761,7 @@ ${ST_LIMIT.map(([f, l]) => `\tif = { limit = { has_policy_flag = ${f} } set_vari
 		set_variable = { which = pe_tmp2 value = pe_st_priv }
 		change_variable = { which = pe_tmp2 value = 1 }
 		if = {
-			limit = { check_variable = { which = pe_tmp2 value <= pe_tmp } }
+			limit = { OR = { check_variable = { which = pe_tmp2 value <= pe_tmp } ${CORPS.map(k => `check_variable = { which = ${C(k, 'right')} value = 1 }`).join(' ')} } }
 			random = {
 				chance = 25
 				set_variable = { which = pe_st_k value = 0 }
@@ -1769,6 +1769,7 @@ ${ST_LIMIT.map(([f, l]) => `\tif = { limit = { has_policy_flag = ${f} } set_vari
 ${CORPS.map(k => `					10 = {
 						modifier = { factor = 0 NOT = { check_variable = { which = ${C(k, 'on')} value = 1 } } }
 						modifier = { factor = 0 check_variable = { which = ${C(k, 'scd')} value > 0 } }
+						modifier = { factor = 10 check_variable = { which = ${C(k, 'right')} value = 1 } }
 						modifier = { factor = 0 check_variable = { which = ${C(k, 'cash')} value < ${ST_COST * 3} } }
 ${GROUPS.map(g => `						modifier = { factor = 0 check_variable = { which = ${C(k, 'grp')} value = ${g} } NOT = { any_planet_within_border = { pe_orbital_for_g${g} = yes OR = { has_orbital_station = no pe_state_station = yes } } } }`).join('\n')}
 						set_variable = { which = pe_st_k value = ${k} }
@@ -1855,7 +1856,7 @@ ${corpChain('root.pe_st_k', k => `set_fleet_flag = pe_stc_${k}`, '\t\t\t\t')}
 	add_resource = { minerals = 1 mult = pe_st_pay }
 	set_variable = { which = pe_tmp value = pe_st_pay }
 	if = { limit = { check_variable = { which = pe_st_mode value = 1 } } change_variable = { which = pe_tmp value = ${ST_COST} } }
-${corpChain('pe_st_k', k => `subtract_variable = { which = ${C(k, 'cash')} value = pe_tmp } set_variable = { which = ${C(k, 'scd')} value = ${ST_CD} }`, '\t')}
+${corpChain('pe_st_k', k => `subtract_variable = { which = ${C(k, 'cash')} value = pe_tmp } set_variable = { which = ${C(k, 'scd')} value = ${ST_CD} } set_variable = { which = ${C(k, 'right')} value = 0 }`, '\t')}
 	event_target:pe_st_planet = { save_event_target_as = pe_msg_planet }
 	set_variable = { which = pe_msg_name value = pe_corp_cur_name }
 ${nameChain('pe_msg_name', id => `if = { limit = { check_variable = { which = pe_st_mode value = 1 } } create_message = { type = pe_private_economy localization = pe_msg_corp_st_build days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_${id} localization = CORP } } } else = { create_message = { type = pe_private_economy localization = pe_msg_corp_st_buy days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_${id} localization = CORP } } }`, '\t')}
@@ -1895,6 +1896,7 @@ ${ST_STOCK.map(r => `			export_resource_stockpile_to_variable = { resource = ${r
 		}
 	}
 	# The corporate production on the headquarters, the earnings and the share for us.
+${CORPS.map(k => `\tif = { limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'sw')} value = 1 } } change_variable = { which = ${C(k, 'sv')} value = 20 } }`).join('\n')}
 ${CORPS.map(k => `	if = {
 		limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'sv')} value > 0 } }
 		if = { limit = { NOT = { is_variable_set = ${C(k, 'prod')} } } ${GROUPS.map((g, i) => `${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = ${C(k, 'grp')} value = ${g} } } set_variable = { which = ${C(k, 'prod')} value = ${GROUP_PROD[g]} } }`).join(' ')} }
