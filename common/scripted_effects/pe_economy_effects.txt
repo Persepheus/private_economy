@@ -26,7 +26,7 @@
 #                    -> pe_corp_step (2) -> pe_corp_census, _crisis, _dissolve, _found, _acquire,
 #                                           _rivalry, _branches, pe_holdings_ensure,
 #                                           pe_corp_stations, pe_corp_station_output,
-#                                           pe_holdings_surplus (3)
+#                                           pe_holdings_surplus, pe_corp_fleets (3)
 #                                        -> pe_corp_free, pe_corp_msg, pe_corp_found_new,
 #                                           pe_corp_station_pick, pe_ledger_bits (4)
 #                    -> pe_relocate (2) -> pe_relocate_from (3) -> pe_relocate_exec (4)
@@ -1639,6 +1639,7 @@ pe_corp_step = {
 	pe_corp_stations = yes
 	if = { limit = { check_variable = { which = pe_st_k value > 0 } } pe_corp_station_pick = yes }
 	pe_corp_station_output = yes
+	pe_corp_fleets = yes
 	change_variable = { which = pe_hq4 value = 1 }
 	if = {
 		limit = { check_variable = { which = pe_hq4 value >= 4 } }

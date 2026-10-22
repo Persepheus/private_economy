@@ -63,6 +63,12 @@ for (const f of scripts) {
   for (const m of text.matchAll(/\b(?:planet_modifier|country_modifier|modifier) = \{([^{}]*)\}/g))
     for (const [, key] of m[1].matchAll(/(\w+) = -?[\d.@]/g)) checkModifier(f, key);
 }
+// Event pictures exist (vanilla or mod sprite names).
+const sprites = new Set();
+for (const f of [...files(path.join(game, 'interface')), ...files(path.join(root, 'interface'))].filter(f => f.endsWith('.gfx')))
+  for (const [, n] of fs.readFileSync(f, 'utf8').matchAll(/name\s*=\s*"(GFX_\w+)"/g)) sprites.add(n);
+for (const f of files(path.join(root, 'events')).filter(f => f.endsWith('.txt')))
+  for (const [, n] of strip(fs.readFileSync(f, 'utf8')).matchAll(/\bpicture = (GFX_\w+)/g)) assert(sprites.has(n), `${rel(f)}: unknown picture ${n}`);
 // Static modifiers: every top-level block is a modifier.
 for (const f of files(path.join(root, 'common/static_modifiers')).filter(f => f.endsWith('.txt'))) {
   const text = strip(fs.readFileSync(f, 'utf8'));

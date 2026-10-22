@@ -1,0 +1,4 @@
+# Corporate fleets: hostile space creatures in this system (system scope).
+pe_monster_system = {
+	any_fleet_in_system = { owner = { OR = { is_amoeba_country_type = yes is_crystal_country_type = yes is_drone_country_type = yes is_voidworms_hostile_country_type = yes } } }
+}

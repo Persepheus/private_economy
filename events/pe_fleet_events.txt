@@ -1,0 +1,68 @@
+# Corporate fleets (see pe_fleet_effects.txt).
+#   pe.282 war lease offer   pe.283 war lease ends   pe.284 clearing offer   pe.285 clearing result
+# Scope: country. pe_corp_cur_name = the corporation's name id.
+namespace = pe
+
+country_event = {
+	id = pe.282
+	title = pe.282.name
+	desc = pe.282.desc
+	picture = GFX_evt_federation_fleet
+	is_triggered_only = yes
+
+	option = {
+		name = pe.282.a
+		custom_tooltip = pe.282.a.tt
+		hidden_effect = { pe_corp_fleet_war_start = yes }
+	}
+	option = { name = pe.282.b }
+}
+
+country_event = {
+	id = pe.283
+	title = pe.283.name
+	desc = pe.283.desc
+	picture = GFX_evt_federation_fleet
+	is_triggered_only = yes
+
+	option = {
+		name = pe.283.a
+		allow = { has_resource = { type = alloys amount >= 1 } }
+		custom_tooltip = pe.283.a.tt
+		hidden_effect = { pe_corp_fleet_buy = yes }
+	}
+	option = {
+		name = pe.283.b
+		hidden_effect = {
+			every_controlled_fleet = { limit = { has_fleet_flag = pe_lease_war } delete_fleet = this }
+			set_variable = { which = pe_lease_war_q value = 0 }
+		}
+	}
+}
+
+country_event = {
+	id = pe.284
+	title = pe.284.name
+	desc = pe.284.desc
+	picture = GFX_evt_crystal_kraken
+	is_triggered_only = yes
+	location = event_target:pe_cl_sys
+
+	option = {
+		name = pe.284.a
+		custom_tooltip = pe.284.a.tt
+		hidden_effect = { pe_corp_fleet_clear_start = yes }
+	}
+	option = { name = pe.284.b }
+}
+
+country_event = {
+	id = pe.285
+	title = pe.285.name
+	desc = { trigger = { check_variable = { which = pe_cl_done value = 1 } } text = pe.285.desc.ok }
+	desc = { trigger = { check_variable = { which = pe_cl_done value = 2 } } text = pe.285.desc.no }
+	picture = GFX_evt_crystal_kraken
+	is_triggered_only = yes
+
+	option = { name = pe.285.a }
+}

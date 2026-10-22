@@ -15,6 +15,7 @@
 #   event pe.14  found a corporation now (needs an independent stage-3 firm; run pe.7 first)
 #   event pe.273 the register of corporations
 #   event pe.274 a corporation takes a station now (holdings created if needed)
+#   event pe.277 corporate fleet offers now (war lease also in peace, clearing if creatures are near)
 namespace = pe
 
 country_event = {
@@ -257,5 +258,24 @@ country_event = {
 			pe_corp_station_pick = yes
 		}
 		log = "private_economy: pe.274 corporation [Root.pe_st_k] mode [Root.pe_st_mode] (0 = no deposit for its group)"
+	}
+}
+
+# event pe.277: corporate fleet offers now (war lease even in peace, clearing if creatures are
+# next to our border); pauses and chances do not apply.
+country_event = {
+	id = pe.277
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_holdings_ensure = yes
+		set_variable = { which = pe_fl_force value = 1 }
+		remove_country_flag = pe_lease_war_cd
+		remove_country_flag = pe_lease_clear_cd
+		set_country_flag = pe_fl_debug_war
+		pe_corp_fleets = yes
+		remove_country_flag = pe_fl_debug_war
+		set_variable = { which = pe_fl_force value = 0 }
+		log = "private_economy: pe.277 fleets: corporation [Root.pe_fl_k], war lease [Root.pe_lease_war_q], clearing [Root.pe_lease_clear_q]"
 	}
 }

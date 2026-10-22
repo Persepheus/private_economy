@@ -1,0 +1,336 @@
+# Corporate fleets (pe_fleet_events.txt): fleets of a corporation, owned by our Private
+# Holdings and leased to us (set_controller). Upkeep for us: the 10% the engine cannot take
+# off (MIN_ECONOMIC_MODIFIER_MULT), as a leasing fee; no naval capacity.
+#   War lease (pe.282/283): at war, an industry corporation offers a fleet for five years;
+#   afterwards we buy it for alloys or it goes back.
+#   Clearing (pe.284/285): space creatures block a system at our border; a corporation
+#   lends a fleet of 1.5 times their strength against the loot rights. Once the system is
+#   clear the fleet goes back, the corporation gets the loot, we some society research.
+# Call depths: pe_corp_fleets 3 (from pe_corp_step) -> pe_corp_fleet_war_start,
+# pe_corp_fleet_clear_start, pe_corp_fleet_buy 4.
+
+# System scope: hostile space creatures are here.
+# The fleet itself (inlined in pe_corp_fleet_war_start / _clear_start, call depth): ships of
+# our biggest class (by tech, our newest design) until its power reaches pe_fp_need or the
+# budget pe_fl_budget is spent (at least one ship, at most 12), at event_target:pe_fl_loc.
+
+# Country scope, quarterly: the corporate fleets.
+pe_corp_fleets = {
+	# --- War lease: running contract ---
+	if = {
+		limit = { check_variable = { which = pe_lease_war_q value > 0 } }
+		change_variable = { which = pe_lease_war_q value = -1 }
+		if = {
+			limit = { NOT = { any_controlled_fleet = { has_fleet_flag = pe_lease_war } } }
+			set_variable = { which = pe_lease_war_q value = 0 }
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_lease_war_q value <= 0 } }
+			set_variable = { which = pe_fl_price value = pe_fl_war_ships }
+			multiply_variable = { which = pe_fl_price value = pe_fl_war_cprice }
+			if = {
+				limit = { is_ai = yes }
+				if = {
+					limit = { has_resource = { type = alloys amount >= 500 } }
+					pe_corp_fleet_buy = yes
+				}
+				else = { every_controlled_fleet = { limit = { has_fleet_flag = pe_lease_war } delete_fleet = this } }
+			}
+			else = { country_event = { id = pe.283 } }
+		}
+	}
+	# --- War lease: an offer (at war, an industry corporation with cash, 30% a quarter) ---
+	else_if = {
+		limit = {
+			OR = { is_at_war = yes has_country_flag = pe_fl_debug_war }
+			exists = event_target:pe_hold
+			NOT = { has_country_flag = pe_lease_war_cd }
+		}
+		set_variable = { which = pe_fl_k value = 0 }
+		set_variable = { which = pe_fl_best value = 599 }
+		if = { limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_grp value = 1 } check_variable = { which = pe_c1_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 1 } set_variable = { which = pe_fl_best value = pe_c1_cash } }
+		if = { limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_grp value = 1 } check_variable = { which = pe_c2_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 2 } set_variable = { which = pe_fl_best value = pe_c2_cash } }
+		if = { limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_grp value = 1 } check_variable = { which = pe_c3_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 3 } set_variable = { which = pe_fl_best value = pe_c3_cash } }
+		if = { limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_grp value = 1 } check_variable = { which = pe_c4_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 4 } set_variable = { which = pe_fl_best value = pe_c4_cash } }
+		if = { limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_grp value = 1 } check_variable = { which = pe_c5_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 5 } set_variable = { which = pe_fl_best value = pe_c5_cash } }
+		if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_grp value = 1 } check_variable = { which = pe_c6_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 6 } set_variable = { which = pe_fl_best value = pe_c6_cash } }
+		if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_grp value = 1 } check_variable = { which = pe_c7_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 7 } set_variable = { which = pe_fl_best value = pe_c7_cash } }
+		if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_grp value = 1 } check_variable = { which = pe_c8_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 8 } set_variable = { which = pe_fl_best value = pe_c8_cash } }
+		if = {
+			limit = { check_variable = { which = pe_fl_k value > 0 } }
+			random_list = {
+			30 = {
+				set_timed_country_flag = { flag = pe_lease_war_cd days = 1800 }
+				set_variable = { which = pe_fl_kind value = 1 }
+				set_variable = { which = pe_fl_budget value = pe_fl_best }
+				multiply_variable = { which = pe_fl_budget value = 0.5 }
+				export_trigger_value_to_variable = { trigger = fleet_power variable = pe_fp_need }
+				multiply_variable = { which = pe_fp_need value = 0.25 }
+				if = { limit = { check_variable = { which = pe_fp_need value < 500 } } set_variable = { which = pe_fp_need value = 500 } }
+				capital_scope = { save_event_target_as = pe_fl_loc }
+				if = { limit = { check_variable = { which = pe_fl_k value = 1 } } set_variable = { which = pe_corp_cur_name value = pe_c1_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 2 } } set_variable = { which = pe_corp_cur_name value = pe_c2_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 3 } } set_variable = { which = pe_corp_cur_name value = pe_c3_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 4 } } set_variable = { which = pe_corp_cur_name value = pe_c4_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 5 } } set_variable = { which = pe_corp_cur_name value = pe_c5_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 6 } } set_variable = { which = pe_corp_cur_name value = pe_c6_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 7 } } set_variable = { which = pe_corp_cur_name value = pe_c7_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 8 } } set_variable = { which = pe_corp_cur_name value = pe_c8_name } }
+				if = {
+					limit = { is_ai = yes }
+					random = { chance = 80 pe_corp_fleet_war_start = yes }
+				}
+				else = { country_event = { id = pe.282 } }
+			}
+			70 = { modifier = { factor = 0 check_variable = { which = pe_fl_force value = 1 } } }
+			}
+		}
+	}
+	# --- Clearing: running contract ---
+	if = {
+		limit = { check_variable = { which = pe_lease_clear_q value > 0 } }
+		change_variable = { which = pe_lease_clear_q value = -1 }
+		set_variable = { which = pe_cl_done value = 0 }
+		if = {
+			limit = { NOT = { any_controlled_fleet = { has_fleet_flag = pe_lease_clear } } }
+			set_variable = { which = pe_cl_done value = 2 }
+		}
+		else_if = {
+			limit = { any_system = { has_star_flag = pe_clear@root NOT = { pe_monster_system = yes } } }
+			set_variable = { which = pe_cl_done value = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_lease_clear_q value <= 0 } }
+			set_variable = { which = pe_cl_done value = 2 }
+		}
+		if = {
+			limit = { check_variable = { which = pe_cl_done value > 0 } }
+			random_system = {
+				limit = { has_star_flag = pe_clear@root }
+				save_event_target_as = pe_cl_sys
+				remove_star_flag = pe_clear@root
+			}
+			every_controlled_fleet = { limit = { has_fleet_flag = pe_lease_clear } delete_fleet = this }
+			set_variable = { which = pe_lease_clear_q value = 0 }
+			if = {
+				limit = { check_variable = { which = pe_cl_done value = 1 } }
+				# The loot: for the corporation a third of the creatures' power in cash (plus
+				# its ships back), for us a twentieth as society research.
+				set_variable = { which = pe_cl_loot value = pe_cl_power }
+				multiply_variable = { which = pe_cl_loot value = 0.35 }
+				change_variable = { which = pe_cl_loot value = pe_cl_spent }
+				round_variable = pe_cl_loot
+				set_variable = { which = pe_cl_res value = pe_cl_power }
+				multiply_variable = { which = pe_cl_res value = 0.05 }
+				if = { limit = { check_variable = { which = pe_cl_res value < 25 } } set_variable = { which = pe_cl_res value = 25 } }
+				round_variable = pe_cl_res
+				if = { limit = { check_variable = { which = pe_cl_k value = 1 } } change_variable = { which = pe_c1_cash value = pe_cl_loot } set_variable = { which = pe_corp_cur_name value = pe_c1_name } }
+				else_if = { limit = { check_variable = { which = pe_cl_k value = 2 } } change_variable = { which = pe_c2_cash value = pe_cl_loot } set_variable = { which = pe_corp_cur_name value = pe_c2_name } }
+				else_if = { limit = { check_variable = { which = pe_cl_k value = 3 } } change_variable = { which = pe_c3_cash value = pe_cl_loot } set_variable = { which = pe_corp_cur_name value = pe_c3_name } }
+				else_if = { limit = { check_variable = { which = pe_cl_k value = 4 } } change_variable = { which = pe_c4_cash value = pe_cl_loot } set_variable = { which = pe_corp_cur_name value = pe_c4_name } }
+				else_if = { limit = { check_variable = { which = pe_cl_k value = 5 } } change_variable = { which = pe_c5_cash value = pe_cl_loot } set_variable = { which = pe_corp_cur_name value = pe_c5_name } }
+				else_if = { limit = { check_variable = { which = pe_cl_k value = 6 } } change_variable = { which = pe_c6_cash value = pe_cl_loot } set_variable = { which = pe_corp_cur_name value = pe_c6_name } }
+				else_if = { limit = { check_variable = { which = pe_cl_k value = 7 } } change_variable = { which = pe_c7_cash value = pe_cl_loot } set_variable = { which = pe_corp_cur_name value = pe_c7_name } }
+				else_if = { limit = { check_variable = { which = pe_cl_k value = 8 } } change_variable = { which = pe_c8_cash value = pe_cl_loot } set_variable = { which = pe_corp_cur_name value = pe_c8_name } }
+				add_resource = { society_research = 1 mult = pe_cl_res }
+			}
+			if = { limit = { is_ai = no } country_event = { id = pe.285 } }
+		}
+	}
+	# --- Clearing: an offer (creatures next to our border, a corporation with cash, 25%) ---
+	else_if = {
+		limit = {
+			exists = event_target:pe_hold
+			NOT = { has_country_flag = pe_lease_clear_cd }
+			any_system_within_border = {
+				any_neighbor_system = { NOT = { exists = owner } pe_monster_system = yes }
+			}
+		}
+		set_variable = { which = pe_fl_k value = 0 }
+		set_variable = { which = pe_fl_best value = 599 }
+		if = { limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 1 } set_variable = { which = pe_fl_best value = pe_c1_cash } }
+		if = { limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 2 } set_variable = { which = pe_fl_best value = pe_c2_cash } }
+		if = { limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 3 } set_variable = { which = pe_fl_best value = pe_c3_cash } }
+		if = { limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 4 } set_variable = { which = pe_fl_best value = pe_c4_cash } }
+		if = { limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 5 } set_variable = { which = pe_fl_best value = pe_c5_cash } }
+		if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 6 } set_variable = { which = pe_fl_best value = pe_c6_cash } }
+		if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 7 } set_variable = { which = pe_fl_best value = pe_c7_cash } }
+		if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 8 } set_variable = { which = pe_fl_best value = pe_c8_cash } }
+		if = {
+			limit = { check_variable = { which = pe_fl_k value > 0 } }
+			random_list = {
+			25 = {
+				set_timed_country_flag = { flag = pe_lease_clear_cd days = 1440 }
+				random_system_within_border = {
+					limit = { any_neighbor_system = { NOT = { exists = owner } pe_monster_system = yes } }
+					save_event_target_as = pe_fl_loc
+					random_neighbor_system = {
+						limit = { NOT = { exists = owner } pe_monster_system = yes }
+						save_event_target_as = pe_cl_sys
+					}
+				}
+				# The creatures' power, and 1.5 times that for the fleet (budget: 80% of the cash).
+				set_variable = { which = pe_cl_power value = 0 }
+				event_target:pe_cl_sys = {
+					every_fleet_in_system = {
+						limit = { owner = { OR = { is_amoeba_country_type = yes is_crystal_country_type = yes is_drone_country_type = yes is_voidworms_hostile_country_type = yes } } }
+						export_trigger_value_to_variable = { trigger = fleet_power variable = pe_tmp }
+						root = { change_variable = { which = pe_cl_power value = prev.pe_tmp } }
+					}
+				}
+				set_variable = { which = pe_fp_need value = pe_cl_power }
+				multiply_variable = { which = pe_fp_need value = 1.5 }
+				set_variable = { which = pe_fl_budget value = pe_fl_best }
+				multiply_variable = { which = pe_fl_budget value = 0.8 }
+				set_variable = { which = pe_fl_kind value = 2 }
+				if = { limit = { check_variable = { which = pe_fl_k value = 1 } } set_variable = { which = pe_corp_cur_name value = pe_c1_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 2 } } set_variable = { which = pe_corp_cur_name value = pe_c2_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 3 } } set_variable = { which = pe_corp_cur_name value = pe_c3_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 4 } } set_variable = { which = pe_corp_cur_name value = pe_c4_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 5 } } set_variable = { which = pe_corp_cur_name value = pe_c5_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 6 } } set_variable = { which = pe_corp_cur_name value = pe_c6_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 7 } } set_variable = { which = pe_corp_cur_name value = pe_c7_name } }
+				else_if = { limit = { check_variable = { which = pe_fl_k value = 8 } } set_variable = { which = pe_corp_cur_name value = pe_c8_name } }
+				if = {
+					limit = { is_ai = yes }
+					random = { chance = 80 pe_corp_fleet_clear_start = yes }
+				}
+				else = { country_event = { id = pe.284 } }
+			}
+			75 = { modifier = { factor = 0 check_variable = { which = pe_fl_force value = 1 } } }
+			}
+		}
+	}
+}
+
+# Country scope: start the war lease (five years).
+pe_corp_fleet_war_start = {
+	set_variable = { which = pe_fl_class value = 1 }
+	if = { limit = { has_technology = tech_destroyers } set_variable = { which = pe_fl_class value = 2 } }
+	if = { limit = { has_technology = tech_cruisers } set_variable = { which = pe_fl_class value = 3 } }
+	if = { limit = { has_technology = tech_battleships } set_variable = { which = pe_fl_class value = 4 } }
+	set_variable = { which = pe_fl_ccost value = 150 }
+	if = { limit = { check_variable = { which = pe_fl_class value = 1 } } set_variable = { which = pe_fl_ccost value = 150 } set_variable = { which = pe_fl_cprice value = 40 } }
+	if = { limit = { check_variable = { which = pe_fl_class value = 2 } } set_variable = { which = pe_fl_ccost value = 300 } set_variable = { which = pe_fl_cprice value = 80 } }
+	if = { limit = { check_variable = { which = pe_fl_class value = 3 } } set_variable = { which = pe_fl_ccost value = 600 } set_variable = { which = pe_fl_cprice value = 160 } }
+	if = { limit = { check_variable = { which = pe_fl_class value = 4 } } set_variable = { which = pe_fl_ccost value = 1200 } set_variable = { which = pe_fl_cprice value = 320 } }
+	set_variable = { which = pe_fl_spent value = 0 }
+	set_variable = { which = pe_fl_ships value = 0 }
+	create_fleet = {
+		name = pe_corp_fleet_name
+		settings = { uses_naval_capacity = no }
+		effect = {
+			set_owner = root
+			set_variable = { which = pe_fp value = 0 }
+			while = {
+				count = 12
+				limit = {
+					check_variable = { which = pe_fp value < root.pe_fp_need }
+					root = { check_variable = { which = pe_fl_spent value < pe_fl_budget } }
+				}
+				if = { limit = { root = { check_variable = { which = pe_fl_class value = 1 } } } create_ship = { name = random random_existing_design = corvette } }
+				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 2 } } } create_ship = { name = random random_existing_design = destroyer } }
+				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 3 } } } create_ship = { name = random random_existing_design = cruiser } }
+				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 4 } } } create_ship = { name = random random_existing_design = battleship } }
+				root = {
+					change_variable = { which = pe_fl_spent value = pe_fl_ccost }
+					change_variable = { which = pe_fl_ships value = 1 }
+				}
+				export_trigger_value_to_variable = { trigger = fleet_power variable = pe_fp }
+			}
+			set_location = event_target:pe_fl_loc
+			set_fleet_flag = pe_leased
+			if = { limit = { root = { check_variable = { which = pe_fl_kind value = 1 } } } set_fleet_flag = pe_lease_war }
+			else = { set_fleet_flag = pe_lease_clear }
+		}
+	}
+	last_created_fleet = {
+		set_owner = event_target:pe_hold
+		set_controller = root
+		add_modifier = { modifier = pe_leased_fleet days = -1 }
+	}
+	if = { limit = { check_variable = { which = pe_fl_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_fl_spent } }
+	set_variable = { which = pe_lease_war_q value = 20 }
+	set_variable = { which = pe_fl_war_ships value = pe_fl_ships }
+	set_variable = { which = pe_fl_war_cprice value = pe_fl_cprice }
+}
+
+# Country scope: start the clearing contract (three years at most).
+pe_corp_fleet_clear_start = {
+	set_variable = { which = pe_fl_class value = 1 }
+	if = { limit = { has_technology = tech_destroyers } set_variable = { which = pe_fl_class value = 2 } }
+	if = { limit = { has_technology = tech_cruisers } set_variable = { which = pe_fl_class value = 3 } }
+	if = { limit = { has_technology = tech_battleships } set_variable = { which = pe_fl_class value = 4 } }
+	set_variable = { which = pe_fl_ccost value = 150 }
+	if = { limit = { check_variable = { which = pe_fl_class value = 1 } } set_variable = { which = pe_fl_ccost value = 150 } set_variable = { which = pe_fl_cprice value = 40 } }
+	if = { limit = { check_variable = { which = pe_fl_class value = 2 } } set_variable = { which = pe_fl_ccost value = 300 } set_variable = { which = pe_fl_cprice value = 80 } }
+	if = { limit = { check_variable = { which = pe_fl_class value = 3 } } set_variable = { which = pe_fl_ccost value = 600 } set_variable = { which = pe_fl_cprice value = 160 } }
+	if = { limit = { check_variable = { which = pe_fl_class value = 4 } } set_variable = { which = pe_fl_ccost value = 1200 } set_variable = { which = pe_fl_cprice value = 320 } }
+	set_variable = { which = pe_fl_spent value = 0 }
+	set_variable = { which = pe_fl_ships value = 0 }
+	create_fleet = {
+		name = pe_corp_fleet_name
+		settings = { uses_naval_capacity = no }
+		effect = {
+			set_owner = root
+			set_variable = { which = pe_fp value = 0 }
+			while = {
+				count = 12
+				limit = {
+					check_variable = { which = pe_fp value < root.pe_fp_need }
+					root = { check_variable = { which = pe_fl_spent value < pe_fl_budget } }
+				}
+				if = { limit = { root = { check_variable = { which = pe_fl_class value = 1 } } } create_ship = { name = random random_existing_design = corvette } }
+				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 2 } } } create_ship = { name = random random_existing_design = destroyer } }
+				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 3 } } } create_ship = { name = random random_existing_design = cruiser } }
+				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 4 } } } create_ship = { name = random random_existing_design = battleship } }
+				root = {
+					change_variable = { which = pe_fl_spent value = pe_fl_ccost }
+					change_variable = { which = pe_fl_ships value = 1 }
+				}
+				export_trigger_value_to_variable = { trigger = fleet_power variable = pe_fp }
+			}
+			set_location = event_target:pe_fl_loc
+			set_fleet_flag = pe_leased
+			if = { limit = { root = { check_variable = { which = pe_fl_kind value = 1 } } } set_fleet_flag = pe_lease_war }
+			else = { set_fleet_flag = pe_lease_clear }
+		}
+	}
+	last_created_fleet = {
+		set_owner = event_target:pe_hold
+		set_controller = root
+		add_modifier = { modifier = pe_leased_fleet days = -1 }
+	}
+	if = { limit = { check_variable = { which = pe_fl_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_fl_spent } }
+	else_if = { limit = { check_variable = { which = pe_fl_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_fl_spent } }
+	set_variable = { which = pe_lease_clear_q value = 12 }
+	set_variable = { which = pe_cl_k value = pe_fl_k }
+	set_variable = { which = pe_cl_spent value = pe_fl_spent }
+	event_target:pe_cl_sys = { set_star_flag = pe_clear@root }
+}
+
+# Country scope: buy the war fleet (pe_fl_price alloys); it becomes ours.
+pe_corp_fleet_buy = {
+	add_resource = { alloys = -1 mult = pe_fl_price }
+	every_controlled_fleet = {
+		limit = { has_fleet_flag = pe_lease_war }
+		set_owner = root
+		remove_modifier = pe_leased_fleet
+		remove_fleet_flag = pe_lease_war
+		remove_fleet_flag = pe_leased
+	}
+	set_variable = { which = pe_lease_war_q value = 0 }
+}
