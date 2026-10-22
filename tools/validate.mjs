@@ -224,7 +224,7 @@ need.push(...defs('common/static_modifiers').flatMap(m => [m, `${m}_desc`]));
 for (const f of files(path.join(root, 'common/message_types')))
   for (const [, n] of fs.readFileSync(f, 'utf8').matchAll(/name = "(\w+)"/g)) need.push(n);
 for (const f of files(path.join(root, 'events')).filter(f => f.endsWith('.txt')))
-  for (const [, k] of strip(fs.readFileSync(f, 'utf8')).matchAll(/\b(?:title|desc|text|name) = ([\w.]+)/g)) need.push(k);
+  for (const [, k] of strip(fs.readFileSync(f, 'utf8')).matchAll(/\b(?:title|desc|text|name) = ([\w.]+)/g)) if (k !== 'random') need.push(k);
 const definedTexts = new Set();
 for (const f of files(path.join(root, 'common/scripted_loc')).filter(f => f.endsWith('.txt'))) {
   const text = strip(fs.readFileSync(f, 'utf8'));

@@ -1,0 +1,241 @@
+# Prototype for private stations, kilostructures and fleets owned by a helper country
+# ("Private Holdings", country type pe_holdings). Console only, scope = your empire:
+#   event pe.15  create the Private Holdings (once)
+#   event pe.16  a private mining station on a free orbital deposit in your space
+#   event pe.17  a private Dyson swarm (stage I) at a star in your space
+#   event pe.18  a private fleet of 3 corvettes (your newest design), leased to you
+#   event pe.19  report: what the holdings own and have in stock
+#   event pe.20  the holdings sell you their minerals and energy at half the base price
+#                (the trade goes to the investor pool)
+#   event pe.21  remove the Private Holdings with everything they own
+namespace = pe
+
+# Create the helper country (once per empire).
+country_event = {
+	id = pe.15
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { NOT = { exists = event_target:pe_holdings } }
+			create_country = {
+				name = pe_holdings_name
+				type = pe_holdings
+				auto_delete = no
+				species = root
+				released_by_country = root
+				flag = random
+				effect = {
+					set_country_flag = pe_holdings
+					save_global_event_target_as = pe_holdings
+					add_resource = { energy = 1000 minerals = 500 alloys = 200 }
+				}
+			}
+			establish_communications_no_message = event_target:pe_holdings
+		}
+		log = "private_economy: pe.15 holdings exist [event_target:pe_holdings.GetName]"
+	}
+}
+
+# A private mining station on a free orbital deposit in our space.
+country_event = {
+	id = pe.16
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { exists = event_target:pe_holdings }
+			set_variable = { which = pe_proto_ok value = 0 }
+			random_planet_within_border = {
+				limit = { has_deposit_for = shipclass_mining_station has_orbital_station = no }
+				create_mining_station = { owner = event_target:pe_holdings }
+				root = { set_variable = { which = pe_proto_ok value = 1 } }
+				save_event_target_as = pe_proto_planet
+			}
+			if = {
+				limit = { check_variable = { which = pe_proto_ok value = 1 } }
+				log = "private_economy: pe.16 station ordered at [event_target:pe_proto_planet.GetName]"
+			}
+			else = { log = "private_economy: pe.16 no free orbital deposit for a mining station in our space" }
+		}
+		else = { log = "private_economy: pe.16 run pe.15 first" }
+	}
+}
+
+# A private Dyson swarm (stage I) at a star in our space, with the swarm's effect on the
+# star's orbital station (as on_build_complete would do).
+country_event = {
+	id = pe.17
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { exists = event_target:pe_holdings }
+			set_variable = { which = pe_proto_ok value = 0 }
+			random_system_within_border = {
+				limit = {
+					NOT = { has_megastructure = dyson_swarm_1 }
+					any_system_planet = { is_star = yes }
+				}
+				random_system_planet = {
+					limit = { is_star = yes }
+					save_event_target_as = pe_proto_star
+				}
+				spawn_megastructure = {
+					type = dyson_swarm_1
+					owner = event_target:pe_holdings
+					planet = event_target:pe_proto_star
+				}
+				event_target:pe_proto_star = {
+					add_modifier = { modifier = dyson_swarm_1_mod days = -1 }
+					set_planet_flag = has_megastructure
+					set_planet_flag = pe_proto_swarm
+				}
+				root = { set_variable = { which = pe_proto_ok value = 1 } }
+			}
+			if = {
+				limit = { check_variable = { which = pe_proto_ok value = 1 } }
+				log = "private_economy: pe.17 swarm at [event_target:pe_proto_star.GetName]"
+			}
+			else = { log = "private_economy: pe.17 no star for a swarm in our space" }
+		}
+		else = { log = "private_economy: pe.17 run pe.15 first" }
+	}
+}
+
+# A private fleet of three corvettes (our newest corvette design), owned by the holdings and
+# leased to us: we control it.
+country_event = {
+	id = pe.18
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { exists = event_target:pe_holdings }
+			create_fleet = {
+				name = pe_proto_fleet_name
+				effect = {
+					set_owner = root
+					create_ship = { name = random random_existing_design = corvette }
+					create_ship = { name = random random_existing_design = corvette }
+					create_ship = { name = random random_existing_design = corvette }
+					set_location = root.capital_scope
+					set_fleet_flag = pe_leased
+				}
+			}
+			last_created_fleet = {
+				set_owner = event_target:pe_holdings
+				set_controller = root
+			}
+			log = "private_economy: pe.18 leased fleet created at the capital"
+		}
+		else = { log = "private_economy: pe.18 run pe.15 first" }
+	}
+}
+
+# Report: stocks of the holdings and what they own.
+country_event = {
+	id = pe.19
+	title = pe.19.name
+	desc = pe.19.desc
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+	immediate = {
+		hidden_effect = {
+			set_variable = { which = pe_ph_st value = 0 }
+			set_variable = { which = pe_ph_fl value = 0 }
+			set_variable = { which = pe_ph_ms value = 0 }
+			if = {
+				limit = { exists = event_target:pe_holdings }
+				event_target:pe_holdings = {
+					export_resource_stockpile_to_variable = { resource = minerals variable = pe_ph_min }
+					export_resource_stockpile_to_variable = { resource = energy variable = pe_ph_en }
+					export_resource_stockpile_to_variable = { resource = alloys variable = pe_ph_al }
+					export_resource_income_to_variable = { resource = minerals variable = pe_ph_min_inc }
+					export_resource_income_to_variable = { resource = energy variable = pe_ph_en_inc }
+					every_orbital_station = { root = { change_variable = { which = pe_ph_st value = 1 } } }
+					every_owned_fleet = { limit = { has_fleet_flag = pe_leased } root = { change_variable = { which = pe_ph_fl value = 1 } } }
+					every_owned_megastructure = { root = { change_variable = { which = pe_ph_ms value = 1 } } }
+					root = {
+						set_variable = { which = pe_ph_min value = prev.pe_ph_min }
+						set_variable = { which = pe_ph_en value = prev.pe_ph_en }
+						set_variable = { which = pe_ph_al value = prev.pe_ph_al }
+						set_variable = { which = pe_ph_min_inc value = prev.pe_ph_min_inc }
+						set_variable = { which = pe_ph_en_inc value = prev.pe_ph_en_inc }
+					}
+				}
+			}
+			# Fleets we control but do not own (leased).
+			set_variable = { which = pe_ph_ctl value = 0 }
+			every_controlled_fleet = {
+				limit = { has_fleet_flag = pe_leased }
+				root = { change_variable = { which = pe_ph_ctl value = 1 } }
+			}
+		}
+	}
+	option = { name = pe.19.a }
+}
+
+# The holdings sell us their minerals and energy at half the base price (1 per 2 units);
+# the trade goes to the investor pool.
+country_event = {
+	id = pe.20
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { exists = event_target:pe_holdings }
+			event_target:pe_holdings = {
+				export_resource_stockpile_to_variable = { resource = minerals variable = pe_ph_min }
+				export_resource_stockpile_to_variable = { resource = energy variable = pe_ph_en }
+				# Keep 200 energy for the station upkeep.
+				change_variable = { which = pe_ph_en value = -200 }
+				if = { limit = { check_variable = { which = pe_ph_en value < 0 } } set_variable = { which = pe_ph_en value = 0 } }
+				add_resource = { minerals = -1 mult = pe_ph_min }
+				add_resource = { energy = -1 mult = pe_ph_en }
+				root = {
+					set_variable = { which = pe_ph_min value = prev.pe_ph_min }
+					set_variable = { which = pe_ph_en value = prev.pe_ph_en }
+				}
+			}
+			add_resource = { minerals = 1 mult = pe_ph_min }
+			add_resource = { energy = 1 mult = pe_ph_en }
+			set_variable = { which = pe_ph_pay value = pe_ph_min }
+			change_variable = { which = pe_ph_pay value = pe_ph_en }
+			multiply_variable = { which = pe_ph_pay value = 0.5 }
+			add_resource = { trade = -1 mult = pe_ph_pay }
+			change_variable = { which = pe_capital value = pe_ph_pay }
+			log = "private_economy: pe.20 bought [Root.pe_ph_min] minerals and [Root.pe_ph_en] energy for [Root.pe_ph_pay] trade"
+		}
+		else = { log = "private_economy: pe.20 run pe.15 first" }
+	}
+}
+
+# Remove the holdings with everything they own.
+country_event = {
+	id = pe.21
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { exists = event_target:pe_holdings }
+			event_target:pe_holdings = {
+				every_owned_fleet = { destroy_fleet = this }
+				every_orbital_station = { dismantle = yes }
+				every_owned_megastructure = { remove_megastructure = this }
+			}
+			every_owned_colony = {
+				solar_system = {
+					every_system_planet = {
+						limit = { is_star = yes has_planet_flag = pe_proto_swarm }
+						remove_modifier = dyson_swarm_1_mod
+						remove_planet_flag = pe_proto_swarm
+						remove_planet_flag = has_megastructure
+					}
+				}
+			}
+			event_target:pe_holdings = { destroy_country = yes }
+			log = "private_economy: pe.21 holdings removed"
+		}
+	}
+}

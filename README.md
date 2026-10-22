@@ -39,6 +39,7 @@ Testablauf: [docs/TESTS_0.19.md](docs/TESTS_0.19.md). Ältere Stände: [0.18](do
 - **Später**: Lösung für Habitate, Ringwelten, Ökumenopolen, Arkships und Spezialplaneten.
 - **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen.
 - **Als Nächstes (beschlossen):** Firmenkredite aus den Konzernkassen, Lieferketten zwischen Planeten, Lobbys der Branchengruppen.
+- **Prototyp Hilfsreich:** [docs/TESTS_PROTO_HOLDINGS.md](docs/TESTS_PROTO_HOLDINGS.md) (Konsole `event pe.15` bis `pe.21`).
 - **Weltraum (Ideen):** private Stationen und Kilostrukturen über ein Hilfsreich mit Leasing, Spenden von Schiffen durch Mäzene nach Verlusten, Konzernflotten über ein Hilfsreich, private Werften.
 - **Gemerkte Ideen, noch offen:**
   - Spezialisten-Automatisierung hinter späten Techs (`job_..._automated_workforce_mult` für Privatjobs, schwächer und teurer als bei Arbeitern). Offen ist, was die Engine dafür an Energie verlangt.
