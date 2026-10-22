@@ -68,3 +68,8 @@
  pe.19.name:0 "Private Holdings (Prototyp)"
  pe.19.desc:0 "§HLager§!\nMineralien: [Root.pe_ph_min] (+[Root.pe_ph_min_inc] im Monat)\nEnergie: [Root.pe_ph_en] (+[Root.pe_ph_en_inc] im Monat)\nLegierungen: [Root.pe_ph_al]\n\n§HBesitz§!\nOrbitalstationen: [Root.pe_ph_st]\nMegastrukturen: [Root.pe_ph_ms]\nGeleaste Flotten (in ihrem Besitz): [Root.pe_ph_fl]\nGeleaste Flotten (von uns gesteuert): [Root.pe_ph_ctl]"
  pe.19.a:0 "Schließen."
+ pe.20.name:0 "Private Holdings: Verkauf"
+ pe.20.desc:0 "Die Holdings haben uns §G[Root.pe_ph_min]§! £minerals£ Mineralien und §G[Root.pe_ph_en]§! £energy£ Energie für §Y[Root.pe_ph_pay]§! £trade£ verkauft (halber Grundpreis). Der Handel ging in den Investorenpool."
+ pe.20.a:0 "Schließen."
+ pe_leased_fleet:0 "Geleast von den Private Holdings"
+ pe_leased_fleet_desc:0 "Die Holdings zahlen den Unterhalt dieser Flotte; sie belegt keine Flottenkapazität."

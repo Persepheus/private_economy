@@ -22,3 +22,28 @@ Ziel: Prüfen, ob ein Hilfsreich Stationen, Kilostrukturen und Flotten in unsere
 ## Was ich danach wissen will
 - error.log und game.log (lese ich selbst).
 - Kurz: Was war sichtbar und wem gehörte es (Station, Schwarm, Flotte)? Kannst du die Flotte steuern? Hat sich das Lager der Holdings verändert?
+
+## Ergebnis Test 1 (2232–2235)
+- **Station (pe.16):** Sie ist sichtbar, bleibt über den Monatswechsel und hat die richtige Flagge. Sie zeigte aber das Enklaven-Symbol statt des Stationssymbols.
+- **Dyson-Schwarm (pe.17):** Sichtbar und dauerhaft. Er gehört den Holdings und steht nicht in deiner Liste.
+- **Flotte (pe.18):** Steuerbar und kampffähig, aber nicht veränderbar. Tooltip: „wird in 0 Tagen zurückgegeben“, sie bleibt aber. Unterhalt und Flottenkapazität hast du gezahlt.
+- **Bericht (pe.19):** Die Holdings bekommen die Erträge von Station und Schwarm.
+- **Verkauf (pe.20):** Hat funktioniert (game.log: 500 Mineralien und 964 Energie für 732 Handel). Das Event lief aber unsichtbar.
+- **Speichern/Laden und Kriegserklärung:** Alles blieb erhalten, auch die Flotte.
+- **Entfernen (pe.21):** Alles weg, nur der Schwarm-Modifier blieb am Stern.
+- **error.log:** „Failed to randomize ethics / find government configuration“ beim Erstellen der Holdings.
+
+## Änderungen für Test 2
+- **Länder-Typ:** ohne `is_enclave` (vermutlich die Ursache des Enklaven-Symbols).
+- **Erstellung:** Die Holdings bekommen Autorität (Oligarchie), Ethik, Civics und Origin, wie Vanilla-Enklaven.
+- **Geleaste Flotte:**
+  - Modifier „Geleast von den Private Holdings“: kein Unterhalt, keine Flottenkapazität, wie bei Vanilla-Söldnern.
+  - Zusätzlich `uses_naval_capacity = no`.
+- **pe.20:** zeigt ein Fenster mit Mengen und Preis.
+- **pe.21:** entfernt den Schwarm-Modifier über den gespeicherten Stern.
+
+## Prüfen in Test 2
+1. pe.15 ohne „Failed to randomize ethics“ im error.log.
+2. pe.16: Hat die Station jetzt das normale Stationssymbol?
+3. pe.18: kein Unterhalt und keine Flottenkapazität für dich, Modifier sichtbar.
+4. pe.20 zeigt das Fenster. pe.21 lässt keinen Modifier am Stern zurück.

@@ -1,13 +1,12 @@
 # Prototype: the private holdings of an empire's investors (events/pe_proto_events.txt). An
 # enclave-like country without AI, borders or colonies. It owns private stations,
 # kilostructures and fleets in our space; fleets are leased to us (set_controller), output
-# is sold to us.
+# is sold to us. Not an enclave type: enclaves show the enclave symbol on their stations.
 pe_holdings = {
 	blocks_piracy = yes
 	show_in_contacts_list = yes
 	can_have_their_comms_shared = yes
 	government = yes
-	is_enclave = yes
 	prevent_automatic_genocidal_hostilities = yes
 	observable = no
 	playable = no

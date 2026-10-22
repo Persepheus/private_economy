@@ -22,6 +22,11 @@ country_event = {
 				name = pe_holdings_name
 				type = pe_holdings
 				auto_delete = no
+				authority = auth_oligarchic
+				ethos = { ethic = ethic_materialist ethic = ethic_egalitarian ethic = ethic_xenophile }
+				civics = { civic = civic_merchant_guilds civic = civic_mining_guilds }
+				remove_invalid_civics = yes
+				origin = origin_default
 				species = root
 				released_by_country = root
 				flag = random
@@ -87,6 +92,7 @@ country_event = {
 					planet = event_target:pe_proto_star
 				}
 				event_target:pe_proto_star = {
+					save_global_event_target_as = pe_proto_star_g
 					add_modifier = { modifier = dyson_swarm_1_mod days = -1 }
 					set_planet_flag = has_megastructure
 					set_planet_flag = pe_proto_swarm
@@ -114,6 +120,7 @@ country_event = {
 			limit = { exists = event_target:pe_holdings }
 			create_fleet = {
 				name = pe_proto_fleet_name
+				settings = { uses_naval_capacity = no }
 				effect = {
 					set_owner = root
 					create_ship = { name = random random_existing_design = corvette }
@@ -126,6 +133,9 @@ country_event = {
 			last_created_fleet = {
 				set_owner = event_target:pe_holdings
 				set_controller = root
+				# The holdings pay the ships (like a mercenary contract): no upkeep, no naval
+				# capacity for us.
+				add_modifier = { modifier = pe_leased_fleet days = -1 }
 			}
 			log = "private_economy: pe.18 leased fleet created at the capital"
 		}
@@ -180,8 +190,11 @@ country_event = {
 # the trade goes to the investor pool.
 country_event = {
 	id = pe.20
-	hide_window = yes
+	title = pe.20.name
+	desc = pe.20.desc
+	picture = GFX_evt_tradedeal
 	is_triggered_only = yes
+	option = { name = pe.20.a }
 	immediate = {
 		if = {
 			limit = { exists = event_target:pe_holdings }
@@ -224,15 +237,19 @@ country_event = {
 				every_orbital_station = { dismantle = yes }
 				every_owned_megastructure = { remove_megastructure = this }
 			}
-			every_owned_colony = {
-				solar_system = {
-					every_system_planet = {
-						limit = { is_star = yes has_planet_flag = pe_proto_swarm }
-						remove_modifier = dyson_swarm_1_mod
-						remove_planet_flag = pe_proto_swarm
-						remove_planet_flag = has_megastructure
-					}
+			if = {
+				limit = { exists = event_target:pe_proto_star_g }
+				event_target:pe_proto_star_g = {
+					remove_modifier = dyson_swarm_1_mod
+					remove_planet_flag = pe_proto_swarm
+					remove_planet_flag = has_megastructure
 				}
+			}
+			every_planet_within_border = {
+				limit = { has_planet_flag = pe_proto_swarm }
+				remove_modifier = dyson_swarm_1_mod
+				remove_planet_flag = pe_proto_swarm
+				remove_planet_flag = has_megastructure
 			}
 			event_target:pe_holdings = { destroy_country = yes }
 			log = "private_economy: pe.21 holdings removed"
