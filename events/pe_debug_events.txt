@@ -17,6 +17,7 @@
 #   event pe.274 a corporation takes a station now (holdings created if needed)
 #   event pe.277 corporate offers now: war lease (also in peace), clearing, exploration charter,
 #                convoy protection, salvage, Dyson swarm (each only where its condition holds)
+#   event pe.278 end all running corporate fleet contracts (fleets return, no loot)
 namespace = pe
 
 country_event = {
@@ -274,6 +275,12 @@ country_event = {
 		remove_country_flag = pe_lease_war_cd
 		remove_country_flag = pe_lease_clear_cd
 		set_country_flag = pe_fl_debug
+		set_variable = { which = pe_wl_k value = 0 }
+		set_variable = { which = pe_cl_k value = 0 }
+		set_variable = { which = pe_ch_k value = 0 }
+		set_variable = { which = pe_cv_k value = 0 }
+		set_variable = { which = pe_sv_k value = 0 }
+		set_variable = { which = pe_sw_k value = 0 }
 		pe_corp_fleets = yes
 		remove_country_flag = pe_charter_cd
 		remove_country_flag = pe_convoy_cd
@@ -285,6 +292,30 @@ country_event = {
 		pe_corp_swarm = yes
 		remove_country_flag = pe_fl_debug
 		set_variable = { which = pe_fl_force value = 0 }
-		log = "private_economy: pe.277 offers: war [Root.pe_wl_k], clearing [Root.pe_cl_k], charter [Root.pe_ch_k], convoy [Root.pe_cv_k], salvage [Root.pe_sv_k], swarm [Root.pe_sw_k] (0 = no corporation or condition)"
+		log = "private_economy: pe.277 corporation per offer (0 = none, or its condition is not met, or a contract of that kind is running): war [Root.pe_wl_k], clearing [Root.pe_cl_k], charter [Root.pe_ch_k], convoy [Root.pe_cv_k], salvage [Root.pe_sv_k], swarm [Root.pe_sw_k]. Running (quarters left): war [Root.pe_lease_war_q], clearing [Root.pe_lease_clear_q], charter [Root.pe_charter_q], convoy [Root.pe_convoy_q]. pe.278 ends them."
+	}
+}
+
+# event pe.278: end all running corporate fleet contracts (for testing new offers).
+country_event = {
+	id = pe.278
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_controlled_fleet = {
+			limit = { has_fleet_flag = pe_leased }
+			if = { limit = { exists = leader } kill_leader = { show_notification = no fire = yes } }
+			delete_fleet = this
+		}
+		every_system = {
+			limit = { OR = { has_star_flag = pe_clear@root has_star_flag = pe_convoy@root } }
+			remove_star_flag = pe_clear@root
+			remove_star_flag = pe_convoy@root
+		}
+		set_variable = { which = pe_lease_war_q value = 0 }
+		set_variable = { which = pe_lease_clear_q value = 0 }
+		set_variable = { which = pe_charter_q value = 0 }
+		set_variable = { which = pe_convoy_q value = 0 }
+		log = "private_economy: pe.278 all corporate fleet contracts ended"
 	}
 }
