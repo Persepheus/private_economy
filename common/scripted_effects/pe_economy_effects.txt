@@ -14,6 +14,7 @@
 #                                                                     -> pe_deposit_fetch (4)
 #                                                                     -> pe_firm_book (4)
 #                                          -> pe_cluster_counts (3), pe_cluster_apply (3)
+#                                          -> pe_corp_lending (3)
 #                                          -> pe_firm_change (3)
 #                                          -> pe_choose_variant (3)   -> pe_consider_variant (4)
 #                                          -> pe_found_variant (3)    -> pe_found_firm (4)
@@ -828,6 +829,8 @@ pe_planet_step = {
 	# Firms per main product, sector group and corporation; cluster modifiers.
 	pe_cluster_counts = yes
 	pe_cluster_apply = yes
+	# Corporate loans for growth and against losses.
+	pe_corp_lending = yes
 	root = { set_variable = { which = pe_chg_type value = 0 } }
 	pe_firm_change = yes
 	# A growth step (+100 jobs) uses idle pops too.
@@ -903,6 +906,7 @@ pe_firm_accounting = {
 		if = { limit = { NOT = { is_variable_set = pe_age } } set_variable = { which = pe_age value = 40 } }
 		change_variable = { which = pe_age value = 1 }
 		if = { limit = { NOT = { is_variable_set = pe_corp } } set_variable = { which = pe_corp value = 0 } }
+		if = { limit = { NOT = { is_variable_set = pe_loan } } set_variable = { which = pe_loan value = 0 } set_variable = { which = pe_lender value = 0 } set_variable = { which = pe_loan_q value = 0 } }
 		pe_deposit_fetch = yes
 		pe_deposit_fetch_scale = yes
 		pe_firm_book = yes
@@ -915,7 +919,9 @@ pe_firm_accounting = {
 }
 
 # Deposit scope. Quarterly profit = value added x stage size x fill x profit share,
-# minus overhead (0.3 per stage and month). A firm in debt pays all of it back first.
+# minus overhead (0.3 per stage and month). A firm in debt pays all of it back first: the
+# investor pool's founding loan, then a corporate loan (3% interest a quarter). Lacking
+# capital for growth, or in losses, it asks a corporation for a loan (pe_corp_lending).
 # Then half goes to the firm and half to the investor pool (a corporation keeps it all),
 # but a firm only keeps a reserve for its own restructuring and next growth step; the
 # rest goes to the pool. Losses hit the firm. Then at most one stage change
@@ -937,6 +943,10 @@ pe_firm_book = {
 	multiply_variable = { which = pe_profit value = 3 }
 	set_variable = { which = pe_pending value = 0 }
 	if = { limit = { NOT = { is_variable_set = pe_debt } } set_variable = { which = pe_debt value = 0 } }
+	set_variable = { which = pe_want_loan value = 0 }
+	set_variable = { which = pe_want_bridge value = 0 }
+	# A corporate loan costs 3% interest a quarter.
+	if = { limit = { check_variable = { which = pe_loan value > 0 } } multiply_variable = { which = pe_loan value = 1.03 } }
 	if = {
 		limit = { check_variable = { which = pe_profit value > 0 } }
 		root = {
@@ -966,6 +976,33 @@ pe_firm_book = {
 		}
 		subtract_variable = { which = pe_debt value = pe_profit }
 		if = { limit = { check_variable = { which = pe_debt value < 0 } } set_variable = { which = pe_debt value = 0 } }
+	}
+	else_if = {
+		# A corporate loan: the profit pays it back first, to the lending corporation; what
+		# is left stays with the firm.
+		limit = {
+			check_variable = { which = pe_profit value > 0 }
+			check_variable = { which = pe_loan value > 0 }
+		}
+		set_variable = { which = pe_tmp value = pe_profit }
+		if = { limit = { check_variable = { which = pe_tmp value > pe_loan } } set_variable = { which = pe_tmp value = pe_loan } }
+		subtract_variable = { which = pe_loan value = pe_tmp }
+		if = { limit = { check_variable = { which = pe_lender value = 1 } } root = { change_variable = { which = pe_c1_cash value = prev.pe_tmp } } }
+		if = { limit = { check_variable = { which = pe_lender value = 2 } } root = { change_variable = { which = pe_c2_cash value = prev.pe_tmp } } }
+		if = { limit = { check_variable = { which = pe_lender value = 3 } } root = { change_variable = { which = pe_c3_cash value = prev.pe_tmp } } }
+		if = { limit = { check_variable = { which = pe_lender value = 4 } } root = { change_variable = { which = pe_c4_cash value = prev.pe_tmp } } }
+		if = { limit = { check_variable = { which = pe_lender value = 5 } } root = { change_variable = { which = pe_c5_cash value = prev.pe_tmp } } }
+		if = { limit = { check_variable = { which = pe_lender value = 6 } } root = { change_variable = { which = pe_c6_cash value = prev.pe_tmp } } }
+		if = { limit = { check_variable = { which = pe_lender value = 7 } } root = { change_variable = { which = pe_c7_cash value = prev.pe_tmp } } }
+		if = { limit = { check_variable = { which = pe_lender value = 8 } } root = { change_variable = { which = pe_c8_cash value = prev.pe_tmp } } }
+		set_variable = { which = pe_tmp2 value = pe_profit }
+		subtract_variable = { which = pe_tmp2 value = pe_tmp }
+		change_variable = { which = pe_fcap value = pe_tmp2 }
+		if = {
+			limit = { check_variable = { which = pe_loan value < 0.5 } }
+			set_variable = { which = pe_loan value = 0 }
+			set_variable = { which = pe_lender value = 0 }
+		}
 	}
 	else_if = {
 		limit = { check_variable = { which = pe_profit value > 0 } }
@@ -1037,6 +1074,15 @@ pe_firm_book = {
 	if = {
 		limit = { root = { check_variable = { which = pe_pend_any value = 0 } } }
 		if = {
+			# Losses: ask for a bridging loan (pe_corp_lending), at most two years in a row.
+			limit = {
+				check_variable = { which = pe_fcap value < 0 }
+				check_variable = { which = pe_loan_q value < 8 }
+			}
+			set_variable = { which = pe_want_bridge value = pe_fcap }
+			multiply_variable = { which = pe_want_bridge value = -1 }
+		}
+		else_if = {
 			limit = { check_variable = { which = pe_fcap value < 0 } }
 			set_variable = { which = pe_fcap value = 0 }
 			if = { limit = { check_variable = { which = pe_stage value > 1 } } set_variable = { which = pe_pending value = 2 } }
@@ -1048,6 +1094,7 @@ pe_firm_book = {
 				check_variable = { which = pe_stage value < 3 }
 				check_variable = { which = pe_profit value > 0 }
 				check_variable = { which = pe_debt value <= 0 }
+				check_variable = { which = pe_loan value <= 0 }
 				root = {
 					check_variable = { which = pe_fill_cur value >= 0.9 }
 					check_variable = { which = pe_unemp value = 1 }
@@ -1063,7 +1110,21 @@ pe_firm_book = {
 				set_variable = { which = pe_pending value = 1 }
 				root = { set_variable = { which = pe_pend_any value = 1 } }
 			}
+			# Not enough capital: ask a corporation for the rest (pe_corp_lending).
+			else = {
+				set_variable = { which = pe_want_cost value = pe_tmp }
+				set_variable = { which = pe_want_loan value = pe_tmp }
+				subtract_variable = { which = pe_want_loan value = pe_fcap }
+			}
 		}
+	}
+	# A profitable quarter with capital ends a series of bridging loans.
+	if = {
+		limit = {
+			check_variable = { which = pe_profit value > 0 }
+			check_variable = { which = pe_fcap value >= 0 }
+		}
+		set_variable = { which = pe_loan_q value = 0 }
 	}
 }
 
@@ -1545,6 +1606,7 @@ pe_command_economy = {
 # firms, take over independent firms of their sector group, fight price wars and merge.
 pe_corp_step = {
 	pe_corp_census = yes
+	pe_corp_crisis = yes
 	pe_corp_dissolve = yes
 	pe_corp_found = yes
 	pe_corp_acquire = yes

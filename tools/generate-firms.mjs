@@ -427,8 +427,9 @@ const rootIs = (name, val) => `root = { check_variable = { which = ${name} value
 const msg = loc => `owner = { create_message = { type = pe_private_economy localization = ${loc} days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }`;
 // pe_age: quarters since the firm was founded or restructured (a stage change or a move keeps it).
 // pe_corp: the corporation (slot 1-8) the firm belongs to, 0 = independent; it stays through
-// stage changes, restructuring and moves.
-const initFirm = (code, stage, fcap, debt, age = 'root.pe_chg_age', corp = 'root.pe_chg_corp') => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } set_variable = { which = pe_debt value = ${debt} } set_variable = { which = pe_age value = ${age} } set_variable = { which = pe_corp value = ${corp} } }`;
+// stage changes, restructuring and moves. So does a corporate loan (pe_loan, pe_lender,
+// pe_loan_q: quarters of bridging loans in a row).
+const initFirm = (code, stage, fcap, debt, age = 'root.pe_chg_age', corp = 'root.pe_chg_corp') => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } set_variable = { which = pe_debt value = ${debt} } set_variable = { which = pe_age value = ${age} } set_variable = { which = pe_corp value = ${corp} } set_variable = { which = pe_loan value = root.pe_chg_loan } set_variable = { which = pe_lender value = root.pe_chg_lender } set_variable = { which = pe_loan_q value = root.pe_chg_loanq } }`;
 const RETOOL_AGE = 40;                                 // quarters (10 years) before a firm may restructure
 const RETOOL_CD = 1800;                                // days (5 years) between two restructurings on a planet
 // Real net output per filled job (one job = 100 workforce) of each private job, measured
@@ -652,6 +653,9 @@ pe_site_complete = {
 			set_variable = { which = pe_old_code value = 0 }
 			set_variable = { which = pe_old_stage value = 0 }
 			set_variable = { which = pe_chg_corp value = 0 }
+			set_variable = { which = pe_chg_loan value = 0 }
+			set_variable = { which = pe_chg_lender value = 0 }
+			set_variable = { which = pe_chg_loanq value = 0 }
 		}
 		if = { limit = { is_variable_set = pe_corp } root = { set_variable = { which = pe_chg_corp value = prev.pe_corp } } }
 		if = {
@@ -694,6 +698,9 @@ pe_firm_change = {
 				set_variable = { which = pe_chg_debt value = prev.pe_debt }
 				set_variable = { which = pe_chg_age value = prev.pe_age }
 				set_variable = { which = pe_chg_corp value = prev.pe_corp }
+				set_variable = { which = pe_chg_loan value = prev.pe_loan }
+				set_variable = { which = pe_chg_lender value = prev.pe_lender }
+				set_variable = { which = pe_chg_loanq value = prev.pe_loan_q }
 			}
 			remove_deposit = yes
 		}
@@ -799,6 +806,7 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM
 		if = {
 			limit = {
 				check_variable = { which = pe_debt value <= 0 }
+				check_variable = { which = pe_loan value <= 0 }
 				check_variable = { which = pe_age value >= ${RETOOL_AGE} }
 				check_variable = { which = pe_gain value > pe_thr }
 				check_variable = { which = pe_gain value > root.pe_best_gain }
@@ -838,6 +846,9 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM
 				set_variable = { which = pe_chg_cost value = prev.pe_cost }
 				set_variable = { which = pe_chg_age value = prev.pe_age }
 				set_variable = { which = pe_chg_corp value = prev.pe_corp }
+				set_variable = { which = pe_chg_loan value = prev.pe_loan }
+				set_variable = { which = pe_chg_lender value = prev.pe_lender }
+				set_variable = { which = pe_chg_loanq value = prev.pe_loan_q }
 			}
 			remove_deposit = yes
 		}
@@ -904,6 +915,9 @@ pe_relocate_exec = {
 			set_variable = { which = pe_chg_debt value = prev.pe_debt }
 			set_variable = { which = pe_chg_age value = prev.pe_age }
 				set_variable = { which = pe_chg_corp value = prev.pe_corp }
+				set_variable = { which = pe_chg_loan value = prev.pe_loan }
+				set_variable = { which = pe_chg_lender value = prev.pe_lender }
+				set_variable = { which = pe_chg_loanq value = prev.pe_loan_q }
 		}
 		remove_deposit = yes
 	}
@@ -1499,6 +1513,105 @@ ${CORPS.map(k => `\tif = { limit = { check_variable = { which = ${C(k, 'on')} va
 	}
 }
 `;
+// Corporate loans: a corporation lends from its cash, down to a credit line of -200.
+const CREDIT_LINE = 200;
+corp += `
+# Colony scope, quarterly (after the accounts): corporate loans. A firm that wants to grow but
+# lacks the capital (pe_want_loan, pe_want_cost) or has run into losses (pe_want_bridge) asks
+# its own corporation first, then the one with the most cash. A corporation lends while its
+# cash stays above -${CREDIT_LINE}. A growth loan pays the next stage at once (one stage change per
+# planet and quarter); a bridging loan covers the loss. Without a lender a firm in losses
+# shrinks or goes bankrupt as before.
+pe_corp_lending = {
+	every_deposit = {
+		limit = {
+			has_deposit_category = pe_deposit_cat_firms
+			OR = {
+				check_variable = { which = pe_want_loan value > 0 }
+				check_variable = { which = pe_want_bridge value > 0 }
+			}
+		}
+		set_variable = { which = pe_lamt value = pe_want_loan }
+		change_variable = { which = pe_lamt value = pe_want_bridge }
+		set_variable = { which = pe_lneed value = pe_lamt }
+		change_variable = { which = pe_lneed value = -${CREDIT_LINE} }
+		root = {
+			set_variable = { which = pe_lend_k value = 0 }
+			set_variable = { which = pe_lend_best value = -${CREDIT_LINE} }
+		}
+		# A growth loan only if this planet has no stage change yet this quarter.
+		if = {
+			limit = {
+				OR = {
+					check_variable = { which = pe_want_bridge value > 0 }
+					root = { check_variable = { which = pe_pend_any value = 0 } }
+				}
+			}
+${CORPS.map((k, i) => `\t\t\t${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_corp value = ${k} } root = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'cash')} value >= prev.pe_lneed } } } root = { set_variable = { which = pe_lend_k value = ${k} } } }`).join('\n')}
+			if = {
+				limit = { root = { check_variable = { which = pe_lend_k value = 0 } } }
+${CORPS.map(k => `\t\t\t\tif = { limit = { root = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'cash')} value >= prev.pe_lneed } check_variable = { which = ${C(k, 'cash')} value > pe_lend_best } } } root = { set_variable = { which = pe_lend_k value = ${k} } set_variable = { which = pe_lend_best value = ${C(k, 'cash')} } } }`).join('\n')}
+			}
+		}
+		if = {
+			limit = { root = { check_variable = { which = pe_lend_k value > 0 } } }
+${corpChain('root.pe_lend_k', k => `root = { subtract_variable = { which = ${C(k, 'cash')} value = prev.pe_lamt } }`, '\t\t\t')}
+			change_variable = { which = pe_loan value = pe_lamt }
+			set_variable = { which = pe_lender value = root.pe_lend_k }
+			change_variable = { which = pe_fcap value = pe_lamt }
+			if = {
+				limit = { check_variable = { which = pe_want_loan value > 0 } }
+				subtract_variable = { which = pe_fcap value = pe_want_cost }
+				set_variable = { which = pe_pending value = 1 }
+				root = { set_variable = { which = pe_pend_any value = 1 } }
+			}
+			else = { change_variable = { which = pe_loan_q value = 1 } }
+		}
+		else_if = {
+			limit = {
+				check_variable = { which = pe_want_bridge value > 0 }
+				root = { check_variable = { which = pe_pend_any value = 0 } }
+			}
+			set_variable = { which = pe_fcap value = 0 }
+			if = { limit = { check_variable = { which = pe_stage value > 1 } } set_variable = { which = pe_pending value = 2 } }
+			else = { set_variable = { which = pe_pending value = 3 } }
+			root = { set_variable = { which = pe_pend_any value = 1 } }
+		}
+		set_variable = { which = pe_want_loan value = 0 }
+		set_variable = { which = pe_want_bridge value = 0 }
+	}
+}
+
+# Country scope, quarterly: a corporation whose cash is below zero (too many loans, too many
+# defaults) sells one of its firms. It becomes independent; the investor pool pays the
+# corporation 30% of what the district costs (city 150 / rural 90 x stage size). Message.
+pe_corp_crisis = {
+${CORPS.map(k => `	if = {
+		limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'cash')} value < 0 } any_owned_colony = { check_variable = { which = pe_mem_${k} value > 0 } } }
+		random_owned_colony = {
+			limit = { check_variable = { which = pe_mem_${k} value > 0 } }
+			save_event_target_as = pe_msg_planet
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = ${k} } }
+				set_variable = { which = pe_corp value = 0 }
+				set_variable = { which = pe_tmp value = pe_stage }
+				change_variable = { which = pe_tmp value = 1 }
+				multiply_variable = { which = pe_tmp value = 0.5 }
+				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+				else = { multiply_variable = { which = pe_tmp value = 90 } }
+				root = {
+					change_variable = { which = ${C(k, 'cash')} value = prev.pe_tmp }
+					subtract_variable = { which = pe_capital value = prev.pe_tmp }
+				}
+			}
+			change_variable = { which = pe_mem_${k} value = -1 }
+		}
+		change_variable = { which = ${C(k, 'firms')} value = -1 }
+		set_variable = { which = pe_msg_name value = ${C(k, 'name')} }
+		pe_corp_msg = { KEY = pe_msg_corp_crisis }
+	}`).join('\n')}
+}
+`;
 write('common/scripted_effects/pe_corp_effects_generated.txt', corp);
 
 write('common/static_modifiers/pe_corp_modifiers_generated.txt', header + `# Clusters (pe_cluster_apply), corporation headquarters and branches (one per name, so the
@@ -1540,6 +1653,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
     li ? ' pe_price_war_desc:0 "Zwei Konzerne kämpfen hier um Kunden: mehr Ausstoß, weniger Gewinn."' : ' pe_price_war_desc:0 "Two corporations fight for customers here: more output, less profit."',
     li ? ' pe_msg_corp_acq:0 "§Y$CORP$§! hat auf $PLANET$ ein unabhängiges Privatunternehmen übernommen."' : ' pe_msg_corp_acq:0 "§Y$CORP$§! has taken over an independent private firm on $PLANET$."',
     li ? ' pe_msg_corp_join:0 "Ein großes unabhängiges Privatunternehmen auf $PLANET$ hat sich §Y$CORP$§! angeschlossen und die Hälfte seines Kapitals eingebracht."' : ' pe_msg_corp_join:0 "A large independent private firm on $PLANET$ has joined §Y$CORP$§! and brought half of its capital."',
+    li ? ' pe_msg_corp_crisis:0 "§Y$CORP$§! hat sich mit Krediten übernommen und verkauft ein Unternehmen auf $PLANET$, um wieder flüssig zu werden."' : ' pe_msg_corp_crisis:0 "§Y$CORP$§! has overextended itself with loans and sells a firm on $PLANET$ to stay solvent."',
     li ? ' pe_msg_corp_gone:0 "§Y$CORP$§! hat keine Firmen mehr und wurde aufgelöst."' : ' pe_msg_corp_gone:0 "§Y$CORP$§! has no firms left and has been dissolved."');
 }
 

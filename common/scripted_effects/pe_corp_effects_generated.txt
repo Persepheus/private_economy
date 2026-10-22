@@ -5530,3 +5530,288 @@ pe_corp_reset = {
 		if = { limit = { has_modifier = pe_price_war } remove_modifier = pe_price_war }
 	}
 }
+
+# Colony scope, quarterly (after the accounts): corporate loans. A firm that wants to grow but
+# lacks the capital (pe_want_loan, pe_want_cost) or has run into losses (pe_want_bridge) asks
+# its own corporation first, then the one with the most cash. A corporation lends while its
+# cash stays above -200. A growth loan pays the next stage at once (one stage change per
+# planet and quarter); a bridging loan covers the loss. Without a lender a firm in losses
+# shrinks or goes bankrupt as before.
+pe_corp_lending = {
+	every_deposit = {
+		limit = {
+			has_deposit_category = pe_deposit_cat_firms
+			OR = {
+				check_variable = { which = pe_want_loan value > 0 }
+				check_variable = { which = pe_want_bridge value > 0 }
+			}
+		}
+		set_variable = { which = pe_lamt value = pe_want_loan }
+		change_variable = { which = pe_lamt value = pe_want_bridge }
+		set_variable = { which = pe_lneed value = pe_lamt }
+		change_variable = { which = pe_lneed value = -200 }
+		root = {
+			set_variable = { which = pe_lend_k value = 0 }
+			set_variable = { which = pe_lend_best value = -200 }
+		}
+		# A growth loan only if this planet has no stage change yet this quarter.
+		if = {
+			limit = {
+				OR = {
+					check_variable = { which = pe_want_bridge value > 0 }
+					root = { check_variable = { which = pe_pend_any value = 0 } }
+				}
+			}
+			if = { limit = { check_variable = { which = pe_corp value = 1 } root = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value >= prev.pe_lneed } } } root = { set_variable = { which = pe_lend_k value = 1 } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 2 } root = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value >= prev.pe_lneed } } } root = { set_variable = { which = pe_lend_k value = 2 } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 3 } root = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value >= prev.pe_lneed } } } root = { set_variable = { which = pe_lend_k value = 3 } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 4 } root = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value >= prev.pe_lneed } } } root = { set_variable = { which = pe_lend_k value = 4 } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 5 } root = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value >= prev.pe_lneed } } } root = { set_variable = { which = pe_lend_k value = 5 } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 6 } root = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value >= prev.pe_lneed } } } root = { set_variable = { which = pe_lend_k value = 6 } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 7 } root = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value >= prev.pe_lneed } } } root = { set_variable = { which = pe_lend_k value = 7 } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 8 } root = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value >= prev.pe_lneed } } } root = { set_variable = { which = pe_lend_k value = 8 } } }
+			if = {
+				limit = { root = { check_variable = { which = pe_lend_k value = 0 } } }
+				if = { limit = { root = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value >= prev.pe_lneed } check_variable = { which = pe_c1_cash value > pe_lend_best } } } root = { set_variable = { which = pe_lend_k value = 1 } set_variable = { which = pe_lend_best value = pe_c1_cash } } }
+				if = { limit = { root = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value >= prev.pe_lneed } check_variable = { which = pe_c2_cash value > pe_lend_best } } } root = { set_variable = { which = pe_lend_k value = 2 } set_variable = { which = pe_lend_best value = pe_c2_cash } } }
+				if = { limit = { root = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value >= prev.pe_lneed } check_variable = { which = pe_c3_cash value > pe_lend_best } } } root = { set_variable = { which = pe_lend_k value = 3 } set_variable = { which = pe_lend_best value = pe_c3_cash } } }
+				if = { limit = { root = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value >= prev.pe_lneed } check_variable = { which = pe_c4_cash value > pe_lend_best } } } root = { set_variable = { which = pe_lend_k value = 4 } set_variable = { which = pe_lend_best value = pe_c4_cash } } }
+				if = { limit = { root = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value >= prev.pe_lneed } check_variable = { which = pe_c5_cash value > pe_lend_best } } } root = { set_variable = { which = pe_lend_k value = 5 } set_variable = { which = pe_lend_best value = pe_c5_cash } } }
+				if = { limit = { root = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value >= prev.pe_lneed } check_variable = { which = pe_c6_cash value > pe_lend_best } } } root = { set_variable = { which = pe_lend_k value = 6 } set_variable = { which = pe_lend_best value = pe_c6_cash } } }
+				if = { limit = { root = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value >= prev.pe_lneed } check_variable = { which = pe_c7_cash value > pe_lend_best } } } root = { set_variable = { which = pe_lend_k value = 7 } set_variable = { which = pe_lend_best value = pe_c7_cash } } }
+				if = { limit = { root = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value >= prev.pe_lneed } check_variable = { which = pe_c8_cash value > pe_lend_best } } } root = { set_variable = { which = pe_lend_k value = 8 } set_variable = { which = pe_lend_best value = pe_c8_cash } } }
+			}
+		}
+		if = {
+			limit = { root = { check_variable = { which = pe_lend_k value > 0 } } }
+			if = { limit = { root = { check_variable = { which = pe_lend_k value = 1 } } } root = { subtract_variable = { which = pe_c1_cash value = prev.pe_lamt } } }
+			else_if = { limit = { root = { check_variable = { which = pe_lend_k value = 2 } } } root = { subtract_variable = { which = pe_c2_cash value = prev.pe_lamt } } }
+			else_if = { limit = { root = { check_variable = { which = pe_lend_k value = 3 } } } root = { subtract_variable = { which = pe_c3_cash value = prev.pe_lamt } } }
+			else_if = { limit = { root = { check_variable = { which = pe_lend_k value = 4 } } } root = { subtract_variable = { which = pe_c4_cash value = prev.pe_lamt } } }
+			else_if = { limit = { root = { check_variable = { which = pe_lend_k value = 5 } } } root = { subtract_variable = { which = pe_c5_cash value = prev.pe_lamt } } }
+			else_if = { limit = { root = { check_variable = { which = pe_lend_k value = 6 } } } root = { subtract_variable = { which = pe_c6_cash value = prev.pe_lamt } } }
+			else_if = { limit = { root = { check_variable = { which = pe_lend_k value = 7 } } } root = { subtract_variable = { which = pe_c7_cash value = prev.pe_lamt } } }
+			else_if = { limit = { root = { check_variable = { which = pe_lend_k value = 8 } } } root = { subtract_variable = { which = pe_c8_cash value = prev.pe_lamt } } }
+			change_variable = { which = pe_loan value = pe_lamt }
+			set_variable = { which = pe_lender value = root.pe_lend_k }
+			change_variable = { which = pe_fcap value = pe_lamt }
+			if = {
+				limit = { check_variable = { which = pe_want_loan value > 0 } }
+				subtract_variable = { which = pe_fcap value = pe_want_cost }
+				set_variable = { which = pe_pending value = 1 }
+				root = { set_variable = { which = pe_pend_any value = 1 } }
+			}
+			else = { change_variable = { which = pe_loan_q value = 1 } }
+		}
+		else_if = {
+			limit = {
+				check_variable = { which = pe_want_bridge value > 0 }
+				root = { check_variable = { which = pe_pend_any value = 0 } }
+			}
+			set_variable = { which = pe_fcap value = 0 }
+			if = { limit = { check_variable = { which = pe_stage value > 1 } } set_variable = { which = pe_pending value = 2 } }
+			else = { set_variable = { which = pe_pending value = 3 } }
+			root = { set_variable = { which = pe_pend_any value = 1 } }
+		}
+		set_variable = { which = pe_want_loan value = 0 }
+		set_variable = { which = pe_want_bridge value = 0 }
+	}
+}
+
+# Country scope, quarterly: a corporation whose cash is below zero (too many loans, too many
+# defaults) sells one of its firms. It becomes independent; the investor pool pays the
+# corporation 30% of what the district costs (city 150 / rural 90 x stage size). Message.
+pe_corp_crisis = {
+	if = {
+		limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value < 0 } any_owned_colony = { check_variable = { which = pe_mem_1 value > 0 } } }
+		random_owned_colony = {
+			limit = { check_variable = { which = pe_mem_1 value > 0 } }
+			save_event_target_as = pe_msg_planet
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 1 } }
+				set_variable = { which = pe_corp value = 0 }
+				set_variable = { which = pe_tmp value = pe_stage }
+				change_variable = { which = pe_tmp value = 1 }
+				multiply_variable = { which = pe_tmp value = 0.5 }
+				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+				else = { multiply_variable = { which = pe_tmp value = 90 } }
+				root = {
+					change_variable = { which = pe_c1_cash value = prev.pe_tmp }
+					subtract_variable = { which = pe_capital value = prev.pe_tmp }
+				}
+			}
+			change_variable = { which = pe_mem_1 value = -1 }
+		}
+		change_variable = { which = pe_c1_firms value = -1 }
+		set_variable = { which = pe_msg_name value = pe_c1_name }
+		pe_corp_msg = { KEY = pe_msg_corp_crisis }
+	}
+	if = {
+		limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value < 0 } any_owned_colony = { check_variable = { which = pe_mem_2 value > 0 } } }
+		random_owned_colony = {
+			limit = { check_variable = { which = pe_mem_2 value > 0 } }
+			save_event_target_as = pe_msg_planet
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 2 } }
+				set_variable = { which = pe_corp value = 0 }
+				set_variable = { which = pe_tmp value = pe_stage }
+				change_variable = { which = pe_tmp value = 1 }
+				multiply_variable = { which = pe_tmp value = 0.5 }
+				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+				else = { multiply_variable = { which = pe_tmp value = 90 } }
+				root = {
+					change_variable = { which = pe_c2_cash value = prev.pe_tmp }
+					subtract_variable = { which = pe_capital value = prev.pe_tmp }
+				}
+			}
+			change_variable = { which = pe_mem_2 value = -1 }
+		}
+		change_variable = { which = pe_c2_firms value = -1 }
+		set_variable = { which = pe_msg_name value = pe_c2_name }
+		pe_corp_msg = { KEY = pe_msg_corp_crisis }
+	}
+	if = {
+		limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value < 0 } any_owned_colony = { check_variable = { which = pe_mem_3 value > 0 } } }
+		random_owned_colony = {
+			limit = { check_variable = { which = pe_mem_3 value > 0 } }
+			save_event_target_as = pe_msg_planet
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 3 } }
+				set_variable = { which = pe_corp value = 0 }
+				set_variable = { which = pe_tmp value = pe_stage }
+				change_variable = { which = pe_tmp value = 1 }
+				multiply_variable = { which = pe_tmp value = 0.5 }
+				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+				else = { multiply_variable = { which = pe_tmp value = 90 } }
+				root = {
+					change_variable = { which = pe_c3_cash value = prev.pe_tmp }
+					subtract_variable = { which = pe_capital value = prev.pe_tmp }
+				}
+			}
+			change_variable = { which = pe_mem_3 value = -1 }
+		}
+		change_variable = { which = pe_c3_firms value = -1 }
+		set_variable = { which = pe_msg_name value = pe_c3_name }
+		pe_corp_msg = { KEY = pe_msg_corp_crisis }
+	}
+	if = {
+		limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value < 0 } any_owned_colony = { check_variable = { which = pe_mem_4 value > 0 } } }
+		random_owned_colony = {
+			limit = { check_variable = { which = pe_mem_4 value > 0 } }
+			save_event_target_as = pe_msg_planet
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 4 } }
+				set_variable = { which = pe_corp value = 0 }
+				set_variable = { which = pe_tmp value = pe_stage }
+				change_variable = { which = pe_tmp value = 1 }
+				multiply_variable = { which = pe_tmp value = 0.5 }
+				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+				else = { multiply_variable = { which = pe_tmp value = 90 } }
+				root = {
+					change_variable = { which = pe_c4_cash value = prev.pe_tmp }
+					subtract_variable = { which = pe_capital value = prev.pe_tmp }
+				}
+			}
+			change_variable = { which = pe_mem_4 value = -1 }
+		}
+		change_variable = { which = pe_c4_firms value = -1 }
+		set_variable = { which = pe_msg_name value = pe_c4_name }
+		pe_corp_msg = { KEY = pe_msg_corp_crisis }
+	}
+	if = {
+		limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value < 0 } any_owned_colony = { check_variable = { which = pe_mem_5 value > 0 } } }
+		random_owned_colony = {
+			limit = { check_variable = { which = pe_mem_5 value > 0 } }
+			save_event_target_as = pe_msg_planet
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 5 } }
+				set_variable = { which = pe_corp value = 0 }
+				set_variable = { which = pe_tmp value = pe_stage }
+				change_variable = { which = pe_tmp value = 1 }
+				multiply_variable = { which = pe_tmp value = 0.5 }
+				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+				else = { multiply_variable = { which = pe_tmp value = 90 } }
+				root = {
+					change_variable = { which = pe_c5_cash value = prev.pe_tmp }
+					subtract_variable = { which = pe_capital value = prev.pe_tmp }
+				}
+			}
+			change_variable = { which = pe_mem_5 value = -1 }
+		}
+		change_variable = { which = pe_c5_firms value = -1 }
+		set_variable = { which = pe_msg_name value = pe_c5_name }
+		pe_corp_msg = { KEY = pe_msg_corp_crisis }
+	}
+	if = {
+		limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value < 0 } any_owned_colony = { check_variable = { which = pe_mem_6 value > 0 } } }
+		random_owned_colony = {
+			limit = { check_variable = { which = pe_mem_6 value > 0 } }
+			save_event_target_as = pe_msg_planet
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 6 } }
+				set_variable = { which = pe_corp value = 0 }
+				set_variable = { which = pe_tmp value = pe_stage }
+				change_variable = { which = pe_tmp value = 1 }
+				multiply_variable = { which = pe_tmp value = 0.5 }
+				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+				else = { multiply_variable = { which = pe_tmp value = 90 } }
+				root = {
+					change_variable = { which = pe_c6_cash value = prev.pe_tmp }
+					subtract_variable = { which = pe_capital value = prev.pe_tmp }
+				}
+			}
+			change_variable = { which = pe_mem_6 value = -1 }
+		}
+		change_variable = { which = pe_c6_firms value = -1 }
+		set_variable = { which = pe_msg_name value = pe_c6_name }
+		pe_corp_msg = { KEY = pe_msg_corp_crisis }
+	}
+	if = {
+		limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value < 0 } any_owned_colony = { check_variable = { which = pe_mem_7 value > 0 } } }
+		random_owned_colony = {
+			limit = { check_variable = { which = pe_mem_7 value > 0 } }
+			save_event_target_as = pe_msg_planet
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 7 } }
+				set_variable = { which = pe_corp value = 0 }
+				set_variable = { which = pe_tmp value = pe_stage }
+				change_variable = { which = pe_tmp value = 1 }
+				multiply_variable = { which = pe_tmp value = 0.5 }
+				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+				else = { multiply_variable = { which = pe_tmp value = 90 } }
+				root = {
+					change_variable = { which = pe_c7_cash value = prev.pe_tmp }
+					subtract_variable = { which = pe_capital value = prev.pe_tmp }
+				}
+			}
+			change_variable = { which = pe_mem_7 value = -1 }
+		}
+		change_variable = { which = pe_c7_firms value = -1 }
+		set_variable = { which = pe_msg_name value = pe_c7_name }
+		pe_corp_msg = { KEY = pe_msg_corp_crisis }
+	}
+	if = {
+		limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value < 0 } any_owned_colony = { check_variable = { which = pe_mem_8 value > 0 } } }
+		random_owned_colony = {
+			limit = { check_variable = { which = pe_mem_8 value > 0 } }
+			save_event_target_as = pe_msg_planet
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 8 } }
+				set_variable = { which = pe_corp value = 0 }
+				set_variable = { which = pe_tmp value = pe_stage }
+				change_variable = { which = pe_tmp value = 1 }
+				multiply_variable = { which = pe_tmp value = 0.5 }
+				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+				else = { multiply_variable = { which = pe_tmp value = 90 } }
+				root = {
+					change_variable = { which = pe_c8_cash value = prev.pe_tmp }
+					subtract_variable = { which = pe_capital value = prev.pe_tmp }
+				}
+			}
+			change_variable = { which = pe_mem_8 value = -1 }
+		}
+		change_variable = { which = pe_c8_firms value = -1 }
+		set_variable = { which = pe_msg_name value = pe_c8_name }
+		pe_corp_msg = { KEY = pe_msg_corp_crisis }
+	}
+}
