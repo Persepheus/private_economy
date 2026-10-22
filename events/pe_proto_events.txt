@@ -29,7 +29,8 @@ country_event = {
 				origin = origin_default
 				species = root
 				released_by_country = root
-				flag = random
+				# Our own flag: the investors are ours.
+				flag = root
 				effect = {
 					set_country_flag = pe_holdings
 					save_global_event_target_as = pe_holdings
@@ -211,14 +212,20 @@ country_event = {
 					set_variable = { which = pe_ph_en value = prev.pe_ph_en }
 				}
 			}
+			# Diagnosis: our stock before and after.
+			export_resource_stockpile_to_variable = { resource = minerals variable = pe_ph_min0 }
+			export_resource_stockpile_to_variable = { resource = energy variable = pe_ph_en0 }
 			add_resource = { minerals = 1 mult = pe_ph_min }
 			add_resource = { energy = 1 mult = pe_ph_en }
+			export_resource_stockpile_to_variable = { resource = minerals variable = pe_ph_min1 }
+			export_resource_stockpile_to_variable = { resource = energy variable = pe_ph_en1 }
+			export_resource_maximum_to_variable = { resource = minerals variable = pe_ph_minmax }
 			set_variable = { which = pe_ph_pay value = pe_ph_min }
 			change_variable = { which = pe_ph_pay value = pe_ph_en }
 			multiply_variable = { which = pe_ph_pay value = 0.5 }
 			add_resource = { trade = -1 mult = pe_ph_pay }
 			change_variable = { which = pe_capital value = pe_ph_pay }
-			log = "private_economy: pe.20 bought [Root.pe_ph_min] minerals and [Root.pe_ph_en] energy for [Root.pe_ph_pay] trade"
+			log = "private_economy: pe.20 bought [Root.pe_ph_min] minerals and [Root.pe_ph_en] energy for [Root.pe_ph_pay] trade; our minerals [Root.pe_ph_min0] -> [Root.pe_ph_min1] (max [Root.pe_ph_minmax]), energy [Root.pe_ph_en0] -> [Root.pe_ph_en1]"
 		}
 		else = { log = "private_economy: pe.20 run pe.15 first" }
 	}

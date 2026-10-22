@@ -1151,9 +1151,19 @@ const CORP_NAMES = [
   'Kessler-Orin Heavy Industries', 'Ferrum Consolidated', 'Vashti Foundries', 'Tarn & Holloway', 'Ironvale Works', 'Calder Metallurgy', 'Stahlberg Combine', 'Orvane Fabrication', 'Brask Industrial', 'Maro-Tecton',
   'Silverline Exchange', 'Meridian Trading Company', 'Lumen Leisure', 'Corva Holdings', 'Starhaven Resorts', 'Pell & Ashby', 'Quorra Markets', 'Halcyon Entertainment', 'Vantor Commerce', 'Goldwake Mercantile',
   'Axiom Laboratories', 'Helix Institute', 'Novaris Research', 'Parallax Media', 'Cygnet Systems', 'Oculus Press', 'Quantum Veritas', 'Lyra Biosciences', 'Tesseract Labs', 'Clearsignal Networks',
-  'Deepcore Mining', 'Solaris Power', 'Greenhollow Agrarian', 'Bedrock Extraction', 'Helios Energy', 'Tillmark Farms', 'Obsidian Resources', 'Riftwell Drilling', 'Verdant Harvest', 'Stormgate Utilities'];
+  'Deepcore Mining', 'Solaris Power', 'Greenhollow Agrarian', 'Bedrock Extraction', 'Helios Energy', 'Tillmark Farms', 'Obsidian Resources', 'Riftwell Drilling', 'Verdant Harvest', 'Stormgate Utilities',
+  // 41-120: 20 more per group, so that every empire gets names of its own (global flags).
+  'Anvilgate Systems', 'Corrigan Steelworks', 'Dravik Foundry Group', 'Emberline Industries', 'Forgehall Combine', 'Grauwerk Industrial', 'Hammerfield & Sons', 'Ironclad Fabricators', 'Kovac Heavy Works', 'Lindqvist Alloys',
+  'Magnar Metalworks', 'Novacast Industries', 'Ostrava Assemblies', 'Pyrex Dynamics', 'Rourke Machine Works', 'Sable Forge', 'Titanforge Holdings', 'Ulmar Engineering', 'Wexford-Okoro', 'Zenith Manufacturing',
+  'Amberway Traders', 'Bellweather Commerce', 'Cascade Resorts', 'Driftwood Leisure', 'Emporium Galactica', 'Fairhaven Markets', 'Glimmer Entertainment', 'Harbourlight Exchange', 'Ivory Tide Trading', 'Jubilee Promotions',
+  'Kestrel Logistics', 'Lantern Street Holdings', 'Mirage Casinos', 'Nightbloom Theatres', 'Opaline Cruises', 'Paragon Retail', 'Riverstone Bazaar', 'Sunward Hospitality', 'Tidewater Shipping', 'Velvet Star Lounges',
+  'Arclight Research', 'Beacon Broadcasting', 'Cerulean Genomics', 'Datastream Media', 'Equinox Institute', 'Fathom Analytics', 'Gnosis Laboratories', 'Horizon Herald', 'Ion Pulse Systems', 'Juniper Biotech',
+  'Keystone Academic Press', 'Luminous Networks', 'Mosaic Science Trust', 'Neuron Dynamics', 'Omnis Media Group', 'Prism Optics', 'Quill & Codex', 'Resonance Labs', 'Sigma Theory Institute', 'Vector Signal News',
+  'Ashfall Mining', 'Boreal Timber & Ore', 'Coldwater Hydrocarbons', 'Dustrider Extraction', 'Ember Basin Energy', 'Fallow Fields Cooperative', 'Granite Peak Mining', 'Highland Grain', 'Ironroot Agriculture', 'Jadestone Quarries',
+  'Kelvin Power', 'Lowland Harvest Company', 'Magma Core Energy', 'Northwind Turbines', 'Orchard & Vine', 'Prairie Gold Farms', 'Quarrymen\'s Union', 'Redrock Minerals', 'Sunsteppe Solar', 'Tundra Geothermal'];
 const NAME_IDS = CORP_NAMES.map((_, i) => i + 1);
-const groupOfName = id => Math.ceil(id / 10);
+// Names 1-40: 10 per group; 41-120: 20 per group.
+const groupOfName = id => id <= 40 ? Math.ceil(id / 10) : Math.ceil((id - 40) / 20);
 const prim = l => LETTERS.indexOf(l) + 1;
 const inGroup = g => `OR = { ${LETTERS.filter(l => GROUP_OF[l] === g).map(l => `check_variable = { which = pe_prim value = ${prim(l)} }`).join(' ')} }`;
 const C = (k, v) => `pe_c${k}_${v}`;
@@ -1220,7 +1230,7 @@ ${CORPS.map(k => `\tif = { limit = { NOT = { is_variable_set = ${C(k, 'cash')} }
 pe_corp_free = {
 ${corpChain('pe_corp_free_k', k => `set_variable = { which = pe_corp_free_name value = ${C(k, 'name')} } set_variable = { which = ${C(k, 'on')} value = 0 } set_variable = { which = ${C(k, 'cash')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'firms')} value = 0 } every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } remove_planet_flag = pe_hq_${k} }`, '\t')}
 ${CORPS.map(k => `\tif = { limit = { check_variable = { which = ${C(k, 'rival')} value = root.pe_corp_free_k } } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } }`).join('\n')}
-${nameChain('pe_corp_free_name', id => `remove_country_flag = pe_cname_${id} every_owned_colony = { limit = { has_modifier = pe_corp_hq_${id} } remove_modifier = pe_corp_hq_${id} } every_owned_colony = { limit = { has_modifier = pe_corp_br_${id} } remove_modifier = pe_corp_br_${id} }`, '\t')}
+${nameChain('pe_corp_free_name', id => `remove_country_flag = pe_cname_${id} remove_global_flag = pe_gcname_${id} every_owned_colony = { limit = { has_modifier = pe_corp_hq_${id} } remove_modifier = pe_corp_hq_${id} } every_owned_colony = { limit = { has_modifier = pe_corp_br_${id} } remove_modifier = pe_corp_br_${id} }`, '\t')}
 }
 
 # Country scope: a message naming the corporation root.pe_msg_name, about
@@ -1327,13 +1337,15 @@ ${corpChain('root.pe_corp_new', k => `set_planet_flag = pe_hq_${k} change_variab
 ${NAME_IDS.map(id => `			10 = {
 				modifier = { factor = 0 NOT = { check_variable = { which = pe_corp_grp value = ${groupOfName(id)} } } }
 				modifier = { factor = 0 has_country_flag = pe_cname_${id} }
+				# Taken by another empire: only if every name of the group is taken.
+				modifier = { factor = 0.001 has_global_flag = pe_gcname_${id} }
 				set_variable = { which = pe_corp_cur_name value = ${id} }
 			}`).join('\n')}
 		}
 		set_variable_to_random_value = { which = pe_corp_cur_ceo min = 1 max = 16 rounded = yes }
 		set_variable = { which = pe_corp_cur value = pe_corp_new }
 ${corpChain('pe_corp_new', k => `set_variable = { which = ${C(k, 'on')} value = 1 } set_variable = { which = ${C(k, 'name')} value = pe_corp_cur_name } set_variable = { which = ${C(k, 'grp')} value = pe_corp_grp } set_variable = { which = ${C(k, 'ceo')} value = pe_corp_cur_ceo } set_variable = { which = ${C(k, 'cash')} value = pe_corp_seed } set_variable = { which = ${C(k, 'firms')} value = 1 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'wcd')} value = 0 }`, '\t\t')}
-${nameChain('pe_corp_cur_name', id => `set_country_flag = pe_cname_${id} event_target:pe_corp_planet = { add_modifier = { modifier = pe_corp_hq_${id} days = -1 } }`, '\t\t')}
+${nameChain('pe_corp_cur_name', id => `set_country_flag = pe_cname_${id} set_global_flag = pe_gcname_${id} event_target:pe_corp_planet = { add_modifier = { modifier = pe_corp_hq_${id} days = -1 } }`, '\t\t')}
 		country_event = { id = pe.270 }
 }
 

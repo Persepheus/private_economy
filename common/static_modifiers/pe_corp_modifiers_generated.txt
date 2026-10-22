@@ -380,6 +380,566 @@ pe_corp_hq_40 = {
 pe_corp_br_40 = {
 	planet_amenities_add = 50
 }
+pe_corp_hq_41 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_41 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_42 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_42 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_43 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_43 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_44 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_44 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_45 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_45 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_46 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_46 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_47 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_47 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_48 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_48 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_49 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_49 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_50 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_50 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_51 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_51 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_52 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_52 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_53 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_53 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_54 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_54 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_55 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_55 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_56 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_56 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_57 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_57 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_58 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_58 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_59 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_59 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_60 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_60 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_61 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_61 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_62 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_62 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_63 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_63 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_64 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_64 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_65 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_65 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_66 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_66 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_67 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_67 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_68 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_68 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_69 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_69 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_70 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_70 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_71 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_71 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_72 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_72 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_73 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_73 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_74 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_74 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_75 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_75 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_76 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_76 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_77 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_77 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_78 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_78 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_79 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_79 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_80 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_80 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_81 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_81 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_82 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_82 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_83 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_83 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_84 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_84 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_85 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_85 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_86 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_86 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_87 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_87 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_88 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_88 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_89 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_89 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_90 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_90 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_91 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_91 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_92 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_92 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_93 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_93 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_94 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_94 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_95 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_95 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_96 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_96 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_97 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_97 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_98 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_98 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_99 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_99 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_100 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_100 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_101 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_101 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_102 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_102 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_103 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_103 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_104 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_104 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_105 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_105 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_106 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_106 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_107 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_107 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_108 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_108 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_109 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_109 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_110 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_110 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_111 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_111 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_112 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_112 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_113 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_113 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_114 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_114 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_115 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_115 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_116 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_116 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_117 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_117 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_118 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_118 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_119 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_119 = {
+	planet_amenities_add = 50
+}
+pe_corp_hq_120 = {
+	planet_stability_add = 1
+	planet_jobs_produces_mult = 0.02
+}
+pe_corp_br_120 = {
+	planet_amenities_add = 50
+}
 pe_price_war = {
 	planet_jobs_produces_mult = 0.03
 }

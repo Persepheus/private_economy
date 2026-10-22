@@ -4,8 +4,9 @@
 # is sold to us. Not an enclave type: enclaves show the enclave symbol on their stations.
 pe_holdings = {
 	blocks_piracy = yes
-	show_in_contacts_list = yes
-	can_have_their_comms_shared = yes
+	# Not in the contacts list, and nobody else learns about it.
+	show_in_contacts_list = no
+	can_have_their_comms_shared = no
 	government = yes
 	prevent_automatic_genocidal_hostilities = yes
 	observable = no

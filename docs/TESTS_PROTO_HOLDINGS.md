@@ -47,3 +47,18 @@ Ziel: Prüfen, ob ein Hilfsreich Stationen, Kilostrukturen und Flotten in unsere
 2. pe.16: Hat die Station jetzt das normale Stationssymbol?
 3. pe.18: kein Unterhalt und keine Flottenkapazität für dich, Modifier sichtbar.
 4. pe.20 zeigt das Fenster. pe.21 lässt keinen Modifier am Stern zurück.
+
+## Ergebnis Test 2 (2200)
+- **Station:** normales Stationssymbol.
+- **pe.21:** entfernt alles.
+- **Leasingflotte:** Modifier −102 % Unterhalt, trotzdem bleiben 0,15 Energie und 0,05 Legierungen.
+  - Ursache: `MIN_ECONOMIC_MODIFIER_MULT = -0.9` in den Vanilla-Defines. Kosten und Unterhalt lassen sich höchstens um 90 % senken.
+  - Vanilla hat keinen Effekt, der Flotten mit Vertrag verleast. Söldner werden über die Diplomatie angeheuert, und dort zahlt der Mieter den Unterhalt (Söldner-Modifier +25 % Energie).
+  - Die übrigen 10 % sind damit die Leasinggebühr; die Holdings können sie aber erstatten.
+- **pe.20:** Laut game.log gekauft (503 Mineralien und 816 Energie für 659,5 Handel), bei dir aber nicht angekommen. Unklar.
+
+## Änderungen für Test 3
+- **Flagge:** Die Holdings tragen die Flagge deines Reichs.
+- **Kontaktliste:** Die Holdings erscheinen nicht mehr darin. Kontakt wird auch nicht mit anderen geteilt.
+- **pe.20:** Fenster und Log zeigen dein Lager vorher und nachher (Mineralien, Energie) und die Lagergrenze.
+

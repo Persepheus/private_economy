@@ -162,6 +162,326 @@ defined_text = {
 		trigger = { check_variable = { which = pe_corp_cur_name value = 40 } }
 		localization_key = pe_cname_40
 	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 41 } }
+		localization_key = pe_cname_41
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 42 } }
+		localization_key = pe_cname_42
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 43 } }
+		localization_key = pe_cname_43
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 44 } }
+		localization_key = pe_cname_44
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 45 } }
+		localization_key = pe_cname_45
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 46 } }
+		localization_key = pe_cname_46
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 47 } }
+		localization_key = pe_cname_47
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 48 } }
+		localization_key = pe_cname_48
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 49 } }
+		localization_key = pe_cname_49
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 50 } }
+		localization_key = pe_cname_50
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 51 } }
+		localization_key = pe_cname_51
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 52 } }
+		localization_key = pe_cname_52
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 53 } }
+		localization_key = pe_cname_53
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 54 } }
+		localization_key = pe_cname_54
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 55 } }
+		localization_key = pe_cname_55
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 56 } }
+		localization_key = pe_cname_56
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 57 } }
+		localization_key = pe_cname_57
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 58 } }
+		localization_key = pe_cname_58
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 59 } }
+		localization_key = pe_cname_59
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 60 } }
+		localization_key = pe_cname_60
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 61 } }
+		localization_key = pe_cname_61
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 62 } }
+		localization_key = pe_cname_62
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 63 } }
+		localization_key = pe_cname_63
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 64 } }
+		localization_key = pe_cname_64
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 65 } }
+		localization_key = pe_cname_65
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 66 } }
+		localization_key = pe_cname_66
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 67 } }
+		localization_key = pe_cname_67
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 68 } }
+		localization_key = pe_cname_68
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 69 } }
+		localization_key = pe_cname_69
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 70 } }
+		localization_key = pe_cname_70
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 71 } }
+		localization_key = pe_cname_71
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 72 } }
+		localization_key = pe_cname_72
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 73 } }
+		localization_key = pe_cname_73
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 74 } }
+		localization_key = pe_cname_74
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 75 } }
+		localization_key = pe_cname_75
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 76 } }
+		localization_key = pe_cname_76
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 77 } }
+		localization_key = pe_cname_77
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 78 } }
+		localization_key = pe_cname_78
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 79 } }
+		localization_key = pe_cname_79
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 80 } }
+		localization_key = pe_cname_80
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 81 } }
+		localization_key = pe_cname_81
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 82 } }
+		localization_key = pe_cname_82
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 83 } }
+		localization_key = pe_cname_83
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 84 } }
+		localization_key = pe_cname_84
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 85 } }
+		localization_key = pe_cname_85
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 86 } }
+		localization_key = pe_cname_86
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 87 } }
+		localization_key = pe_cname_87
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 88 } }
+		localization_key = pe_cname_88
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 89 } }
+		localization_key = pe_cname_89
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 90 } }
+		localization_key = pe_cname_90
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 91 } }
+		localization_key = pe_cname_91
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 92 } }
+		localization_key = pe_cname_92
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 93 } }
+		localization_key = pe_cname_93
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 94 } }
+		localization_key = pe_cname_94
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 95 } }
+		localization_key = pe_cname_95
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 96 } }
+		localization_key = pe_cname_96
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 97 } }
+		localization_key = pe_cname_97
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 98 } }
+		localization_key = pe_cname_98
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 99 } }
+		localization_key = pe_cname_99
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 100 } }
+		localization_key = pe_cname_100
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 101 } }
+		localization_key = pe_cname_101
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 102 } }
+		localization_key = pe_cname_102
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 103 } }
+		localization_key = pe_cname_103
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 104 } }
+		localization_key = pe_cname_104
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 105 } }
+		localization_key = pe_cname_105
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 106 } }
+		localization_key = pe_cname_106
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 107 } }
+		localization_key = pe_cname_107
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 108 } }
+		localization_key = pe_cname_108
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 109 } }
+		localization_key = pe_cname_109
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 110 } }
+		localization_key = pe_cname_110
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 111 } }
+		localization_key = pe_cname_111
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 112 } }
+		localization_key = pe_cname_112
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 113 } }
+		localization_key = pe_cname_113
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 114 } }
+		localization_key = pe_cname_114
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 115 } }
+		localization_key = pe_cname_115
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 116 } }
+		localization_key = pe_cname_116
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 117 } }
+		localization_key = pe_cname_117
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 118 } }
+		localization_key = pe_cname_118
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 119 } }
+		localization_key = pe_cname_119
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_cur_name value = 120 } }
+		localization_key = pe_cname_120
+	}
 	default = pe_corp_line_none
 }
 defined_text = {
@@ -325,6 +645,326 @@ defined_text = {
 	text = {
 		trigger = { check_variable = { which = pe_corp_a_name value = 40 } }
 		localization_key = pe_cname_40
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 41 } }
+		localization_key = pe_cname_41
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 42 } }
+		localization_key = pe_cname_42
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 43 } }
+		localization_key = pe_cname_43
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 44 } }
+		localization_key = pe_cname_44
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 45 } }
+		localization_key = pe_cname_45
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 46 } }
+		localization_key = pe_cname_46
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 47 } }
+		localization_key = pe_cname_47
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 48 } }
+		localization_key = pe_cname_48
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 49 } }
+		localization_key = pe_cname_49
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 50 } }
+		localization_key = pe_cname_50
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 51 } }
+		localization_key = pe_cname_51
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 52 } }
+		localization_key = pe_cname_52
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 53 } }
+		localization_key = pe_cname_53
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 54 } }
+		localization_key = pe_cname_54
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 55 } }
+		localization_key = pe_cname_55
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 56 } }
+		localization_key = pe_cname_56
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 57 } }
+		localization_key = pe_cname_57
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 58 } }
+		localization_key = pe_cname_58
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 59 } }
+		localization_key = pe_cname_59
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 60 } }
+		localization_key = pe_cname_60
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 61 } }
+		localization_key = pe_cname_61
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 62 } }
+		localization_key = pe_cname_62
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 63 } }
+		localization_key = pe_cname_63
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 64 } }
+		localization_key = pe_cname_64
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 65 } }
+		localization_key = pe_cname_65
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 66 } }
+		localization_key = pe_cname_66
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 67 } }
+		localization_key = pe_cname_67
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 68 } }
+		localization_key = pe_cname_68
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 69 } }
+		localization_key = pe_cname_69
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 70 } }
+		localization_key = pe_cname_70
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 71 } }
+		localization_key = pe_cname_71
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 72 } }
+		localization_key = pe_cname_72
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 73 } }
+		localization_key = pe_cname_73
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 74 } }
+		localization_key = pe_cname_74
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 75 } }
+		localization_key = pe_cname_75
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 76 } }
+		localization_key = pe_cname_76
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 77 } }
+		localization_key = pe_cname_77
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 78 } }
+		localization_key = pe_cname_78
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 79 } }
+		localization_key = pe_cname_79
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 80 } }
+		localization_key = pe_cname_80
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 81 } }
+		localization_key = pe_cname_81
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 82 } }
+		localization_key = pe_cname_82
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 83 } }
+		localization_key = pe_cname_83
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 84 } }
+		localization_key = pe_cname_84
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 85 } }
+		localization_key = pe_cname_85
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 86 } }
+		localization_key = pe_cname_86
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 87 } }
+		localization_key = pe_cname_87
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 88 } }
+		localization_key = pe_cname_88
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 89 } }
+		localization_key = pe_cname_89
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 90 } }
+		localization_key = pe_cname_90
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 91 } }
+		localization_key = pe_cname_91
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 92 } }
+		localization_key = pe_cname_92
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 93 } }
+		localization_key = pe_cname_93
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 94 } }
+		localization_key = pe_cname_94
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 95 } }
+		localization_key = pe_cname_95
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 96 } }
+		localization_key = pe_cname_96
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 97 } }
+		localization_key = pe_cname_97
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 98 } }
+		localization_key = pe_cname_98
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 99 } }
+		localization_key = pe_cname_99
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 100 } }
+		localization_key = pe_cname_100
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 101 } }
+		localization_key = pe_cname_101
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 102 } }
+		localization_key = pe_cname_102
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 103 } }
+		localization_key = pe_cname_103
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 104 } }
+		localization_key = pe_cname_104
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 105 } }
+		localization_key = pe_cname_105
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 106 } }
+		localization_key = pe_cname_106
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 107 } }
+		localization_key = pe_cname_107
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 108 } }
+		localization_key = pe_cname_108
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 109 } }
+		localization_key = pe_cname_109
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 110 } }
+		localization_key = pe_cname_110
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 111 } }
+		localization_key = pe_cname_111
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 112 } }
+		localization_key = pe_cname_112
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 113 } }
+		localization_key = pe_cname_113
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 114 } }
+		localization_key = pe_cname_114
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 115 } }
+		localization_key = pe_cname_115
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 116 } }
+		localization_key = pe_cname_116
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 117 } }
+		localization_key = pe_cname_117
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 118 } }
+		localization_key = pe_cname_118
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 119 } }
+		localization_key = pe_cname_119
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_a_name value = 120 } }
+		localization_key = pe_cname_120
 	}
 	default = pe_corp_line_none
 }
@@ -490,6 +1130,326 @@ defined_text = {
 		trigger = { check_variable = { which = pe_corp_b_name value = 40 } }
 		localization_key = pe_cname_40
 	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 41 } }
+		localization_key = pe_cname_41
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 42 } }
+		localization_key = pe_cname_42
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 43 } }
+		localization_key = pe_cname_43
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 44 } }
+		localization_key = pe_cname_44
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 45 } }
+		localization_key = pe_cname_45
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 46 } }
+		localization_key = pe_cname_46
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 47 } }
+		localization_key = pe_cname_47
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 48 } }
+		localization_key = pe_cname_48
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 49 } }
+		localization_key = pe_cname_49
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 50 } }
+		localization_key = pe_cname_50
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 51 } }
+		localization_key = pe_cname_51
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 52 } }
+		localization_key = pe_cname_52
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 53 } }
+		localization_key = pe_cname_53
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 54 } }
+		localization_key = pe_cname_54
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 55 } }
+		localization_key = pe_cname_55
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 56 } }
+		localization_key = pe_cname_56
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 57 } }
+		localization_key = pe_cname_57
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 58 } }
+		localization_key = pe_cname_58
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 59 } }
+		localization_key = pe_cname_59
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 60 } }
+		localization_key = pe_cname_60
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 61 } }
+		localization_key = pe_cname_61
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 62 } }
+		localization_key = pe_cname_62
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 63 } }
+		localization_key = pe_cname_63
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 64 } }
+		localization_key = pe_cname_64
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 65 } }
+		localization_key = pe_cname_65
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 66 } }
+		localization_key = pe_cname_66
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 67 } }
+		localization_key = pe_cname_67
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 68 } }
+		localization_key = pe_cname_68
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 69 } }
+		localization_key = pe_cname_69
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 70 } }
+		localization_key = pe_cname_70
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 71 } }
+		localization_key = pe_cname_71
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 72 } }
+		localization_key = pe_cname_72
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 73 } }
+		localization_key = pe_cname_73
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 74 } }
+		localization_key = pe_cname_74
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 75 } }
+		localization_key = pe_cname_75
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 76 } }
+		localization_key = pe_cname_76
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 77 } }
+		localization_key = pe_cname_77
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 78 } }
+		localization_key = pe_cname_78
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 79 } }
+		localization_key = pe_cname_79
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 80 } }
+		localization_key = pe_cname_80
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 81 } }
+		localization_key = pe_cname_81
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 82 } }
+		localization_key = pe_cname_82
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 83 } }
+		localization_key = pe_cname_83
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 84 } }
+		localization_key = pe_cname_84
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 85 } }
+		localization_key = pe_cname_85
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 86 } }
+		localization_key = pe_cname_86
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 87 } }
+		localization_key = pe_cname_87
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 88 } }
+		localization_key = pe_cname_88
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 89 } }
+		localization_key = pe_cname_89
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 90 } }
+		localization_key = pe_cname_90
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 91 } }
+		localization_key = pe_cname_91
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 92 } }
+		localization_key = pe_cname_92
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 93 } }
+		localization_key = pe_cname_93
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 94 } }
+		localization_key = pe_cname_94
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 95 } }
+		localization_key = pe_cname_95
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 96 } }
+		localization_key = pe_cname_96
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 97 } }
+		localization_key = pe_cname_97
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 98 } }
+		localization_key = pe_cname_98
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 99 } }
+		localization_key = pe_cname_99
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 100 } }
+		localization_key = pe_cname_100
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 101 } }
+		localization_key = pe_cname_101
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 102 } }
+		localization_key = pe_cname_102
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 103 } }
+		localization_key = pe_cname_103
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 104 } }
+		localization_key = pe_cname_104
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 105 } }
+		localization_key = pe_cname_105
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 106 } }
+		localization_key = pe_cname_106
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 107 } }
+		localization_key = pe_cname_107
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 108 } }
+		localization_key = pe_cname_108
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 109 } }
+		localization_key = pe_cname_109
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 110 } }
+		localization_key = pe_cname_110
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 111 } }
+		localization_key = pe_cname_111
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 112 } }
+		localization_key = pe_cname_112
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 113 } }
+		localization_key = pe_cname_113
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 114 } }
+		localization_key = pe_cname_114
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 115 } }
+		localization_key = pe_cname_115
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 116 } }
+		localization_key = pe_cname_116
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 117 } }
+		localization_key = pe_cname_117
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 118 } }
+		localization_key = pe_cname_118
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 119 } }
+		localization_key = pe_cname_119
+	}
+	text = {
+		trigger = { check_variable = { which = pe_corp_b_name value = 120 } }
+		localization_key = pe_cname_120
+	}
 	default = pe_corp_line_none
 }
 defined_text = {
@@ -653,6 +1613,326 @@ defined_text = {
 	text = {
 		trigger = { check_variable = { which = pe_c1_name value = 40 } }
 		localization_key = pe_cname_40
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 41 } }
+		localization_key = pe_cname_41
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 42 } }
+		localization_key = pe_cname_42
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 43 } }
+		localization_key = pe_cname_43
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 44 } }
+		localization_key = pe_cname_44
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 45 } }
+		localization_key = pe_cname_45
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 46 } }
+		localization_key = pe_cname_46
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 47 } }
+		localization_key = pe_cname_47
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 48 } }
+		localization_key = pe_cname_48
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 49 } }
+		localization_key = pe_cname_49
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 50 } }
+		localization_key = pe_cname_50
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 51 } }
+		localization_key = pe_cname_51
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 52 } }
+		localization_key = pe_cname_52
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 53 } }
+		localization_key = pe_cname_53
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 54 } }
+		localization_key = pe_cname_54
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 55 } }
+		localization_key = pe_cname_55
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 56 } }
+		localization_key = pe_cname_56
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 57 } }
+		localization_key = pe_cname_57
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 58 } }
+		localization_key = pe_cname_58
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 59 } }
+		localization_key = pe_cname_59
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 60 } }
+		localization_key = pe_cname_60
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 61 } }
+		localization_key = pe_cname_61
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 62 } }
+		localization_key = pe_cname_62
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 63 } }
+		localization_key = pe_cname_63
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 64 } }
+		localization_key = pe_cname_64
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 65 } }
+		localization_key = pe_cname_65
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 66 } }
+		localization_key = pe_cname_66
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 67 } }
+		localization_key = pe_cname_67
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 68 } }
+		localization_key = pe_cname_68
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 69 } }
+		localization_key = pe_cname_69
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 70 } }
+		localization_key = pe_cname_70
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 71 } }
+		localization_key = pe_cname_71
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 72 } }
+		localization_key = pe_cname_72
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 73 } }
+		localization_key = pe_cname_73
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 74 } }
+		localization_key = pe_cname_74
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 75 } }
+		localization_key = pe_cname_75
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 76 } }
+		localization_key = pe_cname_76
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 77 } }
+		localization_key = pe_cname_77
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 78 } }
+		localization_key = pe_cname_78
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 79 } }
+		localization_key = pe_cname_79
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 80 } }
+		localization_key = pe_cname_80
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 81 } }
+		localization_key = pe_cname_81
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 82 } }
+		localization_key = pe_cname_82
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 83 } }
+		localization_key = pe_cname_83
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 84 } }
+		localization_key = pe_cname_84
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 85 } }
+		localization_key = pe_cname_85
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 86 } }
+		localization_key = pe_cname_86
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 87 } }
+		localization_key = pe_cname_87
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 88 } }
+		localization_key = pe_cname_88
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 89 } }
+		localization_key = pe_cname_89
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 90 } }
+		localization_key = pe_cname_90
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 91 } }
+		localization_key = pe_cname_91
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 92 } }
+		localization_key = pe_cname_92
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 93 } }
+		localization_key = pe_cname_93
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 94 } }
+		localization_key = pe_cname_94
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 95 } }
+		localization_key = pe_cname_95
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 96 } }
+		localization_key = pe_cname_96
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 97 } }
+		localization_key = pe_cname_97
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 98 } }
+		localization_key = pe_cname_98
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 99 } }
+		localization_key = pe_cname_99
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 100 } }
+		localization_key = pe_cname_100
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 101 } }
+		localization_key = pe_cname_101
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 102 } }
+		localization_key = pe_cname_102
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 103 } }
+		localization_key = pe_cname_103
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 104 } }
+		localization_key = pe_cname_104
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 105 } }
+		localization_key = pe_cname_105
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 106 } }
+		localization_key = pe_cname_106
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 107 } }
+		localization_key = pe_cname_107
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 108 } }
+		localization_key = pe_cname_108
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 109 } }
+		localization_key = pe_cname_109
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 110 } }
+		localization_key = pe_cname_110
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 111 } }
+		localization_key = pe_cname_111
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 112 } }
+		localization_key = pe_cname_112
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 113 } }
+		localization_key = pe_cname_113
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 114 } }
+		localization_key = pe_cname_114
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 115 } }
+		localization_key = pe_cname_115
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 116 } }
+		localization_key = pe_cname_116
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 117 } }
+		localization_key = pe_cname_117
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 118 } }
+		localization_key = pe_cname_118
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 119 } }
+		localization_key = pe_cname_119
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_name value = 120 } }
+		localization_key = pe_cname_120
 	}
 	default = pe_corp_line_none
 }
@@ -818,6 +2098,326 @@ defined_text = {
 		trigger = { check_variable = { which = pe_c2_name value = 40 } }
 		localization_key = pe_cname_40
 	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 41 } }
+		localization_key = pe_cname_41
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 42 } }
+		localization_key = pe_cname_42
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 43 } }
+		localization_key = pe_cname_43
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 44 } }
+		localization_key = pe_cname_44
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 45 } }
+		localization_key = pe_cname_45
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 46 } }
+		localization_key = pe_cname_46
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 47 } }
+		localization_key = pe_cname_47
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 48 } }
+		localization_key = pe_cname_48
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 49 } }
+		localization_key = pe_cname_49
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 50 } }
+		localization_key = pe_cname_50
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 51 } }
+		localization_key = pe_cname_51
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 52 } }
+		localization_key = pe_cname_52
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 53 } }
+		localization_key = pe_cname_53
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 54 } }
+		localization_key = pe_cname_54
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 55 } }
+		localization_key = pe_cname_55
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 56 } }
+		localization_key = pe_cname_56
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 57 } }
+		localization_key = pe_cname_57
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 58 } }
+		localization_key = pe_cname_58
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 59 } }
+		localization_key = pe_cname_59
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 60 } }
+		localization_key = pe_cname_60
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 61 } }
+		localization_key = pe_cname_61
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 62 } }
+		localization_key = pe_cname_62
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 63 } }
+		localization_key = pe_cname_63
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 64 } }
+		localization_key = pe_cname_64
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 65 } }
+		localization_key = pe_cname_65
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 66 } }
+		localization_key = pe_cname_66
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 67 } }
+		localization_key = pe_cname_67
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 68 } }
+		localization_key = pe_cname_68
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 69 } }
+		localization_key = pe_cname_69
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 70 } }
+		localization_key = pe_cname_70
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 71 } }
+		localization_key = pe_cname_71
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 72 } }
+		localization_key = pe_cname_72
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 73 } }
+		localization_key = pe_cname_73
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 74 } }
+		localization_key = pe_cname_74
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 75 } }
+		localization_key = pe_cname_75
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 76 } }
+		localization_key = pe_cname_76
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 77 } }
+		localization_key = pe_cname_77
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 78 } }
+		localization_key = pe_cname_78
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 79 } }
+		localization_key = pe_cname_79
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 80 } }
+		localization_key = pe_cname_80
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 81 } }
+		localization_key = pe_cname_81
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 82 } }
+		localization_key = pe_cname_82
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 83 } }
+		localization_key = pe_cname_83
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 84 } }
+		localization_key = pe_cname_84
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 85 } }
+		localization_key = pe_cname_85
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 86 } }
+		localization_key = pe_cname_86
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 87 } }
+		localization_key = pe_cname_87
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 88 } }
+		localization_key = pe_cname_88
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 89 } }
+		localization_key = pe_cname_89
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 90 } }
+		localization_key = pe_cname_90
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 91 } }
+		localization_key = pe_cname_91
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 92 } }
+		localization_key = pe_cname_92
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 93 } }
+		localization_key = pe_cname_93
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 94 } }
+		localization_key = pe_cname_94
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 95 } }
+		localization_key = pe_cname_95
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 96 } }
+		localization_key = pe_cname_96
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 97 } }
+		localization_key = pe_cname_97
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 98 } }
+		localization_key = pe_cname_98
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 99 } }
+		localization_key = pe_cname_99
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 100 } }
+		localization_key = pe_cname_100
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 101 } }
+		localization_key = pe_cname_101
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 102 } }
+		localization_key = pe_cname_102
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 103 } }
+		localization_key = pe_cname_103
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 104 } }
+		localization_key = pe_cname_104
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 105 } }
+		localization_key = pe_cname_105
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 106 } }
+		localization_key = pe_cname_106
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 107 } }
+		localization_key = pe_cname_107
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 108 } }
+		localization_key = pe_cname_108
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 109 } }
+		localization_key = pe_cname_109
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 110 } }
+		localization_key = pe_cname_110
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 111 } }
+		localization_key = pe_cname_111
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 112 } }
+		localization_key = pe_cname_112
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 113 } }
+		localization_key = pe_cname_113
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 114 } }
+		localization_key = pe_cname_114
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 115 } }
+		localization_key = pe_cname_115
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 116 } }
+		localization_key = pe_cname_116
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 117 } }
+		localization_key = pe_cname_117
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 118 } }
+		localization_key = pe_cname_118
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 119 } }
+		localization_key = pe_cname_119
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_name value = 120 } }
+		localization_key = pe_cname_120
+	}
 	default = pe_corp_line_none
 }
 defined_text = {
@@ -981,6 +2581,326 @@ defined_text = {
 	text = {
 		trigger = { check_variable = { which = pe_c3_name value = 40 } }
 		localization_key = pe_cname_40
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 41 } }
+		localization_key = pe_cname_41
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 42 } }
+		localization_key = pe_cname_42
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 43 } }
+		localization_key = pe_cname_43
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 44 } }
+		localization_key = pe_cname_44
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 45 } }
+		localization_key = pe_cname_45
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 46 } }
+		localization_key = pe_cname_46
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 47 } }
+		localization_key = pe_cname_47
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 48 } }
+		localization_key = pe_cname_48
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 49 } }
+		localization_key = pe_cname_49
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 50 } }
+		localization_key = pe_cname_50
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 51 } }
+		localization_key = pe_cname_51
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 52 } }
+		localization_key = pe_cname_52
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 53 } }
+		localization_key = pe_cname_53
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 54 } }
+		localization_key = pe_cname_54
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 55 } }
+		localization_key = pe_cname_55
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 56 } }
+		localization_key = pe_cname_56
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 57 } }
+		localization_key = pe_cname_57
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 58 } }
+		localization_key = pe_cname_58
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 59 } }
+		localization_key = pe_cname_59
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 60 } }
+		localization_key = pe_cname_60
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 61 } }
+		localization_key = pe_cname_61
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 62 } }
+		localization_key = pe_cname_62
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 63 } }
+		localization_key = pe_cname_63
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 64 } }
+		localization_key = pe_cname_64
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 65 } }
+		localization_key = pe_cname_65
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 66 } }
+		localization_key = pe_cname_66
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 67 } }
+		localization_key = pe_cname_67
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 68 } }
+		localization_key = pe_cname_68
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 69 } }
+		localization_key = pe_cname_69
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 70 } }
+		localization_key = pe_cname_70
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 71 } }
+		localization_key = pe_cname_71
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 72 } }
+		localization_key = pe_cname_72
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 73 } }
+		localization_key = pe_cname_73
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 74 } }
+		localization_key = pe_cname_74
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 75 } }
+		localization_key = pe_cname_75
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 76 } }
+		localization_key = pe_cname_76
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 77 } }
+		localization_key = pe_cname_77
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 78 } }
+		localization_key = pe_cname_78
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 79 } }
+		localization_key = pe_cname_79
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 80 } }
+		localization_key = pe_cname_80
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 81 } }
+		localization_key = pe_cname_81
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 82 } }
+		localization_key = pe_cname_82
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 83 } }
+		localization_key = pe_cname_83
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 84 } }
+		localization_key = pe_cname_84
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 85 } }
+		localization_key = pe_cname_85
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 86 } }
+		localization_key = pe_cname_86
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 87 } }
+		localization_key = pe_cname_87
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 88 } }
+		localization_key = pe_cname_88
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 89 } }
+		localization_key = pe_cname_89
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 90 } }
+		localization_key = pe_cname_90
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 91 } }
+		localization_key = pe_cname_91
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 92 } }
+		localization_key = pe_cname_92
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 93 } }
+		localization_key = pe_cname_93
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 94 } }
+		localization_key = pe_cname_94
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 95 } }
+		localization_key = pe_cname_95
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 96 } }
+		localization_key = pe_cname_96
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 97 } }
+		localization_key = pe_cname_97
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 98 } }
+		localization_key = pe_cname_98
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 99 } }
+		localization_key = pe_cname_99
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 100 } }
+		localization_key = pe_cname_100
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 101 } }
+		localization_key = pe_cname_101
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 102 } }
+		localization_key = pe_cname_102
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 103 } }
+		localization_key = pe_cname_103
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 104 } }
+		localization_key = pe_cname_104
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 105 } }
+		localization_key = pe_cname_105
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 106 } }
+		localization_key = pe_cname_106
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 107 } }
+		localization_key = pe_cname_107
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 108 } }
+		localization_key = pe_cname_108
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 109 } }
+		localization_key = pe_cname_109
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 110 } }
+		localization_key = pe_cname_110
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 111 } }
+		localization_key = pe_cname_111
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 112 } }
+		localization_key = pe_cname_112
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 113 } }
+		localization_key = pe_cname_113
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 114 } }
+		localization_key = pe_cname_114
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 115 } }
+		localization_key = pe_cname_115
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 116 } }
+		localization_key = pe_cname_116
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 117 } }
+		localization_key = pe_cname_117
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 118 } }
+		localization_key = pe_cname_118
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 119 } }
+		localization_key = pe_cname_119
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_name value = 120 } }
+		localization_key = pe_cname_120
 	}
 	default = pe_corp_line_none
 }
@@ -1146,6 +3066,326 @@ defined_text = {
 		trigger = { check_variable = { which = pe_c4_name value = 40 } }
 		localization_key = pe_cname_40
 	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 41 } }
+		localization_key = pe_cname_41
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 42 } }
+		localization_key = pe_cname_42
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 43 } }
+		localization_key = pe_cname_43
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 44 } }
+		localization_key = pe_cname_44
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 45 } }
+		localization_key = pe_cname_45
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 46 } }
+		localization_key = pe_cname_46
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 47 } }
+		localization_key = pe_cname_47
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 48 } }
+		localization_key = pe_cname_48
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 49 } }
+		localization_key = pe_cname_49
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 50 } }
+		localization_key = pe_cname_50
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 51 } }
+		localization_key = pe_cname_51
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 52 } }
+		localization_key = pe_cname_52
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 53 } }
+		localization_key = pe_cname_53
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 54 } }
+		localization_key = pe_cname_54
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 55 } }
+		localization_key = pe_cname_55
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 56 } }
+		localization_key = pe_cname_56
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 57 } }
+		localization_key = pe_cname_57
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 58 } }
+		localization_key = pe_cname_58
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 59 } }
+		localization_key = pe_cname_59
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 60 } }
+		localization_key = pe_cname_60
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 61 } }
+		localization_key = pe_cname_61
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 62 } }
+		localization_key = pe_cname_62
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 63 } }
+		localization_key = pe_cname_63
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 64 } }
+		localization_key = pe_cname_64
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 65 } }
+		localization_key = pe_cname_65
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 66 } }
+		localization_key = pe_cname_66
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 67 } }
+		localization_key = pe_cname_67
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 68 } }
+		localization_key = pe_cname_68
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 69 } }
+		localization_key = pe_cname_69
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 70 } }
+		localization_key = pe_cname_70
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 71 } }
+		localization_key = pe_cname_71
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 72 } }
+		localization_key = pe_cname_72
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 73 } }
+		localization_key = pe_cname_73
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 74 } }
+		localization_key = pe_cname_74
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 75 } }
+		localization_key = pe_cname_75
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 76 } }
+		localization_key = pe_cname_76
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 77 } }
+		localization_key = pe_cname_77
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 78 } }
+		localization_key = pe_cname_78
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 79 } }
+		localization_key = pe_cname_79
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 80 } }
+		localization_key = pe_cname_80
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 81 } }
+		localization_key = pe_cname_81
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 82 } }
+		localization_key = pe_cname_82
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 83 } }
+		localization_key = pe_cname_83
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 84 } }
+		localization_key = pe_cname_84
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 85 } }
+		localization_key = pe_cname_85
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 86 } }
+		localization_key = pe_cname_86
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 87 } }
+		localization_key = pe_cname_87
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 88 } }
+		localization_key = pe_cname_88
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 89 } }
+		localization_key = pe_cname_89
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 90 } }
+		localization_key = pe_cname_90
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 91 } }
+		localization_key = pe_cname_91
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 92 } }
+		localization_key = pe_cname_92
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 93 } }
+		localization_key = pe_cname_93
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 94 } }
+		localization_key = pe_cname_94
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 95 } }
+		localization_key = pe_cname_95
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 96 } }
+		localization_key = pe_cname_96
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 97 } }
+		localization_key = pe_cname_97
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 98 } }
+		localization_key = pe_cname_98
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 99 } }
+		localization_key = pe_cname_99
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 100 } }
+		localization_key = pe_cname_100
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 101 } }
+		localization_key = pe_cname_101
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 102 } }
+		localization_key = pe_cname_102
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 103 } }
+		localization_key = pe_cname_103
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 104 } }
+		localization_key = pe_cname_104
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 105 } }
+		localization_key = pe_cname_105
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 106 } }
+		localization_key = pe_cname_106
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 107 } }
+		localization_key = pe_cname_107
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 108 } }
+		localization_key = pe_cname_108
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 109 } }
+		localization_key = pe_cname_109
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 110 } }
+		localization_key = pe_cname_110
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 111 } }
+		localization_key = pe_cname_111
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 112 } }
+		localization_key = pe_cname_112
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 113 } }
+		localization_key = pe_cname_113
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 114 } }
+		localization_key = pe_cname_114
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 115 } }
+		localization_key = pe_cname_115
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 116 } }
+		localization_key = pe_cname_116
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 117 } }
+		localization_key = pe_cname_117
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 118 } }
+		localization_key = pe_cname_118
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 119 } }
+		localization_key = pe_cname_119
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_name value = 120 } }
+		localization_key = pe_cname_120
+	}
 	default = pe_corp_line_none
 }
 defined_text = {
@@ -1309,6 +3549,326 @@ defined_text = {
 	text = {
 		trigger = { check_variable = { which = pe_c5_name value = 40 } }
 		localization_key = pe_cname_40
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 41 } }
+		localization_key = pe_cname_41
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 42 } }
+		localization_key = pe_cname_42
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 43 } }
+		localization_key = pe_cname_43
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 44 } }
+		localization_key = pe_cname_44
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 45 } }
+		localization_key = pe_cname_45
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 46 } }
+		localization_key = pe_cname_46
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 47 } }
+		localization_key = pe_cname_47
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 48 } }
+		localization_key = pe_cname_48
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 49 } }
+		localization_key = pe_cname_49
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 50 } }
+		localization_key = pe_cname_50
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 51 } }
+		localization_key = pe_cname_51
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 52 } }
+		localization_key = pe_cname_52
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 53 } }
+		localization_key = pe_cname_53
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 54 } }
+		localization_key = pe_cname_54
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 55 } }
+		localization_key = pe_cname_55
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 56 } }
+		localization_key = pe_cname_56
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 57 } }
+		localization_key = pe_cname_57
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 58 } }
+		localization_key = pe_cname_58
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 59 } }
+		localization_key = pe_cname_59
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 60 } }
+		localization_key = pe_cname_60
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 61 } }
+		localization_key = pe_cname_61
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 62 } }
+		localization_key = pe_cname_62
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 63 } }
+		localization_key = pe_cname_63
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 64 } }
+		localization_key = pe_cname_64
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 65 } }
+		localization_key = pe_cname_65
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 66 } }
+		localization_key = pe_cname_66
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 67 } }
+		localization_key = pe_cname_67
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 68 } }
+		localization_key = pe_cname_68
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 69 } }
+		localization_key = pe_cname_69
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 70 } }
+		localization_key = pe_cname_70
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 71 } }
+		localization_key = pe_cname_71
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 72 } }
+		localization_key = pe_cname_72
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 73 } }
+		localization_key = pe_cname_73
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 74 } }
+		localization_key = pe_cname_74
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 75 } }
+		localization_key = pe_cname_75
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 76 } }
+		localization_key = pe_cname_76
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 77 } }
+		localization_key = pe_cname_77
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 78 } }
+		localization_key = pe_cname_78
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 79 } }
+		localization_key = pe_cname_79
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 80 } }
+		localization_key = pe_cname_80
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 81 } }
+		localization_key = pe_cname_81
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 82 } }
+		localization_key = pe_cname_82
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 83 } }
+		localization_key = pe_cname_83
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 84 } }
+		localization_key = pe_cname_84
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 85 } }
+		localization_key = pe_cname_85
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 86 } }
+		localization_key = pe_cname_86
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 87 } }
+		localization_key = pe_cname_87
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 88 } }
+		localization_key = pe_cname_88
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 89 } }
+		localization_key = pe_cname_89
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 90 } }
+		localization_key = pe_cname_90
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 91 } }
+		localization_key = pe_cname_91
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 92 } }
+		localization_key = pe_cname_92
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 93 } }
+		localization_key = pe_cname_93
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 94 } }
+		localization_key = pe_cname_94
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 95 } }
+		localization_key = pe_cname_95
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 96 } }
+		localization_key = pe_cname_96
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 97 } }
+		localization_key = pe_cname_97
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 98 } }
+		localization_key = pe_cname_98
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 99 } }
+		localization_key = pe_cname_99
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 100 } }
+		localization_key = pe_cname_100
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 101 } }
+		localization_key = pe_cname_101
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 102 } }
+		localization_key = pe_cname_102
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 103 } }
+		localization_key = pe_cname_103
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 104 } }
+		localization_key = pe_cname_104
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 105 } }
+		localization_key = pe_cname_105
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 106 } }
+		localization_key = pe_cname_106
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 107 } }
+		localization_key = pe_cname_107
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 108 } }
+		localization_key = pe_cname_108
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 109 } }
+		localization_key = pe_cname_109
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 110 } }
+		localization_key = pe_cname_110
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 111 } }
+		localization_key = pe_cname_111
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 112 } }
+		localization_key = pe_cname_112
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 113 } }
+		localization_key = pe_cname_113
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 114 } }
+		localization_key = pe_cname_114
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 115 } }
+		localization_key = pe_cname_115
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 116 } }
+		localization_key = pe_cname_116
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 117 } }
+		localization_key = pe_cname_117
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 118 } }
+		localization_key = pe_cname_118
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 119 } }
+		localization_key = pe_cname_119
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_name value = 120 } }
+		localization_key = pe_cname_120
 	}
 	default = pe_corp_line_none
 }
@@ -1474,6 +4034,326 @@ defined_text = {
 		trigger = { check_variable = { which = pe_c6_name value = 40 } }
 		localization_key = pe_cname_40
 	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 41 } }
+		localization_key = pe_cname_41
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 42 } }
+		localization_key = pe_cname_42
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 43 } }
+		localization_key = pe_cname_43
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 44 } }
+		localization_key = pe_cname_44
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 45 } }
+		localization_key = pe_cname_45
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 46 } }
+		localization_key = pe_cname_46
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 47 } }
+		localization_key = pe_cname_47
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 48 } }
+		localization_key = pe_cname_48
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 49 } }
+		localization_key = pe_cname_49
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 50 } }
+		localization_key = pe_cname_50
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 51 } }
+		localization_key = pe_cname_51
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 52 } }
+		localization_key = pe_cname_52
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 53 } }
+		localization_key = pe_cname_53
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 54 } }
+		localization_key = pe_cname_54
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 55 } }
+		localization_key = pe_cname_55
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 56 } }
+		localization_key = pe_cname_56
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 57 } }
+		localization_key = pe_cname_57
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 58 } }
+		localization_key = pe_cname_58
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 59 } }
+		localization_key = pe_cname_59
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 60 } }
+		localization_key = pe_cname_60
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 61 } }
+		localization_key = pe_cname_61
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 62 } }
+		localization_key = pe_cname_62
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 63 } }
+		localization_key = pe_cname_63
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 64 } }
+		localization_key = pe_cname_64
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 65 } }
+		localization_key = pe_cname_65
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 66 } }
+		localization_key = pe_cname_66
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 67 } }
+		localization_key = pe_cname_67
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 68 } }
+		localization_key = pe_cname_68
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 69 } }
+		localization_key = pe_cname_69
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 70 } }
+		localization_key = pe_cname_70
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 71 } }
+		localization_key = pe_cname_71
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 72 } }
+		localization_key = pe_cname_72
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 73 } }
+		localization_key = pe_cname_73
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 74 } }
+		localization_key = pe_cname_74
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 75 } }
+		localization_key = pe_cname_75
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 76 } }
+		localization_key = pe_cname_76
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 77 } }
+		localization_key = pe_cname_77
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 78 } }
+		localization_key = pe_cname_78
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 79 } }
+		localization_key = pe_cname_79
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 80 } }
+		localization_key = pe_cname_80
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 81 } }
+		localization_key = pe_cname_81
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 82 } }
+		localization_key = pe_cname_82
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 83 } }
+		localization_key = pe_cname_83
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 84 } }
+		localization_key = pe_cname_84
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 85 } }
+		localization_key = pe_cname_85
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 86 } }
+		localization_key = pe_cname_86
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 87 } }
+		localization_key = pe_cname_87
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 88 } }
+		localization_key = pe_cname_88
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 89 } }
+		localization_key = pe_cname_89
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 90 } }
+		localization_key = pe_cname_90
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 91 } }
+		localization_key = pe_cname_91
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 92 } }
+		localization_key = pe_cname_92
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 93 } }
+		localization_key = pe_cname_93
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 94 } }
+		localization_key = pe_cname_94
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 95 } }
+		localization_key = pe_cname_95
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 96 } }
+		localization_key = pe_cname_96
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 97 } }
+		localization_key = pe_cname_97
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 98 } }
+		localization_key = pe_cname_98
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 99 } }
+		localization_key = pe_cname_99
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 100 } }
+		localization_key = pe_cname_100
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 101 } }
+		localization_key = pe_cname_101
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 102 } }
+		localization_key = pe_cname_102
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 103 } }
+		localization_key = pe_cname_103
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 104 } }
+		localization_key = pe_cname_104
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 105 } }
+		localization_key = pe_cname_105
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 106 } }
+		localization_key = pe_cname_106
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 107 } }
+		localization_key = pe_cname_107
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 108 } }
+		localization_key = pe_cname_108
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 109 } }
+		localization_key = pe_cname_109
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 110 } }
+		localization_key = pe_cname_110
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 111 } }
+		localization_key = pe_cname_111
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 112 } }
+		localization_key = pe_cname_112
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 113 } }
+		localization_key = pe_cname_113
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 114 } }
+		localization_key = pe_cname_114
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 115 } }
+		localization_key = pe_cname_115
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 116 } }
+		localization_key = pe_cname_116
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 117 } }
+		localization_key = pe_cname_117
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 118 } }
+		localization_key = pe_cname_118
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 119 } }
+		localization_key = pe_cname_119
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_name value = 120 } }
+		localization_key = pe_cname_120
+	}
 	default = pe_corp_line_none
 }
 defined_text = {
@@ -1638,6 +4518,326 @@ defined_text = {
 		trigger = { check_variable = { which = pe_c7_name value = 40 } }
 		localization_key = pe_cname_40
 	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 41 } }
+		localization_key = pe_cname_41
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 42 } }
+		localization_key = pe_cname_42
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 43 } }
+		localization_key = pe_cname_43
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 44 } }
+		localization_key = pe_cname_44
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 45 } }
+		localization_key = pe_cname_45
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 46 } }
+		localization_key = pe_cname_46
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 47 } }
+		localization_key = pe_cname_47
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 48 } }
+		localization_key = pe_cname_48
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 49 } }
+		localization_key = pe_cname_49
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 50 } }
+		localization_key = pe_cname_50
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 51 } }
+		localization_key = pe_cname_51
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 52 } }
+		localization_key = pe_cname_52
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 53 } }
+		localization_key = pe_cname_53
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 54 } }
+		localization_key = pe_cname_54
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 55 } }
+		localization_key = pe_cname_55
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 56 } }
+		localization_key = pe_cname_56
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 57 } }
+		localization_key = pe_cname_57
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 58 } }
+		localization_key = pe_cname_58
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 59 } }
+		localization_key = pe_cname_59
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 60 } }
+		localization_key = pe_cname_60
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 61 } }
+		localization_key = pe_cname_61
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 62 } }
+		localization_key = pe_cname_62
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 63 } }
+		localization_key = pe_cname_63
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 64 } }
+		localization_key = pe_cname_64
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 65 } }
+		localization_key = pe_cname_65
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 66 } }
+		localization_key = pe_cname_66
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 67 } }
+		localization_key = pe_cname_67
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 68 } }
+		localization_key = pe_cname_68
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 69 } }
+		localization_key = pe_cname_69
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 70 } }
+		localization_key = pe_cname_70
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 71 } }
+		localization_key = pe_cname_71
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 72 } }
+		localization_key = pe_cname_72
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 73 } }
+		localization_key = pe_cname_73
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 74 } }
+		localization_key = pe_cname_74
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 75 } }
+		localization_key = pe_cname_75
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 76 } }
+		localization_key = pe_cname_76
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 77 } }
+		localization_key = pe_cname_77
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 78 } }
+		localization_key = pe_cname_78
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 79 } }
+		localization_key = pe_cname_79
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 80 } }
+		localization_key = pe_cname_80
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 81 } }
+		localization_key = pe_cname_81
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 82 } }
+		localization_key = pe_cname_82
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 83 } }
+		localization_key = pe_cname_83
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 84 } }
+		localization_key = pe_cname_84
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 85 } }
+		localization_key = pe_cname_85
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 86 } }
+		localization_key = pe_cname_86
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 87 } }
+		localization_key = pe_cname_87
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 88 } }
+		localization_key = pe_cname_88
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 89 } }
+		localization_key = pe_cname_89
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 90 } }
+		localization_key = pe_cname_90
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 91 } }
+		localization_key = pe_cname_91
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 92 } }
+		localization_key = pe_cname_92
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 93 } }
+		localization_key = pe_cname_93
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 94 } }
+		localization_key = pe_cname_94
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 95 } }
+		localization_key = pe_cname_95
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 96 } }
+		localization_key = pe_cname_96
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 97 } }
+		localization_key = pe_cname_97
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 98 } }
+		localization_key = pe_cname_98
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 99 } }
+		localization_key = pe_cname_99
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 100 } }
+		localization_key = pe_cname_100
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 101 } }
+		localization_key = pe_cname_101
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 102 } }
+		localization_key = pe_cname_102
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 103 } }
+		localization_key = pe_cname_103
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 104 } }
+		localization_key = pe_cname_104
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 105 } }
+		localization_key = pe_cname_105
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 106 } }
+		localization_key = pe_cname_106
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 107 } }
+		localization_key = pe_cname_107
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 108 } }
+		localization_key = pe_cname_108
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 109 } }
+		localization_key = pe_cname_109
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 110 } }
+		localization_key = pe_cname_110
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 111 } }
+		localization_key = pe_cname_111
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 112 } }
+		localization_key = pe_cname_112
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 113 } }
+		localization_key = pe_cname_113
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 114 } }
+		localization_key = pe_cname_114
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 115 } }
+		localization_key = pe_cname_115
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 116 } }
+		localization_key = pe_cname_116
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 117 } }
+		localization_key = pe_cname_117
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 118 } }
+		localization_key = pe_cname_118
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 119 } }
+		localization_key = pe_cname_119
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_name value = 120 } }
+		localization_key = pe_cname_120
+	}
 	default = pe_corp_line_none
 }
 defined_text = {
@@ -1801,6 +5001,326 @@ defined_text = {
 	text = {
 		trigger = { check_variable = { which = pe_c8_name value = 40 } }
 		localization_key = pe_cname_40
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 41 } }
+		localization_key = pe_cname_41
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 42 } }
+		localization_key = pe_cname_42
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 43 } }
+		localization_key = pe_cname_43
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 44 } }
+		localization_key = pe_cname_44
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 45 } }
+		localization_key = pe_cname_45
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 46 } }
+		localization_key = pe_cname_46
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 47 } }
+		localization_key = pe_cname_47
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 48 } }
+		localization_key = pe_cname_48
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 49 } }
+		localization_key = pe_cname_49
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 50 } }
+		localization_key = pe_cname_50
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 51 } }
+		localization_key = pe_cname_51
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 52 } }
+		localization_key = pe_cname_52
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 53 } }
+		localization_key = pe_cname_53
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 54 } }
+		localization_key = pe_cname_54
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 55 } }
+		localization_key = pe_cname_55
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 56 } }
+		localization_key = pe_cname_56
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 57 } }
+		localization_key = pe_cname_57
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 58 } }
+		localization_key = pe_cname_58
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 59 } }
+		localization_key = pe_cname_59
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 60 } }
+		localization_key = pe_cname_60
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 61 } }
+		localization_key = pe_cname_61
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 62 } }
+		localization_key = pe_cname_62
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 63 } }
+		localization_key = pe_cname_63
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 64 } }
+		localization_key = pe_cname_64
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 65 } }
+		localization_key = pe_cname_65
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 66 } }
+		localization_key = pe_cname_66
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 67 } }
+		localization_key = pe_cname_67
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 68 } }
+		localization_key = pe_cname_68
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 69 } }
+		localization_key = pe_cname_69
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 70 } }
+		localization_key = pe_cname_70
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 71 } }
+		localization_key = pe_cname_71
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 72 } }
+		localization_key = pe_cname_72
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 73 } }
+		localization_key = pe_cname_73
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 74 } }
+		localization_key = pe_cname_74
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 75 } }
+		localization_key = pe_cname_75
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 76 } }
+		localization_key = pe_cname_76
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 77 } }
+		localization_key = pe_cname_77
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 78 } }
+		localization_key = pe_cname_78
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 79 } }
+		localization_key = pe_cname_79
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 80 } }
+		localization_key = pe_cname_80
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 81 } }
+		localization_key = pe_cname_81
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 82 } }
+		localization_key = pe_cname_82
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 83 } }
+		localization_key = pe_cname_83
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 84 } }
+		localization_key = pe_cname_84
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 85 } }
+		localization_key = pe_cname_85
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 86 } }
+		localization_key = pe_cname_86
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 87 } }
+		localization_key = pe_cname_87
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 88 } }
+		localization_key = pe_cname_88
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 89 } }
+		localization_key = pe_cname_89
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 90 } }
+		localization_key = pe_cname_90
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 91 } }
+		localization_key = pe_cname_91
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 92 } }
+		localization_key = pe_cname_92
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 93 } }
+		localization_key = pe_cname_93
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 94 } }
+		localization_key = pe_cname_94
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 95 } }
+		localization_key = pe_cname_95
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 96 } }
+		localization_key = pe_cname_96
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 97 } }
+		localization_key = pe_cname_97
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 98 } }
+		localization_key = pe_cname_98
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 99 } }
+		localization_key = pe_cname_99
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 100 } }
+		localization_key = pe_cname_100
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 101 } }
+		localization_key = pe_cname_101
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 102 } }
+		localization_key = pe_cname_102
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 103 } }
+		localization_key = pe_cname_103
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 104 } }
+		localization_key = pe_cname_104
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 105 } }
+		localization_key = pe_cname_105
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 106 } }
+		localization_key = pe_cname_106
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 107 } }
+		localization_key = pe_cname_107
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 108 } }
+		localization_key = pe_cname_108
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 109 } }
+		localization_key = pe_cname_109
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 110 } }
+		localization_key = pe_cname_110
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 111 } }
+		localization_key = pe_cname_111
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 112 } }
+		localization_key = pe_cname_112
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 113 } }
+		localization_key = pe_cname_113
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 114 } }
+		localization_key = pe_cname_114
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 115 } }
+		localization_key = pe_cname_115
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 116 } }
+		localization_key = pe_cname_116
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 117 } }
+		localization_key = pe_cname_117
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 118 } }
+		localization_key = pe_cname_118
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 119 } }
+		localization_key = pe_cname_119
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_name value = 120 } }
+		localization_key = pe_cname_120
 	}
 	default = pe_corp_line_none
 }
