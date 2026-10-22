@@ -447,9 +447,12 @@ pe_corp_dissolve = {
 	}
 }
 
-# Country scope, quarterly: a stage-3 firm without a corporation founds one (at most one per
-# quarter, while a slot is free): a free name of its sector group, a magnate as chief
-# executive, the headquarters on its planet. Event pe.270.
+# Country scope, quarterly: one independent stage-3 firm a quarter (the candidate,
+# pe_corp_cand) becomes part of a corporation. If its sector group has fewer than two
+# corporations and a slot is free, it founds one: a free name of its group, a magnate as
+# chief executive, the headquarters on its planet, half of its capital as seed money (event
+# pe.270). Otherwise it joins the smallest corporation of its group, bringing half of its
+# capital (a friendly merger, message).
 pe_corp_found = {
 	set_variable = { which = pe_corp_new value = 0 }
 	if = { limit = { NOT = { check_variable = { which = pe_c8_on value = 1 } } } set_variable = { which = pe_corp_new value = 8 } }
@@ -461,21 +464,153 @@ pe_corp_found = {
 	if = { limit = { NOT = { check_variable = { which = pe_c2_on value = 1 } } } set_variable = { which = pe_corp_new value = 2 } }
 	if = { limit = { NOT = { check_variable = { which = pe_c1_on value = 1 } } } set_variable = { which = pe_corp_new value = 1 } }
 	if = {
-		limit = {
-			check_variable = { which = pe_corp_new value > 0 }
-			any_owned_colony = { check_variable = { which = pe_ind3 value > 0 } }
-		}
+		limit = { any_owned_colony = { check_variable = { which = pe_ind3 value > 0 } } }
 		set_variable = { which = pe_corp_grp value = 0 }
+		set_variable = { which = pe_corp_seed value = 0 }
 		random_owned_colony = {
 			limit = { check_variable = { which = pe_ind3 value > 0 } }
 			save_event_target_as = pe_corp_planet
 			random_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_stage value = 3 } check_variable = { which = pe_corp value = 0 } }
-				set_variable = { which = pe_corp value = root.pe_corp_new }
+				set_variable = { which = pe_corp_cand value = 1 }
 				if = { limit = { OR = { check_variable = { which = pe_prim value = 1 } check_variable = { which = pe_prim value = 2 } } } root = { set_variable = { which = pe_corp_grp value = 1 } } }
 				else_if = { limit = { OR = { check_variable = { which = pe_prim value = 3 } check_variable = { which = pe_prim value = 4 } } } root = { set_variable = { which = pe_corp_grp value = 2 } } }
 				else_if = { limit = { OR = { check_variable = { which = pe_prim value = 5 } check_variable = { which = pe_prim value = 6 } check_variable = { which = pe_prim value = 7 } check_variable = { which = pe_prim value = 8 } } } root = { set_variable = { which = pe_corp_grp value = 3 } } }
 				else_if = { limit = { OR = { check_variable = { which = pe_prim value = 9 } check_variable = { which = pe_prim value = 10 } check_variable = { which = pe_prim value = 11 } } } root = { set_variable = { which = pe_corp_grp value = 4 } } }
+				set_variable = { which = pe_tmp value = pe_fcap }
+				multiply_variable = { which = pe_tmp value = 0.5 }
+				root = { set_variable = { which = pe_corp_seed value = prev.pe_tmp } }
+			}
+		}
+		# The corporations of its group, and the smallest of them.
+		set_variable = { which = pe_grp_n value = 0 }
+		set_variable = { which = pe_join value = 0 }
+		set_variable = { which = pe_join_min value = 100000 }
+		if = {
+			limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_grp value = pe_corp_grp } }
+			change_variable = { which = pe_grp_n value = 1 }
+			if = {
+				limit = { check_variable = { which = pe_c1_firms value < pe_join_min } }
+				set_variable = { which = pe_join value = 1 }
+				set_variable = { which = pe_join_min value = pe_c1_firms }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_grp value = pe_corp_grp } }
+			change_variable = { which = pe_grp_n value = 1 }
+			if = {
+				limit = { check_variable = { which = pe_c2_firms value < pe_join_min } }
+				set_variable = { which = pe_join value = 2 }
+				set_variable = { which = pe_join_min value = pe_c2_firms }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_grp value = pe_corp_grp } }
+			change_variable = { which = pe_grp_n value = 1 }
+			if = {
+				limit = { check_variable = { which = pe_c3_firms value < pe_join_min } }
+				set_variable = { which = pe_join value = 3 }
+				set_variable = { which = pe_join_min value = pe_c3_firms }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_grp value = pe_corp_grp } }
+			change_variable = { which = pe_grp_n value = 1 }
+			if = {
+				limit = { check_variable = { which = pe_c4_firms value < pe_join_min } }
+				set_variable = { which = pe_join value = 4 }
+				set_variable = { which = pe_join_min value = pe_c4_firms }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_grp value = pe_corp_grp } }
+			change_variable = { which = pe_grp_n value = 1 }
+			if = {
+				limit = { check_variable = { which = pe_c5_firms value < pe_join_min } }
+				set_variable = { which = pe_join value = 5 }
+				set_variable = { which = pe_join_min value = pe_c5_firms }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_grp value = pe_corp_grp } }
+			change_variable = { which = pe_grp_n value = 1 }
+			if = {
+				limit = { check_variable = { which = pe_c6_firms value < pe_join_min } }
+				set_variable = { which = pe_join value = 6 }
+				set_variable = { which = pe_join_min value = pe_c6_firms }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_grp value = pe_corp_grp } }
+			change_variable = { which = pe_grp_n value = 1 }
+			if = {
+				limit = { check_variable = { which = pe_c7_firms value < pe_join_min } }
+				set_variable = { which = pe_join value = 7 }
+				set_variable = { which = pe_join_min value = pe_c7_firms }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_grp value = pe_corp_grp } }
+			change_variable = { which = pe_grp_n value = 1 }
+			if = {
+				limit = { check_variable = { which = pe_c8_firms value < pe_join_min } }
+				set_variable = { which = pe_join value = 8 }
+				set_variable = { which = pe_join_min value = pe_c8_firms }
+			}
+		}
+		if = {
+			limit = {
+				check_variable = { which = pe_corp_new value > 0 }
+				check_variable = { which = pe_grp_n value < 2 }
+			}
+			pe_corp_found_new = yes
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_join value > 0 } }
+			event_target:pe_corp_planet = {
+				random_deposit = {
+					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp_cand value = 1 } }
+					set_variable = { which = pe_corp value = root.pe_join }
+					subtract_variable = { which = pe_fcap value = root.pe_corp_seed }
+				}
+				change_variable = { which = pe_ind3 value = -1 }
+				if = { limit = { root = { check_variable = { which = pe_join value = 1 } } } change_variable = { which = pe_mem_1 value = 1 } }
+				else_if = { limit = { root = { check_variable = { which = pe_join value = 2 } } } change_variable = { which = pe_mem_2 value = 1 } }
+				else_if = { limit = { root = { check_variable = { which = pe_join value = 3 } } } change_variable = { which = pe_mem_3 value = 1 } }
+				else_if = { limit = { root = { check_variable = { which = pe_join value = 4 } } } change_variable = { which = pe_mem_4 value = 1 } }
+				else_if = { limit = { root = { check_variable = { which = pe_join value = 5 } } } change_variable = { which = pe_mem_5 value = 1 } }
+				else_if = { limit = { root = { check_variable = { which = pe_join value = 6 } } } change_variable = { which = pe_mem_6 value = 1 } }
+				else_if = { limit = { root = { check_variable = { which = pe_join value = 7 } } } change_variable = { which = pe_mem_7 value = 1 } }
+				else_if = { limit = { root = { check_variable = { which = pe_join value = 8 } } } change_variable = { which = pe_mem_8 value = 1 } }
+				save_event_target_as = pe_msg_planet
+			}
+			if = { limit = { check_variable = { which = pe_join value = 1 } } change_variable = { which = pe_c1_cash value = pe_corp_seed } change_variable = { which = pe_c1_firms value = 1 } set_variable = { which = pe_msg_name value = pe_c1_name } }
+			else_if = { limit = { check_variable = { which = pe_join value = 2 } } change_variable = { which = pe_c2_cash value = pe_corp_seed } change_variable = { which = pe_c2_firms value = 1 } set_variable = { which = pe_msg_name value = pe_c2_name } }
+			else_if = { limit = { check_variable = { which = pe_join value = 3 } } change_variable = { which = pe_c3_cash value = pe_corp_seed } change_variable = { which = pe_c3_firms value = 1 } set_variable = { which = pe_msg_name value = pe_c3_name } }
+			else_if = { limit = { check_variable = { which = pe_join value = 4 } } change_variable = { which = pe_c4_cash value = pe_corp_seed } change_variable = { which = pe_c4_firms value = 1 } set_variable = { which = pe_msg_name value = pe_c4_name } }
+			else_if = { limit = { check_variable = { which = pe_join value = 5 } } change_variable = { which = pe_c5_cash value = pe_corp_seed } change_variable = { which = pe_c5_firms value = 1 } set_variable = { which = pe_msg_name value = pe_c5_name } }
+			else_if = { limit = { check_variable = { which = pe_join value = 6 } } change_variable = { which = pe_c6_cash value = pe_corp_seed } change_variable = { which = pe_c6_firms value = 1 } set_variable = { which = pe_msg_name value = pe_c6_name } }
+			else_if = { limit = { check_variable = { which = pe_join value = 7 } } change_variable = { which = pe_c7_cash value = pe_corp_seed } change_variable = { which = pe_c7_firms value = 1 } set_variable = { which = pe_msg_name value = pe_c7_name } }
+			else_if = { limit = { check_variable = { which = pe_join value = 8 } } change_variable = { which = pe_c8_cash value = pe_corp_seed } change_variable = { which = pe_c8_firms value = 1 } set_variable = { which = pe_msg_name value = pe_c8_name } }
+			pe_corp_msg = { KEY = pe_msg_corp_join }
+		}
+		event_target:pe_corp_planet = {
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp_cand value = 1 } }
+				set_variable = { which = pe_corp_cand value = 0 }
+			}
+		}
+	}
+}
+
+# Country scope: the candidate (pe_corp_cand on event_target:pe_corp_planet) founds a
+# corporation in slot pe_corp_new.
+pe_corp_found_new = {
+		event_target:pe_corp_planet = {
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp_cand value = 1 } }
+				set_variable = { which = pe_corp value = root.pe_corp_new }
+				subtract_variable = { which = pe_fcap value = root.pe_corp_seed }
 			}
 			change_variable = { which = pe_ind3 value = -1 }
 			if = { limit = { root = { check_variable = { which = pe_corp_new value = 1 } } } set_planet_flag = pe_hq_1 change_variable = { which = pe_mem_1 value = 1 } }
@@ -692,14 +827,14 @@ pe_corp_found = {
 		}
 		set_variable_to_random_value = { which = pe_corp_cur_ceo min = 1 max = 16 rounded = yes }
 		set_variable = { which = pe_corp_cur value = pe_corp_new }
-		if = { limit = { check_variable = { which = pe_corp_new value = 1 } } set_variable = { which = pe_c1_on value = 1 } set_variable = { which = pe_c1_name value = pe_corp_cur_name } set_variable = { which = pe_c1_grp value = pe_corp_grp } set_variable = { which = pe_c1_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c1_cash value = 0 } set_variable = { which = pe_c1_firms value = 1 } set_variable = { which = pe_c1_war value = 0 } set_variable = { which = pe_c1_rival value = 0 } set_variable = { which = pe_c1_wcd value = 0 } }
-		else_if = { limit = { check_variable = { which = pe_corp_new value = 2 } } set_variable = { which = pe_c2_on value = 1 } set_variable = { which = pe_c2_name value = pe_corp_cur_name } set_variable = { which = pe_c2_grp value = pe_corp_grp } set_variable = { which = pe_c2_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c2_cash value = 0 } set_variable = { which = pe_c2_firms value = 1 } set_variable = { which = pe_c2_war value = 0 } set_variable = { which = pe_c2_rival value = 0 } set_variable = { which = pe_c2_wcd value = 0 } }
-		else_if = { limit = { check_variable = { which = pe_corp_new value = 3 } } set_variable = { which = pe_c3_on value = 1 } set_variable = { which = pe_c3_name value = pe_corp_cur_name } set_variable = { which = pe_c3_grp value = pe_corp_grp } set_variable = { which = pe_c3_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c3_cash value = 0 } set_variable = { which = pe_c3_firms value = 1 } set_variable = { which = pe_c3_war value = 0 } set_variable = { which = pe_c3_rival value = 0 } set_variable = { which = pe_c3_wcd value = 0 } }
-		else_if = { limit = { check_variable = { which = pe_corp_new value = 4 } } set_variable = { which = pe_c4_on value = 1 } set_variable = { which = pe_c4_name value = pe_corp_cur_name } set_variable = { which = pe_c4_grp value = pe_corp_grp } set_variable = { which = pe_c4_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c4_cash value = 0 } set_variable = { which = pe_c4_firms value = 1 } set_variable = { which = pe_c4_war value = 0 } set_variable = { which = pe_c4_rival value = 0 } set_variable = { which = pe_c4_wcd value = 0 } }
-		else_if = { limit = { check_variable = { which = pe_corp_new value = 5 } } set_variable = { which = pe_c5_on value = 1 } set_variable = { which = pe_c5_name value = pe_corp_cur_name } set_variable = { which = pe_c5_grp value = pe_corp_grp } set_variable = { which = pe_c5_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c5_cash value = 0 } set_variable = { which = pe_c5_firms value = 1 } set_variable = { which = pe_c5_war value = 0 } set_variable = { which = pe_c5_rival value = 0 } set_variable = { which = pe_c5_wcd value = 0 } }
-		else_if = { limit = { check_variable = { which = pe_corp_new value = 6 } } set_variable = { which = pe_c6_on value = 1 } set_variable = { which = pe_c6_name value = pe_corp_cur_name } set_variable = { which = pe_c6_grp value = pe_corp_grp } set_variable = { which = pe_c6_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c6_cash value = 0 } set_variable = { which = pe_c6_firms value = 1 } set_variable = { which = pe_c6_war value = 0 } set_variable = { which = pe_c6_rival value = 0 } set_variable = { which = pe_c6_wcd value = 0 } }
-		else_if = { limit = { check_variable = { which = pe_corp_new value = 7 } } set_variable = { which = pe_c7_on value = 1 } set_variable = { which = pe_c7_name value = pe_corp_cur_name } set_variable = { which = pe_c7_grp value = pe_corp_grp } set_variable = { which = pe_c7_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c7_cash value = 0 } set_variable = { which = pe_c7_firms value = 1 } set_variable = { which = pe_c7_war value = 0 } set_variable = { which = pe_c7_rival value = 0 } set_variable = { which = pe_c7_wcd value = 0 } }
-		else_if = { limit = { check_variable = { which = pe_corp_new value = 8 } } set_variable = { which = pe_c8_on value = 1 } set_variable = { which = pe_c8_name value = pe_corp_cur_name } set_variable = { which = pe_c8_grp value = pe_corp_grp } set_variable = { which = pe_c8_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c8_cash value = 0 } set_variable = { which = pe_c8_firms value = 1 } set_variable = { which = pe_c8_war value = 0 } set_variable = { which = pe_c8_rival value = 0 } set_variable = { which = pe_c8_wcd value = 0 } }
+		if = { limit = { check_variable = { which = pe_corp_new value = 1 } } set_variable = { which = pe_c1_on value = 1 } set_variable = { which = pe_c1_name value = pe_corp_cur_name } set_variable = { which = pe_c1_grp value = pe_corp_grp } set_variable = { which = pe_c1_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c1_cash value = pe_corp_seed } set_variable = { which = pe_c1_firms value = 1 } set_variable = { which = pe_c1_war value = 0 } set_variable = { which = pe_c1_rival value = 0 } set_variable = { which = pe_c1_wcd value = 0 } }
+		else_if = { limit = { check_variable = { which = pe_corp_new value = 2 } } set_variable = { which = pe_c2_on value = 1 } set_variable = { which = pe_c2_name value = pe_corp_cur_name } set_variable = { which = pe_c2_grp value = pe_corp_grp } set_variable = { which = pe_c2_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c2_cash value = pe_corp_seed } set_variable = { which = pe_c2_firms value = 1 } set_variable = { which = pe_c2_war value = 0 } set_variable = { which = pe_c2_rival value = 0 } set_variable = { which = pe_c2_wcd value = 0 } }
+		else_if = { limit = { check_variable = { which = pe_corp_new value = 3 } } set_variable = { which = pe_c3_on value = 1 } set_variable = { which = pe_c3_name value = pe_corp_cur_name } set_variable = { which = pe_c3_grp value = pe_corp_grp } set_variable = { which = pe_c3_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c3_cash value = pe_corp_seed } set_variable = { which = pe_c3_firms value = 1 } set_variable = { which = pe_c3_war value = 0 } set_variable = { which = pe_c3_rival value = 0 } set_variable = { which = pe_c3_wcd value = 0 } }
+		else_if = { limit = { check_variable = { which = pe_corp_new value = 4 } } set_variable = { which = pe_c4_on value = 1 } set_variable = { which = pe_c4_name value = pe_corp_cur_name } set_variable = { which = pe_c4_grp value = pe_corp_grp } set_variable = { which = pe_c4_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c4_cash value = pe_corp_seed } set_variable = { which = pe_c4_firms value = 1 } set_variable = { which = pe_c4_war value = 0 } set_variable = { which = pe_c4_rival value = 0 } set_variable = { which = pe_c4_wcd value = 0 } }
+		else_if = { limit = { check_variable = { which = pe_corp_new value = 5 } } set_variable = { which = pe_c5_on value = 1 } set_variable = { which = pe_c5_name value = pe_corp_cur_name } set_variable = { which = pe_c5_grp value = pe_corp_grp } set_variable = { which = pe_c5_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c5_cash value = pe_corp_seed } set_variable = { which = pe_c5_firms value = 1 } set_variable = { which = pe_c5_war value = 0 } set_variable = { which = pe_c5_rival value = 0 } set_variable = { which = pe_c5_wcd value = 0 } }
+		else_if = { limit = { check_variable = { which = pe_corp_new value = 6 } } set_variable = { which = pe_c6_on value = 1 } set_variable = { which = pe_c6_name value = pe_corp_cur_name } set_variable = { which = pe_c6_grp value = pe_corp_grp } set_variable = { which = pe_c6_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c6_cash value = pe_corp_seed } set_variable = { which = pe_c6_firms value = 1 } set_variable = { which = pe_c6_war value = 0 } set_variable = { which = pe_c6_rival value = 0 } set_variable = { which = pe_c6_wcd value = 0 } }
+		else_if = { limit = { check_variable = { which = pe_corp_new value = 7 } } set_variable = { which = pe_c7_on value = 1 } set_variable = { which = pe_c7_name value = pe_corp_cur_name } set_variable = { which = pe_c7_grp value = pe_corp_grp } set_variable = { which = pe_c7_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c7_cash value = pe_corp_seed } set_variable = { which = pe_c7_firms value = 1 } set_variable = { which = pe_c7_war value = 0 } set_variable = { which = pe_c7_rival value = 0 } set_variable = { which = pe_c7_wcd value = 0 } }
+		else_if = { limit = { check_variable = { which = pe_corp_new value = 8 } } set_variable = { which = pe_c8_on value = 1 } set_variable = { which = pe_c8_name value = pe_corp_cur_name } set_variable = { which = pe_c8_grp value = pe_corp_grp } set_variable = { which = pe_c8_ceo value = pe_corp_cur_ceo } set_variable = { which = pe_c8_cash value = pe_corp_seed } set_variable = { which = pe_c8_firms value = 1 } set_variable = { which = pe_c8_war value = 0 } set_variable = { which = pe_c8_rival value = 0 } set_variable = { which = pe_c8_wcd value = 0 } }
 		if = { limit = { check_variable = { which = pe_corp_cur_name value = 1 } } set_country_flag = pe_cname_1 event_target:pe_corp_planet = { add_modifier = { modifier = pe_corp_hq_1 days = -1 } } }
 		else_if = { limit = { check_variable = { which = pe_corp_cur_name value = 2 } } set_country_flag = pe_cname_2 event_target:pe_corp_planet = { add_modifier = { modifier = pe_corp_hq_2 days = -1 } } }
 		else_if = { limit = { check_variable = { which = pe_corp_cur_name value = 3 } } set_country_flag = pe_cname_3 event_target:pe_corp_planet = { add_modifier = { modifier = pe_corp_hq_3 days = -1 } } }
@@ -741,18 +876,17 @@ pe_corp_found = {
 		else_if = { limit = { check_variable = { which = pe_corp_cur_name value = 39 } } set_country_flag = pe_cname_39 event_target:pe_corp_planet = { add_modifier = { modifier = pe_corp_hq_39 days = -1 } } }
 		else_if = { limit = { check_variable = { which = pe_corp_cur_name value = 40 } } set_country_flag = pe_cname_40 event_target:pe_corp_planet = { add_modifier = { modifier = pe_corp_hq_40 days = -1 } } }
 		country_event = { id = pe.270 }
-	}
 }
 
 # Country scope, quarterly: each corporation with enough cash may take over one independent
-# firm of its sector group (35% per quarter). It pays the owners half of what the district
-# costs (city 250 / rural 150 x stage size) into the investor pool.
+# firm of its sector group (35% per quarter). It pays the owners 30% of what the district
+# costs (city 150 / rural 90 x stage size) into the investor pool.
 pe_corp_acquire = {
 	if = {
 		limit = {
 			check_variable = { which = pe_c1_on value = 1 }
 			check_variable = { which = pe_c1_grp value = 1 }
-			check_variable = { which = pe_c1_cash value >= 150 }
+			check_variable = { which = pe_c1_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g1 value > 0 } }
 		}
 		random = {
@@ -766,8 +900,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c1_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 1 }
@@ -795,7 +929,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c1_on value = 1 }
 			check_variable = { which = pe_c1_grp value = 2 }
-			check_variable = { which = pe_c1_cash value >= 150 }
+			check_variable = { which = pe_c1_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g2 value > 0 } }
 		}
 		random = {
@@ -809,8 +943,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c1_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 1 }
@@ -838,7 +972,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c1_on value = 1 }
 			check_variable = { which = pe_c1_grp value = 3 }
-			check_variable = { which = pe_c1_cash value >= 150 }
+			check_variable = { which = pe_c1_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g3 value > 0 } }
 		}
 		random = {
@@ -852,8 +986,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c1_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 1 }
@@ -881,7 +1015,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c1_on value = 1 }
 			check_variable = { which = pe_c1_grp value = 4 }
-			check_variable = { which = pe_c1_cash value >= 150 }
+			check_variable = { which = pe_c1_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g4 value > 0 } }
 		}
 		random = {
@@ -895,8 +1029,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c1_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 1 }
@@ -924,7 +1058,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c2_on value = 1 }
 			check_variable = { which = pe_c2_grp value = 1 }
-			check_variable = { which = pe_c2_cash value >= 150 }
+			check_variable = { which = pe_c2_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g1 value > 0 } }
 		}
 		random = {
@@ -938,8 +1072,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c2_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 2 }
@@ -967,7 +1101,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c2_on value = 1 }
 			check_variable = { which = pe_c2_grp value = 2 }
-			check_variable = { which = pe_c2_cash value >= 150 }
+			check_variable = { which = pe_c2_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g2 value > 0 } }
 		}
 		random = {
@@ -981,8 +1115,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c2_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 2 }
@@ -1010,7 +1144,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c2_on value = 1 }
 			check_variable = { which = pe_c2_grp value = 3 }
-			check_variable = { which = pe_c2_cash value >= 150 }
+			check_variable = { which = pe_c2_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g3 value > 0 } }
 		}
 		random = {
@@ -1024,8 +1158,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c2_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 2 }
@@ -1053,7 +1187,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c2_on value = 1 }
 			check_variable = { which = pe_c2_grp value = 4 }
-			check_variable = { which = pe_c2_cash value >= 150 }
+			check_variable = { which = pe_c2_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g4 value > 0 } }
 		}
 		random = {
@@ -1067,8 +1201,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c2_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 2 }
@@ -1096,7 +1230,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c3_on value = 1 }
 			check_variable = { which = pe_c3_grp value = 1 }
-			check_variable = { which = pe_c3_cash value >= 150 }
+			check_variable = { which = pe_c3_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g1 value > 0 } }
 		}
 		random = {
@@ -1110,8 +1244,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c3_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 3 }
@@ -1139,7 +1273,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c3_on value = 1 }
 			check_variable = { which = pe_c3_grp value = 2 }
-			check_variable = { which = pe_c3_cash value >= 150 }
+			check_variable = { which = pe_c3_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g2 value > 0 } }
 		}
 		random = {
@@ -1153,8 +1287,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c3_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 3 }
@@ -1182,7 +1316,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c3_on value = 1 }
 			check_variable = { which = pe_c3_grp value = 3 }
-			check_variable = { which = pe_c3_cash value >= 150 }
+			check_variable = { which = pe_c3_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g3 value > 0 } }
 		}
 		random = {
@@ -1196,8 +1330,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c3_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 3 }
@@ -1225,7 +1359,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c3_on value = 1 }
 			check_variable = { which = pe_c3_grp value = 4 }
-			check_variable = { which = pe_c3_cash value >= 150 }
+			check_variable = { which = pe_c3_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g4 value > 0 } }
 		}
 		random = {
@@ -1239,8 +1373,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c3_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 3 }
@@ -1268,7 +1402,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c4_on value = 1 }
 			check_variable = { which = pe_c4_grp value = 1 }
-			check_variable = { which = pe_c4_cash value >= 150 }
+			check_variable = { which = pe_c4_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g1 value > 0 } }
 		}
 		random = {
@@ -1282,8 +1416,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c4_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 4 }
@@ -1311,7 +1445,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c4_on value = 1 }
 			check_variable = { which = pe_c4_grp value = 2 }
-			check_variable = { which = pe_c4_cash value >= 150 }
+			check_variable = { which = pe_c4_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g2 value > 0 } }
 		}
 		random = {
@@ -1325,8 +1459,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c4_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 4 }
@@ -1354,7 +1488,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c4_on value = 1 }
 			check_variable = { which = pe_c4_grp value = 3 }
-			check_variable = { which = pe_c4_cash value >= 150 }
+			check_variable = { which = pe_c4_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g3 value > 0 } }
 		}
 		random = {
@@ -1368,8 +1502,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c4_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 4 }
@@ -1397,7 +1531,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c4_on value = 1 }
 			check_variable = { which = pe_c4_grp value = 4 }
-			check_variable = { which = pe_c4_cash value >= 150 }
+			check_variable = { which = pe_c4_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g4 value > 0 } }
 		}
 		random = {
@@ -1411,8 +1545,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c4_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 4 }
@@ -1440,7 +1574,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c5_on value = 1 }
 			check_variable = { which = pe_c5_grp value = 1 }
-			check_variable = { which = pe_c5_cash value >= 150 }
+			check_variable = { which = pe_c5_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g1 value > 0 } }
 		}
 		random = {
@@ -1454,8 +1588,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c5_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 5 }
@@ -1483,7 +1617,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c5_on value = 1 }
 			check_variable = { which = pe_c5_grp value = 2 }
-			check_variable = { which = pe_c5_cash value >= 150 }
+			check_variable = { which = pe_c5_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g2 value > 0 } }
 		}
 		random = {
@@ -1497,8 +1631,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c5_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 5 }
@@ -1526,7 +1660,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c5_on value = 1 }
 			check_variable = { which = pe_c5_grp value = 3 }
-			check_variable = { which = pe_c5_cash value >= 150 }
+			check_variable = { which = pe_c5_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g3 value > 0 } }
 		}
 		random = {
@@ -1540,8 +1674,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c5_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 5 }
@@ -1569,7 +1703,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c5_on value = 1 }
 			check_variable = { which = pe_c5_grp value = 4 }
-			check_variable = { which = pe_c5_cash value >= 150 }
+			check_variable = { which = pe_c5_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g4 value > 0 } }
 		}
 		random = {
@@ -1583,8 +1717,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c5_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 5 }
@@ -1612,7 +1746,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c6_on value = 1 }
 			check_variable = { which = pe_c6_grp value = 1 }
-			check_variable = { which = pe_c6_cash value >= 150 }
+			check_variable = { which = pe_c6_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g1 value > 0 } }
 		}
 		random = {
@@ -1626,8 +1760,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c6_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 6 }
@@ -1655,7 +1789,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c6_on value = 1 }
 			check_variable = { which = pe_c6_grp value = 2 }
-			check_variable = { which = pe_c6_cash value >= 150 }
+			check_variable = { which = pe_c6_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g2 value > 0 } }
 		}
 		random = {
@@ -1669,8 +1803,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c6_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 6 }
@@ -1698,7 +1832,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c6_on value = 1 }
 			check_variable = { which = pe_c6_grp value = 3 }
-			check_variable = { which = pe_c6_cash value >= 150 }
+			check_variable = { which = pe_c6_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g3 value > 0 } }
 		}
 		random = {
@@ -1712,8 +1846,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c6_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 6 }
@@ -1741,7 +1875,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c6_on value = 1 }
 			check_variable = { which = pe_c6_grp value = 4 }
-			check_variable = { which = pe_c6_cash value >= 150 }
+			check_variable = { which = pe_c6_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g4 value > 0 } }
 		}
 		random = {
@@ -1755,8 +1889,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c6_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 6 }
@@ -1784,7 +1918,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c7_on value = 1 }
 			check_variable = { which = pe_c7_grp value = 1 }
-			check_variable = { which = pe_c7_cash value >= 150 }
+			check_variable = { which = pe_c7_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g1 value > 0 } }
 		}
 		random = {
@@ -1798,8 +1932,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c7_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 7 }
@@ -1827,7 +1961,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c7_on value = 1 }
 			check_variable = { which = pe_c7_grp value = 2 }
-			check_variable = { which = pe_c7_cash value >= 150 }
+			check_variable = { which = pe_c7_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g2 value > 0 } }
 		}
 		random = {
@@ -1841,8 +1975,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c7_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 7 }
@@ -1870,7 +2004,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c7_on value = 1 }
 			check_variable = { which = pe_c7_grp value = 3 }
-			check_variable = { which = pe_c7_cash value >= 150 }
+			check_variable = { which = pe_c7_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g3 value > 0 } }
 		}
 		random = {
@@ -1884,8 +2018,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c7_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 7 }
@@ -1913,7 +2047,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c7_on value = 1 }
 			check_variable = { which = pe_c7_grp value = 4 }
-			check_variable = { which = pe_c7_cash value >= 150 }
+			check_variable = { which = pe_c7_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g4 value > 0 } }
 		}
 		random = {
@@ -1927,8 +2061,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c7_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 7 }
@@ -1956,7 +2090,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c8_on value = 1 }
 			check_variable = { which = pe_c8_grp value = 1 }
-			check_variable = { which = pe_c8_cash value >= 150 }
+			check_variable = { which = pe_c8_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g1 value > 0 } }
 		}
 		random = {
@@ -1970,8 +2104,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c8_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 8 }
@@ -1999,7 +2133,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c8_on value = 1 }
 			check_variable = { which = pe_c8_grp value = 2 }
-			check_variable = { which = pe_c8_cash value >= 150 }
+			check_variable = { which = pe_c8_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g2 value > 0 } }
 		}
 		random = {
@@ -2013,8 +2147,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c8_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 8 }
@@ -2042,7 +2176,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c8_on value = 1 }
 			check_variable = { which = pe_c8_grp value = 3 }
-			check_variable = { which = pe_c8_cash value >= 150 }
+			check_variable = { which = pe_c8_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g3 value > 0 } }
 		}
 		random = {
@@ -2056,8 +2190,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c8_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 8 }
@@ -2085,7 +2219,7 @@ pe_corp_acquire = {
 		limit = {
 			check_variable = { which = pe_c8_on value = 1 }
 			check_variable = { which = pe_c8_grp value = 4 }
-			check_variable = { which = pe_c8_cash value >= 150 }
+			check_variable = { which = pe_c8_cash value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g4 value > 0 } }
 		}
 		random = {
@@ -2099,8 +2233,8 @@ pe_corp_acquire = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = pe_c8_cash value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = 8 }

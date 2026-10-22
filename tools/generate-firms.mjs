@@ -1241,25 +1241,83 @@ ${CORPS.map(k => `	if = {
 	}`).join('\n')}
 }
 
-# Country scope, quarterly: a stage-3 firm without a corporation founds one (at most one per
-# quarter, while a slot is free): a free name of its sector group, a magnate as chief
-# executive, the headquarters on its planet. Event pe.270.
+# Country scope, quarterly: one independent stage-3 firm a quarter (the candidate,
+# pe_corp_cand) becomes part of a corporation. If its sector group has fewer than two
+# corporations and a slot is free, it founds one: a free name of its group, a magnate as
+# chief executive, the headquarters on its planet, half of its capital as seed money (event
+# pe.270). Otherwise it joins the smallest corporation of its group, bringing half of its
+# capital (a friendly merger, message).
 pe_corp_found = {
 	set_variable = { which = pe_corp_new value = 0 }
 ${[...CORPS].reverse().map(k => `\tif = { limit = { NOT = { check_variable = { which = ${C(k, 'on')} value = 1 } } } set_variable = { which = pe_corp_new value = ${k} } }`).join('\n')}
 	if = {
-		limit = {
-			check_variable = { which = pe_corp_new value > 0 }
-			any_owned_colony = { check_variable = { which = pe_ind3 value > 0 } }
-		}
+		limit = { any_owned_colony = { check_variable = { which = pe_ind3 value > 0 } } }
 		set_variable = { which = pe_corp_grp value = 0 }
+		set_variable = { which = pe_corp_seed value = 0 }
 		random_owned_colony = {
 			limit = { check_variable = { which = pe_ind3 value > 0 } }
 			save_event_target_as = pe_corp_planet
 			random_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_stage value = 3 } check_variable = { which = pe_corp value = 0 } }
-				set_variable = { which = pe_corp value = root.pe_corp_new }
+				set_variable = { which = pe_corp_cand value = 1 }
 ${ifChain(GROUPS, g => inGroup(g), g => `root = { set_variable = { which = pe_corp_grp value = ${g} } }`, '\t\t\t\t')}
+				set_variable = { which = pe_tmp value = pe_fcap }
+				multiply_variable = { which = pe_tmp value = 0.5 }
+				root = { set_variable = { which = pe_corp_seed value = prev.pe_tmp } }
+			}
+		}
+		# The corporations of its group, and the smallest of them.
+		set_variable = { which = pe_grp_n value = 0 }
+		set_variable = { which = pe_join value = 0 }
+		set_variable = { which = pe_join_min value = 100000 }
+${CORPS.map(k => `		if = {
+			limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'grp')} value = pe_corp_grp } }
+			change_variable = { which = pe_grp_n value = 1 }
+			if = {
+				limit = { check_variable = { which = ${C(k, 'firms')} value < pe_join_min } }
+				set_variable = { which = pe_join value = ${k} }
+				set_variable = { which = pe_join_min value = ${C(k, 'firms')} }
+			}
+		}`).join('\n')}
+		if = {
+			limit = {
+				check_variable = { which = pe_corp_new value > 0 }
+				check_variable = { which = pe_grp_n value < 2 }
+			}
+			pe_corp_found_new = yes
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_join value > 0 } }
+			event_target:pe_corp_planet = {
+				random_deposit = {
+					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp_cand value = 1 } }
+					set_variable = { which = pe_corp value = root.pe_join }
+					subtract_variable = { which = pe_fcap value = root.pe_corp_seed }
+				}
+				change_variable = { which = pe_ind3 value = -1 }
+${corpChain('root.pe_join', k => `change_variable = { which = pe_mem_${k} value = 1 }`, '\t\t\t\t')}
+				save_event_target_as = pe_msg_planet
+			}
+${corpChain('pe_join', k => `change_variable = { which = ${C(k, 'cash')} value = pe_corp_seed } change_variable = { which = ${C(k, 'firms')} value = 1 } set_variable = { which = pe_msg_name value = ${C(k, 'name')} }`, '\t\t\t')}
+			pe_corp_msg = { KEY = pe_msg_corp_join }
+		}
+		event_target:pe_corp_planet = {
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp_cand value = 1 } }
+				set_variable = { which = pe_corp_cand value = 0 }
+			}
+		}
+	}
+}
+
+# Country scope: the candidate (pe_corp_cand on event_target:pe_corp_planet) founds a
+# corporation in slot pe_corp_new.
+pe_corp_found_new = {
+		event_target:pe_corp_planet = {
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp_cand value = 1 } }
+				set_variable = { which = pe_corp value = root.pe_corp_new }
+				subtract_variable = { which = pe_fcap value = root.pe_corp_seed }
 			}
 			change_variable = { which = pe_ind3 value = -1 }
 ${corpChain('root.pe_corp_new', k => `set_planet_flag = pe_hq_${k} change_variable = { which = pe_mem_${k} value = 1 }`, '\t\t\t')}
@@ -1274,21 +1332,20 @@ ${NAME_IDS.map(id => `			10 = {
 		}
 		set_variable_to_random_value = { which = pe_corp_cur_ceo min = 1 max = 16 rounded = yes }
 		set_variable = { which = pe_corp_cur value = pe_corp_new }
-${corpChain('pe_corp_new', k => `set_variable = { which = ${C(k, 'on')} value = 1 } set_variable = { which = ${C(k, 'name')} value = pe_corp_cur_name } set_variable = { which = ${C(k, 'grp')} value = pe_corp_grp } set_variable = { which = ${C(k, 'ceo')} value = pe_corp_cur_ceo } set_variable = { which = ${C(k, 'cash')} value = 0 } set_variable = { which = ${C(k, 'firms')} value = 1 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'wcd')} value = 0 }`, '\t\t')}
+${corpChain('pe_corp_new', k => `set_variable = { which = ${C(k, 'on')} value = 1 } set_variable = { which = ${C(k, 'name')} value = pe_corp_cur_name } set_variable = { which = ${C(k, 'grp')} value = pe_corp_grp } set_variable = { which = ${C(k, 'ceo')} value = pe_corp_cur_ceo } set_variable = { which = ${C(k, 'cash')} value = pe_corp_seed } set_variable = { which = ${C(k, 'firms')} value = 1 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'wcd')} value = 0 }`, '\t\t')}
 ${nameChain('pe_corp_cur_name', id => `set_country_flag = pe_cname_${id} event_target:pe_corp_planet = { add_modifier = { modifier = pe_corp_hq_${id} days = -1 } }`, '\t\t')}
 		country_event = { id = pe.270 }
-	}
 }
 
 # Country scope, quarterly: each corporation with enough cash may take over one independent
-# firm of its sector group (35% per quarter). It pays the owners half of what the district
-# costs (city 250 / rural 150 x stage size) into the investor pool.
+# firm of its sector group (35% per quarter). It pays the owners 30% of what the district
+# costs (city 150 / rural 90 x stage size) into the investor pool.
 pe_corp_acquire = {
 ${CORPS.flatMap(k => GROUPS.map(g => `	if = {
 		limit = {
 			check_variable = { which = ${C(k, 'on')} value = 1 }
 			check_variable = { which = ${C(k, 'grp')} value = ${g} }
-			check_variable = { which = ${C(k, 'cash')} value >= 150 }
+			check_variable = { which = ${C(k, 'cash')} value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g${g} value > 0 } }
 		}
 		random = {
@@ -1302,8 +1359,8 @@ ${CORPS.flatMap(k => GROUPS.map(g => `	if = {
 					set_variable = { which = pe_tmp value = pe_stage }
 					change_variable = { which = pe_tmp value = 1 }
 					multiply_variable = { which = pe_tmp value = 0.5 }
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 250 } }
-					else = { multiply_variable = { which = pe_tmp value = 150 } }
+					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
 						limit = { root = { check_variable = { which = ${C(k, 'cash')} value >= prev.pe_tmp } } }
 						set_variable = { which = pe_corp value = ${k} }
@@ -1470,6 +1527,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
     li ? ' pe_price_war:0 "Preiskampf"' : ' pe_price_war:0 "Price War"',
     li ? ' pe_price_war_desc:0 "Zwei Konzerne kämpfen hier um Kunden: mehr Ausstoß, weniger Gewinn."' : ' pe_price_war_desc:0 "Two corporations fight for customers here: more output, less profit."',
     li ? ' pe_msg_corp_acq:0 "§Y$CORP$§! hat auf $PLANET$ ein unabhängiges Privatunternehmen übernommen."' : ' pe_msg_corp_acq:0 "§Y$CORP$§! has taken over an independent private firm on $PLANET$."',
+    li ? ' pe_msg_corp_join:0 "Ein großes unabhängiges Privatunternehmen auf $PLANET$ hat sich §Y$CORP$§! angeschlossen und die Hälfte seines Kapitals eingebracht."' : ' pe_msg_corp_join:0 "A large independent private firm on $PLANET$ has joined §Y$CORP$§! and brought half of its capital."',
     li ? ' pe_msg_corp_gone:0 "§Y$CORP$§! hat keine Firmen mehr und wurde aufgelöst."' : ' pe_msg_corp_gone:0 "§Y$CORP$§! has no firms left and has been dissolved."');
 }
 

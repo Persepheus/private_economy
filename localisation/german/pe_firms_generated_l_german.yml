@@ -1881,4 +1881,5 @@
  pe_price_war:0 "Preiskampf"
  pe_price_war_desc:0 "Zwei Konzerne kämpfen hier um Kunden: mehr Ausstoß, weniger Gewinn."
  pe_msg_corp_acq:0 "§Y$CORP$§! hat auf $PLANET$ ein unabhängiges Privatunternehmen übernommen."
+ pe_msg_corp_join:0 "Ein großes unabhängiges Privatunternehmen auf $PLANET$ hat sich §Y$CORP$§! angeschlossen und die Hälfte seines Kapitals eingebracht."
  pe_msg_corp_gone:0 "§Y$CORP$§! hat keine Firmen mehr und wurde aufgelöst."

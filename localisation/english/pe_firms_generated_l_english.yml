@@ -1881,4 +1881,5 @@
  pe_price_war:0 "Price War"
  pe_price_war_desc:0 "Two corporations fight for customers here: more output, less profit."
  pe_msg_corp_acq:0 "§Y$CORP$§! has taken over an independent private firm on $PLANET$."
+ pe_msg_corp_join:0 "A large independent private firm on $PLANET$ has joined §Y$CORP$§! and brought half of its capital."
  pe_msg_corp_gone:0 "§Y$CORP$§! has no firms left and has been dissolved."

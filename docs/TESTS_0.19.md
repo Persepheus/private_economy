@@ -36,6 +36,14 @@ Ein laufendes Spiel kann weiterlaufen. Bestehende Firmen sind zunächst unabhän
 - **Planwirtschaft:** Alle Konzerne enden.
 - **Umbau, Wachstum und Umzug:** Die Firma bleibt in ihrem Konzern.
 
+## Änderungen 0.19.1 (nach dem Save 2278)
+Im Save waren nach rund zwei Jahren alle 8 Plätze belegt, mit Konzernen aus je einer Firma (einer hatte zwei). Die Gruppe Handel und Freizeit fehlte, Industrie und Rohstoffe hatten je drei. 20 deiner Firmen der Stufe 3 blieben unabhängig, weil eine Übernahme 500 kostete und die Kassen bei 30–200 lagen.
+- **Startkapital:** Die gründende Firma gibt die Hälfte ihres Kapitals in die Konzernkasse.
+- **Höchstens 2 Konzerne pro Branchengruppe:** So verteilen sich die 8 Plätze auf alle Gruppen.
+- **Freundliche Fusion:** Kann eine große unabhängige Firma keinen Konzern gründen (Gruppe voll oder kein Platz), schließt sie sich dem kleinsten Konzern ihrer Gruppe an. Sie bringt die Hälfte ihres Kapitals mit. Dazu kommt eine Nachricht.
+- **Übernahmen billiger:** 30 % der Distriktkosten × Stufengröße (Stadt 150, Land 90) statt der Hälfte.
+- Bestehende Konzerne bleiben. Die dritten Konzerne in Industrie und Rohstoffe verschwinden erst über Fusionen.
+
 ## Debug
 - `event pe.14`: sofort einen Konzern gründen (vorher `event pe.7`).
 - `event pe.273`: Konzernregister mit Firmen, Kasse und Preiskämpfen.
