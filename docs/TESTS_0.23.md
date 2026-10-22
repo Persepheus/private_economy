@@ -28,6 +28,18 @@ Alle Schiffe gehören dem Konzern (Holdings), werden dir verleast (10 % Unterhal
 ## Korrektur
 - Beim Einbau hätte ich beinahe den Monatsimpuls `pe.100` überschrieben, also die ganze Privatwirtschaft. Er ist wiederhergestellt, und der Validator prüft ihn jetzt.
 
+## Korrekturen 0.23.1 (nach dem ersten Test)
+- **Keine Anführer** (error.log: „assign_leader effect failed“): Der Anführer der Holdings wurde zugewiesen, als die Flotte schon an dich verleast war. Jetzt läuft es wie bei Vanilla:
+  - Die Holdings werden Eigentümer.
+  - Ihr Anführer (als Event-Target gemerkt) wird zugewiesen.
+  - Erst danach wird die Flotte an dich verleast.
+  - Bleibt eine Flotte trotzdem ohne Anführer, steht im game.log „corporate fleet without a leader“.
+- **`pe.277` hat laufende Verträge weitergezählt:** Dein Kriegsleasing stand nach mehreren Aufrufen von 17 auf 9 Quartalen, die Charta lief vorzeitig ab. Jetzt löst `pe.277` nur Angebote aus und lässt laufende Verträge in Ruhe.
+- **Angebote mischten ihre Daten:** Alle Angebote nutzten dieselben Zwischenwerte (Konzern, Stärke, Budget, Ort). Kamen zwei in einem Quartal, überschrieb das zweite das erste, bevor du antworten konntest. So begann eine Charta ohne Konzern. Jetzt hat jede Art eigene Werte (`pe_wl_`, `pe_cl_`, `pe_cv_`, `pe_ch_`, `pe_sv_`, `pe_sw_`), und jedes Event setzt seinen Konzernnamen selbst.
+- **Dyson-Schwarm:** Er wurde gebaut (unter Laissez-faire ohne Angebot), nur ohne Hinweis. Jetzt kommt eine Nachricht. In der Galaxis gab es 10 Schwärme, also bauen auch KI-Konzerne.
+- **Log-Fehler „Failed to get leader from scope“** beim Zurückgeben einer Flotte ohne Anführer: behoben.
+- `pe.277` schreibt ins Log, welcher Konzern für welches Angebot in Frage kam (0 = keiner oder Bedingung fehlt).
+
 ## Debug
 - `event pe.277`: alle Konzern-Angebote sofort, jeweils nur, wo die Bedingung erfüllt ist: Kriegsleasing auch im Frieden, Säuberung, Charta, Konvoischutz, Bergung, Schwarm.
 

@@ -273,7 +273,7 @@ country_event = {
 		set_variable = { which = pe_fl_force value = 1 }
 		remove_country_flag = pe_lease_war_cd
 		remove_country_flag = pe_lease_clear_cd
-		set_country_flag = pe_fl_debug_war
+		set_country_flag = pe_fl_debug
 		pe_corp_fleets = yes
 		remove_country_flag = pe_charter_cd
 		remove_country_flag = pe_convoy_cd
@@ -283,8 +283,8 @@ country_event = {
 		pe_corp_convoy = yes
 		pe_corp_salvage = yes
 		pe_corp_swarm = yes
-		remove_country_flag = pe_fl_debug_war
+		remove_country_flag = pe_fl_debug
 		set_variable = { which = pe_fl_force value = 0 }
-		log = "private_economy: pe.277 fleets: corporation [Root.pe_fl_k], war lease [Root.pe_lease_war_q], clearing [Root.pe_lease_clear_q]"
+		log = "private_economy: pe.277 offers: war [Root.pe_wl_k], clearing [Root.pe_cl_k], charter [Root.pe_ch_k], convoy [Root.pe_cv_k], salvage [Root.pe_sv_k], swarm [Root.pe_sw_k] (0 = no corporation or condition)"
 	}
 }

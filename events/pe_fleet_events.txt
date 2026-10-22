@@ -11,6 +11,7 @@ country_event = {
 	desc = pe.282.desc
 	picture = GFX_evt_federation_fleet
 	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_wl_k value = 1 } } set_variable = { which = pe_corp_cur_name value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 2 } } set_variable = { which = pe_corp_cur_name value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 3 } } set_variable = { which = pe_corp_cur_name value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 4 } } set_variable = { which = pe_corp_cur_name value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 5 } } set_variable = { which = pe_corp_cur_name value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 6 } } set_variable = { which = pe_corp_cur_name value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 7 } } set_variable = { which = pe_corp_cur_name value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 8 } } set_variable = { which = pe_corp_cur_name value = pe_c8_name } } } }
 
 	option = {
 		name = pe.282.a
@@ -26,6 +27,7 @@ country_event = {
 	desc = pe.283.desc
 	picture = GFX_evt_federation_fleet
 	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_wl_k value = 1 } } set_variable = { which = pe_corp_cur_name value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 2 } } set_variable = { which = pe_corp_cur_name value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 3 } } set_variable = { which = pe_corp_cur_name value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 4 } } set_variable = { which = pe_corp_cur_name value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 5 } } set_variable = { which = pe_corp_cur_name value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 6 } } set_variable = { which = pe_corp_cur_name value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 7 } } set_variable = { which = pe_corp_cur_name value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_wl_k value = 8 } } set_variable = { which = pe_corp_cur_name value = pe_c8_name } } } }
 
 	option = {
 		name = pe.283.a
@@ -36,7 +38,7 @@ country_event = {
 	option = {
 		name = pe.283.b
 		hidden_effect = {
-			every_controlled_fleet = { limit = { has_fleet_flag = pe_lease_war } kill_leader = { show_notification = no fire = yes } delete_fleet = this }
+			every_controlled_fleet = { limit = { has_fleet_flag = pe_lease_war } if = { limit = { exists = leader } kill_leader = { show_notification = no fire = yes } } delete_fleet = this }
 			set_variable = { which = pe_lease_war_q value = 0 }
 		}
 	}
@@ -48,6 +50,7 @@ country_event = {
 	desc = pe.284.desc
 	picture = GFX_evt_crystal_kraken
 	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_cl_k value = 1 } } set_variable = { which = pe_corp_cur_name value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 2 } } set_variable = { which = pe_corp_cur_name value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 3 } } set_variable = { which = pe_corp_cur_name value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 4 } } set_variable = { which = pe_corp_cur_name value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 5 } } set_variable = { which = pe_corp_cur_name value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 6 } } set_variable = { which = pe_corp_cur_name value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 7 } } set_variable = { which = pe_corp_cur_name value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 8 } } set_variable = { which = pe_corp_cur_name value = pe_c8_name } } } }
 	location = event_target:pe_cl_sys
 
 	option = {
@@ -65,6 +68,7 @@ country_event = {
 	desc = { trigger = { check_variable = { which = pe_cl_done value = 2 } } text = pe.285.desc.no }
 	picture = GFX_evt_crystal_kraken
 	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_cl_k value = 1 } } set_variable = { which = pe_corp_cur_name value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 2 } } set_variable = { which = pe_corp_cur_name value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 3 } } set_variable = { which = pe_corp_cur_name value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 4 } } set_variable = { which = pe_corp_cur_name value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 5 } } set_variable = { which = pe_corp_cur_name value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 6 } } set_variable = { which = pe_corp_cur_name value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 7 } } set_variable = { which = pe_corp_cur_name value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_cl_k value = 8 } } set_variable = { which = pe_corp_cur_name value = pe_c8_name } } } }
 
 	option = { name = pe.285.a }
 }
@@ -95,6 +99,7 @@ country_event = {
 	desc = pe.286.desc
 	picture = GFX_evt_inf_science_ship
 	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_ch_k value = 1 } } set_variable = { which = pe_corp_cur_name value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_ch_k value = 2 } } set_variable = { which = pe_corp_cur_name value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_ch_k value = 3 } } set_variable = { which = pe_corp_cur_name value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_ch_k value = 4 } } set_variable = { which = pe_corp_cur_name value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_ch_k value = 5 } } set_variable = { which = pe_corp_cur_name value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_ch_k value = 6 } } set_variable = { which = pe_corp_cur_name value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_ch_k value = 7 } } set_variable = { which = pe_corp_cur_name value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_ch_k value = 8 } } set_variable = { which = pe_corp_cur_name value = pe_c8_name } } } }
 
 	option = {
 		name = pe.286.a
@@ -111,6 +116,7 @@ country_event = {
 	desc = pe.287.desc
 	picture = GFX_evt_federation_fleet
 	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_cv_k value = 1 } } set_variable = { which = pe_corp_cur_name value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 2 } } set_variable = { which = pe_corp_cur_name value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 3 } } set_variable = { which = pe_corp_cur_name value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 4 } } set_variable = { which = pe_corp_cur_name value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 5 } } set_variable = { which = pe_corp_cur_name value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 6 } } set_variable = { which = pe_corp_cur_name value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 7 } } set_variable = { which = pe_corp_cur_name value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 8 } } set_variable = { which = pe_corp_cur_name value = pe_c8_name } } } }
 	location = event_target:pe_cv_sys
 
 	option = {
@@ -129,6 +135,7 @@ country_event = {
 	desc = { trigger = { check_variable = { which = pe_cv_done value = 2 } } text = pe.288.desc.no }
 	picture = GFX_evt_federation_fleet
 	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_cv_k value = 1 } } set_variable = { which = pe_corp_cur_name value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 2 } } set_variable = { which = pe_corp_cur_name value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 3 } } set_variable = { which = pe_corp_cur_name value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 4 } } set_variable = { which = pe_corp_cur_name value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 5 } } set_variable = { which = pe_corp_cur_name value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 6 } } set_variable = { which = pe_corp_cur_name value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 7 } } set_variable = { which = pe_corp_cur_name value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_cv_k value = 8 } } set_variable = { which = pe_corp_cur_name value = pe_c8_name } } } }
 
 	option = { name = pe.288.a }
 }
@@ -140,6 +147,7 @@ country_event = {
 	desc = pe.289.desc
 	picture = GFX_evt_debris
 	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_sv_k value = 1 } } set_variable = { which = pe_corp_cur_name value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_sv_k value = 2 } } set_variable = { which = pe_corp_cur_name value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_sv_k value = 3 } } set_variable = { which = pe_corp_cur_name value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_sv_k value = 4 } } set_variable = { which = pe_corp_cur_name value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_sv_k value = 5 } } set_variable = { which = pe_corp_cur_name value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_sv_k value = 6 } } set_variable = { which = pe_corp_cur_name value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_sv_k value = 7 } } set_variable = { which = pe_corp_cur_name value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_sv_k value = 8 } } set_variable = { which = pe_corp_cur_name value = pe_c8_name } } } }
 
 	option = {
 		name = pe.289.a
@@ -156,6 +164,7 @@ country_event = {
 	desc = pe.292.desc
 	picture = GFX_evt_dyson_swarm
 	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_sw_k value = 1 } } set_variable = { which = pe_corp_cur_name value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_sw_k value = 2 } } set_variable = { which = pe_corp_cur_name value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_sw_k value = 3 } } set_variable = { which = pe_corp_cur_name value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_sw_k value = 4 } } set_variable = { which = pe_corp_cur_name value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_sw_k value = 5 } } set_variable = { which = pe_corp_cur_name value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_sw_k value = 6 } } set_variable = { which = pe_corp_cur_name value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_sw_k value = 7 } } set_variable = { which = pe_corp_cur_name value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_sw_k value = 8 } } set_variable = { which = pe_corp_cur_name value = pe_c8_name } } } }
 	location = event_target:pe_sw_star
 
 	option = {
