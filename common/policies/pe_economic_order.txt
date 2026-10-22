@@ -15,10 +15,14 @@ pe_economic_order = {
 		name = "pe_order_planned"
 		policy_flags = { pe_order_planned }
 		on_enabled = {
-			set_variable = { which = pe_private_share value = 0 }
-			set_variable = { which = pe_profit_share value = 0 }
-			set_variable = { which = pe_profit_pct value = 0 }
-			set_variable = { which = pe_savings_rate value = 0 }
+			custom_tooltip = pe_order_planned_tt
+			hidden_effect = {
+				set_variable = { which = pe_private_share value = 0 }
+				set_variable = { which = pe_profit_share value = 0 }
+				set_variable = { which = pe_profit_pct value = 0 }
+				set_variable = { which = pe_savings_rate value = 0 }
+			}
+			hidden_effect = { pe_command_economy = yes }
 		}
 		ai_weight = {
 			weight = 50
@@ -29,10 +33,13 @@ pe_economic_order = {
 		name = "pe_order_guided"
 		policy_flags = { pe_order_guided }
 		on_enabled = {
-			set_variable = { which = pe_private_share value = 20 }
-			set_variable = { which = pe_profit_share value = 0.15 }
-			set_variable = { which = pe_profit_pct value = 15 }
-			set_variable = { which = pe_savings_rate value = 0.05 }
+			custom_tooltip = pe_order_guided_tt
+			hidden_effect = {
+				set_variable = { which = pe_private_share value = 20 }
+				set_variable = { which = pe_profit_share value = 0.15 }
+				set_variable = { which = pe_profit_pct value = 15 }
+				set_variable = { which = pe_savings_rate value = 0.05 }
+			}
 		}
 		ai_weight = {
 			weight = 80
@@ -43,10 +50,13 @@ pe_economic_order = {
 		name = "pe_order_mixed"
 		policy_flags = { pe_order_mixed }
 		on_enabled = {
-			set_variable = { which = pe_private_share value = 40 }
-			set_variable = { which = pe_profit_share value = 0.2 }
-			set_variable = { which = pe_profit_pct value = 20 }
-			set_variable = { which = pe_savings_rate value = 0.1 }
+			custom_tooltip = pe_order_mixed_tt
+			hidden_effect = {
+				set_variable = { which = pe_private_share value = 40 }
+				set_variable = { which = pe_profit_share value = 0.2 }
+				set_variable = { which = pe_profit_pct value = 20 }
+				set_variable = { which = pe_savings_rate value = 0.1 }
+			}
 		}
 		ai_weight = {
 			weight = 100
@@ -56,10 +66,13 @@ pe_economic_order = {
 		name = "pe_order_free_market"
 		policy_flags = { pe_order_free_market }
 		on_enabled = {
-			set_variable = { which = pe_private_share value = 60 }
-			set_variable = { which = pe_profit_share value = 0.25 }
-			set_variable = { which = pe_profit_pct value = 25 }
-			set_variable = { which = pe_savings_rate value = 0.15 }
+			custom_tooltip = pe_order_free_market_tt
+			hidden_effect = {
+				set_variable = { which = pe_private_share value = 60 }
+				set_variable = { which = pe_profit_share value = 0.25 }
+				set_variable = { which = pe_profit_pct value = 25 }
+				set_variable = { which = pe_savings_rate value = 0.15 }
+			}
 		}
 		ai_weight = {
 			weight = 80
@@ -71,10 +84,13 @@ pe_economic_order = {
 		name = "pe_order_laissez_faire"
 		policy_flags = { pe_order_laissez_faire }
 		on_enabled = {
-			set_variable = { which = pe_private_share value = 80 }
-			set_variable = { which = pe_profit_share value = 0.35 }
-			set_variable = { which = pe_profit_pct value = 35 }
-			set_variable = { which = pe_savings_rate value = 0.2 }
+			custom_tooltip = pe_order_laissez_faire_tt
+			hidden_effect = {
+				set_variable = { which = pe_private_share value = 80 }
+				set_variable = { which = pe_profit_share value = 0.35 }
+				set_variable = { which = pe_profit_pct value = 35 }
+				set_variable = { which = pe_savings_rate value = 0.2 }
+			}
 		}
 		ai_weight = {
 			weight = 30

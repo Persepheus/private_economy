@@ -377,6 +377,8 @@ country_event = {
 
 	option = {
 		name = pe.215.a
+		custom_tooltip = pe.215.a.tt
+		hidden_effect = {
 		event_target:pe_pat_planet = {
 			if = { limit = { has_deposit = d_pe_hydroponics } remove_deposit = d_pe_hydroponics }
 			if = { limit = { has_deposit = d_pe_hydroponics_2 } remove_deposit = d_pe_hydroponics_2 }
@@ -386,7 +388,8 @@ country_event = {
 			else = { add_deposit = d_pe_hydroponics_3 }
 			set_timed_planet_flag = { flag = pe_hydro days = 3600 }
 		}
-		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		change_variable = { which = pe_mag_rep value = 1 }
+		}
 		ai_chance = { factor = 80 }
 	}
 	option = {
@@ -523,7 +526,7 @@ country_event = {
 				owner = root
 				species = root
 			}
-			set_variable = { which = pe_col_pops value = root.pe_col_pops }
+			hidden_effect = { set_variable = { which = pe_col_pops value = root.pe_col_pops } }
 			create_pop_group = {
 				species = owner_main_species
 				size = pe_col_pops
@@ -612,8 +615,11 @@ country_event = {
 	option = {
 		name = pe.226.a
 		event_target:pe_pat_planet = { add_modifier = { modifier = pe_relief days = 720 multiplier = root.pe_pat_mult } }
-		set_timed_country_flag = { flag = pe_gratitude days = 720 }
-		hidden_effect = { change_variable = { which = pe_mag_rep value = 2 } }
+		custom_tooltip = pe.226.a.tt
+		hidden_effect = {
+			set_timed_country_flag = { flag = pe_gratitude days = 720 }
+			change_variable = { which = pe_mag_rep value = 2 }
+		}
 		ai_chance = { factor = 80 }
 	}
 	option = {

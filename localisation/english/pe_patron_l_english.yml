@@ -291,3 +291,5 @@
  d_pe_company_housing_2_desc:0 "Apartment blocks the private firms built for their workers."
  d_pe_company_housing_3:0 "Company Housing"
  d_pe_company_housing_3_desc:0 "Apartment blocks the private firms built for their workers."
+ pe.215.a.tt:0 "§Y[pe_pat_planet.GetName]§! gets hydroponic towers: §G+[Root.pe_hydro_food]§! £food£ food a month for ten years, for a little energy."
+ pe.226.a.tt:0 "Out of gratitude the firms take only half their profit for two years."

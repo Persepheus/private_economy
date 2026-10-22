@@ -609,6 +609,7 @@ ${ifChain(variants, v => rootIs('pe_best_variant', v.code), v => {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= ${(m + t) * DOWN} } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = ${v.code} }

@@ -20,6 +20,7 @@
 #                                          -> pe_nationalise_one (3)
 #                                          -> pe_restructure (3)      -> pe_retool_consider (4)
 #                                                                     -> pe_retool_guard (4)
+#                    -> pe_command_economy (2) -> pe_firm_identify (3), pe_deposit_fetch (3)
 #                    -> pe_relocate (2) -> pe_relocate_from (3) -> pe_relocate_exec (4)
 #                                                             -> pe_relocate_check_dest (4)
 #                    -> pe_patron (2) -> pe_patron_fire (3)   (pe_patron_effects.txt)
@@ -146,6 +147,19 @@ pe_init = {
 
 pe_quarterly = {
 	pe_init = yes
+	# Command economy: no private economy at all (firms that appeared anyway are removed).
+	if = {
+		limit = {
+			has_policy_flag = pe_order_planned
+			any_owned_colony = {
+				OR = {
+					count_deposits = { category = pe_deposit_cat_firms count > 0 }
+					count_deposits = { category = pe_deposit_cat_sites count > 0 }
+				}
+			}
+		}
+		pe_command_economy = yes
+	}
 	set_variable = { which = pe_pool_income value = 0 }
 	set_variable = { which = pe_profit_due value = 0 }
 	pe_savings = yes
@@ -822,7 +836,8 @@ pe_planet_step = {
 				pe_found_variant = yes
 			}
 			else_if = {
-				limit = { owner = { pe_buyout_allowed = yes } }
+				# At most one buyout (or offer) per planet every two years.
+				limit = { owner = { pe_buyout_allowed = yes } NOT = { has_planet_flag = pe_buy_cd } }
 				# A firm must be worth clearly more than the state district it replaces.
 				root = { set_variable = { which = pe_best_min value = 2 } set_variable = { which = pe_dmode value = 1 } }
 				pe_choose_variant = { MODE = buy }
@@ -1291,7 +1306,7 @@ pe_found_firm = {
 
 # The investor pool buys a state district, which becomes the firm at once (no construction
 # time). The state gets the full price; the pool pays 40% down, the firm owes the rest. Then
-# a year's pause on the planet. Only if the
+# a year's pause on the planet, and two years before the next buyout there. Only if the
 # district really went away (pe_before > pe_after); otherwise nothing happens.
 pe_buyout_execute = {
 	set_variable = { which = pe_before value = 0 }
@@ -1322,6 +1337,7 @@ pe_buyout_execute = {
 			set_variable = { which = pe_age value = 0 }
 		}
 		set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+		set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 		check_planet_employment = yes
 		save_event_target_as = pe_msg_planet
 		owner = {
@@ -1385,4 +1401,71 @@ pe_firm_cleared = {
 		set_timed_planet_flag = { flag = pe_cooldown days = 1800 }
 		check_planet_employment = yes
 	}
+}
+
+# Country scope: the Command Economy ends the private economy. Every firm becomes a state
+# district of its type (city firms and labs a city district, rural firms their rural
+# district), whatever its stage; a site of a restructuring the same (the firm was there
+# before), a site of a new firm just goes. Private automation and ledgers go too. The
+# investors lose everything: the pool, shares and state bonds are gone.
+pe_command_economy = {
+	every_owned_colony = {
+		limit = {
+			OR = {
+				count_deposits = { category = pe_deposit_cat_firms count > 0 }
+				count_deposits = { category = pe_deposit_cat_sites count > 0 }
+				count_deposits = { category = pe_deposit_cat_automation count > 0 }
+				has_deposit = d_pe_ledger_profit
+			}
+		}
+		while = {
+			limit = { count_deposits = { category = pe_deposit_cat_firms count > 0 } }
+			root = { set_variable = { which = pe_cmd_cls value = 0 } }
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms }
+				if = { limit = { NOT = { is_variable_set = pe_code } } pe_firm_identify = yes }
+				if = { limit = { NOT = { is_variable_set = pe_cls } } pe_deposit_fetch = yes }
+				root = { set_variable = { which = pe_cmd_cls value = prev.pe_cls } }
+				remove_deposit = yes
+			}
+			if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 2 } } } add_district = { district_type = district_mining ignore_cap = yes } }
+			else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 3 } } } add_district = { district_type = district_generator ignore_cap = yes } }
+			else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 4 } } } add_district = { district_type = district_farming ignore_cap = yes } }
+			else = { add_district = { district_type = district_city ignore_cap = yes } }
+		}
+		while = {
+			limit = { count_deposits = { category = pe_deposit_cat_sites count > 0 } }
+			root = { set_variable = { which = pe_cmd_cls value = 0 } }
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_sites }
+				if = {
+					limit = { check_variable = { which = pe_kind value = 3 } }
+					root = { set_variable = { which = pe_cmd_cls value = 1 } }
+					if = { limit = { is_deposit_type = d_pe_site_mining } root = { set_variable = { which = pe_cmd_cls value = 2 } } }
+					if = { limit = { is_deposit_type = d_pe_site_generator } root = { set_variable = { which = pe_cmd_cls value = 3 } } }
+					if = { limit = { is_deposit_type = d_pe_site_farming } root = { set_variable = { which = pe_cmd_cls value = 4 } } }
+				}
+				remove_deposit = yes
+			}
+			if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 1 } } } add_district = { district_type = district_city ignore_cap = yes } }
+			else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 2 } } } add_district = { district_type = district_mining ignore_cap = yes } }
+			else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 3 } } } add_district = { district_type = district_generator ignore_cap = yes } }
+			else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 4 } } } add_district = { district_type = district_farming ignore_cap = yes } }
+		}
+		while = {
+			limit = { count_deposits = { category = pe_deposit_cat_automation count > 0 } }
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_automation }
+				remove_deposit = yes
+			}
+		}
+		if = { limit = { has_deposit = d_pe_ledger_profit } remove_deposit = d_pe_ledger_profit }
+		set_variable = { which = pe_pl_profit value = 0 }
+		remove_planet_flag = pe_site
+		check_planet_employment = yes
+	}
+	set_variable = { which = pe_capital value = 0 }
+	set_variable = { which = pe_shares value = 0 }
+	set_variable = { which = pe_bond_left value = 0 }
+	set_variable = { which = pe_profit_due value = 0 }
 }

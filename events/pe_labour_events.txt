@@ -74,7 +74,7 @@ country_event = {
 		allow = { has_resource = { type = trade amount >= 100 } }
 		add_resource = { trade = -100 }
 		event_target:pe_pat_planet = {
-			set_variable = { which = pe_gw_pops value = root.pe_gw_pops }
+			hidden_effect = { set_variable = { which = pe_gw_pops value = root.pe_gw_pops } }
 			create_pop_group = {
 				species = event_target:pe_gw_species
 				size = pe_gw_pops
@@ -124,7 +124,7 @@ country_event = {
 	option = {
 		name = pe.212.a
 		event_target:pe_pat_planet = {
-			set_variable = { which = pe_lease_m value = root.pe_lease_mult }
+			hidden_effect = { set_variable = { which = pe_lease_m value = root.pe_lease_mult } }
 			if = { limit = { root = { check_variable = { which = pe_lab_job value = 1 } } } add_modifier = { modifier = pe_leasing_miner days = 1800 multiplier = root.pe_lease_mult } }
 			else_if = { limit = { root = { check_variable = { which = pe_lab_job value = 2 } } } add_modifier = { modifier = pe_leasing_technician days = 1800 multiplier = root.pe_lease_mult } }
 			else = { add_modifier = { modifier = pe_leasing_farmer days = 1800 multiplier = root.pe_lease_mult } }

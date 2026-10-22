@@ -2791,6 +2791,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 1 }
@@ -2810,6 +2811,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 2 }
@@ -2829,6 +2831,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 3 }
@@ -2848,6 +2851,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 4 }
@@ -2867,6 +2871,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 5 }
@@ -2886,6 +2891,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 6 }
@@ -2905,6 +2911,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 7 }
@@ -2924,6 +2931,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 8 }
@@ -2943,6 +2951,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 9 }
@@ -2962,6 +2971,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 10 }
@@ -2981,6 +2991,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 11 }
@@ -3000,6 +3011,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 12 }
@@ -3019,6 +3031,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 13 }
@@ -3038,6 +3051,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 14 }
@@ -3057,6 +3071,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 15 }
@@ -3076,6 +3091,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 16 }
@@ -3095,6 +3111,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 17 }
@@ -3114,6 +3131,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 18 }
@@ -3133,6 +3151,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 19 }
@@ -3152,6 +3171,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 20 }
@@ -3171,6 +3191,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 21 }
@@ -3190,6 +3211,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 22 }
@@ -3209,6 +3231,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 23 }
@@ -3228,6 +3251,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 24 }
@@ -3247,6 +3271,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 25 }
@@ -3266,6 +3291,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 26 }
@@ -3285,6 +3311,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 27 }
@@ -3304,6 +3331,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 28 }
@@ -3323,6 +3351,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 29 }
@@ -3342,6 +3371,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 30 }
@@ -3361,6 +3391,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 31 }
@@ -3380,6 +3411,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 32 }
@@ -3399,6 +3431,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 33 }
@@ -3418,6 +3451,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 34 }
@@ -3437,6 +3471,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 35 }
@@ -3456,6 +3491,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 36 }
@@ -3475,6 +3511,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 37 }
@@ -3494,6 +3531,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 38 }
@@ -3513,6 +3551,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 39 }
@@ -3532,6 +3571,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 40 }
@@ -3551,6 +3591,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 41 }
@@ -3570,6 +3611,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 42 }
@@ -3589,6 +3631,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 43 }
@@ -3608,6 +3651,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 44 }
@@ -3627,6 +3671,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 45 }
@@ -3646,6 +3691,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 46 }
@@ -3665,6 +3711,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 47 }
@@ -3684,6 +3731,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 48 }
@@ -3703,6 +3751,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 49 }
@@ -3722,6 +3771,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 50 }
@@ -3741,6 +3791,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 51 }
@@ -3760,6 +3811,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 52 }
@@ -3779,6 +3831,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 53 }
@@ -3798,6 +3851,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 54 }
@@ -3817,6 +3871,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 55 }
@@ -3836,6 +3891,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 56 }
@@ -3855,6 +3911,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 57 }
@@ -3874,6 +3931,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 58 }
@@ -3893,6 +3951,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 59 }
@@ -3912,6 +3971,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 60 }
@@ -3931,6 +3991,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 61 }
@@ -3950,6 +4011,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 62 }
@@ -3969,6 +4031,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 63 }
@@ -3988,6 +4051,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 64 }
@@ -4007,6 +4071,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 65 }
@@ -4026,6 +4091,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 66 }
@@ -4045,6 +4111,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 67 }
@@ -4064,6 +4131,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 68 }
@@ -4083,6 +4151,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 69 }
@@ -4102,6 +4171,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 70 }
@@ -4121,6 +4191,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 71 }
@@ -4140,6 +4211,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 72 }
@@ -4159,6 +4231,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 73 }
@@ -4178,6 +4251,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 74 }
@@ -4197,6 +4271,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 75 }
@@ -4216,6 +4291,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 76 }
@@ -4235,6 +4311,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 77 }
@@ -4254,6 +4331,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 78 }
@@ -4273,6 +4351,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 79 }
@@ -4292,6 +4371,7 @@ pe_buy_or_offer = {
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
+			set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
 			save_event_target_as = pe_offer_planet
 			root = {
 				set_variable = { which = pe_offer_variant value = 80 }

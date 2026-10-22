@@ -291,3 +291,5 @@
  d_pe_company_housing_2_desc:0 "Wohnblöcke, die die Privatfirmen für ihre Arbeiter gebaut haben."
  d_pe_company_housing_3:0 "Werkswohnungen"
  d_pe_company_housing_3_desc:0 "Wohnblöcke, die die Privatfirmen für ihre Arbeiter gebaut haben."
+ pe.215.a.tt:0 "§Y[pe_pat_planet.GetName]§! bekommt Hydroponik-Türme: zehn Jahre lang §G+[Root.pe_hydro_food]§! £food£ Nahrung im Monat, für etwas Energie."
+ pe.226.a.tt:0 "Aus Dankbarkeit nehmen die Firmen zwei Jahre lang nur den halben Gewinn."
