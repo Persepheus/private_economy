@@ -19,6 +19,11 @@ Die Flotten gehören dem Konzern (gehalten von deinen Private Holdings) und werd
 - Ist das Zielsystem frei: Die Flotte kehrt zurück. Der Konzern bekommt ein Drittel der Kreaturenstärke als Beute plus seine Schiffskosten. Du bekommst ein Zwanzigstel als Gesellschaftsforschung (mindestens 25). Event pe.285.
 - Nach 3 Jahren oder wenn die Flotte zerstört ist, endet der Vertrag ohne Beute.
 
+## Änderungen 0.22.1 (nach dem ersten Test)
+- **Kriegsleasing blieb aus:** Du hattest nur einen Konzern, einen Rohstoffkonzern. Angeboten hatten bisher nur Industriekonzerne. Jetzt springt ein anderer Konzern ein, wenn kein Industriekonzern 600 Kasse hat; er braucht dafür 1200.
+- **Kommandant:** Jede Konzernflotte bekommt einen Kommandanten der Holdings (Fähigkeit 2). Er zählt nicht gegen dein Anführerlimit. Er geht mit der Flotte, wenn sie zurückgegeben wird. Kaufst du die Flotte, setzt du deinen eigenen ein.
+- **Säuberung im Save geprüft:** Kreaturenstärke 2332, Flotte aus 5 Kreuzern für 3000. Beute für den Konzern 3816 (einschließlich der Schiffskosten), für dich 117 Gesellschaftsforschung.
+
 ## Debug
 - `event pe.277`: beide Angebote sofort (Kriegsleasing auch im Frieden; Säuberung nur, wenn Kreaturen an der Grenze sitzen). Pausen und Zufall gelten nicht.
 

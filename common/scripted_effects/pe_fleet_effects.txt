@@ -34,12 +34,13 @@ pe_corp_fleets = {
 					limit = { has_resource = { type = alloys amount >= 500 } }
 					pe_corp_fleet_buy = yes
 				}
-				else = { every_controlled_fleet = { limit = { has_fleet_flag = pe_lease_war } delete_fleet = this } }
+				else = { every_controlled_fleet = { limit = { has_fleet_flag = pe_lease_war } kill_leader = { show_notification = no fire = yes } delete_fleet = this } }
 			}
 			else = { country_event = { id = pe.283 } }
 		}
 	}
-	# --- War lease: an offer (at war, an industry corporation with cash, 30% a quarter) ---
+	# --- War lease: an offer (at war, an industry corporation with 600 cash or any other
+	# with 1200, 30% a quarter) ---
 	else_if = {
 		limit = {
 			OR = { is_at_war = yes has_country_flag = pe_fl_debug_war }
@@ -56,6 +57,19 @@ pe_corp_fleets = {
 		if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_grp value = 1 } check_variable = { which = pe_c6_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 6 } set_variable = { which = pe_fl_best value = pe_c6_cash } }
 		if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_grp value = 1 } check_variable = { which = pe_c7_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 7 } set_variable = { which = pe_fl_best value = pe_c7_cash } }
 		if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_grp value = 1 } check_variable = { which = pe_c8_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 8 } set_variable = { which = pe_fl_best value = pe_c8_cash } }
+		# No industry corporation with the cash: any other corporation with twice as much.
+		if = {
+			limit = { check_variable = { which = pe_fl_k value = 0 } }
+			set_variable = { which = pe_fl_best value = 1199 }
+			if = { limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 1 } set_variable = { which = pe_fl_best value = pe_c1_cash } }
+			if = { limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 2 } set_variable = { which = pe_fl_best value = pe_c2_cash } }
+			if = { limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 3 } set_variable = { which = pe_fl_best value = pe_c3_cash } }
+			if = { limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 4 } set_variable = { which = pe_fl_best value = pe_c4_cash } }
+			if = { limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 5 } set_variable = { which = pe_fl_best value = pe_c5_cash } }
+			if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 6 } set_variable = { which = pe_fl_best value = pe_c6_cash } }
+			if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 7 } set_variable = { which = pe_fl_best value = pe_c7_cash } }
+			if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_fl_best } } set_variable = { which = pe_fl_k value = 8 } set_variable = { which = pe_fl_best value = pe_c8_cash } }
+		}
 		if = {
 			limit = { check_variable = { which = pe_fl_k value > 0 } }
 			random_list = {
@@ -110,7 +124,7 @@ pe_corp_fleets = {
 				save_event_target_as = pe_cl_sys
 				remove_star_flag = pe_clear@root
 			}
-			every_controlled_fleet = { limit = { has_fleet_flag = pe_lease_clear } delete_fleet = this }
+			every_controlled_fleet = { limit = { has_fleet_flag = pe_lease_clear } kill_leader = { show_notification = no fire = yes } delete_fleet = this }
 			set_variable = { which = pe_lease_clear_q value = 0 }
 			if = {
 				limit = { check_variable = { which = pe_cl_done value = 1 } }
@@ -244,10 +258,15 @@ pe_corp_fleet_war_start = {
 			else = { set_fleet_flag = pe_lease_clear }
 		}
 	}
+	# Its commander is one of the holdings' (not counted against our leader cap).
+	event_target:pe_hold = {
+		create_leader = { class = commander species = root name = random skill = 2 }
+	}
 	last_created_fleet = {
 		set_owner = event_target:pe_hold
 		set_controller = root
 		add_modifier = { modifier = pe_leased_fleet days = -1 }
+		assign_leader = last_created_leader
 	}
 	if = { limit = { check_variable = { which = pe_fl_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_fl_spent } }
 	else_if = { limit = { check_variable = { which = pe_fl_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_fl_spent } }
@@ -303,10 +322,15 @@ pe_corp_fleet_clear_start = {
 			else = { set_fleet_flag = pe_lease_clear }
 		}
 	}
+	# Its commander is one of the holdings' (not counted against our leader cap).
+	event_target:pe_hold = {
+		create_leader = { class = commander species = root name = random skill = 2 }
+	}
 	last_created_fleet = {
 		set_owner = event_target:pe_hold
 		set_controller = root
 		add_modifier = { modifier = pe_leased_fleet days = -1 }
+		assign_leader = last_created_leader
 	}
 	if = { limit = { check_variable = { which = pe_fl_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_fl_spent } }
 	else_if = { limit = { check_variable = { which = pe_fl_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_fl_spent } }
@@ -327,6 +351,7 @@ pe_corp_fleet_buy = {
 	add_resource = { alloys = -1 mult = pe_fl_price }
 	every_controlled_fleet = {
 		limit = { has_fleet_flag = pe_lease_war }
+		kill_leader = { show_notification = no fire = yes }
 		set_owner = root
 		remove_modifier = pe_leased_fleet
 		remove_fleet_flag = pe_lease_war

@@ -34,7 +34,7 @@ country_event = {
 	option = {
 		name = pe.283.b
 		hidden_effect = {
-			every_controlled_fleet = { limit = { has_fleet_flag = pe_lease_war } delete_fleet = this }
+			every_controlled_fleet = { limit = { has_fleet_flag = pe_lease_war } kill_leader = { show_notification = no fire = yes } delete_fleet = this }
 			set_variable = { which = pe_lease_war_q value = 0 }
 		}
 	}
