@@ -23,8 +23,12 @@
 #                                          -> pe_restructure (3)      -> pe_retool_consider (4)
 #                                                                     -> pe_retool_guard (4)
 #                    -> pe_command_economy (2) -> pe_firm_identify (3), pe_deposit_fetch (3)
-#                    -> pe_corp_step (2) -> pe_corp_census, _dissolve, _found, _acquire,
-#                                           _rivalry, _branches (3) -> pe_corp_free, pe_corp_msg (4)
+#                    -> pe_corp_step (2) -> pe_corp_census, _crisis, _dissolve, _found, _acquire,
+#                                           _rivalry, _branches, pe_holdings_ensure,
+#                                           pe_corp_stations, pe_corp_station_output,
+#                                           pe_holdings_surplus (3)
+#                                        -> pe_corp_free, pe_corp_msg, pe_corp_found_new,
+#                                           pe_corp_station_pick, pe_ledger_bits (4)
 #                    -> pe_relocate (2) -> pe_relocate_from (3) -> pe_relocate_exec (4)
 #                                                             -> pe_relocate_check_dest (4)
 #                    -> pe_patron (2) -> pe_patron_fire (3)   (pe_patron_effects.txt)
@@ -1589,6 +1593,16 @@ pe_command_economy = {
 			}
 		}
 		if = { limit = { has_deposit = d_pe_ledger_profit } remove_deposit = d_pe_ledger_profit }
+		if = { limit = { has_deposit = d_pe_cprod_alloys } remove_deposit = d_pe_cprod_alloys }
+		if = { limit = { has_deposit = d_pe_cprod_consumer_goods } remove_deposit = d_pe_cprod_consumer_goods }
+		if = { limit = { has_deposit = d_pe_cprod_trade } remove_deposit = d_pe_cprod_trade }
+		if = { limit = { has_deposit = d_pe_cprod_physics_research } remove_deposit = d_pe_cprod_physics_research }
+		if = { limit = { has_deposit = d_pe_cprod_society_research } remove_deposit = d_pe_cprod_society_research }
+		if = { limit = { has_deposit = d_pe_cprod_engineering_research } remove_deposit = d_pe_cprod_engineering_research }
+		if = { limit = { has_deposit = d_pe_cprod_unity } remove_deposit = d_pe_cprod_unity }
+		if = { limit = { has_deposit = d_pe_cprod_minerals } remove_deposit = d_pe_cprod_minerals }
+		if = { limit = { has_deposit = d_pe_cprod_energy } remove_deposit = d_pe_cprod_energy }
+		if = { limit = { has_deposit = d_pe_cprod_food } remove_deposit = d_pe_cprod_food }
 		set_variable = { which = pe_pl_profit value = 0 }
 		remove_planet_flag = pe_site
 		check_planet_employment = yes
@@ -1602,7 +1616,8 @@ pe_command_economy = {
 
 # Country scope, quarterly: the corporations (see pe_corp_effects_generated.txt). Up to 8 per
 # empire, each with a name, a chief executive, headquarters, member firms and cash (half of
-# what its members would send to the investor pool). They form from independent stage-3
+# what its members would send to the investor pool), and its stations (held by the empire's
+# Private Holdings). They form from independent stage-3
 # firms, take over independent firms of their sector group, fight price wars and merge.
 pe_corp_step = {
 	pe_corp_census = yes
@@ -1611,6 +1626,25 @@ pe_corp_step = {
 	pe_corp_found = yes
 	pe_corp_acquire = yes
 	pe_corp_rivalry = yes
+	# The holdings and the corporate stations (five years between two purchases).
+	if = { limit = { check_variable = { which = pe_c1_scd value > 0 } } change_variable = { which = pe_c1_scd value = -1 } }
+	if = { limit = { check_variable = { which = pe_c2_scd value > 0 } } change_variable = { which = pe_c2_scd value = -1 } }
+	if = { limit = { check_variable = { which = pe_c3_scd value > 0 } } change_variable = { which = pe_c3_scd value = -1 } }
+	if = { limit = { check_variable = { which = pe_c4_scd value > 0 } } change_variable = { which = pe_c4_scd value = -1 } }
+	if = { limit = { check_variable = { which = pe_c5_scd value > 0 } } change_variable = { which = pe_c5_scd value = -1 } }
+	if = { limit = { check_variable = { which = pe_c6_scd value > 0 } } change_variable = { which = pe_c6_scd value = -1 } }
+	if = { limit = { check_variable = { which = pe_c7_scd value > 0 } } change_variable = { which = pe_c7_scd value = -1 } }
+	if = { limit = { check_variable = { which = pe_c8_scd value > 0 } } change_variable = { which = pe_c8_scd value = -1 } }
+	pe_holdings_ensure = yes
+	pe_corp_stations = yes
+	if = { limit = { check_variable = { which = pe_st_k value > 0 } } pe_corp_station_pick = yes }
+	pe_corp_station_output = yes
+	change_variable = { which = pe_hq4 value = 1 }
+	if = {
+		limit = { check_variable = { which = pe_hq4 value >= 4 } }
+		set_variable = { which = pe_hq4 value = 0 }
+		pe_holdings_surplus = yes
+	}
 	every_owned_colony = {
 		limit = { is_variable_set = pe_mem_1 }
 		pe_corp_branches = yes

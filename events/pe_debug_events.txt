@@ -14,6 +14,7 @@
 #   event pe.13  the Command Economy now: every firm becomes a state district
 #   event pe.14  found a corporation now (needs an independent stage-3 firm; run pe.7 first)
 #   event pe.273 the register of corporations
+#   event pe.274 a corporation takes a station now (holdings created if needed)
 namespace = pe
 
 country_event = {
@@ -231,5 +232,30 @@ country_event = {
 	immediate = {
 		pe_corp_found = yes
 		log = "private_economy: pe.14 corporation slot [Root.pe_corp_new] name [Root.pe_corp_cur_name] group [Root.pe_corp_grp]"
+	}
+}
+
+# event pe.274: a corporation takes a station now (the first active one; holdings created if
+# needed; the share limit and the pause do not apply).
+country_event = {
+	id = pe.274
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_holdings_ensure = yes
+		set_variable = { which = pe_st_k value = 0 }
+		if = { limit = { check_variable = { which = pe_c8_on value = 1 } } set_variable = { which = pe_st_k value = 8 } }
+		if = { limit = { check_variable = { which = pe_c7_on value = 1 } } set_variable = { which = pe_st_k value = 7 } }
+		if = { limit = { check_variable = { which = pe_c6_on value = 1 } } set_variable = { which = pe_st_k value = 6 } }
+		if = { limit = { check_variable = { which = pe_c5_on value = 1 } } set_variable = { which = pe_st_k value = 5 } }
+		if = { limit = { check_variable = { which = pe_c4_on value = 1 } } set_variable = { which = pe_st_k value = 4 } }
+		if = { limit = { check_variable = { which = pe_c3_on value = 1 } } set_variable = { which = pe_st_k value = 3 } }
+		if = { limit = { check_variable = { which = pe_c2_on value = 1 } } set_variable = { which = pe_st_k value = 2 } }
+		if = { limit = { check_variable = { which = pe_c1_on value = 1 } } set_variable = { which = pe_st_k value = 1 } }
+		if = {
+			limit = { check_variable = { which = pe_st_k value > 0 } exists = event_target:pe_hold }
+			pe_corp_station_pick = yes
+		}
+		log = "private_economy: pe.274 corporation [Root.pe_st_k] mode [Root.pe_st_mode] (0 = no deposit for its group)"
 	}
 }

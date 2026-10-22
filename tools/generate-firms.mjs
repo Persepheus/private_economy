@@ -349,6 +349,9 @@ pe_private_savings = {
 pe_private_dividends = {
 	use_for_ai_budget = no
 }
+pe_corp_production = {
+	use_for_ai_budget = no
+}
 `);
 write('common/deposits/pe_ledger_deposits.txt', header + `# Ledgers of the private economy: what the state pays each month, as trade upkeep (see
 # pe_ledgers). No district slot.
@@ -1159,6 +1162,10 @@ const CLUSTER_STEP = 0.03;
 // product: 1 industry (a c), 2 trade and leisure (t u), 3 science and media (x y z b),
 // 4 raw materials (m e f).
 const CORPS = [1, 2, 3, 4, 5, 6, 7, 8];
+// The corporation's product (pe_c<slot>_prod): index into PROD, from its founding firm.
+const PROD = ['alloys', 'consumer_goods', 'trade', 'physics_research', 'society_research', 'engineering_research', 'unity', 'minerals', 'energy', 'food'];
+const PROD_OF = {a: 1, c: 2, t: 3, u: 3, x: 4, y: 5, z: 6, b: 7, m: 8, e: 9, f: 10};
+const GROUP_PROD = {1: 1, 2: 3, 3: 4, 4: 8};
 const GROUP_OF = {a: 1, c: 1, t: 2, u: 2, x: 3, y: 3, z: 3, b: 3, m: 4, e: 4, f: 4};
 const GROUPS = [1, 2, 3, 4];
 const CORP_NAMES = [
@@ -1239,12 +1246,12 @@ ${CORPS.map(k => `\t\t\tchange_variable = { which = ${C(k, 'firms')} value = pre
 ${CORPS.map(k => `\tif = { limit = { NOT = { is_variable_set = ${C(k, 'cash')} } } set_variable = { which = ${C(k, 'cash')} value = 0 } }\n\tset_variable = { which = ${C(k, 'cashr')} value = ${C(k, 'cash')} }\n\tround_variable = ${C(k, 'cashr')}`).join('\n')}
 }
 
-# Country scope: free the slot root.pe_corp_free_k (its headquarters modifier, its name, its
-# rival), without touching its firms (they must have left or merged).
+# Country scope: free the slot root.pe_corp_free_k (its headquarters, its name, its rival);
+# its stations return to us. Its firms are not touched (they must have left or merged).
 pe_corp_free = {
-${corpChain('pe_corp_free_k', k => `set_variable = { which = pe_corp_free_name value = ${C(k, 'name')} } set_variable = { which = ${C(k, 'on')} value = 0 } set_variable = { which = ${C(k, 'cash')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'firms')} value = 0 } every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } remove_planet_flag = pe_hq_${k} }`, '\t')}
+${corpChain('pe_corp_free_k', k => `set_variable = { which = pe_corp_free_name value = ${C(k, 'name')} } set_variable = { which = ${C(k, 'on')} value = 0 } set_variable = { which = ${C(k, 'cash')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'firms')} value = 0 } every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } remove_planet_flag = pe_hq_${k} } set_variable = { which = ${C(k, 'scd')} value = 0 } set_variable = { which = ${C(k, 'sv')} value = 0 } set_variable = { which = ${C(k, 'st')} value = 0 } every_planet_within_border = { limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_${k} } } orbital_station = { remove_fleet_flag = pe_stc_${k} remove_fleet_flag = pe_st_share set_owner = root } }`, '\t')}
 ${CORPS.map(k => `\tif = { limit = { check_variable = { which = ${C(k, 'rival')} value = root.pe_corp_free_k } } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } }`).join('\n')}
-${nameChain('pe_corp_free_name', id => `remove_country_flag = pe_cname_${id} remove_global_flag = pe_gcname_${id} every_owned_colony = { limit = { has_modifier = pe_corp_hq_${id} } remove_modifier = pe_corp_hq_${id} } every_owned_colony = { limit = { has_modifier = pe_corp_br_${id} } remove_modifier = pe_corp_br_${id} }`, '\t')}
+${nameChain('pe_corp_free_name', id => `remove_country_flag = pe_cname_${id} remove_global_flag = pe_gcname_${id} every_owned_colony = { limit = { has_modifier = pe_corp_hq_${id} } remove_modifier = pe_corp_hq_${id} } every_owned_colony = { limit = { has_deposit = d_pe_hq_${id} } remove_deposit = d_pe_hq_${id} } every_owned_colony = { limit = { has_modifier = pe_corp_br_${id} } remove_modifier = pe_corp_br_${id} }`, '\t')}
 }
 
 # Country scope: a message naming the corporation root.pe_msg_name, about
@@ -1284,6 +1291,7 @@ ${[...CORPS].reverse().map(k => `\tif = { limit = { NOT = { check_variable = { w
 			random_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_stage value = 3 } check_variable = { which = pe_corp value = 0 } }
 				set_variable = { which = pe_corp_cand value = 1 }
+				root = { set_variable = { which = pe_corp_prim value = prev.pe_prim } }
 ${ifChain(GROUPS, g => inGroup(g), g => `root = { set_variable = { which = pe_corp_grp value = ${g} } }`, '\t\t\t\t')}
 				set_variable = { which = pe_tmp value = pe_fcap }
 				multiply_variable = { which = pe_tmp value = 0.5 }
@@ -1358,8 +1366,9 @@ ${NAME_IDS.map(id => `			10 = {
 		}
 		set_variable_to_random_value = { which = pe_corp_cur_ceo min = 1 max = 16 rounded = yes }
 		set_variable = { which = pe_corp_cur value = pe_corp_new }
-${corpChain('pe_corp_new', k => `set_variable = { which = ${C(k, 'on')} value = 1 } set_variable = { which = ${C(k, 'name')} value = pe_corp_cur_name } set_variable = { which = ${C(k, 'grp')} value = pe_corp_grp } set_variable = { which = ${C(k, 'ceo')} value = pe_corp_cur_ceo } set_variable = { which = ${C(k, 'cash')} value = pe_corp_seed } set_variable = { which = ${C(k, 'firms')} value = 1 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'wcd')} value = 0 }`, '\t\t')}
-${nameChain('pe_corp_cur_name', id => `set_country_flag = pe_cname_${id} set_global_flag = pe_gcname_${id} event_target:pe_corp_planet = { add_modifier = { modifier = pe_corp_hq_${id} days = -1 } }`, '\t\t')}
+${corpChain('pe_corp_new', k => `set_variable = { which = ${C(k, 'on')} value = 1 } set_variable = { which = ${C(k, 'name')} value = pe_corp_cur_name } set_variable = { which = ${C(k, 'grp')} value = pe_corp_grp } set_variable = { which = ${C(k, 'ceo')} value = pe_corp_cur_ceo } set_variable = { which = ${C(k, 'cash')} value = pe_corp_seed } set_variable = { which = ${C(k, 'firms')} value = 1 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'wcd')} value = 0 } set_variable = { which = ${C(k, 'scd')} value = 0 }`, '\t\t')}
+${corpChain('pe_corp_new', k => LETTERS.map((l, i) => `${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_corp_prim value = ${prim(l)} } } set_variable = { which = ${C(k, 'prod')} value = ${PROD_OF[l]} } }`).join(' '), '\t\t')}
+${nameChain('pe_corp_cur_name', id => `set_country_flag = pe_cname_${id} set_global_flag = pe_gcname_${id} event_target:pe_corp_planet = { add_deposit = d_pe_hq_${id} }`, '\t\t')}
 		country_event = { id = pe.270 }
 }
 
@@ -1480,6 +1489,12 @@ pe_corp_merge = {
 	}
 ${corpChain('pe_mg_w', k => `set_variable = { which = pe_tmp value = ${C(k, 'cash')} }`, '\t')}
 ${corpChain('pe_mg_s', k => `change_variable = { which = ${C(k, 'cash')} value = pe_tmp }`, '\t')}
+	every_planet_within_border = {
+		limit = { has_orbital_station = yes }
+		orbital_station = {
+${corpChain('root.pe_mg_w', k => `if = { limit = { has_fleet_flag = pe_stc_${k} } remove_fleet_flag = pe_stc_${k} ${CORPS.map((j, i) => `${i ? 'else_if' : 'if'} = { limit = { root = { check_variable = { which = pe_mg_s value = ${j} } } } set_fleet_flag = pe_stc_${j} }`).join(' ')} }`, '\t\t\t')}
+		}
+	}
 	set_variable = { which = pe_corp_free_k value = pe_mg_w }
 	pe_corp_free = yes
 }
@@ -1490,16 +1505,13 @@ pe_corp_fine = {
 ${corpChain('pe_mg_w', k => `multiply_variable = { which = ${C(k, 'cash')} value = 0.75 }`, '\t')}
 }
 
-# Colony scope, quarterly: which corporations have branches here (a named modifier each,
-# except at the headquarters), and the price war modifier.
+# Colony scope, quarterly: the price war modifier. Branch modifiers (before 0.21) are removed,
+# headquarters modifiers become headquarters deposits.
 pe_corp_branches = {
 ${NAME_IDS.map(id => `\tif = { limit = { has_modifier = pe_corp_br_${id} } remove_modifier = pe_corp_br_${id} }`).join('\n')}
 	if = { limit = { has_modifier = pe_price_war } remove_modifier = pe_price_war }
+${NAME_IDS.map(id => `\tif = { limit = { has_modifier = pe_corp_hq_${id} } remove_modifier = pe_corp_hq_${id} add_deposit = d_pe_hq_${id} }`).join('\n')}
 ${CORPS.map(k => `	if = {
-		limit = { check_variable = { which = pe_mem_${k} value > 0 } root = { check_variable = { which = ${C(k, 'on')} value = 1 } } NOT = { has_planet_flag = pe_hq_${k} } }
-${nameChain(`root.${C(k, 'name')}`, id => `add_modifier = { modifier = pe_corp_br_${id} days = -1 }`, '\t\t')}
-	}
-	if = {
 		limit = { check_variable = { which = pe_mem_${k} value > 0 } root = { check_variable = { which = ${C(k, 'war')} value > 0 } } NOT = { has_modifier = pe_price_war } }
 		add_modifier = { modifier = pe_price_war days = -1 }
 	}`).join('\n')}
@@ -1612,6 +1624,378 @@ ${CORPS.map(k => `	if = {
 	}`).join('\n')}
 }
 `;
+// --- Holdings and corporate stations ------------------------------------------------------
+// Each empire with a corporation gets one helper country, the Private Holdings (country type
+// pe_holdings), linked by the relation flag pe_holdings_of. Corporations build stations on
+// free orbital deposits or buy the state's stations (Laissez-faire without asking, Free
+// Market and Mixed by offer, pe.280). Only deposits of ordinary resources; strategic ones stay
+// out. The station's output goes to the holdings and is used by the corporation: it produces
+// twice the station's value (base prices) more in its own product (deposit lines on its
+// headquarters, budget line "Corporate production").
+const ST_VAL = {minerals: 1, energy: 1, food: 1, trade: 1, alloys: 4, consumer_goods: 2, unity: 3, physics_research: 3.5, society_research: 3.5, engineering_research: 3.5};
+const ST_RES = Object.keys(ST_VAL);
+const ST_STOCK = ['minerals', 'energy', 'food', 'trade', 'alloys', 'consumer_goods', 'unity'];
+const ST_BONUS = 2;
+// Which station resources a sector group can use.
+const GROUP_RES = {1: ['minerals', 'energy', 'alloys'], 2: ['trade', 'energy', 'consumer_goods'], 3: ['physics_research', 'society_research', 'engineering_research', 'unity'], 4: ['minerals', 'energy', 'food']};
+const ST_LIMIT = [['pe_order_laissez_faire', 0.4], ['pe_order_free_market', 0.25], ['pe_order_mixed', 0.15]];
+const ST_COST = 100;                                   // vanilla @civilian_station_cost (minerals)
+const ST_CD = 20;                                      // quarters between two purchases of a corporation
+const ORBITALS = [];
+for (const t of readDir('common/deposits')) {
+  for (const m of t.matchAll(/^(d_\w+) = \{/gm)) {
+    const def = blockAt(t, t.indexOf('{', m.index));
+    const st = def.match(/\n\tstation = (shipclass_mining_station|shipclass_research_station)/);
+    const rm = def.match(/\n\tresources = \{/);
+    if (!st || !rm) continue;
+    const res = blockAt(def, def.indexOf('{', rm.index));
+    const pm = res.match(/\n\t\tproduces = \{([^{}]*)\}/);
+    if (!pm || /trigger/.test(res)) continue;
+    const amounts = {};
+    for (const [, r, n] of pm[1].matchAll(/(\w+) = ([\d.]+)/g)) amounts[r] = Number(n);
+    if (!Object.keys(amounts).length || !Object.keys(amounts).every(r => ST_RES.includes(r))) continue;
+    const value = Object.entries(amounts).reduce((a, [r, n]) => a + n * ST_VAL[r], 0);
+    ORBITALS.push({key: m[1], station: st[1], amounts, value});
+  }
+}
+const orbitalsFor = g => ORBITALS.filter(o => Object.keys(o.amounts).every(r => GROUP_RES[g].includes(r)));
+let ctrg = header + `# Corporate stations (see pe_corp_effects_generated.txt). Planet scope.
+
+# An orbital deposit of an ordinary resource (no strategic resources).
+pe_orbital_allowed = {
+	OR = {
+${ORBITALS.map(o => `\t\thas_deposit = ${o.key}`).join('\n')}
+	}
+}
+${GROUPS.map(g => `
+# An orbital deposit that corporations of sector group ${g} can use.
+pe_orbital_for_g${g} = {
+	OR = {
+${orbitalsFor(g).map(o => `\t\thas_deposit = ${o.key}`).join('\n')}
+	}
+}`).join('\n')}
+
+# A station of the holdings (event_target:pe_hold) orbits this planet.
+pe_holdings_station = {
+	has_orbital_station = yes
+	orbital_station = { owner = { is_same_value = event_target:pe_hold } }
+}
+
+# A station of our own (root) orbits this planet.
+pe_state_station = {
+	has_orbital_station = yes
+	orbital_station = { owner = { is_same_value = root } }
+}
+`;
+write('common/scripted_triggers/pe_corp_triggers_generated.txt', ctrg);
+
+corp += `
+# Country scope, quarterly: find our holdings (event_target:pe_hold); create them once we
+# have a corporation. Our flag, not in the contacts list.
+pe_holdings_ensure = {
+	random_country = {
+		limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } }
+		save_event_target_as = pe_hold
+	}
+	if = {
+		limit = {
+			NOT = { exists = event_target:pe_hold }
+			OR = { ${CORPS.map(k => `check_variable = { which = ${C(k, 'on')} value = 1 }`).join(' ')} }
+		}
+		create_country = {
+			name = pe_holdings_name
+			type = pe_holdings
+			auto_delete = no
+			authority = auth_oligarchic
+			ethos = { ethic = ethic_materialist ethic = ethic_egalitarian ethic = ethic_xenophile }
+			civics = { civic = civic_merchant_guilds civic = civic_mining_guilds }
+			remove_invalid_civics = yes
+			origin = origin_default
+			species = root
+			flag = root
+			effect = {
+				set_relation_flag = { who = root flag = pe_holdings_of }
+				save_event_target_as = pe_hold
+				add_resource = { energy = 500 }
+			}
+		}
+	}
+}
+
+# Country scope, quarterly: one corporation may take a station (25% a quarter, at most one per
+# empire and quarter, then ${ST_CD / 4} years' pause for that corporation). Private stations stay below a
+# share of our stations of ordinary resources: Laissez-faire 40%, Free Market 25%, Mixed 15%.
+# A free deposit first (the corporation builds), otherwise one of our stations (it buys).
+# Here only the corporation is chosen (pe_st_k); pe_corp_step then calls pe_corp_station_pick.
+pe_corp_stations = {
+	set_variable = { which = pe_st_k value = 0 }
+	set_variable = { which = pe_st_lim value = 0 }
+${ST_LIMIT.map(([f, l]) => `\tif = { limit = { has_policy_flag = ${f} } set_variable = { which = pe_st_lim value = ${l} } }`).join('\n')}
+	if = {
+		limit = { exists = event_target:pe_hold check_variable = { which = pe_st_lim value > 0 } }
+		set_variable = { which = pe_st_state value = 0 }
+		set_variable = { which = pe_st_priv value = 0 }
+		every_planet_within_border = {
+			limit = { pe_orbital_allowed = yes has_orbital_station = yes }
+			if = { limit = { pe_state_station = yes } root = { change_variable = { which = pe_st_state value = 1 } } }
+			else_if = { limit = { pe_holdings_station = yes } root = { change_variable = { which = pe_st_priv value = 1 } } }
+		}
+		# (private + 1) <= limit x (all + 1)
+		set_variable = { which = pe_tmp value = pe_st_state }
+		change_variable = { which = pe_tmp value = pe_st_priv }
+		change_variable = { which = pe_tmp value = 1 }
+		multiply_variable = { which = pe_tmp value = pe_st_lim }
+		set_variable = { which = pe_tmp2 value = pe_st_priv }
+		change_variable = { which = pe_tmp2 value = 1 }
+		if = {
+			limit = { check_variable = { which = pe_tmp2 value <= pe_tmp } }
+			random = {
+				chance = 25
+				set_variable = { which = pe_st_k value = 0 }
+				random_list = {
+${CORPS.map(k => `					10 = {
+						modifier = { factor = 0 NOT = { check_variable = { which = ${C(k, 'on')} value = 1 } } }
+						modifier = { factor = 0 check_variable = { which = ${C(k, 'scd')} value > 0 } }
+						modifier = { factor = 0 check_variable = { which = ${C(k, 'cash')} value < ${ST_COST * 3} } }
+${GROUPS.map(g => `						modifier = { factor = 0 check_variable = { which = ${C(k, 'grp')} value = ${g} } NOT = { any_planet_within_border = { pe_orbital_for_g${g} = yes OR = { has_orbital_station = no pe_state_station = yes } } } }`).join('\n')}
+						set_variable = { which = pe_st_k value = ${k} }
+					}`).join('\n')}
+					10 = { }
+				}
+			}
+		}
+	}
+}
+
+# Country scope: the corporation pe_st_k picks a deposit (free first) and builds or buys,
+# directly under Laissez-faire, by offer (pe.280) under Free Market and Mixed.
+pe_corp_station_pick = {
+	set_variable = { which = pe_st_mode value = 0 }
+${corpChain('pe_st_k', k => `set_variable = { which = pe_st_grp value = ${C(k, 'grp')} } set_variable = { which = pe_corp_cur_name value = ${C(k, 'name')} }`, '\t')}
+${GROUPS.map((g, i) => `	${i ? 'else_if' : 'if'} = {
+		limit = { check_variable = { which = pe_st_grp value = ${g} } }
+		if = {
+			limit = { any_planet_within_border = { pe_orbital_for_g${g} = yes has_orbital_station = no } }
+			random_planet_within_border = { limit = { pe_orbital_for_g${g} = yes has_orbital_station = no } save_event_target_as = pe_st_planet }
+			set_variable = { which = pe_st_mode value = 1 }
+		}
+		else_if = {
+			limit = { any_planet_within_border = { pe_orbital_for_g${g} = yes pe_state_station = yes } }
+			random_planet_within_border = { limit = { pe_orbital_for_g${g} = yes pe_state_station = yes } save_event_target_as = pe_st_planet }
+			set_variable = { which = pe_st_mode value = 2 }
+		}
+	}`).join('\n')}
+	# What we get: Laissez-faire nothing for a free deposit, the building cost for a station;
+	# Free Market and Mixed a concession fee (the building cost) or twice the building cost,
+	# and every year a fifth of the station's value.
+	set_variable = { which = pe_st_pay value = 0 }
+	set_variable = { which = pe_st_share value = 0 }
+	if = {
+		limit = { has_policy_flag = pe_order_laissez_faire }
+		if = { limit = { check_variable = { which = pe_st_mode value = 2 } } set_variable = { which = pe_st_pay value = ${ST_COST} } }
+	}
+	else = {
+		set_variable = { which = pe_st_pay value = ${ST_COST} }
+		if = { limit = { check_variable = { which = pe_st_mode value = 2 } } set_variable = { which = pe_st_pay value = ${ST_COST * 2} } }
+		set_variable = { which = pe_st_share value = 1 }
+	}
+	if = {
+		limit = { check_variable = { which = pe_st_mode value > 0 } }
+		if = {
+			limit = { has_policy_flag = pe_order_laissez_faire }
+			pe_corp_station_exec = yes
+		}
+		else_if = {
+			limit = { is_ai = yes }
+			random = { chance = 70 pe_corp_station_exec = yes }
+		}
+		else = { country_event = { id = pe.280 } }
+	}
+}
+
+# Country scope: carry out the station deal (pe_st_k, pe_st_mode 1 build / 2 buy,
+# event_target:pe_st_planet). The corporation pays its building cost and what we get from
+# its cash; the station belongs to the holdings, flagged with the corporation.
+pe_corp_station_exec = {
+	if = {
+		limit = { check_variable = { which = pe_st_mode value = 1 } }
+		event_target:pe_st_planet = {
+			if = {
+				limit = { has_deposit_for = shipclass_research_station }
+				create_research_station = { owner = event_target:pe_hold }
+			}
+			else = { create_mining_station = { owner = event_target:pe_hold } }
+		}
+	}
+	else = {
+		event_target:pe_st_planet = { orbital_station = { set_owner = event_target:pe_hold } }
+	}
+	event_target:pe_st_planet = {
+		if = {
+			limit = { has_orbital_station = yes }
+			orbital_station = {
+${corpChain('root.pe_st_k', k => `set_fleet_flag = pe_stc_${k}`, '\t\t\t\t')}
+				if = { limit = { root = { check_variable = { which = pe_st_share value = 1 } } } set_fleet_flag = pe_st_share }
+			}
+		}
+	}
+	add_resource = { minerals = 1 mult = pe_st_pay }
+	set_variable = { which = pe_tmp value = pe_st_pay }
+	if = { limit = { check_variable = { which = pe_st_mode value = 1 } } change_variable = { which = pe_tmp value = ${ST_COST} } }
+${corpChain('pe_st_k', k => `subtract_variable = { which = ${C(k, 'cash')} value = pe_tmp } set_variable = { which = ${C(k, 'scd')} value = ${ST_CD} }`, '\t')}
+	event_target:pe_st_planet = { save_event_target_as = pe_msg_planet }
+	set_variable = { which = pe_msg_name value = pe_corp_cur_name }
+${nameChain('pe_msg_name', id => `if = { limit = { check_variable = { which = pe_st_mode value = 1 } } create_message = { type = pe_private_economy localization = pe_msg_corp_st_build days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_${id} localization = CORP } } } else = { create_message = { type = pe_private_economy localization = pe_msg_corp_st_buy days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_${id} localization = CORP } } }`, '\t')}
+}
+
+# Country scope, quarterly: what the corporate stations bring. Per corporation its stations'
+# value at base prices (pe_c<slot>_sv, per month) and their number (pe_c<slot>_st). The
+# holdings hand the stored output to the corporation (it is used up); the corporation
+# produces ${ST_BONUS} x the value in its own product on its headquarters (pe_cpv_<res> on the
+# planet, deposit lines), and books half the value (per quarter: x 3) as its own earnings.
+# Stations bought under Free Market or Mixed pay us a fifth of their value a year.
+pe_corp_station_output = {
+${CORPS.map(k => `\tset_variable = { which = ${C(k, 'sv')} value = 0 }\n\tset_variable = { which = ${C(k, 'st')} value = 0 }\n\tset_variable = { which = ${C(k, 'shv')} value = 0 }`).join('\n')}
+${ST_STOCK.map(r => `\tset_variable = { which = pe_sr_${r} value = 0 }`).join('\n')}
+	every_owned_colony = {
+${PROD.map(r => `\t\tset_variable = { which = pe_cpv_${r} value = 0 }`).join('\n')}
+	}
+	if = {
+		limit = { exists = event_target:pe_hold }
+		every_planet_within_border = {
+			limit = { pe_orbital_allowed = yes pe_holdings_station = yes }
+			set_variable = { which = pe_stk value = 0 }
+			orbital_station = {
+${corpChain('x', k => '', '\t\t\t\t').split('\n').map((_, i) => `\t\t\t\t${i ? 'else_if' : 'if'} = { limit = { has_fleet_flag = pe_stc_${i + 1} } prev = { set_variable = { which = pe_stk value = ${i + 1} } } }`).join('\n')}
+			}
+			set_variable = { which = pe_stval value = 0 }
+${ifChain(ORBITALS, o => `has_deposit = ${o.key}`, o => `set_variable = { which = pe_stval value = ${o.value} } root = { ${Object.entries(o.amounts).filter(([r]) => ST_STOCK.includes(r)).map(([r, n]) => `change_variable = { which = pe_sr_${r} value = ${n} }`).join(' ')} }`, '\t\t\t')}
+${corpChain('pe_stk', k => `root = { change_variable = { which = ${C(k, 'sv')} value = prev.pe_stval } change_variable = { which = ${C(k, 'st')} value = 1 } } if = { limit = { orbital_station = { has_fleet_flag = pe_st_share } } root = { change_variable = { which = ${C(k, 'shv')} value = prev.pe_stval } } }`, '\t\t\t')}
+		}
+		# The stored output is used up (three months).
+		event_target:pe_hold = {
+${ST_STOCK.map(r => `			export_resource_stockpile_to_variable = { resource = ${r} variable = pe_hs }
+			set_variable = { which = pe_tmp value = root.pe_sr_${r} }
+			multiply_variable = { which = pe_tmp value = 3 }
+			if = { limit = { check_variable = { which = pe_tmp value > pe_hs } } set_variable = { which = pe_tmp value = pe_hs } }
+			add_resource = { ${r} = -1 mult = pe_tmp }`).join('\n')}
+		}
+	}
+	# The corporate production on the headquarters, the earnings and the share for us.
+${CORPS.map(k => `	if = {
+		limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'sv')} value > 0 } }
+		if = { limit = { NOT = { is_variable_set = ${C(k, 'prod')} } } ${GROUPS.map((g, i) => `${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = ${C(k, 'grp')} value = ${g} } } set_variable = { which = ${C(k, 'prod')} value = ${GROUP_PROD[g]} } }`).join(' ')} }
+${PROD.map((r, i) => `		${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = ${C(k, 'prod')} value = ${i + 1} } } set_variable = { which = pe_tmp value = ${C(k, 'sv')} } multiply_variable = { which = pe_tmp value = ${+(ST_BONUS / ST_VAL[r]).toFixed(4)} } every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } change_variable = { which = pe_cpv_${r} value = root.pe_tmp } } }`).join('\n')}
+		set_variable = { which = pe_tmp value = ${C(k, 'sv')} }
+		multiply_variable = { which = pe_tmp value = 1.5 }
+		change_variable = { which = ${C(k, 'cash')} value = pe_tmp }
+		if = {
+			limit = { check_variable = { which = ${C(k, 'shv')} value > 0 } }
+			set_variable = { which = pe_tmp value = ${C(k, 'shv')} }
+			multiply_variable = { which = pe_tmp value = 0.15 }
+			subtract_variable = { which = ${C(k, 'cash')} value = pe_tmp }
+			add_resource = { trade = 1 mult = pe_tmp }
+		}
+	}`).join('\n')}
+	every_owned_colony = {
+		limit = { OR = { ${PROD.map(r => `check_variable = { which = pe_cpv_${r} value > 0 } has_deposit = d_pe_cprod_${r}`).join(' ')} } }
+${PROD.map(r => `		root = { set_variable = { which = pe_lv value = prev.pe_cpv_${r} } }
+		pe_ledger_bits = { V = cp_${r} }
+		if = {
+			limit = { check_variable = { which = pe_cpv_${r} value >= 0.5 } }
+			if = { limit = { NOT = { has_deposit = d_pe_cprod_${r} } } add_deposit = d_pe_cprod_${r} }
+		}
+		else_if = { limit = { has_deposit = d_pe_cprod_${r} } remove_deposit = d_pe_cprod_${r} }`).join('\n')}
+	}
+}
+
+# Country scope, once a year: what is left in the holdings' stores (stations whose
+# corporation is gone, outside our borders ...). Short of it ourselves, we are offered it at
+# 60% of the market price (pe.281); otherwise it is exported, and the investor pool gets half
+# its base value.
+pe_holdings_surplus = {
+	if = {
+		limit = { exists = event_target:pe_hold }
+		set_variable = { which = pe_hsx value = 0 }
+${ST_STOCK.filter(r => r !== 'unity').map((r, i) => `		event_target:pe_hold = { export_resource_stockpile_to_variable = { resource = ${r} variable = pe_hs } root = { set_variable = { which = pe_hs value = prev.pe_hs } } }
+		if = {
+			limit = { check_variable = { which = pe_hs value >= 100 } }
+			if = {
+				limit = { check_variable = { which = pe_def_${r} value = 1 } check_variable = { which = pe_hsx value = 0 } is_ai = no }
+				set_variable = { which = pe_hsx value = ${i + 1} }
+				set_variable = { which = pe_hs_amt value = pe_hs }
+				round_variable = pe_hs_amt
+				export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = ${r} amount = 100 trade_type = market_buy } variable = pe_hs_price }
+				divide_variable = { which = pe_hs_price value = 100 }
+				if = { limit = { check_variable = { which = pe_hs_price value <= 0 } } set_variable = { which = pe_hs_price value = ${ST_VAL[r] || 1} } }
+				set_variable = { which = pe_hs_cost value = pe_hs_amt }
+				multiply_variable = { which = pe_hs_cost value = pe_hs_price }
+				multiply_variable = { which = pe_hs_cost value = 0.6 }
+				round_variable = pe_hs_cost
+				country_event = { id = pe.281 }
+			}
+			else = {
+				event_target:pe_hold = { add_resource = { ${r} = -1 mult = root.pe_hs } }
+				multiply_variable = { which = pe_hs value = ${(ST_VAL[r] || 1) * 0.5} }
+				change_variable = { which = pe_capital value = pe_hs }
+			}
+		}`).join('\n')}
+	}
+}
+
+# Country scope (event pe.281): buy the holdings' stock of resource pe_hsx.
+pe_holdings_sell = {
+${ST_STOCK.filter(r => r !== 'unity').map((r, i) => `	${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_hsx value = ${i + 1} } } add_resource = { ${r} = 1 mult = pe_hs_amt } event_target:pe_hold = { add_resource = { ${r} = -1 mult = root.pe_hs_amt } } }`).join('\n')}
+	add_resource = { trade = -1 mult = pe_hs_cost }
+	change_variable = { which = pe_capital value = pe_hs_cost }
+}
+`;
+write('common/deposits/pe_corp_deposits_generated.txt', header + `# Corporation headquarters (one per name, effects as before as a modifier) and the corporate
+# production lines (budget line "Corporate production", amounts as bits like the ledgers).
+` + NAME_IDS.map(id => `
+d_pe_hq_${id} = {
+	icon = d_tradestation_interior
+	is_for_colonizable = yes
+	category = pe_deposit_cat_corp
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	planet_modifier = {
+		planet_stability_add = 1
+		planet_jobs_produces_mult = 0.02
+	}
+}
+`).join('') + PROD.map(r => `
+d_pe_cprod_${r} = {
+	icon = d_tradestation_interior
+	is_for_colonizable = yes
+	category = pe_deposit_cat_ledger
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = pe_corp_production
+${LEDGER_BITS.map((b, i) => `		produces = {
+			trigger = { planet = { check_variable = { which = pe_cp_${r}_b${i} value = 1 } } }
+			${r} = ${b}
+		}`).join('\n')}
+	}
+}
+`).join(''));
+const PROD_NAMES = {alloys: ['Alloys', 'Legierungen'], consumer_goods: ['Consumer Goods', 'Konsumgüter'], trade: ['Trade', 'Handel'], physics_research: ['Physics', 'Physik'], society_research: ['Society', 'Gesellschaft'], engineering_research: ['Engineering', 'Ingenieurwesen'], unity: ['Unity', 'Einheit'], minerals: ['Minerals', 'Mineralien'], energy: ['Energy', 'Energie'], food: ['Food', 'Nahrung']};
+for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
+  const L = loc[lang];
+  NAME_IDS.forEach(id => L.push(li ? ` d_pe_hq_${id}:0 "Hauptsitz: ${CORP_NAMES[id - 1]}"` : ` d_pe_hq_${id}:0 "Headquarters: ${CORP_NAMES[id - 1]}"`,
+    li ? ` d_pe_hq_${id}_desc:0 "Der Konzern ${CORP_NAMES[id - 1]} hat hier seinen Sitz: Verwaltung, Forschung, gut bezahlte Stellen. Hier entsteht auch die Konzernproduktion aus seinen Stationen."` : ` d_pe_hq_${id}_desc:0 "The corporation ${CORP_NAMES[id - 1]} has its headquarters here: management, research, well-paid jobs. Its corporate production from its stations is made here as well."`));
+  PROD.forEach(r => L.push(li ? ` d_pe_cprod_${r}:0 "Konzernproduktion: ${PROD_NAMES[r][1]}"` : ` d_pe_cprod_${r}:0 "Corporate Production: ${PROD_NAMES[r][0]}"`,
+    li ? ` d_pe_cprod_${r}_desc:0 "Ein Konzern mit Hauptsitz hier verarbeitet den Ertrag seiner Orbitalstationen und produziert dafür doppelt so viel Wert in seinem eigenen Produkt."` : ` d_pe_cprod_${r}_desc:0 "A corporation headquartered here processes the output of its orbital stations and produces twice its value in its own product."`));
+  L.push(li ? ' pe_corp_production:0 "Konzernproduktion"' : ' pe_corp_production:0 "Corporate Production"',
+    li ? ' pe_deposit_cat_corp:0 "Konzerne"' : ' pe_deposit_cat_corp:0 "Corporations"',
+    li ? ' pe_msg_corp_st_build:0 "§Y$CORP$§! hat über $PLANET$ eine eigene Station errichtet. Ihren Ertrag verarbeitet der Konzern selbst."' : ' pe_msg_corp_st_build:0 "§Y$CORP$§! has built a station of its own above $PLANET$. The corporation processes its output itself."',
+    li ? ' pe_msg_corp_st_buy:0 "§Y$CORP$§! hat unsere Station über $PLANET$ gekauft. Ihren Ertrag verarbeitet der Konzern jetzt selbst."' : ' pe_msg_corp_st_buy:0 "§Y$CORP$§! has bought our station above $PLANET$. The corporation now processes its output itself."');
+}
 write('common/scripted_effects/pe_corp_effects_generated.txt', corp);
 
 write('common/static_modifiers/pe_corp_modifiers_generated.txt', header + `# Clusters (pe_cluster_apply), corporation headquarters and branches (one per name, so the
@@ -1643,10 +2027,10 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
     : ` pe_cluster_${l}_${n}:0 "${CLUSTER_NAMES[l][0]} Cluster (${n + 1}${n === 3 ? '+' : ''} firms)"`,
     li ? ` pe_cluster_${l}_${n}_desc:0 "Mehrere Privatfirmen derselben Branche teilen sich hier Zulieferer, Fachkräfte und Wissen."` : ` pe_cluster_${l}_${n}_desc:0 "Several private firms of the same sector share suppliers, skilled people and know-how here."`)));
   CORPS.forEach(k => L.push(li
-    ? ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, Kasse [Root.${C(k, 'cashr')}] £trade£"`
-    : ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, cash [Root.${C(k, 'cashr')}] £trade£"`,
-    li ? ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, Kasse [Root.${C(k, 'cashr')}] £trade£, §RPreiskampf mit [Root.GetPeCorpRival${k}]§!"`
-       : ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, cash [Root.${C(k, 'cashr')}] £trade£, §Rprice war with [Root.GetPeCorpRival${k}]§!"`,
+    ? ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£"`
+    : ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£"`,
+    li ? ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£, §RPreiskampf mit [Root.GetPeCorpRival${k}]§!"`
+       : ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£, §Rprice war with [Root.GetPeCorpRival${k}]§!"`,
     ` pe_corp_rn_${k}:0 "[Root.GetPeCorpN${k}]"`));
   L.push(' pe_corp_line_none:0 ""',
     li ? ' pe_price_war:0 "Preiskampf"' : ' pe_price_war:0 "Price War"',
