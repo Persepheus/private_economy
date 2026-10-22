@@ -49,6 +49,18 @@ Ein laufendes Spiel kann weiterlaufen. Hauptsitz-Modifier werden im nächsten Qu
 - **Nur echte Vorkommen:** Mineralien, Energie, Legierungen, Nahrung, Physik, Gesellschaft, Ingenieurwesen, Handel, jeweils mit Stufe. Sonderfälle wie Arc Furnace, Drachenhort, Kristallriss, Protostern, Roter Riese, Einheit und Maschinen-Direktive bleiben draußen. Legierungen waren schon dabei.
 - **Versuch: Konzern im Firmen-Tooltip.** Jede Firma hat eine Tooltip-Zeile „Gehört zum Konzern X“ oder „Unabhängiges Unternehmen“. Ob das Spiel die Zeile im Vorkommen-Tooltip auswertet (Scope der Firma), muss der Test zeigen. Sonst steht dort nur „Unabhängiges Unternehmen“ oder ein Platzhalter.
 
+## Firmenregister (0.21.2)
+- **Ergebnis des Tooltip-Versuchs:** Bei jeder Firma stand „Unabhängiges Unternehmen“. Der Tooltip eines Vorkommens wird also nicht im Kontext der einzelnen Firma ausgewertet.
+- **Coop und Branch Office Planner geprüft:**
+  - Die Branch-Office-Mod zeigt Zustände über austauschbare Gebäudetypen und eigene Knöpfe (überschriebene Oberfläche).
+  - Coop nutzt ein eigenes Event-Fenster.
+  - Für einzelne Vorkommen hilft beides nicht. Gebäudetypen tauschen ginge nur mit 389 × 9 Firmen-Vorkommen.
+- **Lösung:** Planeten-Entscheidung **Firmenregister**.
+  - Kostenlos, die KI nutzt sie nie.
+  - Sie öffnet ein Fenster mit allen Privatfirmen des Planeten: Name, Größe (klein, mittel, groß) und Konzern bzw. „unabhängig“.
+  - Bis zu 20 Firmen, darüber „… und N weitere“.
+  - Der Tooltip jeder Firma verweist darauf.
+
 ## Debug
 - `event pe.274`: Der erste aktive Konzern holt sich sofort eine Station (Holdings werden bei Bedarf erstellt; Grenze und Pause gelten nicht). Unter Freier Markt oder Gemischt kommt das Angebot.
 

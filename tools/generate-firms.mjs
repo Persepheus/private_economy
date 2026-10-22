@@ -2009,6 +2009,77 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
     li ? ' pe_msg_corp_st_build:0 "§Y$CORP$§! hat über $PLANET$ eine eigene Station errichtet. Ihren Ertrag verarbeitet der Konzern selbst."' : ' pe_msg_corp_st_build:0 "§Y$CORP$§! has built a station of its own above $PLANET$. The corporation processes its output itself."',
     li ? ' pe_msg_corp_st_buy:0 "§Y$CORP$§! hat unsere Station über $PLANET$ gekauft. Ihren Ertrag verarbeitet der Konzern jetzt selbst."' : ' pe_msg_corp_st_buy:0 "§Y$CORP$§! has bought our station above $PLANET$. The corporation now processes its output itself."');
 }
+// Firm register of a planet (decision -> event pe.276): up to REG_LINES firms with stage and
+// corporation. The deposit tooltip cannot show it (it is read in planet scope).
+const REG_LINES = 20;
+const REG = [...Array(REG_LINES).keys()].map(i => i + 1);
+corp += `
+# Country scope (event pe.276): fill the register lines for event_target:pe_reg_planet:
+# pe_fl<i>_code, _stage, _name (corporation name id, 0 = independent), pe_fl_n firms.
+pe_firm_register = {
+	set_variable = { which = pe_fl_n value = 0 }
+${REG.map(i => `\tset_variable = { which = pe_fl${i}_code value = 0 }`).join('\n')}
+	event_target:pe_reg_planet = {
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms }
+			if = { limit = { NOT = { is_variable_set = pe_code } } pe_firm_identify = yes }
+			if = { limit = { NOT = { is_variable_set = pe_corp } } set_variable = { which = pe_corp value = 0 } }
+			root = { change_variable = { which = pe_fl_n value = 1 } }
+${REG.map((i, n) => `\t\t\t${n ? 'else_if' : 'if'} = { limit = { root = { check_variable = { which = pe_fl_n value = ${i} } } } root = { set_variable = { which = pe_fl${i}_code value = prev.pe_code } set_variable = { which = pe_fl${i}_stage value = prev.pe_stage } set_variable = { which = pe_fl${i}_name value = 0 } } ${CORPS.map((k, j) => `${j ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_corp value = ${k} } } root = { set_variable = { which = pe_fl${i}_name value = ${C(k, 'name')} } } }`).join(' ')} }`).join('\n')}
+		}
+	}
+	set_variable = { which = pe_fl_more value = pe_fl_n }
+	change_variable = { which = pe_fl_more value = -${REG_LINES} }
+}
+`;
+write('common/decisions/pe_decisions.txt', header + `# Planet decision: the register of the private firms on this planet and their corporations
+# (free, never taken by the AI).
+decision_pe_firm_register = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_politics
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		count_deposits = { category = pe_deposit_cat_firms count > 0 }
+	}
+
+	effect = {
+		hidden_effect = {
+			save_event_target_as = pe_reg_planet
+			owner = { country_event = { id = pe.276 } }
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
+`);
+let regLoc = header + `# Firm register lines (country scope, event pe.276).\n`;
+for (const i of REG) {
+  regLoc += dtext(`GetPeFl${i}`, `pe_fl${i}_code`, [[0, 'pe_corp_line_none'], ...variants.map(v => [v.code, `pe_fl_line_${i}`])], 'pe_corp_line_none');
+  regLoc += dtext(`GetPeFl${i}Firm`, `pe_fl${i}_code`, variants.map(v => [v.code, v.key]), 'pe_no_firm');
+  regLoc += dtext(`GetPeFl${i}Stage`, `pe_fl${i}_stage`, STAGES.map(s => [s, `pe_reg_stage_${s}`]), 'pe_corp_line_none');
+  regLoc += dtext(`GetPeFl${i}Corp`, `pe_fl${i}_name`, [[0, 'pe_reg_independent'], ...NAME_IDS.map(id => [id, `pe_cname_${id}`])], 'pe_reg_independent');
+}
+regLoc += `defined_text = {\n\tname = GetPeFlMore\n\ttext = {\n\t\ttrigger = { check_variable = { which = pe_fl_more value > 0 } }\n\t\tlocalization_key = pe_reg_more\n\t}\n\tdefault = pe_corp_line_none\n}\n`;
+write('common/scripted_loc/pe_register_loc_generated.txt', regLoc);
+for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
+  const L = loc[lang];
+  REG.forEach(i => L.push(` pe_fl_line_${i}:0 "[Root.GetPeFl${i}Firm] ([Root.GetPeFl${i}Stage]): §Y[Root.GetPeFl${i}Corp]§!\\n"`));
+  STAGES.forEach(s => L.push(` pe_reg_stage_${s}:0 "${li ? ['klein', 'mittel', 'groß'][s - 1] : ['small', 'mid-size', 'large'][s - 1]}"`));
+  L.push(li ? ' pe_reg_independent:0 "unabhängig"' : ' pe_reg_independent:0 "independent"',
+    li ? ' pe_reg_more:0 "… und [Root.pe_fl_more] weitere"' : ' pe_reg_more:0 "… and [Root.pe_fl_more] more"',
+    li ? ' decision_pe_firm_register:0 "Firmenregister"' : ' decision_pe_firm_register:0 "Register of Firms"',
+    li ? ' decision_pe_firm_register_desc:0 "Zeigt die Privatfirmen auf diesem Planeten und die Konzerne, zu denen sie gehören."' : ' decision_pe_firm_register_desc:0 "Shows the private firms on this planet and the corporations they belong to."',
+    li ? ' pe.276.name:0 "Firmenregister: [pe_reg_planet.GetName]"' : ' pe.276.name:0 "Register of Firms: [pe_reg_planet.GetName]"',
+    ` pe.276.desc:0 "${REG.map(i => `[Root.GetPeFl${i}]`).join('')}[Root.GetPeFlMore]"`,
+    li ? ' pe.276.a:0 "Schließen."' : ' pe.276.a:0 "Close."');
+}
 write('common/scripted_effects/pe_corp_effects_generated.txt', corp);
 
 write('common/static_modifiers/pe_corp_modifiers_generated.txt', header + `# Clusters (pe_cluster_apply), corporation headquarters and branches (one per name, so the
@@ -2019,8 +2090,6 @@ write('common/static_modifiers/pe_corp_modifiers_generated.txt', header + `# Clu
 
 const corpLoc = (name, varName, keyOf) => dtext(name, varName, NAME_IDS.map(id => [id, keyOf(id)]), 'pe_corp_line_none');
 write('common/scripted_loc/pe_corp_loc_generated.txt', header + `# Corporation names (country scope).\n` +
-  // Deposit scope (firm tooltip): the corporation of the firm (pe_corp) by its owner's slot name.
-  `defined_text = {\n\tname = GetPeFirmCorp\n${CORPS.flatMap(k => NAME_IDS.map(id => `\ttext = {\n\t\ttrigger = { check_variable = { which = pe_corp value = ${k} } planet = { owner = { check_variable = { which = ${C(k, 'name')} value = ${id} } } } }\n\t\tlocalization_key = pe_firm_corp_${id}\n\t}\n`)).join('')}\tdefault = pe_firm_corp_none\n}\n` +
   corpLoc('GetPeCorpName', 'pe_corp_cur_name', id => `pe_cname_${id}`) + corpLoc('GetPeCorpA', 'pe_corp_a_name', id => `pe_cname_${id}`) + corpLoc('GetPeCorpB', 'pe_corp_b_name', id => `pe_cname_${id}`) +
   CORPS.map(k => corpLoc(`GetPeCorpN${k}`, C(k, 'name'), id => `pe_cname_${id}`)).join('') +
   dtext('GetPeCorpGroup', 'pe_corp_grp', GROUPS.map(g => [g, `pe_corp_grp_${g}`]), 'pe_corp_line_none') +
@@ -2031,8 +2100,7 @@ const CORP_GROUP_NAMES = {1: ['industry', 'Industrie'], 2: ['trade and leisure',
 const CLUSTER_NAMES = {a: ['Steel', 'Stahl'], c: ['Consumer Goods', 'Konsumgüter'], t: ['Trade', 'Handels'], u: ['Entertainment', 'Unterhaltungs'], x: ['Physics', 'Physik'], y: ['Biology', 'Biologie'], z: ['Engineering', 'Ingenieurs'], b: ['Media', 'Medien'], m: ['Mining', 'Bergbau'], e: ['Energy', 'Energie'], f: ['Agricultural', 'Agrar']};
 for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
   const L = loc[lang];
-  NAME_IDS.forEach(id => L.push(li ? ` pe_firm_corp_${id}:0 "Gehört zum Konzern §Y${CORP_NAMES[id - 1].replace(/"/g, '')}§!."` : ` pe_firm_corp_${id}:0 "Part of the corporation §Y${CORP_NAMES[id - 1].replace(/"/g, '')}§!."`));
-  L.push(li ? ' pe_firm_corp_none:0 "Unabhängiges Unternehmen."' : ' pe_firm_corp_none:0 "Independent firm."', ' pe_firm_corp_tt:0 "[This.GetPeFirmCorp]"');
+  L.push(li ? ' pe_firm_corp_tt:0 "Zu welchem Konzern die Firma gehört, zeigt die Planeten-Entscheidung §YFirmenregister§!."' : ' pe_firm_corp_tt:0 "The planet decision §YRegister of Firms§! shows which corporation this firm belongs to."');
   NAME_IDS.forEach(id => L.push(` pe_cname_${id}:0 "${CORP_NAMES[id - 1]}"`,
     li ? ` pe_corp_hq_${id}:0 "Hauptsitz: ${CORP_NAMES[id - 1]}"` : ` pe_corp_hq_${id}:0 "Headquarters: ${CORP_NAMES[id - 1]}"`,
     li ? ` pe_corp_hq_${id}_desc:0 "Der Konzern ${CORP_NAMES[id - 1]} hat hier seinen Sitz: Verwaltung, Forschung, gut bezahlte Stellen."` : ` pe_corp_hq_${id}_desc:0 "The corporation ${CORP_NAMES[id - 1]} has its headquarters here: management, research, well-paid jobs."`,

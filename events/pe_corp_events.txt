@@ -1,6 +1,7 @@
 # Corporation events (see pe_corp_effects_generated.txt, pe_corp_step).
 #   pe.270 a corporation is founded   pe.271 a price war   pe.272 a merger
 #   pe.273 the register of corporations (console: event pe.273)
+#   pe.276 register of firms of a planet (planet decision)
 #   pe.280 a corporation wants a station   pe.281 the holdings offer their stock
 # Scope: country. pe_corp_cur_name / pe_corp_a_name / pe_corp_b_name: name ids for the texts;
 # pe_mg_s / pe_mg_w: the stronger and the weaker corporation (slots).
@@ -124,4 +125,18 @@ country_event = {
 	option = {
 		name = pe.281.b
 	}
+}
+
+# The register of the private firms on a planet (planet decision "Register of Firms"):
+# event_target:pe_reg_planet.
+country_event = {
+	id = pe.276
+	title = pe.276.name
+	desc = pe.276.desc
+	picture = GFX_evt_galactic_senate
+	is_triggered_only = yes
+	location = event_target:pe_reg_planet
+
+	immediate = { hidden_effect = { pe_firm_register = yes } }
+	option = { name = pe.276.a }
 }
