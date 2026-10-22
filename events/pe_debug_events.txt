@@ -10,7 +10,7 @@
 #   event pe.9   try a firm relocation now (stuck planet, ignores the yearly limit)
 #   event pe.10  fire a patron event now
 #   event pe.11  fire a labour event now (a planet with empty private worker jobs)
-#   event pe.12  offer a supply deal now (needs a short good that a private firm makes)
+#   event pe.12  offer a supply deal now, also without a shortage (a private firm must make the good)
 #   event pe.13  the Command Economy now: every firm becomes a state district
 namespace = pe
 
@@ -193,8 +193,8 @@ country_event = {
 	}
 }
 
-# event pe.12: a supply deal now (needs a short market good that a private firm makes and a
-# full stock of another good); run pe.7 first so the prices are fresh.
+# event pe.12: a supply deal now, also without a shortage (needs a private firm that makes
+# the good and a stock of another good of at least 40%); run pe.7 first for fresh prices.
 country_event = {
 	id = pe.12
 	hide_window = yes
@@ -202,8 +202,11 @@ country_event = {
 	immediate = {
 		pe_init = yes
 		remove_country_flag = pe_deal_cd
+		set_variable = { which = pe_deal_force value = 1 }
 		pe_deal_fire = yes
-		log = "private_economy: pe.12 deal x [Root.pe_deal_x] y [Root.pe_deal_y] xamt [Root.pe_deal_xamt] yamt [Root.pe_deal_yamt]"
+		set_variable = { which = pe_deal_force value = 0 }
+		# 0 = none found: x needs a private firm making that good, y a stock of at least 40%.
+		log = "private_economy: pe.12 deal good x [Root.pe_deal_x] for y [Root.pe_deal_y] (0 = none found)"
 	}
 }
 

@@ -39,11 +39,35 @@ for (const [kind, list] of [['job', jobs], ['deposit', deposits], ['building', b
 const modifiers = new Set([...fs.readFileSync(path.join(docs, 'modifiers.log'), 'utf8').matchAll(/^- (\w+),/gm)].map(m => m[1]));
 for (const j of jobs) modifiers.add(`job_${j}_add`);
 for (const c of econCats) for (const k of ['produces', 'upkeep']) modifiers.add(`${c}_${k}_mult`);
+// Category modifiers <category>_<kind>_mult exist only where the vanilla category generates
+// them (generate_mult_modifiers, comments stripped): the engine rejects the rest, even if an
+// older modifier list names them.
+const blockOf = (t, open) => { let d = 0; for (let j = open; j < t.length; j++) { if (t[j] === '{') d++; else if (t[j] === '}' && --d === 0) return t.slice(open, j + 1); } return ''; };
+const vanillaCats = {};
+for (const f of files(path.join(game, 'common/economic_categories')).filter(f => f.endsWith('.txt'))) {
+  const t = strip(fs.readFileSync(f, 'utf8'));
+  for (const m of t.matchAll(/^(\w+) = \{/gm)) {
+    const b = blockOf(t, t.indexOf('{', m.index));
+    const g = b.match(/generate_mult_modifiers = \{([^}]*)\}/);
+    vanillaCats[m[1]] = g ? g[1].split(/\s+/).filter(Boolean) : [];
+  }
+}
+const checkModifier = (f, key) => {
+  if (['factor', 'add', 'weight', 'mult'].includes(key)) return;
+  const cm = key.match(/^(\w+)_(produces|upkeep|cost)_mult$/);
+  if (cm && vanillaCats[cm[1]]) assert(vanillaCats[cm[1]].includes(cm[2]), `${rel(f)}: ${key}: vanilla category ${cm[1]} does not generate ${cm[2]} mult modifiers`);
+  else assert(modifiers.has(key), `${rel(f)}: unknown modifier ${key}`);
+};
 for (const f of scripts) {
   const text = strip(fs.readFileSync(f, 'utf8'));
   for (const m of text.matchAll(/\b(?:planet_modifier|country_modifier|modifier) = \{([^{}]*)\}/g))
-    for (const [, key] of m[1].matchAll(/(\w+) = -?[\d.@]/g))
-      if (!['factor', 'add', 'weight', 'mult'].includes(key)) assert(modifiers.has(key), `${rel(f)}: unknown modifier ${key}`);
+    for (const [, key] of m[1].matchAll(/(\w+) = -?[\d.@]/g)) checkModifier(f, key);
+}
+// Static modifiers: every top-level block is a modifier.
+for (const f of files(path.join(root, 'common/static_modifiers')).filter(f => f.endsWith('.txt'))) {
+  const text = strip(fs.readFileSync(f, 'utf8'));
+  for (const m of text.matchAll(/^(\w+) = \{/gm))
+    for (const [, key] of blockOf(text, text.indexOf('{', m.index)).matchAll(/(\w+) = -?[\d.@]/g)) checkModifier(f, key);
 }
 
 // 5. Effects/triggers referencing our objects point at existing definitions.

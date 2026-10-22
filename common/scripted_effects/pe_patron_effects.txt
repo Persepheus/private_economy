@@ -472,32 +472,33 @@ pe_deal = {
 # fullest stock, at least 40%, not short), then the amounts: X = a year's shortfall (at
 # least 100), Y worth 80% of what X costs on the market (at the price we would get for Y),
 # at most half of the Y stock. The firm's margin: a quarter of X's market value.
+# pe_deal_force = 1 (debug event pe.12): X need not be short, so a deal can be tested anytime.
 pe_deal_fire = {
 	set_timed_country_flag = { flag = pe_deal_cd days = 1080 }
 	set_variable = { which = pe_deal_x value = 0 }
 	random_list = {
 		10 = {
-			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_alloys value = 1 } } }
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_alloys value = 1 } } NOT = { check_variable = { which = pe_deal_force value = 1 } } }
 			modifier = { factor = 0 NOT = { check_variable = { which = pe_cnt_a value > 0 } } }
 			set_variable = { which = pe_deal_x value = 1 }
 		}
 		10 = {
-			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } }
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } NOT = { check_variable = { which = pe_deal_force value = 1 } } }
 			modifier = { factor = 0 NOT = { check_variable = { which = pe_cnt_c value > 0 } } }
 			set_variable = { which = pe_deal_x value = 2 }
 		}
 		10 = {
-			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_minerals value = 1 } } }
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_minerals value = 1 } } NOT = { check_variable = { which = pe_deal_force value = 1 } } }
 			modifier = { factor = 0 NOT = { check_variable = { which = pe_cnt_m value > 0 } } }
 			set_variable = { which = pe_deal_x value = 3 }
 		}
 		10 = {
-			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_energy value = 1 } } }
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_energy value = 1 } } NOT = { check_variable = { which = pe_deal_force value = 1 } } }
 			modifier = { factor = 0 NOT = { check_variable = { which = pe_cnt_e value > 0 } } }
 			set_variable = { which = pe_deal_x value = 4 }
 		}
 		10 = {
-			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_food value = 1 } } }
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_food value = 1 } } NOT = { check_variable = { which = pe_deal_force value = 1 } } }
 			modifier = { factor = 0 NOT = { check_variable = { which = pe_cnt_f value > 0 } } }
 			set_variable = { which = pe_deal_x value = 5 }
 		}

@@ -154,8 +154,9 @@ pe_modern_physicist = {
 pe_modern_biologist = {
 	planet_biologists_produces_mult = 0.1
 }
+# Vanilla has no output multiplier for engineers alone: half of it for all researchers.
 pe_modern_engineer = {
-	planet_engineers_produces_mult = 0.1
+	planet_researchers_produces_mult = 0.05
 }
 pe_modern_bureaucrat = {
 	planet_bureaucrats_produces_mult = 0.1
@@ -191,7 +192,7 @@ pe_rational_biologist = {
 }
 pe_rational_engineer = {
 	job_pe_private_engineer_add = -100
-	planet_engineers_produces_mult = 0.05
+	planet_researchers_produces_mult = 0.025
 }
 pe_rational_bureaucrat = {
 	job_pe_private_bureaucrat_add = -100

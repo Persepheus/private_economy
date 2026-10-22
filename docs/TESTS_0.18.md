@@ -31,6 +31,11 @@ Ein laufendes Spiel kann weiterlaufen.
   - **pe.267 Technologielizenz:** Der Staat kauft sie (Handel, volle Forschung), die Firmen kaufen sie (Pool, halbe Forschung), oder keine.
   - **pe.268 Dumping:** Billige Legierungen oder Konsumgüter für dich, aber deine Firmen der Branche verlieren ein Viertel ihres Kapitals. Oder Schutzzölle für Einfluss, dann sinkt die Meinung des Nachbarn.
 
+## Korrekturen (0.18.1)
+- **Ingenieure:** Vanilla hat keinen Ertrags-Multiplikator nur für Ingenieure (`planet_engineers_produces_mult` ist dort auskommentiert, error.log: „Invalid modifier“). Modernisierung und Rationalisierung von Ingenieurslaboren wirken deshalb mit halbem Wert auf alle Forscher des Planeten.
+- **Validator:** Prüft jetzt auch die Statischen Modifier und gleicht Kategorie-Multiplikatoren mit den Vanilla-Kategorien ab.
+- **`event pe.12`** erzwingt das Angebot jetzt, auch ohne Mangel. Es braucht nur eine Privatfirma, die das Gut herstellt, und ein anderes Lager, das mindestens 40 % voll ist. Das Log nennt die gewählten Güter (0 = keins gefunden).
+
 ## Debug
 - `event pe.12`: Liefer-Deal sofort (vorher `event pe.7`, damit die Preise frisch sind).
 - `event pe.13`: Planwirtschaft ausführen, ohne die Richtlinie umzustellen.
