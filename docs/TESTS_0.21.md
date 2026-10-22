@@ -41,6 +41,14 @@ Ein laufendes Spiel kann weiterlaufen. Hauptsitz-Modifier werden im nächsten Qu
 - „Hauptsitz: Name“ ist jetzt ein Vorkommen mit denselben Effekten (+1 Stabilität, +2 % Jobertrag).
 - Niederlassungs-Modifier gibt es nicht mehr. Das Register `event pe.273` zeigt Firmen, Stationen und Kasse.
 
+## Korrekturen 0.21.1 (nach dem ersten Test)
+- **Erstkontakt mit den eigenen Holdings:** Die Holdings entstehen jetzt mit `released_by_country` (sofortiger Kontakt) und `contact_rule = never` (niemand sonst trifft sie). Bestehende Holdings bekommen jedes Quartal den Kontakt, falls er fehlt.
+- **Station über einem Planeten mit Anomalie:** Konzerne nehmen nur Vorkommen auf Planeten, die du vermessen hast und die keine Anomalie haben. Die Anomalie hatte ein Energievorkommen versteckt und später in Mineralien umgewandelt.
+  - Der Konzern hat die Umwandlung mitbekommen. Im Save rechnete er mit „Mineralien 6“ (Wert 6), produzierte also 12 Energie.
+  - Die Zuordnung liest die Vorkommen jedes Quartal neu aus.
+- **Nur echte Vorkommen:** Mineralien, Energie, Legierungen, Nahrung, Physik, Gesellschaft, Ingenieurwesen, Handel, jeweils mit Stufe. Sonderfälle wie Arc Furnace, Drachenhort, Kristallriss, Protostern, Roter Riese, Einheit und Maschinen-Direktive bleiben draußen. Legierungen waren schon dabei.
+- **Versuch: Konzern im Firmen-Tooltip.** Jede Firma hat eine Tooltip-Zeile „Gehört zum Konzern X“ oder „Unabhängiges Unternehmen“. Ob das Spiel die Zeile im Vorkommen-Tooltip auswertet (Scope der Firma), muss der Test zeigen. Sonst steht dort nur „Unabhängiges Unternehmen“ oder ein Platzhalter.
+
 ## Debug
 - `event pe.274`: Der erste aktive Konzern holt sich sofort eine Station (Holdings werden bei Bedarf erstellt; Grenze und Pause gelten nicht). Unter Freier Markt oder Gemischt kommt das Angebot.
 

@@ -275,6 +275,7 @@ ${key} = {
 	potential = { always = no }
 	drop_weight = { weight = 0 }
 ${clearing(v.k, s)}
+	custom_tooltip = pe_firm_corp_tt
 
 	resources = {
 		category = planet_deposits
@@ -1647,7 +1648,7 @@ for (const t of readDir('common/deposits')) {
     const def = blockAt(t, t.indexOf('{', m.index));
     const st = def.match(/\n\tstation = (shipclass_mining_station|shipclass_research_station)/);
     const rm = def.match(/\n\tresources = \{/);
-    if (!st || !rm) continue;
+    if (!st || !rm || !/^d_(minerals|energy|alloys|food|physics|society|engineering|trade_value)_\d+$/.test(m[1])) continue;
     const res = blockAt(def, def.indexOf('{', rm.index));
     const pm = res.match(/\n\t\tproduces = \{([^{}]*)\}/);
     if (!pm || /trigger/.test(res)) continue;
@@ -1661,8 +1662,11 @@ for (const t of readDir('common/deposits')) {
 const orbitalsFor = g => ORBITALS.filter(o => Object.keys(o.amounts).every(r => GROUP_RES[g].includes(r)));
 let ctrg = header + `# Corporate stations (see pe_corp_effects_generated.txt). Planet scope.
 
-# An orbital deposit of an ordinary resource (no strategic resources).
+# An orbital deposit of an ordinary resource (no strategic resources), surveyed by us, no
+# anomaly on the planet (it could hide or change the deposit).
 pe_orbital_allowed = {
+	is_surveyed = { who = root status = yes }
+	has_anomaly = no
 	OR = {
 ${ORBITALS.map(o => `\t\thas_deposit = ${o.key}`).join('\n')}
 	}
@@ -1670,6 +1674,8 @@ ${ORBITALS.map(o => `\t\thas_deposit = ${o.key}`).join('\n')}
 ${GROUPS.map(g => `
 # An orbital deposit that corporations of sector group ${g} can use.
 pe_orbital_for_g${g} = {
+	is_surveyed = { who = root status = yes }
+	has_anomaly = no
 	OR = {
 ${orbitalsFor(g).map(o => `\t\thas_deposit = ${o.key}`).join('\n')}
 	}
@@ -1706,6 +1712,8 @@ pe_holdings_ensure = {
 			name = pe_holdings_name
 			type = pe_holdings
 			auto_delete = no
+			contact_rule = never
+			released_by_country = root
 			authority = auth_oligarchic
 			ethos = { ethic = ethic_materialist ethic = ethic_egalitarian ethic = ethic_xenophile }
 			civics = { civic = civic_merchant_guilds civic = civic_mining_guilds }
@@ -1719,6 +1727,11 @@ pe_holdings_ensure = {
 				add_resource = { energy = 500 }
 			}
 		}
+	}
+	# Our own holdings are no strangers (no first contact).
+	if = {
+		limit = { exists = event_target:pe_hold NOT = { has_communications = event_target:pe_hold } }
+		establish_communications_no_message = event_target:pe_hold
 	}
 }
 
@@ -2006,6 +2019,8 @@ write('common/static_modifiers/pe_corp_modifiers_generated.txt', header + `# Clu
 
 const corpLoc = (name, varName, keyOf) => dtext(name, varName, NAME_IDS.map(id => [id, keyOf(id)]), 'pe_corp_line_none');
 write('common/scripted_loc/pe_corp_loc_generated.txt', header + `# Corporation names (country scope).\n` +
+  // Deposit scope (firm tooltip): the corporation of the firm (pe_corp) by its owner's slot name.
+  `defined_text = {\n\tname = GetPeFirmCorp\n${CORPS.flatMap(k => NAME_IDS.map(id => `\ttext = {\n\t\ttrigger = { check_variable = { which = pe_corp value = ${k} } planet = { owner = { check_variable = { which = ${C(k, 'name')} value = ${id} } } } }\n\t\tlocalization_key = pe_firm_corp_${id}\n\t}\n`)).join('')}\tdefault = pe_firm_corp_none\n}\n` +
   corpLoc('GetPeCorpName', 'pe_corp_cur_name', id => `pe_cname_${id}`) + corpLoc('GetPeCorpA', 'pe_corp_a_name', id => `pe_cname_${id}`) + corpLoc('GetPeCorpB', 'pe_corp_b_name', id => `pe_cname_${id}`) +
   CORPS.map(k => corpLoc(`GetPeCorpN${k}`, C(k, 'name'), id => `pe_cname_${id}`)).join('') +
   dtext('GetPeCorpGroup', 'pe_corp_grp', GROUPS.map(g => [g, `pe_corp_grp_${g}`]), 'pe_corp_line_none') +
@@ -2016,6 +2031,8 @@ const CORP_GROUP_NAMES = {1: ['industry', 'Industrie'], 2: ['trade and leisure',
 const CLUSTER_NAMES = {a: ['Steel', 'Stahl'], c: ['Consumer Goods', 'Konsumgüter'], t: ['Trade', 'Handels'], u: ['Entertainment', 'Unterhaltungs'], x: ['Physics', 'Physik'], y: ['Biology', 'Biologie'], z: ['Engineering', 'Ingenieurs'], b: ['Media', 'Medien'], m: ['Mining', 'Bergbau'], e: ['Energy', 'Energie'], f: ['Agricultural', 'Agrar']};
 for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
   const L = loc[lang];
+  NAME_IDS.forEach(id => L.push(li ? ` pe_firm_corp_${id}:0 "Gehört zum Konzern §Y${CORP_NAMES[id - 1].replace(/"/g, '')}§!."` : ` pe_firm_corp_${id}:0 "Part of the corporation §Y${CORP_NAMES[id - 1].replace(/"/g, '')}§!."`));
+  L.push(li ? ' pe_firm_corp_none:0 "Unabhängiges Unternehmen."' : ' pe_firm_corp_none:0 "Independent firm."', ' pe_firm_corp_tt:0 "[This.GetPeFirmCorp]"');
   NAME_IDS.forEach(id => L.push(` pe_cname_${id}:0 "${CORP_NAMES[id - 1]}"`,
     li ? ` pe_corp_hq_${id}:0 "Hauptsitz: ${CORP_NAMES[id - 1]}"` : ` pe_corp_hq_${id}:0 "Headquarters: ${CORP_NAMES[id - 1]}"`,
     li ? ` pe_corp_hq_${id}_desc:0 "Der Konzern ${CORP_NAMES[id - 1]} hat hier seinen Sitz: Verwaltung, Forschung, gut bezahlte Stellen."` : ` pe_corp_hq_${id}_desc:0 "The corporation ${CORP_NAMES[id - 1]} has its headquarters here: management, research, well-paid jobs."`,

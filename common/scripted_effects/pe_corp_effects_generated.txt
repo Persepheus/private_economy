@@ -4990,6 +4990,8 @@ pe_holdings_ensure = {
 			name = pe_holdings_name
 			type = pe_holdings
 			auto_delete = no
+			contact_rule = never
+			released_by_country = root
 			authority = auth_oligarchic
 			ethos = { ethic = ethic_materialist ethic = ethic_egalitarian ethic = ethic_xenophile }
 			civics = { civic = civic_merchant_guilds civic = civic_mining_guilds }
@@ -5003,6 +5005,11 @@ pe_holdings_ensure = {
 				add_resource = { energy = 500 }
 			}
 		}
+	}
+	# Our own holdings are no strangers (no first contact).
+	if = {
+		limit = { exists = event_target:pe_hold NOT = { has_communications = event_target:pe_hold } }
+		establish_communications_no_message = event_target:pe_hold
 	}
 }
 
@@ -5526,17 +5533,9 @@ pe_corp_station_output = {
 			else_if = { limit = { has_deposit = d_food_6 } set_variable = { which = pe_stval value = 6 } root = { change_variable = { which = pe_sr_food value = 6 } } }
 			else_if = { limit = { has_deposit = d_food_7 } set_variable = { which = pe_stval value = 7 } root = { change_variable = { which = pe_sr_food value = 7 } } }
 			else_if = { limit = { has_deposit = d_food_10 } set_variable = { which = pe_stval value = 10 } root = { change_variable = { which = pe_sr_food value = 10 } } }
-			else_if = { limit = { has_deposit = d_consumer_goods_obsessional_directive } set_variable = { which = pe_stval value = 4 } root = { change_variable = { which = pe_sr_consumer_goods value = 2 } } }
-			else_if = { limit = { has_deposit = d_guardian_dragon_hoard } set_variable = { which = pe_stval value = 60 } root = { change_variable = { which = pe_sr_minerals value = 30 } change_variable = { which = pe_sr_energy value = 30 } } }
-			else_if = { limit = { has_deposit = d_vast_unity_deposit } set_variable = { which = pe_stval value = 9 } root = { change_variable = { which = pe_sr_unity value = 3 } } }
-			else_if = { limit = { has_deposit = d_crystal_rift } set_variable = { which = pe_stval value = 30 } root = { change_variable = { which = pe_sr_unity value = 10 } } }
 			else_if = { limit = { has_deposit = d_physics_25 } set_variable = { which = pe_stval value = 87.5 } root = {  } }
 			else_if = { limit = { has_deposit = d_engineering_25 } set_variable = { which = pe_stval value = 87.5 } root = {  } }
 			else_if = { limit = { has_deposit = d_society_25 } set_variable = { which = pe_stval value = 87.5 } root = {  } }
-			else_if = { limit = { has_deposit = d_arc_furnace_1 } set_variable = { which = pe_stval value = 1 } root = { change_variable = { which = pe_sr_minerals value = 1 } } }
-			else_if = { limit = { has_deposit = d_arc_furnace_2 } set_variable = { which = pe_stval value = 2 } root = { change_variable = { which = pe_sr_minerals value = 2 } } }
-			else_if = { limit = { has_deposit = d_red_giant_unstable } set_variable = { which = pe_stval value = 5 } root = { change_variable = { which = pe_sr_energy value = 5 } } }
-			else_if = { limit = { has_deposit = d_protostar } set_variable = { which = pe_stval value = 40 } root = { change_variable = { which = pe_sr_energy value = 5 } } }
 			if = { limit = { check_variable = { which = pe_stk value = 1 } } root = { change_variable = { which = pe_c1_sv value = prev.pe_stval } change_variable = { which = pe_c1_st value = 1 } } if = { limit = { orbital_station = { has_fleet_flag = pe_st_share } } root = { change_variable = { which = pe_c1_shv value = prev.pe_stval } } } }
 			else_if = { limit = { check_variable = { which = pe_stk value = 2 } } root = { change_variable = { which = pe_c2_sv value = prev.pe_stval } change_variable = { which = pe_c2_st value = 1 } } if = { limit = { orbital_station = { has_fleet_flag = pe_st_share } } root = { change_variable = { which = pe_c2_shv value = prev.pe_stval } } } }
 			else_if = { limit = { check_variable = { which = pe_stk value = 3 } } root = { change_variable = { which = pe_c3_sv value = prev.pe_stval } change_variable = { which = pe_c3_st value = 1 } } if = { limit = { orbital_station = { has_fleet_flag = pe_st_share } } root = { change_variable = { which = pe_c3_shv value = prev.pe_stval } } } }
