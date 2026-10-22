@@ -33,6 +33,19 @@ pe_has_idle_pops = {
 	check_variable = { which = pe_idle value >= 50 }
 }
 
+# Colony scope: private specialist jobs stand empty here (at least one job's worth).
+pe_spec_short = {
+	OR = {
+		free_jobs_of_type = { job = pe_private_metallurgist value >= 100 }
+		free_jobs_of_type = { job = pe_private_artisan value >= 100 }
+		free_jobs_of_type = { job = pe_private_trader value >= 100 }
+		free_jobs_of_type = { job = pe_private_physicist value >= 100 }
+		free_jobs_of_type = { job = pe_private_biologist value >= 100 }
+		free_jobs_of_type = { job = pe_private_engineer value >= 100 }
+		free_jobs_of_type = { job = pe_private_bureaucrat value >= 100 }
+	}
+}
+
 # Colony scope: private worker jobs stand empty here (at least one job's worth).
 pe_rural_short = {
 	OR = {

@@ -149,3 +149,180 @@ defined_text = {
 	}
 	default = pe_magnate_1
 }
+
+# Flair events.
+defined_text = {
+	name = GetPeDealX
+	text = {
+		trigger = { check_variable = { which = pe_deal_x value = 1 } }
+		localization_key = pe_good_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_deal_x value = 2 } }
+		localization_key = pe_good_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_deal_x value = 3 } }
+		localization_key = pe_good_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_deal_x value = 4 } }
+		localization_key = pe_good_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_deal_x value = 5 } }
+		localization_key = pe_good_5
+	}
+}
+
+defined_text = {
+	name = GetPeDealY
+	text = {
+		trigger = { check_variable = { which = pe_deal_y value = 1 } }
+		localization_key = pe_good_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_deal_y value = 2 } }
+		localization_key = pe_good_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_deal_y value = 3 } }
+		localization_key = pe_good_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_deal_y value = 4 } }
+		localization_key = pe_good_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_deal_y value = 5 } }
+		localization_key = pe_good_5
+	}
+}
+
+defined_text = {
+	name = GetPeDealFirm
+	text = {
+		trigger = { check_variable = { which = pe_deal_x value = 1 } }
+		localization_key = pe_deal_firm_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_deal_x value = 2 } }
+		localization_key = pe_deal_firm_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_deal_x value = 3 } }
+		localization_key = pe_deal_firm_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_deal_x value = 4 } }
+		localization_key = pe_deal_firm_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_deal_x value = 5 } }
+		localization_key = pe_deal_firm_5
+	}
+}
+
+defined_text = {
+	name = GetPeSector
+	text = {
+		trigger = { check_variable = { which = pe_mod_job value = 1 } }
+		localization_key = pe_sector_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mod_job value = 2 } }
+		localization_key = pe_sector_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mod_job value = 3 } }
+		localization_key = pe_sector_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mod_job value = 4 } }
+		localization_key = pe_sector_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mod_job value = 5 } }
+		localization_key = pe_sector_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mod_job value = 6 } }
+		localization_key = pe_sector_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mod_job value = 7 } }
+		localization_key = pe_sector_7
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mod_job value = 8 } }
+		localization_key = pe_sector_8
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mod_job value = 9 } }
+		localization_key = pe_sector_9
+	}
+	text = {
+		trigger = { check_variable = { which = pe_mod_job value = 10 } }
+		localization_key = pe_sector_10
+	}
+}
+
+defined_text = {
+	name = GetPeRatSector
+	text = {
+		trigger = { check_variable = { which = pe_rat_job value = 1 } }
+		localization_key = pe_sector_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_rat_job value = 2 } }
+		localization_key = pe_sector_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_rat_job value = 3 } }
+		localization_key = pe_sector_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_rat_job value = 4 } }
+		localization_key = pe_sector_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_rat_job value = 5 } }
+		localization_key = pe_sector_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_rat_job value = 6 } }
+		localization_key = pe_sector_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_rat_job value = 7 } }
+		localization_key = pe_sector_7
+	}
+}
+
+defined_text = {
+	name = GetPeLicField
+	text = {
+		trigger = { check_variable = { which = pe_lic_field value = 1 } }
+		localization_key = pe_field_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_lic_field value = 2 } }
+		localization_key = pe_field_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_lic_field value = 3 } }
+		localization_key = pe_field_3
+	}
+}
+
+defined_text = {
+	name = GetPeDumpGood
+	text = {
+		trigger = { check_variable = { which = pe_dump_p value = 1 } }
+		localization_key = pe_good_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dump_p value = 2 } }
+		localization_key = pe_good_2
+	}
+}

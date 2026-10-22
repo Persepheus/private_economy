@@ -10,6 +10,8 @@
 #   event pe.9   try a firm relocation now (stuck planet, ignores the yearly limit)
 #   event pe.10  fire a patron event now
 #   event pe.11  fire a labour event now (a planet with empty private worker jobs)
+#   event pe.12  offer a supply deal now (needs a short good that a private firm makes)
+#   event pe.13  the Command Economy now: every firm becomes a state district
 namespace = pe
 
 country_event = {
@@ -191,3 +193,27 @@ country_event = {
 	}
 }
 
+# event pe.12: a supply deal now (needs a short market good that a private firm makes and a
+# full stock of another good); run pe.7 first so the prices are fresh.
+country_event = {
+	id = pe.12
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_init = yes
+		remove_country_flag = pe_deal_cd
+		pe_deal_fire = yes
+		log = "private_economy: pe.12 deal x [Root.pe_deal_x] y [Root.pe_deal_y] xamt [Root.pe_deal_xamt] yamt [Root.pe_deal_yamt]"
+	}
+}
+
+# event pe.13: what the Command Economy does, without switching the policy.
+country_event = {
+	id = pe.13
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_command_economy = yes
+		log = "private_economy: pe.13 command economy, pool [Root.pe_capital]"
+	}
+}

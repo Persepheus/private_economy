@@ -4,8 +4,12 @@
 #   events and a new one appears.
 #   Labour (pe_labour_events.txt): private worker jobs stay empty; firms and workers react.
 #   Market (pe_market_events.txt): shares, bonds, takeovers, monopolies, crashes ...
+#   Flair (pe_flair_events.txt): supply deals, modernisation, rationalisation, capital
+#   levy, and the neighbours (investment abroad, foreign branches, licences, dumping).
 #   pe_quarterly (1) -> pe_patron (2) -> pe_patron_fire (3) -> pe_pat_amounts (4)
 #                    -> pe_labour (2) -> pe_labour_fire (3) -> pe_pat_amounts (4)
+#                    -> pe_deal (2) -> pe_deal_fire (3)
+#   pe_patron_fire (3) -> pe_pick_sector (4), pe_pick_free_spec (4)
 
 # --- Patrons ------------------------------------------------------------------------
 
@@ -119,6 +123,63 @@ pe_patron_fire = {
 				save_event_target_as = pe_pat_planet
 			}
 			country_event = { id = pe.226 }
+		}
+		# Flair events (pe_flair_events.txt).
+		8 = {
+			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes count_deposits = { category = pe_deposit_cat_firms count >= 2 } NOT = { pe_has_idle_pops = yes } } } }
+			random_owned_colony = {
+				limit = { pe_planet_eligible = yes count_deposits = { category = pe_deposit_cat_firms count >= 2 } NOT = { pe_has_idle_pops = yes } }
+				save_event_target_as = pe_pat_planet
+				pe_pick_sector = yes
+			}
+			country_event = { id = pe.262 }
+		}
+		6 = {
+			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes pe_spec_short = yes } } }
+			random_owned_colony = {
+				limit = { pe_planet_eligible = yes pe_spec_short = yes }
+				save_event_target_as = pe_pat_planet
+				pe_pick_free_spec = yes
+			}
+			country_event = { id = pe.263 }
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_capital value >= 10000 } } }
+			country_event = { id = pe.264 }
+		}
+		5 = {
+			modifier = { factor = 0 NOT = { any_country = { is_country_type = default NOT = { is_same_value = root } has_communications = root NOT = { is_at_war_with = root } } } }
+			random_country = {
+				limit = { is_country_type = default NOT = { is_same_value = root } has_communications = root NOT = { is_at_war_with = root } }
+				save_event_target_as = pe_pat_country
+			}
+			country_event = { id = pe.265 }
+		}
+		5 = {
+			modifier = { factor = 0 NOT = { any_country = { is_country_type = default NOT = { is_same_value = root } has_communications = root NOT = { is_at_war_with = root } } } }
+			random_country = {
+				limit = { is_country_type = default NOT = { is_same_value = root } has_communications = root NOT = { is_at_war_with = root } }
+				save_event_target_as = pe_pat_country
+			}
+			random_owned_colony = { limit = { pe_planet_eligible = yes } save_event_target_as = pe_pat_planet }
+			country_event = { id = pe.266 }
+		}
+		5 = {
+			modifier = { factor = 0 NOT = { any_country = { is_country_type = default NOT = { is_same_value = root } has_communications = root NOT = { is_at_war_with = root } } } }
+			random_country = {
+				limit = { is_country_type = default NOT = { is_same_value = root } has_communications = root NOT = { is_at_war_with = root } }
+				save_event_target_as = pe_pat_country
+			}
+			country_event = { id = pe.267 }
+		}
+		5 = {
+			modifier = { factor = 0 NOT = { any_country = { is_country_type = default NOT = { is_same_value = root } has_communications = root } } }
+			modifier = { factor = 0 NOT = { OR = { check_variable = { which = pe_cnt_a value >= 2 } check_variable = { which = pe_cnt_c value >= 2 } } } }
+			random_country = {
+				limit = { is_country_type = default NOT = { is_same_value = root } has_communications = root }
+				save_event_target_as = pe_pat_country
+			}
+			country_event = { id = pe.268 }
 		}
 		# Market and corporate events (pe_market_events.txt).
 		6 = {
@@ -277,6 +338,26 @@ pe_pat_amounts = {
 	# Leased machines (pe.212): at most twice the base lease (25% -> 50% automated).
 	set_variable = { which = pe_lease_mult value = pe_pat_mult }
 	if = { limit = { check_variable = { which = pe_lease_mult value > 2 } } set_variable = { which = pe_lease_mult value = 2 } }
+	set_variable = { which = pe_pat_mult_half value = pe_pat_mult }
+	multiply_variable = { which = pe_pat_mult_half value = 0.5 }
+	# Investment abroad (pe.265): per month, taxes for the state and returns for the pool.
+	set_variable = { which = pe_abroad_new_state value = pe_pat_spend }
+	multiply_variable = { which = pe_abroad_new_state value = 0.004 }
+	round_variable = pe_abroad_new_state
+	set_variable = { which = pe_abroad_new_pool value = pe_pat_spend }
+	multiply_variable = { which = pe_abroad_new_pool value = 0.008 }
+	round_variable = pe_abroad_new_pool
+	# Technology licence (pe.267): the fee and the research.
+	set_variable = { which = pe_lic_cost value = pe_pat_spend }
+	multiply_variable = { which = pe_lic_cost value = 0.3 }
+	round_variable = pe_lic_cost
+	set_variable = { which = pe_lic_res_half value = pe_pat_res }
+	multiply_variable = { which = pe_lic_res_half value = 0.5 }
+	round_variable = pe_lic_res_half
+	# Dumping (pe.268): the tariff in influence.
+	set_variable = { which = pe_tariff value = pe_pat_mult }
+	multiply_variable = { which = pe_tariff value = 25 }
+	round_variable = pe_tariff
 }
 
 # --- Labour -------------------------------------------------------------------------
@@ -359,5 +440,332 @@ pe_labour_fire = {
 		}
 		30 = { country_event = { id = pe.232 } }
 		15 = { country_event = { id = pe.233 } }
+	}
+}
+
+# --- Supply deals ---------------------------------------------------------------------
+
+# Country scope, quarterly: when a market good is short, a private firm that makes it
+# offers a deal (pe.260): it delivers a year's shortfall in exchange for a good we have
+# plenty of, cheaper than the market would be for us. Its margin goes to the investors.
+# At most every three years, a 30% chance per quarter.
+pe_deal = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = pe_deal_cd }
+			OR = {
+				AND = { check_variable = { which = pe_def_alloys value = 1 } check_variable = { which = pe_cnt_a value > 0 } }
+				AND = { check_variable = { which = pe_def_consumer_goods value = 1 } check_variable = { which = pe_cnt_c value > 0 } }
+				AND = { check_variable = { which = pe_def_minerals value = 1 } check_variable = { which = pe_cnt_m value > 0 } }
+				AND = { check_variable = { which = pe_def_energy value = 1 } check_variable = { which = pe_cnt_e value > 0 } }
+				AND = { check_variable = { which = pe_def_food value = 1 } check_variable = { which = pe_cnt_f value > 0 } }
+			}
+		}
+		random = {
+			chance = 30
+			pe_deal_fire = yes
+		}
+	}
+}
+
+# Country scope: pick the short good X (pe_deal_x) and the plentiful good Y (pe_deal_y: the
+# fullest stock, at least 40%, not short), then the amounts: X = a year's shortfall (at
+# least 100), Y worth 80% of what X costs on the market (at the price we would get for Y),
+# at most half of the Y stock. The firm's margin: a quarter of X's market value.
+pe_deal_fire = {
+	set_timed_country_flag = { flag = pe_deal_cd days = 1080 }
+	set_variable = { which = pe_deal_x value = 0 }
+	random_list = {
+		10 = {
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_alloys value = 1 } } }
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_cnt_a value > 0 } } }
+			set_variable = { which = pe_deal_x value = 1 }
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } } }
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_cnt_c value > 0 } } }
+			set_variable = { which = pe_deal_x value = 2 }
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_minerals value = 1 } } }
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_cnt_m value > 0 } } }
+			set_variable = { which = pe_deal_x value = 3 }
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_energy value = 1 } } }
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_cnt_e value > 0 } } }
+			set_variable = { which = pe_deal_x value = 4 }
+		}
+		10 = {
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_def_food value = 1 } } }
+			modifier = { factor = 0 NOT = { check_variable = { which = pe_cnt_f value > 0 } } }
+			set_variable = { which = pe_deal_x value = 5 }
+		}
+	}
+	set_variable = { which = pe_deal_y value = 0 }
+	set_variable = { which = pe_deal_best value = 0.4 }
+	export_resource_stockpile_to_variable = { resource = alloys variable = pe_ds_1 }
+	export_resource_maximum_to_variable = { resource = alloys variable = pe_dm }
+	if = {
+		limit = {
+			check_variable = { which = pe_dm value > 0 }
+			NOT = { check_variable = { which = pe_deal_x value = 1 } }
+			NOT = { check_variable = { which = pe_def_alloys value = 1 } }
+		}
+		set_variable = { which = pe_df value = pe_ds_1 }
+		divide_variable = { which = pe_df value = pe_dm }
+		if = {
+			limit = { check_variable = { which = pe_df value > pe_deal_best } }
+			set_variable = { which = pe_deal_best value = pe_df }
+			set_variable = { which = pe_deal_y value = 1 }
+		}
+	}
+	export_resource_stockpile_to_variable = { resource = consumer_goods variable = pe_ds_2 }
+	export_resource_maximum_to_variable = { resource = consumer_goods variable = pe_dm }
+	if = {
+		limit = {
+			check_variable = { which = pe_dm value > 0 }
+			NOT = { check_variable = { which = pe_deal_x value = 2 } }
+			NOT = { check_variable = { which = pe_def_consumer_goods value = 1 } }
+		}
+		set_variable = { which = pe_df value = pe_ds_2 }
+		divide_variable = { which = pe_df value = pe_dm }
+		if = {
+			limit = { check_variable = { which = pe_df value > pe_deal_best } }
+			set_variable = { which = pe_deal_best value = pe_df }
+			set_variable = { which = pe_deal_y value = 2 }
+		}
+	}
+	export_resource_stockpile_to_variable = { resource = minerals variable = pe_ds_3 }
+	export_resource_maximum_to_variable = { resource = minerals variable = pe_dm }
+	if = {
+		limit = {
+			check_variable = { which = pe_dm value > 0 }
+			NOT = { check_variable = { which = pe_deal_x value = 3 } }
+			NOT = { check_variable = { which = pe_def_minerals value = 1 } }
+		}
+		set_variable = { which = pe_df value = pe_ds_3 }
+		divide_variable = { which = pe_df value = pe_dm }
+		if = {
+			limit = { check_variable = { which = pe_df value > pe_deal_best } }
+			set_variable = { which = pe_deal_best value = pe_df }
+			set_variable = { which = pe_deal_y value = 3 }
+		}
+	}
+	export_resource_stockpile_to_variable = { resource = energy variable = pe_ds_4 }
+	export_resource_maximum_to_variable = { resource = energy variable = pe_dm }
+	if = {
+		limit = {
+			check_variable = { which = pe_dm value > 0 }
+			NOT = { check_variable = { which = pe_deal_x value = 4 } }
+			NOT = { check_variable = { which = pe_def_energy value = 1 } }
+		}
+		set_variable = { which = pe_df value = pe_ds_4 }
+		divide_variable = { which = pe_df value = pe_dm }
+		if = {
+			limit = { check_variable = { which = pe_df value > pe_deal_best } }
+			set_variable = { which = pe_deal_best value = pe_df }
+			set_variable = { which = pe_deal_y value = 4 }
+		}
+	}
+	export_resource_stockpile_to_variable = { resource = food variable = pe_ds_5 }
+	export_resource_maximum_to_variable = { resource = food variable = pe_dm }
+	if = {
+		limit = {
+			check_variable = { which = pe_dm value > 0 }
+			NOT = { check_variable = { which = pe_deal_x value = 5 } }
+			NOT = { check_variable = { which = pe_def_food value = 1 } }
+		}
+		set_variable = { which = pe_df value = pe_ds_5 }
+		divide_variable = { which = pe_df value = pe_dm }
+		if = {
+			limit = { check_variable = { which = pe_df value > pe_deal_best } }
+			set_variable = { which = pe_deal_best value = pe_df }
+			set_variable = { which = pe_deal_y value = 5 }
+		}
+	}
+	if = {
+		limit = {
+			check_variable = { which = pe_deal_x value > 0 }
+			check_variable = { which = pe_deal_y value > 0 }
+		}
+		# Shortfall per month, market prices (per unit), the Y stock.
+		if = { limit = { check_variable = { which = pe_deal_x value = 1 } } set_variable = { which = pe_deal_xamt value = pe_netm_alloys } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = alloys amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 4 } }
+		else_if = { limit = { check_variable = { which = pe_deal_x value = 2 } } set_variable = { which = pe_deal_xamt value = pe_netm_consumer_goods } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = consumer_goods amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 2 } }
+		else_if = { limit = { check_variable = { which = pe_deal_x value = 3 } } set_variable = { which = pe_deal_xamt value = pe_netm_minerals } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = minerals amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 1 } }
+		else_if = { limit = { check_variable = { which = pe_deal_x value = 4 } } set_variable = { which = pe_deal_xamt value = pe_netm_energy } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = energy amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 1 } }
+		else_if = { limit = { check_variable = { which = pe_deal_x value = 5 } } set_variable = { which = pe_deal_xamt value = pe_netm_food } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = food amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 1 } }
+		if = { limit = { check_variable = { which = pe_deal_y value = 1 } } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = alloys amount = 100 trade_type = market_sell } variable = pe_dpy } set_variable = { which = pe_deal_ystock value = pe_ds_1 } set_variable = { which = pe_dbasey value = 4 } }
+		else_if = { limit = { check_variable = { which = pe_deal_y value = 2 } } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = consumer_goods amount = 100 trade_type = market_sell } variable = pe_dpy } set_variable = { which = pe_deal_ystock value = pe_ds_2 } set_variable = { which = pe_dbasey value = 2 } }
+		else_if = { limit = { check_variable = { which = pe_deal_y value = 3 } } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = minerals amount = 100 trade_type = market_sell } variable = pe_dpy } set_variable = { which = pe_deal_ystock value = pe_ds_3 } set_variable = { which = pe_dbasey value = 1 } }
+		else_if = { limit = { check_variable = { which = pe_deal_y value = 4 } } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = energy amount = 100 trade_type = market_sell } variable = pe_dpy } set_variable = { which = pe_deal_ystock value = pe_ds_4 } set_variable = { which = pe_dbasey value = 1 } }
+		else_if = { limit = { check_variable = { which = pe_deal_y value = 5 } } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = food amount = 100 trade_type = market_sell } variable = pe_dpy } set_variable = { which = pe_deal_ystock value = pe_ds_5 } set_variable = { which = pe_dbasey value = 1 } }
+		divide_variable = { which = pe_dpx value = 100 }
+		divide_variable = { which = pe_dpy value = 100 }
+		if = { limit = { check_variable = { which = pe_dpx value <= 0 } } set_variable = { which = pe_dpx value = pe_dbase } multiply_variable = { which = pe_dpx value = 1.3 } }
+		if = { limit = { check_variable = { which = pe_dpy value <= 0 } } set_variable = { which = pe_dpy value = pe_dbasey } multiply_variable = { which = pe_dpy value = 0.7 } }
+		multiply_variable = { which = pe_deal_xamt value = -12 }
+		if = { limit = { check_variable = { which = pe_deal_xamt value < 100 } } set_variable = { which = pe_deal_xamt value = 100 } }
+		set_variable = { which = pe_deal_yamt value = pe_deal_xamt }
+		multiply_variable = { which = pe_deal_yamt value = pe_dpx }
+		multiply_variable = { which = pe_deal_yamt value = 0.8 }
+		divide_variable = { which = pe_deal_yamt value = pe_dpy }
+		set_variable = { which = pe_tmp value = pe_deal_ystock }
+		multiply_variable = { which = pe_tmp value = 0.5 }
+		if = {
+			limit = { check_variable = { which = pe_deal_yamt value > pe_tmp } }
+			set_variable = { which = pe_deal_yamt value = pe_tmp }
+			set_variable = { which = pe_deal_xamt value = pe_deal_yamt }
+			multiply_variable = { which = pe_deal_xamt value = pe_dpy }
+			divide_variable = { which = pe_deal_xamt value = 0.8 }
+			divide_variable = { which = pe_deal_xamt value = pe_dpx }
+		}
+		# Round to tens.
+		divide_variable = { which = pe_deal_xamt value = 10 }
+		round_variable = pe_deal_xamt
+		multiply_variable = { which = pe_deal_xamt value = 10 }
+		divide_variable = { which = pe_deal_yamt value = 10 }
+		round_variable = pe_deal_yamt
+		multiply_variable = { which = pe_deal_yamt value = 10 }
+		set_variable = { which = pe_deal_profit value = pe_deal_xamt }
+		multiply_variable = { which = pe_deal_profit value = pe_dpx }
+		multiply_variable = { which = pe_deal_profit value = 0.25 }
+		round_variable = pe_deal_profit
+		if = {
+			limit = { check_variable = { which = pe_deal_yamt value >= 10 } }
+			country_event = { id = pe.260 }
+		}
+	}
+}
+
+# Country scope (event pe.260/261): the deal. Give Y, get X, the margin to the investors.
+pe_deal_apply = {
+	if = { limit = { check_variable = { which = pe_deal_x value = 1 } } add_resource = { alloys = 1 mult = pe_deal_xamt } }
+	else_if = { limit = { check_variable = { which = pe_deal_x value = 2 } } add_resource = { consumer_goods = 1 mult = pe_deal_xamt } }
+	else_if = { limit = { check_variable = { which = pe_deal_x value = 3 } } add_resource = { minerals = 1 mult = pe_deal_xamt } }
+	else_if = { limit = { check_variable = { which = pe_deal_x value = 4 } } add_resource = { energy = 1 mult = pe_deal_xamt } }
+	else_if = { limit = { check_variable = { which = pe_deal_x value = 5 } } add_resource = { food = 1 mult = pe_deal_xamt } }
+	if = { limit = { check_variable = { which = pe_deal_y value = 1 } } add_resource = { alloys = -1 mult = pe_deal_yamt } }
+	else_if = { limit = { check_variable = { which = pe_deal_y value = 2 } } add_resource = { consumer_goods = -1 mult = pe_deal_yamt } }
+	else_if = { limit = { check_variable = { which = pe_deal_y value = 3 } } add_resource = { minerals = -1 mult = pe_deal_yamt } }
+	else_if = { limit = { check_variable = { which = pe_deal_y value = 4 } } add_resource = { energy = -1 mult = pe_deal_yamt } }
+	else_if = { limit = { check_variable = { which = pe_deal_y value = 5 } } add_resource = { food = -1 mult = pe_deal_yamt } }
+	hidden_effect = { change_variable = { which = pe_capital value = pe_deal_profit } }
+}
+
+# --- Sectors (modernisation, rationalisation) -------------------------------------------
+
+# Colony scope: root.pe_mod_job = the private job with the most workers here (1 metallurgist,
+# 2 artisan, 3 trader, 4-6 physicist, biologist, engineer, 7 media, 8 miner, 9 technician,
+# 10 farmer).
+pe_pick_sector = {
+	root = {
+		set_variable = { which = pe_mod_job value = 0 }
+		set_variable = { which = pe_mod_best value = 0 }
+	}
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = pe_private_metallurgist } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_mod_best } }
+		root = { set_variable = { which = pe_mod_best value = prev.pe_tmp } set_variable = { which = pe_mod_job value = 1 } }
+	}
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = pe_private_artisan } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_mod_best } }
+		root = { set_variable = { which = pe_mod_best value = prev.pe_tmp } set_variable = { which = pe_mod_job value = 2 } }
+	}
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = pe_private_trader } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_mod_best } }
+		root = { set_variable = { which = pe_mod_best value = prev.pe_tmp } set_variable = { which = pe_mod_job value = 3 } }
+	}
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = pe_private_physicist } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_mod_best } }
+		root = { set_variable = { which = pe_mod_best value = prev.pe_tmp } set_variable = { which = pe_mod_job value = 4 } }
+	}
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = pe_private_biologist } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_mod_best } }
+		root = { set_variable = { which = pe_mod_best value = prev.pe_tmp } set_variable = { which = pe_mod_job value = 5 } }
+	}
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = pe_private_engineer } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_mod_best } }
+		root = { set_variable = { which = pe_mod_best value = prev.pe_tmp } set_variable = { which = pe_mod_job value = 6 } }
+	}
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = pe_private_bureaucrat } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_mod_best } }
+		root = { set_variable = { which = pe_mod_best value = prev.pe_tmp } set_variable = { which = pe_mod_job value = 7 } }
+	}
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = pe_private_miner } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_mod_best } }
+		root = { set_variable = { which = pe_mod_best value = prev.pe_tmp } set_variable = { which = pe_mod_job value = 8 } }
+	}
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = pe_private_technician } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_mod_best } }
+		root = { set_variable = { which = pe_mod_best value = prev.pe_tmp } set_variable = { which = pe_mod_job value = 9 } }
+	}
+	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = pe_private_farmer } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_mod_best } }
+		root = { set_variable = { which = pe_mod_best value = prev.pe_tmp } set_variable = { which = pe_mod_job value = 10 } }
+	}
+}
+
+# Colony scope: root.pe_rat_job = the private specialist job with the most empty places here
+# (1-7 as in pe_pick_sector), root.pe_rat_free = how many.
+pe_pick_free_spec = {
+	root = {
+		set_variable = { which = pe_rat_job value = 0 }
+		set_variable = { which = pe_rat_free value = 0 }
+	}
+	export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = pe_private_metallurgist } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_rat_free } }
+		root = { set_variable = { which = pe_rat_free value = prev.pe_tmp } set_variable = { which = pe_rat_job value = 1 } }
+	}
+	export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = pe_private_artisan } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_rat_free } }
+		root = { set_variable = { which = pe_rat_free value = prev.pe_tmp } set_variable = { which = pe_rat_job value = 2 } }
+	}
+	export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = pe_private_trader } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_rat_free } }
+		root = { set_variable = { which = pe_rat_free value = prev.pe_tmp } set_variable = { which = pe_rat_job value = 3 } }
+	}
+	export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = pe_private_physicist } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_rat_free } }
+		root = { set_variable = { which = pe_rat_free value = prev.pe_tmp } set_variable = { which = pe_rat_job value = 4 } }
+	}
+	export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = pe_private_biologist } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_rat_free } }
+		root = { set_variable = { which = pe_rat_free value = prev.pe_tmp } set_variable = { which = pe_rat_job value = 5 } }
+	}
+	export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = pe_private_engineer } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_rat_free } }
+		root = { set_variable = { which = pe_rat_free value = prev.pe_tmp } set_variable = { which = pe_rat_job value = 6 } }
+	}
+	export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = pe_private_bureaucrat } variable = pe_tmp }
+	if = {
+		limit = { check_variable = { which = pe_tmp value > root.pe_rat_free } }
+		root = { set_variable = { which = pe_rat_free value = prev.pe_tmp } set_variable = { which = pe_rat_job value = 7 } }
+	}
+	# Cut at most what is empty: 100 jobs x scale, in whole hundreds.
+	root = {
+		set_variable = { which = pe_rat_mult value = pe_rat_free }
+		divide_variable = { which = pe_rat_mult value = 100 }
+		floor_variable = pe_rat_mult
+		if = { limit = { check_variable = { which = pe_rat_mult value > pe_pat_mult } } set_variable = { which = pe_rat_mult value = pe_pat_mult } }
+		floor_variable = pe_rat_mult
+		if = { limit = { check_variable = { which = pe_rat_mult value < 1 } } set_variable = { which = pe_rat_mult value = 1 } }
+		set_variable = { which = pe_rat_jobs value = pe_rat_mult }
+		multiply_variable = { which = pe_rat_jobs value = 100 }
 	}
 }

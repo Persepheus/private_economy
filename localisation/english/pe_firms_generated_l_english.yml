@@ -18,7 +18,7 @@
  pe_msg_relocate:0 "§Y$FIRM$§! has moved from $PLANET$ to $DEST$, whose designation suits it better. Its workers came along."
  pe_msg_relocate_need:0 "§Y$FIRM$§! has moved from $PLANET$, which lacks housing or amenities, to $DEST$. Its workers came along."
  pe_msg_site_cancel:0 "Investors have given up a construction site on $PLANET$: for two years there were no workers for the new firm. They got their down payment back."
- pe_private_dividends:0 "Dividends from Shares"
+ pe_private_dividends:0 "Dividends"
  d_pe_ledger_dividend:0 "State Shareholdings"
  d_pe_ledger_dividend_desc:0 "Shares the state bought in private corporations; they pay dividends every month."
  pe_private_profits:0 "Private Firms' Profits"

@@ -1,0 +1,22 @@
+# Opinion of a neighbour after a private economy event (pe_flair_events.txt).
+# Investors from our empire put money into their economy (pe.265), or our firms licensed
+# their technology / welcomed their branch (pe.266, pe.267).
+pe_opinion_investment = {
+	opinion = {
+		base = 30
+	}
+	decay = {
+		base = 1
+	}
+}
+
+# We raised tariffs against their goods (pe.268).
+pe_opinion_tariffs = {
+	opinion = {
+		base = -30
+	}
+	min = -1000
+	decay = {
+		base = 1
+	}
+}

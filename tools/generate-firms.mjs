@@ -1057,8 +1057,8 @@ loc.german.push(' pe_msg_relocate:0 "§Y$FIRM$§! ist von $PLANET$ nach $DEST$ u
 loc.german.push(' pe_deposit_cat_ledger:0 "Privatwirtschaft"');
 loc.english.push(' pe_msg_site_cancel:0 "Investors have given up a construction site on $PLANET$: for two years there were no workers for the new firm. They got their down payment back."');
 loc.german.push(' pe_msg_site_cancel:0 "Investoren haben eine Baustelle auf $PLANET$ aufgegeben: Zwei Jahre lang fanden sich keine Arbeiter für die neue Firma. Sie haben ihre Anzahlung zurückbekommen."');
-loc.english.push(' pe_private_dividends:0 "Dividends from Shares"', ' d_pe_ledger_dividend:0 "State Shareholdings"', ' d_pe_ledger_dividend_desc:0 "Shares the state bought in private corporations; they pay dividends every month."');
-loc.german.push(' pe_private_dividends:0 "Dividenden aus Aktien"', ' d_pe_ledger_dividend:0 "Staatliche Aktienbeteiligungen"', ' d_pe_ledger_dividend_desc:0 "Aktien, die der Staat an Privatkonzernen hält; sie zahlen monatlich Dividende."');
+loc.english.push(' pe_private_dividends:0 "Dividends"', ' d_pe_ledger_dividend:0 "State Shareholdings"', ' d_pe_ledger_dividend_desc:0 "Shares the state bought in private corporations; they pay dividends every month."');
+loc.german.push(' pe_private_dividends:0 "Dividenden"', ' d_pe_ledger_dividend:0 "Staatliche Aktienbeteiligungen"', ' d_pe_ledger_dividend_desc:0 "Aktien, die der Staat an Privatkonzernen hält; sie zahlen monatlich Dividende."');
 loc.english.push(' pe_private_profits:0 "Private Firms\' Profits"', ' pe_private_savings:0 "Private Savings"',
   ' d_pe_ledger_profit:0 "Private Profits"', ' d_pe_ledger_profit_desc:0 "What the private firms on this planet earn as their profit share; the state pays it every month in trade."',
   ' d_pe_ledger_savings:0 "Private Savings"', ' d_pe_ledger_savings_desc:0 "The part of the trade income that flows into private investment every month (by economic order)."');

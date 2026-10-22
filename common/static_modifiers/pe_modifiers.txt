@@ -137,3 +137,67 @@ pe_farewell = {
 pe_expropriation = {
 	planet_stability_add = -5
 }
+
+# Flair events (pe_flair_events.txt).
+pe_modern_metallurgist = {
+	planet_metallurgists_produces_mult = 0.1
+}
+pe_modern_artisan = {
+	planet_artisans_produces_mult = 0.1
+}
+pe_modern_trader = {
+	planet_traders_produces_mult = 0.1
+}
+pe_modern_physicist = {
+	planet_physicists_produces_mult = 0.1
+}
+pe_modern_biologist = {
+	planet_biologists_produces_mult = 0.1
+}
+pe_modern_engineer = {
+	planet_engineers_produces_mult = 0.1
+}
+pe_modern_bureaucrat = {
+	planet_bureaucrats_produces_mult = 0.1
+}
+pe_modern_miner = {
+	planet_miners_produces_mult = 0.1
+}
+pe_modern_technician = {
+	planet_technician_produces_mult = 0.1
+}
+pe_modern_farmer = {
+	planet_farmers_produces_mult = 0.1
+}
+pe_rational_metallurgist = {
+	job_pe_private_metallurgist_add = -100
+	planet_metallurgists_produces_mult = 0.05
+}
+pe_rational_artisan = {
+	job_pe_private_artisan_add = -100
+	planet_artisans_produces_mult = 0.05
+}
+pe_rational_trader = {
+	job_pe_private_trader_add = -100
+	planet_traders_produces_mult = 0.05
+}
+pe_rational_physicist = {
+	job_pe_private_physicist_add = -100
+	planet_physicists_produces_mult = 0.05
+}
+pe_rational_biologist = {
+	job_pe_private_biologist_add = -100
+	planet_biologists_produces_mult = 0.05
+}
+pe_rational_engineer = {
+	job_pe_private_engineer_add = -100
+	planet_engineers_produces_mult = 0.05
+}
+pe_rational_bureaucrat = {
+	job_pe_private_bureaucrat_add = -100
+	planet_bureaucrats_produces_mult = 0.05
+}
+pe_foreign_branch = {
+	planet_jobs_produces_mult = 0.03
+	planet_amenities_add = 300
+}

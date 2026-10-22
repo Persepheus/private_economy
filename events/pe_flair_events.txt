@@ -1,0 +1,361 @@
+# Flair events of the private economy (see pe_patron_effects.txt).
+#   pe.260 supply deal          pe.261 supply deal: haggling
+#   pe.262 modernisation         pe.263 rationalisation      pe.264 capital levy
+#   pe.265 investment abroad     pe.266 a foreign branch     pe.267 technology licence
+#   pe.268 dumping
+# Scope: country. root.pe_pat_spend = what the investors put in (already taken from the
+# pool; declining options pay it back). Events where foreigners pay give it back at once.
+namespace = pe
+
+# A supply deal (pe_deal_fire): X = pe_deal_x, Y = pe_deal_y.
+country_event = {
+	id = pe.260
+	title = pe.260.name
+	desc = pe.260.desc
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+
+	option = {
+		name = pe.260.a
+		allow = { check_variable = { which = pe_deal_ystock value >= pe_deal_yamt } }
+		pe_deal_apply = yes
+		custom_tooltip = pe.260.a.tt
+		ai_chance = { factor = 70 }
+	}
+	option = {
+		name = pe.260.b
+		custom_tooltip = pe.260.b.tt
+		hidden_effect = {
+			random_list = {
+				50 = {
+					set_variable = { which = pe_deal_ok value = 1 }
+					multiply_variable = { which = pe_deal_yamt value = 0.85 }
+					divide_variable = { which = pe_deal_yamt value = 10 }
+					round_variable = pe_deal_yamt
+					multiply_variable = { which = pe_deal_yamt value = 10 }
+					multiply_variable = { which = pe_deal_profit value = 0.5 }
+					round_variable = pe_deal_profit
+				}
+				50 = { set_variable = { which = pe_deal_ok value = 0 } }
+			}
+			country_event = { id = pe.261 }
+		}
+		ai_chance = { factor = 20 }
+	}
+	option = {
+		name = pe.260.c
+		ai_chance = { factor = 10 }
+	}
+}
+
+# Haggling: a better price, or no deal.
+country_event = {
+	id = pe.261
+	title = pe.261.name
+	desc = { trigger = { check_variable = { which = pe_deal_ok value = 1 } } text = pe.261.desc.ok }
+	desc = { trigger = { check_variable = { which = pe_deal_ok value = 0 } } text = pe.261.desc.no }
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+
+	option = {
+		name = pe.261.a
+		trigger = { check_variable = { which = pe_deal_ok value = 1 } }
+		allow = { check_variable = { which = pe_deal_ystock value >= pe_deal_yamt } }
+		pe_deal_apply = yes
+	}
+	option = {
+		name = pe.261.b
+		trigger = { check_variable = { which = pe_deal_ok value = 0 } }
+	}
+}
+
+# Modernisation: the firms on a planet without idle pops invest in productivity instead of
+# jobs (sector pe_mod_job).
+country_event = {
+	id = pe.262
+	title = pe.262.name
+	desc = pe.262.desc
+	picture = GFX_evt_engineering_bay
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.262.a
+		event_target:pe_pat_planet = {
+			if = { limit = { root = { check_variable = { which = pe_mod_job value = 1 } } } add_modifier = { modifier = pe_modern_metallurgist days = 3600 multiplier = root.pe_pat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_mod_job value = 2 } } } add_modifier = { modifier = pe_modern_artisan days = 3600 multiplier = root.pe_pat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_mod_job value = 3 } } } add_modifier = { modifier = pe_modern_trader days = 3600 multiplier = root.pe_pat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_mod_job value = 4 } } } add_modifier = { modifier = pe_modern_physicist days = 3600 multiplier = root.pe_pat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_mod_job value = 5 } } } add_modifier = { modifier = pe_modern_biologist days = 3600 multiplier = root.pe_pat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_mod_job value = 6 } } } add_modifier = { modifier = pe_modern_engineer days = 3600 multiplier = root.pe_pat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_mod_job value = 7 } } } add_modifier = { modifier = pe_modern_bureaucrat days = 3600 multiplier = root.pe_pat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_mod_job value = 8 } } } add_modifier = { modifier = pe_modern_miner days = 3600 multiplier = root.pe_pat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_mod_job value = 9 } } } add_modifier = { modifier = pe_modern_technician days = 3600 multiplier = root.pe_pat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_mod_job value = 10 } } } add_modifier = { modifier = pe_modern_farmer days = 3600 multiplier = root.pe_pat_mult } }
+		}
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = { factor = 80 }
+	}
+	option = {
+		name = pe.262.b
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_spend }
+			change_variable = { which = pe_mag_rep value = -1 }
+		}
+		ai_chance = { factor = 20 }
+	}
+}
+
+# Rationalisation: the firms cut jobs they cannot fill and make the others more productive
+# (sector pe_rat_job, pe_rat_jobs jobs).
+country_event = {
+	id = pe.263
+	title = pe.263.name
+	desc = pe.263.desc
+	picture = GFX_evt_engineering_research
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	option = {
+		name = pe.263.a
+		event_target:pe_pat_planet = {
+			if = { limit = { root = { check_variable = { which = pe_rat_job value = 1 } } } add_modifier = { modifier = pe_rational_metallurgist days = 3600 multiplier = root.pe_rat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_rat_job value = 2 } } } add_modifier = { modifier = pe_rational_artisan days = 3600 multiplier = root.pe_rat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_rat_job value = 3 } } } add_modifier = { modifier = pe_rational_trader days = 3600 multiplier = root.pe_rat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_rat_job value = 4 } } } add_modifier = { modifier = pe_rational_physicist days = 3600 multiplier = root.pe_rat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_rat_job value = 5 } } } add_modifier = { modifier = pe_rational_biologist days = 3600 multiplier = root.pe_rat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_rat_job value = 6 } } } add_modifier = { modifier = pe_rational_engineer days = 3600 multiplier = root.pe_rat_mult } }
+			else_if = { limit = { root = { check_variable = { which = pe_rat_job value = 7 } } } add_modifier = { modifier = pe_rational_bureaucrat days = 3600 multiplier = root.pe_rat_mult } }
+			check_planet_employment = yes
+		}
+		ai_chance = { factor = 70 }
+	}
+	option = {
+		name = pe.263.b
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_spend }
+			change_variable = { which = pe_mag_rep value = -1 }
+		}
+		ai_chance = { factor = 30 }
+	}
+}
+
+# Capital levy: the investor pool is far bigger than the firms can use.
+country_event = {
+	id = pe.264
+	title = pe.264.name
+	desc = pe.264.desc
+	picture = GFX_evt_galactic_senate
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_spend }
+			set_variable = { which = pe_levy_lo value = pe_capital }
+			multiply_variable = { which = pe_levy_lo value = 0.1 }
+			round_variable = pe_levy_lo
+			set_variable = { which = pe_levy_hi value = pe_capital }
+			multiply_variable = { which = pe_levy_hi value = 0.25 }
+			round_variable = pe_levy_hi
+		}
+	}
+	option = {
+		name = pe.264.a
+		add_resource = { trade = 1 mult = pe_levy_lo }
+		capital_scope = { add_modifier = { modifier = pe_business_upset days = 720 } }
+		hidden_effect = {
+			subtract_variable = { which = pe_capital value = pe_levy_lo }
+			change_variable = { which = pe_mag_rep value = -1 }
+		}
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = pe.264.b
+		add_resource = { trade = 1 mult = pe_levy_hi }
+		capital_scope = { add_modifier = { modifier = pe_expropriation days = 1080 } }
+		hidden_effect = {
+			subtract_variable = { which = pe_capital value = pe_levy_hi }
+			change_variable = { which = pe_mag_rep value = -2 }
+		}
+		ai_chance = {
+			factor = 20
+			modifier = { factor = 3 is_authoritarian = yes }
+		}
+	}
+	option = {
+		name = pe.264.c
+		ai_chance = {
+			factor = 30
+			modifier = { factor = 2 has_policy_flag = pe_order_laissez_faire }
+		}
+	}
+}
+
+# Investment abroad: our investors put money into a neighbour's economy.
+country_event = {
+	id = pe.265
+	title = pe.265.name
+	desc = pe.265.desc
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+
+	option = {
+		name = pe.265.a
+		custom_tooltip = pe.265.a.tt
+		event_target:pe_pat_country = { add_opinion_modifier = { who = root modifier = pe_opinion_investment } }
+		hidden_effect = {
+			change_variable = { which = pe_abroad_state value = pe_abroad_new_state }
+			change_variable = { which = pe_abroad_pool value = pe_abroad_new_pool }
+			set_variable = { which = pe_abroad_q value = 40 }
+			change_variable = { which = pe_mag_rep value = 1 }
+		}
+		ai_chance = { factor = 60 }
+	}
+	option = {
+		name = pe.265.b
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_spend }
+			change_variable = { which = pe_mag_rep value = -1 }
+		}
+		ai_chance = {
+			factor = 40
+			modifier = { factor = 3 is_xenophobe = yes }
+		}
+	}
+}
+
+# A foreign branch: a corporation of a neighbour wants to open offices on one of our planets.
+country_event = {
+	id = pe.266
+	title = pe.266.name
+	desc = pe.266.desc
+	picture = GFX_evt_city_planet
+	is_triggered_only = yes
+	location = event_target:pe_pat_planet
+
+	immediate = { hidden_effect = { change_variable = { which = pe_capital value = pe_pat_spend } } }
+	option = {
+		name = pe.266.a
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_foreign_branch days = 3600 multiplier = root.pe_pat_mult } }
+		event_target:pe_pat_country = { add_opinion_modifier = { who = root modifier = pe_opinion_investment } }
+		custom_tooltip = pe.266.a.tt
+		hidden_effect = {
+			multiply_variable = { which = pe_capital value = 0.95 }
+			change_variable = { which = pe_mag_rep value = -1 }
+		}
+		ai_chance = {
+			factor = 40
+			modifier = { factor = 2 is_xenophile = yes }
+		}
+	}
+	option = {
+		name = pe.266.b
+		add_resource = { trade = 1 mult = pe_pat_tax }
+		event_target:pe_pat_planet = { add_modifier = { modifier = pe_foreign_branch days = 3600 multiplier = root.pe_pat_mult_half } }
+		ai_chance = { factor = 40 }
+	}
+	option = {
+		name = pe.266.c
+		custom_tooltip = pe.266.c.tt
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = {
+			factor = 20
+			modifier = { factor = 3 is_xenophobe = yes }
+		}
+	}
+}
+
+# A technology licence from a corporation of a neighbour.
+country_event = {
+	id = pe.267
+	title = pe.267.name
+	desc = pe.267.desc
+	picture = GFX_evt_physics_research
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_spend }
+			random_list = {
+				1 = { set_variable = { which = pe_lic_field value = 1 } }
+				1 = { set_variable = { which = pe_lic_field value = 2 } }
+				1 = { set_variable = { which = pe_lic_field value = 3 } }
+			}
+			export_resource_stockpile_to_variable = { resource = trade variable = pe_trade_stock }
+		}
+	}
+	option = {
+		name = pe.267.a
+		allow = { check_variable = { which = pe_trade_stock value >= pe_lic_cost } }
+		add_resource = { trade = -1 mult = pe_lic_cost }
+		if = { limit = { check_variable = { which = pe_lic_field value = 1 } } add_resource = { physics_research = 1 mult = pe_pat_res } }
+		else_if = { limit = { check_variable = { which = pe_lic_field value = 2 } } add_resource = { society_research = 1 mult = pe_pat_res } }
+		else_if = { limit = { check_variable = { which = pe_lic_field value = 3 } } add_resource = { engineering_research = 1 mult = pe_pat_res } }
+		event_target:pe_pat_country = { add_opinion_modifier = { who = root modifier = pe_opinion_investment } }
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = pe.267.b
+		allow = { check_variable = { which = pe_capital value >= pe_lic_cost } }
+		if = { limit = { check_variable = { which = pe_lic_field value = 1 } } add_resource = { physics_research = 1 mult = pe_lic_res_half } }
+		else_if = { limit = { check_variable = { which = pe_lic_field value = 2 } } add_resource = { society_research = 1 mult = pe_lic_res_half } }
+		else_if = { limit = { check_variable = { which = pe_lic_field value = 3 } } add_resource = { engineering_research = 1 mult = pe_lic_res_half } }
+		hidden_effect = { subtract_variable = { which = pe_capital value = pe_lic_cost } }
+		ai_chance = { factor = 40 }
+	}
+	option = {
+		name = pe.267.c
+		ai_chance = { factor = 10 }
+	}
+}
+
+# Dumping: a neighbour's firms flood our market with cheap alloys or consumer goods.
+country_event = {
+	id = pe.268
+	title = pe.268.name
+	desc = pe.268.desc
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+
+	immediate = {
+		hidden_effect = {
+			change_variable = { which = pe_capital value = pe_pat_spend }
+			set_variable = { which = pe_dump_p value = 2 }
+			if = { limit = { check_variable = { which = pe_cnt_a value > pe_cnt_c } } set_variable = { which = pe_dump_p value = 1 } }
+			set_variable = { which = pe_dump_amt value = pe_pat_spend }
+			if = { limit = { check_variable = { which = pe_dump_p value = 1 } } multiply_variable = { which = pe_dump_amt value = 0.05 } }
+			else = { multiply_variable = { which = pe_dump_amt value = 0.1 } }
+			round_variable = pe_dump_amt
+			export_resource_stockpile_to_variable = { resource = influence variable = pe_inf_stock }
+		}
+	}
+	# Cheap goods for us, but our firms that make them lose a quarter of their capital.
+	option = {
+		name = pe.268.a
+		if = { limit = { check_variable = { which = pe_dump_p value = 1 } } add_resource = { alloys = 1 mult = pe_dump_amt } }
+		else = { add_resource = { consumer_goods = 1 mult = pe_dump_amt } }
+		custom_tooltip = pe.268.a.tt
+		hidden_effect = {
+			every_owned_colony = {
+				every_deposit = {
+					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_prim value = root.pe_dump_p } }
+					multiply_variable = { which = pe_fcap value = 0.75 }
+				}
+			}
+			change_variable = { which = pe_mag_rep value = -1 }
+		}
+		ai_chance = { factor = 40 }
+	}
+	# Tariffs protect our firms; the neighbour is not pleased.
+	option = {
+		name = pe.268.b
+		allow = { check_variable = { which = pe_inf_stock value >= pe_tariff } }
+		add_resource = { influence = -1 mult = pe_tariff }
+		event_target:pe_pat_country = { add_opinion_modifier = { who = root modifier = pe_opinion_tariffs } }
+		hidden_effect = { change_variable = { which = pe_mag_rep value = 1 } }
+		ai_chance = {
+			factor = 60
+			modifier = { factor = 2 is_xenophobe = yes }
+		}
+	}
+}

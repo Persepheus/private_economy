@@ -24,6 +24,7 @@
 #                    -> pe_relocate (2) -> pe_relocate_from (3) -> pe_relocate_exec (4)
 #                                                             -> pe_relocate_check_dest (4)
 #                    -> pe_patron (2) -> pe_patron_fire (3)   (pe_patron_effects.txt)
+#                    -> pe_deal (2) -> pe_deal_fire (3)   (pe_patron_effects.txt)
 #                    -> pe_ledgers (2) -> pe_ledger_planet (3) -> pe_ledger_bits (4)
 #                                      -> pe_ledger_bits (3)
 # Variant lists and dispatchers: pe_firm_effects_generated.txt (tools/generate-firms.mjs).
@@ -180,6 +181,7 @@ pe_quarterly = {
 	pe_relocate = yes
 	pe_patron = yes
 	pe_labour = yes
+	pe_deal = yes
 	pe_ledgers = yes
 }
 
@@ -398,6 +400,21 @@ pe_ledgers = {
 			subtract_variable = { which = pe_capital value = pe_tmp }
 		}
 		else = { set_variable = { which = pe_div_month value = 0 } }
+	}
+	# Investment abroad (pe.265): taxes on the returns for the state (shown with the
+	# dividends) and the returns for the investor pool, for ten years.
+	if = {
+		limit = { check_variable = { which = pe_abroad_q value > 0 } }
+		change_variable = { which = pe_div_month value = pe_abroad_state }
+		set_variable = { which = pe_tmp value = pe_abroad_pool }
+		multiply_variable = { which = pe_tmp value = 3 }
+		change_variable = { which = pe_capital value = pe_tmp }
+		change_variable = { which = pe_abroad_q value = -1 }
+		if = {
+			limit = { check_variable = { which = pe_abroad_q value <= 0 } }
+			set_variable = { which = pe_abroad_state value = 0 }
+			set_variable = { which = pe_abroad_pool value = 0 }
+		}
 	}
 	capital_scope = {
 		root = { set_variable = { which = pe_lv value = pe_div_month } }
