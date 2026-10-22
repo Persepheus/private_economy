@@ -43,7 +43,7 @@ Testablauf: [docs/TESTS_0.23.md](docs/TESTS_0.23.md). Ältere Stände: [0.22](do
 
 - **Später**: Lösung für Habitate, Ringwelten, Ökumenopolen, Arkships und Spezialplaneten.
 - **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen.
-- **Als Nächstes (beschlossen):** Lieferketten zwischen Planeten, Flair (Schiffsspenden, private Werften); später Lobbys der Branchengruppen.
+- **Als Nächstes (beschlossen):** Lieferketten zwischen Planeten, private Werften (Konzept noch offen); später Lobbys der Branchengruppen.
 - **Prototyp Hilfsreich:** [docs/TESTS_PROTO_HOLDINGS.md](docs/TESTS_PROTO_HOLDINGS.md) (Konsole `event pe.15` bis `pe.21`).
 - **Weltraum (Ideen):** private Stationen und Kilostrukturen über ein Hilfsreich mit Leasing, Spenden von Schiffen durch Mäzene nach Verlusten, Konzernflotten über ein Hilfsreich, private Werften.
 - **Gemerkte Ideen, noch offen:**
