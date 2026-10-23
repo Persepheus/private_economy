@@ -57,3 +57,22 @@ Ein laufendes Spiel kann weiterlaufen.
 3. Nach der Befreiung (mindestens 3 Monate später): pe.299.
 4. Bei einer echten Invasion: Kommt das Angebot, und kämpft der Werkschutz mit? Bitte genau beobachten.
 5. Logs: keine Fehler aus pe_war_effects.txt, pe_war_events.txt oder pe_corp_effects_generated.txt (pe_occupation_step).
+
+## 0.29.1: Werkschutz schneller und zahlreicher
+- **Zeitpunkt:** **10 Tage nach Beginn** eines Bodenkampfs, mit 75 % Chance, und nur, wenn der Kampf dann noch läuft.
+  - Derselbe Planet kann alle 30 Tage wieder auslösen statt alle 180.
+  - Bezahlte Angebote kommen höchstens alle 180 Tage statt einmal im Jahr. Der Hauptsitz wird immer kostenlos verteidigt.
+- **Menge:** 1 Einheit je **400** Pops plus die Hälfte der Verteidiger, höchstens 50. Weiterhin begrenzt durch das Geld, 75 je Einheit.
+- **Werkschutz** ist jetzt eine Kopie der Vanilla-Verteidigungsarmee: Leben 1,25, Schaden 1,5, Moral 1,25. Er funktioniert für jede Spezies, auch für Roboter in normalen Reichen.
+- **Debug:**
+  - `event pe.136` lässt 10 Rebellenarmeen einer feindlichen Fraktion auf deiner Hauptwelt landen, wie Vanillas wütende Wälder. Der Bodenkampf beginnt, und 10 Tage später kommt der Werkschutz sicher: kostenlos bei einem Konzernsitz, sonst als Angebot pe.297.
+  - `event pe.137` entfernt die Invasoren wieder.
+
+### Prüfen
+1. Speichern, dann `event pe.136`.
+   - Der Bodenkampf auf der Hauptwelt beginnt.
+   - Nach 10 Tagen kommt die Nachricht oder pe.297.
+2. Landen die Einheiten, und kämpfen sie im laufenden Kampf mit (Bodenkampf-Fenster)?
+3. Nach dem Kampf ist der Werkschutz beim nächsten Monatswechsel weg.
+4. `event pe.137` räumt die Invasoren weg, falls sie noch da sind.
+

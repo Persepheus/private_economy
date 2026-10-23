@@ -1,12 +1,13 @@
 # Corporate guards: troops a corporation sends to a planet under ground attack (pe.140-141,
-# pe_war_effects.txt). Defensive (they stay on the planet), created by script only; removed
-# when the ground combat is over.
+# pe_war_effects.txt). A copy of the vanilla defense army (same strength), but created by
+# script only, without pops or jobs, and for every species (exotic empires too); removed when
+# the ground combat is over.
 pe_corporate_guard = {
 	defensive = yes
 	time = 30
-	health = 1.5
-	damage = 1.5
-	morale = 1.5
+	health = 1.25
+	damage = 1.50
+	morale = 1.25
 	collateral_damage = 0.0
 	war_exhaustion = 0.0
 	icon = GFX_army_type_defensive

@@ -82,3 +82,4 @@
  pe.25.a:0 "Schließen."
  pe_warzone:0 "Kriegsgebiet"
  pe_warzone_desc:0 "Dieser Planet wurde vor Kurzem bombardiert. Investoren halten sich fern: vorerst keine neuen Privatfirmen, keine Übernahmen, kein Umbau hier."
+ pe_dbg_invaders_name:0 "Invasoren (Debug)"

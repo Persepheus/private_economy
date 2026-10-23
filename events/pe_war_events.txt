@@ -1,6 +1,7 @@
 # Private economy at war (pe_war_effects.txt).
 #   pe.138 a colony with firms is occupied: contributions   pe.139 it is liberated: collaborators
-#   pe.140 / 141 ground combat begins: corporate guards      pe.297 / 298 the offer, haggling
+#   pe.140 / 141 ground combat begins: corporate guards ten days later (75%), if it still
+#                 goes on                                  pe.297 / 298 the offer, haggling
 #   pe.299 what to do with the collaborators
 namespace = pe
 
@@ -65,17 +66,42 @@ carrier_event = {
 		NOT = { has_planet_flag = pe_gc_cd }
 	}
 	immediate = {
-		save_event_target_as = pe_gc_planet
-		set_timed_planet_flag = { flag = pe_gc_cd days = 180 }
-		owner = { country_event = { id = pe.141 } }
+		set_timed_planet_flag = { flag = pe_gc_cd days = 30 }
+		if = {
+			limit = { owner = { has_country_flag = pe_gc_force } }
+			set_planet_flag = pe_gc_wait
+			owner = { country_event = { id = pe.141 days = 10 } }
+		}
+		else = {
+			random = {
+				chance = 75
+				set_planet_flag = pe_gc_wait
+				owner = { country_event = { id = pe.141 days = 10 } }
+			}
+		}
 	}
 }
 
+# Ten days after a ground combat began: if it still goes on, a corporation helps.
 country_event = {
 	id = pe.141
 	hide_window = yes
 	is_triggered_only = yes
-	immediate = { pe_corp_ground = yes }
+	immediate = {
+		random_owned_colony = {
+			limit = { has_planet_flag = pe_gc_wait has_ground_combat = yes }
+			save_event_target_as = pe_gc_planet
+			remove_planet_flag = pe_gc_wait
+		}
+		every_owned_colony = {
+			limit = { has_planet_flag = pe_gc_wait has_ground_combat = no }
+			remove_planet_flag = pe_gc_wait
+		}
+		if = {
+			limit = { exists = event_target:pe_gc_planet }
+			pe_corp_ground = yes
+		}
+	}
 }
 
 # A corporation offers its guards against a ground attack, for a price.

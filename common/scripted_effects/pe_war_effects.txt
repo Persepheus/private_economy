@@ -5,9 +5,10 @@
 # --- Ground combat -------------------------------------------------------------------------
 # Country scope (pe.141), event_target:pe_gc_planet is under ground attack. A corporation
 # headquartered there sends its guards for free (down to its credit line -200); otherwise the
-# strongest corporation (at least 500 cash) offers them for a price (pe.297 / 298). How many:
-# one unit per 2000 pops on the planet plus half the defending armies there (1 to 25), as many
-# as the money allows (75 each; free: cash + 200, otherwise 80% of the cash).
+# strongest corporation (at least 500 cash) offers them for a price (pe.297 / 298), at most
+# every 180 days. How many: one unit per 400 pops on the planet plus half the defending armies
+# there (1 to 50), as many as the money allows (75 each; free: cash + 200, otherwise 80% of the
+# cash).
 pe_corp_ground = {
 	set_variable = { which = pe_gc_k value = 0 }
 	set_variable = { which = pe_gc_free value = 0 }
@@ -58,13 +59,13 @@ pe_corp_ground = {
 			root = { change_variable = { which = pe_gc_def value = 1 } }
 		}
 		set_variable = { which = pe_gc_n value = pe_gc_pops }
-		divide_variable = { which = pe_gc_n value = 2000 }
+		divide_variable = { which = pe_gc_n value = 400 }
 		set_variable = { which = pe_tmp value = pe_gc_def }
 		multiply_variable = { which = pe_tmp value = 0.5 }
 		change_variable = { which = pe_gc_n value = pe_tmp }
 		round_variable = pe_gc_n
 		if = { limit = { check_variable = { which = pe_gc_n value < 1 } } set_variable = { which = pe_gc_n value = 1 } }
-		if = { limit = { check_variable = { which = pe_gc_n value > 25 } } set_variable = { which = pe_gc_n value = 25 } }
+		if = { limit = { check_variable = { which = pe_gc_n value > 50 } } set_variable = { which = pe_gc_n value = 50 } }
 		set_variable = { which = pe_tmp value = pe_gc_budget }
 		divide_variable = { which = pe_tmp value = 75 }
 		floor_variable = pe_tmp
@@ -97,7 +98,7 @@ pe_corp_ground = {
 				pe_corp_ground_start = yes
 			}
 			else = {
-				set_timed_country_flag = { flag = pe_ground_cd days = 360 }
+				set_timed_country_flag = { flag = pe_ground_cd days = 180 }
 				if = {
 					limit = { is_ai = yes }
 					if = {

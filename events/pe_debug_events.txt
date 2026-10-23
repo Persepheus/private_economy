@@ -21,8 +21,9 @@
 #   event pe.279 the supply chain step now (run pe.7 first)
 #   event pe.134 cede our planet with the most firms (not the capital) to another empire
 #   event pe.135 take the ceded planet back (both fire on_colony_transfer like a peace treaty)
-#   event pe.136 corporate guards for the capital now, as if it were under ground attack (they
-#                go home at the next monthly pulse, as there is no ground combat)
+#   event pe.136 invaders land on the capital (ten rebel armies); ten days after the ground
+#                combat began the corporate guards come or are offered
+#   event pe.137 remove the invaders of pe.136
 namespace = pe
 
 country_event = {
@@ -390,16 +391,51 @@ country_event = {
 	}
 }
 
-# Debug: the corporate guards offer for the capital, as if it were attacked.
+# Debug: invaders land on the capital (a hostile faction with ten rebel armies, as vanilla's
+# rampaging forests do); the ground combat starts, and ten days later the guards' offer comes
+# for sure (pe_gc_force). pe.137 removes the invaders.
 country_event = {
 	id = pe.136
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
-		capital_scope = { save_event_target_as = pe_gc_planet }
+		set_timed_country_flag = { flag = pe_gc_force days = 60 }
 		remove_country_flag = pe_ground_cd
-		pe_corp_ground = yes
-		log = "private_economy: pe.136 guards: corporation [Root.pe_gc_k] (free [Root.pe_gc_free]), units [Root.pe_gc_n], pops [Root.pe_gc_pops], defenders [Root.pe_gc_def], cost [Root.pe_gc_spent], alloys [Root.pe_gc_alloys]"
+		capital_scope = {
+			remove_planet_flag = pe_gc_cd
+			save_event_target_as = pe_dbg_planet
+		}
+		create_country = {
+			name = pe_dbg_invaders_name
+			type = faction
+			effect = {
+				set_country_flag = pe_dbg_invader
+				establish_communications_no_message = root
+			}
+		}
+		last_created_country = { save_event_target_as = pe_dbg_invaders }
+		event_target:pe_dbg_planet = {
+			while = {
+				count = 10
+				create_army = { name = random owner = event_target:pe_dbg_invaders species = root.species type = rebel_army }
+			}
+		}
+		log = "private_economy: pe.136 ten invader armies landed on [event_target:pe_dbg_planet.GetName]; the guards' offer follows ten days after the ground combat began"
+	}
+}
+
+# Debug: remove the invaders of pe.136.
+country_event = {
+	id = pe.137
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_country = {
+			limit = { has_country_flag = pe_dbg_invader }
+			every_owned_army = { remove_army = yes }
+			destroy_country = yes
+		}
+		log = "private_economy: pe.137 invaders removed"
 	}
 }
 
