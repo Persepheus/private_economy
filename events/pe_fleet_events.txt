@@ -1,7 +1,7 @@
 # Corporate fleets (see pe_fleet_effects.txt).
 #   pe.282 war lease offer   pe.283 war lease ends   pe.284 clearing offer   pe.285 clearing result
 #   pe.286 exploration charter   pe.287 / 288 convoy protection   pe.289 salvage
-#   pe.290 ship lost (on_action)   pe.292 corporate Dyson swarm
+#   pe.290 ship lost (on_action)   pe.292 corporate Dyson swarm   pe.293 corporate arc furnace
 # Scope: country. pe_corp_cur_name = the corporation's name id.
 namespace = pe
 
@@ -173,4 +173,22 @@ country_event = {
 		hidden_effect = { pe_corp_swarm_exec = yes }
 	}
 	option = { name = pe.292.b }
+}
+
+# A corporation wants to build an arc furnace (Free Market, Mixed).
+country_event = {
+	id = pe.293
+	title = pe.293.name
+	desc = pe.293.desc
+	picture = GFX_evt_molten
+	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_af_k value = 1 } } set_variable = { which = pe_corp_cur_name value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_af_k value = 2 } } set_variable = { which = pe_corp_cur_name value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_af_k value = 3 } } set_variable = { which = pe_corp_cur_name value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_af_k value = 4 } } set_variable = { which = pe_corp_cur_name value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_af_k value = 5 } } set_variable = { which = pe_corp_cur_name value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_af_k value = 6 } } set_variable = { which = pe_corp_cur_name value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_af_k value = 7 } } set_variable = { which = pe_corp_cur_name value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_af_k value = 8 } } set_variable = { which = pe_corp_cur_name value = pe_c8_name } } } }
+	location = event_target:pe_af_p
+
+	option = {
+		name = pe.293.a
+		custom_tooltip = pe.293.a.tt
+		hidden_effect = { pe_corp_furnace_exec = yes }
+	}
+	option = { name = pe.293.b }
 }

@@ -29,7 +29,7 @@
 #                                           pe_corp_stations, pe_corp_station_output,
 #                                           pe_holdings_surplus, pe_corp_fleets, pe_corp_charter,
 #                                           pe_corp_convoy, pe_corp_salvage, pe_corp_swarm,
-#                                           pe_corp_auto_msg (3)
+#                                           pe_corp_furnace, pe_corp_auto_msg (3)
 #                                        -> pe_corp_free, pe_corp_msg, pe_corp_found_new,
 #                                           pe_corp_station_pick, pe_ledger_bits (4)
 #                    -> pe_relocate (2) -> pe_relocate_from (3) -> pe_relocate_exec (4)
@@ -1690,6 +1690,7 @@ pe_corp_step = {
 	pe_corp_convoy = yes
 	pe_corp_salvage = yes
 	pe_corp_swarm = yes
+	pe_corp_furnace = yes
 	pe_corp_auto_msg = yes
 	change_variable = { which = pe_hq4 value = 1 }
 	if = {

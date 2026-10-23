@@ -1294,9 +1294,9 @@ ${CORPS.map(k => `\tif = { limit = { NOT = { is_variable_set = ${C(k, 'cash')} }
 }
 
 # Country scope: free the slot root.pe_corp_free_k (its headquarters, its name, its rival);
-# its stations return to us. Its firms are not touched (they must have left or merged).
+# its stations, its Dyson swarm and its arc furnace go to us. Its firms are not touched (they must have left or merged).
 pe_corp_free = {
-${corpChain('pe_corp_free_k', k => `set_variable = { which = pe_corp_free_name value = ${C(k, 'name')} } set_variable = { which = ${C(k, 'on')} value = 0 } set_variable = { which = ${C(k, 'cash')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'firms')} value = 0 } every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } remove_planet_flag = pe_hq_${k} } set_variable = { which = ${C(k, 'scd')} value = 0 } set_variable = { which = ${C(k, 'sv')} value = 0 } set_variable = { which = ${C(k, 'st')} value = 0 } set_variable = { which = ${C(k, 'sw')} value = 0 } set_variable = { which = ${C(k, 'right')} value = 0 } every_planet_within_border = { limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_${k} } } orbital_station = { remove_fleet_flag = pe_stc_${k} remove_fleet_flag = pe_st_share set_owner = root } }`, '\t')}
+${corpChain('pe_corp_free_k', k => `set_variable = { which = pe_corp_free_name value = ${C(k, 'name')} } set_variable = { which = ${C(k, 'on')} value = 0 } set_variable = { which = ${C(k, 'cash')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'firms')} value = 0 } every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } remove_planet_flag = pe_hq_${k} } set_variable = { which = ${C(k, 'scd')} value = 0 } set_variable = { which = ${C(k, 'sv')} value = 0 } set_variable = { which = ${C(k, 'st')} value = 0 } set_variable = { which = ${C(k, 'sw')} value = 0 } set_variable = { which = ${C(k, 'right')} value = 0 } every_planet_within_border = { limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_${k} } } orbital_station = { remove_fleet_flag = pe_stc_${k} remove_fleet_flag = pe_st_share set_owner = root } } random_country = { limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } } every_owned_megastructure = { limit = { planet = { OR = { has_planet_flag = pe_swc_${k} AND = { is_variable_set = pe_afc check_variable = { which = pe_afc value = ${k} } } } } } set_owner = root } } every_planet_within_border = { limit = { has_planet_flag = pe_swc_${k} } remove_planet_flag = pe_swc_${k} } every_planet_within_border = { limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = ${k} } } set_variable = { which = pe_af_corp value = 0 } set_variable = { which = pe_af_h value = 0 } set_variable = { which = pe_af_val value = 0 } } every_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = ${k} } } set_variable = { which = pe_afc value = 0 } } set_variable = { which = ${C(k, 'af')} value = 0 }`, '\t')}
 ${CORPS.map(k => `\tif = { limit = { check_variable = { which = ${C(k, 'rival')} value = root.pe_corp_free_k } } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } }`).join('\n')}
 ${nameChain('pe_corp_free_name', id => `remove_country_flag = pe_cname_${id} remove_global_flag = pe_gcname_${id} every_owned_colony = { limit = { has_modifier = pe_corp_hq_${id} } remove_modifier = pe_corp_hq_${id} } every_owned_colony = { limit = { has_deposit = d_pe_hq_${id} } remove_deposit = d_pe_hq_${id} } every_owned_colony = { limit = { has_modifier = pe_corp_br_${id} } remove_modifier = pe_corp_br_${id} }`, '\t')}
 }
@@ -1921,13 +1921,23 @@ ${ST_STOCK.map(r => `\tset_variable = { which = pe_sr_${r} value = 0 }`).join('\
 	if = {
 		limit = { exists = event_target:pe_hold }
 		every_planet_within_border = {
-			limit = { pe_orbital_allowed = yes pe_holdings_station = yes }
+			limit = { pe_holdings_station = yes OR = { pe_orbital_allowed = yes AND = { is_variable_set = pe_af_val check_variable = { which = pe_af_val value > 0 } } } }
 			set_variable = { which = pe_stk value = 0 }
 			orbital_station = {
 ${corpChain('x', k => '', '\t\t\t\t').split('\n').map((_, i) => `\t\t\t\t${i ? 'else_if' : 'if'} = { limit = { has_fleet_flag = pe_stc_${i + 1} } prev = { set_variable = { which = pe_stk value = ${i + 1} } } }`).join('\n')}
 			}
 			set_variable = { which = pe_stval value = 0 }
 ${ifChain(ORBITALS, o => `has_deposit = ${o.key}`, o => `set_variable = { which = pe_stval value = ${o.value} } root = { ${Object.entries(o.amounts).filter(([r]) => ST_STOCK.includes(r)).map(([r, n]) => `change_variable = { which = pe_sr_${r} value = ${n} }`).join(' ')} }`, '\t\t\t')}
+			# A corporate arc furnace in the system: its deposit here (pe_af_val per month, set by
+			# pe_corp_furnace with the station bonus of its stage).
+			if = {
+				limit = { is_variable_set = pe_af_val check_variable = { which = pe_af_val value > 0 } }
+				change_variable = { which = pe_stval value = pe_af_val }
+				root = {
+					change_variable = { which = pe_sr_minerals value = prev.pe_af_min }
+					change_variable = { which = pe_sr_alloys value = prev.pe_af_al }
+				}
+			}
 ${corpChain('pe_stk', k => `root = { change_variable = { which = ${C(k, 'sv')} value = prev.pe_stval } change_variable = { which = ${C(k, 'st')} value = 1 } } if = { limit = { orbital_station = { has_fleet_flag = pe_st_share } } root = { change_variable = { which = ${C(k, 'shv')} value = prev.pe_stval } } }`, '\t\t\t')}
 		}
 		# Corporate Dyson swarms (the star flagged pe_swc_<slot>): like vanilla, the swarm replaces
@@ -2215,6 +2225,13 @@ ${corpChain('pe_acorp_' + a, k => `root = { set_variable = { which = pe_msg_name
 			set_variable = { which = pe_acorp_${a} value = 0 }
 		}`).join('\n')}
 	}
+}
+`;
+corp += `
+# Planet scope: pe_ov = the value per month (base prices) of its ordinary orbital deposit.
+pe_orbital_value = {
+	set_variable = { which = pe_ov value = 0 }
+${ifChain(ORBITALS, o => `has_deposit = ${o.key}`, o => `set_variable = { which = pe_ov value = ${o.value} }`)}
 }
 `;
 write('common/scripted_effects/pe_corp_effects_generated.txt', corp);

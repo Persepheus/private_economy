@@ -6,10 +6,12 @@
 #   pe_cl_  clearing (pe.284 / 285): space creatures next to our border, loot rights
 #   pe_cv_  convoy protection (pe.287 / 288): pirates within our borders
 #   pe_ch_  exploration charter (pe.286): a science ship for five years, mining rights
-#   pe_sv_  salvage (pe.289); pe_sw_ corporate Dyson swarm (pe.292)
+#   pe_sv_  salvage (pe.289); pe_sw_ corporate Dyson swarm (pe.292); pe_af_ corporate arc
+#           furnace (pe.293)
 # Debug (pe.277, flag pe_fl_debug): offers only, running contracts are not advanced.
 # Call depths: pe_corp_fleets, pe_corp_charter, pe_corp_convoy, pe_corp_salvage,
-# pe_corp_swarm 3 (from pe_corp_step) -> the start and exec effects 4.
+# pe_corp_swarm, pe_corp_furnace 3 (from pe_corp_step) -> the start and exec effects,
+# pe_select_mid, pe_orbital_value, pe_corp_msg 4.
 
 # Country scope, quarterly: war lease and clearing.
 pe_corp_fleets = {
@@ -683,6 +685,147 @@ pe_corp_swarm = {
 	# borders) ends it; a station at its star (older saves) is dismantled, like vanilla does;
 	# the swarm is upgraded when the corporation can pay (stage II 4000, stage III 8000 with
 	# the Dyson sphere technology; vanilla build time). Never a Dyson sphere.
+	# The upkeep (vanilla alloys 5 / 10 / 20 a month by stage) is paid by the corporation: the
+	# holdings get the alloys for the next three months, the corporation pays their value (4).
+	if = {
+		limit = { exists = event_target:pe_hold NOT = { has_country_flag = pe_fl_debug } }
+		if = {
+			limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_sw value = 1 } }
+			set_variable = { which = pe_sw_upk value = 0 }
+			random_planet_within_border = {
+				limit = { has_planet_flag = pe_swc_1 }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+			}
+			if = {
+				limit = { check_variable = { which = pe_sw_upk value > 0 } }
+				event_target:pe_hold = { add_resource = { alloys = 1 mult = root.pe_sw_upk } }
+				set_variable = { which = pe_tmp value = pe_sw_upk }
+				multiply_variable = { which = pe_tmp value = 4 }
+				subtract_variable = { which = pe_c1_cash value = pe_tmp }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_sw value = 1 } }
+			set_variable = { which = pe_sw_upk value = 0 }
+			random_planet_within_border = {
+				limit = { has_planet_flag = pe_swc_2 }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+			}
+			if = {
+				limit = { check_variable = { which = pe_sw_upk value > 0 } }
+				event_target:pe_hold = { add_resource = { alloys = 1 mult = root.pe_sw_upk } }
+				set_variable = { which = pe_tmp value = pe_sw_upk }
+				multiply_variable = { which = pe_tmp value = 4 }
+				subtract_variable = { which = pe_c2_cash value = pe_tmp }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_sw value = 1 } }
+			set_variable = { which = pe_sw_upk value = 0 }
+			random_planet_within_border = {
+				limit = { has_planet_flag = pe_swc_3 }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+			}
+			if = {
+				limit = { check_variable = { which = pe_sw_upk value > 0 } }
+				event_target:pe_hold = { add_resource = { alloys = 1 mult = root.pe_sw_upk } }
+				set_variable = { which = pe_tmp value = pe_sw_upk }
+				multiply_variable = { which = pe_tmp value = 4 }
+				subtract_variable = { which = pe_c3_cash value = pe_tmp }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_sw value = 1 } }
+			set_variable = { which = pe_sw_upk value = 0 }
+			random_planet_within_border = {
+				limit = { has_planet_flag = pe_swc_4 }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+			}
+			if = {
+				limit = { check_variable = { which = pe_sw_upk value > 0 } }
+				event_target:pe_hold = { add_resource = { alloys = 1 mult = root.pe_sw_upk } }
+				set_variable = { which = pe_tmp value = pe_sw_upk }
+				multiply_variable = { which = pe_tmp value = 4 }
+				subtract_variable = { which = pe_c4_cash value = pe_tmp }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_sw value = 1 } }
+			set_variable = { which = pe_sw_upk value = 0 }
+			random_planet_within_border = {
+				limit = { has_planet_flag = pe_swc_5 }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+			}
+			if = {
+				limit = { check_variable = { which = pe_sw_upk value > 0 } }
+				event_target:pe_hold = { add_resource = { alloys = 1 mult = root.pe_sw_upk } }
+				set_variable = { which = pe_tmp value = pe_sw_upk }
+				multiply_variable = { which = pe_tmp value = 4 }
+				subtract_variable = { which = pe_c5_cash value = pe_tmp }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_sw value = 1 } }
+			set_variable = { which = pe_sw_upk value = 0 }
+			random_planet_within_border = {
+				limit = { has_planet_flag = pe_swc_6 }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+			}
+			if = {
+				limit = { check_variable = { which = pe_sw_upk value > 0 } }
+				event_target:pe_hold = { add_resource = { alloys = 1 mult = root.pe_sw_upk } }
+				set_variable = { which = pe_tmp value = pe_sw_upk }
+				multiply_variable = { which = pe_tmp value = 4 }
+				subtract_variable = { which = pe_c6_cash value = pe_tmp }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_sw value = 1 } }
+			set_variable = { which = pe_sw_upk value = 0 }
+			random_planet_within_border = {
+				limit = { has_planet_flag = pe_swc_7 }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+			}
+			if = {
+				limit = { check_variable = { which = pe_sw_upk value > 0 } }
+				event_target:pe_hold = { add_resource = { alloys = 1 mult = root.pe_sw_upk } }
+				set_variable = { which = pe_tmp value = pe_sw_upk }
+				multiply_variable = { which = pe_tmp value = 4 }
+				subtract_variable = { which = pe_c7_cash value = pe_tmp }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_sw value = 1 } }
+			set_variable = { which = pe_sw_upk value = 0 }
+			random_planet_within_border = {
+				limit = { has_planet_flag = pe_swc_8 }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+			}
+			if = {
+				limit = { check_variable = { which = pe_sw_upk value > 0 } }
+				event_target:pe_hold = { add_resource = { alloys = 1 mult = root.pe_sw_upk } }
+				set_variable = { which = pe_tmp value = pe_sw_upk }
+				multiply_variable = { which = pe_tmp value = 4 }
+				subtract_variable = { which = pe_c8_cash value = pe_tmp }
+			}
+		}
+	}
 	if = {
 		limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_sw value = 1 } exists = event_target:pe_hold }
 		if = {
@@ -970,16 +1113,46 @@ pe_corp_swarm = {
 			random_list = {
 				20 = {
 					set_timed_country_flag = { flag = pe_swarm_cd days = 1440 }
-					random_system_within_border = {
-						limit = { pe_swarm_system = yes }
-						save_event_target_as = pe_sw_sys
-						random_system_planet = { limit = { pe_swarm_star = yes } save_event_target_as = pe_sw_star }
+					# The star: of those whose deposit pays the upkeep at the last stage (the
+					# corporation earns half the value a month: value x 31 / 2 >= 80 with the Dyson
+					# sphere technology, else value x 16 / 2 >= 40), a middling one (pe_select_mid).
+					set_variable = { which = pe_sw_thr value = 5 }
+					if = { limit = { has_technology = tech_dyson_sphere } set_variable = { which = pe_sw_thr value = 5.17 } }
+					if = { limit = { check_variable = { which = pe_fl_force value = 1 } } set_variable = { which = pe_sw_thr value = 0.1 } }
+					set_variable = { which = pe_sel_n value = 0 }
+					set_variable = { which = pe_sel_sum value = 0 }
+					set_variable = { which = pe_sel_min value = 1000000 }
+					set_variable = { which = pe_sel_max value = -1 }
+					every_planet_within_border = {
+						limit = { pe_swarm_star = yes solar_system = { pe_swarm_system = yes } }
+						pe_orbital_value = yes
+						set_variable = { which = pe_sel_v value = pe_ov }
+						set_variable = { which = pe_sel_c value = 0 }
+						if = {
+							limit = { check_variable = { which = pe_sel_v value >= root.pe_sw_thr } }
+							set_variable = { which = pe_sel_c value = 1 }
+							root = {
+								change_variable = { which = pe_sel_n value = 1 }
+								change_variable = { which = pe_sel_sum value = prev.pe_sel_v }
+								if = { limit = { check_variable = { which = pe_sel_min value > prev.pe_sel_v } } set_variable = { which = pe_sel_min value = prev.pe_sel_v } }
+								if = { limit = { check_variable = { which = pe_sel_max value < prev.pe_sel_v } } set_variable = { which = pe_sel_max value = prev.pe_sel_v } }
+							}
+						}
 					}
+					set_variable = { which = pe_sel_found value = 0 }
+					if = { limit = { check_variable = { which = pe_sel_n value > 0 } } pe_select_mid = yes }
 					if = {
-						limit = { OR = { has_policy_flag = pe_order_laissez_faire is_ai = yes } }
-						pe_corp_swarm_exec = yes
+						limit = { check_variable = { which = pe_sel_found value = 1 } }
+						event_target:pe_sel_p = {
+							save_event_target_as = pe_sw_star
+							solar_system = { save_event_target_as = pe_sw_sys }
+						}
+						if = {
+							limit = { OR = { has_policy_flag = pe_order_laissez_faire is_ai = yes } }
+							pe_corp_swarm_exec = yes
+						}
+						else = { country_event = { id = pe.292 } }
 					}
-					else = { country_event = { id = pe.292 } }
 				}
 				80 = { modifier = { factor = 0 check_variable = { which = pe_fl_force value = 1 } } }
 			}
@@ -1158,5 +1331,1371 @@ pe_corp_swarm_exec = {
 		else_if = { limit = { check_variable = { which = pe_msg_name value = 118 } } create_message = { type = pe_private_economy localization = pe_msg_corp_swarm days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_118 localization = CORP } } }
 		else_if = { limit = { check_variable = { which = pe_msg_name value = 119 } } create_message = { type = pe_private_economy localization = pe_msg_corp_swarm days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_119 localization = CORP } } }
 		else_if = { limit = { check_variable = { which = pe_msg_name value = 120 } } create_message = { type = pe_private_economy localization = pe_msg_corp_swarm days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_120 localization = CORP } } }
+	}
+}
+
+# Country scope, quarterly: corporate arc furnaces (Laissez-faire, Free Market, Mixed; with the
+# vanilla technology). First the corporations' furnaces: a furnace that is gone takes its
+# deposits and the holdings' stations with it; otherwise the corporation sets its smelting
+# process (industry alloys, raw materials minerals; from stage III), pays the upkeep and
+# upgrades when it can pay. Then, every four years at most, a new furnace: a corporation of
+# industry or raw materials with 2500 cash builds one (cost 2000) over a molten planet. The
+# holdings get a station on every body of the system that had no deposit before; bodies with
+# a deposit stay ours (and get the furnace deposit and bonus too). The site: one whose bodies
+# for the holdings pay the upkeep at stage IV (the corporation earns half the value a month:
+# alloys 12 per body against 125 energy, so at least 11 bodies; minerals 6 per body against
+# 75, at least 13), and of those a middling one (pe_select_mid).
+pe_corp_furnace = {
+	if = {
+		limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_af value = 1 } exists = event_target:pe_hold }
+		set_variable = { which = pe_af_st value = 0 }
+		set_variable = { which = pe_af_upg value = 0 }
+		set_variable = { which = pe_af_oc value = 0 }
+		set_variable = { which = pe_af_want value = 1 }
+		if = { limit = { check_variable = { which = pe_c1_grp value = 1 } } set_variable = { which = pe_af_want value = 3 } }
+		event_target:pe_hold = {
+			every_owned_megastructure = {
+				limit = { planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 1 } } }
+				if = { limit = { is_megastructure_type = orbital_arc_furnace_1 } root = { set_variable = { which = pe_af_st value = 1 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_2 } root = { set_variable = { which = pe_af_st value = 2 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_3 } root = { set_variable = { which = pe_af_st value = 3 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_4 } root = { set_variable = { which = pe_af_st value = 4 } } }
+				if = { limit = { is_upgrading = yes } root = { set_variable = { which = pe_af_upg value = 1 } } }
+				if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_minerals has_overclock = overclock_arc_furnace_4_minerals } } root = { set_variable = { which = pe_af_oc value = 1 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_balanced has_overclock = overclock_arc_furnace_4_balanced } } root = { set_variable = { which = pe_af_oc value = 2 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_alloys has_overclock = overclock_arc_furnace_4_alloys } } root = { set_variable = { which = pe_af_oc value = 3 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_obsessional_directive has_overclock = overclock_arc_furnace_4_obsessional_directive } } root = { set_variable = { which = pe_af_oc value = 4 } } }
+				# The corporation's smelting process: industry alloys, raw materials minerals.
+				if = {
+					limit = { root = { check_variable = { which = pe_af_st value >= 3 } NOT = { check_variable = { which = pe_af_oc value = pe_af_want } } } }
+					if = {
+						limit = { is_megastructure_type = orbital_arc_furnace_3 }
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_3_alloys }
+						else = { set_overclock = overclock_arc_furnace_3_minerals }
+					}
+					else = {
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_4_alloys }
+						else = { set_overclock = overclock_arc_furnace_4_minerals }
+					}
+					root = { set_variable = { which = pe_af_oc value = pe_af_want } }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_af_st value = 0 } }
+			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
+			set_variable = { which = pe_c1_af value = 0 }
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 1 } }
+				dismantle_arc_furnace_effect = yes
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 1 } pe_holdings_station = yes }
+					orbital_station = { dismantle = yes }
+				}
+				set_variable = { which = pe_af_corp value = 0 }
+				set_variable = { which = pe_af_h value = 0 }
+				set_variable = { which = pe_af_val value = 0 }
+			}
+			every_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 1 } } set_variable = { which = pe_afc value = 0 } }
+		}
+		else = {
+			# Its deposit per body for the holdings' stations (station bonus of the stage included):
+			# I 1.25 minerals, II 3; III 7 minerals or 3.5 alloys; IV 12 minerals or 6 alloys.
+			set_variable = { which = pe_af_vm value = 0 }
+			set_variable = { which = pe_af_va value = 0 }
+			if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_vm value = 1.25 } }
+			else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_vm value = 3 } }
+			else_if = {
+				limit = { check_variable = { which = pe_af_st value = 3 } }
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 7 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 3.5 } set_variable = { which = pe_af_va value = 1.75 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 3.5 } }
+			}
+			else = {
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 12 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 4 } set_variable = { which = pe_af_va value = 4 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 6 } }
+			}
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 1 } }
+				set_variable = { which = pe_af_min value = root.pe_af_vm }
+				set_variable = { which = pe_af_al value = root.pe_af_va }
+				set_variable = { which = pe_af_val value = pe_af_al }
+				multiply_variable = { which = pe_af_val value = 4 }
+				change_variable = { which = pe_af_val value = pe_af_min }
+			}
+			if = {
+				limit = { NOT = { has_country_flag = pe_fl_debug } }
+				# The upkeep for the next three months (vanilla energy 20 / 40 / 80 / 100 a month;
+				# from stage III minerals -25%, alloys +25%), paid by the corporation.
+				if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_upk value = 60 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_upk value = 120 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 3 } } set_variable = { which = pe_af_upk value = 240 } }
+				else = { set_variable = { which = pe_af_upk value = 300 } }
+				if = {
+					limit = { check_variable = { which = pe_af_st value >= 3 } }
+					if = { limit = { check_variable = { which = pe_af_oc value = 1 } } multiply_variable = { which = pe_af_upk value = 0.75 } }
+					else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } multiply_variable = { which = pe_af_upk value = 1.25 } }
+				}
+				event_target:pe_hold = { add_resource = { energy = 1 mult = root.pe_af_upk } }
+				subtract_variable = { which = pe_c1_cash value = pe_af_upk }
+				# The next stage when the corporation can pay it (II 4000, III 7000, IV 12000).
+				set_variable = { which = pe_af_up value = 0 }
+				if = {
+					limit = { check_variable = { which = pe_af_upg value = 0 } }
+					event_target:pe_hold = {
+						every_owned_megastructure = {
+							limit = { is_upgrading = no planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 1 } } }
+							if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_1 root = { check_variable = { which = pe_c1_cash value >= 4000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_2
+								root = { change_variable = { which = pe_c1_cash value = -4000 } set_variable = { which = pe_af_up value = 2 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_2 root = { check_variable = { which = pe_c1_cash value >= 7000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_3
+								root = { change_variable = { which = pe_c1_cash value = -7000 } set_variable = { which = pe_af_up value = 3 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_3 root = { check_variable = { which = pe_c1_cash value >= 12000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_4
+								root = { change_variable = { which = pe_c1_cash value = -12000 } set_variable = { which = pe_af_up value = 4 } }
+							}
+						}
+					}
+				}
+				if = {
+					limit = { check_variable = { which = pe_af_up value > 0 } is_ai = no }
+					set_variable = { which = pe_msg_name value = pe_c1_name }
+					random_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 1 } } save_event_target_as = pe_msg_planet }
+					pe_corp_msg = { KEY = pe_msg_corp_furnace_up }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_af value = 1 } exists = event_target:pe_hold }
+		set_variable = { which = pe_af_st value = 0 }
+		set_variable = { which = pe_af_upg value = 0 }
+		set_variable = { which = pe_af_oc value = 0 }
+		set_variable = { which = pe_af_want value = 1 }
+		if = { limit = { check_variable = { which = pe_c2_grp value = 1 } } set_variable = { which = pe_af_want value = 3 } }
+		event_target:pe_hold = {
+			every_owned_megastructure = {
+				limit = { planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 2 } } }
+				if = { limit = { is_megastructure_type = orbital_arc_furnace_1 } root = { set_variable = { which = pe_af_st value = 1 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_2 } root = { set_variable = { which = pe_af_st value = 2 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_3 } root = { set_variable = { which = pe_af_st value = 3 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_4 } root = { set_variable = { which = pe_af_st value = 4 } } }
+				if = { limit = { is_upgrading = yes } root = { set_variable = { which = pe_af_upg value = 1 } } }
+				if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_minerals has_overclock = overclock_arc_furnace_4_minerals } } root = { set_variable = { which = pe_af_oc value = 1 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_balanced has_overclock = overclock_arc_furnace_4_balanced } } root = { set_variable = { which = pe_af_oc value = 2 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_alloys has_overclock = overclock_arc_furnace_4_alloys } } root = { set_variable = { which = pe_af_oc value = 3 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_obsessional_directive has_overclock = overclock_arc_furnace_4_obsessional_directive } } root = { set_variable = { which = pe_af_oc value = 4 } } }
+				# The corporation's smelting process: industry alloys, raw materials minerals.
+				if = {
+					limit = { root = { check_variable = { which = pe_af_st value >= 3 } NOT = { check_variable = { which = pe_af_oc value = pe_af_want } } } }
+					if = {
+						limit = { is_megastructure_type = orbital_arc_furnace_3 }
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_3_alloys }
+						else = { set_overclock = overclock_arc_furnace_3_minerals }
+					}
+					else = {
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_4_alloys }
+						else = { set_overclock = overclock_arc_furnace_4_minerals }
+					}
+					root = { set_variable = { which = pe_af_oc value = pe_af_want } }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_af_st value = 0 } }
+			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
+			set_variable = { which = pe_c2_af value = 0 }
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 2 } }
+				dismantle_arc_furnace_effect = yes
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 1 } pe_holdings_station = yes }
+					orbital_station = { dismantle = yes }
+				}
+				set_variable = { which = pe_af_corp value = 0 }
+				set_variable = { which = pe_af_h value = 0 }
+				set_variable = { which = pe_af_val value = 0 }
+			}
+			every_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 2 } } set_variable = { which = pe_afc value = 0 } }
+		}
+		else = {
+			# Its deposit per body for the holdings' stations (station bonus of the stage included):
+			# I 1.25 minerals, II 3; III 7 minerals or 3.5 alloys; IV 12 minerals or 6 alloys.
+			set_variable = { which = pe_af_vm value = 0 }
+			set_variable = { which = pe_af_va value = 0 }
+			if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_vm value = 1.25 } }
+			else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_vm value = 3 } }
+			else_if = {
+				limit = { check_variable = { which = pe_af_st value = 3 } }
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 7 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 3.5 } set_variable = { which = pe_af_va value = 1.75 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 3.5 } }
+			}
+			else = {
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 12 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 4 } set_variable = { which = pe_af_va value = 4 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 6 } }
+			}
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 2 } }
+				set_variable = { which = pe_af_min value = root.pe_af_vm }
+				set_variable = { which = pe_af_al value = root.pe_af_va }
+				set_variable = { which = pe_af_val value = pe_af_al }
+				multiply_variable = { which = pe_af_val value = 4 }
+				change_variable = { which = pe_af_val value = pe_af_min }
+			}
+			if = {
+				limit = { NOT = { has_country_flag = pe_fl_debug } }
+				# The upkeep for the next three months (vanilla energy 20 / 40 / 80 / 100 a month;
+				# from stage III minerals -25%, alloys +25%), paid by the corporation.
+				if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_upk value = 60 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_upk value = 120 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 3 } } set_variable = { which = pe_af_upk value = 240 } }
+				else = { set_variable = { which = pe_af_upk value = 300 } }
+				if = {
+					limit = { check_variable = { which = pe_af_st value >= 3 } }
+					if = { limit = { check_variable = { which = pe_af_oc value = 1 } } multiply_variable = { which = pe_af_upk value = 0.75 } }
+					else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } multiply_variable = { which = pe_af_upk value = 1.25 } }
+				}
+				event_target:pe_hold = { add_resource = { energy = 1 mult = root.pe_af_upk } }
+				subtract_variable = { which = pe_c2_cash value = pe_af_upk }
+				# The next stage when the corporation can pay it (II 4000, III 7000, IV 12000).
+				set_variable = { which = pe_af_up value = 0 }
+				if = {
+					limit = { check_variable = { which = pe_af_upg value = 0 } }
+					event_target:pe_hold = {
+						every_owned_megastructure = {
+							limit = { is_upgrading = no planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 2 } } }
+							if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_1 root = { check_variable = { which = pe_c2_cash value >= 4000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_2
+								root = { change_variable = { which = pe_c2_cash value = -4000 } set_variable = { which = pe_af_up value = 2 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_2 root = { check_variable = { which = pe_c2_cash value >= 7000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_3
+								root = { change_variable = { which = pe_c2_cash value = -7000 } set_variable = { which = pe_af_up value = 3 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_3 root = { check_variable = { which = pe_c2_cash value >= 12000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_4
+								root = { change_variable = { which = pe_c2_cash value = -12000 } set_variable = { which = pe_af_up value = 4 } }
+							}
+						}
+					}
+				}
+				if = {
+					limit = { check_variable = { which = pe_af_up value > 0 } is_ai = no }
+					set_variable = { which = pe_msg_name value = pe_c2_name }
+					random_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 2 } } save_event_target_as = pe_msg_planet }
+					pe_corp_msg = { KEY = pe_msg_corp_furnace_up }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_af value = 1 } exists = event_target:pe_hold }
+		set_variable = { which = pe_af_st value = 0 }
+		set_variable = { which = pe_af_upg value = 0 }
+		set_variable = { which = pe_af_oc value = 0 }
+		set_variable = { which = pe_af_want value = 1 }
+		if = { limit = { check_variable = { which = pe_c3_grp value = 1 } } set_variable = { which = pe_af_want value = 3 } }
+		event_target:pe_hold = {
+			every_owned_megastructure = {
+				limit = { planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 3 } } }
+				if = { limit = { is_megastructure_type = orbital_arc_furnace_1 } root = { set_variable = { which = pe_af_st value = 1 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_2 } root = { set_variable = { which = pe_af_st value = 2 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_3 } root = { set_variable = { which = pe_af_st value = 3 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_4 } root = { set_variable = { which = pe_af_st value = 4 } } }
+				if = { limit = { is_upgrading = yes } root = { set_variable = { which = pe_af_upg value = 1 } } }
+				if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_minerals has_overclock = overclock_arc_furnace_4_minerals } } root = { set_variable = { which = pe_af_oc value = 1 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_balanced has_overclock = overclock_arc_furnace_4_balanced } } root = { set_variable = { which = pe_af_oc value = 2 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_alloys has_overclock = overclock_arc_furnace_4_alloys } } root = { set_variable = { which = pe_af_oc value = 3 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_obsessional_directive has_overclock = overclock_arc_furnace_4_obsessional_directive } } root = { set_variable = { which = pe_af_oc value = 4 } } }
+				# The corporation's smelting process: industry alloys, raw materials minerals.
+				if = {
+					limit = { root = { check_variable = { which = pe_af_st value >= 3 } NOT = { check_variable = { which = pe_af_oc value = pe_af_want } } } }
+					if = {
+						limit = { is_megastructure_type = orbital_arc_furnace_3 }
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_3_alloys }
+						else = { set_overclock = overclock_arc_furnace_3_minerals }
+					}
+					else = {
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_4_alloys }
+						else = { set_overclock = overclock_arc_furnace_4_minerals }
+					}
+					root = { set_variable = { which = pe_af_oc value = pe_af_want } }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_af_st value = 0 } }
+			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
+			set_variable = { which = pe_c3_af value = 0 }
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 3 } }
+				dismantle_arc_furnace_effect = yes
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 1 } pe_holdings_station = yes }
+					orbital_station = { dismantle = yes }
+				}
+				set_variable = { which = pe_af_corp value = 0 }
+				set_variable = { which = pe_af_h value = 0 }
+				set_variable = { which = pe_af_val value = 0 }
+			}
+			every_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 3 } } set_variable = { which = pe_afc value = 0 } }
+		}
+		else = {
+			# Its deposit per body for the holdings' stations (station bonus of the stage included):
+			# I 1.25 minerals, II 3; III 7 minerals or 3.5 alloys; IV 12 minerals or 6 alloys.
+			set_variable = { which = pe_af_vm value = 0 }
+			set_variable = { which = pe_af_va value = 0 }
+			if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_vm value = 1.25 } }
+			else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_vm value = 3 } }
+			else_if = {
+				limit = { check_variable = { which = pe_af_st value = 3 } }
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 7 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 3.5 } set_variable = { which = pe_af_va value = 1.75 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 3.5 } }
+			}
+			else = {
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 12 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 4 } set_variable = { which = pe_af_va value = 4 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 6 } }
+			}
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 3 } }
+				set_variable = { which = pe_af_min value = root.pe_af_vm }
+				set_variable = { which = pe_af_al value = root.pe_af_va }
+				set_variable = { which = pe_af_val value = pe_af_al }
+				multiply_variable = { which = pe_af_val value = 4 }
+				change_variable = { which = pe_af_val value = pe_af_min }
+			}
+			if = {
+				limit = { NOT = { has_country_flag = pe_fl_debug } }
+				# The upkeep for the next three months (vanilla energy 20 / 40 / 80 / 100 a month;
+				# from stage III minerals -25%, alloys +25%), paid by the corporation.
+				if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_upk value = 60 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_upk value = 120 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 3 } } set_variable = { which = pe_af_upk value = 240 } }
+				else = { set_variable = { which = pe_af_upk value = 300 } }
+				if = {
+					limit = { check_variable = { which = pe_af_st value >= 3 } }
+					if = { limit = { check_variable = { which = pe_af_oc value = 1 } } multiply_variable = { which = pe_af_upk value = 0.75 } }
+					else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } multiply_variable = { which = pe_af_upk value = 1.25 } }
+				}
+				event_target:pe_hold = { add_resource = { energy = 1 mult = root.pe_af_upk } }
+				subtract_variable = { which = pe_c3_cash value = pe_af_upk }
+				# The next stage when the corporation can pay it (II 4000, III 7000, IV 12000).
+				set_variable = { which = pe_af_up value = 0 }
+				if = {
+					limit = { check_variable = { which = pe_af_upg value = 0 } }
+					event_target:pe_hold = {
+						every_owned_megastructure = {
+							limit = { is_upgrading = no planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 3 } } }
+							if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_1 root = { check_variable = { which = pe_c3_cash value >= 4000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_2
+								root = { change_variable = { which = pe_c3_cash value = -4000 } set_variable = { which = pe_af_up value = 2 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_2 root = { check_variable = { which = pe_c3_cash value >= 7000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_3
+								root = { change_variable = { which = pe_c3_cash value = -7000 } set_variable = { which = pe_af_up value = 3 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_3 root = { check_variable = { which = pe_c3_cash value >= 12000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_4
+								root = { change_variable = { which = pe_c3_cash value = -12000 } set_variable = { which = pe_af_up value = 4 } }
+							}
+						}
+					}
+				}
+				if = {
+					limit = { check_variable = { which = pe_af_up value > 0 } is_ai = no }
+					set_variable = { which = pe_msg_name value = pe_c3_name }
+					random_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 3 } } save_event_target_as = pe_msg_planet }
+					pe_corp_msg = { KEY = pe_msg_corp_furnace_up }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_af value = 1 } exists = event_target:pe_hold }
+		set_variable = { which = pe_af_st value = 0 }
+		set_variable = { which = pe_af_upg value = 0 }
+		set_variable = { which = pe_af_oc value = 0 }
+		set_variable = { which = pe_af_want value = 1 }
+		if = { limit = { check_variable = { which = pe_c4_grp value = 1 } } set_variable = { which = pe_af_want value = 3 } }
+		event_target:pe_hold = {
+			every_owned_megastructure = {
+				limit = { planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 4 } } }
+				if = { limit = { is_megastructure_type = orbital_arc_furnace_1 } root = { set_variable = { which = pe_af_st value = 1 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_2 } root = { set_variable = { which = pe_af_st value = 2 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_3 } root = { set_variable = { which = pe_af_st value = 3 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_4 } root = { set_variable = { which = pe_af_st value = 4 } } }
+				if = { limit = { is_upgrading = yes } root = { set_variable = { which = pe_af_upg value = 1 } } }
+				if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_minerals has_overclock = overclock_arc_furnace_4_minerals } } root = { set_variable = { which = pe_af_oc value = 1 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_balanced has_overclock = overclock_arc_furnace_4_balanced } } root = { set_variable = { which = pe_af_oc value = 2 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_alloys has_overclock = overclock_arc_furnace_4_alloys } } root = { set_variable = { which = pe_af_oc value = 3 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_obsessional_directive has_overclock = overclock_arc_furnace_4_obsessional_directive } } root = { set_variable = { which = pe_af_oc value = 4 } } }
+				# The corporation's smelting process: industry alloys, raw materials minerals.
+				if = {
+					limit = { root = { check_variable = { which = pe_af_st value >= 3 } NOT = { check_variable = { which = pe_af_oc value = pe_af_want } } } }
+					if = {
+						limit = { is_megastructure_type = orbital_arc_furnace_3 }
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_3_alloys }
+						else = { set_overclock = overclock_arc_furnace_3_minerals }
+					}
+					else = {
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_4_alloys }
+						else = { set_overclock = overclock_arc_furnace_4_minerals }
+					}
+					root = { set_variable = { which = pe_af_oc value = pe_af_want } }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_af_st value = 0 } }
+			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
+			set_variable = { which = pe_c4_af value = 0 }
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 4 } }
+				dismantle_arc_furnace_effect = yes
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 1 } pe_holdings_station = yes }
+					orbital_station = { dismantle = yes }
+				}
+				set_variable = { which = pe_af_corp value = 0 }
+				set_variable = { which = pe_af_h value = 0 }
+				set_variable = { which = pe_af_val value = 0 }
+			}
+			every_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 4 } } set_variable = { which = pe_afc value = 0 } }
+		}
+		else = {
+			# Its deposit per body for the holdings' stations (station bonus of the stage included):
+			# I 1.25 minerals, II 3; III 7 minerals or 3.5 alloys; IV 12 minerals or 6 alloys.
+			set_variable = { which = pe_af_vm value = 0 }
+			set_variable = { which = pe_af_va value = 0 }
+			if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_vm value = 1.25 } }
+			else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_vm value = 3 } }
+			else_if = {
+				limit = { check_variable = { which = pe_af_st value = 3 } }
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 7 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 3.5 } set_variable = { which = pe_af_va value = 1.75 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 3.5 } }
+			}
+			else = {
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 12 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 4 } set_variable = { which = pe_af_va value = 4 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 6 } }
+			}
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 4 } }
+				set_variable = { which = pe_af_min value = root.pe_af_vm }
+				set_variable = { which = pe_af_al value = root.pe_af_va }
+				set_variable = { which = pe_af_val value = pe_af_al }
+				multiply_variable = { which = pe_af_val value = 4 }
+				change_variable = { which = pe_af_val value = pe_af_min }
+			}
+			if = {
+				limit = { NOT = { has_country_flag = pe_fl_debug } }
+				# The upkeep for the next three months (vanilla energy 20 / 40 / 80 / 100 a month;
+				# from stage III minerals -25%, alloys +25%), paid by the corporation.
+				if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_upk value = 60 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_upk value = 120 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 3 } } set_variable = { which = pe_af_upk value = 240 } }
+				else = { set_variable = { which = pe_af_upk value = 300 } }
+				if = {
+					limit = { check_variable = { which = pe_af_st value >= 3 } }
+					if = { limit = { check_variable = { which = pe_af_oc value = 1 } } multiply_variable = { which = pe_af_upk value = 0.75 } }
+					else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } multiply_variable = { which = pe_af_upk value = 1.25 } }
+				}
+				event_target:pe_hold = { add_resource = { energy = 1 mult = root.pe_af_upk } }
+				subtract_variable = { which = pe_c4_cash value = pe_af_upk }
+				# The next stage when the corporation can pay it (II 4000, III 7000, IV 12000).
+				set_variable = { which = pe_af_up value = 0 }
+				if = {
+					limit = { check_variable = { which = pe_af_upg value = 0 } }
+					event_target:pe_hold = {
+						every_owned_megastructure = {
+							limit = { is_upgrading = no planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 4 } } }
+							if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_1 root = { check_variable = { which = pe_c4_cash value >= 4000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_2
+								root = { change_variable = { which = pe_c4_cash value = -4000 } set_variable = { which = pe_af_up value = 2 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_2 root = { check_variable = { which = pe_c4_cash value >= 7000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_3
+								root = { change_variable = { which = pe_c4_cash value = -7000 } set_variable = { which = pe_af_up value = 3 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_3 root = { check_variable = { which = pe_c4_cash value >= 12000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_4
+								root = { change_variable = { which = pe_c4_cash value = -12000 } set_variable = { which = pe_af_up value = 4 } }
+							}
+						}
+					}
+				}
+				if = {
+					limit = { check_variable = { which = pe_af_up value > 0 } is_ai = no }
+					set_variable = { which = pe_msg_name value = pe_c4_name }
+					random_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 4 } } save_event_target_as = pe_msg_planet }
+					pe_corp_msg = { KEY = pe_msg_corp_furnace_up }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_af value = 1 } exists = event_target:pe_hold }
+		set_variable = { which = pe_af_st value = 0 }
+		set_variable = { which = pe_af_upg value = 0 }
+		set_variable = { which = pe_af_oc value = 0 }
+		set_variable = { which = pe_af_want value = 1 }
+		if = { limit = { check_variable = { which = pe_c5_grp value = 1 } } set_variable = { which = pe_af_want value = 3 } }
+		event_target:pe_hold = {
+			every_owned_megastructure = {
+				limit = { planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 5 } } }
+				if = { limit = { is_megastructure_type = orbital_arc_furnace_1 } root = { set_variable = { which = pe_af_st value = 1 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_2 } root = { set_variable = { which = pe_af_st value = 2 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_3 } root = { set_variable = { which = pe_af_st value = 3 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_4 } root = { set_variable = { which = pe_af_st value = 4 } } }
+				if = { limit = { is_upgrading = yes } root = { set_variable = { which = pe_af_upg value = 1 } } }
+				if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_minerals has_overclock = overclock_arc_furnace_4_minerals } } root = { set_variable = { which = pe_af_oc value = 1 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_balanced has_overclock = overclock_arc_furnace_4_balanced } } root = { set_variable = { which = pe_af_oc value = 2 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_alloys has_overclock = overclock_arc_furnace_4_alloys } } root = { set_variable = { which = pe_af_oc value = 3 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_obsessional_directive has_overclock = overclock_arc_furnace_4_obsessional_directive } } root = { set_variable = { which = pe_af_oc value = 4 } } }
+				# The corporation's smelting process: industry alloys, raw materials minerals.
+				if = {
+					limit = { root = { check_variable = { which = pe_af_st value >= 3 } NOT = { check_variable = { which = pe_af_oc value = pe_af_want } } } }
+					if = {
+						limit = { is_megastructure_type = orbital_arc_furnace_3 }
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_3_alloys }
+						else = { set_overclock = overclock_arc_furnace_3_minerals }
+					}
+					else = {
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_4_alloys }
+						else = { set_overclock = overclock_arc_furnace_4_minerals }
+					}
+					root = { set_variable = { which = pe_af_oc value = pe_af_want } }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_af_st value = 0 } }
+			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
+			set_variable = { which = pe_c5_af value = 0 }
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 5 } }
+				dismantle_arc_furnace_effect = yes
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 1 } pe_holdings_station = yes }
+					orbital_station = { dismantle = yes }
+				}
+				set_variable = { which = pe_af_corp value = 0 }
+				set_variable = { which = pe_af_h value = 0 }
+				set_variable = { which = pe_af_val value = 0 }
+			}
+			every_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 5 } } set_variable = { which = pe_afc value = 0 } }
+		}
+		else = {
+			# Its deposit per body for the holdings' stations (station bonus of the stage included):
+			# I 1.25 minerals, II 3; III 7 minerals or 3.5 alloys; IV 12 minerals or 6 alloys.
+			set_variable = { which = pe_af_vm value = 0 }
+			set_variable = { which = pe_af_va value = 0 }
+			if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_vm value = 1.25 } }
+			else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_vm value = 3 } }
+			else_if = {
+				limit = { check_variable = { which = pe_af_st value = 3 } }
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 7 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 3.5 } set_variable = { which = pe_af_va value = 1.75 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 3.5 } }
+			}
+			else = {
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 12 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 4 } set_variable = { which = pe_af_va value = 4 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 6 } }
+			}
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 5 } }
+				set_variable = { which = pe_af_min value = root.pe_af_vm }
+				set_variable = { which = pe_af_al value = root.pe_af_va }
+				set_variable = { which = pe_af_val value = pe_af_al }
+				multiply_variable = { which = pe_af_val value = 4 }
+				change_variable = { which = pe_af_val value = pe_af_min }
+			}
+			if = {
+				limit = { NOT = { has_country_flag = pe_fl_debug } }
+				# The upkeep for the next three months (vanilla energy 20 / 40 / 80 / 100 a month;
+				# from stage III minerals -25%, alloys +25%), paid by the corporation.
+				if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_upk value = 60 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_upk value = 120 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 3 } } set_variable = { which = pe_af_upk value = 240 } }
+				else = { set_variable = { which = pe_af_upk value = 300 } }
+				if = {
+					limit = { check_variable = { which = pe_af_st value >= 3 } }
+					if = { limit = { check_variable = { which = pe_af_oc value = 1 } } multiply_variable = { which = pe_af_upk value = 0.75 } }
+					else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } multiply_variable = { which = pe_af_upk value = 1.25 } }
+				}
+				event_target:pe_hold = { add_resource = { energy = 1 mult = root.pe_af_upk } }
+				subtract_variable = { which = pe_c5_cash value = pe_af_upk }
+				# The next stage when the corporation can pay it (II 4000, III 7000, IV 12000).
+				set_variable = { which = pe_af_up value = 0 }
+				if = {
+					limit = { check_variable = { which = pe_af_upg value = 0 } }
+					event_target:pe_hold = {
+						every_owned_megastructure = {
+							limit = { is_upgrading = no planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 5 } } }
+							if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_1 root = { check_variable = { which = pe_c5_cash value >= 4000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_2
+								root = { change_variable = { which = pe_c5_cash value = -4000 } set_variable = { which = pe_af_up value = 2 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_2 root = { check_variable = { which = pe_c5_cash value >= 7000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_3
+								root = { change_variable = { which = pe_c5_cash value = -7000 } set_variable = { which = pe_af_up value = 3 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_3 root = { check_variable = { which = pe_c5_cash value >= 12000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_4
+								root = { change_variable = { which = pe_c5_cash value = -12000 } set_variable = { which = pe_af_up value = 4 } }
+							}
+						}
+					}
+				}
+				if = {
+					limit = { check_variable = { which = pe_af_up value > 0 } is_ai = no }
+					set_variable = { which = pe_msg_name value = pe_c5_name }
+					random_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 5 } } save_event_target_as = pe_msg_planet }
+					pe_corp_msg = { KEY = pe_msg_corp_furnace_up }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_af value = 1 } exists = event_target:pe_hold }
+		set_variable = { which = pe_af_st value = 0 }
+		set_variable = { which = pe_af_upg value = 0 }
+		set_variable = { which = pe_af_oc value = 0 }
+		set_variable = { which = pe_af_want value = 1 }
+		if = { limit = { check_variable = { which = pe_c6_grp value = 1 } } set_variable = { which = pe_af_want value = 3 } }
+		event_target:pe_hold = {
+			every_owned_megastructure = {
+				limit = { planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 6 } } }
+				if = { limit = { is_megastructure_type = orbital_arc_furnace_1 } root = { set_variable = { which = pe_af_st value = 1 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_2 } root = { set_variable = { which = pe_af_st value = 2 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_3 } root = { set_variable = { which = pe_af_st value = 3 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_4 } root = { set_variable = { which = pe_af_st value = 4 } } }
+				if = { limit = { is_upgrading = yes } root = { set_variable = { which = pe_af_upg value = 1 } } }
+				if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_minerals has_overclock = overclock_arc_furnace_4_minerals } } root = { set_variable = { which = pe_af_oc value = 1 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_balanced has_overclock = overclock_arc_furnace_4_balanced } } root = { set_variable = { which = pe_af_oc value = 2 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_alloys has_overclock = overclock_arc_furnace_4_alloys } } root = { set_variable = { which = pe_af_oc value = 3 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_obsessional_directive has_overclock = overclock_arc_furnace_4_obsessional_directive } } root = { set_variable = { which = pe_af_oc value = 4 } } }
+				# The corporation's smelting process: industry alloys, raw materials minerals.
+				if = {
+					limit = { root = { check_variable = { which = pe_af_st value >= 3 } NOT = { check_variable = { which = pe_af_oc value = pe_af_want } } } }
+					if = {
+						limit = { is_megastructure_type = orbital_arc_furnace_3 }
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_3_alloys }
+						else = { set_overclock = overclock_arc_furnace_3_minerals }
+					}
+					else = {
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_4_alloys }
+						else = { set_overclock = overclock_arc_furnace_4_minerals }
+					}
+					root = { set_variable = { which = pe_af_oc value = pe_af_want } }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_af_st value = 0 } }
+			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
+			set_variable = { which = pe_c6_af value = 0 }
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 6 } }
+				dismantle_arc_furnace_effect = yes
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 1 } pe_holdings_station = yes }
+					orbital_station = { dismantle = yes }
+				}
+				set_variable = { which = pe_af_corp value = 0 }
+				set_variable = { which = pe_af_h value = 0 }
+				set_variable = { which = pe_af_val value = 0 }
+			}
+			every_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 6 } } set_variable = { which = pe_afc value = 0 } }
+		}
+		else = {
+			# Its deposit per body for the holdings' stations (station bonus of the stage included):
+			# I 1.25 minerals, II 3; III 7 minerals or 3.5 alloys; IV 12 minerals or 6 alloys.
+			set_variable = { which = pe_af_vm value = 0 }
+			set_variable = { which = pe_af_va value = 0 }
+			if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_vm value = 1.25 } }
+			else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_vm value = 3 } }
+			else_if = {
+				limit = { check_variable = { which = pe_af_st value = 3 } }
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 7 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 3.5 } set_variable = { which = pe_af_va value = 1.75 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 3.5 } }
+			}
+			else = {
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 12 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 4 } set_variable = { which = pe_af_va value = 4 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 6 } }
+			}
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 6 } }
+				set_variable = { which = pe_af_min value = root.pe_af_vm }
+				set_variable = { which = pe_af_al value = root.pe_af_va }
+				set_variable = { which = pe_af_val value = pe_af_al }
+				multiply_variable = { which = pe_af_val value = 4 }
+				change_variable = { which = pe_af_val value = pe_af_min }
+			}
+			if = {
+				limit = { NOT = { has_country_flag = pe_fl_debug } }
+				# The upkeep for the next three months (vanilla energy 20 / 40 / 80 / 100 a month;
+				# from stage III minerals -25%, alloys +25%), paid by the corporation.
+				if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_upk value = 60 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_upk value = 120 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 3 } } set_variable = { which = pe_af_upk value = 240 } }
+				else = { set_variable = { which = pe_af_upk value = 300 } }
+				if = {
+					limit = { check_variable = { which = pe_af_st value >= 3 } }
+					if = { limit = { check_variable = { which = pe_af_oc value = 1 } } multiply_variable = { which = pe_af_upk value = 0.75 } }
+					else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } multiply_variable = { which = pe_af_upk value = 1.25 } }
+				}
+				event_target:pe_hold = { add_resource = { energy = 1 mult = root.pe_af_upk } }
+				subtract_variable = { which = pe_c6_cash value = pe_af_upk }
+				# The next stage when the corporation can pay it (II 4000, III 7000, IV 12000).
+				set_variable = { which = pe_af_up value = 0 }
+				if = {
+					limit = { check_variable = { which = pe_af_upg value = 0 } }
+					event_target:pe_hold = {
+						every_owned_megastructure = {
+							limit = { is_upgrading = no planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 6 } } }
+							if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_1 root = { check_variable = { which = pe_c6_cash value >= 4000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_2
+								root = { change_variable = { which = pe_c6_cash value = -4000 } set_variable = { which = pe_af_up value = 2 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_2 root = { check_variable = { which = pe_c6_cash value >= 7000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_3
+								root = { change_variable = { which = pe_c6_cash value = -7000 } set_variable = { which = pe_af_up value = 3 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_3 root = { check_variable = { which = pe_c6_cash value >= 12000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_4
+								root = { change_variable = { which = pe_c6_cash value = -12000 } set_variable = { which = pe_af_up value = 4 } }
+							}
+						}
+					}
+				}
+				if = {
+					limit = { check_variable = { which = pe_af_up value > 0 } is_ai = no }
+					set_variable = { which = pe_msg_name value = pe_c6_name }
+					random_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 6 } } save_event_target_as = pe_msg_planet }
+					pe_corp_msg = { KEY = pe_msg_corp_furnace_up }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_af value = 1 } exists = event_target:pe_hold }
+		set_variable = { which = pe_af_st value = 0 }
+		set_variable = { which = pe_af_upg value = 0 }
+		set_variable = { which = pe_af_oc value = 0 }
+		set_variable = { which = pe_af_want value = 1 }
+		if = { limit = { check_variable = { which = pe_c7_grp value = 1 } } set_variable = { which = pe_af_want value = 3 } }
+		event_target:pe_hold = {
+			every_owned_megastructure = {
+				limit = { planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 7 } } }
+				if = { limit = { is_megastructure_type = orbital_arc_furnace_1 } root = { set_variable = { which = pe_af_st value = 1 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_2 } root = { set_variable = { which = pe_af_st value = 2 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_3 } root = { set_variable = { which = pe_af_st value = 3 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_4 } root = { set_variable = { which = pe_af_st value = 4 } } }
+				if = { limit = { is_upgrading = yes } root = { set_variable = { which = pe_af_upg value = 1 } } }
+				if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_minerals has_overclock = overclock_arc_furnace_4_minerals } } root = { set_variable = { which = pe_af_oc value = 1 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_balanced has_overclock = overclock_arc_furnace_4_balanced } } root = { set_variable = { which = pe_af_oc value = 2 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_alloys has_overclock = overclock_arc_furnace_4_alloys } } root = { set_variable = { which = pe_af_oc value = 3 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_obsessional_directive has_overclock = overclock_arc_furnace_4_obsessional_directive } } root = { set_variable = { which = pe_af_oc value = 4 } } }
+				# The corporation's smelting process: industry alloys, raw materials minerals.
+				if = {
+					limit = { root = { check_variable = { which = pe_af_st value >= 3 } NOT = { check_variable = { which = pe_af_oc value = pe_af_want } } } }
+					if = {
+						limit = { is_megastructure_type = orbital_arc_furnace_3 }
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_3_alloys }
+						else = { set_overclock = overclock_arc_furnace_3_minerals }
+					}
+					else = {
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_4_alloys }
+						else = { set_overclock = overclock_arc_furnace_4_minerals }
+					}
+					root = { set_variable = { which = pe_af_oc value = pe_af_want } }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_af_st value = 0 } }
+			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
+			set_variable = { which = pe_c7_af value = 0 }
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 7 } }
+				dismantle_arc_furnace_effect = yes
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 1 } pe_holdings_station = yes }
+					orbital_station = { dismantle = yes }
+				}
+				set_variable = { which = pe_af_corp value = 0 }
+				set_variable = { which = pe_af_h value = 0 }
+				set_variable = { which = pe_af_val value = 0 }
+			}
+			every_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 7 } } set_variable = { which = pe_afc value = 0 } }
+		}
+		else = {
+			# Its deposit per body for the holdings' stations (station bonus of the stage included):
+			# I 1.25 minerals, II 3; III 7 minerals or 3.5 alloys; IV 12 minerals or 6 alloys.
+			set_variable = { which = pe_af_vm value = 0 }
+			set_variable = { which = pe_af_va value = 0 }
+			if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_vm value = 1.25 } }
+			else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_vm value = 3 } }
+			else_if = {
+				limit = { check_variable = { which = pe_af_st value = 3 } }
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 7 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 3.5 } set_variable = { which = pe_af_va value = 1.75 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 3.5 } }
+			}
+			else = {
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 12 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 4 } set_variable = { which = pe_af_va value = 4 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 6 } }
+			}
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 7 } }
+				set_variable = { which = pe_af_min value = root.pe_af_vm }
+				set_variable = { which = pe_af_al value = root.pe_af_va }
+				set_variable = { which = pe_af_val value = pe_af_al }
+				multiply_variable = { which = pe_af_val value = 4 }
+				change_variable = { which = pe_af_val value = pe_af_min }
+			}
+			if = {
+				limit = { NOT = { has_country_flag = pe_fl_debug } }
+				# The upkeep for the next three months (vanilla energy 20 / 40 / 80 / 100 a month;
+				# from stage III minerals -25%, alloys +25%), paid by the corporation.
+				if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_upk value = 60 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_upk value = 120 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 3 } } set_variable = { which = pe_af_upk value = 240 } }
+				else = { set_variable = { which = pe_af_upk value = 300 } }
+				if = {
+					limit = { check_variable = { which = pe_af_st value >= 3 } }
+					if = { limit = { check_variable = { which = pe_af_oc value = 1 } } multiply_variable = { which = pe_af_upk value = 0.75 } }
+					else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } multiply_variable = { which = pe_af_upk value = 1.25 } }
+				}
+				event_target:pe_hold = { add_resource = { energy = 1 mult = root.pe_af_upk } }
+				subtract_variable = { which = pe_c7_cash value = pe_af_upk }
+				# The next stage when the corporation can pay it (II 4000, III 7000, IV 12000).
+				set_variable = { which = pe_af_up value = 0 }
+				if = {
+					limit = { check_variable = { which = pe_af_upg value = 0 } }
+					event_target:pe_hold = {
+						every_owned_megastructure = {
+							limit = { is_upgrading = no planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 7 } } }
+							if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_1 root = { check_variable = { which = pe_c7_cash value >= 4000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_2
+								root = { change_variable = { which = pe_c7_cash value = -4000 } set_variable = { which = pe_af_up value = 2 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_2 root = { check_variable = { which = pe_c7_cash value >= 7000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_3
+								root = { change_variable = { which = pe_c7_cash value = -7000 } set_variable = { which = pe_af_up value = 3 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_3 root = { check_variable = { which = pe_c7_cash value >= 12000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_4
+								root = { change_variable = { which = pe_c7_cash value = -12000 } set_variable = { which = pe_af_up value = 4 } }
+							}
+						}
+					}
+				}
+				if = {
+					limit = { check_variable = { which = pe_af_up value > 0 } is_ai = no }
+					set_variable = { which = pe_msg_name value = pe_c7_name }
+					random_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 7 } } save_event_target_as = pe_msg_planet }
+					pe_corp_msg = { KEY = pe_msg_corp_furnace_up }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_af value = 1 } exists = event_target:pe_hold }
+		set_variable = { which = pe_af_st value = 0 }
+		set_variable = { which = pe_af_upg value = 0 }
+		set_variable = { which = pe_af_oc value = 0 }
+		set_variable = { which = pe_af_want value = 1 }
+		if = { limit = { check_variable = { which = pe_c8_grp value = 1 } } set_variable = { which = pe_af_want value = 3 } }
+		event_target:pe_hold = {
+			every_owned_megastructure = {
+				limit = { planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 8 } } }
+				if = { limit = { is_megastructure_type = orbital_arc_furnace_1 } root = { set_variable = { which = pe_af_st value = 1 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_2 } root = { set_variable = { which = pe_af_st value = 2 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_3 } root = { set_variable = { which = pe_af_st value = 3 } } }
+				else_if = { limit = { is_megastructure_type = orbital_arc_furnace_4 } root = { set_variable = { which = pe_af_st value = 4 } } }
+				if = { limit = { is_upgrading = yes } root = { set_variable = { which = pe_af_upg value = 1 } } }
+				if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_minerals has_overclock = overclock_arc_furnace_4_minerals } } root = { set_variable = { which = pe_af_oc value = 1 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_balanced has_overclock = overclock_arc_furnace_4_balanced } } root = { set_variable = { which = pe_af_oc value = 2 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_alloys has_overclock = overclock_arc_furnace_4_alloys } } root = { set_variable = { which = pe_af_oc value = 3 } } }
+				else_if = { limit = { OR = { has_overclock = overclock_arc_furnace_3_obsessional_directive has_overclock = overclock_arc_furnace_4_obsessional_directive } } root = { set_variable = { which = pe_af_oc value = 4 } } }
+				# The corporation's smelting process: industry alloys, raw materials minerals.
+				if = {
+					limit = { root = { check_variable = { which = pe_af_st value >= 3 } NOT = { check_variable = { which = pe_af_oc value = pe_af_want } } } }
+					if = {
+						limit = { is_megastructure_type = orbital_arc_furnace_3 }
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_3_alloys }
+						else = { set_overclock = overclock_arc_furnace_3_minerals }
+					}
+					else = {
+						if = { limit = { root = { check_variable = { which = pe_af_want value = 3 } } } set_overclock = overclock_arc_furnace_4_alloys }
+						else = { set_overclock = overclock_arc_furnace_4_minerals }
+					}
+					root = { set_variable = { which = pe_af_oc value = pe_af_want } }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_af_st value = 0 } }
+			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
+			set_variable = { which = pe_c8_af value = 0 }
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 8 } }
+				dismantle_arc_furnace_effect = yes
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 1 } pe_holdings_station = yes }
+					orbital_station = { dismantle = yes }
+				}
+				set_variable = { which = pe_af_corp value = 0 }
+				set_variable = { which = pe_af_h value = 0 }
+				set_variable = { which = pe_af_val value = 0 }
+			}
+			every_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 8 } } set_variable = { which = pe_afc value = 0 } }
+		}
+		else = {
+			# Its deposit per body for the holdings' stations (station bonus of the stage included):
+			# I 1.25 minerals, II 3; III 7 minerals or 3.5 alloys; IV 12 minerals or 6 alloys.
+			set_variable = { which = pe_af_vm value = 0 }
+			set_variable = { which = pe_af_va value = 0 }
+			if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_vm value = 1.25 } }
+			else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_vm value = 3 } }
+			else_if = {
+				limit = { check_variable = { which = pe_af_st value = 3 } }
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 7 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 3.5 } set_variable = { which = pe_af_va value = 1.75 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 3.5 } }
+			}
+			else = {
+				if = { limit = { check_variable = { which = pe_af_oc value = 1 } } set_variable = { which = pe_af_vm value = 12 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 2 } } set_variable = { which = pe_af_vm value = 4 } set_variable = { which = pe_af_va value = 4 } }
+				else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } set_variable = { which = pe_af_va value = 6 } }
+			}
+			every_planet_within_border = {
+				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 8 } }
+				set_variable = { which = pe_af_min value = root.pe_af_vm }
+				set_variable = { which = pe_af_al value = root.pe_af_va }
+				set_variable = { which = pe_af_val value = pe_af_al }
+				multiply_variable = { which = pe_af_val value = 4 }
+				change_variable = { which = pe_af_val value = pe_af_min }
+			}
+			if = {
+				limit = { NOT = { has_country_flag = pe_fl_debug } }
+				# The upkeep for the next three months (vanilla energy 20 / 40 / 80 / 100 a month;
+				# from stage III minerals -25%, alloys +25%), paid by the corporation.
+				if = { limit = { check_variable = { which = pe_af_st value = 1 } } set_variable = { which = pe_af_upk value = 60 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 2 } } set_variable = { which = pe_af_upk value = 120 } }
+				else_if = { limit = { check_variable = { which = pe_af_st value = 3 } } set_variable = { which = pe_af_upk value = 240 } }
+				else = { set_variable = { which = pe_af_upk value = 300 } }
+				if = {
+					limit = { check_variable = { which = pe_af_st value >= 3 } }
+					if = { limit = { check_variable = { which = pe_af_oc value = 1 } } multiply_variable = { which = pe_af_upk value = 0.75 } }
+					else_if = { limit = { check_variable = { which = pe_af_oc value = 3 } } multiply_variable = { which = pe_af_upk value = 1.25 } }
+				}
+				event_target:pe_hold = { add_resource = { energy = 1 mult = root.pe_af_upk } }
+				subtract_variable = { which = pe_c8_cash value = pe_af_upk }
+				# The next stage when the corporation can pay it (II 4000, III 7000, IV 12000).
+				set_variable = { which = pe_af_up value = 0 }
+				if = {
+					limit = { check_variable = { which = pe_af_upg value = 0 } }
+					event_target:pe_hold = {
+						every_owned_megastructure = {
+							limit = { is_upgrading = no planet = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 8 } } }
+							if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_1 root = { check_variable = { which = pe_c8_cash value >= 4000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_2
+								root = { change_variable = { which = pe_c8_cash value = -4000 } set_variable = { which = pe_af_up value = 2 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_2 root = { check_variable = { which = pe_c8_cash value >= 7000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_3
+								root = { change_variable = { which = pe_c8_cash value = -7000 } set_variable = { which = pe_af_up value = 3 } }
+							}
+							else_if = {
+								limit = { is_megastructure_type = orbital_arc_furnace_3 root = { check_variable = { which = pe_c8_cash value >= 12000 } } }
+								upgrade_megastructure_to = orbital_arc_furnace_4
+								root = { change_variable = { which = pe_c8_cash value = -12000 } set_variable = { which = pe_af_up value = 4 } }
+							}
+						}
+					}
+				}
+				if = {
+					limit = { check_variable = { which = pe_af_up value > 0 } is_ai = no }
+					set_variable = { which = pe_msg_name value = pe_c8_name }
+					random_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 8 } } save_event_target_as = pe_msg_planet }
+					pe_corp_msg = { KEY = pe_msg_corp_furnace_up }
+				}
+			}
+		}
+	}
+	if = {
+		limit = {
+			exists = event_target:pe_hold
+			has_technology = tech_orbital_arc_furnace
+			OR = { has_policy_flag = pe_order_laissez_faire has_policy_flag = pe_order_free_market has_policy_flag = pe_order_mixed }
+			NOT = { has_country_flag = pe_furnace_cd }
+			any_planet_within_border = { pe_furnace_site = yes }
+		}
+		set_variable = { which = pe_af_k value = 0 }
+		set_variable = { which = pe_af_best value = 2499 }
+		if = { limit = { check_variable = { which = pe_c1_on value = 1 } OR = { check_variable = { which = pe_c1_grp value = 1 } check_variable = { which = pe_c1_grp value = 4 } } NOT = { check_variable = { which = pe_c1_af value = 1 } } check_variable = { which = pe_c1_cash value > pe_af_best } } set_variable = { which = pe_af_k value = 1 } set_variable = { which = pe_af_best value = pe_c1_cash } }
+		if = { limit = { check_variable = { which = pe_c2_on value = 1 } OR = { check_variable = { which = pe_c2_grp value = 1 } check_variable = { which = pe_c2_grp value = 4 } } NOT = { check_variable = { which = pe_c2_af value = 1 } } check_variable = { which = pe_c2_cash value > pe_af_best } } set_variable = { which = pe_af_k value = 2 } set_variable = { which = pe_af_best value = pe_c2_cash } }
+		if = { limit = { check_variable = { which = pe_c3_on value = 1 } OR = { check_variable = { which = pe_c3_grp value = 1 } check_variable = { which = pe_c3_grp value = 4 } } NOT = { check_variable = { which = pe_c3_af value = 1 } } check_variable = { which = pe_c3_cash value > pe_af_best } } set_variable = { which = pe_af_k value = 3 } set_variable = { which = pe_af_best value = pe_c3_cash } }
+		if = { limit = { check_variable = { which = pe_c4_on value = 1 } OR = { check_variable = { which = pe_c4_grp value = 1 } check_variable = { which = pe_c4_grp value = 4 } } NOT = { check_variable = { which = pe_c4_af value = 1 } } check_variable = { which = pe_c4_cash value > pe_af_best } } set_variable = { which = pe_af_k value = 4 } set_variable = { which = pe_af_best value = pe_c4_cash } }
+		if = { limit = { check_variable = { which = pe_c5_on value = 1 } OR = { check_variable = { which = pe_c5_grp value = 1 } check_variable = { which = pe_c5_grp value = 4 } } NOT = { check_variable = { which = pe_c5_af value = 1 } } check_variable = { which = pe_c5_cash value > pe_af_best } } set_variable = { which = pe_af_k value = 5 } set_variable = { which = pe_af_best value = pe_c5_cash } }
+		if = { limit = { check_variable = { which = pe_c6_on value = 1 } OR = { check_variable = { which = pe_c6_grp value = 1 } check_variable = { which = pe_c6_grp value = 4 } } NOT = { check_variable = { which = pe_c6_af value = 1 } } check_variable = { which = pe_c6_cash value > pe_af_best } } set_variable = { which = pe_af_k value = 6 } set_variable = { which = pe_af_best value = pe_c6_cash } }
+		if = { limit = { check_variable = { which = pe_c7_on value = 1 } OR = { check_variable = { which = pe_c7_grp value = 1 } check_variable = { which = pe_c7_grp value = 4 } } NOT = { check_variable = { which = pe_c7_af value = 1 } } check_variable = { which = pe_c7_cash value > pe_af_best } } set_variable = { which = pe_af_k value = 7 } set_variable = { which = pe_af_best value = pe_c7_cash } }
+		if = { limit = { check_variable = { which = pe_c8_on value = 1 } OR = { check_variable = { which = pe_c8_grp value = 1 } check_variable = { which = pe_c8_grp value = 4 } } NOT = { check_variable = { which = pe_c8_af value = 1 } } check_variable = { which = pe_c8_cash value > pe_af_best } } set_variable = { which = pe_af_k value = 8 } set_variable = { which = pe_af_best value = pe_c8_cash } }
+		if = {
+			limit = { check_variable = { which = pe_af_k value > 0 } }
+			random_list = {
+				20 = {
+					set_timed_country_flag = { flag = pe_furnace_cd days = 1440 }
+					set_variable = { which = pe_af_thr value = 13 }
+					if = { limit = { check_variable = { which = pe_af_k value = 1 } check_variable = { which = pe_c1_grp value = 1 } } set_variable = { which = pe_af_thr value = 11 } }
+					else_if = { limit = { check_variable = { which = pe_af_k value = 2 } check_variable = { which = pe_c2_grp value = 1 } } set_variable = { which = pe_af_thr value = 11 } }
+					else_if = { limit = { check_variable = { which = pe_af_k value = 3 } check_variable = { which = pe_c3_grp value = 1 } } set_variable = { which = pe_af_thr value = 11 } }
+					else_if = { limit = { check_variable = { which = pe_af_k value = 4 } check_variable = { which = pe_c4_grp value = 1 } } set_variable = { which = pe_af_thr value = 11 } }
+					else_if = { limit = { check_variable = { which = pe_af_k value = 5 } check_variable = { which = pe_c5_grp value = 1 } } set_variable = { which = pe_af_thr value = 11 } }
+					else_if = { limit = { check_variable = { which = pe_af_k value = 6 } check_variable = { which = pe_c6_grp value = 1 } } set_variable = { which = pe_af_thr value = 11 } }
+					else_if = { limit = { check_variable = { which = pe_af_k value = 7 } check_variable = { which = pe_c7_grp value = 1 } } set_variable = { which = pe_af_thr value = 11 } }
+					else_if = { limit = { check_variable = { which = pe_af_k value = 8 } check_variable = { which = pe_c8_grp value = 1 } } set_variable = { which = pe_af_thr value = 11 } }
+					if = { limit = { check_variable = { which = pe_fl_force value = 1 } } set_variable = { which = pe_af_thr value = 1 } }
+					set_variable = { which = pe_sel_n value = 0 }
+					set_variable = { which = pe_sel_sum value = 0 }
+					set_variable = { which = pe_sel_min value = 1000000 }
+					set_variable = { which = pe_sel_max value = -1 }
+					every_planet_within_border = {
+						limit = { pe_furnace_site = yes }
+						# Bodies for the holdings: they get the furnace deposit and had none before.
+						set_variable = { which = pe_sel_v value = 0 }
+						set_variable = { which = pe_sel_c value = 0 }
+						solar_system = {
+							every_system_planet = {
+								limit = { NOT = { has_deposit_for = shipclass_research_station } is_star = no is_astral_scar = no colonizable_planet = no NOT = { has_deposit_for = shipclass_mining_station } NOT = { is_same_value = prevprev } }
+								prevprev = { change_variable = { which = pe_sel_v value = 1 } }
+							}
+						}
+						if = {
+							limit = { check_variable = { which = pe_sel_v value >= root.pe_af_thr } }
+							set_variable = { which = pe_sel_c value = 1 }
+							root = {
+								change_variable = { which = pe_sel_n value = 1 }
+								change_variable = { which = pe_sel_sum value = prev.pe_sel_v }
+								if = { limit = { check_variable = { which = pe_sel_min value > prev.pe_sel_v } } set_variable = { which = pe_sel_min value = prev.pe_sel_v } }
+								if = { limit = { check_variable = { which = pe_sel_max value < prev.pe_sel_v } } set_variable = { which = pe_sel_max value = prev.pe_sel_v } }
+							}
+						}
+					}
+					set_variable = { which = pe_sel_found value = 0 }
+					if = { limit = { check_variable = { which = pe_sel_n value > 0 } } pe_select_mid = yes }
+					if = {
+						limit = { check_variable = { which = pe_sel_found value = 1 } }
+						event_target:pe_sel_p = { save_event_target_as = pe_af_p }
+						if = {
+							limit = { OR = { has_policy_flag = pe_order_laissez_faire is_ai = yes } }
+							pe_corp_furnace_exec = yes
+						}
+						else = { country_event = { id = pe.293 } }
+					}
+				}
+				80 = { modifier = { factor = 0 check_variable = { which = pe_fl_force value = 1 } } }
+			}
+		}
+	}
+}
+
+# Country scope: build the corporation pe_af_k's furnace (stage I) over event_target:pe_af_p,
+# as vanilla's on_build_complete and cybernetics.1000 would (the spawned furnace runs neither).
+pe_corp_furnace_exec = {
+	# A station of ours there is dismantled and paid for (Laissez-faire the building cost,
+	# otherwise twice that).
+	set_variable = { which = pe_af_pay value = 0 }
+	event_target:pe_af_p = {
+		if = {
+			limit = { has_orbital_station = yes }
+			if = {
+				limit = { pe_state_station = yes }
+				root = {
+					set_variable = { which = pe_af_pay value = 100 }
+					if = { limit = { NOT = { has_policy_flag = pe_order_laissez_faire } } set_variable = { which = pe_af_pay value = 200 } }
+				}
+			}
+			orbital_station = { dismantle = yes }
+		}
+	}
+	add_resource = { minerals = 1 mult = pe_af_pay }
+	if = { limit = { check_variable = { which = pe_af_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_af_pay } change_variable = { which = pe_c1_cash value = -2000 } set_variable = { which = pe_c1_af value = 1 } set_variable = { which = pe_msg_name value = pe_c1_name } }
+	else_if = { limit = { check_variable = { which = pe_af_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_af_pay } change_variable = { which = pe_c2_cash value = -2000 } set_variable = { which = pe_c2_af value = 1 } set_variable = { which = pe_msg_name value = pe_c2_name } }
+	else_if = { limit = { check_variable = { which = pe_af_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_af_pay } change_variable = { which = pe_c3_cash value = -2000 } set_variable = { which = pe_c3_af value = 1 } set_variable = { which = pe_msg_name value = pe_c3_name } }
+	else_if = { limit = { check_variable = { which = pe_af_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_af_pay } change_variable = { which = pe_c4_cash value = -2000 } set_variable = { which = pe_c4_af value = 1 } set_variable = { which = pe_msg_name value = pe_c4_name } }
+	else_if = { limit = { check_variable = { which = pe_af_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_af_pay } change_variable = { which = pe_c5_cash value = -2000 } set_variable = { which = pe_c5_af value = 1 } set_variable = { which = pe_msg_name value = pe_c5_name } }
+	else_if = { limit = { check_variable = { which = pe_af_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_af_pay } change_variable = { which = pe_c6_cash value = -2000 } set_variable = { which = pe_c6_af value = 1 } set_variable = { which = pe_msg_name value = pe_c6_name } }
+	else_if = { limit = { check_variable = { which = pe_af_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_af_pay } change_variable = { which = pe_c7_cash value = -2000 } set_variable = { which = pe_c7_af value = 1 } set_variable = { which = pe_msg_name value = pe_c7_name } }
+	else_if = { limit = { check_variable = { which = pe_af_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_af_pay } change_variable = { which = pe_c8_cash value = -2000 } set_variable = { which = pe_c8_af value = 1 } set_variable = { which = pe_msg_name value = pe_c8_name } }
+	event_target:pe_af_p = {
+		solar_system = {
+			spawn_megastructure = {
+				type = orbital_arc_furnace_1
+				owner = event_target:pe_hold
+				planet = event_target:pe_af_p
+			}
+		}
+		set_planet_flag = has_megastructure
+		set_planet_flag = has_arc_furnace
+		set_planet_entity = { entity = invisible_turret_entity }
+		set_variable = { which = pe_afc value = root.pe_af_k }
+		solar_system = {
+			every_system_planet = {
+				limit = { NOT = { has_deposit_for = shipclass_research_station } is_star = no is_astral_scar = no colonizable_planet = no }
+				set_variable = { which = pe_af_h value = 0 }
+				if = {
+					limit = { NOT = { has_deposit_for = shipclass_mining_station } NOT = { is_same_value = event_target:pe_af_p } }
+					set_variable = { which = pe_af_h value = 1 }
+				}
+				# remove_trade_deposits inline (call depth)
+				remove_deposit = d_trade_value_1
+				remove_deposit = d_trade_value_2
+				remove_deposit = d_trade_value_3
+				remove_deposit = d_trade_value_4
+				remove_deposit = d_trade_value_5
+				remove_deposit = d_trade_value_6
+				remove_deposit = d_trade_value_7
+				remove_deposit = d_trade_value_8
+				remove_deposit = d_trade_value_9
+				remove_deposit = d_trade_value_10
+				add_deposit = d_arc_furnace_1
+				add_modifier = { modifier = orbital_arc_furnace_1_mod days = -1 }
+				set_variable = { which = pe_af_corp value = root.pe_af_k }
+				set_variable = { which = pe_af_min value = 1.25 }
+				set_variable = { which = pe_af_al value = 0 }
+				set_variable = { which = pe_af_val value = 1.25 }
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 1 } }
+					if = { limit = { has_orbital_station = no } create_mining_station = { owner = event_target:pe_hold } }
+					if = {
+						limit = { has_orbital_station = yes }
+						orbital_station = {
+							if = { limit = { root = { check_variable = { which = pe_af_k value = 1 } } } set_fleet_flag = pe_stc_1 }
+							else_if = { limit = { root = { check_variable = { which = pe_af_k value = 2 } } } set_fleet_flag = pe_stc_2 }
+							else_if = { limit = { root = { check_variable = { which = pe_af_k value = 3 } } } set_fleet_flag = pe_stc_3 }
+							else_if = { limit = { root = { check_variable = { which = pe_af_k value = 4 } } } set_fleet_flag = pe_stc_4 }
+							else_if = { limit = { root = { check_variable = { which = pe_af_k value = 5 } } } set_fleet_flag = pe_stc_5 }
+							else_if = { limit = { root = { check_variable = { which = pe_af_k value = 6 } } } set_fleet_flag = pe_stc_6 }
+							else_if = { limit = { root = { check_variable = { which = pe_af_k value = 7 } } } set_fleet_flag = pe_stc_7 }
+							else_if = { limit = { root = { check_variable = { which = pe_af_k value = 8 } } } set_fleet_flag = pe_stc_8 }
+						}
+					}
+				}
+			}
+		}
+		save_event_target_as = pe_msg_planet
+	}
+	# The message inline (call depth).
+	if = {
+		limit = { is_ai = no }
+		if = { limit = { check_variable = { which = pe_msg_name value = 1 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_1 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 2 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_2 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 3 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_3 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 4 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_4 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 5 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_5 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 6 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_6 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 7 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_7 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 8 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_8 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 9 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_9 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 10 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_10 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 11 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_11 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 12 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_12 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 13 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_13 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 14 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_14 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 15 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_15 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 16 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_16 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 17 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_17 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 18 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_18 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 19 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_19 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 20 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_20 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 21 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_21 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 22 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_22 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 23 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_23 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 24 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_24 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 25 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_25 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 26 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_26 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 27 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_27 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 28 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_28 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 29 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_29 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 30 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_30 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 31 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_31 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 32 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_32 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 33 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_33 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 34 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_34 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 35 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_35 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 36 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_36 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 37 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_37 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 38 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_38 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 39 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_39 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 40 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_40 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 41 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_41 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 42 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_42 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 43 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_43 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 44 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_44 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 45 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_45 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 46 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_46 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 47 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_47 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 48 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_48 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 49 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_49 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 50 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_50 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 51 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_51 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 52 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_52 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 53 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_53 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 54 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_54 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 55 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_55 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 56 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_56 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 57 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_57 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 58 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_58 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 59 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_59 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 60 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_60 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 61 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_61 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 62 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_62 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 63 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_63 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 64 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_64 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 65 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_65 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 66 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_66 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 67 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_67 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 68 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_68 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 69 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_69 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 70 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_70 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 71 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_71 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 72 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_72 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 73 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_73 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 74 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_74 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 75 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_75 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 76 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_76 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 77 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_77 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 78 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_78 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 79 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_79 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 80 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_80 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 81 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_81 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 82 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_82 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 83 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_83 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 84 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_84 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 85 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_85 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 86 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_86 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 87 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_87 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 88 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_88 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 89 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_89 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 90 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_90 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 91 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_91 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 92 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_92 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 93 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_93 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 94 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_94 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 95 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_95 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 96 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_96 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 97 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_97 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 98 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_98 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 99 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_99 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 100 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_100 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 101 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_101 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 102 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_102 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 103 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_103 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 104 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_104 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 105 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_105 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 106 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_106 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 107 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_107 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 108 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_108 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 109 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_109 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 110 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_110 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 111 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_111 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 112 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_112 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 113 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_113 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 114 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_114 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 115 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_115 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 116 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_116 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 117 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_117 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 118 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_118 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 119 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_119 localization = CORP } } }
+		else_if = { limit = { check_variable = { which = pe_msg_name value = 120 } } create_message = { type = pe_private_economy localization = pe_msg_corp_furnace days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_cname_120 localization = CORP } } }
+	}
+}
+
+# Country scope: of the candidate planets (pe_sel_c = 1, score pe_sel_v; pe_sel_n candidates,
+# pe_sel_sum, pe_sel_min, pe_sel_max), the one closest to the average. With three or more
+# candidates of different scores neither the best nor the worst. event_target:pe_sel_p,
+# pe_sel_found = 1. Resets pe_sel_c.
+pe_select_mid = {
+	set_variable = { which = pe_sel_found value = 0 }
+	set_variable = { which = pe_sel_best value = 1000000 }
+	set_variable = { which = pe_sel_mean value = pe_sel_sum }
+	divide_variable = { which = pe_sel_mean value = pe_sel_n }
+	set_variable = { which = pe_sel_ex value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_sel_n value >= 3 } check_variable = { which = pe_sel_max value > pe_sel_min } }
+		set_variable = { which = pe_sel_ex value = 1 }
+	}
+	every_planet_within_border = {
+		limit = { is_variable_set = pe_sel_c check_variable = { which = pe_sel_c value = 1 } }
+		set_variable = { which = pe_sel_d value = pe_sel_v }
+		subtract_variable = { which = pe_sel_d value = root.pe_sel_mean }
+		if = { limit = { check_variable = { which = pe_sel_d value < 0 } } multiply_variable = { which = pe_sel_d value = -1 } }
+		if = {
+			limit = {
+				check_variable = { which = pe_sel_d value < root.pe_sel_best }
+				OR = {
+					root = { check_variable = { which = pe_sel_ex value = 0 } }
+					AND = {
+						check_variable = { which = pe_sel_v value < root.pe_sel_max }
+						check_variable = { which = pe_sel_v value > root.pe_sel_min }
+					}
+				}
+			}
+			root = { set_variable = { which = pe_sel_best value = prev.pe_sel_d } set_variable = { which = pe_sel_found value = 1 } }
+			save_event_target_as = pe_sel_p
+		}
+	}
+	# Nothing strictly between the best and the worst (e.g. 5, 5, 10): the closest of all.
+	if = {
+		limit = { check_variable = { which = pe_sel_found value = 0 } }
+		every_planet_within_border = {
+			limit = { is_variable_set = pe_sel_c check_variable = { which = pe_sel_c value = 1 } check_variable = { which = pe_sel_d value < root.pe_sel_best } }
+			root = { set_variable = { which = pe_sel_best value = prev.pe_sel_d } set_variable = { which = pe_sel_found value = 1 } }
+			save_event_target_as = pe_sel_p
+		}
+	}
+	every_planet_within_border = {
+		limit = { is_variable_set = pe_sel_c check_variable = { which = pe_sel_c value = 1 } }
+		set_variable = { which = pe_sel_c value = 0 }
 	}
 }
