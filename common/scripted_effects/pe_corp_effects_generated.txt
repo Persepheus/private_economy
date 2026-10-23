@@ -32,9 +32,126 @@ pe_cluster_counts = {
 	set_variable = { which = pe_mem_6 value = 0 }
 	set_variable = { which = pe_mem_7 value = 0 }
 	set_variable = { which = pe_mem_8 value = 0 }
+	set_variable = { which = pe_scn_m value = 0 }
+	set_variable = { which = pe_scs_m value = 0 }
+	set_variable = { which = pe_scn_c value = 0 }
+	set_variable = { which = pe_scs_c value = 0 }
+	set_variable = { which = pe_scn_f value = 0 }
+	set_variable = { which = pe_scs_f value = 0 }
+	set_variable = { which = pe_sch value = 0 }
+	set_variable = { which = pe_scl_a value = 0 }
+	set_variable = { which = pe_scl_c value = 0 }
+	set_variable = { which = pe_scl_t value = 0 }
+	set_variable = { which = pe_scl_x value = 0 }
+	set_variable = { which = pe_scl_y value = 0 }
+	set_variable = { which = pe_scl_z value = 0 }
+	set_variable = { which = pe_scl_b value = 0 }
+	set_variable = { which = pe_scl_m value = 0 }
+	set_variable = { which = pe_scl_f value = 0 }
 	every_deposit = {
 		limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_prim }
 		if = { limit = { NOT = { is_variable_set = pe_corp } } set_variable = { which = pe_corp value = 0 } }
+		if = { limit = { NOT = { is_variable_set = pe_sup_fid } } set_variable = { which = pe_sup_fid value = 0 } }
+		if = { limit = { NOT = { is_variable_set = pe_sup_n } } set_variable = { which = pe_sup_n value = 0 } }
+		if = { limit = { NOT = { is_variable_set = pe_sup_cd } } set_variable = { which = pe_sup_cd value = 0 } }
+		# Supply chains: buyers without a supplier (by the supplier they need), suppliers with room,
+		# and contracted firms per sector (for the modifier).
+		if = {
+			limit = { check_variable = { which = pe_prim value = 1 } }
+			if = {
+				limit = { check_variable = { which = pe_sup_fid value > 0 } }
+				prev = { change_variable = { which = pe_scl_a value = 1 } }
+			}
+			else_if = {
+				limit = { check_variable = { which = pe_sup_cd value <= 0 } }
+				if = { limit = { root = { is_catalytic_empire = yes } } prev = { change_variable = { which = pe_scn_f value = 1 } } }
+				else = { prev = { change_variable = { which = pe_scn_m value = 1 } } }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_prim value = 2 } }
+			if = {
+				limit = { check_variable = { which = pe_sup_fid value > 0 } }
+				prev = { change_variable = { which = pe_scl_c value = 1 } }
+			}
+			else_if = {
+				limit = { check_variable = { which = pe_sup_cd value <= 0 } }
+				prev = { change_variable = { which = pe_scn_m value = 1 } }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_prim value = 3 } }
+			if = {
+				limit = { check_variable = { which = pe_sup_fid value > 0 } }
+				prev = { change_variable = { which = pe_scl_t value = 1 } }
+			}
+			else_if = {
+				limit = { check_variable = { which = pe_sup_cd value <= 0 } }
+				prev = { change_variable = { which = pe_scn_c value = 1 } }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_prim value = 5 } }
+			if = {
+				limit = { check_variable = { which = pe_sup_fid value > 0 } }
+				prev = { change_variable = { which = pe_scl_x value = 1 } }
+			}
+			else_if = {
+				limit = { check_variable = { which = pe_sup_cd value <= 0 } }
+				prev = { change_variable = { which = pe_scn_c value = 1 } }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_prim value = 6 } }
+			if = {
+				limit = { check_variable = { which = pe_sup_fid value > 0 } }
+				prev = { change_variable = { which = pe_scl_y value = 1 } }
+			}
+			else_if = {
+				limit = { check_variable = { which = pe_sup_cd value <= 0 } }
+				prev = { change_variable = { which = pe_scn_c value = 1 } }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_prim value = 7 } }
+			if = {
+				limit = { check_variable = { which = pe_sup_fid value > 0 } }
+				prev = { change_variable = { which = pe_scl_z value = 1 } }
+			}
+			else_if = {
+				limit = { check_variable = { which = pe_sup_cd value <= 0 } }
+				prev = { change_variable = { which = pe_scn_c value = 1 } }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_prim value = 8 } }
+			if = {
+				limit = { check_variable = { which = pe_sup_fid value > 0 } }
+				prev = { change_variable = { which = pe_scl_b value = 1 } }
+			}
+			else_if = {
+				limit = { check_variable = { which = pe_sup_cd value <= 0 } }
+				prev = { change_variable = { which = pe_scn_c value = 1 } }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_prim value = 9 } }
+			prev = { change_variable = { which = pe_sch value = 1 } }
+			if = { limit = { check_variable = { which = pe_sup_n value < 2 } } prev = { change_variable = { which = pe_scs_m value = 1 } } }
+			if = { limit = { check_variable = { which = pe_sup_n value > 0 } } prev = { change_variable = { which = pe_scl_m value = 1 } } }
+		}
+		if = {
+			limit = { check_variable = { which = pe_prim value = 2 } }
+			prev = { change_variable = { which = pe_sch value = 1 } }
+			if = { limit = { check_variable = { which = pe_sup_n value < 2 } } prev = { change_variable = { which = pe_scs_c value = 1 } } }
+			if = { limit = { check_variable = { which = pe_sup_n value > 0 } } prev = { change_variable = { which = pe_scl_c value = 1 } } }
+		}
+		if = {
+			limit = { check_variable = { which = pe_prim value = 11 } }
+			prev = { change_variable = { which = pe_sch value = 1 } }
+			if = { limit = { check_variable = { which = pe_sup_n value < 2 } } prev = { change_variable = { which = pe_scs_f value = 1 } } }
+			if = { limit = { check_variable = { which = pe_sup_n value > 0 } } prev = { change_variable = { which = pe_scl_f value = 1 } } }
+		}
 		if = { limit = { check_variable = { which = pe_prim value = 1 } } prev = { change_variable = { which = pe_cn_a value = 1 } } }
 		else_if = { limit = { check_variable = { which = pe_prim value = 2 } } prev = { change_variable = { which = pe_cn_c value = 1 } } }
 		else_if = { limit = { check_variable = { which = pe_prim value = 3 } } prev = { change_variable = { which = pe_cn_t value = 1 } } }
@@ -68,6 +185,51 @@ pe_cluster_counts = {
 # Colony scope, quarterly: the cluster modifier of each main product (level = firms - 1, at
 # most 3), changed only when the level changes.
 pe_cluster_apply = {
+	if = {
+		limit = { check_variable = { which = pe_scl_a value > 0 } }
+		if = { limit = { NOT = { has_modifier = pe_supply_a } } add_modifier = { modifier = pe_supply_a days = -1 } }
+	}
+	else_if = { limit = { has_modifier = pe_supply_a } remove_modifier = pe_supply_a }
+	if = {
+		limit = { check_variable = { which = pe_scl_c value > 0 } }
+		if = { limit = { NOT = { has_modifier = pe_supply_c } } add_modifier = { modifier = pe_supply_c days = -1 } }
+	}
+	else_if = { limit = { has_modifier = pe_supply_c } remove_modifier = pe_supply_c }
+	if = {
+		limit = { check_variable = { which = pe_scl_t value > 0 } }
+		if = { limit = { NOT = { has_modifier = pe_supply_t } } add_modifier = { modifier = pe_supply_t days = -1 } }
+	}
+	else_if = { limit = { has_modifier = pe_supply_t } remove_modifier = pe_supply_t }
+	if = {
+		limit = { check_variable = { which = pe_scl_x value > 0 } }
+		if = { limit = { NOT = { has_modifier = pe_supply_x } } add_modifier = { modifier = pe_supply_x days = -1 } }
+	}
+	else_if = { limit = { has_modifier = pe_supply_x } remove_modifier = pe_supply_x }
+	if = {
+		limit = { check_variable = { which = pe_scl_y value > 0 } }
+		if = { limit = { NOT = { has_modifier = pe_supply_y } } add_modifier = { modifier = pe_supply_y days = -1 } }
+	}
+	else_if = { limit = { has_modifier = pe_supply_y } remove_modifier = pe_supply_y }
+	if = {
+		limit = { check_variable = { which = pe_scl_z value > 0 } }
+		if = { limit = { NOT = { has_modifier = pe_supply_z } } add_modifier = { modifier = pe_supply_z days = -1 } }
+	}
+	else_if = { limit = { has_modifier = pe_supply_z } remove_modifier = pe_supply_z }
+	if = {
+		limit = { check_variable = { which = pe_scl_b value > 0 } }
+		if = { limit = { NOT = { has_modifier = pe_supply_b } } add_modifier = { modifier = pe_supply_b days = -1 } }
+	}
+	else_if = { limit = { has_modifier = pe_supply_b } remove_modifier = pe_supply_b }
+	if = {
+		limit = { check_variable = { which = pe_scl_m value > 0 } }
+		if = { limit = { NOT = { has_modifier = pe_supply_m } } add_modifier = { modifier = pe_supply_m days = -1 } }
+	}
+	else_if = { limit = { has_modifier = pe_supply_m } remove_modifier = pe_supply_m }
+	if = {
+		limit = { check_variable = { which = pe_scl_f value > 0 } }
+		if = { limit = { NOT = { has_modifier = pe_supply_f } } add_modifier = { modifier = pe_supply_f days = -1 } }
+	}
+	else_if = { limit = { has_modifier = pe_supply_f } remove_modifier = pe_supply_f }
 	set_variable = { which = pe_tmp value = pe_cn_a }
 	change_variable = { which = pe_tmp value = -1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0 } } set_variable = { which = pe_tmp value = 0 } }

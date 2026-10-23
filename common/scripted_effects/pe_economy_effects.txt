@@ -23,6 +23,7 @@
 #                                          -> pe_restructure (3)      -> pe_retool_consider (4)
 #                                                                     -> pe_retool_guard (4)
 #                    -> pe_command_economy (2) -> pe_firm_identify (3), pe_deposit_fetch (3)
+#                    -> pe_supply_step (2)
 #                    -> pe_corp_step (2) -> pe_corp_census, _crisis, _dissolve, _found, _acquire,
 #                                           _rivalry, _branches, pe_holdings_ensure,
 #                                           pe_corp_stations, pe_corp_station_output,
@@ -187,6 +188,7 @@ pe_quarterly = {
 		limit = { pe_planet_eligible = yes NOT = { has_planet_flag = pe_stepped } }
 		pe_planet_step = yes
 	}
+	pe_supply_step = yes
 	pe_relocate = yes
 	pe_corp_step = yes
 	pe_patron = yes
@@ -912,6 +914,12 @@ pe_firm_accounting = {
 		change_variable = { which = pe_age value = 1 }
 		if = { limit = { NOT = { is_variable_set = pe_corp } } set_variable = { which = pe_corp value = 0 } }
 		if = { limit = { NOT = { is_variable_set = pe_loan } } set_variable = { which = pe_loan value = 0 } set_variable = { which = pe_lender value = 0 } set_variable = { which = pe_loan_q value = 0 } }
+		# A firm number (supply contracts).
+		if = {
+			limit = { OR = { NOT = { is_variable_set = pe_fid } check_variable = { which = pe_fid value <= 0 } } }
+			root = { change_variable = { which = pe_fid_next value = 1 } }
+			set_variable = { which = pe_fid value = root.pe_fid_next }
+		}
 		pe_deposit_fetch = yes
 		pe_deposit_fetch_scale = yes
 		pe_firm_book = yes
@@ -1654,5 +1662,231 @@ pe_corp_step = {
 	every_owned_colony = {
 		limit = { is_variable_set = pe_mem_1 }
 		pe_corp_branches = yes
+	}
+}
+
+# Country scope, quarterly (after the planets have counted their firms): supply chains.
+# A buyer (pe_sup_fid = its supplier's firm number pe_fid) and a supplier (pe_sup_n buyers, at
+# most 2). First the contracts are checked (a supplier that is gone, restructured or moved to
+# another product ends them: message, the buyer waits a year), then up to one new contract per
+# kind of supplier (mine, factory, farm) is made. The bonus is the planet modifier "Supply
+# Contracts" (pe_cluster_apply). See tools/generate-firms.mjs (SUP_*).
+pe_supply_step = {
+	every_owned_colony = {
+		limit = { count_deposits = { category = pe_deposit_cat_firms count > 0 } }
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_sup_fid value > 0 } }
+			set_variable = { which = pe_sup_ok value = 0 }
+		}
+	}
+	# Each supplier counts its buyers and marks them.
+	every_owned_colony = {
+		limit = { check_variable = { which = pe_sch value > 0 } }
+		every_deposit = {
+			limit = {
+				has_deposit_category = pe_deposit_cat_firms
+				check_variable = { which = pe_fid value > 0 }
+				OR = { check_variable = { which = pe_prim value = 9 } check_variable = { which = pe_prim value = 2 } check_variable = { which = pe_prim value = 11 } }
+			}
+			root = {
+				set_variable = { which = pe_cur_fid value = prev.pe_fid }
+				set_variable = { which = pe_cur_n value = 0 }
+				every_owned_colony = {
+					limit = { count_deposits = { category = pe_deposit_cat_firms count > 0 } }
+					every_deposit = {
+						limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_sup_fid value = root.pe_cur_fid } }
+						set_variable = { which = pe_sup_ok value = 1 }
+						root = { change_variable = { which = pe_cur_n value = 1 } }
+					}
+				}
+			}
+			set_variable = { which = pe_sup_n value = root.pe_cur_n }
+		}
+	}
+	# Contracts without a supplier end; the buyer waits a year before it looks again.
+	every_owned_colony = {
+		limit = { count_deposits = { category = pe_deposit_cat_firms count > 0 } }
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms }
+			if = { limit = { check_variable = { which = pe_sup_cd value > 0 } } change_variable = { which = pe_sup_cd value = -1 } }
+			if = {
+				limit = { check_variable = { which = pe_sup_fid value > 0 } check_variable = { which = pe_sup_ok value = 0 } }
+				set_variable = { which = pe_sup_fid value = 0 }
+				set_variable = { which = pe_sup_cd value = 4 }
+				if = {
+					limit = { root = { is_ai = no } }
+					prev = { save_event_target_as = pe_msg_planet }
+					root = { create_message = { type = pe_private_economy localization = pe_msg_supply_broken days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+				}
+			}
+		}
+	}
+	# A new contract with a private mine.
+	if = {
+		limit = {
+			any_owned_colony = { check_variable = { which = pe_scn_m value > 0 } }
+			any_owned_colony = { check_variable = { which = pe_scs_m value > 0 } }
+		}
+		set_variable = { which = pe_new_cons value = 0 }
+		set_variable = { which = pe_new_sup value = 0 }
+		random_owned_colony = {
+			limit = { check_variable = { which = pe_scn_m value > 0 } }
+			save_event_target_as = pe_sc_buyer
+			random_deposit = {
+				limit = {
+					has_deposit_category = pe_deposit_cat_firms
+					check_variable = { which = pe_fid value > 0 }
+					check_variable = { which = pe_sup_fid value <= 0 }
+					check_variable = { which = pe_sup_cd value <= 0 }
+					OR = { AND = { check_variable = { which = pe_prim value = 1 } root = { is_catalytic_empire = no } } AND = { check_variable = { which = pe_prim value = 2 }  } }
+				}
+				root = { set_variable = { which = pe_new_cons value = prev.pe_fid } }
+			}
+			change_variable = { which = pe_scn_m value = -1 }
+		}
+		if = {
+			limit = { check_variable = { which = pe_new_cons value > 0 } }
+			random_owned_colony = {
+				limit = { check_variable = { which = pe_scs_m value > 0 } }
+				save_event_target_as = pe_sc_seller
+				random_deposit = {
+					limit = {
+						has_deposit_category = pe_deposit_cat_firms
+						check_variable = { which = pe_fid value > 0 }
+						check_variable = { which = pe_prim value = 9 }
+						check_variable = { which = pe_sup_n value < 2 }
+					}
+					change_variable = { which = pe_sup_n value = 1 }
+					root = { set_variable = { which = pe_new_sup value = prev.pe_fid } }
+				}
+				change_variable = { which = pe_scs_m value = -1 }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_new_sup value > 0 } }
+			event_target:pe_sc_buyer = {
+				random_deposit = {
+					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_fid value = root.pe_new_cons } }
+					set_variable = { which = pe_sup_fid value = root.pe_new_sup }
+				}
+				save_event_target_as = pe_msg_planet
+			}
+			if = {
+				limit = { is_ai = no }
+				create_message = { type = pe_private_economy localization = pe_msg_supply_m days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = name localization = FROM scope = event_target:pe_sc_seller } }
+			}
+		}
+	}
+	# A new contract with a private factory.
+	if = {
+		limit = {
+			any_owned_colony = { check_variable = { which = pe_scn_c value > 0 } }
+			any_owned_colony = { check_variable = { which = pe_scs_c value > 0 } }
+		}
+		set_variable = { which = pe_new_cons value = 0 }
+		set_variable = { which = pe_new_sup value = 0 }
+		random_owned_colony = {
+			limit = { check_variable = { which = pe_scn_c value > 0 } }
+			save_event_target_as = pe_sc_buyer
+			random_deposit = {
+				limit = {
+					has_deposit_category = pe_deposit_cat_firms
+					check_variable = { which = pe_fid value > 0 }
+					check_variable = { which = pe_sup_fid value <= 0 }
+					check_variable = { which = pe_sup_cd value <= 0 }
+					OR = { AND = { check_variable = { which = pe_prim value = 3 }  } AND = { check_variable = { which = pe_prim value = 5 }  } AND = { check_variable = { which = pe_prim value = 6 }  } AND = { check_variable = { which = pe_prim value = 7 }  } AND = { check_variable = { which = pe_prim value = 8 }  } }
+				}
+				root = { set_variable = { which = pe_new_cons value = prev.pe_fid } }
+			}
+			change_variable = { which = pe_scn_c value = -1 }
+		}
+		if = {
+			limit = { check_variable = { which = pe_new_cons value > 0 } }
+			random_owned_colony = {
+				limit = { check_variable = { which = pe_scs_c value > 0 } }
+				save_event_target_as = pe_sc_seller
+				random_deposit = {
+					limit = {
+						has_deposit_category = pe_deposit_cat_firms
+						check_variable = { which = pe_fid value > 0 }
+						check_variable = { which = pe_prim value = 2 }
+						check_variable = { which = pe_sup_n value < 2 }
+					}
+					change_variable = { which = pe_sup_n value = 1 }
+					root = { set_variable = { which = pe_new_sup value = prev.pe_fid } }
+				}
+				change_variable = { which = pe_scs_c value = -1 }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_new_sup value > 0 } }
+			event_target:pe_sc_buyer = {
+				random_deposit = {
+					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_fid value = root.pe_new_cons } }
+					set_variable = { which = pe_sup_fid value = root.pe_new_sup }
+				}
+				save_event_target_as = pe_msg_planet
+			}
+			if = {
+				limit = { is_ai = no }
+				create_message = { type = pe_private_economy localization = pe_msg_supply_c days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = name localization = FROM scope = event_target:pe_sc_seller } }
+			}
+		}
+	}
+	# A new contract with a private farm.
+	if = {
+		limit = {
+			any_owned_colony = { check_variable = { which = pe_scn_f value > 0 } }
+			any_owned_colony = { check_variable = { which = pe_scs_f value > 0 } }
+		}
+		set_variable = { which = pe_new_cons value = 0 }
+		set_variable = { which = pe_new_sup value = 0 }
+		random_owned_colony = {
+			limit = { check_variable = { which = pe_scn_f value > 0 } }
+			save_event_target_as = pe_sc_buyer
+			random_deposit = {
+				limit = {
+					has_deposit_category = pe_deposit_cat_firms
+					check_variable = { which = pe_fid value > 0 }
+					check_variable = { which = pe_sup_fid value <= 0 }
+					check_variable = { which = pe_sup_cd value <= 0 }
+					OR = { AND = { check_variable = { which = pe_prim value = 1 } root = { is_catalytic_empire = yes } } }
+				}
+				root = { set_variable = { which = pe_new_cons value = prev.pe_fid } }
+			}
+			change_variable = { which = pe_scn_f value = -1 }
+		}
+		if = {
+			limit = { check_variable = { which = pe_new_cons value > 0 } }
+			random_owned_colony = {
+				limit = { check_variable = { which = pe_scs_f value > 0 } }
+				save_event_target_as = pe_sc_seller
+				random_deposit = {
+					limit = {
+						has_deposit_category = pe_deposit_cat_firms
+						check_variable = { which = pe_fid value > 0 }
+						check_variable = { which = pe_prim value = 11 }
+						check_variable = { which = pe_sup_n value < 2 }
+					}
+					change_variable = { which = pe_sup_n value = 1 }
+					root = { set_variable = { which = pe_new_sup value = prev.pe_fid } }
+				}
+				change_variable = { which = pe_scs_f value = -1 }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_new_sup value > 0 } }
+			event_target:pe_sc_buyer = {
+				random_deposit = {
+					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_fid value = root.pe_new_cons } }
+					set_variable = { which = pe_sup_fid value = root.pe_new_sup }
+				}
+				save_event_target_as = pe_msg_planet
+			}
+			if = {
+				limit = { is_ai = no }
+				create_message = { type = pe_private_economy localization = pe_msg_supply_f days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = name localization = FROM scope = event_target:pe_sc_seller } }
+			}
+		}
 	}
 }

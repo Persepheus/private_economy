@@ -433,7 +433,7 @@ const msg = loc => `owner = { create_message = { type = pe_private_economy local
 // pe_corp: the corporation (slot 1-8) the firm belongs to, 0 = independent; it stays through
 // stage changes, restructuring and moves. So does a corporate loan (pe_loan, pe_lender,
 // pe_loan_q: quarters of bridging loans in a row).
-const initFirm = (code, stage, fcap, debt, age = 'root.pe_chg_age', corp = 'root.pe_chg_corp') => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } set_variable = { which = pe_debt value = ${debt} } set_variable = { which = pe_age value = ${age} } set_variable = { which = pe_corp value = ${corp} } set_variable = { which = pe_loan value = root.pe_chg_loan } set_variable = { which = pe_lender value = root.pe_chg_lender } set_variable = { which = pe_loan_q value = root.pe_chg_loanq } }`;
+const initFirm = (code, stage, fcap, debt, age = 'root.pe_chg_age', corp = 'root.pe_chg_corp') => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } set_variable = { which = pe_debt value = ${debt} } set_variable = { which = pe_age value = ${age} } set_variable = { which = pe_corp value = ${corp} } set_variable = { which = pe_loan value = root.pe_chg_loan } set_variable = { which = pe_lender value = root.pe_chg_lender } set_variable = { which = pe_loan_q value = root.pe_chg_loanq } set_variable = { which = pe_fid value = root.pe_chg_fid } set_variable = { which = pe_sup_fid value = root.pe_chg_supfid } }`;
 const RETOOL_AGE = 40;                                 // quarters (10 years) before a firm may restructure
 const RETOOL_CD = 1800;                                // days (5 years) between two restructurings on a planet
 // Real net output per filled job (one job = 100 workforce) of each private job, measured
@@ -660,6 +660,8 @@ pe_site_complete = {
 			set_variable = { which = pe_chg_loan value = 0 }
 			set_variable = { which = pe_chg_lender value = 0 }
 			set_variable = { which = pe_chg_loanq value = 0 }
+			set_variable = { which = pe_chg_fid value = 0 }
+			set_variable = { which = pe_chg_supfid value = 0 }
 		}
 		if = { limit = { is_variable_set = pe_corp } root = { set_variable = { which = pe_chg_corp value = prev.pe_corp } } }
 		if = {
@@ -705,6 +707,8 @@ pe_firm_change = {
 				set_variable = { which = pe_chg_loan value = prev.pe_loan }
 				set_variable = { which = pe_chg_lender value = prev.pe_lender }
 				set_variable = { which = pe_chg_loanq value = prev.pe_loan_q }
+				set_variable = { which = pe_chg_fid value = prev.pe_fid }
+				set_variable = { which = pe_chg_supfid value = prev.pe_sup_fid }
 			}
 			remove_deposit = yes
 		}
@@ -807,6 +811,8 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM
 		set_variable = { which = pe_thr value = pe_val }
 		multiply_variable = { which = pe_thr value = 0.3 }
 		if = { limit = { check_variable = { which = pe_thr value < 3 } } set_variable = { which = pe_thr value = 3 } }
+		# A supply contract (as buyer or supplier) makes it less willing to change.
+		if = { limit = { OR = { check_variable = { which = pe_sup_fid value > 0 } check_variable = { which = pe_sup_n value > 0 } } } multiply_variable = { which = pe_thr value = 1.5 } }
 		if = {
 			limit = {
 				check_variable = { which = pe_debt value <= 0 }
@@ -853,6 +859,8 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM
 				set_variable = { which = pe_chg_loan value = prev.pe_loan }
 				set_variable = { which = pe_chg_lender value = prev.pe_lender }
 				set_variable = { which = pe_chg_loanq value = prev.pe_loan_q }
+				set_variable = { which = pe_chg_fid value = prev.pe_fid }
+				set_variable = { which = pe_chg_supfid value = prev.pe_sup_fid }
 			}
 			remove_deposit = yes
 		}
@@ -922,6 +930,8 @@ pe_relocate_exec = {
 				set_variable = { which = pe_chg_loan value = prev.pe_loan }
 				set_variable = { which = pe_chg_lender value = prev.pe_lender }
 				set_variable = { which = pe_chg_loanq value = prev.pe_loan_q }
+				set_variable = { which = pe_chg_fid value = prev.pe_fid }
+				set_variable = { which = pe_chg_supfid value = prev.pe_sup_fid }
 		}
 		remove_deposit = yes
 	}
@@ -1153,6 +1163,17 @@ for (const c of [1, 2, 3, 4]) for (const s of STAGES) {
   loc.english.push(` pe_msg_nat_${c}_${s}:0 "We nationalised a ${size[0]} private firm on $PLANET$ for §R${m}§! £minerals£ and §R${t}§! £trade£. It is a ${distName(c, true)} district again."`);
   loc.german.push(` pe_msg_nat_${c}_${s}:0 "Wir haben ein ${size[1]} Privatunternehmen auf $PLANET$ für §R${m}§! £minerals£ und §R${t}§! £trade£ verstaatlicht. Es ist wieder ein ${distName(c, false)}distrikt."`);
 }
+// --- Supply chains ------------------------------------------------------------------------
+// Buyers and suppliers (letters): a mine supplies steelworks and factories (minerals), a
+// factory supplies labs, trading houses and media houses (consumer goods); with Catalytic
+// Processing a farm supplies steelworks (food). A supplier serves at most SUP_CAP buyers.
+// Planets with contracted buyers or suppliers of a sector get +SUP_STEP output there.
+const SUP_CAP = 2;
+const SUP_STEP = 0.05;
+const SUP_BUYERS = {a: 'm', c: 'm', t: 'c', x: 'c', y: 'c', z: 'c', b: 'c'};
+const SUP_SUPPLIERS = ['m', 'c', 'f'];
+const SUP_LETTERS = [...new Set([...Object.keys(SUP_BUYERS), ...SUP_SUPPLIERS])];
+
 // --- Clusters and corporations -----------------------------------------------------------
 // Clusters: 2 / 3 / 4+ firms with the same main product on a planet give that sector there
 // +3 / 6 / 9% output (state jobs too). Vanilla has no output multiplier for engineers alone:
@@ -1207,9 +1228,19 @@ ${LETTERS.map(l => `\tset_variable = { which = pe_cn_${l} value = 0 }`).join('\n
 ${GROUPS.map(g => `\tset_variable = { which = pe_ind_g${g} value = 0 }`).join('\n')}
 	set_variable = { which = pe_ind3 value = 0 }
 ${CORPS.map(k => `\tset_variable = { which = pe_mem_${k} value = 0 }`).join('\n')}
+${SUP_SUPPLIERS.map(l => `\tset_variable = { which = pe_scn_${l} value = 0 }\n\tset_variable = { which = pe_scs_${l} value = 0 }`).join('\n')}
+	set_variable = { which = pe_sch value = 0 }
+${SUP_LETTERS.map(l => `\tset_variable = { which = pe_scl_${l} value = 0 }`).join('\n')}
 	every_deposit = {
 		limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_prim }
 		if = { limit = { NOT = { is_variable_set = pe_corp } } set_variable = { which = pe_corp value = 0 } }
+		if = { limit = { NOT = { is_variable_set = pe_sup_fid } } set_variable = { which = pe_sup_fid value = 0 } }
+		if = { limit = { NOT = { is_variable_set = pe_sup_n } } set_variable = { which = pe_sup_n value = 0 } }
+		if = { limit = { NOT = { is_variable_set = pe_sup_cd } } set_variable = { which = pe_sup_cd value = 0 } }
+		# Supply chains: buyers without a supplier (by the supplier they need), suppliers with room,
+		# and contracted firms per sector (for the modifier).
+${Object.entries(SUP_BUYERS).map(([l, need]) => `\t\tif = {\n\t\t\tlimit = { check_variable = { which = pe_prim value = ${prim(l)} } }\n\t\t\tif = {\n\t\t\t\tlimit = { check_variable = { which = pe_sup_fid value > 0 } }\n\t\t\t\tprev = { change_variable = { which = pe_scl_${l} value = 1 } }\n\t\t\t}\n\t\t\telse_if = {\n\t\t\t\tlimit = { check_variable = { which = pe_sup_cd value <= 0 } }\n${l === 'a' ? `\t\t\t\tif = { limit = { root = { is_catalytic_empire = yes } } prev = { change_variable = { which = pe_scn_f value = 1 } } }\n\t\t\t\telse = { prev = { change_variable = { which = pe_scn_m value = 1 } } }` : `\t\t\t\tprev = { change_variable = { which = pe_scn_${need} value = 1 } }`}\n\t\t\t}\n\t\t}`).join('\n')}
+${SUP_SUPPLIERS.map(l => `\t\tif = {\n\t\t\tlimit = { check_variable = { which = pe_prim value = ${prim(l)} } }\n\t\t\tprev = { change_variable = { which = pe_sch value = 1 } }\n\t\t\tif = { limit = { check_variable = { which = pe_sup_n value < ${SUP_CAP} } } prev = { change_variable = { which = pe_scs_${l} value = 1 } } }\n\t\t\tif = { limit = { check_variable = { which = pe_sup_n value > 0 } } prev = { change_variable = { which = pe_scl_${l} value = 1 } } }\n\t\t}`).join('\n')}
 ${ifChain(LETTERS, l => `check_variable = { which = pe_prim value = ${prim(l)} }`, l => `prev = { change_variable = { which = pe_cn_${l} value = 1 } }`, '\t\t')}
 		if = {
 			limit = { check_variable = { which = pe_corp value = 0 } }
@@ -1223,6 +1254,7 @@ ${corpChain('pe_corp', k => `prev = { change_variable = { which = pe_mem_${k} va
 # Colony scope, quarterly: the cluster modifier of each main product (level = firms - 1, at
 # most 3), changed only when the level changes.
 pe_cluster_apply = {
+${SUP_LETTERS.map(l => `\tif = {\n\t\tlimit = { check_variable = { which = pe_scl_${l} value > 0 } }\n\t\tif = { limit = { NOT = { has_modifier = pe_supply_${l} } } add_modifier = { modifier = pe_supply_${l} days = -1 } }\n\t}\n\telse_if = { limit = { has_modifier = pe_supply_${l} } remove_modifier = pe_supply_${l} }`).join('\n')}
 ${LETTERS.map(l => `	set_variable = { which = pe_tmp value = pe_cn_${l} }
 	change_variable = { which = pe_tmp value = -1 }
 	if = { limit = { check_variable = { which = pe_tmp value < 0 } } set_variable = { which = pe_tmp value = 0 } }
@@ -2088,9 +2120,10 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
 }
 write('common/scripted_effects/pe_corp_effects_generated.txt', corp);
 
-write('common/static_modifiers/pe_corp_modifiers_generated.txt', header + `# Clusters (pe_cluster_apply), corporation headquarters and branches (one per name, so the
-# planet view names the corporation), and the price war.
-` + LETTERS.flatMap(l => [1, 2, 3].map(n => `pe_cluster_${l}_${n} = {\n\t${CLUSTER_CAT[l]}_produces_mult = ${+(n * CLUSTER_STEP * (l === 'z' ? 0.5 : 1)).toFixed(3)}\n}\n`)).join('') +
+write('common/static_modifiers/pe_corp_modifiers_generated.txt', header + `# Clusters (pe_cluster_apply), supply contracts, corporation headquarters and branches (one
+# per name, so the planet view names the corporation), and the price war.
+` +
+  SUP_LETTERS.map(l => `pe_supply_${l} = {\n\t${CLUSTER_CAT[l]}_produces_mult = ${+(SUP_STEP * (l === 'z' ? 0.5 : 1)).toFixed(3)}\n}\n`).join('') + LETTERS.flatMap(l => [1, 2, 3].map(n => `pe_cluster_${l}_${n} = {\n\t${CLUSTER_CAT[l]}_produces_mult = ${+(n * CLUSTER_STEP * (l === 'z' ? 0.5 : 1)).toFixed(3)}\n}\n`)).join('') +
   NAME_IDS.map(id => `pe_corp_hq_${id} = {\n\tplanet_stability_add = 1\n\tplanet_jobs_produces_mult = 0.02\n}\npe_corp_br_${id} = {\n\tplanet_amenities_add = 50\n}\n`).join('') +
   `pe_price_war = {\n\tplanet_jobs_produces_mult = 0.03\n}\n`);
 
@@ -2114,6 +2147,8 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
     li ? ` pe_corp_br_${id}:0 "Niederlassung: ${CORP_NAMES[id - 1]}"` : ` pe_corp_br_${id}:0 "Branch: ${CORP_NAMES[id - 1]}"`,
     li ? ` pe_corp_br_${id}_desc:0 "Firmen des Konzerns ${CORP_NAMES[id - 1]} arbeiten hier."` : ` pe_corp_br_${id}_desc:0 "Firms of the corporation ${CORP_NAMES[id - 1]} work here."`));
   GROUPS.forEach(g => L.push(` pe_corp_grp_${g}:0 "${CORP_GROUP_NAMES[g][li]}"`));
+  SUP_LETTERS.forEach(l => L.push(li ? ` pe_supply_${l}:0 "Lieferverträge: ${CLUSTER_NAMES[l][1]}"` : ` pe_supply_${l}:0 "Supply Contracts: ${CLUSTER_NAMES[l][0]}"`,
+    li ? ` pe_supply_${l}_desc:0 "Privatfirmen dieser Branche hier haben feste Lieferverträge mit Firmen auf anderen Planeten: verlässliche Mengen, weniger Leerlauf."` : ` pe_supply_${l}_desc:0 "Private firms of this sector here have fixed supply contracts with firms on other planets: reliable quantities, less idle time."`));
   LETTERS.forEach(l => [1, 2, 3].forEach(n => L.push(li
     ? ` pe_cluster_${l}_${n}:0 "${CLUSTER_NAMES[l][1]}-Cluster (${n + 1}${n === 3 ? '+' : ''} Firmen)"`
     : ` pe_cluster_${l}_${n}:0 "${CLUSTER_NAMES[l][0]} Cluster (${n + 1}${n === 3 ? '+' : ''} firms)"`,

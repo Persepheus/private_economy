@@ -73,3 +73,7 @@
  pe.20.a:0 "Schließen."
  pe_leased_fleet:0 "Geleast von den Private Holdings"
  pe_leased_fleet_desc:0 "Die Holdings zahlen den Unterhalt dieser Flotte; sie belegt keine Flottenkapazität."
+ pe_msg_supply_m:0 "Liefervertrag: Eine private Mine auf $FROM$ beliefert jetzt eine Firma auf $PLANET$ mit Mineralien. Beide Branchen produzieren mehr."
+ pe_msg_supply_c:0 "Liefervertrag: Eine private Fabrik auf $FROM$ beliefert jetzt eine Firma auf $PLANET$ mit Konsumgütern. Beide Branchen produzieren mehr."
+ pe_msg_supply_f:0 "Liefervertrag: Ein privater Agrarbetrieb auf $FROM$ beliefert jetzt eine Firma auf $PLANET$ mit Nahrung. Beide Branchen produzieren mehr."
+ pe_msg_supply_broken:0 "Ein Liefervertrag einer Firma auf $PLANET$ ist beendet: Ihren Lieferanten gibt es nicht mehr. Die Firma sucht in einem Jahr einen neuen."

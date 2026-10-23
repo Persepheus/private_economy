@@ -18,6 +18,7 @@
 #   event pe.277 corporate offers now: war lease (also in peace), clearing, exploration charter,
 #                convoy protection, salvage, Dyson swarm (each only where its condition holds)
 #   event pe.278 end all running corporate fleet contracts (fleets return, no loot)
+#   event pe.279 the supply chain step now (run pe.7 first)
 namespace = pe
 
 country_event = {
@@ -317,5 +318,16 @@ country_event = {
 		set_variable = { which = pe_charter_q value = 0 }
 		set_variable = { which = pe_convoy_q value = 0 }
 		log = "private_economy: pe.278 all corporate fleet contracts ended"
+	}
+}
+
+# event pe.279: the supply chain step now (pe.7 first, so the planets have counted their firms).
+country_event = {
+	id = pe.279
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_supply_step = yes
+		log = "private_economy: pe.279 supply step: last new buyer [Root.pe_new_cons], supplier [Root.pe_new_sup] (firm numbers)"
 	}
 }

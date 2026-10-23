@@ -73,3 +73,7 @@
  pe.20.a:0 "Close."
  pe_leased_fleet:0 "Leased from the Private Holdings"
  pe_leased_fleet_desc:0 "The holdings pay this fleet's upkeep; it takes no naval capacity."
+ pe_msg_supply_m:0 "Supply contract: a private mine on $FROM$ now supplies a firm on $PLANET$ with minerals. Both sectors produce more."
+ pe_msg_supply_c:0 "Supply contract: a private factory on $FROM$ now supplies a firm on $PLANET$ with consumer goods. Both sectors produce more."
+ pe_msg_supply_f:0 "Supply contract: a private farm on $FROM$ now supplies a firm on $PLANET$ with food. Both sectors produce more."
+ pe_msg_supply_broken:0 "A supply contract of a firm on $PLANET$ has ended: its supplier is gone. The firm looks for a new one in a year."
