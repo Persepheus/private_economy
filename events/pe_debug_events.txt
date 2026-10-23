@@ -290,6 +290,7 @@ country_event = {
 		remove_country_flag = pe_swarm_cd
 		remove_country_flag = pe_furnace_cd
 		remove_country_flag = pe_defence_cd
+		remove_country_flag = pe_defence_hq_cd
 		pe_corp_charter = yes
 		pe_corp_convoy = yes
 		pe_corp_salvage = yes
