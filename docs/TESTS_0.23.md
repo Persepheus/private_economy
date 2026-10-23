@@ -49,6 +49,14 @@ Alle Schiffe gehören dem Konzern (Holdings), werden dir verleast (10 % Unterhal
   - Auf dem Hauptsitz als Vorkommen „Konzernproduktion: Energie“ und im Haushalt als Zeile „Konzernproduktion“. Im Save: Hauptstadt Cevanti, +62 Energie im Monat. Das ist der Stationswert 31 (zwei Bergbaustationen plus 20 für den Schwarm) mal 2, bei Energie als Produkt.
   - Neu: Das Konzernregister `event pe.273` zeigt pro Konzern „Konzernproduktion +62 Energie/Monat“.
 
+## Änderungen 0.23.3 (Dyson-Schwarm)
+- **Kriegsleasing getestet:** Kauf am Ende funktioniert.
+- **Der Schwarm war zu niedrig bewertet:** Er produziert selbst nichts, sondern verstärkt die Station am Stern: Stufe I +500 %, II +1500 %, III +3000 % (Vanilla). Aus 3 Physik werden in Stufe I 18 Physik. Bisher zählte der Konzern pauschal 20.
+  - Der Konzern baut einen Schwarm nur an einem Stern mit nutzbarem Vorkommen und übernimmt dessen Station (baut sie oder kauft deine: Laissez-faire 100, sonst 200 Mineralien).
+  - Gewertet wird der verstärkte Ertrag. Beispiel 3 Physik in Stufe I: 18 Physik, Wert 63, also 126 Konzernproduktion.
+  - Bestehende Schwärme übernehmen die Station am Stern im nächsten Quartal nachträglich.
+- **Ausbau:** Der Konzern baut seinen Schwarm aus, sobald er es bezahlen kann: Stufe II für 4000, Stufe III für 8000 (mit der Technik Dyson-Sphäre). Es gilt die Vanilla-Bauzeit, dazu kommt eine Nachricht.
+
 ## Debug
 - `event pe.278`: alle laufenden Konzernflotten-Verträge beenden (Flotten verschwinden, keine Beute).
 - `event pe.277`: alle Konzern-Angebote sofort, jeweils nur, wo die Bedingung erfüllt ist: Kriegsleasing auch im Frieden, Säuberung, Charta, Konvoischutz, Bergung, Schwarm.

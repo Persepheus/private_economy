@@ -8,7 +8,8 @@ pe_pirate_system = {
 	any_fleet_in_system = { owner = { OR = { is_country_type = pirate is_country_type = marauder_raiders } } }
 }
 
-# Corporate Dyson swarm: a single star without a megastructure (system scope).
+# Corporate Dyson swarm: a single star without a megastructure, with an ordinary orbital
+# deposit whose station the corporation can have (none yet, or ours) (system scope).
 pe_swarm_system = {
 	is_binary_star = no
 	is_trinary_star = no
@@ -17,5 +18,16 @@ pe_swarm_system = {
 		is_star_class = sc_neutron_star
 		is_star_class = sc_pulsar
 	}
-	any_system_planet = { is_star = yes NOT = { has_planet_flag = has_megastructure } }
+	any_system_planet = { pe_swarm_star = yes }
+}
+
+# Planet scope: a star for a corporate swarm (see pe_swarm_system).
+pe_swarm_star = {
+	is_star = yes
+	NOT = { has_planet_flag = has_megastructure }
+	pe_orbital_allowed = yes
+	OR = {
+		has_orbital_station = no
+		pe_state_station = yes
+	}
 }

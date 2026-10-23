@@ -1884,6 +1884,10 @@ ${corpChain('x', k => '', '\t\t\t\t').split('\n').map((_, i) => `\t\t\t\t${i ? '
 			}
 			set_variable = { which = pe_stval value = 0 }
 ${ifChain(ORBITALS, o => `has_deposit = ${o.key}`, o => `set_variable = { which = pe_stval value = ${o.value} } root = { ${Object.entries(o.amounts).filter(([r]) => ST_STOCK.includes(r)).map(([r, n]) => `change_variable = { which = pe_sr_${r} value = ${n} }`).join(' ')} }`, '\t\t\t')}
+			# A Dyson swarm at this star multiplies the station's output (stage I x6, II x16, III x31).
+			if = { limit = { has_modifier = dyson_swarm_1_mod } multiply_variable = { which = pe_stval value = 6 } }
+			else_if = { limit = { has_modifier = dyson_swarm_2_mod } multiply_variable = { which = pe_stval value = 16 } }
+			else_if = { limit = { has_modifier = dyson_swarm_3_mod } multiply_variable = { which = pe_stval value = 31 } }
 ${corpChain('pe_stk', k => `root = { change_variable = { which = ${C(k, 'sv')} value = prev.pe_stval } change_variable = { which = ${C(k, 'st')} value = 1 } } if = { limit = { orbital_station = { has_fleet_flag = pe_st_share } } root = { change_variable = { which = ${C(k, 'shv')} value = prev.pe_stval } } }`, '\t\t\t')}
 		}
 		# The stored output is used up (three months).
@@ -1896,7 +1900,6 @@ ${ST_STOCK.map(r => `			export_resource_stockpile_to_variable = { resource = ${r
 		}
 	}
 	# The corporate production on the headquarters, the earnings and the share for us.
-${CORPS.map(k => `\tif = { limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'sw')} value = 1 } } change_variable = { which = ${C(k, 'sv')} value = 20 } }`).join('\n')}
 ${CORPS.map(k => `	if = {
 		limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'sv')} value > 0 } }
 		if = { limit = { NOT = { is_variable_set = ${C(k, 'prod')} } } ${GROUPS.map((g, i) => `${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = ${C(k, 'grp')} value = ${g} } } set_variable = { which = ${C(k, 'prod')} value = ${GROUP_PROD[g]} } }`).join(' ')} }

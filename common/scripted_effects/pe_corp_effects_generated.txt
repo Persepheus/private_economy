@@ -5552,6 +5552,10 @@ pe_corp_station_output = {
 			else_if = { limit = { has_deposit = d_physics_25 } set_variable = { which = pe_stval value = 87.5 } root = {  } }
 			else_if = { limit = { has_deposit = d_engineering_25 } set_variable = { which = pe_stval value = 87.5 } root = {  } }
 			else_if = { limit = { has_deposit = d_society_25 } set_variable = { which = pe_stval value = 87.5 } root = {  } }
+			# A Dyson swarm at this star multiplies the station's output (stage I x6, II x16, III x31).
+			if = { limit = { has_modifier = dyson_swarm_1_mod } multiply_variable = { which = pe_stval value = 6 } }
+			else_if = { limit = { has_modifier = dyson_swarm_2_mod } multiply_variable = { which = pe_stval value = 16 } }
+			else_if = { limit = { has_modifier = dyson_swarm_3_mod } multiply_variable = { which = pe_stval value = 31 } }
 			if = { limit = { check_variable = { which = pe_stk value = 1 } } root = { change_variable = { which = pe_c1_sv value = prev.pe_stval } change_variable = { which = pe_c1_st value = 1 } } if = { limit = { orbital_station = { has_fleet_flag = pe_st_share } } root = { change_variable = { which = pe_c1_shv value = prev.pe_stval } } } }
 			else_if = { limit = { check_variable = { which = pe_stk value = 2 } } root = { change_variable = { which = pe_c2_sv value = prev.pe_stval } change_variable = { which = pe_c2_st value = 1 } } if = { limit = { orbital_station = { has_fleet_flag = pe_st_share } } root = { change_variable = { which = pe_c2_shv value = prev.pe_stval } } } }
 			else_if = { limit = { check_variable = { which = pe_stk value = 3 } } root = { change_variable = { which = pe_c3_sv value = prev.pe_stval } change_variable = { which = pe_c3_st value = 1 } } if = { limit = { orbital_station = { has_fleet_flag = pe_st_share } } root = { change_variable = { which = pe_c3_shv value = prev.pe_stval } } } }
@@ -5601,14 +5605,6 @@ pe_corp_station_output = {
 		}
 	}
 	# The corporate production on the headquarters, the earnings and the share for us.
-	if = { limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_sw value = 1 } } change_variable = { which = pe_c1_sv value = 20 } }
-	if = { limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_sw value = 1 } } change_variable = { which = pe_c2_sv value = 20 } }
-	if = { limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_sw value = 1 } } change_variable = { which = pe_c3_sv value = 20 } }
-	if = { limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_sw value = 1 } } change_variable = { which = pe_c4_sv value = 20 } }
-	if = { limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_sw value = 1 } } change_variable = { which = pe_c5_sv value = 20 } }
-	if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_sw value = 1 } } change_variable = { which = pe_c6_sv value = 20 } }
-	if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_sw value = 1 } } change_variable = { which = pe_c7_sv value = 20 } }
-	if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_sw value = 1 } } change_variable = { which = pe_c8_sv value = 20 } }
 	if = {
 		limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_sv value > 0 } }
 		if = { limit = { NOT = { is_variable_set = pe_c1_prod } } if = { limit = { check_variable = { which = pe_c1_grp value = 1 } } set_variable = { which = pe_c1_prod value = 1 } } else_if = { limit = { check_variable = { which = pe_c1_grp value = 2 } } set_variable = { which = pe_c1_prod value = 3 } } else_if = { limit = { check_variable = { which = pe_c1_grp value = 3 } } set_variable = { which = pe_c1_prod value = 4 } } else_if = { limit = { check_variable = { which = pe_c1_grp value = 4 } } set_variable = { which = pe_c1_prod value = 8 } } }
