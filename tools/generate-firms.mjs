@@ -355,10 +355,38 @@ pe_private_dividends = {
 pe_corp_production = {
 	use_for_ai_budget = no
 }
+pe_supply_deal = {
+	use_for_ai_budget = no
+}
 `);
+// A supply deal (pe.260): a private firm delivers good X every month for two years and takes
+// good Y; on the capital, amounts as bits (pe_dlxa_b<i>, pe_dlya_b<i>), goods pe_dlx / pe_dly.
+const DEAL_RES = ['alloys', 'consumer_goods', 'minerals', 'energy', 'food'];
+const dealDeposit = `
+d_pe_supply_deal = {
+	icon = d_tradestation_interior
+	is_for_colonizable = yes
+	category = pe_deposit_cat_ledger
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = pe_supply_deal
+${DEAL_RES.flatMap((r, ri) => LEDGER_BITS.map((b, i) => `		produces = {
+			trigger = { planet = { check_variable = { which = pe_dlx value = ${ri + 1} } check_variable = { which = pe_dlxa_b${i} value = 1 } } }
+			${r} = ${b}
+		}`)).join('\n')}
+${DEAL_RES.flatMap((r, ri) => LEDGER_BITS.map((b, i) => `		upkeep = {
+			trigger = { planet = { check_variable = { which = pe_dly value = ${ri + 1} } check_variable = { which = pe_dlya_b${i} value = 1 } } }
+			${r} = ${b}
+		}`)).join('\n')}
+	}
+}
+`;
 write('common/deposits/pe_ledger_deposits.txt', header + `# Ledgers of the private economy: what the state pays each month, as trade upkeep (see
-# pe_ledgers). No district slot.
-` + [['d_pe_ledger_profit', 'pe_private_profits', 'lp', 'upkeep'], ['d_pe_ledger_savings', 'pe_private_savings', 'ls', 'upkeep'], ['d_pe_ledger_dividend', 'pe_private_dividends', 'ld', 'produces']].map(([key, cat, v, kind]) => `
+# pe_ledgers), and the supply deal with a private firm. No district slot.
+` + dealDeposit + [['d_pe_ledger_profit', 'pe_private_profits', 'lp', 'upkeep'], ['d_pe_ledger_savings', 'pe_private_savings', 'ls', 'upkeep'], ['d_pe_ledger_dividend', 'pe_private_dividends', 'ld', 'produces']].map(([key, cat, v, kind]) => `
 ${key} = {
 	icon = d_tradestation_interior
 	is_for_colonizable = yes
@@ -1103,6 +1131,8 @@ loc.german.push(' pe_private_profits:0 "Gewinnauszahlung an Privatfirmen"', ' pe
   ' d_pe_ledger_profit:0 "Gewinnauszahlung an Privatfirmen"', ' d_pe_ledger_profit_desc:0 "§HEine Ausgabe des Staates.§! Die Privatfirmen auf diesem Planeten liefern ihre ganze Produktion an das Reich, genau wie Staatsjobs. Dafür zahlt der Staat ihnen jeden Monat ihren Gewinnanteil in Handel: einen Teil des Werts, den ihre Jobs schaffen, je nach Wirtschaftsordnung (Gelenkt 15 %, Gemischt 20 %, Freie Marktwirtschaft 25 %, Laissez-faire 35 %), abzüglich ihrer laufenden Kosten. Davon wachsen die Firmen, und neue werden gegründet.\\n\\nGewinne und Ersparnisse zusammen kosten höchstens 40 % des Brutto-Handels; was der Staat nicht zahlt, bekommen die Firmen auch nicht."',
   ' d_pe_ledger_savings:0 "Private Ersparnisse"', ' d_pe_ledger_savings_desc:0 "§HEine Ausgabe des Staates.§! Jeden Monat fließt ein Teil unseres Handelseinkommens als private Ersparnisse in den Investorenpool, je nach Wirtschaftsordnung (Gelenkt 5 %, Gemischt 10 %, Freie Marktwirtschaft 15 %, Laissez-faire 20 %). Aus dem Pool gründen Investoren neue Firmen und kaufen Staatsdistrikte."');
 loc.german.push(' pe_deposit_cat_automation:0 "Private Automatisierung"');
+loc.english.push(' pe_supply_deal:0 "Supply Deal with a Private Firm"', ' d_pe_supply_deal:0 "Supply Deal"', ' d_pe_supply_deal_desc:0 "A private firm delivers us this good every month for two years and takes another one in return, of which we had plenty (event §YA Special Deal§!). The deal ends early if we run out of the good we pay with."');
+loc.german.push(' pe_supply_deal:0 "Liefervertrag mit einer Privatfirma"', ' d_pe_supply_deal:0 "Liefervertrag"', ' d_pe_supply_deal_desc:0 "Eine Privatfirma liefert uns zwei Jahre lang jeden Monat diese Ware und nimmt dafür eine andere, von der wir reichlich hatten (Ereignis §YEin besonderes Angebot§!). Der Vertrag endet vorzeitig, wenn uns die Ware ausgeht, mit der wir bezahlen."');
 for (const a of AUTO_JOBS) for (const l of [1, 2]) {
   const [en, de] = AUTO_NAMES[a], lv = l === 1 ? 'I' : 'II';
   loc.english.push(` d_pe_auto_${a}_${l}:0 "Private Automation (${en}) ${lv}"`,

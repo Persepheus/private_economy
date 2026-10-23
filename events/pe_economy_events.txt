@@ -16,6 +16,7 @@ country_event = {
 	immediate = {
 		pe_init = yes
 		pe_monthly_sites = yes
+		pe_deal_month = yes
 		change_variable = { which = pe_months value = 1 }
 		if = {
 			limit = { check_variable = { which = pe_months value >= 3 } }

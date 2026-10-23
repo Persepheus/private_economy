@@ -89,3 +89,28 @@ Ein laufendes Spiel kann weiterlaufen.
 3. Der Tooltip von „Standortvorteile“ listet die Branchen mit Cluster und Verträgen.
 4. Der nächste neue Konzern hat im Event den richtigen Namen.
 
+## 0.26.2: Liefervertrag statt Einmallieferung
+- **Wann:** Eine Ware ist knapp (Monatsüberschuss unter der Sicherheitsmarge) **und** ihr Lager ist weniger als halb voll. Eine Privatfirma, die sie herstellt, macht das Angebot („Ein besonderes Angebot“). Höchstens alle 3 Jahre, nie während ein Vertrag läuft.
+- **Menge pro Monat, 24 Monate lang:**
+  - Der Fehlbetrag bis zur Sicherheitsmarge, mindestens 5 % deiner Bruttoproduktion dieser Ware.
+  - Mindestens 5, höchstens 500.
+- **Bezahlung pro Monat:**
+  - In der Ware, von der du am meisten hast: 80 % des Marktwerts.
+  - Höchstens 500, und höchstens so viel, dass die Hälfte deines Lagers die zwei Jahre deckt.
+- **Haushalt:** Auf der Hauptwelt steht das Vorkommen **„Liefervertrag“**. Im Haushalt erscheint die Zeile „Liefervertrag mit einer Privatfirma“: die Lieferung als Einkommen, die Bezahlung als Unterhalt.
+- **Ende:**
+  - Nach 24 Monaten, mit einer Nachricht.
+  - Vorzeitig, wenn das Lager der Bezahlware unter eine Monatsrate fällt, ebenfalls mit Nachricht.
+- **Investoren:** Die Marge der Firma (ein Viertel des Marktwerts der Lieferung) geht jeden Monat an den Pool.
+- **Verhandeln:** wie bisher. Bei Erfolg 15 % weniger Bezahlung und die halbe Marge.
+
+### Prüfen
+1. `event pe.7`, dann `event pe.12`.
+   - pe.12 erzwingt ein Angebot auch ohne Mangel und ohne halbleeres Lager.
+   - Das Angebot nennt Monatsmenge und Gesamtmenge.
+2. Annehmen:
+   - Auf der Hauptwelt erscheint „Liefervertrag“.
+   - Im Haushalt erscheint die Zeile mit Einkommen und Unterhalt.
+3. Nach 24 Monaten verschwindet das Vorkommen, und die Nachricht kommt.
+4. Logs: keine Fehler aus pe_patron_effects.txt (pe_deal_fire, pe_deal_apply, pe_deal_month).
+

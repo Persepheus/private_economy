@@ -17,9 +17,9 @@ country_event = {
 
 	option = {
 		name = pe.260.a
-		allow = { check_variable = { which = pe_deal_ystock value >= pe_deal_yamt } }
-		pe_deal_apply = yes
+		allow = { check_variable = { which = pe_deal_ystock value >= pe_deal_ytot } }
 		custom_tooltip = pe.260.a.tt
+		hidden_effect = { pe_deal_apply = yes }
 		ai_chance = { factor = 70 }
 	}
 	option = {
@@ -30,9 +30,10 @@ country_event = {
 				50 = {
 					set_variable = { which = pe_deal_ok value = 1 }
 					multiply_variable = { which = pe_deal_yamt value = 0.85 }
-					divide_variable = { which = pe_deal_yamt value = 10 }
 					round_variable = pe_deal_yamt
-					multiply_variable = { which = pe_deal_yamt value = 10 }
+					if = { limit = { check_variable = { which = pe_deal_yamt value < 1 } } set_variable = { which = pe_deal_yamt value = 1 } }
+					set_variable = { which = pe_deal_ytot value = pe_deal_yamt }
+					multiply_variable = { which = pe_deal_ytot value = 24 }
 					multiply_variable = { which = pe_deal_profit value = 0.5 }
 					round_variable = pe_deal_profit
 				}
@@ -60,8 +61,9 @@ country_event = {
 	option = {
 		name = pe.261.a
 		trigger = { check_variable = { which = pe_deal_ok value = 1 } }
-		allow = { check_variable = { which = pe_deal_ystock value >= pe_deal_yamt } }
-		pe_deal_apply = yes
+		allow = { check_variable = { which = pe_deal_ystock value >= pe_deal_ytot } }
+		custom_tooltip = pe.260.a.tt
+		hidden_effect = { pe_deal_apply = yes }
 	}
 	option = {
 		name = pe.261.b

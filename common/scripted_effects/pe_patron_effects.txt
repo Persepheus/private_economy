@@ -462,14 +462,16 @@ pe_labour_fire = {
 
 # --- Supply deals ---------------------------------------------------------------------
 
-# Country scope, quarterly: when a market good is short, a private firm that makes it
-# offers a deal (pe.260): it delivers a year's shortfall in exchange for a good we have
-# plenty of, cheaper than the market would be for us. Its margin goes to the investors.
-# At most every three years, a 30% chance per quarter.
+# Country scope, quarterly: when a market good is short and its store less than half full, a
+# private firm that makes it offers a supply deal (pe.260): for two years it delivers every
+# month what we lack, in exchange for a good we have plenty of, cheaper than the market would
+# be for us. Its margin goes to the investors. At most every three years and never while a
+# deal runs, a 30% chance per quarter.
 pe_deal = {
 	if = {
 		limit = {
 			NOT = { has_country_flag = pe_deal_cd }
+			NOT = { check_variable = { which = pe_deal_mon value > 0 } }
 			OR = {
 				AND = { check_variable = { which = pe_def_alloys value = 1 } check_variable = { which = pe_cnt_a value > 0 } }
 				AND = { check_variable = { which = pe_def_consumer_goods value = 1 } check_variable = { which = pe_cnt_c value > 0 } }
@@ -486,14 +488,21 @@ pe_deal = {
 }
 
 # Country scope: pick the short good X (pe_deal_x: the lowest monthly balance among the short
-# goods a private firm makes) and the plentiful good Y (pe_deal_y: the fullest stock, at
-# least 40%, not short), then the amounts: X = a year of the monthly deficit (at least 100), Y worth 80% of what X costs on the market (at the price we would get for Y),
-# at most half of the Y stock. The firm's margin: a quarter of X's market value.
-# pe_deal_force = 1 (debug event pe.12): X need not be short, so a deal can be tested anytime.
+# goods a private firm makes whose store is less than half full) and the plentiful good Y
+# (pe_deal_y: the fullest stock, at least 40%, not short), then the amounts per month for two
+# years: X = the shortfall below the shortage margin, at least 5% of our gross production of
+# X (5 to 500); Y worth 80% of what X costs on the market (at the price we would get for Y),
+# at most 500 and at most what half the Y stock pays for two years. The firm's margin a
+# month: a quarter of X's market value.
+# pe_deal_force = 1 (debug event pe.12): X need not be short nor its store half empty.
 pe_deal_fire = {
 	set_timed_country_flag = { flag = pe_deal_cd days = 1080 }
 	set_variable = { which = pe_deal_x value = 0 }
 	set_variable = { which = pe_deal_xmin value = 1000000 }
+	export_resource_stockpile_to_variable = { resource = alloys variable = pe_dxs }
+	export_resource_maximum_to_variable = { resource = alloys variable = pe_dxm }
+	set_variable = { which = pe_dxf_1 value = 0 }
+	if = { limit = { check_variable = { which = pe_dxm value > 0 } } set_variable = { which = pe_dxf_1 value = pe_dxs } divide_variable = { which = pe_dxf_1 value = pe_dxm } }
 	export_resource_income_to_variable = { resource = alloys variable = pe_dn_1 }
 	if = {
 		limit = {
@@ -505,10 +514,15 @@ pe_deal_fire = {
 				}
 			}
 			check_variable = { which = pe_dn_1 value < pe_deal_xmin }
+			OR = { check_variable = { which = pe_deal_force value = 1 } check_variable = { which = pe_dxf_1 value < 0.5 } }
 		}
 		set_variable = { which = pe_deal_xmin value = pe_dn_1 }
 		set_variable = { which = pe_deal_x value = 1 }
 	}
+	export_resource_stockpile_to_variable = { resource = consumer_goods variable = pe_dxs }
+	export_resource_maximum_to_variable = { resource = consumer_goods variable = pe_dxm }
+	set_variable = { which = pe_dxf_2 value = 0 }
+	if = { limit = { check_variable = { which = pe_dxm value > 0 } } set_variable = { which = pe_dxf_2 value = pe_dxs } divide_variable = { which = pe_dxf_2 value = pe_dxm } }
 	export_resource_income_to_variable = { resource = consumer_goods variable = pe_dn_2 }
 	if = {
 		limit = {
@@ -520,10 +534,15 @@ pe_deal_fire = {
 				}
 			}
 			check_variable = { which = pe_dn_2 value < pe_deal_xmin }
+			OR = { check_variable = { which = pe_deal_force value = 1 } check_variable = { which = pe_dxf_2 value < 0.5 } }
 		}
 		set_variable = { which = pe_deal_xmin value = pe_dn_2 }
 		set_variable = { which = pe_deal_x value = 2 }
 	}
+	export_resource_stockpile_to_variable = { resource = minerals variable = pe_dxs }
+	export_resource_maximum_to_variable = { resource = minerals variable = pe_dxm }
+	set_variable = { which = pe_dxf_3 value = 0 }
+	if = { limit = { check_variable = { which = pe_dxm value > 0 } } set_variable = { which = pe_dxf_3 value = pe_dxs } divide_variable = { which = pe_dxf_3 value = pe_dxm } }
 	export_resource_income_to_variable = { resource = minerals variable = pe_dn_3 }
 	if = {
 		limit = {
@@ -535,10 +554,15 @@ pe_deal_fire = {
 				}
 			}
 			check_variable = { which = pe_dn_3 value < pe_deal_xmin }
+			OR = { check_variable = { which = pe_deal_force value = 1 } check_variable = { which = pe_dxf_3 value < 0.5 } }
 		}
 		set_variable = { which = pe_deal_xmin value = pe_dn_3 }
 		set_variable = { which = pe_deal_x value = 3 }
 	}
+	export_resource_stockpile_to_variable = { resource = energy variable = pe_dxs }
+	export_resource_maximum_to_variable = { resource = energy variable = pe_dxm }
+	set_variable = { which = pe_dxf_4 value = 0 }
+	if = { limit = { check_variable = { which = pe_dxm value > 0 } } set_variable = { which = pe_dxf_4 value = pe_dxs } divide_variable = { which = pe_dxf_4 value = pe_dxm } }
 	export_resource_income_to_variable = { resource = energy variable = pe_dn_4 }
 	if = {
 		limit = {
@@ -550,10 +574,15 @@ pe_deal_fire = {
 				}
 			}
 			check_variable = { which = pe_dn_4 value < pe_deal_xmin }
+			OR = { check_variable = { which = pe_deal_force value = 1 } check_variable = { which = pe_dxf_4 value < 0.5 } }
 		}
 		set_variable = { which = pe_deal_xmin value = pe_dn_4 }
 		set_variable = { which = pe_deal_x value = 4 }
 	}
+	export_resource_stockpile_to_variable = { resource = food variable = pe_dxs }
+	export_resource_maximum_to_variable = { resource = food variable = pe_dxm }
+	set_variable = { which = pe_dxf_5 value = 0 }
+	if = { limit = { check_variable = { which = pe_dxm value > 0 } } set_variable = { which = pe_dxf_5 value = pe_dxs } divide_variable = { which = pe_dxf_5 value = pe_dxm } }
 	export_resource_income_to_variable = { resource = food variable = pe_dn_5 }
 	if = {
 		limit = {
@@ -565,6 +594,7 @@ pe_deal_fire = {
 				}
 			}
 			check_variable = { which = pe_dn_5 value < pe_deal_xmin }
+			OR = { check_variable = { which = pe_deal_force value = 1 } check_variable = { which = pe_dxf_5 value < 0.5 } }
 		}
 		set_variable = { which = pe_deal_xmin value = pe_dn_5 }
 		set_variable = { which = pe_deal_x value = 5 }
@@ -657,11 +687,11 @@ pe_deal_fire = {
 			check_variable = { which = pe_deal_y value > 0 }
 		}
 		# Shortfall per month, market prices (per unit), the Y stock.
-		if = { limit = { check_variable = { which = pe_deal_x value = 1 } } set_variable = { which = pe_deal_xamt value = pe_dn_1 } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = alloys amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 4 } }
-		else_if = { limit = { check_variable = { which = pe_deal_x value = 2 } } set_variable = { which = pe_deal_xamt value = pe_dn_2 } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = consumer_goods amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 2 } }
-		else_if = { limit = { check_variable = { which = pe_deal_x value = 3 } } set_variable = { which = pe_deal_xamt value = pe_dn_3 } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = minerals amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 1 } }
-		else_if = { limit = { check_variable = { which = pe_deal_x value = 4 } } set_variable = { which = pe_deal_xamt value = pe_dn_4 } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = energy amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 1 } }
-		else_if = { limit = { check_variable = { which = pe_deal_x value = 5 } } set_variable = { which = pe_deal_xamt value = pe_dn_5 } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = food amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 1 } }
+		if = { limit = { check_variable = { which = pe_deal_x value = 1 } } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = alloys amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 4 } }
+		else_if = { limit = { check_variable = { which = pe_deal_x value = 2 } } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = consumer_goods amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 2 } }
+		else_if = { limit = { check_variable = { which = pe_deal_x value = 3 } } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = minerals amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 1 } }
+		else_if = { limit = { check_variable = { which = pe_deal_x value = 4 } } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = energy amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 1 } }
+		else_if = { limit = { check_variable = { which = pe_deal_x value = 5 } } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = food amount = 100 trade_type = market_buy } variable = pe_dpx } set_variable = { which = pe_dbase value = 1 } }
 		if = { limit = { check_variable = { which = pe_deal_y value = 1 } } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = alloys amount = 100 trade_type = market_sell } variable = pe_dpy } set_variable = { which = pe_deal_ystock value = pe_ds_1 } set_variable = { which = pe_dbasey value = 4 } }
 		else_if = { limit = { check_variable = { which = pe_deal_y value = 2 } } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = consumer_goods amount = 100 trade_type = market_sell } variable = pe_dpy } set_variable = { which = pe_deal_ystock value = pe_ds_2 } set_variable = { which = pe_dbasey value = 2 } }
 		else_if = { limit = { check_variable = { which = pe_deal_y value = 3 } } export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = minerals amount = 100 trade_type = market_sell } variable = pe_dpy } set_variable = { which = pe_deal_ystock value = pe_ds_3 } set_variable = { which = pe_dbasey value = 1 } }
@@ -671,14 +701,26 @@ pe_deal_fire = {
 		divide_variable = { which = pe_dpy value = 100 }
 		if = { limit = { check_variable = { which = pe_dpx value <= 0 } } set_variable = { which = pe_dpx value = pe_dbase } multiply_variable = { which = pe_dpx value = 1.3 } }
 		if = { limit = { check_variable = { which = pe_dpy value <= 0 } } set_variable = { which = pe_dpy value = pe_dbasey } multiply_variable = { which = pe_dpy value = 0.7 } }
-		multiply_variable = { which = pe_deal_xamt value = -12 }
-		if = { limit = { check_variable = { which = pe_deal_xamt value < 100 } } set_variable = { which = pe_deal_xamt value = 100 } }
+		# Per month: the shortfall below the shortage margin, at least 5% of the gross production.
+		if = { limit = { check_variable = { which = pe_deal_x value = 1 } } set_variable = { which = pe_deal_xamt value = pe_netm_alloys } export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = alloys } variable = pe_dg } }
+		else_if = { limit = { check_variable = { which = pe_deal_x value = 2 } } set_variable = { which = pe_deal_xamt value = pe_netm_consumer_goods } export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = consumer_goods } variable = pe_dg } }
+		else_if = { limit = { check_variable = { which = pe_deal_x value = 3 } } set_variable = { which = pe_deal_xamt value = pe_netm_minerals } export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = minerals } variable = pe_dg } }
+		else_if = { limit = { check_variable = { which = pe_deal_x value = 4 } } set_variable = { which = pe_deal_xamt value = pe_netm_energy } export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = energy } variable = pe_dg } }
+		else_if = { limit = { check_variable = { which = pe_deal_x value = 5 } } set_variable = { which = pe_deal_xamt value = pe_netm_food } export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = food } variable = pe_dg } }
+		multiply_variable = { which = pe_deal_xamt value = -1 }
+		multiply_variable = { which = pe_dg value = 0.05 }
+		if = { limit = { check_variable = { which = pe_deal_xamt value < pe_dg } } set_variable = { which = pe_deal_xamt value = pe_dg } }
+		if = { limit = { check_variable = { which = pe_deal_xamt value < 5 } } set_variable = { which = pe_deal_xamt value = 5 } }
+		if = { limit = { check_variable = { which = pe_deal_xamt value > 500 } } set_variable = { which = pe_deal_xamt value = 500 } }
+		round_variable = pe_deal_xamt
+		# The payment per month, at most 500 and what half the Y stock pays for 24 months.
 		set_variable = { which = pe_deal_yamt value = pe_deal_xamt }
 		multiply_variable = { which = pe_deal_yamt value = pe_dpx }
 		multiply_variable = { which = pe_deal_yamt value = 0.8 }
 		divide_variable = { which = pe_deal_yamt value = pe_dpy }
 		set_variable = { which = pe_tmp value = pe_deal_ystock }
-		multiply_variable = { which = pe_tmp value = 0.5 }
+		divide_variable = { which = pe_tmp value = 48 }
+		if = { limit = { check_variable = { which = pe_tmp value > 500 } } set_variable = { which = pe_tmp value = 500 } }
 		if = {
 			limit = { check_variable = { which = pe_deal_yamt value > pe_tmp } }
 			set_variable = { which = pe_deal_yamt value = pe_tmp }
@@ -686,38 +728,75 @@ pe_deal_fire = {
 			multiply_variable = { which = pe_deal_xamt value = pe_dpy }
 			divide_variable = { which = pe_deal_xamt value = 0.8 }
 			divide_variable = { which = pe_deal_xamt value = pe_dpx }
+			if = { limit = { check_variable = { which = pe_deal_xamt value > 500 } } set_variable = { which = pe_deal_xamt value = 500 } }
+			round_variable = pe_deal_xamt
 		}
-		# Round to tens.
-		divide_variable = { which = pe_deal_xamt value = 10 }
-		round_variable = pe_deal_xamt
-		multiply_variable = { which = pe_deal_xamt value = 10 }
-		divide_variable = { which = pe_deal_yamt value = 10 }
 		round_variable = pe_deal_yamt
-		multiply_variable = { which = pe_deal_yamt value = 10 }
+		set_variable = { which = pe_deal_ytot value = pe_deal_yamt }
+		multiply_variable = { which = pe_deal_ytot value = 24 }
+		set_variable = { which = pe_deal_xtot value = pe_deal_xamt }
+		multiply_variable = { which = pe_deal_xtot value = 24 }
 		set_variable = { which = pe_deal_profit value = pe_deal_xamt }
 		multiply_variable = { which = pe_deal_profit value = pe_dpx }
 		multiply_variable = { which = pe_deal_profit value = 0.25 }
 		round_variable = pe_deal_profit
 		if = {
-			limit = { check_variable = { which = pe_deal_yamt value >= 10 } }
+			limit = { check_variable = { which = pe_deal_yamt value >= 1 } check_variable = { which = pe_deal_xamt value >= 1 } }
 			country_event = { id = pe.260 }
 		}
 	}
 }
 
-# Country scope (event pe.260/261): the deal. Give Y, get X, the margin to the investors.
+# Country scope (event pe.260/261): the deal starts. For 24 months the supply deal deposit on
+# the capital produces X and costs Y (budget line "Supply Deal"); pe_deal_month counts down,
+# pays the firm's margin to the investors and ends it.
 pe_deal_apply = {
-	if = { limit = { check_variable = { which = pe_deal_x value = 1 } } add_resource = { alloys = 1 mult = pe_deal_xamt } }
-	else_if = { limit = { check_variable = { which = pe_deal_x value = 2 } } add_resource = { consumer_goods = 1 mult = pe_deal_xamt } }
-	else_if = { limit = { check_variable = { which = pe_deal_x value = 3 } } add_resource = { minerals = 1 mult = pe_deal_xamt } }
-	else_if = { limit = { check_variable = { which = pe_deal_x value = 4 } } add_resource = { energy = 1 mult = pe_deal_xamt } }
-	else_if = { limit = { check_variable = { which = pe_deal_x value = 5 } } add_resource = { food = 1 mult = pe_deal_xamt } }
-	if = { limit = { check_variable = { which = pe_deal_y value = 1 } } add_resource = { alloys = -1 mult = pe_deal_yamt } }
-	else_if = { limit = { check_variable = { which = pe_deal_y value = 2 } } add_resource = { consumer_goods = -1 mult = pe_deal_yamt } }
-	else_if = { limit = { check_variable = { which = pe_deal_y value = 3 } } add_resource = { minerals = -1 mult = pe_deal_yamt } }
-	else_if = { limit = { check_variable = { which = pe_deal_y value = 4 } } add_resource = { energy = -1 mult = pe_deal_yamt } }
-	else_if = { limit = { check_variable = { which = pe_deal_y value = 5 } } add_resource = { food = -1 mult = pe_deal_yamt } }
-	hidden_effect = { change_variable = { which = pe_capital value = pe_deal_profit } }
+	set_variable = { which = pe_deal_mon value = 24 }
+	set_variable = { which = pe_deal_pm value = pe_deal_profit }
+	set_variable = { which = pe_deal_my value = pe_deal_yamt }
+	set_variable = { which = pe_deal_myr value = pe_deal_y }
+	every_owned_planet = { limit = { has_deposit = d_pe_supply_deal } remove_deposit = d_pe_supply_deal }
+	capital_scope = {
+		set_variable = { which = pe_dlx value = root.pe_deal_x }
+		set_variable = { which = pe_dly value = root.pe_deal_y }
+		root = { set_variable = { which = pe_lv value = pe_deal_xamt } }
+		pe_ledger_bits = { V = dlxa }
+		root = { set_variable = { which = pe_lv value = pe_deal_yamt } }
+		pe_ledger_bits = { V = dlya }
+		add_deposit = d_pe_supply_deal
+	}
+}
+
+# Country scope, monthly (pe.100): a running supply deal. The margin goes to the investors;
+# after 24 months, or when we cannot pay (the Y stock below a month's payment), it ends.
+pe_deal_month = {
+	if = {
+		limit = { check_variable = { which = pe_deal_mon value > 0 } }
+		change_variable = { which = pe_deal_mon value = -1 }
+		change_variable = { which = pe_capital value = pe_deal_pm }
+		set_variable = { which = pe_deal_end value = 0 }
+		if = { limit = { check_variable = { which = pe_deal_mon value <= 0 } } set_variable = { which = pe_deal_end value = 1 } }
+		if = { limit = { check_variable = { which = pe_deal_myr value = 1 } } export_resource_stockpile_to_variable = { resource = alloys variable = pe_dys } }
+		else_if = { limit = { check_variable = { which = pe_deal_myr value = 2 } } export_resource_stockpile_to_variable = { resource = consumer_goods variable = pe_dys } }
+		else_if = { limit = { check_variable = { which = pe_deal_myr value = 3 } } export_resource_stockpile_to_variable = { resource = minerals variable = pe_dys } }
+		else_if = { limit = { check_variable = { which = pe_deal_myr value = 4 } } export_resource_stockpile_to_variable = { resource = energy variable = pe_dys } }
+		else_if = { limit = { check_variable = { which = pe_deal_myr value = 5 } } export_resource_stockpile_to_variable = { resource = food variable = pe_dys } }
+		if = { limit = { check_variable = { which = pe_deal_end value = 0 } check_variable = { which = pe_dys value < pe_deal_my } } set_variable = { which = pe_deal_end value = 2 } }
+		if = {
+			limit = { check_variable = { which = pe_deal_end value > 0 } }
+			set_variable = { which = pe_deal_mon value = 0 }
+			every_owned_planet = {
+				limit = { has_deposit = d_pe_supply_deal }
+				remove_deposit = d_pe_supply_deal
+				save_event_target_as = pe_msg_planet
+			}
+			if = {
+				limit = { is_ai = no exists = event_target:pe_msg_planet }
+				if = { limit = { check_variable = { which = pe_deal_end value = 1 } } create_message = { type = pe_private_economy localization = pe_msg_deal_end days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+				else = { create_message = { type = pe_private_economy localization = pe_msg_deal_broken days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+			}
+		}
+	}
 }
 
 # --- Sectors (modernisation, rationalisation) -------------------------------------------

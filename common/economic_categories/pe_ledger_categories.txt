@@ -12,3 +12,6 @@ pe_private_dividends = {
 pe_corp_production = {
 	use_for_ai_budget = no
 }
+pe_supply_deal = {
+	use_for_ai_budget = no
+}
