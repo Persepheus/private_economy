@@ -60,8 +60,9 @@ Ein laufendes Spiel kann weiterlaufen.
 
 ## 0.29.1: Werkschutz schneller und zahlreicher
 - **Zeitpunkt:** **10 Tage nach Beginn** eines Bodenkampfs, mit 75 % Chance, und nur, wenn der Kampf dann noch läuft.
-  - Derselbe Planet kann alle 30 Tage wieder auslösen statt alle 180.
-  - Bezahlte Angebote kommen höchstens alle 180 Tage statt einmal im Jahr. Der Hauptsitz wird immer kostenlos verteidigt.
+  - **Einmal pro Bodenkampf:** Jeder neue Eroberungsversuch kann wieder auslösen, ohne Sperrfrist (0.29.2).
+  - **Kein Stapeln:** Werkschutz, der von einem früheren Angriff noch auf dem Planeten steht, wird abgezogen. Es landet nur so viel, dass die berechnete Menge erreicht ist. Steht schon genug da, gibt es kein Angebot.
+  - Der Hauptsitz wird immer kostenlos verteidigt.
 - **Menge:** 1 Einheit je **400** Pops plus die Hälfte der Verteidiger, höchstens 50. Weiterhin begrenzt durch das Geld, 75 je Einheit.
 - **Werkschutz** ist jetzt eine Kopie der Vanilla-Verteidigungsarmee: Leben 1,25, Schaden 1,5, Moral 1,25. Er funktioniert für jede Spezies, auch für Roboter in normalen Reichen.
 - **Debug:**

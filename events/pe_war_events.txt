@@ -1,7 +1,7 @@
 # Private economy at war (pe_war_effects.txt).
 #   pe.138 a colony with firms is occupied: contributions   pe.139 it is liberated: collaborators
 #   pe.140 / 141 ground combat begins: corporate guards ten days later (75%), if it still
-#                 goes on                                  pe.297 / 298 the offer, haggling
+#                 goes on; once per ground combat                                  pe.297 / 298 the offer, haggling
 #   pe.299 what to do with the collaborators
 namespace = pe
 
@@ -63,10 +63,10 @@ carrier_event = {
 		owner = { is_country_type = default is_gestalt = no }
 		exists = from
 		NOT = { from = { is_same_value = root.owner } }
-		NOT = { has_planet_flag = pe_gc_cd }
+		# one check per ground combat: none is waiting here yet
+		NOT = { has_planet_flag = pe_gc_wait }
 	}
 	immediate = {
-		set_timed_planet_flag = { flag = pe_gc_cd days = 30 }
 		if = {
 			limit = { owner = { has_country_flag = pe_gc_force } }
 			set_planet_flag = pe_gc_wait

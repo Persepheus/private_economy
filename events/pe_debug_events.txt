@@ -400,9 +400,7 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		set_timed_country_flag = { flag = pe_gc_force days = 60 }
-		remove_country_flag = pe_ground_cd
 		capital_scope = {
-			remove_planet_flag = pe_gc_cd
 			save_event_target_as = pe_dbg_planet
 		}
 		create_country = {
