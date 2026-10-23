@@ -361,3 +361,21 @@ country_event = {
 		}
 	}
 }
+
+# Ruins of an independent private firm: its owners ask for a subsidy to rebuild.
+country_event = {
+	id = pe.296
+	title = pe.296.name
+	desc = pe.296.desc
+	picture = GFX_evt_city_planet
+	is_triggered_only = yes
+	location = event_target:pe_rb_planet
+
+	option = {
+		name = pe.296.a
+		allow = { has_resource = { type = trade amount >= 1 } }
+		custom_tooltip = pe.296.a.tt
+		hidden_effect = { pe_ruin_subsidy = yes }
+	}
+	option = { name = pe.296.b }
+}

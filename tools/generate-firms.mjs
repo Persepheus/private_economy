@@ -739,7 +739,9 @@ pe_firm_change = {
 				set_variable = { which = pe_chg_loanq value = prev.pe_loan_q }
 				set_variable = { which = pe_chg_fid value = prev.pe_fid }
 				set_variable = { which = pe_chg_supfid value = prev.pe_sup_fid }
+				set_variable = { which = pe_chg_bomb value = 0 }
 			}
+			if = { limit = { is_variable_set = pe_bomb_hit check_variable = { which = pe_bomb_hit value = 1 } } root = { set_variable = { which = pe_chg_bomb value = 1 } } }
 			remove_deposit = yes
 		}
 		root = { set_variable = { which = pe_pend_any value = 0 } }
@@ -747,10 +749,31 @@ pe_firm_change = {
 ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = ${p.v.code} } check_variable = { which = pe_chg_stage value = ${p.s} } }`, p => [
   p.s < 3 ? `if = { limit = { ${rootIs('pe_chg_type', 1)} } add_deposit = ${keyOf(p.v, p.s + 1)} ${initFirm(p.v.code, p.s + 1, 'root.pe_chg_fcap', 'root.pe_chg_debt')} ${msg(`pe_msg_up_${keyOf(p.v, p.s + 1)}`)} }` : '',
   p.s > 1 ? `if = { limit = { ${rootIs('pe_chg_type', 2)} } add_deposit = ${keyOf(p.v, p.s - 1)} ${initFirm(p.v.code, p.s - 1, 'root.pe_chg_fcap', 'root.pe_chg_debt')} ${msg(`pe_msg_down_${keyOf(p.v, p.s - 1)}`)} }` : '',
-  p.s === 1 ? `if = { limit = { ${rootIs('pe_chg_type', 3)} } ${msg(`pe_msg_bankrupt_${p.key}`)} }` : '',
+  p.s === 1 ? `if = { limit = { ${rootIs('pe_chg_type', 3)} NOT = { ${rootIs('pe_chg_bomb', 1)} } } ${msg(`pe_msg_bankrupt_${p.key}`)} }` : '',
 ].filter(Boolean).join(' '), '\t\t')}
+		# Destroyed by a bombardment: ruins instead of a free slot (the player or a corporation
+		# clears them; see pe_ruins_step).
+		if = {
+			limit = { root = { check_variable = { which = pe_chg_type value = 3 } check_variable = { which = pe_chg_bomb value = 1 } } }
+			add_deposit = d_pe_ruins
+			last_added_deposit = { set_variable = { which = pe_ruin_code value = root.pe_chg_code } set_variable = { which = pe_ruin_corp value = root.pe_chg_corp } }
+			${msg('pe_msg_firm_ruined')}
+		}
 		check_planet_employment = yes
 	}
+}
+
+# Country scope: the founding cost of variant root.pe_rb_code (city 500, rural 300) -> pe_rb_cost.
+pe_ruin_cost = {
+	set_variable = { which = pe_rb_cost value = 500 }
+${variants.filter(v => !v.cityLike).map((v, i) => `\t${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_rb_code value = ${v.code} } } set_variable = { which = pe_rb_cost value = ${FOUND[v.k]} } }`).join('\n')}
+}
+
+# Colony scope: rebuild a ruin as a construction site of its old firm (stage 1): code
+# root.pe_rb_code, corporation root.pe_rb_corp, capital root.pe_rb_fcap, debt root.pe_rb_debt.
+pe_ruin_rebuild = {
+${ifChain(variants, v => rootIs('pe_rb_code', v.code), v => `add_deposit = ${v.site} last_added_deposit = { set_variable = { which = pe_target value = ${v.code} } set_variable = { which = pe_tstage value = 1 } set_variable = { which = pe_fcap value = root.pe_rb_fcap } set_variable = { which = pe_debt value = root.pe_rb_debt } set_variable = { which = pe_left value = ${BUILD_MONTHS[v.k]} } set_variable = { which = pe_kind value = 1 } set_variable = { which = pe_corp value = root.pe_rb_corp } }`)}
+	set_planet_flag = pe_site
 }
 
 # Colony scope: the state buys back the least valuable firm at the buyout price x stage
@@ -1131,6 +1154,8 @@ loc.german.push(' pe_private_profits:0 "Gewinnauszahlung an Privatfirmen"', ' pe
   ' d_pe_ledger_profit:0 "Gewinnauszahlung an Privatfirmen"', ' d_pe_ledger_profit_desc:0 "§HEine Ausgabe des Staates.§! Die Privatfirmen auf diesem Planeten liefern ihre ganze Produktion an das Reich, genau wie Staatsjobs. Dafür zahlt der Staat ihnen jeden Monat ihren Gewinnanteil in Handel: einen Teil des Werts, den ihre Jobs schaffen, je nach Wirtschaftsordnung (Gelenkt 15 %, Gemischt 20 %, Freie Marktwirtschaft 25 %, Laissez-faire 35 %), abzüglich ihrer laufenden Kosten. Davon wachsen die Firmen, und neue werden gegründet.\\n\\nGewinne und Ersparnisse zusammen kosten höchstens 40 % des Brutto-Handels; was der Staat nicht zahlt, bekommen die Firmen auch nicht."',
   ' d_pe_ledger_savings:0 "Private Ersparnisse"', ' d_pe_ledger_savings_desc:0 "§HEine Ausgabe des Staates.§! Jeden Monat fließt ein Teil unseres Handelseinkommens als private Ersparnisse in den Investorenpool, je nach Wirtschaftsordnung (Gelenkt 5 %, Gemischt 10 %, Freie Marktwirtschaft 15 %, Laissez-faire 20 %). Aus dem Pool gründen Investoren neue Firmen und kaufen Staatsdistrikte."');
 loc.german.push(' pe_deposit_cat_automation:0 "Private Automatisierung"');
+loc.english.push(' pe_msg_firm_ruined:0 "A private firm on $PLANET$ has been destroyed by the bombardment. Its ruins block the district slot until they are cleared or rebuilt."', ' d_pe_ruins:0 "Ruins of a Private Firm"', ' d_pe_ruins_desc:0 "What the bombardment left of a private firm. The ruins block a district slot. They can be cleared, or rebuilt: by the firm\'s corporation from its cash, otherwise with a subsidy from us."', ' pe_deposit_cat_ruins:0 "Ruins"');
+loc.german.push(' pe_msg_firm_ruined:0 "Eine Privatfirma auf $PLANET$ ist durch das Bombardement zerstört worden. Ihre Trümmer blockieren den Distriktplatz, bis sie geräumt oder wieder aufgebaut sind."', ' d_pe_ruins:0 "Trümmer einer Privatfirma"', ' d_pe_ruins_desc:0 "Was das Bombardement von einer Privatfirma übrig gelassen hat. Die Trümmer blockieren einen Distriktplatz. Sie lassen sich räumen oder wieder aufbauen: durch den Konzern der Firma aus seiner Kasse, sonst mit einem Zuschuss von uns."', ' pe_deposit_cat_ruins:0 "Trümmer"');
 loc.english.push(' pe_supply_deal:0 "Supply Deal with a Private Firm"', ' d_pe_supply_deal:0 "Supply Deal"', ' d_pe_supply_deal_desc:0 "A private firm delivers us this good every month for two years and takes another one in return, of which we had plenty (event §YA Special Deal§!). The deal ends early if we run out of the good we pay with."');
 loc.german.push(' pe_supply_deal:0 "Liefervertrag mit einer Privatfirma"', ' d_pe_supply_deal:0 "Liefervertrag"', ' d_pe_supply_deal_desc:0 "Eine Privatfirma liefert uns zwei Jahre lang jeden Monat diese Ware und nimmt dafür eine andere, von der wir reichlich hatten (Ereignis §YEin besonderes Angebot§!). Der Vertrag endet vorzeitig, wenn uns die Ware ausgeht, mit der wir bezahlen."');
 for (const a of AUTO_JOBS) for (const l of [1, 2]) {

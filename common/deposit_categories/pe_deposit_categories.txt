@@ -26,3 +26,10 @@ pe_deposit_cat_automation = {
 pe_deposit_cat_ledger = {
 	important = no
 }
+
+# Ruins of a private firm after a bombardment (clearable like a blocker).
+pe_deposit_cat_ruins = {
+	blocker = yes
+	important = yes
+}
+

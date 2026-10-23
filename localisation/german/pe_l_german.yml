@@ -80,3 +80,5 @@
  pe.25.name:0 "Arc Furnace der Holdings (Prototyp)"
  pe.25.desc:0 "§HOfen§! bei [pe_paf_p.GetName]\nStufe: [Root.pe_paf_stage] (Ausbau läuft: [Root.pe_paf_upg])\nOverclock: [Root.pe_paf_oc] (0 keiner, 1 Mineralien, 2 ausgewogen, 3 Legierungen, 4 Konsumgüter)\nPlaneten im System mit Ofen-Vorkommen: [Root.pe_paf_dep]\n\n§HStationen im System§!\nUnsere: [Root.pe_paf_our] (auf Ofen-Vorkommen: [Root.pe_paf_ourdep])\nHoldings: [Root.pe_paf_hst]\nAndere: [Root.pe_paf_oth]\n\n§HPrivate Holdings§! (Lager, pro Monat, seit pe.22)\nMineralien: [Root.pe_paf_min] ([Root.pe_paf_min_inc]; [Root.pe_paf_min_d])\nLegierungen: [Root.pe_paf_al] ([Root.pe_paf_al_inc]; [Root.pe_paf_al_d])\nEnergie: [Root.pe_paf_en] ([Root.pe_paf_en_inc]; [Root.pe_paf_en_d])\nKonsumgüter: [Root.pe_paf_cg] ([Root.pe_paf_cg_inc]; [Root.pe_paf_cg_d])\n\n§HUnser Einkommen§!\nMineralien: [Root.pe_paf_our_min], Legierungen: [Root.pe_paf_our_al]"
  pe.25.a:0 "Schließen."
+ pe_warzone:0 "Kriegsgebiet"
+ pe_warzone_desc:0 "Dieser Planet wurde vor Kurzem bombardiert. Investoren halten sich fern: vorerst keine neuen Privatfirmen, keine Übernahmen, kein Umbau hier."

@@ -208,3 +208,11 @@ pe_leased_fleet = {
 	ships_upkeep_mult = -1
 	mod_ship_naval_cap_usage_mult = -1
 }
+
+# War zone: a planet that was bombarded recently (pe_bombard_step). Investors stay away: no
+# new private firms, no buyouts, no restructuring here while it lasts (three years after the
+# last bombardment). Its effect is the absence of investment, so it changes no numbers.
+pe_warzone = {
+	icon = "gfx/interface/icons/planet_modifiers/pm_under_orbital_bombardment.dds"
+}
+

@@ -45,3 +45,27 @@ Ein laufendes Spiel kann weiterlaufen.
 1. Einen Planeten mit Konzernsitz bombardieren lassen. Dann kommt im nächsten Monat die Flotte ohne Event, mit Nachricht. Alternativ `event pe.277`.
 2. Im Firmenregister sinkt die Kasse, notfalls bis −200.
 
+## 0.27.2: Bombardement trifft Firmen
+- **Maßstab ist die Verwüstung des Planeten**, nicht die Bombardement-Stufe. Es gilt nur, solange er bombardiert wird. Geprüft wird monatlich.
+- **Kapitalverlust:** Jede Firma verliert pro Monat 2 % ihres Kapitals plus 0,15 % je Punkt Verwüstung, höchstens 20 %. Bei 50 Verwüstung sind das 9,5 % im Monat. Fehlt dann Kapital, greifen die üblichen Regeln: Verluste, Kredite, Schrumpfen.
+- **Zerstörung, selten:**
+  - Jede Firma wird pro Monat mit 1 % getroffen. Bei 20 / 40 / 60 / 80 Verwüstung steigt die Chance auf 2 / 3 / 4 / 5 %.
+  - Eine getroffene Firma verliert bei ihrer nächsten Abrechnung eine Stufe.
+  - Auf Stufe 1 wird sie zerstört. Es bleiben **„Trümmer einer Privatfirma“**: ein Blocker, der einen Distriktplatz belegt. Räumen kostet 300 Mineralien und 4 Monate.
+- **Kriegsgebiet:** Nach dem letzten Bombardement gilt der Planeten-Modifikator „Kriegsgebiet“ 3 Jahre lang. Solange gibt es keine Neugründung, keine Übernahme von Staatsdistrikten und keinen Umbau.
+- **Wiederaufbau** (quartalsweise, sobald das Bombardement vorbei ist, eine Baustelle pro Planet):
+  - Trümmer einer Konzernfirma baut der Konzern aus seiner Kasse wieder auf: Gründungskosten 500 Stadt bzw. 300 Land, Reserve 300. Dazu kommt eine Nachricht.
+  - Trümmer einer unabhängigen Firma: höchstens einmal im Jahr kommt das Angebot pe.296. Du zahlst die Hälfte der Gründungskosten in Handel, die Investoren leihen den Rest. KI-Reiche bauen aus dem Investorenpool wieder auf.
+
+### Prüfen
+1. Einen Planeten mit Firmen bombardieren lassen:
+   - Nach einem Monat steht dort „Kriegsgebiet“.
+   - Das Firmenkapital (Firmenregister bzw. Save) sinkt monatlich.
+2. Bei längerem Bombardement:
+   - Nachrichten über geschrumpfte Firmen, irgendwann „durch das Bombardement zerstört“.
+   - Die Trümmer erscheinen als Vorkommen und lassen sich räumen.
+3. Nach dem Bombardement:
+   - Konzerntrümmer werden zur Baustelle, mit Nachricht.
+   - Bei unabhängigen Trümmern kommt pe.296.
+4. Logs: keine Fehler aus pe_economy_effects.txt (pe_bombard_step, pe_ruins_step) oder pe_firm_effects_generated.txt (pe_firm_change, pe_ruin_rebuild).
+

@@ -4,7 +4,7 @@ Stellaris 4.5: Eine Richtlinie **Wirtschaftsordnung** legt fest, wie viel der Wi
 
 Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools/validate.mjs` prüft das).
 
-## Stand 0.27.1
+## Stand 0.27.2
 
 Die Privatwirtschaft ist ein Kreislauf:
 
@@ -31,6 +31,7 @@ Die Privatwirtschaft ist ein Kreislauf:
 - **Weitere Konzern-Angebote:** Erkundungscharta (Forschungsschiff gegen Schürfrechte), Konvoischutz gegen Piraten, Schutzflotten für bombardierte Planeten (gegen Firmen, Legierungen oder Einfluss; für den eigenen Hauptsitz kostenlos), Bergung von Trümmerfeldern, eigene Dyson-Schwärme und Arc Furnaces (der Konzern zahlt Bau, Ausbau und Unterhalt und wählt einen mittleren Standort; beim Ofen bekommt er die Himmelskörper ohne früheres Vorkommen, die übrigen bleiben beim Reich); Mäzene spenden Schiffe nach Verlusten.
 - **Firmenregister:** Planeten-Entscheidung, die zeigt, welche Firma zu welchem Konzern gehört.
 - **Kredite:** Konzerne verleihen aus ihrer Kasse für Wachstum und gegen Verluste (3 % Zins pro Quartal, Kreditlinie −200). Ausfälle treffen den Gläubiger; ein Konzern im Minus verkauft Firmen.
+- **Bombardement:** Firmen bombardierter Planeten verlieren Kapital (nach Verwüstung), selten Stufen bis zur Zerstörung (Trümmer); danach drei Jahre Kriegsgebiet ohne neue Investitionen; Konzerne bauen ihre Firmen wieder auf, unabhängige gegen einen Zuschuss.
 - **Cluster:** Mehrere gleiche Firmen auf einem Planeten stärken die ganze Branche dort. Cluster und Lieferverträge zeigt das Vorkommen „Standortvorteile“.
 - **Flair:** Lieferverträge bei Mangel (zwei Jahre monatlich, nur bei weniger als halb vollem Lager), Modernisierung, Rationalisierung, Vermögensabgabe; mit den Nachbarn: Auslandsinvestitionen, ausländische Filialen, Technologielizenzen, Dumping und Schutzzölle.
 - **Planwirtschaft** beendet die Privatwirtschaft: Firmen werden Staatsdistrikte, der Pool verfällt.

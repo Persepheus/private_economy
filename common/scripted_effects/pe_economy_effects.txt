@@ -854,7 +854,7 @@ pe_planet_step = {
 			NOT = { has_planet_flag = pe_cooldown }
 		}
 		if = {
-			limit = { check_variable = { which = pe_firms value < pe_target } }
+			limit = { check_variable = { which = pe_firms value < pe_target } NOT = { has_modifier = pe_warzone } }
 			if = {
 				limit = {
 					free_district_slots > 0
@@ -891,6 +891,7 @@ pe_planet_step = {
 			NOT = { has_planet_flag = pe_site }
 			NOT = { has_planet_flag = pe_cooldown }
 			NOT = { has_planet_flag = pe_retool_cd }
+			NOT = { has_modifier = pe_warzone }
 			check_variable = { which = pe_firms_real value > 0 }
 			root = { check_variable = { which = pe_fill_cur value >= 0.8 } }
 		}
@@ -1139,6 +1140,14 @@ pe_firm_book = {
 			check_variable = { which = pe_fcap value >= 0 }
 		}
 		set_variable = { which = pe_loan_q value = 0 }
+	}
+	# Hit by a bombardment (pe_bombard_step): it loses a stage, at stage 1 it is destroyed
+	# (ruins, see pe_firm_change). This replaces whatever else it planned.
+	if = {
+		limit = { is_variable_set = pe_bomb_hit check_variable = { which = pe_bomb_hit value = 1 } }
+		if = { limit = { check_variable = { which = pe_stage value > 1 } } set_variable = { which = pe_pending value = 2 } }
+		else = { set_variable = { which = pe_pending value = 3 } }
+		root = { set_variable = { which = pe_pend_any value = 1 } }
 	}
 }
 
@@ -1692,6 +1701,7 @@ pe_corp_step = {
 	pe_corp_swarm = yes
 	pe_corp_furnace = yes
 	pe_corp_auto_msg = yes
+	pe_ruins_step = yes
 	change_variable = { which = pe_hq4 value = 1 }
 	if = {
 		limit = { check_variable = { which = pe_hq4 value >= 4 } }
@@ -1928,4 +1938,137 @@ pe_supply_step = {
 			}
 		}
 	}
+}
+
+# --- Bombardment -------------------------------------------------------------------------
+# Country scope, monthly (pe.100): our colonies under orbital bombardment. The damage follows
+# the devastation of the planet (how hard the bombardment really hits: ships, technology,
+# shields), only while it is bombarded:
+# - each firm loses 2% of its capital a month plus 0.15% per point of devastation (at most 20%);
+# - rarely a firm is hit (1% a month, up to 5% at high devastation): it loses a stage at its
+#   next accounts, at stage 1 it is destroyed and leaves ruins (pe_firm_book, pe_firm_change);
+# - the planet is a war zone for three years after the last bombardment (pe_warzone): no new
+#   firms, no buyouts, no restructuring there.
+pe_bombard_step = {
+	every_owned_colony = {
+		limit = { has_orbital_bombardment = yes }
+		if = { limit = { has_modifier = pe_warzone } remove_modifier = pe_warzone }
+		add_modifier = { modifier = pe_warzone days = 1080 }
+		if = {
+			limit = { count_deposits = { category = pe_deposit_cat_firms count > 0 } }
+			export_trigger_value_to_variable = { trigger = planet_devastation variable = pe_dev }
+			set_variable = { which = pe_brate value = pe_dev }
+			multiply_variable = { which = pe_brate value = 0.0015 }
+			change_variable = { which = pe_brate value = 0.02 }
+			if = { limit = { check_variable = { which = pe_brate value > 0.2 } } set_variable = { which = pe_brate value = 0.2 } }
+			set_variable = { which = pe_bkeep value = 1 }
+			subtract_variable = { which = pe_bkeep value = pe_brate }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_fcap }
+				if = { limit = { check_variable = { which = pe_fcap value > 0 } } multiply_variable = { which = pe_fcap value = prev.pe_bkeep } }
+				if = {
+					limit = { prev = { check_variable = { which = pe_dev value < 20 } } }
+					random = { chance = 1 set_variable = { which = pe_bomb_hit value = 1 } }
+				}
+				else_if = {
+					limit = { prev = { check_variable = { which = pe_dev value < 40 } } }
+					random = { chance = 2 set_variable = { which = pe_bomb_hit value = 1 } }
+				}
+				else_if = {
+					limit = { prev = { check_variable = { which = pe_dev value < 60 } } }
+					random = { chance = 3 set_variable = { which = pe_bomb_hit value = 1 } }
+				}
+				else_if = {
+					limit = { prev = { check_variable = { which = pe_dev value < 80 } } }
+					random = { chance = 4 set_variable = { which = pe_bomb_hit value = 1 } }
+				}
+				else = {
+					random = { chance = 5 set_variable = { which = pe_bomb_hit value = 1 } }
+				}
+			}
+		}
+	}
+}
+
+# Country scope, quarterly: ruins of private firms on planets no longer bombarded (one site
+# per planet as always). A corporation rebuilds its own firm's ruins from its cash (the
+# founding cost, keeping 300); for other ruins we get an offer at most once a year (pe.296):
+# a subsidy of half the founding cost, the investor pool lends the rest.
+pe_ruins_step = {
+	every_owned_colony = {
+		limit = {
+			count_deposits = { category = pe_deposit_cat_ruins count > 0 }
+			has_orbital_bombardment = no
+			NOT = { has_planet_flag = pe_site }
+		}
+		root = { set_variable = { which = pe_rb_done value = 0 } }
+		random_deposit = {
+			limit = { is_deposit_type = d_pe_ruins is_variable_set = pe_ruin_corp check_variable = { which = pe_ruin_corp value > 0 } }
+			root = {
+				set_variable = { which = pe_rb_code value = prev.pe_ruin_code }
+				set_variable = { which = pe_rb_corp value = prev.pe_ruin_corp }
+				pe_ruin_cost = yes
+				set_variable = { which = pe_rb_need value = pe_rb_cost }
+				change_variable = { which = pe_rb_need value = 300 }
+				if = { limit = { check_variable = { which = pe_rb_corp value = 1 } check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value >= pe_rb_need } } subtract_variable = { which = pe_c1_cash value = pe_rb_cost } set_variable = { which = pe_rb_done value = 1 } set_variable = { which = pe_msg_name value = pe_c1_name } }
+				else_if = { limit = { check_variable = { which = pe_rb_corp value = 2 } check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value >= pe_rb_need } } subtract_variable = { which = pe_c2_cash value = pe_rb_cost } set_variable = { which = pe_rb_done value = 1 } set_variable = { which = pe_msg_name value = pe_c2_name } }
+				else_if = { limit = { check_variable = { which = pe_rb_corp value = 3 } check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value >= pe_rb_need } } subtract_variable = { which = pe_c3_cash value = pe_rb_cost } set_variable = { which = pe_rb_done value = 1 } set_variable = { which = pe_msg_name value = pe_c3_name } }
+				else_if = { limit = { check_variable = { which = pe_rb_corp value = 4 } check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value >= pe_rb_need } } subtract_variable = { which = pe_c4_cash value = pe_rb_cost } set_variable = { which = pe_rb_done value = 1 } set_variable = { which = pe_msg_name value = pe_c4_name } }
+				else_if = { limit = { check_variable = { which = pe_rb_corp value = 5 } check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value >= pe_rb_need } } subtract_variable = { which = pe_c5_cash value = pe_rb_cost } set_variable = { which = pe_rb_done value = 1 } set_variable = { which = pe_msg_name value = pe_c5_name } }
+				else_if = { limit = { check_variable = { which = pe_rb_corp value = 6 } check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value >= pe_rb_need } } subtract_variable = { which = pe_c6_cash value = pe_rb_cost } set_variable = { which = pe_rb_done value = 1 } set_variable = { which = pe_msg_name value = pe_c6_name } }
+				else_if = { limit = { check_variable = { which = pe_rb_corp value = 7 } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value >= pe_rb_need } } subtract_variable = { which = pe_c7_cash value = pe_rb_cost } set_variable = { which = pe_rb_done value = 1 } set_variable = { which = pe_msg_name value = pe_c7_name } }
+				else_if = { limit = { check_variable = { which = pe_rb_corp value = 8 } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value >= pe_rb_need } } subtract_variable = { which = pe_c8_cash value = pe_rb_cost } set_variable = { which = pe_rb_done value = 1 } set_variable = { which = pe_msg_name value = pe_c8_name } }
+			}
+			if = { limit = { root = { check_variable = { which = pe_rb_done value = 1 } } } remove_deposit = yes }
+		}
+		if = {
+			limit = { root = { check_variable = { which = pe_rb_done value = 1 } } }
+			root = { set_variable = { which = pe_rb_fcap value = 10 } set_variable = { which = pe_rb_debt value = 0 } }
+			pe_ruin_rebuild = yes
+			save_event_target_as = pe_msg_planet
+			if = { limit = { owner = { is_ai = no } } root = { pe_corp_msg = { KEY = pe_msg_corp_rebuild } } }
+		}
+		# Other ruins: an offer for a subsidy (humans), the investors rebuild them (AI).
+		else_if = {
+			limit = { root = { NOT = { has_country_flag = pe_rebuild_cd } } }
+			random_deposit = {
+				limit = { is_deposit_type = d_pe_ruins }
+				root = {
+					set_variable = { which = pe_rb_code value = prev.pe_ruin_code }
+					set_variable = { which = pe_rb_corp value = 0 }
+					pe_ruin_cost = yes
+					set_variable = { which = pe_rb_sub value = pe_rb_cost }
+					multiply_variable = { which = pe_rb_sub value = 0.5 }
+				}
+				save_event_target_as = pe_rb_ruin
+			}
+			save_event_target_as = pe_rb_planet
+			root = {
+				set_timed_country_flag = { flag = pe_rebuild_cd days = 360 }
+				if = {
+					limit = { is_ai = yes check_variable = { which = pe_capital value >= pe_rb_cost } }
+					subtract_variable = { which = pe_capital value = pe_rb_cost }
+					event_target:pe_rb_ruin = { remove_deposit = yes }
+					set_variable = { which = pe_rb_fcap value = 10 }
+					set_variable = { which = pe_rb_debt value = 0 }
+					event_target:pe_rb_planet = { pe_ruin_rebuild = yes }
+				}
+				else_if = {
+					limit = { is_ai = no }
+					country_event = { id = pe.296 }
+				}
+			}
+		}
+	}
+}
+
+# Country scope (pe.296): we pay half the founding cost, the investor pool lends the rest; the
+# firm is rebuilt as an independent firm (site of its old variant).
+pe_ruin_subsidy = {
+	add_resource = { trade = -1 mult = pe_rb_sub }
+	set_variable = { which = pe_rb_fcap value = 10 }
+	set_variable = { which = pe_rb_debt value = pe_rb_cost }
+	subtract_variable = { which = pe_rb_debt value = pe_rb_sub }
+	event_target:pe_rb_ruin = { remove_deposit = yes }
+	event_target:pe_rb_planet = { pe_ruin_rebuild = yes }
 }

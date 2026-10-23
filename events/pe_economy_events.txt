@@ -18,6 +18,7 @@ country_event = {
 		pe_monthly_sites = yes
 		pe_deal_month = yes
 		pe_corp_defence = yes
+		pe_bombard_step = yes
 		change_variable = { which = pe_months value = 1 }
 		if = {
 			limit = { check_variable = { which = pe_months value >= 3 } }
