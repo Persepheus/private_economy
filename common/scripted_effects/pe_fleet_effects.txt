@@ -7,7 +7,7 @@
 #   pe_cv_  convoy protection (pe.287 / 288): pirates within our borders
 #   pe_ch_  exploration charter (pe.286): a science ship for five years, mining rights
 #   pe_sv_  salvage (pe.289); pe_sw_ corporate Dyson swarm (pe.292); pe_af_ corporate arc
-#           furnace (pe.293)
+#           furnace (pe.293); pe_df_ planetary defence (pe.294 / 295, monthly from pe.100)
 # Debug (pe.277, flag pe_fl_debug): offers only, running contracts are not advanced.
 # Call depths: pe_corp_fleets, pe_corp_charter, pe_corp_convoy, pe_corp_salvage,
 # pe_corp_swarm, pe_corp_furnace 3 (from pe_corp_step) -> the start and exec effects,
@@ -2828,4 +2828,205 @@ pe_select_mid = {
 		limit = { is_variable_set = pe_sel_c check_variable = { which = pe_sel_c value = 1 } }
 		set_variable = { which = pe_sel_c value = 0 }
 	}
+}
+
+# --- Planetary defence (pe.294 / 295) --------------------------------------------------------
+# Country scope, monthly (pe.100): one of our planets is bombarded (by monsters or an enemy). A
+# strong corporation (at least 1500 cash, the one with the most) offers to send a fleet of its
+# own at once, built from our designs, at its own cost (up to 80% of its cash, aiming at 1.5x
+# the hostile fleet power in the system). It wants something big in return: the independent
+# firms of the planet, alloys (an eighth of its budget) or concessions (150 influence); we may
+# haggle (half the alloys, or it leaves). The fleet is held by our Private Holdings and under
+# our command (so it fights in our wars), no lease, no fee; it withdraws when the system is
+# clear and the bombardment over, after a year at the latest, or when it is destroyed. At most
+# every two years. Variables pe_df_.
+pe_corp_defence = {
+	random_country = {
+		limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } }
+		save_event_target_as = pe_hold
+	}
+	if = {
+		limit = { check_variable = { which = pe_df_q value > 0 } NOT = { has_country_flag = pe_fl_debug } }
+		change_variable = { which = pe_df_q value = -1 }
+		set_variable = { which = pe_df_end value = 0 }
+		if = {
+			limit = { NOT = { any_controlled_fleet = { has_fleet_flag = pe_lease_defence } } }
+			set_variable = { which = pe_df_end value = 2 }
+		}
+		else_if = {
+			limit = {
+				any_owned_planet = {
+					has_planet_flag = pe_df_target
+					has_orbital_bombardment = no
+					NOT = { solar_system = { any_fleet_in_system = { owner = { OR = { is_hostile = root is_at_war_with = root } } fleet_power > 0 } } }
+				}
+			}
+			set_variable = { which = pe_df_end value = 1 }
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_df_q value <= 0 } }
+			set_variable = { which = pe_df_end value = 1 }
+		}
+		if = {
+			limit = { check_variable = { which = pe_df_end value > 0 } }
+			set_variable = { which = pe_df_q value = 0 }
+			every_controlled_fleet = { limit = { has_fleet_flag = pe_lease_defence } if = { limit = { exists = leader } kill_leader = { show_notification = no fire = yes } } delete_fleet = this }
+			every_owned_planet = { limit = { has_planet_flag = pe_df_target } save_event_target_as = pe_msg_planet remove_planet_flag = pe_df_target }
+			if = {
+				limit = { is_ai = no exists = event_target:pe_msg_planet }
+				if = { limit = { check_variable = { which = pe_df_run value = 1 } } set_variable = { which = pe_msg_name value = pe_c1_name } }
+				else_if = { limit = { check_variable = { which = pe_df_run value = 2 } } set_variable = { which = pe_msg_name value = pe_c2_name } }
+				else_if = { limit = { check_variable = { which = pe_df_run value = 3 } } set_variable = { which = pe_msg_name value = pe_c3_name } }
+				else_if = { limit = { check_variable = { which = pe_df_run value = 4 } } set_variable = { which = pe_msg_name value = pe_c4_name } }
+				else_if = { limit = { check_variable = { which = pe_df_run value = 5 } } set_variable = { which = pe_msg_name value = pe_c5_name } }
+				else_if = { limit = { check_variable = { which = pe_df_run value = 6 } } set_variable = { which = pe_msg_name value = pe_c6_name } }
+				else_if = { limit = { check_variable = { which = pe_df_run value = 7 } } set_variable = { which = pe_msg_name value = pe_c7_name } }
+				else_if = { limit = { check_variable = { which = pe_df_run value = 8 } } set_variable = { which = pe_msg_name value = pe_c8_name } }
+				if = { limit = { check_variable = { which = pe_df_end value = 1 } } pe_corp_msg = { KEY = pe_msg_defence_end } }
+				else = { pe_corp_msg = { KEY = pe_msg_defence_lost } }
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { check_variable = { which = pe_df_q value > 0 } }
+			exists = event_target:pe_hold
+			NOT = { has_country_flag = pe_defence_cd }
+			any_owned_planet = { has_orbital_bombardment = yes }
+		}
+		set_variable = { which = pe_df_k value = 0 }
+		set_variable = { which = pe_df_best value = 1499 }
+		if = { limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value > pe_df_best } } set_variable = { which = pe_df_k value = 1 } set_variable = { which = pe_df_best value = pe_c1_cash } }
+		if = { limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value > pe_df_best } } set_variable = { which = pe_df_k value = 2 } set_variable = { which = pe_df_best value = pe_c2_cash } }
+		if = { limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value > pe_df_best } } set_variable = { which = pe_df_k value = 3 } set_variable = { which = pe_df_best value = pe_c3_cash } }
+		if = { limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value > pe_df_best } } set_variable = { which = pe_df_k value = 4 } set_variable = { which = pe_df_best value = pe_c4_cash } }
+		if = { limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value > pe_df_best } } set_variable = { which = pe_df_k value = 5 } set_variable = { which = pe_df_best value = pe_c5_cash } }
+		if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value > pe_df_best } } set_variable = { which = pe_df_k value = 6 } set_variable = { which = pe_df_best value = pe_c6_cash } }
+		if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value > pe_df_best } } set_variable = { which = pe_df_k value = 7 } set_variable = { which = pe_df_best value = pe_c7_cash } }
+		if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_df_best } } set_variable = { which = pe_df_k value = 8 } set_variable = { which = pe_df_best value = pe_c8_cash } }
+		if = {
+			limit = { check_variable = { which = pe_df_k value > 0 } }
+			set_timed_country_flag = { flag = pe_defence_cd days = 720 }
+			random_owned_planet = {
+				limit = { has_orbital_bombardment = yes }
+				save_event_target_as = pe_df_planet
+			}
+			# The hostile fleet power in the system, the independent firms on the planet.
+			set_variable = { which = pe_df_power value = 0 }
+			set_variable = { which = pe_df_ind value = 0 }
+			event_target:pe_df_planet = {
+				solar_system = {
+					every_fleet_in_system = {
+						limit = { owner = { OR = { is_hostile = root is_at_war_with = root } } }
+						export_trigger_value_to_variable = { trigger = fleet_power variable = pe_tmp }
+						root = { change_variable = { which = pe_df_power value = prev.pe_tmp } }
+					}
+				}
+				every_deposit = {
+					limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = 0 } }
+					root = { change_variable = { which = pe_df_ind value = 1 } }
+				}
+			}
+			set_variable = { which = pe_df_need value = pe_df_power }
+			multiply_variable = { which = pe_df_need value = 1.5 }
+			set_variable = { which = pe_df_budget value = pe_df_best }
+			multiply_variable = { which = pe_df_budget value = 0.8 }
+			set_variable = { which = pe_df_alloys value = pe_df_budget }
+			divide_variable = { which = pe_df_alloys value = 8 }
+			divide_variable = { which = pe_df_alloys value = 10 }
+			round_variable = pe_df_alloys
+			multiply_variable = { which = pe_df_alloys value = 10 }
+			export_resource_stockpile_to_variable = { resource = alloys variable = pe_df_stock }
+			set_variable = { which = pe_df_half value = pe_df_alloys }
+			multiply_variable = { which = pe_df_half value = 0.5 }
+			round_variable = pe_df_half
+			if = {
+				limit = { check_variable = { which = pe_df_power value > 0 } }
+				if = {
+					limit = { is_ai = yes }
+					if = {
+						limit = { has_resource = { type = alloys amount >= 1 } }
+						export_resource_stockpile_to_variable = { resource = alloys variable = pe_tmp }
+						if = {
+							limit = { check_variable = { which = pe_tmp value >= pe_df_alloys } }
+							add_resource = { alloys = -1 mult = pe_df_alloys }
+							pe_corp_defence_start = yes
+						}
+					}
+				}
+				else = { country_event = { id = pe.294 } }
+			}
+		}
+	}
+}
+
+# Country scope: the independent firms of event_target:pe_df_planet join the corporation pe_df_k.
+pe_corp_defence_firms = {
+	event_target:pe_df_planet = {
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = 0 } }
+			set_variable = { which = pe_corp value = root.pe_df_k }
+		}
+	}
+}
+
+# Country scope: the corporation pe_df_k sends its fleet to event_target:pe_df_planet.
+pe_corp_defence_start = {
+	set_variable = { which = pe_fl_class value = 1 }
+	if = { limit = { has_technology = tech_destroyers } set_variable = { which = pe_fl_class value = 2 } }
+	if = { limit = { has_technology = tech_cruisers } set_variable = { which = pe_fl_class value = 3 } }
+	if = { limit = { has_technology = tech_battleships } set_variable = { which = pe_fl_class value = 4 } }
+	if = { limit = { check_variable = { which = pe_fl_class value = 1 } } set_variable = { which = pe_fl_ccost value = 150 } }
+	if = { limit = { check_variable = { which = pe_fl_class value = 2 } } set_variable = { which = pe_fl_ccost value = 300 } }
+	if = { limit = { check_variable = { which = pe_fl_class value = 3 } } set_variable = { which = pe_fl_ccost value = 600 } }
+	if = { limit = { check_variable = { which = pe_fl_class value = 4 } } set_variable = { which = pe_fl_ccost value = 1200 } }
+	set_variable = { which = pe_df_spent value = 0 }
+	create_fleet = {
+		name = pe_corp_fleet_name
+		settings = { uses_naval_capacity = no }
+		effect = {
+			set_owner = root
+			set_variable = { which = pe_fp value = 0 }
+			while = {
+				count = 20
+				limit = {
+					check_variable = { which = pe_fp value < root.pe_df_need }
+					root = { check_variable = { which = pe_df_spent value < pe_df_budget } }
+				}
+				if = { limit = { root = { check_variable = { which = pe_fl_class value = 1 } } } create_ship = { name = random random_existing_design = corvette } }
+				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 2 } } } create_ship = { name = random random_existing_design = destroyer } }
+				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 3 } } } create_ship = { name = random random_existing_design = cruiser } }
+				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 4 } } } create_ship = { name = random random_existing_design = battleship } }
+				root = { change_variable = { which = pe_df_spent value = pe_fl_ccost } }
+				export_trigger_value_to_variable = { trigger = fleet_power variable = pe_fp }
+			}
+			set_location = event_target:pe_df_planet
+			set_fleet_stance = aggressive
+			set_fleet_flag = pe_leased
+			set_fleet_flag = pe_lease_defence
+		}
+	}
+	# The leader is the holdings' own; assigned while they own and control the fleet.
+	event_target:pe_hold = {
+		create_leader = { class = commander species = root name = random skill = 3 }
+		last_created_leader = { save_event_target_as = pe_fl_leader }
+	}
+	last_created_fleet = {
+		set_owner = event_target:pe_hold
+		assign_leader = event_target:pe_fl_leader
+		set_controller = root
+		add_modifier = { modifier = pe_leased_fleet days = -1 }
+	}
+	if = { limit = { check_variable = { which = pe_df_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c1_name } }
+	else_if = { limit = { check_variable = { which = pe_df_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c2_name } }
+	else_if = { limit = { check_variable = { which = pe_df_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c3_name } }
+	else_if = { limit = { check_variable = { which = pe_df_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c4_name } }
+	else_if = { limit = { check_variable = { which = pe_df_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c5_name } }
+	else_if = { limit = { check_variable = { which = pe_df_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c6_name } }
+	else_if = { limit = { check_variable = { which = pe_df_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c7_name } }
+	else_if = { limit = { check_variable = { which = pe_df_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c8_name } }
+	set_variable = { which = pe_df_q value = 12 }
+	set_variable = { which = pe_df_run value = pe_df_k }
+	event_target:pe_df_planet = { set_planet_flag = pe_df_target save_event_target_as = pe_msg_planet }
+	if = { limit = { is_ai = no } pe_corp_msg = { KEY = pe_msg_defence_start } }
 }

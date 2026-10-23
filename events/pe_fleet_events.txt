@@ -2,6 +2,7 @@
 #   pe.282 war lease offer   pe.283 war lease ends   pe.284 clearing offer   pe.285 clearing result
 #   pe.286 exploration charter   pe.287 / 288 convoy protection   pe.289 salvage
 #   pe.290 ship lost (on_action)   pe.292 corporate Dyson swarm   pe.293 corporate arc furnace
+#   pe.294 / 295 planetary defence against bombardment
 # Scope: country. pe_corp_cur_name = the corporation's name id.
 namespace = pe
 
@@ -191,4 +192,84 @@ country_event = {
 		hidden_effect = { pe_corp_furnace_exec = yes }
 	}
 	option = { name = pe.293.b }
+}
+
+# A planet is bombarded: a corporation offers a fleet of its own, for a price.
+country_event = {
+	id = pe.294
+	title = pe.294.name
+	desc = pe.294.desc
+	picture = GFX_evt_federation_fleet
+	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_df_k value = 1 } } set_variable = { which = pe_cn294 value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 2 } } set_variable = { which = pe_cn294 value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 3 } } set_variable = { which = pe_cn294 value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 4 } } set_variable = { which = pe_cn294 value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 5 } } set_variable = { which = pe_cn294 value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 6 } } set_variable = { which = pe_cn294 value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 7 } } set_variable = { which = pe_cn294 value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 8 } } set_variable = { which = pe_cn294 value = pe_c8_name } } } }
+	location = event_target:pe_df_planet
+
+	option = {
+		name = pe.294.a
+		trigger = { check_variable = { which = pe_df_ind value > 0 } }
+		custom_tooltip = pe.294.a.tt
+		hidden_effect = { pe_corp_defence_firms = yes pe_corp_defence_start = yes }
+	}
+	option = {
+		name = pe.294.b
+		allow = { check_variable = { which = pe_df_stock value >= pe_df_alloys } }
+		custom_tooltip = pe.294.b.tt
+		hidden_effect = {
+			export_resource_stockpile_to_variable = { resource = alloys variable = pe_tmp }
+			if = {
+				limit = { check_variable = { which = pe_tmp value >= pe_df_alloys } }
+				add_resource = { alloys = -1 mult = pe_df_alloys }
+				pe_corp_defence_start = yes
+			}
+		}
+	}
+	option = {
+		name = pe.294.c
+		allow = { has_resource = { type = influence amount >= 150 } }
+		custom_tooltip = pe.294.c.tt
+		hidden_effect = { add_resource = { influence = -150 } pe_corp_defence_start = yes }
+	}
+	option = {
+		name = pe.294.d
+		custom_tooltip = pe.294.d.tt
+		hidden_effect = {
+			random_list = {
+				50 = { set_variable = { which = pe_df_ok value = 1 } }
+				50 = { set_variable = { which = pe_df_ok value = 0 } }
+			}
+			country_event = { id = pe.295 }
+		}
+	}
+	option = { name = pe.294.e }
+}
+
+# Haggling over the planetary defence.
+country_event = {
+	id = pe.295
+	title = pe.295.name
+	desc = { trigger = { check_variable = { which = pe_df_ok value = 1 } } text = pe.295.desc.ok }
+	desc = { trigger = { check_variable = { which = pe_df_ok value = 0 } } text = pe.295.desc.no }
+	picture = GFX_evt_federation_fleet
+	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_df_k value = 1 } } set_variable = { which = pe_cn295 value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 2 } } set_variable = { which = pe_cn295 value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 3 } } set_variable = { which = pe_cn295 value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 4 } } set_variable = { which = pe_cn295 value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 5 } } set_variable = { which = pe_cn295 value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 6 } } set_variable = { which = pe_cn295 value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 7 } } set_variable = { which = pe_cn295 value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_df_k value = 8 } } set_variable = { which = pe_cn295 value = pe_c8_name } } } }
+	location = event_target:pe_df_planet
+
+	option = {
+		name = pe.295.a
+		trigger = { check_variable = { which = pe_df_ok value = 1 } }
+		allow = { check_variable = { which = pe_df_stock value >= pe_df_half } }
+		custom_tooltip = pe.295.a.tt
+		hidden_effect = {
+			export_resource_stockpile_to_variable = { resource = alloys variable = pe_tmp }
+			if = {
+				limit = { check_variable = { which = pe_tmp value >= pe_df_half } }
+				add_resource = { alloys = -1 mult = pe_df_half }
+				pe_corp_defence_start = yes
+			}
+		}
+	}
+	option = {
+		name = pe.295.b
+		trigger = { check_variable = { which = pe_df_ok value = 0 } }
+	}
 }

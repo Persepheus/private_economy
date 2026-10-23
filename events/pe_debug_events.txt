@@ -289,14 +289,16 @@ country_event = {
 		remove_country_flag = pe_salvage_cd
 		remove_country_flag = pe_swarm_cd
 		remove_country_flag = pe_furnace_cd
+		remove_country_flag = pe_defence_cd
 		pe_corp_charter = yes
 		pe_corp_convoy = yes
 		pe_corp_salvage = yes
 		pe_corp_swarm = yes
 		pe_corp_furnace = yes
+		pe_corp_defence = yes
 		remove_country_flag = pe_fl_debug
 		set_variable = { which = pe_fl_force value = 0 }
-		log = "private_economy: pe.277 corporation per offer (0 = none, or its condition is not met, or a contract of that kind is running): war [Root.pe_wl_k], clearing [Root.pe_cl_k], charter [Root.pe_ch_k], convoy [Root.pe_cv_k], salvage [Root.pe_sv_k], swarm [Root.pe_sw_k], furnace [Root.pe_af_k]. Running (quarters left): war [Root.pe_lease_war_q], clearing [Root.pe_lease_clear_q], charter [Root.pe_charter_q], convoy [Root.pe_convoy_q]. pe.278 ends them."
+		log = "private_economy: pe.277 corporation per offer (0 = none, or its condition is not met, or a contract of that kind is running): war [Root.pe_wl_k], clearing [Root.pe_cl_k], charter [Root.pe_ch_k], convoy [Root.pe_cv_k], salvage [Root.pe_sv_k], swarm [Root.pe_sw_k], furnace [Root.pe_af_k], defence of a bombarded planet [Root.pe_df_k]. Running (quarters left): war [Root.pe_lease_war_q], clearing [Root.pe_lease_clear_q], charter [Root.pe_charter_q], convoy [Root.pe_convoy_q]. pe.278 ends them."
 	}
 }
 

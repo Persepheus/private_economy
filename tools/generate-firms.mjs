@@ -2304,7 +2304,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
 
 // Events that name a corporation: each reads its own variable pe_cn<event>, set in its
 // immediate (pe_corp_cur_name is shared and may change before the window is read).
-const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293];
+const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295];
 const corpLoc = (name, varName, keyOf) => dtext(name, varName, NAME_IDS.map(id => [id, keyOf(id)]), 'pe_corp_line_none');
 write('common/scripted_loc/pe_corp_loc_generated.txt', header + locDt + `# Corporation names (country scope).\n` +
   corpLoc('GetPeCorpName', 'pe_corp_cur_name', id => `pe_cname_${id}`) + CORP_EVENTS.map(e => corpLoc(`GetPeCorpName${e}`, `pe_cn${e}`, id => `pe_cname_${id}`)).join('') + corpLoc('GetPeCorpA', 'pe_corp_a_name', id => `pe_cname_${id}`) + corpLoc('GetPeCorpB', 'pe_corp_b_name', id => `pe_cname_${id}`) +
