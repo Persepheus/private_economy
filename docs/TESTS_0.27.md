@@ -32,3 +32,16 @@ Ein laufendes Spiel kann weiterlaufen.
 3. Kämpft die Flotte gegen die Bombardierer? Bitte genau beobachten, vor allem bei Monstern.
 4. Ist das System frei, zieht die Flotte nach höchstens einem Monat ab, mit Nachricht.
 5. Logs: keine Fehler aus pe_fleet_effects.txt (pe_corp_defence, pe_corp_defence_start).
+
+## 0.27.1: Hauptsitz verteidigen
+- **Wann:** Ein bombardierter Planet trägt den Hauptsitz eines Konzerns. Dann schickt dieser Konzern seine Flotte **kostenlos**, ohne Verhandlung. Es kommt nur die Nachricht „verteidigt seinen Hauptsitz“.
+- **Budget:** seine ganze Kasse plus Kreditlinie. Er geht bis −200 ins Minus. Er muss mindestens noch −50 Kasse haben; darunter kann er es sich nicht mehr leisten.
+- **Vorrang und Sperren:**
+  - Der Hauptsitz hat Vorrang vor dem bezahlten Angebot.
+  - Höchstens einmal im Jahr. Diese Sperre ist unabhängig von der 2-Jahres-Sperre des bezahlten Angebots.
+- **Ins Minus gerutscht:** Die üblichen Regeln greifen. Ein Konzern unter 0 verkauft Firmen.
+
+### Prüfen
+1. Einen Planeten mit Konzernsitz bombardieren lassen. Dann kommt im nächsten Monat die Flotte ohne Event, mit Nachricht. Alternativ `event pe.277`.
+2. Im Firmenregister sinkt die Kasse, notfalls bis −200.
+

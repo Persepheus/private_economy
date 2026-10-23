@@ -514,3 +514,4 @@
  pe_msg_defence_start:0 "Eine Flotte von §Y$CORP$§! ist bei $PLANET$ eingetroffen, um das Bombardement zu beenden. Sie steht unter unserem Befehl, bis die Gefahr vorbei ist."
  pe_msg_defence_end:0 "Die Flotte von §Y$CORP$§! hat $PLANET$ gesichert und ist abgezogen."
  pe_msg_defence_lost:0 "Die Flotte von §Y$CORP$§! bei $PLANET$ wurde vernichtet."
+ pe_msg_defence_hq:0 "§Y$CORP$§! verteidigt seinen Hauptsitz: Eine Flotte des Konzerns ist bei $PLANET$ eingetroffen, kostenlos und unter unserem Befehl, bis die Gefahr vorbei ist."

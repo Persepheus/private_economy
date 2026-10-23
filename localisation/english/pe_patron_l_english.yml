@@ -514,3 +514,4 @@
  pe_msg_defence_start:0 "A fleet of §Y$CORP$§! has arrived at $PLANET$ to end the bombardment. It is under our command until the danger is over."
  pe_msg_defence_end:0 "The fleet of §Y$CORP$§! has secured $PLANET$ and withdrawn."
  pe_msg_defence_lost:0 "The fleet of §Y$CORP$§! at $PLANET$ has been destroyed."
+ pe_msg_defence_hq:0 "§Y$CORP$§! defends its headquarters: a fleet of the corporation has arrived at $PLANET$, free of charge, under our command until the danger is over."
