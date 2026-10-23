@@ -40,7 +40,17 @@ Alle Schiffe gehören dem Konzern (Holdings), werden dir verleast (10 % Unterhal
 - **Log-Fehler „Failed to get leader from scope“** beim Zurückgeben einer Flotte ohne Anführer: behoben.
 - `pe.277` schreibt ins Log, welcher Konzern für welches Angebot in Frage kam (0 = keiner oder Bedingung fehlt).
 
+## Korrekturen 0.23.2 (nach dem zweiten Test)
+- **Anführer:** auf den Schiffen. Die Charta kann vermessen.
+- **Keine Nachricht am Ende der Charta:** `pe.277` hatte 2249 und 2250 den Konzern der laufenden Charta auf 0 gesetzt. Beim Ende 2253 gab es deshalb weder Nachricht noch Schürfrecht.
+  - Laufende Verträge (Charta, Säuberung, Konvoischutz) merken sich ihren Konzern jetzt getrennt (`pe_ch_run`, `pe_cl_run`, `pe_cv_run`).
+  - Ohne Konzern kommt eine allgemeine Nachricht.
+- **Wo sieht man die Konzernproduktion?**
+  - Auf dem Hauptsitz als Vorkommen „Konzernproduktion: Energie“ und im Haushalt als Zeile „Konzernproduktion“. Im Save: Hauptstadt Cevanti, +62 Energie im Monat. Das ist der Stationswert 31 (zwei Bergbaustationen plus 20 für den Schwarm) mal 2, bei Energie als Produkt.
+  - Neu: Das Konzernregister `event pe.273` zeigt pro Konzern „Konzernproduktion +62 Energie/Monat“.
+
 ## Debug
+- `event pe.278`: alle laufenden Konzernflotten-Verträge beenden (Flotten verschwinden, keine Beute).
 - `event pe.277`: alle Konzern-Angebote sofort, jeweils nur, wo die Bedingung erfüllt ist: Kriegsleasing auch im Frieden, Säuberung, Charta, Konvoischutz, Bergung, Schwarm.
 
 ## Prüfen

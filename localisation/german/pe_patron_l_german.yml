@@ -483,3 +483,4 @@
  pe.292.b:0 "Megastrukturen sind Sache des Staates."
  pe_msg_charter_end:0 "Die Erkundungscharta von §Y$CORP$§! ist beendet, ihr Schiff zurück. Der Konzern hält jetzt die Schürfrechte an seinen Funden."
  pe_msg_corp_swarm:0 "§Y$CORP$§! hat bei $PLANET$ einen eigenen Dyson-Schwarm gebaut. Seine Energie stärkt die Stationen am Stern."
+ pe_msg_charter_end_anon:0 "Eine Erkundungscharta ist beendet; das geleaste Forschungsschiff ist zu seinem Konzern zurückgekehrt."

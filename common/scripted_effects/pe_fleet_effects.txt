@@ -127,14 +127,14 @@ pe_corp_fleets = {
 				multiply_variable = { which = pe_cl_res value = 0.05 }
 				if = { limit = { check_variable = { which = pe_cl_res value < 25 } } set_variable = { which = pe_cl_res value = 25 } }
 				round_variable = pe_cl_res
-				if = { limit = { check_variable = { which = pe_cl_k value = 1 } } change_variable = { which = pe_c1_cash value = pe_cl_loot } }
-				else_if = { limit = { check_variable = { which = pe_cl_k value = 2 } } change_variable = { which = pe_c2_cash value = pe_cl_loot } }
-				else_if = { limit = { check_variable = { which = pe_cl_k value = 3 } } change_variable = { which = pe_c3_cash value = pe_cl_loot } }
-				else_if = { limit = { check_variable = { which = pe_cl_k value = 4 } } change_variable = { which = pe_c4_cash value = pe_cl_loot } }
-				else_if = { limit = { check_variable = { which = pe_cl_k value = 5 } } change_variable = { which = pe_c5_cash value = pe_cl_loot } }
-				else_if = { limit = { check_variable = { which = pe_cl_k value = 6 } } change_variable = { which = pe_c6_cash value = pe_cl_loot } }
-				else_if = { limit = { check_variable = { which = pe_cl_k value = 7 } } change_variable = { which = pe_c7_cash value = pe_cl_loot } }
-				else_if = { limit = { check_variable = { which = pe_cl_k value = 8 } } change_variable = { which = pe_c8_cash value = pe_cl_loot } }
+				if = { limit = { check_variable = { which = pe_cl_run value = 1 } } change_variable = { which = pe_c1_cash value = pe_cl_loot } }
+				else_if = { limit = { check_variable = { which = pe_cl_run value = 2 } } change_variable = { which = pe_c2_cash value = pe_cl_loot } }
+				else_if = { limit = { check_variable = { which = pe_cl_run value = 3 } } change_variable = { which = pe_c3_cash value = pe_cl_loot } }
+				else_if = { limit = { check_variable = { which = pe_cl_run value = 4 } } change_variable = { which = pe_c4_cash value = pe_cl_loot } }
+				else_if = { limit = { check_variable = { which = pe_cl_run value = 5 } } change_variable = { which = pe_c5_cash value = pe_cl_loot } }
+				else_if = { limit = { check_variable = { which = pe_cl_run value = 6 } } change_variable = { which = pe_c6_cash value = pe_cl_loot } }
+				else_if = { limit = { check_variable = { which = pe_cl_run value = 7 } } change_variable = { which = pe_c7_cash value = pe_cl_loot } }
+				else_if = { limit = { check_variable = { which = pe_cl_run value = 8 } } change_variable = { which = pe_c8_cash value = pe_cl_loot } }
 				add_resource = { society_research = 1 mult = pe_cl_res }
 			}
 			if = { limit = { is_ai = no } country_event = { id = pe.285 } }
@@ -319,6 +319,7 @@ pe_corp_fleet_clear_start = {
 	else_if = { limit = { check_variable = { which = pe_cl_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_cl_spent } }
 	else_if = { limit = { check_variable = { which = pe_cl_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_cl_spent } }
 	set_variable = { which = pe_lease_clear_q value = 12 }
+	set_variable = { which = pe_cl_run value = pe_cl_k }
 	event_target:pe_cl_sys = { set_star_flag = pe_clear@root }
 }
 
@@ -353,18 +354,21 @@ pe_corp_charter = {
 		if = {
 			limit = { check_variable = { which = pe_charter_q value <= 0 } }
 			every_controlled_fleet = { limit = { has_fleet_flag = pe_lease_charter } if = { limit = { exists = leader } kill_leader = { show_notification = no fire = yes } } delete_fleet = this }
-			if = { limit = { check_variable = { which = pe_ch_k value = 1 } } set_variable = { which = pe_c1_right value = 1 } set_variable = { which = pe_c1_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c1_name } }
-			else_if = { limit = { check_variable = { which = pe_ch_k value = 2 } } set_variable = { which = pe_c2_right value = 1 } set_variable = { which = pe_c2_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c2_name } }
-			else_if = { limit = { check_variable = { which = pe_ch_k value = 3 } } set_variable = { which = pe_c3_right value = 1 } set_variable = { which = pe_c3_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c3_name } }
-			else_if = { limit = { check_variable = { which = pe_ch_k value = 4 } } set_variable = { which = pe_c4_right value = 1 } set_variable = { which = pe_c4_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c4_name } }
-			else_if = { limit = { check_variable = { which = pe_ch_k value = 5 } } set_variable = { which = pe_c5_right value = 1 } set_variable = { which = pe_c5_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c5_name } }
-			else_if = { limit = { check_variable = { which = pe_ch_k value = 6 } } set_variable = { which = pe_c6_right value = 1 } set_variable = { which = pe_c6_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c6_name } }
-			else_if = { limit = { check_variable = { which = pe_ch_k value = 7 } } set_variable = { which = pe_c7_right value = 1 } set_variable = { which = pe_c7_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c7_name } }
-			else_if = { limit = { check_variable = { which = pe_ch_k value = 8 } } set_variable = { which = pe_c8_right value = 1 } set_variable = { which = pe_c8_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c8_name } }
+			if = { limit = { check_variable = { which = pe_ch_run value = 1 } } set_variable = { which = pe_c1_right value = 1 } set_variable = { which = pe_c1_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c1_name } }
+			else_if = { limit = { check_variable = { which = pe_ch_run value = 2 } } set_variable = { which = pe_c2_right value = 1 } set_variable = { which = pe_c2_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c2_name } }
+			else_if = { limit = { check_variable = { which = pe_ch_run value = 3 } } set_variable = { which = pe_c3_right value = 1 } set_variable = { which = pe_c3_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c3_name } }
+			else_if = { limit = { check_variable = { which = pe_ch_run value = 4 } } set_variable = { which = pe_c4_right value = 1 } set_variable = { which = pe_c4_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c4_name } }
+			else_if = { limit = { check_variable = { which = pe_ch_run value = 5 } } set_variable = { which = pe_c5_right value = 1 } set_variable = { which = pe_c5_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c5_name } }
+			else_if = { limit = { check_variable = { which = pe_ch_run value = 6 } } set_variable = { which = pe_c6_right value = 1 } set_variable = { which = pe_c6_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c6_name } }
+			else_if = { limit = { check_variable = { which = pe_ch_run value = 7 } } set_variable = { which = pe_c7_right value = 1 } set_variable = { which = pe_c7_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c7_name } }
+			else_if = { limit = { check_variable = { which = pe_ch_run value = 8 } } set_variable = { which = pe_c8_right value = 1 } set_variable = { which = pe_c8_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c8_name } }
+			capital_scope = { save_event_target_as = pe_msg_planet }
 			if = {
-				limit = { check_variable = { which = pe_ch_k value > 0 } }
-				capital_scope = { save_event_target_as = pe_msg_planet }
+				limit = { check_variable = { which = pe_ch_run value > 0 } }
 				pe_corp_msg = { KEY = pe_msg_charter_end }
+			}
+			else = {
+				create_message = { type = pe_private_economy localization = pe_msg_charter_end_anon days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } }
 			}
 		}
 	}
@@ -405,6 +409,7 @@ pe_corp_charter = {
 # Country scope: start the charter (one science ship of our design, a scientist of the holdings).
 pe_corp_charter_start = {
 	set_variable = { which = pe_charter_q value = 20 }
+	set_variable = { which = pe_ch_run value = pe_ch_k }
 	create_fleet = {
 		name = pe_charter_fleet_name
 		settings = { uses_naval_capacity = no }
@@ -475,14 +480,14 @@ pe_corp_convoy = {
 				multiply_variable = { which = pe_cv_loot value = 0.35 }
 				change_variable = { which = pe_cv_loot value = pe_cv_spent }
 				round_variable = pe_cv_loot
-				if = { limit = { check_variable = { which = pe_cv_k value = 1 } } change_variable = { which = pe_c1_cash value = pe_cv_loot } }
-				else_if = { limit = { check_variable = { which = pe_cv_k value = 2 } } change_variable = { which = pe_c2_cash value = pe_cv_loot } }
-				else_if = { limit = { check_variable = { which = pe_cv_k value = 3 } } change_variable = { which = pe_c3_cash value = pe_cv_loot } }
-				else_if = { limit = { check_variable = { which = pe_cv_k value = 4 } } change_variable = { which = pe_c4_cash value = pe_cv_loot } }
-				else_if = { limit = { check_variable = { which = pe_cv_k value = 5 } } change_variable = { which = pe_c5_cash value = pe_cv_loot } }
-				else_if = { limit = { check_variable = { which = pe_cv_k value = 6 } } change_variable = { which = pe_c6_cash value = pe_cv_loot } }
-				else_if = { limit = { check_variable = { which = pe_cv_k value = 7 } } change_variable = { which = pe_c7_cash value = pe_cv_loot } }
-				else_if = { limit = { check_variable = { which = pe_cv_k value = 8 } } change_variable = { which = pe_c8_cash value = pe_cv_loot } }
+				if = { limit = { check_variable = { which = pe_cv_run value = 1 } } change_variable = { which = pe_c1_cash value = pe_cv_loot } }
+				else_if = { limit = { check_variable = { which = pe_cv_run value = 2 } } change_variable = { which = pe_c2_cash value = pe_cv_loot } }
+				else_if = { limit = { check_variable = { which = pe_cv_run value = 3 } } change_variable = { which = pe_c3_cash value = pe_cv_loot } }
+				else_if = { limit = { check_variable = { which = pe_cv_run value = 4 } } change_variable = { which = pe_c4_cash value = pe_cv_loot } }
+				else_if = { limit = { check_variable = { which = pe_cv_run value = 5 } } change_variable = { which = pe_c5_cash value = pe_cv_loot } }
+				else_if = { limit = { check_variable = { which = pe_cv_run value = 6 } } change_variable = { which = pe_c6_cash value = pe_cv_loot } }
+				else_if = { limit = { check_variable = { which = pe_cv_run value = 7 } } change_variable = { which = pe_c7_cash value = pe_cv_loot } }
+				else_if = { limit = { check_variable = { which = pe_cv_run value = 8 } } change_variable = { which = pe_c8_cash value = pe_cv_loot } }
 			}
 			if = { limit = { is_ai = no } country_event = { id = pe.288 } }
 		}
@@ -598,6 +603,7 @@ pe_corp_convoy_start = {
 	else_if = { limit = { check_variable = { which = pe_cv_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_cv_spent } }
 	else_if = { limit = { check_variable = { which = pe_cv_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_cv_spent } }
 	set_variable = { which = pe_convoy_q value = 12 }
+	set_variable = { which = pe_cv_run value = pe_cv_k }
 	event_target:pe_cv_sys = { set_star_flag = pe_convoy@root }
 }
 

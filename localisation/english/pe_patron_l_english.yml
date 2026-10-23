@@ -483,3 +483,4 @@
  pe.292.b:0 "Megastructures are the state’s business."
  pe_msg_charter_end:0 "The exploration charter of §Y$CORP$§! has ended; its ship has returned. The corporation now holds the mining rights to what it found."
  pe_msg_corp_swarm:0 "§Y$CORP$§! has built a Dyson swarm of its own at $PLANET$. Its power strengthens the stations at the star."
+ pe_msg_charter_end_anon:0 "An exploration charter has ended; the leased science ship has returned to its corporation."

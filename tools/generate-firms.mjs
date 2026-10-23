@@ -1869,7 +1869,7 @@ ${nameChain('pe_msg_name', id => `if = { limit = { check_variable = { which = pe
 # planet, deposit lines), and books half the value (per quarter: x 3) as its own earnings.
 # Stations bought under Free Market or Mixed pay us a fifth of their value a year.
 pe_corp_station_output = {
-${CORPS.map(k => `\tset_variable = { which = ${C(k, 'sv')} value = 0 }\n\tset_variable = { which = ${C(k, 'st')} value = 0 }\n\tset_variable = { which = ${C(k, 'shv')} value = 0 }`).join('\n')}
+${CORPS.map(k => `\tset_variable = { which = ${C(k, 'sv')} value = 0 }\n\tset_variable = { which = ${C(k, 'out')} value = 0 }\n\tset_variable = { which = ${C(k, 'st')} value = 0 }\n\tset_variable = { which = ${C(k, 'shv')} value = 0 }`).join('\n')}
 ${ST_STOCK.map(r => `\tset_variable = { which = pe_sr_${r} value = 0 }`).join('\n')}
 	every_owned_colony = {
 ${PROD.map(r => `\t\tset_variable = { which = pe_cpv_${r} value = 0 }`).join('\n')}
@@ -1900,7 +1900,7 @@ ${CORPS.map(k => `\tif = { limit = { check_variable = { which = ${C(k, 'on')} va
 ${CORPS.map(k => `	if = {
 		limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'sv')} value > 0 } }
 		if = { limit = { NOT = { is_variable_set = ${C(k, 'prod')} } } ${GROUPS.map((g, i) => `${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = ${C(k, 'grp')} value = ${g} } } set_variable = { which = ${C(k, 'prod')} value = ${GROUP_PROD[g]} } }`).join(' ')} }
-${PROD.map((r, i) => `		${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = ${C(k, 'prod')} value = ${i + 1} } } set_variable = { which = pe_tmp value = ${C(k, 'sv')} } multiply_variable = { which = pe_tmp value = ${+(ST_BONUS / ST_VAL[r]).toFixed(4)} } every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } change_variable = { which = pe_cpv_${r} value = root.pe_tmp } } }`).join('\n')}
+${PROD.map((r, i) => `		${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = ${C(k, 'prod')} value = ${i + 1} } } set_variable = { which = pe_tmp value = ${C(k, 'sv')} } multiply_variable = { which = pe_tmp value = ${+(ST_BONUS / ST_VAL[r]).toFixed(4)} } every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } change_variable = { which = pe_cpv_${r} value = root.pe_tmp } } set_variable = { which = ${C(k, 'out')} value = pe_tmp } round_variable = ${C(k, 'out')} }`).join('\n')}
 		set_variable = { which = pe_tmp value = ${C(k, 'sv')} }
 		multiply_variable = { which = pe_tmp value = 1.5 }
 		change_variable = { which = ${C(k, 'cash')} value = pe_tmp }
@@ -2006,6 +2006,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
     li ? ` d_pe_hq_${id}_desc:0 "Der Konzern ${CORP_NAMES[id - 1]} hat hier seinen Sitz: Verwaltung, Forschung, gut bezahlte Stellen. Hier entsteht auch die Konzernproduktion aus seinen Stationen."` : ` d_pe_hq_${id}_desc:0 "The corporation ${CORP_NAMES[id - 1]} has its headquarters here: management, research, well-paid jobs. Its corporate production from its stations is made here as well."`));
   PROD.forEach(r => L.push(li ? ` d_pe_cprod_${r}:0 "Konzernproduktion: ${PROD_NAMES[r][1]}"` : ` d_pe_cprod_${r}:0 "Corporate Production: ${PROD_NAMES[r][0]}"`,
     li ? ` d_pe_cprod_${r}_desc:0 "Ein Konzern mit Hauptsitz hier verarbeitet den Ertrag seiner Orbitalstationen und produziert dafür doppelt so viel Wert in seinem eigenen Produkt."` : ` d_pe_cprod_${r}_desc:0 "A corporation headquartered here processes the output of its orbital stations and produces twice its value in its own product."`));
+  PROD.forEach(r => L.push(` pe_prod_${r}:0 "${li ? PROD_NAMES[r][1] : PROD_NAMES[r][0]}"`));
   L.push(li ? ' pe_corp_production:0 "Konzernproduktion"' : ' pe_corp_production:0 "Corporate Production"',
     li ? ' pe_deposit_cat_corp:0 "Konzerne"' : ' pe_deposit_cat_corp:0 "Corporations"',
     li ? ' pe_msg_corp_st_build:0 "§Y$CORP$§! hat über $PLANET$ eine eigene Station errichtet. Ihren Ertrag verarbeitet der Konzern selbst."' : ' pe_msg_corp_st_build:0 "§Y$CORP$§! has built a station of its own above $PLANET$. The corporation processes its output itself."',
@@ -2097,6 +2098,7 @@ write('common/scripted_loc/pe_corp_loc_generated.txt', header + `# Corporation n
   dtext('GetPeCorpGroup', 'pe_corp_grp', GROUPS.map(g => [g, `pe_corp_grp_${g}`]), 'pe_corp_line_none') +
   dtext('GetPeCorpCeo', 'pe_corp_cur_ceo', Array.from({length: 16}, (_, i) => [i + 1, `pe_magnate_${i + 1}`]), 'pe_corp_line_none') +
   CORPS.map(k => `defined_text = {\n\tname = GetPeCorpLine${k}\n\ttext = {\n\t\ttrigger = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'war')} value > 0 } }\n\t\tlocalization_key = pe_corp_line_war_${k}\n\t}\n\ttext = {\n\t\ttrigger = { check_variable = { which = ${C(k, 'on')} value = 1 } }\n\t\tlocalization_key = pe_corp_line_${k}\n\t}\n\tdefault = pe_corp_line_none\n}\n`).join('') +
+  CORPS.map(k => dtext(`GetPeCorpProd${k}`, C(k, 'prod'), PROD.map((r, i) => [i + 1, `pe_prod_${r}`]), 'pe_corp_line_none')).join('') +
   CORPS.map(k => dtext(`GetPeCorpRival${k}`, C(k, 'rival'), CORPS.map(j => [j, `pe_corp_rn_${j}`]), 'pe_corp_line_none')).join(''));
 const CORP_GROUP_NAMES = {1: ['industry', 'Industrie'], 2: ['trade and leisure', 'Handel und Freizeit'], 3: ['science and media', 'Wissenschaft und Medien'], 4: ['raw materials', 'Rohstoffe']};
 const CLUSTER_NAMES = {a: ['Steel', 'Stahl'], c: ['Consumer Goods', 'Konsumgüter'], t: ['Trade', 'Handels'], u: ['Entertainment', 'Unterhaltungs'], x: ['Physics', 'Physik'], y: ['Biology', 'Biologie'], z: ['Engineering', 'Ingenieurs'], b: ['Media', 'Medien'], m: ['Mining', 'Bergbau'], e: ['Energy', 'Energie'], f: ['Agricultural', 'Agrar']};
@@ -2114,10 +2116,10 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
     : ` pe_cluster_${l}_${n}:0 "${CLUSTER_NAMES[l][0]} Cluster (${n + 1}${n === 3 ? '+' : ''} firms)"`,
     li ? ` pe_cluster_${l}_${n}_desc:0 "Mehrere Privatfirmen derselben Branche teilen sich hier Zulieferer, Fachkräfte und Wissen."` : ` pe_cluster_${l}_${n}_desc:0 "Several private firms of the same sector share suppliers, skilled people and know-how here."`)));
   CORPS.forEach(k => L.push(li
-    ? ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£"`
-    : ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£"`,
-    li ? ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£, §RPreiskampf mit [Root.GetPeCorpRival${k}]§!"`
-       : ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£, §Rprice war with [Root.GetPeCorpRival${k}]§!"`,
+    ? ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£, Konzernproduktion +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/Monat"`
+    : ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£, corporate production +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/month"`,
+    li ? ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£, Konzernproduktion +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/Monat, §RPreiskampf mit [Root.GetPeCorpRival${k}]§!"`
+       : ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£, corporate production +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/month, §Rprice war with [Root.GetPeCorpRival${k}]§!"`,
     ` pe_corp_rn_${k}:0 "[Root.GetPeCorpN${k}]"`));
   L.push(' pe_corp_line_none:0 ""',
     li ? ' pe_price_war:0 "Preiskampf"' : ' pe_price_war:0 "Price War"',
