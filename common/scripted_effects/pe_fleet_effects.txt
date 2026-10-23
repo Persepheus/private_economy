@@ -679,60 +679,19 @@ pe_corp_salvage_exec = {
 # (pe_c<slot>_sw), so it produces 40 more in its own product. One per corporation; 20% a
 # quarter, then four years' pause.
 pe_corp_swarm = {
-	# Corporations with a swarm: they take the station at its star if they do not have it yet,
-	# and upgrade the swarm when they can pay (stage II 4000, stage III 8000 with the Dyson
-	# sphere technology; vanilla build time).
+	# Corporations with a swarm: a swarm that is gone (dismantled, destroyed, outside our
+	# borders) ends it; a station at its star (older saves) is dismantled, like vanilla does;
+	# the swarm is upgraded when the corporation can pay (stage II 4000, stage III 8000 with
+	# the Dyson sphere technology; vanilla build time). Never a Dyson sphere.
 	if = {
 		limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_sw value = 1 } exists = event_target:pe_hold }
-		random_planet_within_border = {
-			limit = { has_planet_flag = pe_swc_1 is_star = yes pe_orbital_allowed = yes OR = { has_orbital_station = no pe_state_station = yes } }
-			save_event_target_as = pe_sw_star
-			root = { set_variable = { which = pe_sw_care value = 1 } }
-		}
 		if = {
-			limit = { check_variable = { which = pe_sw_care value = 1 } }
-			set_variable = { which = pe_sw_care value = 0 }
-			set_variable = { which = pe_one value = 1 }
-			# The corporation takes the station at the star: builds it, or buys ours (Laissez-faire the
-			# building cost, otherwise twice that), flagged with the corporation.
-			set_variable = { which = pe_sw_pay value = 0 }
-			event_target:pe_sw_star = {
-				if = {
-					limit = { has_orbital_station = no }
-					if = { limit = { has_deposit_for = shipclass_research_station } create_research_station = { owner = event_target:pe_hold } }
-					else = { create_mining_station = { owner = event_target:pe_hold } }
-				}
-				else_if = {
-					limit = { pe_state_station = yes }
-					orbital_station = { set_owner = event_target:pe_hold }
-					root = {
-						set_variable = { which = pe_sw_pay value = 100 }
-						if = { limit = { NOT = { has_policy_flag = pe_order_laissez_faire } } set_variable = { which = pe_sw_pay value = 200 } }
-					}
-				}
-				if = {
-					limit = { has_orbital_station = yes }
-					orbital_station = {
-						if = { limit = { root = { check_variable = { which = pe_one value = 1 } } } set_fleet_flag = pe_stc_1 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 2 } } } set_fleet_flag = pe_stc_2 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 3 } } } set_fleet_flag = pe_stc_3 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 4 } } } set_fleet_flag = pe_stc_4 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 5 } } } set_fleet_flag = pe_stc_5 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 6 } } } set_fleet_flag = pe_stc_6 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 7 } } } set_fleet_flag = pe_stc_7 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 8 } } } set_fleet_flag = pe_stc_8 }
-					}
-				}
-			}
-			add_resource = { minerals = 1 mult = pe_sw_pay }
-			if = { limit = { check_variable = { which = pe_one value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_sw_pay } }
+			limit = { NOT = { any_planet_within_border = { has_planet_flag = pe_swc_1 OR = { has_modifier = dyson_swarm_1_mod has_modifier = dyson_swarm_2_mod has_modifier = dyson_swarm_3_mod } } } }
+			set_variable = { which = pe_c1_sw value = 0 }
+		}
+		random_planet_within_border = {
+			limit = { has_planet_flag = pe_swc_1 has_orbital_station = yes }
+			orbital_station = { dismantle = yes }
 		}
 		set_variable = { which = pe_sw_up value = 0 }
 		event_target:pe_hold = {
@@ -759,55 +718,13 @@ pe_corp_swarm = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_sw value = 1 } exists = event_target:pe_hold }
-		random_planet_within_border = {
-			limit = { has_planet_flag = pe_swc_2 is_star = yes pe_orbital_allowed = yes OR = { has_orbital_station = no pe_state_station = yes } }
-			save_event_target_as = pe_sw_star
-			root = { set_variable = { which = pe_sw_care value = 2 } }
-		}
 		if = {
-			limit = { check_variable = { which = pe_sw_care value = 2 } }
-			set_variable = { which = pe_sw_care value = 0 }
-			set_variable = { which = pe_one value = 2 }
-			# The corporation takes the station at the star: builds it, or buys ours (Laissez-faire the
-			# building cost, otherwise twice that), flagged with the corporation.
-			set_variable = { which = pe_sw_pay value = 0 }
-			event_target:pe_sw_star = {
-				if = {
-					limit = { has_orbital_station = no }
-					if = { limit = { has_deposit_for = shipclass_research_station } create_research_station = { owner = event_target:pe_hold } }
-					else = { create_mining_station = { owner = event_target:pe_hold } }
-				}
-				else_if = {
-					limit = { pe_state_station = yes }
-					orbital_station = { set_owner = event_target:pe_hold }
-					root = {
-						set_variable = { which = pe_sw_pay value = 100 }
-						if = { limit = { NOT = { has_policy_flag = pe_order_laissez_faire } } set_variable = { which = pe_sw_pay value = 200 } }
-					}
-				}
-				if = {
-					limit = { has_orbital_station = yes }
-					orbital_station = {
-						if = { limit = { root = { check_variable = { which = pe_one value = 1 } } } set_fleet_flag = pe_stc_1 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 2 } } } set_fleet_flag = pe_stc_2 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 3 } } } set_fleet_flag = pe_stc_3 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 4 } } } set_fleet_flag = pe_stc_4 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 5 } } } set_fleet_flag = pe_stc_5 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 6 } } } set_fleet_flag = pe_stc_6 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 7 } } } set_fleet_flag = pe_stc_7 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 8 } } } set_fleet_flag = pe_stc_8 }
-					}
-				}
-			}
-			add_resource = { minerals = 1 mult = pe_sw_pay }
-			if = { limit = { check_variable = { which = pe_one value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_sw_pay } }
+			limit = { NOT = { any_planet_within_border = { has_planet_flag = pe_swc_2 OR = { has_modifier = dyson_swarm_1_mod has_modifier = dyson_swarm_2_mod has_modifier = dyson_swarm_3_mod } } } }
+			set_variable = { which = pe_c2_sw value = 0 }
+		}
+		random_planet_within_border = {
+			limit = { has_planet_flag = pe_swc_2 has_orbital_station = yes }
+			orbital_station = { dismantle = yes }
 		}
 		set_variable = { which = pe_sw_up value = 0 }
 		event_target:pe_hold = {
@@ -834,55 +751,13 @@ pe_corp_swarm = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_sw value = 1 } exists = event_target:pe_hold }
-		random_planet_within_border = {
-			limit = { has_planet_flag = pe_swc_3 is_star = yes pe_orbital_allowed = yes OR = { has_orbital_station = no pe_state_station = yes } }
-			save_event_target_as = pe_sw_star
-			root = { set_variable = { which = pe_sw_care value = 3 } }
-		}
 		if = {
-			limit = { check_variable = { which = pe_sw_care value = 3 } }
-			set_variable = { which = pe_sw_care value = 0 }
-			set_variable = { which = pe_one value = 3 }
-			# The corporation takes the station at the star: builds it, or buys ours (Laissez-faire the
-			# building cost, otherwise twice that), flagged with the corporation.
-			set_variable = { which = pe_sw_pay value = 0 }
-			event_target:pe_sw_star = {
-				if = {
-					limit = { has_orbital_station = no }
-					if = { limit = { has_deposit_for = shipclass_research_station } create_research_station = { owner = event_target:pe_hold } }
-					else = { create_mining_station = { owner = event_target:pe_hold } }
-				}
-				else_if = {
-					limit = { pe_state_station = yes }
-					orbital_station = { set_owner = event_target:pe_hold }
-					root = {
-						set_variable = { which = pe_sw_pay value = 100 }
-						if = { limit = { NOT = { has_policy_flag = pe_order_laissez_faire } } set_variable = { which = pe_sw_pay value = 200 } }
-					}
-				}
-				if = {
-					limit = { has_orbital_station = yes }
-					orbital_station = {
-						if = { limit = { root = { check_variable = { which = pe_one value = 1 } } } set_fleet_flag = pe_stc_1 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 2 } } } set_fleet_flag = pe_stc_2 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 3 } } } set_fleet_flag = pe_stc_3 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 4 } } } set_fleet_flag = pe_stc_4 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 5 } } } set_fleet_flag = pe_stc_5 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 6 } } } set_fleet_flag = pe_stc_6 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 7 } } } set_fleet_flag = pe_stc_7 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 8 } } } set_fleet_flag = pe_stc_8 }
-					}
-				}
-			}
-			add_resource = { minerals = 1 mult = pe_sw_pay }
-			if = { limit = { check_variable = { which = pe_one value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_sw_pay } }
+			limit = { NOT = { any_planet_within_border = { has_planet_flag = pe_swc_3 OR = { has_modifier = dyson_swarm_1_mod has_modifier = dyson_swarm_2_mod has_modifier = dyson_swarm_3_mod } } } }
+			set_variable = { which = pe_c3_sw value = 0 }
+		}
+		random_planet_within_border = {
+			limit = { has_planet_flag = pe_swc_3 has_orbital_station = yes }
+			orbital_station = { dismantle = yes }
 		}
 		set_variable = { which = pe_sw_up value = 0 }
 		event_target:pe_hold = {
@@ -909,55 +784,13 @@ pe_corp_swarm = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_sw value = 1 } exists = event_target:pe_hold }
-		random_planet_within_border = {
-			limit = { has_planet_flag = pe_swc_4 is_star = yes pe_orbital_allowed = yes OR = { has_orbital_station = no pe_state_station = yes } }
-			save_event_target_as = pe_sw_star
-			root = { set_variable = { which = pe_sw_care value = 4 } }
-		}
 		if = {
-			limit = { check_variable = { which = pe_sw_care value = 4 } }
-			set_variable = { which = pe_sw_care value = 0 }
-			set_variable = { which = pe_one value = 4 }
-			# The corporation takes the station at the star: builds it, or buys ours (Laissez-faire the
-			# building cost, otherwise twice that), flagged with the corporation.
-			set_variable = { which = pe_sw_pay value = 0 }
-			event_target:pe_sw_star = {
-				if = {
-					limit = { has_orbital_station = no }
-					if = { limit = { has_deposit_for = shipclass_research_station } create_research_station = { owner = event_target:pe_hold } }
-					else = { create_mining_station = { owner = event_target:pe_hold } }
-				}
-				else_if = {
-					limit = { pe_state_station = yes }
-					orbital_station = { set_owner = event_target:pe_hold }
-					root = {
-						set_variable = { which = pe_sw_pay value = 100 }
-						if = { limit = { NOT = { has_policy_flag = pe_order_laissez_faire } } set_variable = { which = pe_sw_pay value = 200 } }
-					}
-				}
-				if = {
-					limit = { has_orbital_station = yes }
-					orbital_station = {
-						if = { limit = { root = { check_variable = { which = pe_one value = 1 } } } set_fleet_flag = pe_stc_1 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 2 } } } set_fleet_flag = pe_stc_2 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 3 } } } set_fleet_flag = pe_stc_3 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 4 } } } set_fleet_flag = pe_stc_4 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 5 } } } set_fleet_flag = pe_stc_5 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 6 } } } set_fleet_flag = pe_stc_6 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 7 } } } set_fleet_flag = pe_stc_7 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 8 } } } set_fleet_flag = pe_stc_8 }
-					}
-				}
-			}
-			add_resource = { minerals = 1 mult = pe_sw_pay }
-			if = { limit = { check_variable = { which = pe_one value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_sw_pay } }
+			limit = { NOT = { any_planet_within_border = { has_planet_flag = pe_swc_4 OR = { has_modifier = dyson_swarm_1_mod has_modifier = dyson_swarm_2_mod has_modifier = dyson_swarm_3_mod } } } }
+			set_variable = { which = pe_c4_sw value = 0 }
+		}
+		random_planet_within_border = {
+			limit = { has_planet_flag = pe_swc_4 has_orbital_station = yes }
+			orbital_station = { dismantle = yes }
 		}
 		set_variable = { which = pe_sw_up value = 0 }
 		event_target:pe_hold = {
@@ -984,55 +817,13 @@ pe_corp_swarm = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_sw value = 1 } exists = event_target:pe_hold }
-		random_planet_within_border = {
-			limit = { has_planet_flag = pe_swc_5 is_star = yes pe_orbital_allowed = yes OR = { has_orbital_station = no pe_state_station = yes } }
-			save_event_target_as = pe_sw_star
-			root = { set_variable = { which = pe_sw_care value = 5 } }
-		}
 		if = {
-			limit = { check_variable = { which = pe_sw_care value = 5 } }
-			set_variable = { which = pe_sw_care value = 0 }
-			set_variable = { which = pe_one value = 5 }
-			# The corporation takes the station at the star: builds it, or buys ours (Laissez-faire the
-			# building cost, otherwise twice that), flagged with the corporation.
-			set_variable = { which = pe_sw_pay value = 0 }
-			event_target:pe_sw_star = {
-				if = {
-					limit = { has_orbital_station = no }
-					if = { limit = { has_deposit_for = shipclass_research_station } create_research_station = { owner = event_target:pe_hold } }
-					else = { create_mining_station = { owner = event_target:pe_hold } }
-				}
-				else_if = {
-					limit = { pe_state_station = yes }
-					orbital_station = { set_owner = event_target:pe_hold }
-					root = {
-						set_variable = { which = pe_sw_pay value = 100 }
-						if = { limit = { NOT = { has_policy_flag = pe_order_laissez_faire } } set_variable = { which = pe_sw_pay value = 200 } }
-					}
-				}
-				if = {
-					limit = { has_orbital_station = yes }
-					orbital_station = {
-						if = { limit = { root = { check_variable = { which = pe_one value = 1 } } } set_fleet_flag = pe_stc_1 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 2 } } } set_fleet_flag = pe_stc_2 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 3 } } } set_fleet_flag = pe_stc_3 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 4 } } } set_fleet_flag = pe_stc_4 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 5 } } } set_fleet_flag = pe_stc_5 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 6 } } } set_fleet_flag = pe_stc_6 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 7 } } } set_fleet_flag = pe_stc_7 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 8 } } } set_fleet_flag = pe_stc_8 }
-					}
-				}
-			}
-			add_resource = { minerals = 1 mult = pe_sw_pay }
-			if = { limit = { check_variable = { which = pe_one value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_sw_pay } }
+			limit = { NOT = { any_planet_within_border = { has_planet_flag = pe_swc_5 OR = { has_modifier = dyson_swarm_1_mod has_modifier = dyson_swarm_2_mod has_modifier = dyson_swarm_3_mod } } } }
+			set_variable = { which = pe_c5_sw value = 0 }
+		}
+		random_planet_within_border = {
+			limit = { has_planet_flag = pe_swc_5 has_orbital_station = yes }
+			orbital_station = { dismantle = yes }
 		}
 		set_variable = { which = pe_sw_up value = 0 }
 		event_target:pe_hold = {
@@ -1059,55 +850,13 @@ pe_corp_swarm = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_sw value = 1 } exists = event_target:pe_hold }
-		random_planet_within_border = {
-			limit = { has_planet_flag = pe_swc_6 is_star = yes pe_orbital_allowed = yes OR = { has_orbital_station = no pe_state_station = yes } }
-			save_event_target_as = pe_sw_star
-			root = { set_variable = { which = pe_sw_care value = 6 } }
-		}
 		if = {
-			limit = { check_variable = { which = pe_sw_care value = 6 } }
-			set_variable = { which = pe_sw_care value = 0 }
-			set_variable = { which = pe_one value = 6 }
-			# The corporation takes the station at the star: builds it, or buys ours (Laissez-faire the
-			# building cost, otherwise twice that), flagged with the corporation.
-			set_variable = { which = pe_sw_pay value = 0 }
-			event_target:pe_sw_star = {
-				if = {
-					limit = { has_orbital_station = no }
-					if = { limit = { has_deposit_for = shipclass_research_station } create_research_station = { owner = event_target:pe_hold } }
-					else = { create_mining_station = { owner = event_target:pe_hold } }
-				}
-				else_if = {
-					limit = { pe_state_station = yes }
-					orbital_station = { set_owner = event_target:pe_hold }
-					root = {
-						set_variable = { which = pe_sw_pay value = 100 }
-						if = { limit = { NOT = { has_policy_flag = pe_order_laissez_faire } } set_variable = { which = pe_sw_pay value = 200 } }
-					}
-				}
-				if = {
-					limit = { has_orbital_station = yes }
-					orbital_station = {
-						if = { limit = { root = { check_variable = { which = pe_one value = 1 } } } set_fleet_flag = pe_stc_1 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 2 } } } set_fleet_flag = pe_stc_2 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 3 } } } set_fleet_flag = pe_stc_3 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 4 } } } set_fleet_flag = pe_stc_4 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 5 } } } set_fleet_flag = pe_stc_5 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 6 } } } set_fleet_flag = pe_stc_6 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 7 } } } set_fleet_flag = pe_stc_7 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 8 } } } set_fleet_flag = pe_stc_8 }
-					}
-				}
-			}
-			add_resource = { minerals = 1 mult = pe_sw_pay }
-			if = { limit = { check_variable = { which = pe_one value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_sw_pay } }
+			limit = { NOT = { any_planet_within_border = { has_planet_flag = pe_swc_6 OR = { has_modifier = dyson_swarm_1_mod has_modifier = dyson_swarm_2_mod has_modifier = dyson_swarm_3_mod } } } }
+			set_variable = { which = pe_c6_sw value = 0 }
+		}
+		random_planet_within_border = {
+			limit = { has_planet_flag = pe_swc_6 has_orbital_station = yes }
+			orbital_station = { dismantle = yes }
 		}
 		set_variable = { which = pe_sw_up value = 0 }
 		event_target:pe_hold = {
@@ -1134,55 +883,13 @@ pe_corp_swarm = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_sw value = 1 } exists = event_target:pe_hold }
-		random_planet_within_border = {
-			limit = { has_planet_flag = pe_swc_7 is_star = yes pe_orbital_allowed = yes OR = { has_orbital_station = no pe_state_station = yes } }
-			save_event_target_as = pe_sw_star
-			root = { set_variable = { which = pe_sw_care value = 7 } }
-		}
 		if = {
-			limit = { check_variable = { which = pe_sw_care value = 7 } }
-			set_variable = { which = pe_sw_care value = 0 }
-			set_variable = { which = pe_one value = 7 }
-			# The corporation takes the station at the star: builds it, or buys ours (Laissez-faire the
-			# building cost, otherwise twice that), flagged with the corporation.
-			set_variable = { which = pe_sw_pay value = 0 }
-			event_target:pe_sw_star = {
-				if = {
-					limit = { has_orbital_station = no }
-					if = { limit = { has_deposit_for = shipclass_research_station } create_research_station = { owner = event_target:pe_hold } }
-					else = { create_mining_station = { owner = event_target:pe_hold } }
-				}
-				else_if = {
-					limit = { pe_state_station = yes }
-					orbital_station = { set_owner = event_target:pe_hold }
-					root = {
-						set_variable = { which = pe_sw_pay value = 100 }
-						if = { limit = { NOT = { has_policy_flag = pe_order_laissez_faire } } set_variable = { which = pe_sw_pay value = 200 } }
-					}
-				}
-				if = {
-					limit = { has_orbital_station = yes }
-					orbital_station = {
-						if = { limit = { root = { check_variable = { which = pe_one value = 1 } } } set_fleet_flag = pe_stc_1 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 2 } } } set_fleet_flag = pe_stc_2 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 3 } } } set_fleet_flag = pe_stc_3 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 4 } } } set_fleet_flag = pe_stc_4 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 5 } } } set_fleet_flag = pe_stc_5 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 6 } } } set_fleet_flag = pe_stc_6 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 7 } } } set_fleet_flag = pe_stc_7 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 8 } } } set_fleet_flag = pe_stc_8 }
-					}
-				}
-			}
-			add_resource = { minerals = 1 mult = pe_sw_pay }
-			if = { limit = { check_variable = { which = pe_one value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_sw_pay } }
+			limit = { NOT = { any_planet_within_border = { has_planet_flag = pe_swc_7 OR = { has_modifier = dyson_swarm_1_mod has_modifier = dyson_swarm_2_mod has_modifier = dyson_swarm_3_mod } } } }
+			set_variable = { which = pe_c7_sw value = 0 }
+		}
+		random_planet_within_border = {
+			limit = { has_planet_flag = pe_swc_7 has_orbital_station = yes }
+			orbital_station = { dismantle = yes }
 		}
 		set_variable = { which = pe_sw_up value = 0 }
 		event_target:pe_hold = {
@@ -1209,55 +916,13 @@ pe_corp_swarm = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_sw value = 1 } exists = event_target:pe_hold }
-		random_planet_within_border = {
-			limit = { has_planet_flag = pe_swc_8 is_star = yes pe_orbital_allowed = yes OR = { has_orbital_station = no pe_state_station = yes } }
-			save_event_target_as = pe_sw_star
-			root = { set_variable = { which = pe_sw_care value = 8 } }
-		}
 		if = {
-			limit = { check_variable = { which = pe_sw_care value = 8 } }
-			set_variable = { which = pe_sw_care value = 0 }
-			set_variable = { which = pe_one value = 8 }
-			# The corporation takes the station at the star: builds it, or buys ours (Laissez-faire the
-			# building cost, otherwise twice that), flagged with the corporation.
-			set_variable = { which = pe_sw_pay value = 0 }
-			event_target:pe_sw_star = {
-				if = {
-					limit = { has_orbital_station = no }
-					if = { limit = { has_deposit_for = shipclass_research_station } create_research_station = { owner = event_target:pe_hold } }
-					else = { create_mining_station = { owner = event_target:pe_hold } }
-				}
-				else_if = {
-					limit = { pe_state_station = yes }
-					orbital_station = { set_owner = event_target:pe_hold }
-					root = {
-						set_variable = { which = pe_sw_pay value = 100 }
-						if = { limit = { NOT = { has_policy_flag = pe_order_laissez_faire } } set_variable = { which = pe_sw_pay value = 200 } }
-					}
-				}
-				if = {
-					limit = { has_orbital_station = yes }
-					orbital_station = {
-						if = { limit = { root = { check_variable = { which = pe_one value = 1 } } } set_fleet_flag = pe_stc_1 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 2 } } } set_fleet_flag = pe_stc_2 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 3 } } } set_fleet_flag = pe_stc_3 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 4 } } } set_fleet_flag = pe_stc_4 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 5 } } } set_fleet_flag = pe_stc_5 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 6 } } } set_fleet_flag = pe_stc_6 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 7 } } } set_fleet_flag = pe_stc_7 }
-						else_if = { limit = { root = { check_variable = { which = pe_one value = 8 } } } set_fleet_flag = pe_stc_8 }
-					}
-				}
-			}
-			add_resource = { minerals = 1 mult = pe_sw_pay }
-			if = { limit = { check_variable = { which = pe_one value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_sw_pay } }
-			else_if = { limit = { check_variable = { which = pe_one value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_sw_pay } }
+			limit = { NOT = { any_planet_within_border = { has_planet_flag = pe_swc_8 OR = { has_modifier = dyson_swarm_1_mod has_modifier = dyson_swarm_2_mod has_modifier = dyson_swarm_3_mod } } } }
+			set_variable = { which = pe_c8_sw value = 0 }
+		}
+		random_planet_within_border = {
+			limit = { has_planet_flag = pe_swc_8 has_orbital_station = yes }
+			orbital_station = { dismantle = yes }
 		}
 		set_variable = { which = pe_sw_up value = 0 }
 		event_target:pe_hold = {
@@ -1324,46 +989,20 @@ pe_corp_swarm = {
 
 # Country scope: build the corporation's swarm at event_target:pe_sw_star.
 pe_corp_swarm_exec = {
-	event_target:pe_sw_sys = {
-		spawn_megastructure = {
-			type = dyson_swarm_1
-			owner = event_target:pe_hold
-			planet = event_target:pe_sw_star
-		}
-	}
-	event_target:pe_sw_star = {
-		add_modifier = { modifier = dyson_swarm_1_mod days = -1 }
-		set_planet_flag = has_megastructure
-	}
-	# The corporation takes the station at the star: builds it, or buys ours (Laissez-faire the
-	# building cost, otherwise twice that), flagged with the corporation.
+	# Like vanilla, the swarm replaces the station at the star: a station of ours is dismantled
+	# and paid for (Laissez-faire the building cost, otherwise twice that).
 	set_variable = { which = pe_sw_pay value = 0 }
 	event_target:pe_sw_star = {
 		if = {
-			limit = { has_orbital_station = no }
-			if = { limit = { has_deposit_for = shipclass_research_station } create_research_station = { owner = event_target:pe_hold } }
-			else = { create_mining_station = { owner = event_target:pe_hold } }
-		}
-		else_if = {
-			limit = { pe_state_station = yes }
-			orbital_station = { set_owner = event_target:pe_hold }
-			root = {
-				set_variable = { which = pe_sw_pay value = 100 }
-				if = { limit = { NOT = { has_policy_flag = pe_order_laissez_faire } } set_variable = { which = pe_sw_pay value = 200 } }
-			}
-		}
-		if = {
 			limit = { has_orbital_station = yes }
-			orbital_station = {
-				if = { limit = { root = { check_variable = { which = pe_sw_k value = 1 } } } set_fleet_flag = pe_stc_1 }
-				else_if = { limit = { root = { check_variable = { which = pe_sw_k value = 2 } } } set_fleet_flag = pe_stc_2 }
-				else_if = { limit = { root = { check_variable = { which = pe_sw_k value = 3 } } } set_fleet_flag = pe_stc_3 }
-				else_if = { limit = { root = { check_variable = { which = pe_sw_k value = 4 } } } set_fleet_flag = pe_stc_4 }
-				else_if = { limit = { root = { check_variable = { which = pe_sw_k value = 5 } } } set_fleet_flag = pe_stc_5 }
-				else_if = { limit = { root = { check_variable = { which = pe_sw_k value = 6 } } } set_fleet_flag = pe_stc_6 }
-				else_if = { limit = { root = { check_variable = { which = pe_sw_k value = 7 } } } set_fleet_flag = pe_stc_7 }
-				else_if = { limit = { root = { check_variable = { which = pe_sw_k value = 8 } } } set_fleet_flag = pe_stc_8 }
+			if = {
+				limit = { pe_state_station = yes }
+				root = {
+					set_variable = { which = pe_sw_pay value = 100 }
+					if = { limit = { NOT = { has_policy_flag = pe_order_laissez_faire } } set_variable = { which = pe_sw_pay value = 200 } }
+				}
 			}
+			orbital_station = { dismantle = yes }
 		}
 	}
 	add_resource = { minerals = 1 mult = pe_sw_pay }
@@ -1375,6 +1014,18 @@ pe_corp_swarm_exec = {
 	else_if = { limit = { check_variable = { which = pe_sw_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_sw_pay } }
 	else_if = { limit = { check_variable = { which = pe_sw_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_sw_pay } }
 	else_if = { limit = { check_variable = { which = pe_sw_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_sw_pay } }
+	event_target:pe_sw_sys = {
+		spawn_megastructure = {
+			type = dyson_swarm_1
+			owner = event_target:pe_hold
+			planet = event_target:pe_sw_star
+		}
+	}
+	event_target:pe_sw_star = {
+		add_modifier = { modifier = dyson_swarm_1_mod days = -1 }
+		set_planet_flag = has_megastructure
+	}
+	event_target:pe_sw_sys = { set_star_flag = conduit_excluded }
 	if = { limit = { check_variable = { which = pe_sw_k value = 1 } } set_variable = { which = pe_c1_sw value = 1 } change_variable = { which = pe_c1_cash value = -3000 } event_target:pe_sw_star = { set_planet_flag = pe_swc_1 } set_variable = { which = pe_msg_name value = pe_c1_name } }
 	else_if = { limit = { check_variable = { which = pe_sw_k value = 2 } } set_variable = { which = pe_c2_sw value = 1 } change_variable = { which = pe_c2_cash value = -3000 } event_target:pe_sw_star = { set_planet_flag = pe_swc_2 } set_variable = { which = pe_msg_name value = pe_c2_name } }
 	else_if = { limit = { check_variable = { which = pe_sw_k value = 3 } } set_variable = { which = pe_c3_sw value = 1 } change_variable = { which = pe_c3_cash value = -3000 } event_target:pe_sw_star = { set_planet_flag = pe_swc_3 } set_variable = { which = pe_msg_name value = pe_c3_name } }

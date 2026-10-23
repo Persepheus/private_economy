@@ -1663,12 +1663,13 @@ ${CORPS.map(k => `	if = {
 // free orbital deposits or buy the state's stations (Laissez-faire without asking, Free
 // Market and Mixed by offer, pe.280). Only deposits of ordinary resources; strategic ones stay
 // out. The station's output goes to the holdings and is used by the corporation: it produces
-// twice the station's value (base prices) more in its own product (deposit lines on its
-// headquarters, budget line "Corporate production").
+// one and a half times the station's value (base prices) more in its own product (deposit
+// lines on its headquarters, budget line "Corporate production"). A corporate Dyson swarm
+// counts like a station at its star, times the swarm's stage.
 const ST_VAL = {minerals: 1, energy: 1, food: 1, trade: 1, alloys: 4, consumer_goods: 2, unity: 3, physics_research: 3.5, society_research: 3.5, engineering_research: 3.5};
 const ST_RES = Object.keys(ST_VAL);
 const ST_STOCK = ['minerals', 'energy', 'food', 'trade', 'alloys', 'consumer_goods', 'unity'];
-const ST_BONUS = 2;
+const ST_BONUS = 1.5;
 // Which station resources a sector group can use.
 const GROUP_RES = {1: ['minerals', 'energy', 'alloys'], 2: ['trade', 'energy', 'consumer_goods'], 3: ['physics_research', 'society_research', 'engineering_research', 'unity'], 4: ['minerals', 'energy', 'food']};
 const ST_LIMIT = [['pe_order_laissez_faire', 0.4], ['pe_order_free_market', 0.25], ['pe_order_mixed', 0.15]];
@@ -1916,11 +1917,33 @@ ${corpChain('x', k => '', '\t\t\t\t').split('\n').map((_, i) => `\t\t\t\t${i ? '
 			}
 			set_variable = { which = pe_stval value = 0 }
 ${ifChain(ORBITALS, o => `has_deposit = ${o.key}`, o => `set_variable = { which = pe_stval value = ${o.value} } root = { ${Object.entries(o.amounts).filter(([r]) => ST_STOCK.includes(r)).map(([r, n]) => `change_variable = { which = pe_sr_${r} value = ${n} }`).join(' ')} }`, '\t\t\t')}
-			# A Dyson swarm at this star multiplies the station's output (stage I x6, II x16, III x31).
-			if = { limit = { has_modifier = dyson_swarm_1_mod } multiply_variable = { which = pe_stval value = 6 } }
-			else_if = { limit = { has_modifier = dyson_swarm_2_mod } multiply_variable = { which = pe_stval value = 16 } }
-			else_if = { limit = { has_modifier = dyson_swarm_3_mod } multiply_variable = { which = pe_stval value = 31 } }
 ${corpChain('pe_stk', k => `root = { change_variable = { which = ${C(k, 'sv')} value = prev.pe_stval } change_variable = { which = ${C(k, 'st')} value = 1 } } if = { limit = { orbital_station = { has_fleet_flag = pe_st_share } } root = { change_variable = { which = ${C(k, 'shv')} value = prev.pe_stval } } }`, '\t\t\t')}
+		}
+		# Corporate Dyson swarms (the star flagged pe_swc_<slot>): like vanilla, the swarm replaces
+		# the star's station and produces its deposit (use_planet_resource), times its stage
+		# (vanilla dyson_swarm_<n>_mod: x6, x16, x31).
+		every_planet_within_border = {
+			limit = {
+				is_star = yes
+				OR = { ${CORPS.map(k => `has_planet_flag = pe_swc_${k}`).join(' ')} }
+				OR = { has_modifier = dyson_swarm_1_mod has_modifier = dyson_swarm_2_mod has_modifier = dyson_swarm_3_mod }
+			}
+			set_variable = { which = pe_stk value = 0 }
+${ifChain(CORPS, k => `has_planet_flag = pe_swc_${k}`, k => `set_variable = { which = pe_stk value = ${k} }`, '\t\t\t')}
+			set_variable = { which = pe_stval value = 0 }
+			if = {
+				limit = { has_modifier = dyson_swarm_1_mod }
+${ifChain(ORBITALS, o => `has_deposit = ${o.key}`, o => `set_variable = { which = pe_stval value = ${+(o.value * 6).toFixed(3)} } root = { ${Object.entries(o.amounts).filter(([r]) => ST_STOCK.includes(r)).map(([r, n]) => `change_variable = { which = pe_sr_${r} value = ${+(n * 6).toFixed(3)} }`).join(' ')} }`, '\t\t\t\t')}
+			}
+			else_if = {
+				limit = { has_modifier = dyson_swarm_2_mod }
+${ifChain(ORBITALS, o => `has_deposit = ${o.key}`, o => `set_variable = { which = pe_stval value = ${+(o.value * 16).toFixed(3)} } root = { ${Object.entries(o.amounts).filter(([r]) => ST_STOCK.includes(r)).map(([r, n]) => `change_variable = { which = pe_sr_${r} value = ${+(n * 16).toFixed(3)} }`).join(' ')} }`, '\t\t\t\t')}
+			}
+			else_if = {
+				limit = { has_modifier = dyson_swarm_3_mod }
+${ifChain(ORBITALS, o => `has_deposit = ${o.key}`, o => `set_variable = { which = pe_stval value = ${+(o.value * 31).toFixed(3)} } root = { ${Object.entries(o.amounts).filter(([r]) => ST_STOCK.includes(r)).map(([r, n]) => `change_variable = { which = pe_sr_${r} value = ${+(n * 31).toFixed(3)} }`).join(' ')} }`, '\t\t\t\t')}
+			}
+${corpChain('pe_stk', k => `root = { change_variable = { which = ${C(k, 'sv')} value = prev.pe_stval } }`, '\t\t\t')}
 		}
 		# The stored output is used up (three months).
 		event_target:pe_hold = {
@@ -2040,7 +2063,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
   NAME_IDS.forEach(id => L.push(li ? ` d_pe_hq_${id}:0 "Hauptsitz: ${CORP_NAMES[id - 1]}"` : ` d_pe_hq_${id}:0 "Headquarters: ${CORP_NAMES[id - 1]}"`,
     li ? ` d_pe_hq_${id}_desc:0 "Der Konzern ${CORP_NAMES[id - 1]} hat hier seinen Sitz: Verwaltung, Forschung, gut bezahlte Stellen. Hier entsteht auch die Konzernproduktion aus seinen Stationen."` : ` d_pe_hq_${id}_desc:0 "The corporation ${CORP_NAMES[id - 1]} has its headquarters here: management, research, well-paid jobs. Its corporate production from its stations is made here as well."`));
   PROD.forEach(r => L.push(li ? ` d_pe_cprod_${r}:0 "Konzernproduktion: ${PROD_NAMES[r][1]}"` : ` d_pe_cprod_${r}:0 "Corporate Production: ${PROD_NAMES[r][0]}"`,
-    li ? ` d_pe_cprod_${r}_desc:0 "Ein Konzern mit Hauptsitz hier verarbeitet den Ertrag seiner Orbitalstationen und produziert dafür doppelt so viel Wert in seinem eigenen Produkt."` : ` d_pe_cprod_${r}_desc:0 "A corporation headquartered here processes the output of its orbital stations and produces twice its value in its own product."`));
+    li ? ` d_pe_cprod_${r}_desc:0 "Ein Konzern mit Hauptsitz hier verarbeitet den Ertrag seiner Orbitalstationen und Dyson-Schwärme und produziert dafür das Anderthalbfache ihres Werts in seinem eigenen Produkt."` : ` d_pe_cprod_${r}_desc:0 "A corporation headquartered here processes the output of its orbital stations and Dyson swarms and produces one and a half times its value in its own product."`));
   PROD.forEach(r => L.push(` pe_prod_${r}:0 "${li ? PROD_NAMES[r][1] : PROD_NAMES[r][0]}"`));
   L.push(li ? ' pe_corp_production:0 "Konzernproduktion"' : ' pe_corp_production:0 "Corporate Production"',
     li ? ' pe_deposit_cat_corp:0 "Konzerne"' : ' pe_deposit_cat_corp:0 "Corporations"',
