@@ -6,6 +6,7 @@
 pe_orbital_allowed = {
 	is_surveyed = { who = root status = yes }
 	has_anomaly = no
+	NOR = { has_planet_flag = has_megastructure has_planet_flag = megastructure }
 	OR = {
 		has_deposit = d_minerals_1
 		has_deposit = d_minerals_2
@@ -91,6 +92,7 @@ pe_orbital_allowed = {
 pe_orbital_for_g1 = {
 	is_surveyed = { who = root status = yes }
 	has_anomaly = no
+	NOR = { has_planet_flag = has_megastructure has_planet_flag = megastructure }
 	OR = {
 		has_deposit = d_minerals_1
 		has_deposit = d_minerals_2
@@ -126,6 +128,7 @@ pe_orbital_for_g1 = {
 pe_orbital_for_g2 = {
 	is_surveyed = { who = root status = yes }
 	has_anomaly = no
+	NOR = { has_planet_flag = has_megastructure has_planet_flag = megastructure }
 	OR = {
 		has_deposit = d_energy_1
 		has_deposit = d_energy_2
@@ -154,6 +157,7 @@ pe_orbital_for_g2 = {
 pe_orbital_for_g3 = {
 	is_surveyed = { who = root status = yes }
 	has_anomaly = no
+	NOR = { has_planet_flag = has_megastructure has_planet_flag = megastructure }
 	OR = {
 		has_deposit = d_society_1
 		has_deposit = d_society_2
@@ -196,6 +200,7 @@ pe_orbital_for_g3 = {
 pe_orbital_for_g4 = {
 	is_surveyed = { who = root status = yes }
 	has_anomaly = no
+	NOR = { has_planet_flag = has_megastructure has_planet_flag = megastructure }
 	OR = {
 		has_deposit = d_minerals_1
 		has_deposit = d_minerals_2

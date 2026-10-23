@@ -16570,6 +16570,7 @@ d_pe_location = {
 	can_be_cleared = { always = no }
 	potential = { always = no }
 	drop_weight = { weight = 0 }
+	custom_tooltip = pe_loc_tt
 
 	triggered_planet_modifier = {
 		potential = { check_variable = { which = pe_cl_a value = 1 } }

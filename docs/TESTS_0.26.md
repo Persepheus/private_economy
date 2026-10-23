@@ -61,3 +61,31 @@ Ein laufendes Spiel kann weiterlaufen.
    - Mit viel Kasse kommt nach dem nächsten Quartal die Nachricht „baut seinen Arc Furnace aus“.
    - Nach Stufe III setzt der Konzern das Verfahren. Im Tab „Verhüttung“ am Ofen steht Legierungen bzw. Mineralien.
 4. Logs: keine Fehler aus pe_fleet_effects.txt (pe_corp_furnace, pe_corp_furnace_exec, pe_select_mid) oder pe_corp_effects_generated.txt (pe_orbital_value, pe_corp_station_output).
+
+## 0.26.1: Korrekturen
+- **Konzern-Ofen ohne Stationen:**
+  - Ursache: Ein gespawnter Ofen führt Vanillas Fertigstellung sofort aus und gibt allen Körpern das Ofen-Vorkommen. Erst danach hat der Konzern geprüft, welche Körper kein Vorkommen haben. Dabei fand er keinen, und das Vorkommen kam doppelt.
+  - Jetzt prüft er vorher und fügt nichts doppelt hinzu.
+  - **Reparatur im laufenden Spiel** (nächstes Quartal): Doppelte Ofen-Vorkommen werden entfernt. Körper, die nur das Ofen-Vorkommen haben und keine Station, bekommen ihre Holdings-Station.
+- **Station auf dem Ofenplaneten:** Planeten mit Megastruktur gelten nicht mehr als frei für Konzernstationen. Eine Holdings-Station über einem Planeten mit Megastruktur wird im nächsten Quartal abgebaut.
+- **Falscher Konzernname** im Event „Ein neuer Konzern“ und anderen:
+  - Ursache: Alle Konzern-Events lasen eine gemeinsame Namensvariable, und die war beim Anzeigen schon überschrieben.
+  - Jetzt hat jedes Event seine eigene. Bei der Gründung gilt das auch für Branche und Vorstand.
+- **Firmenregister:**
+  - Unter den Firmen stehen jetzt **alle Konzerne des Reichs**: Firmen, Stationen, Kasse, Konzernproduktion, Dyson-Schwarm und Arc Furnace mit Stufe.
+  - Das Konzernregister pe.273 zeigt dieselben Zeilen.
+- **Standortvorteile:** Der Tooltip zeigt jetzt die **Herkunft jedes Bonus**, zum Beispiel „Stahl: Cluster aus 3 Firmen (+6 %), Lieferverträge (+5 %)“.
+- **Erkundungscharta:**
+  - Läuft jetzt **8 Jahre** statt 5. Eine laufende Charta behält ihre 5 Jahre.
+  - Danach 2 Jahre Pause. Derselbe Konzern bietet frühestens nach 10 Jahren wieder an.
+- **Fehler im error.log behoben:** Konzern ohne Stationen ohne Produktvariable (pe_c<n>_prod).
+
+### Prüfen
+1. Ein Quartal nach dem Laden:
+   - Die Körper im Ofensystem ohne früheres Vorkommen haben Holdings-Stationen.
+   - Jeder Körper hat nur ein Ofen-Vorkommen.
+   - Die Station über dem Ofenplaneten ist weg.
+2. Im Firmenregister stehen deine drei Konzerne. Beim ersten steht „Dyson-Schwarm II, Arc Furnace I“.
+3. Der Tooltip von „Standortvorteile“ listet die Branchen mit Cluster und Verträgen.
+4. Der nächste neue Konzern hat im Event den richtigen Namen.
+

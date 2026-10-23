@@ -342,9 +342,11 @@ pe_corp_fleet_buy = {
 
 # --- Exploration charter (pe.286) ----------------------------------------------------------
 # Unsurveyed planets next to our borders: a corporation with 400 cash leases us a science ship
-# with one of its scientists for five years (it pays 300). In return it gets the mining rights
+# with one of its scientists for eight years (it pays 300). In return it gets the mining rights
 # it finds: when the charter ends, its station pause is over and it may take one station beyond
-# the share limit (pe_c<slot>_right). 20% a quarter, then five years' pause.
+# the share limit (pe_c<slot>_right). 20% a quarter; after an offer five years' pause, after
+# the end of a charter two years; the same corporation offers again after ten years at the
+# earliest (pe_charter_cd_<slot>).
 pe_corp_charter = {
 	if = {
 		limit = { check_variable = { which = pe_charter_q value > 0 } NOT = { has_country_flag = pe_fl_debug } }
@@ -364,6 +366,7 @@ pe_corp_charter = {
 			else_if = { limit = { check_variable = { which = pe_ch_run value = 6 } } set_variable = { which = pe_c6_right value = 1 } set_variable = { which = pe_c6_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c6_name } }
 			else_if = { limit = { check_variable = { which = pe_ch_run value = 7 } } set_variable = { which = pe_c7_right value = 1 } set_variable = { which = pe_c7_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c7_name } }
 			else_if = { limit = { check_variable = { which = pe_ch_run value = 8 } } set_variable = { which = pe_c8_right value = 1 } set_variable = { which = pe_c8_scd value = 0 } set_variable = { which = pe_msg_name value = pe_c8_name } }
+			set_timed_country_flag = { flag = pe_charter_cd days = 720 }
 			capital_scope = { save_event_target_as = pe_msg_planet }
 			if = {
 				limit = { check_variable = { which = pe_ch_run value > 0 } }
@@ -383,19 +386,27 @@ pe_corp_charter = {
 		}
 		set_variable = { which = pe_ch_k value = 0 }
 		set_variable = { which = pe_ch_best value = 399 }
-		if = { limit = { check_variable = { which = pe_c1_on value = 1 }  check_variable = { which = pe_c1_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 1 } set_variable = { which = pe_ch_best value = pe_c1_cash } }
-		if = { limit = { check_variable = { which = pe_c2_on value = 1 }  check_variable = { which = pe_c2_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 2 } set_variable = { which = pe_ch_best value = pe_c2_cash } }
-		if = { limit = { check_variable = { which = pe_c3_on value = 1 }  check_variable = { which = pe_c3_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 3 } set_variable = { which = pe_ch_best value = pe_c3_cash } }
-		if = { limit = { check_variable = { which = pe_c4_on value = 1 }  check_variable = { which = pe_c4_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 4 } set_variable = { which = pe_ch_best value = pe_c4_cash } }
-		if = { limit = { check_variable = { which = pe_c5_on value = 1 }  check_variable = { which = pe_c5_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 5 } set_variable = { which = pe_ch_best value = pe_c5_cash } }
-		if = { limit = { check_variable = { which = pe_c6_on value = 1 }  check_variable = { which = pe_c6_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 6 } set_variable = { which = pe_ch_best value = pe_c6_cash } }
-		if = { limit = { check_variable = { which = pe_c7_on value = 1 }  check_variable = { which = pe_c7_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 7 } set_variable = { which = pe_ch_best value = pe_c7_cash } }
-		if = { limit = { check_variable = { which = pe_c8_on value = 1 }  check_variable = { which = pe_c8_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 8 } set_variable = { which = pe_ch_best value = pe_c8_cash } }
+		if = { limit = { check_variable = { which = pe_c1_on value = 1 } NOT = { has_country_flag = pe_charter_cd_1 } check_variable = { which = pe_c1_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 1 } set_variable = { which = pe_ch_best value = pe_c1_cash } }
+		if = { limit = { check_variable = { which = pe_c2_on value = 1 } NOT = { has_country_flag = pe_charter_cd_2 } check_variable = { which = pe_c2_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 2 } set_variable = { which = pe_ch_best value = pe_c2_cash } }
+		if = { limit = { check_variable = { which = pe_c3_on value = 1 } NOT = { has_country_flag = pe_charter_cd_3 } check_variable = { which = pe_c3_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 3 } set_variable = { which = pe_ch_best value = pe_c3_cash } }
+		if = { limit = { check_variable = { which = pe_c4_on value = 1 } NOT = { has_country_flag = pe_charter_cd_4 } check_variable = { which = pe_c4_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 4 } set_variable = { which = pe_ch_best value = pe_c4_cash } }
+		if = { limit = { check_variable = { which = pe_c5_on value = 1 } NOT = { has_country_flag = pe_charter_cd_5 } check_variable = { which = pe_c5_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 5 } set_variable = { which = pe_ch_best value = pe_c5_cash } }
+		if = { limit = { check_variable = { which = pe_c6_on value = 1 } NOT = { has_country_flag = pe_charter_cd_6 } check_variable = { which = pe_c6_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 6 } set_variable = { which = pe_ch_best value = pe_c6_cash } }
+		if = { limit = { check_variable = { which = pe_c7_on value = 1 } NOT = { has_country_flag = pe_charter_cd_7 } check_variable = { which = pe_c7_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 7 } set_variable = { which = pe_ch_best value = pe_c7_cash } }
+		if = { limit = { check_variable = { which = pe_c8_on value = 1 } NOT = { has_country_flag = pe_charter_cd_8 } check_variable = { which = pe_c8_cash value > pe_ch_best } } set_variable = { which = pe_ch_k value = 8 } set_variable = { which = pe_ch_best value = pe_c8_cash } }
 		if = {
 			limit = { check_variable = { which = pe_ch_k value > 0 } }
 			random_list = {
 				20 = {
 					set_timed_country_flag = { flag = pe_charter_cd days = 1800 }
+					if = { limit = { check_variable = { which = pe_ch_k value = 1 } } set_timed_country_flag = { flag = pe_charter_cd_1 days = 3600 } }
+					else_if = { limit = { check_variable = { which = pe_ch_k value = 2 } } set_timed_country_flag = { flag = pe_charter_cd_2 days = 3600 } }
+					else_if = { limit = { check_variable = { which = pe_ch_k value = 3 } } set_timed_country_flag = { flag = pe_charter_cd_3 days = 3600 } }
+					else_if = { limit = { check_variable = { which = pe_ch_k value = 4 } } set_timed_country_flag = { flag = pe_charter_cd_4 days = 3600 } }
+					else_if = { limit = { check_variable = { which = pe_ch_k value = 5 } } set_timed_country_flag = { flag = pe_charter_cd_5 days = 3600 } }
+					else_if = { limit = { check_variable = { which = pe_ch_k value = 6 } } set_timed_country_flag = { flag = pe_charter_cd_6 days = 3600 } }
+					else_if = { limit = { check_variable = { which = pe_ch_k value = 7 } } set_timed_country_flag = { flag = pe_charter_cd_7 days = 3600 } }
+					else_if = { limit = { check_variable = { which = pe_ch_k value = 8 } } set_timed_country_flag = { flag = pe_charter_cd_8 days = 3600 } }
 					if = {
 						limit = { is_ai = yes }
 						random = { chance = 70 pe_corp_charter_start = yes }
@@ -410,7 +421,7 @@ pe_corp_charter = {
 
 # Country scope: start the charter (one science ship of our design, a scientist of the holdings).
 pe_corp_charter_start = {
-	set_variable = { which = pe_charter_q value = 20 }
+	set_variable = { which = pe_charter_q value = 32 }
 	set_variable = { which = pe_ch_run value = pe_ch_k }
 	create_fleet = {
 		name = pe_charter_fleet_name
@@ -689,14 +700,15 @@ pe_corp_swarm = {
 	# holdings get the alloys for the next three months, the corporation pays their value (4).
 	if = {
 		limit = { exists = event_target:pe_hold NOT = { has_country_flag = pe_fl_debug } }
+		set_variable = { which = pe_c1_sws value = 0 }
 		if = {
 			limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_sw value = 1 } }
 			set_variable = { which = pe_sw_upk value = 0 }
 			random_planet_within_border = {
 				limit = { has_planet_flag = pe_swc_1 }
-				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } set_variable = { which = pe_c1_sws value = 1 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } set_variable = { which = pe_c1_sws value = 2 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } set_variable = { which = pe_c1_sws value = 3 } } }
 			}
 			if = {
 				limit = { check_variable = { which = pe_sw_upk value > 0 } }
@@ -706,14 +718,15 @@ pe_corp_swarm = {
 				subtract_variable = { which = pe_c1_cash value = pe_tmp }
 			}
 		}
+		set_variable = { which = pe_c2_sws value = 0 }
 		if = {
 			limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_sw value = 1 } }
 			set_variable = { which = pe_sw_upk value = 0 }
 			random_planet_within_border = {
 				limit = { has_planet_flag = pe_swc_2 }
-				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } set_variable = { which = pe_c2_sws value = 1 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } set_variable = { which = pe_c2_sws value = 2 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } set_variable = { which = pe_c2_sws value = 3 } } }
 			}
 			if = {
 				limit = { check_variable = { which = pe_sw_upk value > 0 } }
@@ -723,14 +736,15 @@ pe_corp_swarm = {
 				subtract_variable = { which = pe_c2_cash value = pe_tmp }
 			}
 		}
+		set_variable = { which = pe_c3_sws value = 0 }
 		if = {
 			limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_sw value = 1 } }
 			set_variable = { which = pe_sw_upk value = 0 }
 			random_planet_within_border = {
 				limit = { has_planet_flag = pe_swc_3 }
-				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } set_variable = { which = pe_c3_sws value = 1 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } set_variable = { which = pe_c3_sws value = 2 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } set_variable = { which = pe_c3_sws value = 3 } } }
 			}
 			if = {
 				limit = { check_variable = { which = pe_sw_upk value > 0 } }
@@ -740,14 +754,15 @@ pe_corp_swarm = {
 				subtract_variable = { which = pe_c3_cash value = pe_tmp }
 			}
 		}
+		set_variable = { which = pe_c4_sws value = 0 }
 		if = {
 			limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_sw value = 1 } }
 			set_variable = { which = pe_sw_upk value = 0 }
 			random_planet_within_border = {
 				limit = { has_planet_flag = pe_swc_4 }
-				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } set_variable = { which = pe_c4_sws value = 1 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } set_variable = { which = pe_c4_sws value = 2 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } set_variable = { which = pe_c4_sws value = 3 } } }
 			}
 			if = {
 				limit = { check_variable = { which = pe_sw_upk value > 0 } }
@@ -757,14 +772,15 @@ pe_corp_swarm = {
 				subtract_variable = { which = pe_c4_cash value = pe_tmp }
 			}
 		}
+		set_variable = { which = pe_c5_sws value = 0 }
 		if = {
 			limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_sw value = 1 } }
 			set_variable = { which = pe_sw_upk value = 0 }
 			random_planet_within_border = {
 				limit = { has_planet_flag = pe_swc_5 }
-				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } set_variable = { which = pe_c5_sws value = 1 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } set_variable = { which = pe_c5_sws value = 2 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } set_variable = { which = pe_c5_sws value = 3 } } }
 			}
 			if = {
 				limit = { check_variable = { which = pe_sw_upk value > 0 } }
@@ -774,14 +790,15 @@ pe_corp_swarm = {
 				subtract_variable = { which = pe_c5_cash value = pe_tmp }
 			}
 		}
+		set_variable = { which = pe_c6_sws value = 0 }
 		if = {
 			limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_sw value = 1 } }
 			set_variable = { which = pe_sw_upk value = 0 }
 			random_planet_within_border = {
 				limit = { has_planet_flag = pe_swc_6 }
-				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } set_variable = { which = pe_c6_sws value = 1 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } set_variable = { which = pe_c6_sws value = 2 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } set_variable = { which = pe_c6_sws value = 3 } } }
 			}
 			if = {
 				limit = { check_variable = { which = pe_sw_upk value > 0 } }
@@ -791,14 +808,15 @@ pe_corp_swarm = {
 				subtract_variable = { which = pe_c6_cash value = pe_tmp }
 			}
 		}
+		set_variable = { which = pe_c7_sws value = 0 }
 		if = {
 			limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_sw value = 1 } }
 			set_variable = { which = pe_sw_upk value = 0 }
 			random_planet_within_border = {
 				limit = { has_planet_flag = pe_swc_7 }
-				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } set_variable = { which = pe_c7_sws value = 1 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } set_variable = { which = pe_c7_sws value = 2 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } set_variable = { which = pe_c7_sws value = 3 } } }
 			}
 			if = {
 				limit = { check_variable = { which = pe_sw_upk value > 0 } }
@@ -808,14 +826,15 @@ pe_corp_swarm = {
 				subtract_variable = { which = pe_c7_cash value = pe_tmp }
 			}
 		}
+		set_variable = { which = pe_c8_sws value = 0 }
 		if = {
 			limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_sw value = 1 } }
 			set_variable = { which = pe_sw_upk value = 0 }
 			random_planet_within_border = {
 				limit = { has_planet_flag = pe_swc_8 }
-				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } } }
-				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } } }
+				if = { limit = { has_modifier = dyson_swarm_1_mod } root = { set_variable = { which = pe_sw_upk value = 15 } set_variable = { which = pe_c8_sws value = 1 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_2_mod } root = { set_variable = { which = pe_sw_upk value = 30 } set_variable = { which = pe_c8_sws value = 2 } } }
+				else_if = { limit = { has_modifier = dyson_swarm_3_mod } root = { set_variable = { which = pe_sw_upk value = 60 } set_variable = { which = pe_c8_sws value = 3 } } }
 			}
 			if = {
 				limit = { check_variable = { which = pe_sw_upk value > 0 } }
@@ -1381,6 +1400,7 @@ pe_corp_furnace = {
 				}
 			}
 		}
+		set_variable = { which = pe_c1_afs value = pe_af_st }
 		if = {
 			limit = { check_variable = { which = pe_af_st value = 0 } }
 			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
@@ -1418,6 +1438,18 @@ pe_corp_furnace = {
 			}
 			every_planet_within_border = {
 				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 1 } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_1 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_1 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_2 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_2 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_3 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_3 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_4 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_4 } remove_deposit = yes } }
+				# Older saves (0.26.0): the furnace deposit came twice, and the bodies without a
+				# deposit before (only the furnace deposit now) got no station of the holdings.
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 0 } num_deposits = 1 has_orbital_station = no NOT = { has_planet_flag = has_arc_furnace } }
+					set_variable = { which = pe_af_h value = 1 }
+					create_mining_station = { owner = event_target:pe_hold }
+					if = { limit = { has_orbital_station = yes } orbital_station = { set_fleet_flag = pe_stc_1 } }
+				}
 				set_variable = { which = pe_af_min value = root.pe_af_vm }
 				set_variable = { which = pe_af_al value = root.pe_af_va }
 				set_variable = { which = pe_af_val value = pe_af_al }
@@ -1508,6 +1540,7 @@ pe_corp_furnace = {
 				}
 			}
 		}
+		set_variable = { which = pe_c2_afs value = pe_af_st }
 		if = {
 			limit = { check_variable = { which = pe_af_st value = 0 } }
 			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
@@ -1545,6 +1578,18 @@ pe_corp_furnace = {
 			}
 			every_planet_within_border = {
 				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 2 } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_1 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_1 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_2 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_2 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_3 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_3 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_4 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_4 } remove_deposit = yes } }
+				# Older saves (0.26.0): the furnace deposit came twice, and the bodies without a
+				# deposit before (only the furnace deposit now) got no station of the holdings.
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 0 } num_deposits = 1 has_orbital_station = no NOT = { has_planet_flag = has_arc_furnace } }
+					set_variable = { which = pe_af_h value = 1 }
+					create_mining_station = { owner = event_target:pe_hold }
+					if = { limit = { has_orbital_station = yes } orbital_station = { set_fleet_flag = pe_stc_2 } }
+				}
 				set_variable = { which = pe_af_min value = root.pe_af_vm }
 				set_variable = { which = pe_af_al value = root.pe_af_va }
 				set_variable = { which = pe_af_val value = pe_af_al }
@@ -1635,6 +1680,7 @@ pe_corp_furnace = {
 				}
 			}
 		}
+		set_variable = { which = pe_c3_afs value = pe_af_st }
 		if = {
 			limit = { check_variable = { which = pe_af_st value = 0 } }
 			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
@@ -1672,6 +1718,18 @@ pe_corp_furnace = {
 			}
 			every_planet_within_border = {
 				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 3 } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_1 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_1 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_2 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_2 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_3 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_3 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_4 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_4 } remove_deposit = yes } }
+				# Older saves (0.26.0): the furnace deposit came twice, and the bodies without a
+				# deposit before (only the furnace deposit now) got no station of the holdings.
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 0 } num_deposits = 1 has_orbital_station = no NOT = { has_planet_flag = has_arc_furnace } }
+					set_variable = { which = pe_af_h value = 1 }
+					create_mining_station = { owner = event_target:pe_hold }
+					if = { limit = { has_orbital_station = yes } orbital_station = { set_fleet_flag = pe_stc_3 } }
+				}
 				set_variable = { which = pe_af_min value = root.pe_af_vm }
 				set_variable = { which = pe_af_al value = root.pe_af_va }
 				set_variable = { which = pe_af_val value = pe_af_al }
@@ -1762,6 +1820,7 @@ pe_corp_furnace = {
 				}
 			}
 		}
+		set_variable = { which = pe_c4_afs value = pe_af_st }
 		if = {
 			limit = { check_variable = { which = pe_af_st value = 0 } }
 			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
@@ -1799,6 +1858,18 @@ pe_corp_furnace = {
 			}
 			every_planet_within_border = {
 				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 4 } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_1 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_1 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_2 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_2 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_3 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_3 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_4 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_4 } remove_deposit = yes } }
+				# Older saves (0.26.0): the furnace deposit came twice, and the bodies without a
+				# deposit before (only the furnace deposit now) got no station of the holdings.
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 0 } num_deposits = 1 has_orbital_station = no NOT = { has_planet_flag = has_arc_furnace } }
+					set_variable = { which = pe_af_h value = 1 }
+					create_mining_station = { owner = event_target:pe_hold }
+					if = { limit = { has_orbital_station = yes } orbital_station = { set_fleet_flag = pe_stc_4 } }
+				}
 				set_variable = { which = pe_af_min value = root.pe_af_vm }
 				set_variable = { which = pe_af_al value = root.pe_af_va }
 				set_variable = { which = pe_af_val value = pe_af_al }
@@ -1889,6 +1960,7 @@ pe_corp_furnace = {
 				}
 			}
 		}
+		set_variable = { which = pe_c5_afs value = pe_af_st }
 		if = {
 			limit = { check_variable = { which = pe_af_st value = 0 } }
 			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
@@ -1926,6 +1998,18 @@ pe_corp_furnace = {
 			}
 			every_planet_within_border = {
 				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 5 } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_1 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_1 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_2 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_2 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_3 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_3 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_4 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_4 } remove_deposit = yes } }
+				# Older saves (0.26.0): the furnace deposit came twice, and the bodies without a
+				# deposit before (only the furnace deposit now) got no station of the holdings.
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 0 } num_deposits = 1 has_orbital_station = no NOT = { has_planet_flag = has_arc_furnace } }
+					set_variable = { which = pe_af_h value = 1 }
+					create_mining_station = { owner = event_target:pe_hold }
+					if = { limit = { has_orbital_station = yes } orbital_station = { set_fleet_flag = pe_stc_5 } }
+				}
 				set_variable = { which = pe_af_min value = root.pe_af_vm }
 				set_variable = { which = pe_af_al value = root.pe_af_va }
 				set_variable = { which = pe_af_val value = pe_af_al }
@@ -2016,6 +2100,7 @@ pe_corp_furnace = {
 				}
 			}
 		}
+		set_variable = { which = pe_c6_afs value = pe_af_st }
 		if = {
 			limit = { check_variable = { which = pe_af_st value = 0 } }
 			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
@@ -2053,6 +2138,18 @@ pe_corp_furnace = {
 			}
 			every_planet_within_border = {
 				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 6 } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_1 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_1 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_2 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_2 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_3 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_3 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_4 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_4 } remove_deposit = yes } }
+				# Older saves (0.26.0): the furnace deposit came twice, and the bodies without a
+				# deposit before (only the furnace deposit now) got no station of the holdings.
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 0 } num_deposits = 1 has_orbital_station = no NOT = { has_planet_flag = has_arc_furnace } }
+					set_variable = { which = pe_af_h value = 1 }
+					create_mining_station = { owner = event_target:pe_hold }
+					if = { limit = { has_orbital_station = yes } orbital_station = { set_fleet_flag = pe_stc_6 } }
+				}
 				set_variable = { which = pe_af_min value = root.pe_af_vm }
 				set_variable = { which = pe_af_al value = root.pe_af_va }
 				set_variable = { which = pe_af_val value = pe_af_al }
@@ -2143,6 +2240,7 @@ pe_corp_furnace = {
 				}
 			}
 		}
+		set_variable = { which = pe_c7_afs value = pe_af_st }
 		if = {
 			limit = { check_variable = { which = pe_af_st value = 0 } }
 			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
@@ -2180,6 +2278,18 @@ pe_corp_furnace = {
 			}
 			every_planet_within_border = {
 				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 7 } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_1 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_1 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_2 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_2 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_3 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_3 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_4 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_4 } remove_deposit = yes } }
+				# Older saves (0.26.0): the furnace deposit came twice, and the bodies without a
+				# deposit before (only the furnace deposit now) got no station of the holdings.
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 0 } num_deposits = 1 has_orbital_station = no NOT = { has_planet_flag = has_arc_furnace } }
+					set_variable = { which = pe_af_h value = 1 }
+					create_mining_station = { owner = event_target:pe_hold }
+					if = { limit = { has_orbital_station = yes } orbital_station = { set_fleet_flag = pe_stc_7 } }
+				}
 				set_variable = { which = pe_af_min value = root.pe_af_vm }
 				set_variable = { which = pe_af_al value = root.pe_af_va }
 				set_variable = { which = pe_af_val value = pe_af_al }
@@ -2270,6 +2380,7 @@ pe_corp_furnace = {
 				}
 			}
 		}
+		set_variable = { which = pe_c8_afs value = pe_af_st }
 		if = {
 			limit = { check_variable = { which = pe_af_st value = 0 } }
 			# The furnace is gone: its deposits, bonuses and the holdings' stations go too.
@@ -2307,6 +2418,18 @@ pe_corp_furnace = {
 			}
 			every_planet_within_border = {
 				limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = 8 } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_1 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_1 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_2 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_2 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_3 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_3 } remove_deposit = yes } }
+				if = { limit = { count_deposits = { type = d_arc_furnace_4 count > 1 } } random_deposit = { limit = { is_deposit_type = d_arc_furnace_4 } remove_deposit = yes } }
+				# Older saves (0.26.0): the furnace deposit came twice, and the bodies without a
+				# deposit before (only the furnace deposit now) got no station of the holdings.
+				if = {
+					limit = { check_variable = { which = pe_af_h value = 0 } num_deposits = 1 has_orbital_station = no NOT = { has_planet_flag = has_arc_furnace } }
+					set_variable = { which = pe_af_h value = 1 }
+					create_mining_station = { owner = event_target:pe_hold }
+					if = { limit = { has_orbital_station = yes } orbital_station = { set_fleet_flag = pe_stc_8 } }
+				}
 				set_variable = { which = pe_af_min value = root.pe_af_vm }
 				set_variable = { which = pe_af_al value = root.pe_af_va }
 				set_variable = { which = pe_af_val value = pe_af_al }
@@ -2468,6 +2591,18 @@ pe_corp_furnace_exec = {
 	else_if = { limit = { check_variable = { which = pe_af_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_af_pay } change_variable = { which = pe_c7_cash value = -2000 } set_variable = { which = pe_c7_af value = 1 } set_variable = { which = pe_msg_name value = pe_c7_name } }
 	else_if = { limit = { check_variable = { which = pe_af_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_af_pay } change_variable = { which = pe_c8_cash value = -2000 } set_variable = { which = pe_c8_af value = 1 } set_variable = { which = pe_msg_name value = pe_c8_name } }
 	event_target:pe_af_p = {
+		# The bodies without a deposit, before the furnace exists: the spawned furnace runs
+		# vanilla's on_build_complete (cybernetics.1000) at once and gives them its deposit.
+		solar_system = {
+			every_system_planet = {
+				limit = { NOT = { has_deposit_for = shipclass_research_station } is_star = no is_astral_scar = no colonizable_planet = no }
+				set_variable = { which = pe_af_h value = 0 }
+				if = {
+					limit = { NOT = { has_deposit_for = shipclass_mining_station } NOT = { is_same_value = event_target:pe_af_p } }
+					set_variable = { which = pe_af_h value = 1 }
+				}
+			}
+		}
 		solar_system = {
 			spawn_megastructure = {
 				type = orbital_arc_furnace_1
@@ -2482,12 +2617,7 @@ pe_corp_furnace_exec = {
 		solar_system = {
 			every_system_planet = {
 				limit = { NOT = { has_deposit_for = shipclass_research_station } is_star = no is_astral_scar = no colonizable_planet = no }
-				set_variable = { which = pe_af_h value = 0 }
-				if = {
-					limit = { NOT = { has_deposit_for = shipclass_mining_station } NOT = { is_same_value = event_target:pe_af_p } }
-					set_variable = { which = pe_af_h value = 1 }
-				}
-				# remove_trade_deposits inline (call depth)
+				# What vanilla's completion did, unless it did (remove_trade_deposits inline).
 				remove_deposit = d_trade_value_1
 				remove_deposit = d_trade_value_2
 				remove_deposit = d_trade_value_3
@@ -2498,8 +2628,8 @@ pe_corp_furnace_exec = {
 				remove_deposit = d_trade_value_8
 				remove_deposit = d_trade_value_9
 				remove_deposit = d_trade_value_10
-				add_deposit = d_arc_furnace_1
-				add_modifier = { modifier = orbital_arc_furnace_1_mod days = -1 }
+				if = { limit = { NOT = { has_deposit = d_arc_furnace_1 } } add_deposit = d_arc_furnace_1 }
+				if = { limit = { NOT = { has_modifier = orbital_arc_furnace_1_mod } } add_modifier = { modifier = orbital_arc_furnace_1_mod days = -1 } }
 				set_variable = { which = pe_af_corp value = root.pe_af_k }
 				set_variable = { which = pe_af_min value = 1.25 }
 				set_variable = { which = pe_af_al value = 0 }
