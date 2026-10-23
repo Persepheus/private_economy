@@ -216,3 +216,11 @@ pe_warzone = {
 	icon = "gfx/interface/icons/planet_modifiers/pm_under_orbital_bombardment.dds"
 }
 
+# After an occupation (pe.299): the collaborators were punished, or pardoned.
+pe_collab_punished = {
+	planet_stability_add = 5
+}
+pe_collab_amnesty = {
+	planet_stability_add = -5
+}
+

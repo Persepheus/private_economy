@@ -1,0 +1,225 @@
+# Private economy at war: occupation and ground combat (events in pe_war_events.txt).
+# Call depths: pe_corp_ground 1 (pe.141) -> pe_corp_ground_start 2 -> pe_corp_msg 3;
+# pe_occ_levy, pe_collab_* 1 (events); pe_guard_cleanup 1 (pe.100).
+
+# --- Ground combat -------------------------------------------------------------------------
+# Country scope (pe.141), event_target:pe_gc_planet is under ground attack. A corporation
+# headquartered there sends its guards for free (down to its credit line -200); otherwise the
+# strongest corporation (at least 500 cash) offers them for a price (pe.297 / 298). How many:
+# one unit per 2000 pops on the planet plus half the defending armies there (1 to 25), as many
+# as the money allows (75 each; free: cash + 200, otherwise 80% of the cash).
+pe_corp_ground = {
+	set_variable = { which = pe_gc_k value = 0 }
+	set_variable = { which = pe_gc_free value = 0 }
+		if = { limit = { check_variable = { which = pe_gc_k value = 0 } check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value >= -50 } event_target:pe_gc_planet = { has_planet_flag = pe_hq_1 } } set_variable = { which = pe_gc_k value = 1 } set_variable = { which = pe_gc_free value = 1 } }
+		if = { limit = { check_variable = { which = pe_gc_k value = 0 } check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value >= -50 } event_target:pe_gc_planet = { has_planet_flag = pe_hq_2 } } set_variable = { which = pe_gc_k value = 2 } set_variable = { which = pe_gc_free value = 1 } }
+		if = { limit = { check_variable = { which = pe_gc_k value = 0 } check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value >= -50 } event_target:pe_gc_planet = { has_planet_flag = pe_hq_3 } } set_variable = { which = pe_gc_k value = 3 } set_variable = { which = pe_gc_free value = 1 } }
+		if = { limit = { check_variable = { which = pe_gc_k value = 0 } check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value >= -50 } event_target:pe_gc_planet = { has_planet_flag = pe_hq_4 } } set_variable = { which = pe_gc_k value = 4 } set_variable = { which = pe_gc_free value = 1 } }
+		if = { limit = { check_variable = { which = pe_gc_k value = 0 } check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value >= -50 } event_target:pe_gc_planet = { has_planet_flag = pe_hq_5 } } set_variable = { which = pe_gc_k value = 5 } set_variable = { which = pe_gc_free value = 1 } }
+		if = { limit = { check_variable = { which = pe_gc_k value = 0 } check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value >= -50 } event_target:pe_gc_planet = { has_planet_flag = pe_hq_6 } } set_variable = { which = pe_gc_k value = 6 } set_variable = { which = pe_gc_free value = 1 } }
+		if = { limit = { check_variable = { which = pe_gc_k value = 0 } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value >= -50 } event_target:pe_gc_planet = { has_planet_flag = pe_hq_7 } } set_variable = { which = pe_gc_k value = 7 } set_variable = { which = pe_gc_free value = 1 } }
+		if = { limit = { check_variable = { which = pe_gc_k value = 0 } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value >= -50 } event_target:pe_gc_planet = { has_planet_flag = pe_hq_8 } } set_variable = { which = pe_gc_k value = 8 } set_variable = { which = pe_gc_free value = 1 } }
+	if = {
+		limit = { check_variable = { which = pe_gc_k value = 0 } NOT = { has_country_flag = pe_ground_cd } }
+		set_variable = { which = pe_gc_best value = 499 }
+		if = { limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value > pe_gc_best } } set_variable = { which = pe_gc_k value = 1 } set_variable = { which = pe_gc_best value = pe_c1_cash } }
+		if = { limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value > pe_gc_best } } set_variable = { which = pe_gc_k value = 2 } set_variable = { which = pe_gc_best value = pe_c2_cash } }
+		if = { limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value > pe_gc_best } } set_variable = { which = pe_gc_k value = 3 } set_variable = { which = pe_gc_best value = pe_c3_cash } }
+		if = { limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value > pe_gc_best } } set_variable = { which = pe_gc_k value = 4 } set_variable = { which = pe_gc_best value = pe_c4_cash } }
+		if = { limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value > pe_gc_best } } set_variable = { which = pe_gc_k value = 5 } set_variable = { which = pe_gc_best value = pe_c5_cash } }
+		if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value > pe_gc_best } } set_variable = { which = pe_gc_k value = 6 } set_variable = { which = pe_gc_best value = pe_c6_cash } }
+		if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value > pe_gc_best } } set_variable = { which = pe_gc_k value = 7 } set_variable = { which = pe_gc_best value = pe_c7_cash } }
+		if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_gc_best } } set_variable = { which = pe_gc_k value = 8 } set_variable = { which = pe_gc_best value = pe_c8_cash } }
+	}
+	if = {
+		limit = { check_variable = { which = pe_gc_k value > 0 } }
+		# The money.
+		if = { limit = { check_variable = { which = pe_gc_k value = 1 } } set_variable = { which = pe_gc_budget value = pe_c1_cash } }
+		else_if = { limit = { check_variable = { which = pe_gc_k value = 2 } } set_variable = { which = pe_gc_budget value = pe_c2_cash } }
+		else_if = { limit = { check_variable = { which = pe_gc_k value = 3 } } set_variable = { which = pe_gc_budget value = pe_c3_cash } }
+		else_if = { limit = { check_variable = { which = pe_gc_k value = 4 } } set_variable = { which = pe_gc_budget value = pe_c4_cash } }
+		else_if = { limit = { check_variable = { which = pe_gc_k value = 5 } } set_variable = { which = pe_gc_budget value = pe_c5_cash } }
+		else_if = { limit = { check_variable = { which = pe_gc_k value = 6 } } set_variable = { which = pe_gc_budget value = pe_c6_cash } }
+		else_if = { limit = { check_variable = { which = pe_gc_k value = 7 } } set_variable = { which = pe_gc_budget value = pe_c7_cash } }
+		else_if = { limit = { check_variable = { which = pe_gc_k value = 8 } } set_variable = { which = pe_gc_budget value = pe_c8_cash } }
+		if = {
+			limit = { check_variable = { which = pe_gc_free value = 1 } }
+			change_variable = { which = pe_gc_budget value = 200 }
+		}
+		else = { multiply_variable = { which = pe_gc_budget value = 0.8 } }
+		# How many: pops and defenders.
+		event_target:pe_gc_planet = {
+			export_trigger_value_to_variable = { trigger = pop_amount variable = pe_tmp }
+			root = { set_variable = { which = pe_gc_pops value = prev.pe_tmp } }
+		}
+		set_variable = { which = pe_gc_def value = 0 }
+		every_owned_army = {
+			limit = { exists = planet planet = { is_same_value = event_target:pe_gc_planet } }
+			root = { change_variable = { which = pe_gc_def value = 1 } }
+		}
+		set_variable = { which = pe_gc_n value = pe_gc_pops }
+		divide_variable = { which = pe_gc_n value = 2000 }
+		set_variable = { which = pe_tmp value = pe_gc_def }
+		multiply_variable = { which = pe_tmp value = 0.5 }
+		change_variable = { which = pe_gc_n value = pe_tmp }
+		round_variable = pe_gc_n
+		if = { limit = { check_variable = { which = pe_gc_n value < 1 } } set_variable = { which = pe_gc_n value = 1 } }
+		if = { limit = { check_variable = { which = pe_gc_n value > 25 } } set_variable = { which = pe_gc_n value = 25 } }
+		set_variable = { which = pe_tmp value = pe_gc_budget }
+		divide_variable = { which = pe_tmp value = 75 }
+		floor_variable = pe_tmp
+		if = { limit = { check_variable = { which = pe_gc_n value > pe_tmp } } set_variable = { which = pe_gc_n value = pe_tmp } }
+		set_variable = { which = pe_gc_spent value = pe_gc_n }
+		multiply_variable = { which = pe_gc_spent value = 75 }
+		# The price (not for the headquarters): the planet's independent firms, alloys (an
+		# eighth of the cost... worth half of it at 4 per alloy), or 100 influence.
+		set_variable = { which = pe_gc_alloys value = pe_gc_spent }
+		divide_variable = { which = pe_gc_alloys value = 8 }
+		divide_variable = { which = pe_gc_alloys value = 10 }
+		round_variable = pe_gc_alloys
+		multiply_variable = { which = pe_gc_alloys value = 10 }
+		if = { limit = { check_variable = { which = pe_gc_alloys value < 10 } } set_variable = { which = pe_gc_alloys value = 10 } }
+		set_variable = { which = pe_gc_half value = pe_gc_alloys }
+		multiply_variable = { which = pe_gc_half value = 0.5 }
+		round_variable = pe_gc_half
+		export_resource_stockpile_to_variable = { resource = alloys variable = pe_gc_stock }
+		set_variable = { which = pe_gc_ind value = 0 }
+		event_target:pe_gc_planet = {
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = 0 } }
+				root = { change_variable = { which = pe_gc_ind value = 1 } }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_gc_n value >= 1 } }
+			if = {
+				limit = { check_variable = { which = pe_gc_free value = 1 } }
+				pe_corp_ground_start = yes
+			}
+			else = {
+				set_timed_country_flag = { flag = pe_ground_cd days = 360 }
+				if = {
+					limit = { is_ai = yes }
+					if = {
+						limit = { check_variable = { which = pe_gc_stock value >= pe_gc_alloys } }
+						add_resource = { alloys = -1 mult = pe_gc_alloys }
+						pe_corp_ground_start = yes
+					}
+				}
+				else = { country_event = { id = pe.297 } }
+			}
+		}
+	}
+}
+
+# Country scope: the corporation pe_gc_k lands pe_gc_n units of guards on event_target:pe_gc_planet.
+pe_corp_ground_start = {
+	set_variable = { which = pe_gc_i value = 0 }
+	while = {
+		limit = { check_variable = { which = pe_gc_i value < pe_gc_n } }
+		event_target:pe_gc_planet = {
+			create_army = { name = random owner = root species = root.species type = pe_corporate_guard }
+		}
+		last_created_army = { set_army_flag = pe_corp_guard }
+		change_variable = { which = pe_gc_i value = 1 }
+	}
+	if = { limit = { check_variable = { which = pe_gc_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_gc_spent } set_variable = { which = pe_msg_name value = pe_c1_name } }
+	else_if = { limit = { check_variable = { which = pe_gc_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_gc_spent } set_variable = { which = pe_msg_name value = pe_c2_name } }
+	else_if = { limit = { check_variable = { which = pe_gc_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_gc_spent } set_variable = { which = pe_msg_name value = pe_c3_name } }
+	else_if = { limit = { check_variable = { which = pe_gc_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_gc_spent } set_variable = { which = pe_msg_name value = pe_c4_name } }
+	else_if = { limit = { check_variable = { which = pe_gc_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_gc_spent } set_variable = { which = pe_msg_name value = pe_c5_name } }
+	else_if = { limit = { check_variable = { which = pe_gc_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_gc_spent } set_variable = { which = pe_msg_name value = pe_c6_name } }
+	else_if = { limit = { check_variable = { which = pe_gc_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_gc_spent } set_variable = { which = pe_msg_name value = pe_c7_name } }
+	else_if = { limit = { check_variable = { which = pe_gc_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_gc_spent } set_variable = { which = pe_msg_name value = pe_c8_name } }
+	event_target:pe_gc_planet = { save_event_target_as = pe_msg_planet }
+	if = {
+		limit = { is_ai = no }
+		if = { limit = { check_variable = { which = pe_gc_free value = 1 } } pe_corp_msg = { KEY = pe_msg_guard_hq } }
+		else = { pe_corp_msg = { KEY = pe_msg_guard } }
+	}
+}
+
+# Country scope (pe.297 option): the planet's independent firms join the corporation pe_gc_k.
+pe_corp_ground_firms = {
+	event_target:pe_gc_planet = {
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = 0 } }
+			set_variable = { which = pe_corp value = root.pe_gc_k }
+		}
+	}
+}
+
+# Country scope, monthly (pe.100): corporate guards on a planet without ground combat go home.
+pe_guard_cleanup = {
+	every_owned_army = {
+		limit = { has_army_flag = pe_corp_guard OR = { NOT = { exists = planet } planet = { has_ground_combat = no } } }
+		remove_army = yes
+	}
+}
+
+# --- Occupation --------------------------------------------------------------------------
+# Planet scope (pe.138, on_planet_occupied): the occupier levies contributions, a quarter of
+# the capital of every firm here; it gets them as trade. pe_occ_sum = the levy.
+pe_occ_levy = {
+	set_variable = { which = pe_occ_m value = 0 }
+	set_variable = { which = pe_occ_sum value = 0 }
+	every_deposit = {
+		limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_fcap check_variable = { which = pe_fcap value > 0 } }
+		set_variable = { which = pe_tmp value = pe_fcap }
+		multiply_variable = { which = pe_tmp value = 0.25 }
+		subtract_variable = { which = pe_fcap value = pe_tmp }
+		prev = { change_variable = { which = pe_occ_sum value = prev.pe_tmp } }
+	}
+	round_variable = pe_occ_sum
+}
+
+# Planet scope (pe.139, on_planet_returned): the fine for collaboration, a fifth of the capital
+# of the firms here (pe_col_sum).
+pe_collab_sum = {
+	set_variable = { which = pe_col_sum value = 0 }
+	every_deposit = {
+		limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_fcap check_variable = { which = pe_fcap value > 0 } }
+		set_variable = { which = pe_tmp value = pe_fcap }
+		multiply_variable = { which = pe_tmp value = 0.2 }
+		prev = { change_variable = { which = pe_col_sum value = prev.pe_tmp } }
+	}
+	round_variable = pe_col_sum
+}
+
+# Country scope (pe.299): punish the collaborators: the firms of event_target:pe_col_planet pay
+# a fifth of their capital as a fine; the people are content.
+pe_collab_punish = {
+	event_target:pe_col_planet = {
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_fcap check_variable = { which = pe_fcap value > 0 } }
+			multiply_variable = { which = pe_fcap value = 0.8 }
+		}
+		add_modifier = { modifier = pe_collab_punished days = 1800 }
+	}
+	add_resource = { trade = 1 mult = pe_col_fine }
+}
+
+# Country scope (pe.299): seize the biggest collaborating firm without compensation; it becomes
+# a state district of its type.
+pe_collab_seize = {
+	event_target:pe_col_planet = {
+		set_variable = { which = pe_col_cls value = 0 }
+		set_variable = { which = pe_col_st value = 0 }
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_stage check_variable = { which = pe_stage value > prev.pe_col_st } }
+			prev = { set_variable = { which = pe_col_st value = prev.pe_stage } }
+		}
+		random_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_stage check_variable = { which = pe_stage value = prev.pe_col_st } }
+			prev = { set_variable = { which = pe_col_cls value = 1 } }
+			if = { limit = { is_variable_set = pe_cls } prev = { set_variable = { which = pe_col_cls value = prev.pe_cls } } }
+			remove_deposit = yes
+		}
+		if = { limit = { check_variable = { which = pe_col_cls value = 2 } } add_district = { district_type = district_mining ignore_cap = yes } }
+		else_if = { limit = { check_variable = { which = pe_col_cls value = 3 } } add_district = { district_type = district_generator ignore_cap = yes } }
+		else_if = { limit = { check_variable = { which = pe_col_cls value = 4 } } add_district = { district_type = district_farming ignore_cap = yes } }
+		else_if = { limit = { check_variable = { which = pe_col_cls value > 0 } } add_district = { district_type = district_city ignore_cap = yes } }
+		add_modifier = { modifier = pe_collab_punished days = 1800 }
+		check_planet_employment = yes
+	}
+}

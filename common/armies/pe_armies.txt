@@ -1,0 +1,17 @@
+# Corporate guards: troops a corporation sends to a planet under ground attack (pe.140-141,
+# pe_war_effects.txt). Defensive (they stay on the planet), created by script only; removed
+# when the ground combat is over.
+pe_corporate_guard = {
+	defensive = yes
+	time = 30
+	health = 1.5
+	damage = 1.5
+	morale = 1.5
+	collateral_damage = 0.0
+	war_exhaustion = 0.0
+	icon = GFX_army_type_defensive
+
+	potential_country = {
+		always = no
+	}
+}

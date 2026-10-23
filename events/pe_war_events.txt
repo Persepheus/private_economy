@@ -1,0 +1,170 @@
+# Private economy at war (pe_war_effects.txt).
+#   pe.138 a colony with firms is occupied: contributions   pe.139 it is liberated: collaborators
+#   pe.140 / 141 ground combat begins: corporate guards      pe.297 / 298 the offer, haggling
+#   pe.299 what to do with the collaborators
+namespace = pe
+
+# on_planet_occupied: root = the planet, from = its owner, fromfrom = the occupier.
+carrier_event = {
+	id = pe.138
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = owner
+		owner = { is_country_type = default is_gestalt = no }
+		count_deposits = { category = pe_deposit_cat_firms count > 0 }
+	}
+	immediate = {
+		save_event_target_as = pe_occ_planet
+		pe_occ_levy = yes
+		if = {
+			limit = { exists = fromfrom check_variable = { which = pe_occ_sum value > 0 } }
+			fromfrom = { add_resource = { trade = 1 mult = prev.pe_occ_sum } }
+		}
+		if = {
+			limit = { exists = from from = { is_ai = no } }
+			from = { create_message = { type = pe_private_economy localization = pe_msg_occ_levy days = 30 target = event_target:pe_occ_planet variable = { type = name localization = PLANET scope = event_target:pe_occ_planet } } }
+		}
+	}
+}
+
+# on_planet_returned: root = the planet, from = its owner, fromfrom = the former occupier.
+carrier_event = {
+	id = pe.139
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = owner
+		owner = { is_country_type = default is_gestalt = no }
+		count_deposits = { category = pe_deposit_cat_firms count > 0 }
+		is_variable_set = pe_occ_m
+		check_variable = { which = pe_occ_m value >= 3 }
+	}
+	immediate = {
+		save_event_target_as = pe_col_planet
+		set_variable = { which = pe_occ_m value = 0 }
+		pe_collab_sum = yes
+		owner = {
+			set_variable = { which = pe_col_fine value = prev.pe_col_sum }
+			if = { limit = { is_ai = no } country_event = { id = pe.299 } }
+			else = { pe_collab_punish = yes }
+		}
+	}
+}
+
+# on_ground_combat_started: root = the colony, from = the attacker.
+carrier_event = {
+	id = pe.140
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = owner
+		owner = { is_country_type = default is_gestalt = no }
+		exists = from
+		NOT = { from = { is_same_value = root.owner } }
+		NOT = { has_planet_flag = pe_gc_cd }
+	}
+	immediate = {
+		save_event_target_as = pe_gc_planet
+		set_timed_planet_flag = { flag = pe_gc_cd days = 180 }
+		owner = { country_event = { id = pe.141 } }
+	}
+}
+
+country_event = {
+	id = pe.141
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { pe_corp_ground = yes }
+}
+
+# A corporation offers its guards against a ground attack, for a price.
+country_event = {
+	id = pe.297
+	title = pe.297.name
+	desc = pe.297.desc
+	picture = GFX_evt_ground_combat
+	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_gc_k value = 1 } } set_variable = { which = pe_cn297 value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 2 } } set_variable = { which = pe_cn297 value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 3 } } set_variable = { which = pe_cn297 value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 4 } } set_variable = { which = pe_cn297 value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 5 } } set_variable = { which = pe_cn297 value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 6 } } set_variable = { which = pe_cn297 value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 7 } } set_variable = { which = pe_cn297 value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 8 } } set_variable = { which = pe_cn297 value = pe_c8_name } } } }
+	location = event_target:pe_gc_planet
+
+	option = {
+		name = pe.297.a
+		trigger = { check_variable = { which = pe_gc_ind value > 0 } }
+		custom_tooltip = pe.297.a.tt
+		hidden_effect = { pe_corp_ground_firms = yes pe_corp_ground_start = yes }
+	}
+	option = {
+		name = pe.297.b
+		allow = { check_variable = { which = pe_gc_stock value >= pe_gc_alloys } }
+		custom_tooltip = pe.297.b.tt
+		hidden_effect = { add_resource = { alloys = -1 mult = pe_gc_alloys } pe_corp_ground_start = yes }
+	}
+	option = {
+		name = pe.297.c
+		allow = { has_resource = { type = influence amount >= 100 } }
+		custom_tooltip = pe.297.c.tt
+		hidden_effect = { add_resource = { influence = -100 } pe_corp_ground_start = yes }
+	}
+	option = {
+		name = pe.297.d
+		custom_tooltip = pe.297.d.tt
+		hidden_effect = {
+			random_list = {
+				50 = { set_variable = { which = pe_gc_ok value = 1 } }
+				50 = { set_variable = { which = pe_gc_ok value = 0 } }
+			}
+			country_event = { id = pe.298 }
+		}
+	}
+	option = { name = pe.297.e }
+}
+
+country_event = {
+	id = pe.298
+	title = pe.298.name
+	desc = { trigger = { check_variable = { which = pe_gc_ok value = 1 } } text = pe.298.desc.ok }
+	desc = { trigger = { check_variable = { which = pe_gc_ok value = 0 } } text = pe.298.desc.no }
+	picture = GFX_evt_ground_combat
+	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_gc_k value = 1 } } set_variable = { which = pe_cn298 value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 2 } } set_variable = { which = pe_cn298 value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 3 } } set_variable = { which = pe_cn298 value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 4 } } set_variable = { which = pe_cn298 value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 5 } } set_variable = { which = pe_cn298 value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 6 } } set_variable = { which = pe_cn298 value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 7 } } set_variable = { which = pe_cn298 value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_gc_k value = 8 } } set_variable = { which = pe_cn298 value = pe_c8_name } } } }
+	location = event_target:pe_gc_planet
+
+	option = {
+		name = pe.298.a
+		trigger = { check_variable = { which = pe_gc_ok value = 1 } }
+		allow = { check_variable = { which = pe_gc_stock value >= pe_gc_half } }
+		custom_tooltip = pe.298.a.tt
+		hidden_effect = { add_resource = { alloys = -1 mult = pe_gc_half } pe_corp_ground_start = yes }
+	}
+	option = {
+		name = pe.298.b
+		trigger = { check_variable = { which = pe_gc_ok value = 0 } }
+	}
+}
+
+# The liberated planet: what happens to the firms that worked for the occupier?
+country_event = {
+	id = pe.299
+	title = pe.299.name
+	desc = pe.299.desc
+	picture = GFX_evt_city_planet
+	is_triggered_only = yes
+	location = event_target:pe_col_planet
+
+	option = {
+		name = pe.299.a
+		custom_tooltip = pe.299.a.tt
+		hidden_effect = { pe_collab_punish = yes }
+	}
+	option = {
+		name = pe.299.b
+		custom_tooltip = pe.299.b.tt
+		hidden_effect = { event_target:pe_col_planet = { add_modifier = { modifier = pe_collab_amnesty days = 720 } } }
+	}
+	option = {
+		name = pe.299.c
+		custom_tooltip = pe.299.c.tt
+		hidden_effect = { pe_collab_seize = yes }
+	}
+}

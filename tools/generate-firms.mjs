@@ -2466,6 +2466,74 @@ ${CORPS.map(k => `\t\t\t\t\tremove_planet_flag = pe_swc_${k}`).join('\n')}
 	}
 }
 `;
+corp += `
+# --- Occupation (pe.138 / 139, pe_war_effects.txt) ------------------------------------------
+# Country scope, monthly: our occupied colonies count their months (pe_occ_m) and pay no
+# profits; their firms stand still (pe_planet_eligible, pe_monthly_sites). A corporation whose
+# headquarters is occupied has its cash frozen (pe_c<slot>_fz, new income too); after five
+# years of occupation it may move its headquarters (3% a month) to our free colony with most of
+# its firms, and its cash is free again. A headquarters free again thaws the cash.
+pe_occupation_step = {
+	every_owned_colony = {
+		limit = { is_occupied_flag = yes }
+		if = { limit = { NOT = { is_variable_set = pe_occ_m } } set_variable = { which = pe_occ_m value = 0 } }
+		change_variable = { which = pe_occ_m value = 1 }
+		set_variable = { which = pe_pl_profit value = 0 }
+	}
+	every_owned_colony = {
+		limit = { is_occupied_flag = no is_variable_set = pe_occ_m check_variable = { which = pe_occ_m value > 0 } }
+		set_variable = { which = pe_occ_m value = 0 }
+	}
+${CORPS.map(k => `	if = {
+		limit = { check_variable = { which = ${C(k, 'on')} value = 1 } }
+		if = { limit = { NOT = { is_variable_set = ${C(k, 'fz')} } } set_variable = { which = ${C(k, 'fz')} value = 0 } }
+		if = {
+			limit = { any_owned_colony = { has_planet_flag = pe_hq_${k} is_occupied_flag = yes } }
+			if = {
+				limit = { check_variable = { which = ${C(k, 'cash')} value > 0 } }
+				change_variable = { which = ${C(k, 'fz')} value = ${C(k, 'cash')} }
+				set_variable = { which = ${C(k, 'cash')} value = 0 }
+			}
+			set_variable = { which = pe_occ_try value = 0 }
+			random_owned_colony = {
+				limit = { has_planet_flag = pe_hq_${k} is_occupied_flag = yes check_variable = { which = pe_occ_m value >= 60 } }
+				save_event_target_as = pe_occ_hq
+				root = { set_variable = { which = pe_occ_try value = 1 } }
+			}
+			if = {
+				limit = { check_variable = { which = pe_occ_try value = 1 } }
+				random = {
+					chance = 3
+					set_variable = { which = pe_occ_best value = 0 }
+					every_owned_colony = {
+						limit = { is_occupied_flag = no is_variable_set = pe_mem_${k} check_variable = { which = pe_mem_${k} value > root.pe_occ_best } }
+						root = { set_variable = { which = pe_occ_best value = prev.pe_mem_${k} } }
+						save_event_target_as = pe_occ_new
+					}
+					if = {
+						limit = { check_variable = { which = pe_occ_best value > 0 } }
+${nameChain(`root.${C(k, 'name')}`, id => `event_target:pe_occ_hq = { if = { limit = { has_deposit = d_pe_hq_${id} } remove_deposit = d_pe_hq_${id} } } event_target:pe_occ_new = { add_deposit = d_pe_hq_${id} }`, '\t\t\t\t\t\t')}
+						event_target:pe_occ_hq = { remove_planet_flag = pe_hq_${k} }
+						event_target:pe_occ_new = { set_planet_flag = pe_hq_${k} save_event_target_as = pe_msg_planet }
+						change_variable = { which = ${C(k, 'cash')} value = ${C(k, 'fz')} }
+						set_variable = { which = ${C(k, 'fz')} value = 0 }
+						if = {
+							limit = { is_ai = no }
+							set_variable = { which = pe_msg_name value = ${C(k, 'name')} }
+							pe_corp_msg = { KEY = pe_msg_occ_hq_moved }
+						}
+					}
+				}
+			}
+		}
+		else_if = {
+			limit = { check_variable = { which = ${C(k, 'fz')} value > 0 } }
+			change_variable = { which = ${C(k, 'cash')} value = ${C(k, 'fz')} }
+			set_variable = { which = ${C(k, 'fz')} value = 0 }
+		}
+	}`).join('\n')}
+}
+`;
 write('common/scripted_effects/pe_corp_effects_generated.txt', corp);
 
 write('common/static_modifiers/pe_corp_modifiers_generated.txt', header + `# Clusters (pe_cluster_apply), supply contracts, corporation headquarters and branches (one
@@ -2494,7 +2562,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
 
 // Events that name a corporation: each reads its own variable pe_cn<event>, set in its
 // immediate (pe_corp_cur_name is shared and may change before the window is read).
-const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295];
+const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298];
 const corpLoc = (name, varName, keyOf) => dtext(name, varName, NAME_IDS.map(id => [id, keyOf(id)]), 'pe_corp_line_none');
 write('common/scripted_loc/pe_corp_loc_generated.txt', header + locDt + `# Corporation names (country scope).\n` +
   corpLoc('GetPeCorpName', 'pe_corp_cur_name', id => `pe_cname_${id}`) + CORP_EVENTS.map(e => corpLoc(`GetPeCorpName${e}`, `pe_cn${e}`, id => `pe_cname_${id}`)).join('') + corpLoc('GetPeCorpA', 'pe_corp_a_name', id => `pe_cname_${id}`) + corpLoc('GetPeCorpB', 'pe_corp_b_name', id => `pe_cname_${id}`) +

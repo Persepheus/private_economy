@@ -65,7 +65,7 @@
 
 pe_monthly_sites = {
 	every_owned_colony = {
-		limit = { has_planet_flag = pe_site }
+		limit = { has_planet_flag = pe_site is_occupied_flag = no }
 		# A site the player cleared leaves the flag behind.
 		if = {
 			limit = { count_deposits = { category = pe_deposit_cat_sites count < 1 } }
@@ -456,7 +456,7 @@ pe_ledgers = {
 # Colony scope: this planet's profit ledger for the next three months.
 pe_ledger_planet = {
 	if = {
-		limit = { count_deposits = { category = pe_deposit_cat_firms count < 1 } }
+		limit = { OR = { count_deposits = { category = pe_deposit_cat_firms count < 1 } is_occupied_flag = yes } }
 		set_variable = { which = pe_pl_profit value = 0 }
 	}
 	if = { limit = { NOT = { is_variable_set = pe_pl_profit } } set_variable = { which = pe_pl_profit value = 0 } }
@@ -1891,7 +1891,8 @@ pe_supply_step = {
 # Country scope, monthly (pe.100): our colonies under orbital bombardment. The damage follows
 # the devastation of the planet (how hard the bombardment really hits: ships, technology,
 # shields), only while it is bombarded:
-# - each firm loses 2% of its capital a month plus 0.15% per point of devastation (at most 20%);
+# - each firm loses 0.2% of its capital a month per point of devastation (a random 0.1-0.3%
+#   per point, per planet and month);
 # - rarely a firm is hit (1% a month, up to 5% at high devastation): it loses a stage at its
 #   next accounts, at stage 1 it is destroyed and leaves ruins (pe_firm_book, pe_firm_change);
 # - the planet is a war zone for three years after the last bombardment (pe_warzone): no new
@@ -1904,10 +1905,10 @@ pe_bombard_step = {
 		if = {
 			limit = { count_deposits = { category = pe_deposit_cat_firms count > 0 } }
 			export_trigger_value_to_variable = { trigger = planet_devastation variable = pe_dev }
+			set_variable_to_random_value = { which = pe_bfac min = 0.001 max = 0.003 }
 			set_variable = { which = pe_brate value = pe_dev }
-			multiply_variable = { which = pe_brate value = 0.0015 }
-			change_variable = { which = pe_brate value = 0.02 }
-			if = { limit = { check_variable = { which = pe_brate value > 0.2 } } set_variable = { which = pe_brate value = 0.2 } }
+			multiply_variable = { which = pe_brate value = pe_bfac }
+			if = { limit = { check_variable = { which = pe_brate value > 0.9 } } set_variable = { which = pe_brate value = 0.9 } }
 			set_variable = { which = pe_bkeep value = 1 }
 			subtract_variable = { which = pe_bkeep value = pe_brate }
 			every_deposit = {

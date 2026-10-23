@@ -6,6 +6,8 @@
 pe_planet_eligible = {
 	exists = owner
 	is_colony = yes
+	# An occupied planet's firms stand still (pe_occupation_step).
+	is_occupied_flag = no
 	is_under_colonization = no
 	colony_age >= 6
 	owner = { is_country_type = default is_gestalt = no }
