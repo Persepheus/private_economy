@@ -2,6 +2,7 @@
 #   pe.270 a corporation is founded   pe.271 a price war   pe.272 a merger
 #   pe.273 the register of corporations (console: event pe.273)
 #   pe.276 register of firms of a planet (planet decision)
+#   pe.131-133 a colony with firms changes owner (on_colony_transfer)
 #   pe.280 a corporation wants a station   pe.281 the holdings offer their stock
 # Scope: country. pe_corp_cur_name / pe_corp_a_name / pe_corp_b_name: name ids for the texts;
 # pe_mg_s / pe_mg_w: the stronger and the weaker corporation (slots).
@@ -142,3 +143,70 @@ country_event = {
 	immediate = { hidden_effect = { pe_firm_register = yes } }
 	option = { name = pe.276.a }
 }
+
+# A colony with private firms or headquarters has a new owner (on_colony_transfer; this =
+# colony, from = new owner, fromfrom = former owner). The former owner lets go (pe.132), then
+# the new one takes over (pe.133).
+carrier_event = {
+	id = pe.131
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		OR = {
+			count_deposits = { category = pe_deposit_cat_firms count > 0 }
+			count_deposits = { category = pe_deposit_cat_sites count > 0 }
+			count_deposits = { category = pe_deposit_cat_corp count > 0 }
+			has_deposit = d_pe_supply_deal
+			has_deposit = d_pe_ledger_savings
+		}
+	}
+	immediate = {
+		save_event_target_as = pe_tr_planet
+		from = { save_event_target_as = pe_tr_new }
+		if = {
+			limit = { exists = fromfrom fromfrom = { is_country_type = default is_gestalt = no } }
+			fromfrom = { country_event = { id = pe.132 } }
+		}
+		else = {
+			# No former economy to let go (the former owner is gone or had none): corporate
+			# ties, loans and headquarters of the planet end here.
+			every_deposit = {
+				limit = { OR = { has_deposit_category = pe_deposit_cat_firms has_deposit_category = pe_deposit_cat_sites } }
+				set_variable = { which = pe_corp value = 0 }
+				set_variable = { which = pe_corp_mv value = 0 }
+				set_variable = { which = pe_loan value = 0 }
+				set_variable = { which = pe_lender value = 0 }
+				set_variable = { which = pe_loan_q value = 0 }
+				set_variable = { which = pe_sup_fid value = 0 }
+				set_variable = { which = pe_sup_n value = 0 }
+				set_variable = { which = pe_fid value = 0 }
+			}
+			while = {
+				limit = { count_deposits = { category = pe_deposit_cat_corp count > 0 } }
+				random_deposit = { limit = { has_deposit_category = pe_deposit_cat_corp } remove_deposit = yes }
+			}
+			remove_planet_flag = pe_hq_1 remove_planet_flag = pe_hq_2 remove_planet_flag = pe_hq_3 remove_planet_flag = pe_hq_4 remove_planet_flag = pe_hq_5 remove_planet_flag = pe_hq_6 remove_planet_flag = pe_hq_7 remove_planet_flag = pe_hq_8
+			from = { country_event = { id = pe.133 } }
+		}
+	}
+}
+
+country_event = {
+	id = pe.132
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_conq_old = yes
+		event_target:pe_tr_new = { country_event = { id = pe.133 } }
+	}
+}
+
+country_event = {
+	id = pe.133
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_conq_new = yes
+	}
+}
+

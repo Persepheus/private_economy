@@ -1154,6 +1154,8 @@ loc.german.push(' pe_private_profits:0 "Gewinnauszahlung an Privatfirmen"', ' pe
   ' d_pe_ledger_profit:0 "Gewinnauszahlung an Privatfirmen"', ' d_pe_ledger_profit_desc:0 "§HEine Ausgabe des Staates.§! Die Privatfirmen auf diesem Planeten liefern ihre ganze Produktion an das Reich, genau wie Staatsjobs. Dafür zahlt der Staat ihnen jeden Monat ihren Gewinnanteil in Handel: einen Teil des Werts, den ihre Jobs schaffen, je nach Wirtschaftsordnung (Gelenkt 15 %, Gemischt 20 %, Freie Marktwirtschaft 25 %, Laissez-faire 35 %), abzüglich ihrer laufenden Kosten. Davon wachsen die Firmen, und neue werden gegründet.\\n\\nGewinne und Ersparnisse zusammen kosten höchstens 40 % des Brutto-Handels; was der Staat nicht zahlt, bekommen die Firmen auch nicht."',
   ' d_pe_ledger_savings:0 "Private Ersparnisse"', ' d_pe_ledger_savings_desc:0 "§HEine Ausgabe des Staates.§! Jeden Monat fließt ein Teil unseres Handelseinkommens als private Ersparnisse in den Investorenpool, je nach Wirtschaftsordnung (Gelenkt 5 %, Gemischt 10 %, Freie Marktwirtschaft 15 %, Laissez-faire 20 %). Aus dem Pool gründen Investoren neue Firmen und kaufen Staatsdistrikte."');
 loc.german.push(' pe_deposit_cat_automation:0 "Private Automatisierung"');
+loc.english.push(' pe_msg_conq_hq_lost:0 "With $PLANET$ we have lost the headquarters of §Y$CORP$§!. The corporation leaves our economy; its firms here are independent now, its stations and megastructures are ours."', ' pe_msg_conq_hq_gained:0 "With $PLANET$ the corporation §Y$CORP$§! has come under our rule: its headquarters and its firms there are part of our economy now."', ' pe_msg_conq_corp_gone:0 "§Y$CORP$§! has its headquarters on $PLANET$, which is ours now, but our economy has no room for it: the corporation is dissolved, its firms are independent."');
+loc.german.push(' pe_msg_conq_hq_lost:0 "Mit $PLANET$ haben wir den Hauptsitz von §Y$CORP$§! verloren. Der Konzern verlässt unsere Wirtschaft; seine Firmen hier sind jetzt unabhängig, seine Stationen und Megastrukturen gehören uns."', ' pe_msg_conq_hq_gained:0 "Mit $PLANET$ ist der Konzern §Y$CORP$§! unter unsere Herrschaft gekommen: Sein Hauptsitz und seine Firmen dort gehören jetzt zu unserer Wirtschaft."', ' pe_msg_conq_corp_gone:0 "§Y$CORP$§! hat seinen Hauptsitz auf $PLANET$, das jetzt uns gehört, aber in unserer Wirtschaft ist kein Platz für ihn: Der Konzern wird aufgelöst, seine Firmen sind unabhängig."');
 loc.english.push(' pe_msg_firm_ruined:0 "A private firm on $PLANET$ has been destroyed by the bombardment. Its ruins block the district slot until they are cleared or rebuilt."', ' d_pe_ruins:0 "Ruins of a Private Firm"', ' d_pe_ruins_desc:0 "What the bombardment left of a private firm. The ruins block a district slot. They can be cleared, or rebuilt: by the firm\'s corporation from its cash, otherwise with a subsidy from us."', ' pe_deposit_cat_ruins:0 "Ruins"');
 loc.german.push(' pe_msg_firm_ruined:0 "Eine Privatfirma auf $PLANET$ ist durch das Bombardement zerstört worden. Ihre Trümmer blockieren den Distriktplatz, bis sie geräumt oder wieder aufgebaut sind."', ' d_pe_ruins:0 "Trümmer einer Privatfirma"', ' d_pe_ruins_desc:0 "Was das Bombardement von einer Privatfirma übrig gelassen hat. Die Trümmer blockieren einen Distriktplatz. Sie lassen sich räumen oder wieder aufbauen: durch den Konzern der Firma aus seiner Kasse, sonst mit einem Zuschuss von uns."', ' pe_deposit_cat_ruins:0 "Trümmer"');
 loc.english.push(' pe_supply_deal:0 "Supply Deal with a Private Firm"', ' d_pe_supply_deal:0 "Supply Deal"', ' d_pe_supply_deal_desc:0 "A private firm delivers us this good every month for two years and takes another one in return, of which we had plenty (event §YA Special Deal§!). The deal ends early if we run out of the good we pay with."');
@@ -2299,6 +2301,169 @@ corp += `
 pe_orbital_value = {
 	set_variable = { which = pe_ov value = 0 }
 ${ifChain(ORBITALS, o => `has_deposit = ${o.key}`, o => `set_variable = { which = pe_ov value = ${o.value} }`)}
+}
+`;
+corp += `
+# --- Conquest (events pe.131-133) -----------------------------------------------------------
+# Country scope = the former owner; event_target:pe_tr_planet has just changed owner. Its firms
+# leave our corporations (corporate loans written off, supply contracts and firm numbers end);
+# old contracts on it go (supply deal, savings, shares). A corporation headquartered there
+# leaves with the planet: its data goes onto the planet (pe_tr<x>_<slot>), its firms elsewhere
+# in our empire become independent, loans it gave are written off, its slot is freed here
+# (stations, swarm and furnace go to us, see pe_corp_free).
+pe_conq_old = {
+	event_target:pe_tr_planet = {
+		every_deposit = {
+			limit = { OR = { has_deposit_category = pe_deposit_cat_firms has_deposit_category = pe_deposit_cat_sites } }
+			set_variable = { which = pe_corp_mv value = 0 }
+			if = {
+				limit = { is_variable_set = pe_corp check_variable = { which = pe_corp value > 0 } }
+${CORPS.map((k, i) => `\t\t\t\t${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_corp value = ${k} } planet = { has_planet_flag = pe_hq_${k} } } set_variable = { which = pe_corp_mv value = ${k} } }`).join('\n')}
+			}
+			set_variable = { which = pe_corp value = 0 }
+			set_variable = { which = pe_loan value = 0 }
+			set_variable = { which = pe_lender value = 0 }
+			set_variable = { which = pe_loan_q value = 0 }
+			set_variable = { which = pe_sup_fid value = 0 }
+			set_variable = { which = pe_sup_n value = 0 }
+			set_variable = { which = pe_fid value = 0 }
+		}
+		if = { limit = { has_deposit = d_pe_supply_deal } remove_deposit = d_pe_supply_deal root = { set_variable = { which = pe_deal_mon value = 0 } } }
+		if = { limit = { has_deposit = d_pe_ledger_savings } remove_deposit = d_pe_ledger_savings }
+		if = { limit = { has_deposit = d_pe_ledger_dividend } remove_deposit = d_pe_ledger_dividend }
+	}
+${CORPS.map(k => `	if = {
+		limit = { check_variable = { which = ${C(k, 'on')} value = 1 } event_target:pe_tr_planet = { has_planet_flag = pe_hq_${k} } }
+		event_target:pe_tr_planet = {
+			set_variable = { which = pe_trc_${k} value = 1 }
+			set_variable = { which = pe_trn_${k} value = root.${C(k, 'name')} }
+			set_variable = { which = pe_trcash_${k} value = root.${C(k, 'cash')} }
+			set_variable = { which = pe_trgrp_${k} value = root.${C(k, 'grp')} }
+			set_variable = { which = pe_trceo_${k} value = root.${C(k, 'ceo')} }
+			set_variable = { which = pe_trprod_${k} value = 0 }
+			if = { limit = { root = { is_variable_set = ${C(k, 'prod')} } } set_variable = { which = pe_trprod_${k} value = root.${C(k, 'prod')} } }
+		}
+		every_owned_colony = {
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms }
+				if = { limit = { is_variable_set = pe_corp check_variable = { which = pe_corp value = ${k} } } set_variable = { which = pe_corp value = 0 } }
+				if = { limit = { is_variable_set = pe_lender check_variable = { which = pe_lender value = ${k} } } set_variable = { which = pe_loan value = 0 } set_variable = { which = pe_lender value = 0 } set_variable = { which = pe_loan_q value = 0 } }
+			}
+		}
+		set_variable = { which = pe_msg_name value = ${C(k, 'name')} }
+		set_variable = { which = pe_corp_free_k value = ${k} }
+		pe_corp_free = yes
+		if = {
+			limit = { is_ai = no }
+			event_target:pe_tr_planet = { save_event_target_as = pe_msg_planet }
+			pe_corp_msg = { KEY = pe_msg_conq_hq_lost }
+		}
+	}`).join('\n')}
+}
+
+# Country scope = the new owner of event_target:pe_tr_planet (after pe_conq_old). Without a
+# private economy of its own (not a normal empire, gestalt, Command Economy) the firms become
+# state districts and headquarters go. Otherwise each corporation that came with the planet
+# (pe_trc_<old slot>) takes a free slot here, unless there are already two corporations of its
+# sector group (or no slot is free): then it is dissolved, its firms independent. A lower
+# economic order reduces the firms over time as usual (pe_nationalise_one).
+pe_conq_new = {
+	event_target:pe_tr_planet = { save_event_target_as = pe_msg_planet }
+	if = {
+		limit = { OR = { NOT = { is_country_type = default } is_gestalt = yes has_policy_flag = pe_order_planned } }
+		event_target:pe_tr_planet = {
+			pe_firms_to_state = yes
+			while = {
+				limit = { count_deposits = { category = pe_deposit_cat_corp count > 0 } }
+				random_deposit = { limit = { has_deposit_category = pe_deposit_cat_corp } remove_deposit = yes }
+			}
+${CORPS.map(k => `\t\t\tremove_planet_flag = pe_hq_${k}\n\t\t\tset_variable = { which = pe_trc_${k} value = 0 }`).join('\n')}
+		}
+	}
+	else = {
+		# The old slots' headquarters flags first (a new slot may be one of them).
+		event_target:pe_tr_planet = {
+${CORPS.map(k => `			if = { limit = { is_variable_set = pe_trc_${k} check_variable = { which = pe_trc_${k} value = 1 } } remove_planet_flag = pe_hq_${k} }`).join('\n')}
+		}
+${CORPS.map(k => `		if = {
+			limit = { event_target:pe_tr_planet = { is_variable_set = pe_trc_${k} check_variable = { which = pe_trc_${k} value = 1 } } }
+			event_target:pe_tr_planet = {
+				root = {
+					set_variable = { which = pe_tr_name value = prev.pe_trn_${k} }
+					set_variable = { which = pe_tr_cash value = prev.pe_trcash_${k} }
+					set_variable = { which = pe_tr_grp value = prev.pe_trgrp_${k} }
+					set_variable = { which = pe_tr_ceo value = prev.pe_trceo_${k} }
+					set_variable = { which = pe_tr_prod value = prev.pe_trprod_${k} }
+				}
+				set_variable = { which = pe_trc_${k} value = 0 }
+			}
+			# A free slot, and room in the sector group (at most two corporations).
+			set_variable = { which = pe_tr_j value = 0 }
+${[...CORPS].reverse().map(j => `\t\t\tif = { limit = { NOT = { check_variable = { which = ${C(j, 'on')} value = 1 } } } set_variable = { which = pe_tr_j value = ${j} } }`).join('\n')}
+			set_variable = { which = pe_tr_gn value = 0 }
+${CORPS.map(j => `\t\t\tif = { limit = { check_variable = { which = ${C(j, 'on')} value = 1 } check_variable = { which = ${C(j, 'grp')} value = pe_tr_grp } } change_variable = { which = pe_tr_gn value = 1 } }`).join('\n')}
+			set_variable = { which = pe_msg_name value = pe_tr_name }
+			if = {
+				limit = { check_variable = { which = pe_tr_j value > 0 } check_variable = { which = pe_tr_gn value < 2 } }
+${corpChain('pe_tr_j', j => `set_variable = { which = ${C(j, 'on')} value = 1 } set_variable = { which = ${C(j, 'name')} value = pe_tr_name } set_variable = { which = ${C(j, 'cash')} value = pe_tr_cash } set_variable = { which = ${C(j, 'grp')} value = pe_tr_grp } set_variable = { which = ${C(j, 'ceo')} value = pe_tr_ceo } set_variable = { which = ${C(j, 'prod')} value = pe_tr_prod } ${['firms', 'war', 'rival', 'wcd', 'scd', 'sv', 'st', 'shv', 'sw', 'sws', 'af', 'afs', 'right', 'out'].map(v => `set_variable = { which = ${C(j, v)} value = 0 }`).join(' ')} event_target:pe_tr_planet = { set_planet_flag = pe_hq_${j} }`, '\t\t\t\t')}
+				if = { limit = { check_variable = { which = pe_tr_prod value <= 0 } } ${corpChain('pe_tr_j', j => `${GROUPS.map((g, i) => `${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_tr_grp value = ${g} } } set_variable = { which = ${C(j, 'prod')} value = ${GROUP_PROD[g]} } }`).join(' ')}`, '					')} }
+				event_target:pe_tr_planet = {
+					every_deposit = {
+						limit = { OR = { has_deposit_category = pe_deposit_cat_firms has_deposit_category = pe_deposit_cat_sites } is_variable_set = pe_corp_mv check_variable = { which = pe_corp_mv value = ${k} } }
+						set_variable = { which = pe_corp value = root.pe_tr_j }
+						set_variable = { which = pe_corp_mv value = 0 }
+					}
+				}
+${nameChain('pe_tr_name', id => `set_country_flag = pe_cname_${id} set_global_flag = pe_gcname_${id}`, '\t\t\t\t')}
+				if = { limit = { is_ai = no } pe_corp_msg = { KEY = pe_msg_conq_hq_gained } }
+			}
+			else = {
+				event_target:pe_tr_planet = {
+${nameChain('root.pe_tr_name', id => `if = { limit = { has_deposit = d_pe_hq_${id} } remove_deposit = d_pe_hq_${id} }`, '\t\t\t\t\t')}
+					every_deposit = {
+						limit = { is_variable_set = pe_corp_mv check_variable = { which = pe_corp_mv value = ${k} } }
+						set_variable = { which = pe_corp_mv value = 0 }
+					}
+				}
+				if = { limit = { is_ai = no } pe_corp_msg = { KEY = pe_msg_conq_corp_gone } }
+			}
+		}`).join('\n')}
+	}
+	event_target:pe_tr_planet = { check_planet_employment = yes }
+}
+
+# Country scope, quarterly: stations and megastructures of our holdings in a system that now
+# belongs to another empire (ceded, conquered) go to that empire. Our corporations lose them.
+pe_holdings_territory = {
+	if = {
+		limit = { exists = event_target:pe_hold }
+		event_target:pe_hold = {
+			every_orbital_station = {
+				limit = { exists = orbit orbit = { solar_system = { exists = owner NOT = { owner = { is_same_value = root } } } } }
+				orbit = { solar_system = { owner = { save_event_target_as = pe_terr_owner } } }
+${CORPS.map(k => `\t\t\t\tremove_fleet_flag = pe_stc_${k}`).join('\n')}
+				remove_fleet_flag = pe_st_share
+				set_owner = event_target:pe_terr_owner
+			}
+			every_owned_megastructure = {
+				limit = { exists = planet planet = { solar_system = { exists = owner NOT = { owner = { is_same_value = root } } } } }
+				planet = {
+					solar_system = { owner = { save_event_target_as = pe_terr_owner } }
+${CORPS.map(k => `\t\t\t\t\tremove_planet_flag = pe_swc_${k}`).join('\n')}
+					set_variable = { which = pe_afc value = 0 }
+					solar_system = {
+						every_system_planet = {
+							limit = { is_variable_set = pe_af_corp }
+							set_variable = { which = pe_af_corp value = 0 }
+							set_variable = { which = pe_af_h value = 0 }
+							set_variable = { which = pe_af_val value = 0 }
+						}
+					}
+				}
+				set_owner = event_target:pe_terr_owner
+			}
+		}
+	}
 }
 `;
 write('common/scripted_effects/pe_corp_effects_generated.txt', corp);

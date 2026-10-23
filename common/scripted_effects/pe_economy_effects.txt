@@ -1606,61 +1606,7 @@ pe_command_economy = {
 				has_deposit = d_pe_ledger_profit
 			}
 		}
-		while = {
-			limit = { count_deposits = { category = pe_deposit_cat_firms count > 0 } }
-			root = { set_variable = { which = pe_cmd_cls value = 0 } }
-			random_deposit = {
-				limit = { has_deposit_category = pe_deposit_cat_firms }
-				if = { limit = { NOT = { is_variable_set = pe_code } } pe_firm_identify = yes }
-				if = { limit = { NOT = { is_variable_set = pe_cls } } pe_deposit_fetch = yes }
-				root = { set_variable = { which = pe_cmd_cls value = prev.pe_cls } }
-				remove_deposit = yes
-			}
-			if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 2 } } } add_district = { district_type = district_mining ignore_cap = yes } }
-			else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 3 } } } add_district = { district_type = district_generator ignore_cap = yes } }
-			else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 4 } } } add_district = { district_type = district_farming ignore_cap = yes } }
-			else = { add_district = { district_type = district_city ignore_cap = yes } }
-		}
-		while = {
-			limit = { count_deposits = { category = pe_deposit_cat_sites count > 0 } }
-			root = { set_variable = { which = pe_cmd_cls value = 0 } }
-			random_deposit = {
-				limit = { has_deposit_category = pe_deposit_cat_sites }
-				if = {
-					limit = { check_variable = { which = pe_kind value = 3 } }
-					root = { set_variable = { which = pe_cmd_cls value = 1 } }
-					if = { limit = { is_deposit_type = d_pe_site_mining } root = { set_variable = { which = pe_cmd_cls value = 2 } } }
-					if = { limit = { is_deposit_type = d_pe_site_generator } root = { set_variable = { which = pe_cmd_cls value = 3 } } }
-					if = { limit = { is_deposit_type = d_pe_site_farming } root = { set_variable = { which = pe_cmd_cls value = 4 } } }
-				}
-				remove_deposit = yes
-			}
-			if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 1 } } } add_district = { district_type = district_city ignore_cap = yes } }
-			else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 2 } } } add_district = { district_type = district_mining ignore_cap = yes } }
-			else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 3 } } } add_district = { district_type = district_generator ignore_cap = yes } }
-			else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 4 } } } add_district = { district_type = district_farming ignore_cap = yes } }
-		}
-		while = {
-			limit = { count_deposits = { category = pe_deposit_cat_automation count > 0 } }
-			random_deposit = {
-				limit = { has_deposit_category = pe_deposit_cat_automation }
-				remove_deposit = yes
-			}
-		}
-		if = { limit = { has_deposit = d_pe_ledger_profit } remove_deposit = d_pe_ledger_profit }
-		if = { limit = { has_deposit = d_pe_cprod_alloys } remove_deposit = d_pe_cprod_alloys }
-		if = { limit = { has_deposit = d_pe_cprod_consumer_goods } remove_deposit = d_pe_cprod_consumer_goods }
-		if = { limit = { has_deposit = d_pe_cprod_trade } remove_deposit = d_pe_cprod_trade }
-		if = { limit = { has_deposit = d_pe_cprod_physics_research } remove_deposit = d_pe_cprod_physics_research }
-		if = { limit = { has_deposit = d_pe_cprod_society_research } remove_deposit = d_pe_cprod_society_research }
-		if = { limit = { has_deposit = d_pe_cprod_engineering_research } remove_deposit = d_pe_cprod_engineering_research }
-		if = { limit = { has_deposit = d_pe_cprod_unity } remove_deposit = d_pe_cprod_unity }
-		if = { limit = { has_deposit = d_pe_cprod_minerals } remove_deposit = d_pe_cprod_minerals }
-		if = { limit = { has_deposit = d_pe_cprod_energy } remove_deposit = d_pe_cprod_energy }
-		if = { limit = { has_deposit = d_pe_cprod_food } remove_deposit = d_pe_cprod_food }
-		set_variable = { which = pe_pl_profit value = 0 }
-		remove_planet_flag = pe_site
-		check_planet_employment = yes
+		pe_firms_to_state = yes
 	}
 	pe_corp_reset = yes
 	set_variable = { which = pe_capital value = 0 }
@@ -1691,6 +1637,7 @@ pe_corp_step = {
 	if = { limit = { check_variable = { which = pe_c7_scd value > 0 } } change_variable = { which = pe_c7_scd value = -1 } }
 	if = { limit = { check_variable = { which = pe_c8_scd value > 0 } } change_variable = { which = pe_c8_scd value = -1 } }
 	pe_holdings_ensure = yes
+	pe_holdings_territory = yes
 	pe_corp_stations = yes
 	if = { limit = { check_variable = { which = pe_st_k value > 0 } } pe_corp_station_pick = yes }
 	pe_corp_station_output = yes
@@ -2071,4 +2018,65 @@ pe_ruin_subsidy = {
 	subtract_variable = { which = pe_rb_debt value = pe_rb_sub }
 	event_target:pe_rb_ruin = { remove_deposit = yes }
 	event_target:pe_rb_planet = { pe_ruin_rebuild = yes }
+}
+
+# Colony scope: every firm here becomes a state district of its type, sites and private
+# automation and the planet's ledgers go (the Command Economy, a conqueror without a private
+# economy).
+pe_firms_to_state = {
+	while = {
+		limit = { count_deposits = { category = pe_deposit_cat_firms count > 0 } }
+		root = { set_variable = { which = pe_cmd_cls value = 0 } }
+		random_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms }
+			if = { limit = { NOT = { is_variable_set = pe_code } } pe_firm_identify = yes }
+			if = { limit = { NOT = { is_variable_set = pe_cls } } pe_deposit_fetch = yes }
+			root = { set_variable = { which = pe_cmd_cls value = prev.pe_cls } }
+			remove_deposit = yes
+		}
+		if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 2 } } } add_district = { district_type = district_mining ignore_cap = yes } }
+		else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 3 } } } add_district = { district_type = district_generator ignore_cap = yes } }
+		else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 4 } } } add_district = { district_type = district_farming ignore_cap = yes } }
+		else = { add_district = { district_type = district_city ignore_cap = yes } }
+	}
+	while = {
+		limit = { count_deposits = { category = pe_deposit_cat_sites count > 0 } }
+		root = { set_variable = { which = pe_cmd_cls value = 0 } }
+		random_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_sites }
+			if = {
+				limit = { check_variable = { which = pe_kind value = 3 } }
+				root = { set_variable = { which = pe_cmd_cls value = 1 } }
+				if = { limit = { is_deposit_type = d_pe_site_mining } root = { set_variable = { which = pe_cmd_cls value = 2 } } }
+				if = { limit = { is_deposit_type = d_pe_site_generator } root = { set_variable = { which = pe_cmd_cls value = 3 } } }
+				if = { limit = { is_deposit_type = d_pe_site_farming } root = { set_variable = { which = pe_cmd_cls value = 4 } } }
+			}
+			remove_deposit = yes
+		}
+		if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 1 } } } add_district = { district_type = district_city ignore_cap = yes } }
+		else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 2 } } } add_district = { district_type = district_mining ignore_cap = yes } }
+		else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 3 } } } add_district = { district_type = district_generator ignore_cap = yes } }
+		else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 4 } } } add_district = { district_type = district_farming ignore_cap = yes } }
+	}
+	while = {
+		limit = { count_deposits = { category = pe_deposit_cat_automation count > 0 } }
+		random_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_automation }
+			remove_deposit = yes
+		}
+	}
+	if = { limit = { has_deposit = d_pe_ledger_profit } remove_deposit = d_pe_ledger_profit }
+	if = { limit = { has_deposit = d_pe_cprod_alloys } remove_deposit = d_pe_cprod_alloys }
+	if = { limit = { has_deposit = d_pe_cprod_consumer_goods } remove_deposit = d_pe_cprod_consumer_goods }
+	if = { limit = { has_deposit = d_pe_cprod_trade } remove_deposit = d_pe_cprod_trade }
+	if = { limit = { has_deposit = d_pe_cprod_physics_research } remove_deposit = d_pe_cprod_physics_research }
+	if = { limit = { has_deposit = d_pe_cprod_society_research } remove_deposit = d_pe_cprod_society_research }
+	if = { limit = { has_deposit = d_pe_cprod_engineering_research } remove_deposit = d_pe_cprod_engineering_research }
+	if = { limit = { has_deposit = d_pe_cprod_unity } remove_deposit = d_pe_cprod_unity }
+	if = { limit = { has_deposit = d_pe_cprod_minerals } remove_deposit = d_pe_cprod_minerals }
+	if = { limit = { has_deposit = d_pe_cprod_energy } remove_deposit = d_pe_cprod_energy }
+	if = { limit = { has_deposit = d_pe_cprod_food } remove_deposit = d_pe_cprod_food }
+	set_variable = { which = pe_pl_profit value = 0 }
+	remove_planet_flag = pe_site
+	check_planet_employment = yes
 }

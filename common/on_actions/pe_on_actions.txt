@@ -11,3 +11,11 @@ on_ship_destroyed_victim = {
 		pe.290
 	}
 }
+
+# A planet changes owner (war, cession, trade): its firms go to the new owner (pe.131).
+on_colony_transfer = {
+	events = {
+		pe.131
+	}
+}
+

@@ -19,6 +19,8 @@
 #                convoy protection, salvage, Dyson swarm (each only where its condition holds)
 #   event pe.278 end all running corporate fleet contracts (fleets return, no loot)
 #   event pe.279 the supply chain step now (run pe.7 first)
+#   event pe.134 cede our planet with the most firms (not the capital) to another empire
+#   event pe.135 take the ceded planet back (both fire on_colony_transfer like a peace treaty)
 namespace = pe
 
 country_event = {
@@ -337,3 +339,52 @@ country_event = {
 		log = "private_economy: pe.279 supply step: last new buyer [Root.pe_new_cons], supplier [Root.pe_new_sup] (firm numbers)"
 	}
 }
+
+# Debug: cede our planet with the most firms (not the capital) to another normal empire.
+country_event = {
+	id = pe.134
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		set_variable = { which = pe_dbg_best value = 0 }
+		every_owned_colony = {
+			limit = { NOT = { is_capital = yes } count_deposits = { category = pe_deposit_cat_firms count > 0 } }
+			set_variable = { which = pe_dbg_n value = 0 }
+			every_deposit = { limit = { has_deposit_category = pe_deposit_cat_firms } prev = { change_variable = { which = pe_dbg_n value = 1 } } }
+			if = {
+				limit = { check_variable = { which = pe_dbg_n value > root.pe_dbg_best } }
+				root = { set_variable = { which = pe_dbg_best value = prev.pe_dbg_n } }
+				save_event_target_as = pe_dbg_planet
+			}
+		}
+		random_country = {
+			limit = { is_country_type = default is_gestalt = no NOT = { is_same_value = root } }
+			save_event_target_as = pe_dbg_to
+		}
+		if = {
+			limit = { exists = event_target:pe_dbg_planet exists = event_target:pe_dbg_to }
+			event_target:pe_dbg_planet = { set_planet_flag = pe_dbg_ceded set_owner = event_target:pe_dbg_to }
+			log = "private_economy: pe.134 ceded [event_target:pe_dbg_planet.GetName] ([Root.pe_dbg_best] firms) to [event_target:pe_dbg_to.GetName]"
+		}
+		else = { log = "private_economy: pe.134 no planet with firms (besides the capital) or no other empire" }
+	}
+}
+
+# Debug: take the planet ceded by pe.134 back.
+country_event = {
+	id = pe.135
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { any_owned_planet = { has_planet_flag = pe_dbg_ceded } }
+			random_owned_planet = { limit = { has_planet_flag = pe_dbg_ceded } save_event_target_as = pe_dbg_planet }
+		}
+		if = {
+			limit = { exists = event_target:pe_dbg_planet }
+			event_target:pe_dbg_planet = { remove_planet_flag = pe_dbg_ceded set_owner = root }
+			log = "private_economy: pe.135 took [event_target:pe_dbg_planet.GetName] back"
+		}
+	}
+}
+
