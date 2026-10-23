@@ -45,9 +45,12 @@ Testablauf: [docs/TESTS_0.29.md](docs/TESTS_0.29.md). Ältere Stände: [0.28](do
 
 ## Geplant
 
-- **Später**: Lösung für Habitate, Ringwelten, Ökumenopolen, Arkships und Spezialplaneten.
+- **In Arbeit: Spezialplaneten**, zuerst Habitate, dann Ringwelten, Ökumenopolen, Arkships und weitere.
 - **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen.
-- **Als Nächstes (beschlossen):** private Werften (Konzept noch offen); später Lobbys der Branchengruppen.
+- **Danach (beschlossen):** Lobbys der Branchengruppen (bauen auf den Konzernen auf); private Werften erst, wenn klar ist, was sie spielerisch bringen.
+- **Konjunkturzyklus:** erst, wenn die Wirtschaft stabil läuft.
+- **Aufräumen:** alter Holdings-Prototyp (pe.15-21) und diese Weltraum-Zeile sind überholt.
+- **Noch nie im Spiel getestet:** Konvoischutz, Bergung, Schiffsspenden der Mäzene, Konzern-Automatisierung, Liefervertrag (zwei Jahre), Trümmer und Wiederaufbau, Besatzung und Kollaboration.
 - **Prototyp Hilfsreich:** [docs/TESTS_PROTO_HOLDINGS.md](docs/TESTS_PROTO_HOLDINGS.md) (Konsole `event pe.15` bis `pe.21`).
 - **Weltraum (Ideen):** private Stationen und Kilostrukturen über ein Hilfsreich mit Leasing, Spenden von Schiffen durch Mäzene nach Verlusten, Konzernflotten über ein Hilfsreich, private Werften.
 - **Gemerkte Ideen, noch offen:**
