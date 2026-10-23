@@ -46,6 +46,8 @@ Testablauf: [docs/TESTS_0.29.md](docs/TESTS_0.29.md). Ältere Stände: [0.28](do
 ## Geplant
 
 - **In Arbeit: Spezialplaneten**, zuerst Habitate, dann Ringwelten, Ökumenopolen, Arkships und weitere.
+- **Zuerst zu klären: Spezialisierungen (Zonen)** auf normalen Planeten. Ein Staatsdistrikt bekommt Jobs aus seiner Zone (z. B. Generator 200 + Energiezone 100 = 300), eine Firma nicht, weil sie kein Distrikt ist. Firmen sollen die Zonen-Jobs bedingt bekommen (num_zones). Danach Habitate (Distrikte mit halben Grundjobs plus Zone, Hydroponik auf Energiedistrikten, Forschungsdistrikte, Kosten in Legierungen).
+- **Gefunden im Save Hesukaran 7 (2287):** Schutzflotte der KI ohne passenden Schiffsentwurf (create_ship ungültig, leere Flotte); Kredite eines aufgelösten Konzerns zahlen weiter in seinen leeren Platz; zwei Rohstoffkonzerne horten je 13-14 Tsd. Kasse (Verwendung bzw. Kalibrierung).
 - **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen.
 - **Danach (beschlossen):** Lobbys der Branchengruppen (bauen auf den Konzernen auf); private Werften erst, wenn klar ist, was sie spielerisch bringen.
 - **Konjunkturzyklus:** erst, wenn die Wirtschaft stabil läuft.
