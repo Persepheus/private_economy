@@ -603,3 +603,78 @@ country_event = {
 		log = "private_economy: pe.27 prototype furnace removed"
 	}
 }
+
+# --- Sprawl prototype -------------------------------------------------------------------
+# Console: pe.28 districts, pe.29 pops, pe.30 colony (empire_size_*_mult = -1 as a planet
+# modifier on our first habitat, else the capital); pe.31 removes all three.
+
+# Prototype: empire_size_districts_mult = -1 on our first habitat (else the capital); the log shows the empire size
+# before and after.
+country_event = {
+	id = pe.28
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		capital_scope = { save_event_target_as = pe_ps_planet }
+		random_owned_colony = { limit = { uses_district_set = habitat } save_event_target_as = pe_ps_planet }
+		export_trigger_value_to_variable = { trigger = empire_size variable = pe_ps_before }
+		event_target:pe_ps_planet = {
+			if = { limit = { NOT = { has_modifier = pe_proto_sprawl_districts } } add_modifier = { modifier = pe_proto_sprawl_districts days = -1 } }
+		}
+		export_trigger_value_to_variable = { trigger = empire_size variable = pe_ps_after }
+		log = "private_economy: pe.28 pe_proto_sprawl_districts on [event_target:pe_ps_planet.GetName]: empire size [Root.pe_ps_before] -> [Root.pe_ps_after] (the engine may only recount next day: compare in the sprawl tooltip)"
+	}
+}
+
+# Prototype: empire_size_pops_mult = -1 on our first habitat (else the capital); the log shows the empire size
+# before and after.
+country_event = {
+	id = pe.29
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		capital_scope = { save_event_target_as = pe_ps_planet }
+		random_owned_colony = { limit = { uses_district_set = habitat } save_event_target_as = pe_ps_planet }
+		export_trigger_value_to_variable = { trigger = empire_size variable = pe_ps_before }
+		event_target:pe_ps_planet = {
+			if = { limit = { NOT = { has_modifier = pe_proto_sprawl_pops } } add_modifier = { modifier = pe_proto_sprawl_pops days = -1 } }
+		}
+		export_trigger_value_to_variable = { trigger = empire_size variable = pe_ps_after }
+		log = "private_economy: pe.29 pe_proto_sprawl_pops on [event_target:pe_ps_planet.GetName]: empire size [Root.pe_ps_before] -> [Root.pe_ps_after] (the engine may only recount next day: compare in the sprawl tooltip)"
+	}
+}
+
+# Prototype: empire_size_colonies_mult = -1 on our first habitat (else the capital); the log shows the empire size
+# before and after.
+country_event = {
+	id = pe.30
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		capital_scope = { save_event_target_as = pe_ps_planet }
+		random_owned_colony = { limit = { uses_district_set = habitat } save_event_target_as = pe_ps_planet }
+		export_trigger_value_to_variable = { trigger = empire_size variable = pe_ps_before }
+		event_target:pe_ps_planet = {
+			if = { limit = { NOT = { has_modifier = pe_proto_sprawl_colonies } } add_modifier = { modifier = pe_proto_sprawl_colonies days = -1 } }
+		}
+		export_trigger_value_to_variable = { trigger = empire_size variable = pe_ps_after }
+		log = "private_economy: pe.30 pe_proto_sprawl_colonies on [event_target:pe_ps_planet.GetName]: empire size [Root.pe_ps_before] -> [Root.pe_ps_after] (the engine may only recount next day: compare in the sprawl tooltip)"
+	}
+}
+
+# Prototype: remove the sprawl test modifiers.
+country_event = {
+	id = pe.31
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_owned_colony = {
+			if = { limit = { has_modifier = pe_proto_sprawl_districts } remove_modifier = pe_proto_sprawl_districts }
+			if = { limit = { has_modifier = pe_proto_sprawl_pops } remove_modifier = pe_proto_sprawl_pops }
+			if = { limit = { has_modifier = pe_proto_sprawl_colonies } remove_modifier = pe_proto_sprawl_colonies }
+		}
+		export_trigger_value_to_variable = { trigger = empire_size variable = pe_ps_after }
+		log = "private_economy: pe.31 sprawl test modifiers removed; empire size [Root.pe_ps_after]"
+	}
+}
+

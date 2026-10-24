@@ -224,3 +224,14 @@ pe_collab_amnesty = {
 	planet_stability_add = -5
 }
 
+# Prototype (pe.28-31): which empire size modifiers work on a single planet?
+pe_proto_sprawl_districts = {
+	empire_size_districts_mult = -1
+}
+pe_proto_sprawl_pops = {
+	empire_size_pops_mult = -1
+}
+pe_proto_sprawl_colonies = {
+	empire_size_colonies_mult = -1
+}
+
