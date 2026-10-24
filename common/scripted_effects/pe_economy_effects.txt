@@ -69,6 +69,7 @@ pe_monthly_sites = {
 		# A site the player cleared leaves the flag behind.
 		if = {
 			limit = { count_deposits = { category = pe_deposit_cat_sites count < 1 } }
+			remove_planet_flag = pe_lab_site
 			remove_planet_flag = pe_site
 		}
 		every_deposit = {
@@ -1429,7 +1430,11 @@ pe_consider_variant = {
 	if = {
 		limit = { pe_can_$MODE$_$V$ = yes pe_ok_$V$ = yes }
 		root = {
+			# Its value here: habitat and void dwellers (pe_pf_u / pe_pf_r), the jobs of the
+			# specialisation of its district type (pe_zb_<rural>, see pe_planet_prepare).
 			set_variable = { which = pe_cand value = pe_val_$V$ }
+			multiply_variable = { which = pe_cand value = pe_pf_$K$ }
+			change_variable = { which = pe_cand value = $ZB$ }
 			set_variable = { which = pe_tmp value = pe_ent_val }
 			multiply_variable = { which = pe_tmp value = $ENT$ }
 			change_variable = { which = pe_cand value = pe_tmp }
@@ -1452,7 +1457,7 @@ pe_consider_variant = {
 			multiply_variable = { which = pe_cand value = pe_rnd }
 			if = {
 				limit = { check_variable = { which = pe_dmode value = 1 } }
-				set_variable = { which = pe_tmp value = pe_dval_$DCLS$ }
+				set_variable = { which = pe_tmp value = pe_dvz_$DCLS$ }
 				multiply_variable = { which = pe_tmp value = 0.875 }
 				subtract_variable = { which = pe_cand value = pe_tmp }
 			}
@@ -1529,7 +1534,7 @@ pe_buyout_execute = {
 		check_planet_employment = yes
 		save_event_target_as = pe_msg_planet
 		owner = {
-			add_resource = { minerals = $MINERALS$ trade = $TRADE$ }
+			add_resource = { $RES$ = $MINERALS$ trade = $TRADE$ }
 			subtract_variable = { which = pe_capital value = pe_down }
 			create_message = {
 				type = pe_private_economy
@@ -1548,9 +1553,13 @@ pe_retool_consider = {
 	if = {
 		limit = { pe_can_retool_$V$ = yes pe_ok_$V$ = yes }
 		root = {
+			# Its value here (as in pe_consider_variant).
+			set_variable = { which = pe_rv value = pe_val_$V$ }
+			multiply_variable = { which = pe_rv value = pe_pf_$K$ }
+			change_variable = { which = pe_rv value = $ZB$ }
 			if = {
-				limit = { check_variable = { which = pe_val_$V$ value > pe_cls_val_all } }
-				set_variable = { which = pe_cls_val_all value = pe_val_$V$ }
+				limit = { check_variable = { which = pe_rv value > pe_cls_val_all } }
+				set_variable = { which = pe_cls_val_all value = pe_rv }
 				set_variable = { which = pe_cls_var_all value = $CODE$ }
 			}
 		}
@@ -1559,8 +1568,8 @@ pe_retool_consider = {
 			limit = { pe_desig_$PRIM$ = yes }
 			root = {
 				if = {
-					limit = { check_variable = { which = pe_val_$V$ value > pe_cls_val_fit } }
-					set_variable = { which = pe_cls_val_fit value = pe_val_$V$ }
+					limit = { check_variable = { which = pe_rv value > pe_cls_val_fit } }
+					set_variable = { which = pe_cls_val_fit value = pe_rv }
 					set_variable = { which = pe_cls_var_fit value = $CODE$ }
 				}
 			}
@@ -2035,10 +2044,8 @@ pe_firms_to_state = {
 			root = { set_variable = { which = pe_cmd_cls value = prev.pe_cls } }
 			remove_deposit = yes
 		}
-		if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 2 } } } add_district = { district_type = district_mining ignore_cap = yes } }
-		else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 3 } } } add_district = { district_type = district_generator ignore_cap = yes } }
-		else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 4 } } } add_district = { district_type = district_farming ignore_cap = yes } }
-		else = { add_district = { district_type = district_city ignore_cap = yes } }
+		root = { set_variable = { which = pe_sd_cls value = pe_cmd_cls } if = { limit = { check_variable = { which = pe_sd_cls value = 0 } } set_variable = { which = pe_sd_cls value = 1 } } }
+		pe_state_district = yes
 	}
 	while = {
 		limit = { count_deposits = { category = pe_deposit_cat_sites count > 0 } }
@@ -2054,10 +2061,11 @@ pe_firms_to_state = {
 			}
 			remove_deposit = yes
 		}
-		if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 1 } } } add_district = { district_type = district_city ignore_cap = yes } }
-		else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 2 } } } add_district = { district_type = district_mining ignore_cap = yes } }
-		else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 3 } } } add_district = { district_type = district_generator ignore_cap = yes } }
-		else_if = { limit = { root = { check_variable = { which = pe_cmd_cls value = 4 } } } add_district = { district_type = district_farming ignore_cap = yes } }
+		if = {
+			limit = { root = { check_variable = { which = pe_cmd_cls value > 0 } } }
+			root = { set_variable = { which = pe_sd_cls value = pe_cmd_cls } }
+			pe_state_district = yes
+		}
 	}
 	while = {
 		limit = { count_deposits = { category = pe_deposit_cat_automation count > 0 } }
@@ -2080,4 +2088,23 @@ pe_firms_to_state = {
 	set_variable = { which = pe_pl_profit value = 0 }
 	remove_planet_flag = pe_site
 	check_planet_employment = yes
+}
+
+# Colony scope: a state district of the class root.pe_sd_cls (1 city, 2 mining, 3 generator,
+# 4 farming, 5 lab) instead of a firm; on a habitat the habitat district (housing, mining,
+# energy for power plants and farms, research for labs).
+pe_state_district = {
+	if = {
+		limit = { uses_district_set = habitat }
+		if = { limit = { root = { check_variable = { which = pe_sd_cls value = 2 } } } add_district = { district_type = district_hab_mining ignore_cap = yes } }
+		else_if = { limit = { root = { OR = { check_variable = { which = pe_sd_cls value = 3 } check_variable = { which = pe_sd_cls value = 4 } } } } add_district = { district_type = district_hab_energy ignore_cap = yes } }
+		else_if = { limit = { root = { check_variable = { which = pe_sd_cls value = 5 } } } add_district = { district_type = district_hab_science ignore_cap = yes } }
+		else = { add_district = { district_type = district_hab_housing ignore_cap = yes } }
+	}
+	else = {
+		if = { limit = { root = { check_variable = { which = pe_sd_cls value = 2 } } } add_district = { district_type = district_mining ignore_cap = yes } }
+		else_if = { limit = { root = { check_variable = { which = pe_sd_cls value = 3 } } } add_district = { district_type = district_generator ignore_cap = yes } }
+		else_if = { limit = { root = { check_variable = { which = pe_sd_cls value = 4 } } } add_district = { district_type = district_farming ignore_cap = yes } }
+		else = { add_district = { district_type = district_city ignore_cap = yes } }
+	}
 }

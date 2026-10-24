@@ -31,6 +31,11 @@ d_pe_site_city = {
 	planet_modifier = {
 		planet_max_districts_add = -1
 	}
+
+	triggered_planet_modifier = {
+		potential = { uses_district_set = habitat has_planet_flag = pe_lab_site }
+		district_hab_science_max_add = -1
+	}
 }
 
 d_pe_site_mining = {
@@ -60,7 +65,16 @@ d_pe_site_mining = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
+	}
+
+	triggered_planet_modifier = {
+		potential = { NOT = { uses_district_set = habitat } }
 		district_mining_max_add = -1
+	}
+
+	triggered_planet_modifier = {
+		potential = { uses_district_set = habitat }
+		district_hab_mining_max_add = -1
 	}
 }
 
@@ -91,7 +105,16 @@ d_pe_site_generator = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
+	}
+
+	triggered_planet_modifier = {
+		potential = { NOT = { uses_district_set = habitat } }
 		district_generator_max_add = -1
+	}
+
+	triggered_planet_modifier = {
+		potential = { uses_district_set = habitat }
+		district_hab_energy_max_add = -1
 	}
 }
 
@@ -122,6 +145,15 @@ d_pe_site_farming = {
 
 	planet_modifier = {
 		planet_max_districts_add = -1
+	}
+
+	triggered_planet_modifier = {
+		potential = { NOT = { uses_district_set = habitat } }
 		district_farming_max_add = -1
+	}
+
+	triggered_planet_modifier = {
+		potential = { uses_district_set = habitat }
+		district_hab_energy_max_add = -1
 	}
 }

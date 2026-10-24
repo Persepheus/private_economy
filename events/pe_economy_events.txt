@@ -35,8 +35,10 @@ country_event = {
 country_event = {
 	id = pe.110
 	title = pe.110.name
-	desc = { trigger = { OR = { check_variable = { which = pe_offer_class value = 1 } check_variable = { which = pe_offer_class value = 5 } } } text = pe.110.desc.urban }
-	desc = { trigger = { check_variable = { which = pe_offer_class value > 1 } check_variable = { which = pe_offer_class value < 5 } } text = pe.110.desc.rural }
+	desc = { trigger = { NOT = { check_variable = { which = pe_offer_hab value = 1 } } OR = { check_variable = { which = pe_offer_class value = 1 } check_variable = { which = pe_offer_class value = 5 } } } text = pe.110.desc.urban }
+	desc = { trigger = { NOT = { check_variable = { which = pe_offer_hab value = 1 } } check_variable = { which = pe_offer_class value > 1 } check_variable = { which = pe_offer_class value < 5 } } text = pe.110.desc.rural }
+	desc = { trigger = { check_variable = { which = pe_offer_hab value = 1 } OR = { check_variable = { which = pe_offer_class value = 1 } check_variable = { which = pe_offer_class value = 5 } } } text = pe.110.desc.urban_hab }
+	desc = { trigger = { check_variable = { which = pe_offer_hab value = 1 } check_variable = { which = pe_offer_class value > 1 } check_variable = { which = pe_offer_class value < 5 } } text = pe.110.desc.rural_hab }
 	picture = GFX_evt_tradedeal
 	is_triggered_only = yes
 	location = event_target:pe_offer_planet

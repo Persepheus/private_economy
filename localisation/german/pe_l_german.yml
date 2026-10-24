@@ -83,3 +83,5 @@
  pe_warzone:0 "Kriegsgebiet"
  pe_warzone_desc:0 "Dieser Planet wurde vor Kurzem bombardiert. Investoren halten sich fern: vorerst keine neuen Privatfirmen, keine Übernahmen, kein Umbau hier."
  pe_dbg_invaders_name:0 "Invasoren (Debug)"
+ pe.110.desc.urban_hab:0 "Investoren wollen einen staatlichen Distrikt auf dem Habitat §Y[pe_offer_planet.GetName]§! kaufen und daraus ein Unternehmen machen: §Y[Root.GetPeOfferFirm]§!. Sie bieten §G225§! £alloys£ und §G150§! £trade£ aus dem Privatkapital.\n\nIn der Freien Marktwirtschaft kommt eine Absage bei der Wirtschaft schlecht an."
+ pe.110.desc.rural_hab:0 "Investoren wollen einen staatlichen Distrikt auf dem Habitat §Y[pe_offer_planet.GetName]§! kaufen und daraus ein Unternehmen machen: §Y[Root.GetPeOfferFirm]§!. Sie bieten §G225§! £alloys£ und §G90§! £trade£ aus dem Privatkapital.\n\nIn der Freien Marktwirtschaft kommt eine Absage bei der Wirtschaft schlecht an."

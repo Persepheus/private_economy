@@ -174,6 +174,37 @@ const ZONE_POS = zoneVar('zone_urban_housing_positive'), ZONE_NEG = zoneVar('zon
 const zoneHousing = v => ((v.counts.u || 0) * ZONE_POS + (4 - (v.counts.u || 0)) * ZONE_NEG) / 2;
 const HOUSING = {u: housingOf('district_city'), m: housingOf('district_mining'), e: housingOf('district_generator'), f: housingOf('district_farming')};
 
+// --- Habitats and district specialisations (zones) ---------------------------------
+// On a habitat a firm takes a habitat district instead: city firms the housing district
+// (same jobs), labs also a research district (only with a research specialisation there),
+// mines and power plants the mining / energy district with half the base jobs (100 instead
+// of 200), farms the energy district (only with hydroponics). Void dwellers get +50% on all
+// habitat jobs, as vanilla. Costs and upkeep like a habitat district (150 alloys = 600,
+// 2 energy + 0.25 alloys, 360 days).
+const HAB = 'uses_district_set = habitat';
+const NOT_HAB = `NOT = { ${HAB} }`;
+const VOID = 'exists = owner owner = { is_void_dweller_empire = yes }';
+const HAB_DISTRICT = {m: 'district_hab_mining', e: 'district_hab_energy', f: 'district_hab_energy', l: 'district_hab_science'};
+const HAB_HOUSING = {u: housingOf('district_hab_housing'), m: housingOf('district_hab_mining'), e: housingOf('district_hab_energy'), f: housingOf('district_hab_energy')};
+const HAB_RURAL = 0.5;
+const HAB_FOUND = 600;
+const HAB_MONTHS = 12;
+const HAB_UPKEEP = {energy: 2, alloys: 0.25};
+const HAB_PRICE = {u: [225, 150], r: [225, 90]};       // buyout/nationalisation on a habitat: alloys, trade (x stage)
+const HAB_RESEARCH_ZONES = ['zone_habitat_research', 'zone_habitat_research_unity'];
+const HAB_FARM_ZONES = ['zone_habitat_hydroponics'];
+// The jobs a state district gets from the specialisation (zone) of its type, per district
+// (vanilla zones/*): a firm in such a district gets the same as private jobs.
+const Z1 = zoneVar('scaling_district_1_job'), Z2 = zoneVar('scaling_district_2_jobs'), ZB3 = zoneVar('bonus_scaling_district_3_jobs');
+const ZONE_JOBS = {
+  district_mining: [['zone_minerals', {miner: Z1}], ['zone_betharian', {miner: Z1}], ['zone_rare_crystals', {miner: Z1}], ['zone_minerals_physics', {miner: Z2, physicist: Z2}]],
+  district_generator: [['zone_energy', {technician: Z1}], ['zone_volatile_motes', {technician: Z1}]],
+  district_farming: [['zone_food', {farmer: Z1}], ['zone_exotic_gases', {farmer: Z1}], ['zone_anglers', {farmer: Z2, artisan: Z2}], ['zone_agrarian_anglers', {farmer: ZB3, artisan: ZB3, trader: ZB3}]],
+  district_hab_mining: [['zone_minerals', {miner: Z1}], ['zone_habitat_rare_crystals', {miner: Z1}]],
+  district_hab_energy: [['zone_energy', {technician: Z1}], ['zone_habitat_volatile_motes', {technician: Z1}], ['zone_habitat_exotic_gases', {farmer: Z1}], ['zone_habitat_hydroponics', {farmer: Z1}]],
+};
+const ZJOB = j => `pe_private_${j}`;
+
 // --- Variants -------------------------------------------------------------------
 const P = {
   a: {job: 'pe_private_metallurgist', urban: true, enArt: 'Private Steelworks', deArt: 'Privates Stahlwerk', enDiv: 'Steel', deDiv: 'Stahl'},
@@ -258,15 +289,34 @@ const clearing = (k, s) => `	time = ${CLEAR_DAYS}
 	on_cleared = { pe_firm_cleared = { COMP = ${FOUND[k] * stageMult(s)} } }`;
 let dep = header + `# Firm variants and stages: one district slot each (rural ones also one district of
 # their type). Placed only by script. Under the Guided and Mixed economy the player can
-# clear them like blockers (influence; under Mixed also trade as compensation). Energy
-# upkeep like the matching district, scaled by stage; housing like the district.
+# clear them like blockers (influence; under Mixed also trade as compensation). Upkeep and
+# housing like the matching district, scaled by stage. Rural firms get the jobs of their
+# district type's specialisation (zone) where the planet has it. On a habitat (conditional
+# modifiers): a habitat district instead, half the base jobs for rural firms, labs also a
+# research district, void dwellers +50% jobs, habitat upkeep.
 `;
+const withCond = (blocks, cond) => blocks.map(b => b.replace('potential = {', `potential = { ${cond}`));
+const fmt = n => +n.toFixed(2);
+const jobsOf = (v, s, f) => Object.entries(v.workforce).map(([job, wf]) => `job_${job}_add = ${fmt(wf * stageMult(s) * f)}`);
+const tpm = (cond, mods) => mods.length ? `triggered_planet_modifier = {\n\t\tpotential = { ${cond} }\n${mods.map(m => '\t\t' + m).join('\n')}\n\t}` : '';
+const zoneBlocks = (district, s, cond, f) => (ZONE_JOBS[district] || []).map(([z, jobs]) => tpm(`${cond} num_zones = { type = ${z} value > 0 }`, Object.entries(jobs).map(([jb, n]) => `job_${ZJOB(jb)}_add = ${fmt(n * stageMult(s) * f)}`)));
+const housingMods = h => h.base;
 for (const {v, s, key} of pairs) {
-  const housing = HOUSING[v.cityLike ? 'u' : v.cls];
-  const baseHousing = housing.base.reduce((sum, m) => sum + Number(m.split(' = ')[1]), 0) + (v.cityLike ? zoneHousing(v) : 0);
-  const mods = ['planet_max_districts_add = -1', ...(baseHousing ? [`planet_housing_add = ${baseHousing}`] : [])];
-  if (!v.cityLike) mods.push(`${v.district}_max_add = -1`);
-  for (const [job, wf] of Object.entries(v.workforce)) mods.push(`job_${job}_add = ${wf * stageMult(s)}`);
+  const rural = !v.cityLike, lab = v.cls === 'l';
+  const housing = HOUSING[v.cityLike ? 'u' : v.cls], habHousing = HAB_HOUSING[v.cityLike ? 'u' : v.cls];
+  const sumH = h => h.base.reduce((sum, m) => sum + Number(m.split(' = ')[1]), 0) + (v.cityLike ? zoneHousing(v) : 0);
+  const planetMods = [...(sumH(housing) ? [`planet_housing_add = ${sumH(housing)}`] : []), ...(rural ? [`${v.district}_max_add = -1`] : []), ...jobsOf(v, s, 1)];
+  const habMods = [...(sumH(habHousing) ? [`planet_housing_add = ${sumH(habHousing)}`] : []), ...(rural ? [`${HAB_DISTRICT[v.cls]}_max_add = -1`] : lab ? [`${HAB_DISTRICT.l}_max_add = -1`] : []), ...jobsOf(v, s, rural ? HAB_RURAL : 1)];
+  const parts = [
+    tpm(NOT_HAB, planetMods),
+    ...withCond(housing.blocks, NOT_HAB),
+    ...(rural ? zoneBlocks(v.district, s, NOT_HAB, 1) : []),
+    tpm(HAB, habMods),
+    tpm(`${HAB} ${VOID}`, jobsOf(v, s, (rural ? HAB_RURAL : 1) * 0.5)),
+    ...withCond(habHousing.blocks, HAB),
+    ...(rural ? zoneBlocks(HAB_DISTRICT[v.cls], s, HAB, 1) : []),
+    ...(rural ? zoneBlocks(HAB_DISTRICT[v.cls], s, `${HAB} ${VOID}`, 0.5) : []),
+  ].filter(Boolean);
   dep += `
 ${key} = {
 	icon = ${v.cityLike ? 'd_city' : P[v.cls].icon}
@@ -280,15 +330,21 @@ ${clearing(v.k, s)}
 	resources = {
 		category = planet_deposits
 		upkeep = {
+			trigger = { planet = { ${NOT_HAB} } }
 			energy = ${UPKEEP[v.k] * stageMult(s)}
+		}
+		upkeep = {
+			trigger = { planet = { ${HAB} } }
+			energy = ${fmt(HAB_UPKEEP.energy * stageMult(s))}
+			alloys = ${fmt(HAB_UPKEEP.alloys * stageMult(s))}
 		}
 ${clearCosts(v.k, s)}
 	}
 
 	planet_modifier = {
-${mods.map(m => '\t\t' + m).join('\n')}
+		planet_max_districts_add = -1
 	}
-${housing.blocks.map(b => '\n\t' + b + '\n').join('')}}
+${parts.map(b => '\n\t' + b + '\n').join('')}}
 `;
 }
 write('common/deposits/pe_firm_deposits.txt', dep);
@@ -311,9 +367,24 @@ ${clearCosts(d ? 'r' : 'u', 1)}
 	}
 
 	planet_modifier = {
-		planet_max_districts_add = -1${d ? `\n\t\t${d}_max_add = -1` : ''}
+		planet_max_districts_add = -1
 	}
-}
+${d ? `
+	triggered_planet_modifier = {
+		potential = { ${NOT_HAB} }
+		${d}_max_add = -1
+	}
+
+	triggered_planet_modifier = {
+		potential = { ${HAB} }
+		${{district_mining: HAB_DISTRICT.m, district_generator: HAB_DISTRICT.e, district_farming: HAB_DISTRICT.f}[d]}_max_add = -1
+	}
+` : `
+	triggered_planet_modifier = {
+		potential = { ${HAB} has_planet_flag = pe_lab_site }
+		${HAB_DISTRICT.l}_max_add = -1
+	}
+`}}
 `).join(''));
 
 write('common/deposits/pe_automation_deposits.txt', header + `# Private automation of a worker job on a planet, like the vanilla automation buildings
@@ -422,18 +493,39 @@ ${[...LEDGER_BITS.entries()].reverse().map(([i, b]) => `	if = {
 // --- Triggers -------------------------------------------------------------------
 const sideOk = v => v.side && !P[v.side].urban && !v.cityLike
   ? ` OR = { has_district = ${P[v.side].district} num_free_districts = { type = ${P[v.side].district} value > 0 } }` : '';
+// On a habitat a rural firm has no rural side share (only city ones).
+const habSideOk = v => v.side && !P[v.side].urban && !v.cityLike ? ' always = no' : '';
+// After a rural firm takes a district of type d, the state keeps one (built or buildable),
+// so a specialisation can still be built there.
+const keepOne = d => `OR = { AND = { has_district = ${d} num_free_districts = { type = ${d} value > 0 } } num_free_districts = { type = ${d} value > 1 } }`;
+const farmZone = v => v.cls === 'f' ? ` OR = { ${HAB_FARM_ZONES.map(z => `num_zones = { type = ${z} value > 0 }`).join(' ')} }` : '';
 let trg = header + `# Colony scope, per variant: can it be founded on a free slot, bought from the state (never
 # the last district of a type: its buildings would be lost),
 # or chosen by a firm that restructures? A rural side share needs
-# the planet to have that district type at all (its deposits).
+# the planet to have that district type at all (its deposits). A rural firm leaves the state
+# one district of its type (built or buildable), so a specialisation stays possible. On a
+# habitat: habitat districts; labs need a research specialisation and a free research
+# district, farms hydroponics; rural firms there have no rural side share.
+
+# Colony scope: a lab may take a research district of this habitat.
+pe_lab_hab_ok = {
+	OR = { ${HAB_RESEARCH_ZONES.map(z => `num_zones = { type = ${z} value > 0 }`).join(' ')} }
+	num_free_districts = { type = ${HAB_DISTRICT.l} value > 0 }
+	NOT = { has_planet_flag = pe_lab_site }
+}
 `;
 for (const v of variants) {
-  const s = sideOk(v);
+  const s = sideOk(v), hs = habSideOk(v);
   if (v.cityLike) {
-    trg += `pe_can_found_${v.key} = { free_district_slots > 0 }\npe_can_buy_${v.key} = { num_districts = { type = district_city value >= 2 } }\npe_can_retool_${v.key} = { always = yes }\n`;
+    const lab = v.cls === 'l';
+    trg += `pe_can_found_${v.key} = { free_district_slots > 0${lab ? ` OR = { ${NOT_HAB} pe_lab_hab_ok = yes }` : ''} }\n`;
+    trg += `pe_can_buy_${v.key} = { OR = { AND = { ${NOT_HAB} num_districts = { type = district_city value >= 2 } } AND = { ${HAB} ${lab ? `num_districts = { type = ${HAB_DISTRICT.l} value >= 2 } OR = { ${HAB_RESEARCH_ZONES.map(z => `num_zones = { type = ${z} value > 0 }`).join(' ')} }` : 'num_districts = { type = district_hab_housing value >= 2 }'} } } }\n`;
+    trg += `pe_can_retool_${v.key} = { ${lab ? `OR = { ${NOT_HAB} pe_lab_hab_ok = yes }` : 'always = yes'} }\n`;
   } else {
-    trg += `pe_can_found_${v.key} = { free_district_slots > 0 num_free_districts = { type = ${v.district} value > 0 }${s} }\n`;
-    trg += `pe_can_buy_${v.key} = { num_districts = { type = ${v.district} value >= 2 }${s} }\npe_can_retool_${v.key} = { NOT = { has_planet_flag = pe_noroom_${v.cls} } OR = { has_district = ${v.district} num_free_districts = { type = ${v.district} value > 0 } root = { check_variable = { which = pe_here_${v.cls} value = 1 } } }${s} }\n`;
+    const d = v.district, hd = HAB_DISTRICT[v.cls], here = `root = { check_variable = { which = pe_here_${v.cls} value = 1 } }`;
+    trg += `pe_can_found_${v.key} = { free_district_slots > 0 OR = { AND = { ${NOT_HAB} ${keepOne(d)}${s} } AND = { ${HAB} ${keepOne(hd)}${farmZone(v)}${hs} } } }\n`;
+    trg += `pe_can_buy_${v.key} = { OR = { AND = { ${NOT_HAB} num_districts = { type = ${d} value >= 2 }${s} } AND = { ${HAB} num_districts = { type = ${hd} value >= 2 }${farmZone(v)}${hs} } } }\n`;
+    trg += `pe_can_retool_${v.key} = { NOT = { has_planet_flag = pe_noroom_${v.cls} } OR = { AND = { ${NOT_HAB} OR = { has_district = ${d} num_free_districts = { type = ${d} value > 0 } ${here} } OR = { has_district = ${d} num_free_districts = { type = ${d} value > 1 } ${here} }${s} } AND = { ${HAB} OR = { has_district = ${hd} num_free_districts = { type = ${hd} value > 0 } ${here} } OR = { has_district = ${hd} num_free_districts = { type = ${hd} value > 1 } ${here} }${farmZone(v)}${hs} } } }\n`;
   }
 }
 // pe_ok_<firm>: none of its inputs is in deficit (pe_def_<res>, set when pricing).
@@ -494,7 +586,7 @@ const ZONES = [
 // Designation -> favoured shares (matched on the designation key).
 const designations = [...new Set(readDir('common/colony_types').flatMap(t => [...t.matchAll(/^(col_\w+) = \{/gm)].map(m => m[1])))];
 const SPEC = [[/foundry|forge/, ['a']], [/factory/, ['c']], [/industrial/, ['a', 'c']], [/trade|^col_city$/, ['t']], [/mining|extraction|refinery/, ['m']], [/generator|energy/, ['e']], [/farming/, ['f']], [/research/, ['x', 'y', 'z']], [/bureau/, ['b']], [/resort|pleasure/, ['u']]];
-const specFor = l => designations.filter(d => !/nomad|habitat|ring|ecu|hiv|mac|pre_ftl|fe_|wilderness/.test(d) && SPEC.some(([re, ls]) => re.test(d) && ls.includes(l)));
+const specFor = l => designations.filter(d => !/nomad|ring|ecu|hiv|mac|gestalt|pre_ftl|fe_|wilderness/.test(d) && SPEC.some(([re, ls]) => re.test(d) && ls.includes(l)));
 
 let eff = header + `# Call depths (see pe_economy_effects.txt): pe_census 2, pe_job_values 2,
 # pe_compute_values 2, pe_planet_prepare 3, pe_firm_identify 4, pe_deposit_fetch 4,
@@ -583,9 +675,36 @@ pe_planet_prepare = {
 ${LETTERS.map(l => `\t\tset_variable = { which = pe_spec_${l} value = 1 }`).join('\n')}
 		set_variable = { which = pe_ent_val value = 0.3 }
 		set_variable = { which = pe_dval_u value = 0 }
+		# Firm values here (see pe_deposit_fetch, pe_consider_variant): pe_pf_u / pe_pf_r =
+		# factor on a city / rural firm's value (habitat: half the rural base jobs, void
+		# dwellers +50%), pe_zb_<rural> = value of the specialisation's jobs of its district
+		# type here, pe_zw_<rural>_<job> = their workforce in the automatable jobs.
+		set_variable = { which = pe_pf_u value = 1 }
+		set_variable = { which = pe_pf_r value = 1 }
+		set_variable = { which = pe_hv value = 1 }
+		set_variable = { which = pe_zb_0 value = 0 }
+${rural.map(r => `\t\tset_variable = { which = pe_zb_${r} value = 0 }\n${AUTO_JOBS.map(a => `\t\tset_variable = { which = pe_zw_${r}_${a} value = 0 }`).join('\n')}`).join('\n')}
 	}
+	if = {
+		limit = { ${HAB} }
+		root = { set_variable = { which = pe_pf_r value = ${HAB_RURAL} } }
+		if = {
+			limit = { ${VOID} }
+			root = {
+				set_variable = { which = pe_hv value = 1.5 }
+				set_variable = { which = pe_pf_u value = 1.5 }
+				set_variable = { which = pe_pf_r value = ${HAB_RURAL * 1.5} }
+			}
+		}
+	}
+${rural.map(r => [[NOT_HAB, P[r].district], [HAB, HAB_DISTRICT[r]]].map(([cond, d]) => (ZONE_JOBS[d] || []).map(([z, jobs]) => `\tif = { limit = { ${cond} num_zones = { type = ${z} value > 0 } } root = { ${Object.entries(jobs).map(([jb, n]) => `set_variable = { which = pe_tmp value = pe_vaj_${ZJOB(jb)} } multiply_variable = { which = pe_tmp value = ${n / 100} } multiply_variable = { which = pe_tmp value = pe_hv } change_variable = { which = pe_zb_${r} value = pe_tmp }${AUTO_JOBS.includes(jb) ? ` set_variable = { which = pe_tmp value = ${n} } multiply_variable = { which = pe_tmp value = pe_hv } change_variable = { which = pe_zw_${r}_${jb} value = pe_tmp }` : ''}`).join(' ')} } }`).join('\n')).join('\n')).join('\n')}
 	# Value of one state city district here: one job per zone (100 workforce each).
 ${ZONES.map(([zone, parts]) => `\tif = { limit = { num_zones = { type = ${zone} value > 0 } } root = { ${parts.map(([job, w]) => `set_variable = { which = pe_tmp value = pe_vaj_${job} } multiply_variable = { which = pe_tmp value = ${+w.toFixed(4)} } change_variable = { which = pe_dval_u value = pe_tmp }`).join(' ')} } }`).join('\n')}
+	root = {
+		set_variable = { which = pe_dvz_u value = pe_dval_u }
+		multiply_variable = { which = pe_dvz_u value = pe_pf_u }
+${rural.map(r => `\t\tset_variable = { which = pe_dvz_${r} value = pe_dval_${r} }\n\t\tmultiply_variable = { which = pe_dvz_${r} value = pe_pf_r }\n\t\tchange_variable = { which = pe_dvz_${r} value = pe_zb_${r} }`).join('\n')}
+	}
 	if = { limit = { free_amenities < 0 } root = { set_variable = { which = pe_ent_val value = 30 } } }
 	else_if = { limit = { free_amenities < 1000 } root = { set_variable = { which = pe_ent_val value = 8 } } }
 	# A specialised planet: all shares ${SPEC_MALUS} first, the matching ones ${SPEC_BONUS}.
@@ -609,7 +728,7 @@ ${ifChain(pairs, p => `is_deposit_type = ${p.key}`, p => `set_variable = { which
 # this planet), its class (1 city, 2 mining, 3 generator, 4 farming, 5 lab), and its
 # workforce in the automatable worker jobs (pe_wf_<job>, scaled by stage).
 pe_deposit_fetch = {
-${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }`, v => `${AUTO_JOBS.map(a => `set_variable = { which = pe_wf_${a} value = ${v.workforce['pe_private_' + a] || 0} }`).join(' ')} set_variable = { which = pe_prim value = ${LETTERS.indexOf(v.primary) + 1} } set_variable = { which = pe_va value = root.pe_va_${v.key} } set_variable = { which = pe_val value = root.pe_val_${v.key} } set_variable = { which = pe_cls value = ${v.clsNum} }${v.entRaw ? ` set_variable = { which = pe_tmp value = root.pe_ent_val } multiply_variable = { which = pe_tmp value = ${v.entRaw} } change_variable = { which = pe_va value = pe_tmp }` : ''}`)}
+${ifChain(variants, v => `check_variable = { which = pe_code value = ${v.code} }`, v => `${AUTO_JOBS.map(a => `set_variable = { which = pe_wf_${a} value = ${v.workforce['pe_private_' + a] || 0} }`).join(' ')} set_variable = { which = pe_prim value = ${LETTERS.indexOf(v.primary) + 1} } set_variable = { which = pe_va value = root.pe_va_${v.key} } set_variable = { which = pe_val value = root.pe_val_${v.key} } set_variable = { which = pe_cls value = ${v.clsNum} }${v.entRaw ? ` set_variable = { which = pe_tmp value = root.pe_ent_val } multiply_variable = { which = pe_tmp value = ${v.entRaw} } change_variable = { which = pe_va value = pe_tmp }` : ''} multiply_variable = { which = pe_va value = root.pe_pf_${v.k} } multiply_variable = { which = pe_val value = root.pe_pf_${v.k} }${v.cityLike ? '' : ` change_variable = { which = pe_va value = root.pe_zb_${v.cls} } change_variable = { which = pe_val value = root.pe_zb_${v.cls} } ${AUTO_JOBS.map(a => `multiply_variable = { which = pe_wf_${a} value = root.pe_pf_r } change_variable = { which = pe_wf_${a} value = root.pe_zw_${v.cls}_${a} }`).join(' ')}`}`)}
 }
 
 pe_deposit_fetch_scale = {
@@ -627,14 +746,21 @@ pe_choose_variant = {
 		set_variable = { which = pe_best value = pe_best_min }
 		set_variable = { which = pe_best_variant value = 0 }
 	}
-${variants.map(v => `\tpe_consider_variant = { V = ${v.key} CODE = ${v.code} MODE = $MODE$ ENT = ${v.entChoose} PRIM = ${v.primary} DCLS = ${v.dcls} }`).join('\n')}
+${variants.map(v => `\tpe_consider_variant = { V = ${v.key} CODE = ${v.code} MODE = $MODE$ ENT = ${v.entChoose} PRIM = ${v.primary} DCLS = ${v.dcls} K = ${v.k} ZB = ${v.cityLike ? 'pe_zb_0' : 'pe_zb_' + v.cls} }`).join('\n')}
 }
 
 # Colony scope: start building the chosen variant on a free slot.
 pe_found_variant = {
-${ifChain(variants, v => rootIs('pe_best_variant', v.code), v => `pe_found_firm = { CODE = ${v.code} COST = ${FOUND[v.k]} SITE = ${v.site} MONTHS = ${BUILD_MONTHS[v.k]} }`)}
+${ifChain(variants, v => rootIs('pe_best_variant', v.code), v => `if = { limit = { ${HAB} } pe_found_firm = { CODE = ${v.code} COST = ${HAB_FOUND} SITE = ${v.site} MONTHS = ${HAB_MONTHS} }${v.cls === 'l' ? ' if = { limit = { has_planet_flag = pe_site } set_planet_flag = pe_lab_site }' : ''} } else = { pe_found_firm = { CODE = ${v.code} COST = ${FOUND[v.k]} SITE = ${v.site} MONTHS = ${BUILD_MONTHS[v.k]} } }`)}
 }
 
+`;
+const buyCall = v => {
+  const [m, t] = PRICE[v.k], [ha, ht] = HAB_PRICE[v.k];
+  const hd = v.cls === 'l' ? HAB_DISTRICT.l : v.cityLike ? 'district_hab_housing' : HAB_DISTRICT[v.cls];
+  return `if = { limit = { ${HAB} } pe_buyout_execute = { FIRM = ${v.key} CODE = ${v.code} DISTRICT = ${hd} RES = alloys MINERALS = ${ha} TRADE = ${ht} PRICE = ${ha * 4 + ht} } } else = { pe_buyout_execute = { FIRM = ${v.key} CODE = ${v.code} DISTRICT = ${v.district} RES = minerals MINERALS = ${m} TRADE = ${t} PRICE = ${m + t} } }`;
+};
+eff += `
 # Colony scope: buy a state district. Human empires on Free Market get an offer (one per
 # quarter); AI empires and Laissez-faire buy directly.
 pe_buy_or_offer = {
@@ -651,13 +777,15 @@ ${ifChain(variants, v => rootIs('pe_best_variant', v.code), v => {
 			root = {
 				set_variable = { which = pe_offer_variant value = ${v.code} }
 				set_variable = { which = pe_offer_class value = ${v.clsNum} }
+				set_variable = { which = pe_offer_hab value = 0 }
+				if = { limit = { prev = { ${HAB} } } set_variable = { which = pe_offer_hab value = 1 } }
 				set_timed_country_flag = { flag = pe_offer_pending days = 3600 }
 				country_event = { id = pe.110 }
 			}
 		}
 		else_if = {
 			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
-			pe_buyout_execute = { FIRM = ${v.key} CODE = ${v.code} DISTRICT = ${v.district} MINERALS = ${m} TRADE = ${t} PRICE = ${m + t} }
+			${buyCall(v)}
 		}
 	`;
 })}
@@ -667,7 +795,7 @@ ${ifChain(variants, v => rootIs('pe_best_variant', v.code), v => {
 pe_buyout_by_offer = {
 ${ifChain(variants, v => rootIs('pe_offer_variant', v.code), v => {
   const [m, t] = PRICE[v.k];
-  return `pe_buyout_execute = { FIRM = ${v.key} CODE = ${v.code} DISTRICT = ${v.district} MINERALS = ${m} TRADE = ${t} PRICE = ${m + t} }`;
+  return buyCall(v);
 })}
 }
 
@@ -708,6 +836,7 @@ pe_site_complete = {
 		save_event_target_as = pe_msg_planet
 ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = ${p.v.code} } check_variable = { which = pe_chg_stage value = ${p.s} } }`, p =>
   `add_deposit = ${p.key} ${initFirm(p.v.code, p.s, 'root.pe_chg_fcap', 'root.pe_chg_debt', 0)} if = { limit = { ${rootIs('pe_chg_type', 3)} } root = { set_variable = { which = pe_new_code value = ${p.v.code} } set_variable = { which = pe_new_stage value = ${p.s} } } }${p.s === 1 ? ` else = { ${msg(`pe_msg_found_${p.key}`)} }` : ''}`, '\t\t')}
+		remove_planet_flag = pe_lab_site
 		# Restructured: name the old and the new firm.
 		if = { limit = { ${rootIs('pe_chg_type', 3)} } pe_retool_message = yes }
 		if = {
@@ -800,10 +929,12 @@ pe_nationalise_one = {
 	}
 	random_deposit = {
 		limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_val check_variable = { which = pe_rid value = root.pe_rid_best } }
-${[1, 2, 3, 4, 5].flatMap(c => STAGES.map(s => ({c, s}))).map(({c, s}, i) => {
-  const [m, t] = PRICE[c === 1 || c === 5 ? 'u' : 'r'].map(x => x * stageMult(s));
-  return `\t\t${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_cls value = ${c} } check_variable = { which = pe_stage value = ${s} } planet_owner = { has_resource = { type = minerals amount >= ${m} } has_resource = { type = trade amount >= ${t} } } }
-			planet_owner = { add_resource = { minerals = -${m} trade = -${t} } change_variable = { which = pe_capital value = ${m + t} } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
+${[1, 2, 3, 4, 5].flatMap(c => STAGES.map(s => ({c, s}))).flatMap(({c, s}) => [false, true].map(hab => ({c, s, hab}))).map(({c, s, hab}, i) => {
+  const k = c === 1 || c === 5 ? 'u' : 'r';
+  const [m, t] = (hab ? HAB_PRICE : PRICE)[k].map(x => x * stageMult(s));
+  const res = hab ? 'alloys' : 'minerals', val = hab ? m * 4 + t : m + t;
+  return `\t\t${i ? 'else_if' : 'if'} = { limit = { planet = { ${hab ? HAB : NOT_HAB} } check_variable = { which = pe_cls value = ${c} } check_variable = { which = pe_stage value = ${s} } planet_owner = { has_resource = { type = ${res} amount >= ${m} } has_resource = { type = trade amount >= ${t} } } }
+			planet_owner = { add_resource = { ${res} = -${m} trade = -${t} } change_variable = { which = pe_capital value = ${val} } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = ${c} } set_variable = { which = pe_nat_stage value = ${s} } }
 			remove_deposit = yes
 		}`;
@@ -813,7 +944,8 @@ ${[1, 2, 3, 4, 5].flatMap(c => STAGES.map(s => ({c, s}))).map(({c, s}, i) => {
 		limit = { root = { check_variable = { which = pe_nat_cls value > 0 } } }
 		set_timed_planet_flag = { flag = pe_cooldown days = 180 }
 		save_event_target_as = pe_msg_planet
-${[1, 2, 3, 4, 5].map((c, i) => `\t\t${i ? 'else_if' : 'if'} = { limit = { ${rootIs('pe_nat_cls', c)} } add_district = { district_type = ${c === 1 || c === 5 ? 'district_city' : P[rural[c - 2]].district} ignore_cap = yes } }`).join('\n')}
+		root = { set_variable = { which = pe_sd_cls value = pe_nat_cls } }
+		pe_state_district = yes
 ${[1, 2, 3, 4, 5].flatMap(c => STAGES.map(s => `\t\tif = { limit = { root = { check_variable = { which = pe_nat_cls value = ${c} } check_variable = { which = pe_nat_stage value = ${s} } } } ${msg(`pe_msg_nat_${c === 5 ? 1 : c}_${s}`)} }`)).join('\n')}
 		check_planet_employment = yes
 	}
@@ -842,7 +974,7 @@ pe_restructure = {
 		set_variable = { which = pe_cls_var_fit value = 0 }
 		set_variable = { which = pe_to value = 0 }
 	}
-${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM = ${v.primary} }`).join('\n')}
+${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM = ${v.primary} K = ${v.k} ZB = ${v.cityLike ? 'pe_zb_0' : 'pe_zb_' + v.cls} }`).join('\n')}
 	every_deposit = {
 		limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_val }
 		root = { change_variable = { which = pe_rid value = 1 } }
@@ -922,7 +1054,7 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM
 		limit = { root = { check_variable = { which = pe_retool_ok value = 1 } } }
 ${ifChain(variants, v => rootIs('pe_to', v.code), v => {
   const site = `add_deposit = ${v.site} last_added_deposit = { set_variable = { which = pe_target value = ${v.code} } set_variable = { which = pe_tstage value = root.pe_chg_stage } set_variable = { which = pe_fcap value = root.pe_chg_fcap } set_variable = { which = pe_debt value = root.pe_chg_debt } set_variable = { which = pe_left value = ${BUILD_MONTHS[v.k] / 2} } set_variable = { which = pe_kind value = 3 } set_variable = { which = pe_corp value = root.pe_chg_corp } set_variable = { which = pe_old_code value = root.pe_chg_code } set_variable = { which = pe_old_stage value = root.pe_chg_stage } }`;
-  return v.cityLike ? site : `if = { limit = { num_free_districts = { type = ${v.district} value > 0 } } ${site} } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_${v.cls} days = 360 } }`;
+  return v.cityLike ? (v.cls === 'l' ? `${site} if = { limit = { ${HAB} } set_planet_flag = pe_lab_site }` : site) : `if = { limit = { OR = { AND = { ${NOT_HAB} num_free_districts = { type = ${v.district} value > 0 } } AND = { ${HAB} num_free_districts = { type = ${HAB_DISTRICT[v.cls]} value > 0 } } } } ${site} } else = { root = { set_variable = { which = pe_rollback value = 1 } } set_timed_planet_flag = { flag = pe_noroom_${v.cls} days = 360 } }`;
 }, '\t\t')}
 		if = {
 			limit = { root = { check_variable = { which = pe_rollback value = 1 } } }

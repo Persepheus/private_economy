@@ -83,3 +83,5 @@
  pe_warzone:0 "War Zone"
  pe_warzone_desc:0 "This planet was bombarded recently. Investors stay away: no new private firms, no buyouts, no restructuring here for now."
  pe_dbg_invaders_name:0 "Invaders (Debug)"
+ pe.110.desc.urban_hab:0 "Investors want to buy one of the state's districts on the habitat §Y[pe_offer_planet.GetName]§! and turn it into a §Y[Root.GetPeOfferFirm]§!. They offer §G225§! £alloys£ and §G150§! £trade£ from the private capital.\n\nUnder the Free Market, refusing them will not go down well with the business community."
+ pe.110.desc.rural_hab:0 "Investors want to buy one of the state's districts on the habitat §Y[pe_offer_planet.GetName]§! and turn it into a §Y[Root.GetPeOfferFirm]§!. They offer §G225§! £alloys£ and §G90§! £trade£ from the private capital.\n\nUnder the Free Market, refusing them will not go down well with the business community."

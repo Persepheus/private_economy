@@ -222,10 +222,11 @@ pe_collab_seize = {
 			if = { limit = { is_variable_set = pe_cls } prev = { set_variable = { which = pe_col_cls value = prev.pe_cls } } }
 			remove_deposit = yes
 		}
-		if = { limit = { check_variable = { which = pe_col_cls value = 2 } } add_district = { district_type = district_mining ignore_cap = yes } }
-		else_if = { limit = { check_variable = { which = pe_col_cls value = 3 } } add_district = { district_type = district_generator ignore_cap = yes } }
-		else_if = { limit = { check_variable = { which = pe_col_cls value = 4 } } add_district = { district_type = district_farming ignore_cap = yes } }
-		else_if = { limit = { check_variable = { which = pe_col_cls value > 0 } } add_district = { district_type = district_city ignore_cap = yes } }
+		if = {
+			limit = { check_variable = { which = pe_col_cls value > 0 } }
+			root = { set_variable = { which = pe_sd_cls value = prev.pe_col_cls } }
+			pe_state_district = yes
+		}
 		add_modifier = { modifier = pe_collab_punished days = 1800 }
 		check_planet_employment = yes
 	}

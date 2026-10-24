@@ -2,247 +2,257 @@
 # Colony scope, per variant: can it be founded on a free slot, bought from the state (never
 # the last district of a type: its buildings would be lost),
 # or chosen by a firm that restructures? A rural side share needs
-# the planet to have that district type at all (its deposits).
+# the planet to have that district type at all (its deposits). A rural firm leaves the state
+# one district of its type (built or buildable), so a specialisation stays possible. On a
+# habitat: habitat districts; labs need a research specialisation and a free research
+# district, farms hydroponics; rural firms there have no rural side share.
+
+# Colony scope: a lab may take a research district of this habitat.
+pe_lab_hab_ok = {
+	OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } }
+	num_free_districts = { type = district_hab_science value > 0 }
+	NOT = { has_planet_flag = pe_lab_site }
+}
 pe_can_found_d_pe_firm_aaac = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aaac = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_aaac = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_aaac = { always = yes }
 pe_can_found_d_pe_firm_aaat = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aaat = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_aaat = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_aaat = { always = yes }
 pe_can_found_d_pe_firm_aaau = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aaau = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_aaau = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_aaau = { always = yes }
 pe_can_found_d_pe_firm_aacc = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aacc = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_aacc = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_aacc = { always = yes }
 pe_can_found_d_pe_firm_aact = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aact = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_aact = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_aact = { always = yes }
 pe_can_found_d_pe_firm_aacu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aacu = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_aacu = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_aacu = { always = yes }
 pe_can_found_d_pe_firm_aatt = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aatt = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_aatt = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_aatt = { always = yes }
 pe_can_found_d_pe_firm_aatu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aatu = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_aatu = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_aatu = { always = yes }
 pe_can_found_d_pe_firm_aauu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_aauu = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_aauu = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_aauu = { always = yes }
 pe_can_found_d_pe_firm_ccca = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ccca = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_ccca = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_ccca = { always = yes }
 pe_can_found_d_pe_firm_ccat = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ccat = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_ccat = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_ccat = { always = yes }
 pe_can_found_d_pe_firm_ccau = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ccau = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_ccau = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_ccau = { always = yes }
 pe_can_found_d_pe_firm_ttac = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ttac = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_ttac = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_ttac = { always = yes }
 pe_can_found_d_pe_firm_actu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_actu = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_actu = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_actu = { always = yes }
 pe_can_found_d_pe_firm_uuac = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_uuac = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_uuac = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_uuac = { always = yes }
 pe_can_found_d_pe_firm_ttta = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ttta = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_ttta = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_ttta = { always = yes }
 pe_can_found_d_pe_firm_ttau = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ttau = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_ttau = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_ttau = { always = yes }
 pe_can_found_d_pe_firm_uuat = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_uuat = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_uuat = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_uuat = { always = yes }
 pe_can_found_d_pe_firm_uuua = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_uuua = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_uuua = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_uuua = { always = yes }
 pe_can_found_d_pe_firm_ccct = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ccct = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_ccct = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_ccct = { always = yes }
 pe_can_found_d_pe_firm_cccu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_cccu = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_cccu = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_cccu = { always = yes }
 pe_can_found_d_pe_firm_cctt = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_cctt = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_cctt = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_cctt = { always = yes }
 pe_can_found_d_pe_firm_cctu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_cctu = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_cctu = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_cctu = { always = yes }
 pe_can_found_d_pe_firm_ccuu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ccuu = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_ccuu = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_ccuu = { always = yes }
 pe_can_found_d_pe_firm_tttc = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_tttc = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_tttc = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_tttc = { always = yes }
 pe_can_found_d_pe_firm_ttcu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ttcu = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_ttcu = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_ttcu = { always = yes }
 pe_can_found_d_pe_firm_uuct = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_uuct = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_uuct = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_uuct = { always = yes }
 pe_can_found_d_pe_firm_uuuc = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_uuuc = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_uuuc = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_uuuc = { always = yes }
 pe_can_found_d_pe_firm_tttu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_tttu = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_tttu = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_tttu = { always = yes }
 pe_can_found_d_pe_firm_ttuu = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_ttuu = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_ttuu = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_ttuu = { always = yes }
 pe_can_found_d_pe_firm_uuut = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_uuut = { num_districts = { type = district_city value >= 2 } }
+pe_can_buy_d_pe_firm_uuut = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_housing value >= 2 } } } }
 pe_can_retool_d_pe_firm_uuut = { always = yes }
-pe_can_found_d_pe_firm_xxxy = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xxxy = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_xxxy = { always = yes }
-pe_can_found_d_pe_firm_xxxz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xxxz = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_xxxz = { always = yes }
-pe_can_found_d_pe_firm_xxxb = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xxxb = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_xxxb = { always = yes }
-pe_can_found_d_pe_firm_xxyy = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xxyy = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_xxyy = { always = yes }
-pe_can_found_d_pe_firm_xxyz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xxyz = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_xxyz = { always = yes }
-pe_can_found_d_pe_firm_xxyb = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xxyb = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_xxyb = { always = yes }
-pe_can_found_d_pe_firm_xxzz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xxzz = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_xxzz = { always = yes }
-pe_can_found_d_pe_firm_xxzb = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xxzb = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_xxzb = { always = yes }
-pe_can_found_d_pe_firm_xxbb = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xxbb = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_xxbb = { always = yes }
-pe_can_found_d_pe_firm_yyyx = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_yyyx = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_yyyx = { always = yes }
-pe_can_found_d_pe_firm_yyxz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_yyxz = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_yyxz = { always = yes }
-pe_can_found_d_pe_firm_yyxb = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_yyxb = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_yyxb = { always = yes }
-pe_can_found_d_pe_firm_zzxy = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_zzxy = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_zzxy = { always = yes }
-pe_can_found_d_pe_firm_xyzb = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_xyzb = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_xyzb = { always = yes }
-pe_can_found_d_pe_firm_bbxy = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_bbxy = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_bbxy = { always = yes }
-pe_can_found_d_pe_firm_zzzx = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_zzzx = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_zzzx = { always = yes }
-pe_can_found_d_pe_firm_zzxb = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_zzxb = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_zzxb = { always = yes }
-pe_can_found_d_pe_firm_bbxz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_bbxz = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_bbxz = { always = yes }
-pe_can_found_d_pe_firm_bbbx = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_bbbx = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_bbbx = { always = yes }
-pe_can_found_d_pe_firm_yyyz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_yyyz = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_yyyz = { always = yes }
-pe_can_found_d_pe_firm_yyyb = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_yyyb = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_yyyb = { always = yes }
-pe_can_found_d_pe_firm_yyzz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_yyzz = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_yyzz = { always = yes }
-pe_can_found_d_pe_firm_yyzb = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_yyzb = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_yyzb = { always = yes }
-pe_can_found_d_pe_firm_yybb = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_yybb = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_yybb = { always = yes }
-pe_can_found_d_pe_firm_zzzy = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_zzzy = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_zzzy = { always = yes }
-pe_can_found_d_pe_firm_zzyb = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_zzyb = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_zzyb = { always = yes }
-pe_can_found_d_pe_firm_bbyz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_bbyz = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_bbyz = { always = yes }
-pe_can_found_d_pe_firm_bbby = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_bbby = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_bbby = { always = yes }
-pe_can_found_d_pe_firm_zzzb = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_zzzb = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_zzzb = { always = yes }
-pe_can_found_d_pe_firm_zzbb = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_zzbb = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_zzbb = { always = yes }
-pe_can_found_d_pe_firm_bbbz = { free_district_slots > 0 }
-pe_can_buy_d_pe_firm_bbbz = { num_districts = { type = district_city value >= 2 } }
-pe_can_retool_d_pe_firm_bbbz = { always = yes }
-pe_can_found_d_pe_firm_mmmm = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
-pe_can_buy_d_pe_firm_mmmm = { num_districts = { type = district_mining value >= 2 } }
-pe_can_retool_d_pe_firm_mmmm = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } }
-pe_can_found_d_pe_firm_mmma = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
-pe_can_buy_d_pe_firm_mmma = { num_districts = { type = district_mining value >= 2 } }
-pe_can_retool_d_pe_firm_mmma = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } }
-pe_can_found_d_pe_firm_mmmc = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
-pe_can_buy_d_pe_firm_mmmc = { num_districts = { type = district_mining value >= 2 } }
-pe_can_retool_d_pe_firm_mmmc = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } }
-pe_can_found_d_pe_firm_mmmt = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } }
-pe_can_buy_d_pe_firm_mmmt = { num_districts = { type = district_mining value >= 2 } }
-pe_can_retool_d_pe_firm_mmmt = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } }
-pe_can_found_d_pe_firm_mmme = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_buy_d_pe_firm_mmme = { num_districts = { type = district_mining value >= 2 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_retool_d_pe_firm_mmme = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_found_d_pe_firm_mmmf = { free_district_slots > 0 num_free_districts = { type = district_mining value > 0 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_buy_d_pe_firm_mmmf = { num_districts = { type = district_mining value >= 2 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_retool_d_pe_firm_mmmf = { NOT = { has_planet_flag = pe_noroom_m } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_found_d_pe_firm_eeee = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
-pe_can_buy_d_pe_firm_eeee = { num_districts = { type = district_generator value >= 2 } }
-pe_can_retool_d_pe_firm_eeee = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } }
-pe_can_found_d_pe_firm_eeea = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
-pe_can_buy_d_pe_firm_eeea = { num_districts = { type = district_generator value >= 2 } }
-pe_can_retool_d_pe_firm_eeea = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } }
-pe_can_found_d_pe_firm_eeec = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
-pe_can_buy_d_pe_firm_eeec = { num_districts = { type = district_generator value >= 2 } }
-pe_can_retool_d_pe_firm_eeec = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } }
-pe_can_found_d_pe_firm_eeet = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } }
-pe_can_buy_d_pe_firm_eeet = { num_districts = { type = district_generator value >= 2 } }
-pe_can_retool_d_pe_firm_eeet = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } }
-pe_can_found_d_pe_firm_eeem = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_buy_d_pe_firm_eeem = { num_districts = { type = district_generator value >= 2 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_retool_d_pe_firm_eeem = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_found_d_pe_firm_eeef = { free_district_slots > 0 num_free_districts = { type = district_generator value > 0 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_buy_d_pe_firm_eeef = { num_districts = { type = district_generator value >= 2 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_retool_d_pe_firm_eeef = { NOT = { has_planet_flag = pe_noroom_e } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } }
-pe_can_found_d_pe_firm_ffff = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
-pe_can_buy_d_pe_firm_ffff = { num_districts = { type = district_farming value >= 2 } }
-pe_can_retool_d_pe_firm_ffff = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } }
-pe_can_found_d_pe_firm_fffa = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
-pe_can_buy_d_pe_firm_fffa = { num_districts = { type = district_farming value >= 2 } }
-pe_can_retool_d_pe_firm_fffa = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } }
-pe_can_found_d_pe_firm_fffc = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
-pe_can_buy_d_pe_firm_fffc = { num_districts = { type = district_farming value >= 2 } }
-pe_can_retool_d_pe_firm_fffc = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } }
-pe_can_found_d_pe_firm_ffft = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } }
-pe_can_buy_d_pe_firm_ffft = { num_districts = { type = district_farming value >= 2 } }
-pe_can_retool_d_pe_firm_ffft = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } }
-pe_can_found_d_pe_firm_fffm = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_buy_d_pe_firm_fffm = { num_districts = { type = district_farming value >= 2 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_retool_d_pe_firm_fffm = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } }
-pe_can_found_d_pe_firm_fffe = { free_district_slots > 0 num_free_districts = { type = district_farming value > 0 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_buy_d_pe_firm_fffe = { num_districts = { type = district_farming value >= 2 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
-pe_can_retool_d_pe_firm_fffe = { NOT = { has_planet_flag = pe_noroom_f } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } }
+pe_can_found_d_pe_firm_xxxy = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_xxxy = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_xxxy = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_xxxz = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_xxxz = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_xxxz = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_xxxb = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_xxxb = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_xxxb = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_xxyy = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_xxyy = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_xxyy = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_xxyz = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_xxyz = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_xxyz = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_xxyb = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_xxyb = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_xxyb = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_xxzz = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_xxzz = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_xxzz = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_xxzb = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_xxzb = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_xxzb = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_xxbb = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_xxbb = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_xxbb = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_yyyx = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_yyyx = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_yyyx = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_yyxz = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_yyxz = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_yyxz = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_yyxb = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_yyxb = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_yyxb = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_zzxy = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_zzxy = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_zzxy = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_xyzb = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_xyzb = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_xyzb = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_bbxy = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_bbxy = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_bbxy = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_zzzx = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_zzzx = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_zzzx = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_zzxb = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_zzxb = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_zzxb = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_bbxz = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_bbxz = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_bbxz = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_bbbx = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_bbbx = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_bbbx = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_yyyz = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_yyyz = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_yyyz = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_yyyb = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_yyyb = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_yyyb = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_yyzz = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_yyzz = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_yyzz = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_yyzb = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_yyzb = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_yyzb = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_yybb = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_yybb = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_yybb = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_zzzy = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_zzzy = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_zzzy = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_zzyb = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_zzyb = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_zzyb = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_bbyz = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_bbyz = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_bbyz = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_bbby = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_bbby = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_bbby = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_zzzb = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_zzzb = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_zzzb = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_zzbb = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_zzbb = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_zzbb = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_bbbz = { free_district_slots > 0 OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_buy_d_pe_firm_bbbz = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_city value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_science value >= 2 } OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } } }
+pe_can_retool_d_pe_firm_bbbz = { OR = { NOT = { uses_district_set = habitat } pe_lab_hab_ok = yes } }
+pe_can_found_d_pe_firm_mmmm = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } num_free_districts = { type = district_mining value > 1 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 0 } } num_free_districts = { type = district_hab_mining value > 1 } } } } }
+pe_can_buy_d_pe_firm_mmmm = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_mining value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_mining value >= 2 } } } }
+pe_can_retool_d_pe_firm_mmmm = { NOT = { has_planet_flag = pe_noroom_m } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 1 } root = { check_variable = { which = pe_here_m value = 1 } } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 1 } root = { check_variable = { which = pe_here_m value = 1 } } } } } }
+pe_can_found_d_pe_firm_mmma = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } num_free_districts = { type = district_mining value > 1 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 0 } } num_free_districts = { type = district_hab_mining value > 1 } } } } }
+pe_can_buy_d_pe_firm_mmma = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_mining value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_mining value >= 2 } } } }
+pe_can_retool_d_pe_firm_mmma = { NOT = { has_planet_flag = pe_noroom_m } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 1 } root = { check_variable = { which = pe_here_m value = 1 } } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 1 } root = { check_variable = { which = pe_here_m value = 1 } } } } } }
+pe_can_found_d_pe_firm_mmmc = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } num_free_districts = { type = district_mining value > 1 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 0 } } num_free_districts = { type = district_hab_mining value > 1 } } } } }
+pe_can_buy_d_pe_firm_mmmc = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_mining value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_mining value >= 2 } } } }
+pe_can_retool_d_pe_firm_mmmc = { NOT = { has_planet_flag = pe_noroom_m } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 1 } root = { check_variable = { which = pe_here_m value = 1 } } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 1 } root = { check_variable = { which = pe_here_m value = 1 } } } } } }
+pe_can_found_d_pe_firm_mmmt = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } num_free_districts = { type = district_mining value > 1 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 0 } } num_free_districts = { type = district_hab_mining value > 1 } } } } }
+pe_can_buy_d_pe_firm_mmmt = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_mining value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_mining value >= 2 } } } }
+pe_can_retool_d_pe_firm_mmmt = { NOT = { has_planet_flag = pe_noroom_m } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 1 } root = { check_variable = { which = pe_here_m value = 1 } } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 1 } root = { check_variable = { which = pe_here_m value = 1 } } } } } }
+pe_can_found_d_pe_firm_mmme = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } num_free_districts = { type = district_mining value > 1 } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 0 } } num_free_districts = { type = district_hab_mining value > 1 } } always = no } } }
+pe_can_buy_d_pe_firm_mmme = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_mining value >= 2 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } } AND = { uses_district_set = habitat num_districts = { type = district_hab_mining value >= 2 } always = no } } }
+pe_can_retool_d_pe_firm_mmme = { NOT = { has_planet_flag = pe_noroom_m } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 1 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 1 } root = { check_variable = { which = pe_here_m value = 1 } } } always = no } } }
+pe_can_found_d_pe_firm_mmmf = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } num_free_districts = { type = district_mining value > 1 } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 0 } } num_free_districts = { type = district_hab_mining value > 1 } } always = no } } }
+pe_can_buy_d_pe_firm_mmmf = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_mining value >= 2 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } } AND = { uses_district_set = habitat num_districts = { type = district_hab_mining value >= 2 } always = no } } }
+pe_can_retool_d_pe_firm_mmmf = { NOT = { has_planet_flag = pe_noroom_m } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 1 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 0 } root = { check_variable = { which = pe_here_m value = 1 } } } OR = { has_district = district_hab_mining num_free_districts = { type = district_hab_mining value > 1 } root = { check_variable = { which = pe_here_m value = 1 } } } always = no } } }
+pe_can_found_d_pe_firm_eeee = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } num_free_districts = { type = district_generator value > 1 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } } num_free_districts = { type = district_hab_energy value > 1 } } } } }
+pe_can_buy_d_pe_firm_eeee = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_generator value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_energy value >= 2 } } } }
+pe_can_retool_d_pe_firm_eeee = { NOT = { has_planet_flag = pe_noroom_e } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 1 } root = { check_variable = { which = pe_here_e value = 1 } } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 1 } root = { check_variable = { which = pe_here_e value = 1 } } } } } }
+pe_can_found_d_pe_firm_eeea = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } num_free_districts = { type = district_generator value > 1 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } } num_free_districts = { type = district_hab_energy value > 1 } } } } }
+pe_can_buy_d_pe_firm_eeea = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_generator value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_energy value >= 2 } } } }
+pe_can_retool_d_pe_firm_eeea = { NOT = { has_planet_flag = pe_noroom_e } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 1 } root = { check_variable = { which = pe_here_e value = 1 } } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 1 } root = { check_variable = { which = pe_here_e value = 1 } } } } } }
+pe_can_found_d_pe_firm_eeec = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } num_free_districts = { type = district_generator value > 1 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } } num_free_districts = { type = district_hab_energy value > 1 } } } } }
+pe_can_buy_d_pe_firm_eeec = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_generator value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_energy value >= 2 } } } }
+pe_can_retool_d_pe_firm_eeec = { NOT = { has_planet_flag = pe_noroom_e } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 1 } root = { check_variable = { which = pe_here_e value = 1 } } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 1 } root = { check_variable = { which = pe_here_e value = 1 } } } } } }
+pe_can_found_d_pe_firm_eeet = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } num_free_districts = { type = district_generator value > 1 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } } num_free_districts = { type = district_hab_energy value > 1 } } } } }
+pe_can_buy_d_pe_firm_eeet = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_generator value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_energy value >= 2 } } } }
+pe_can_retool_d_pe_firm_eeet = { NOT = { has_planet_flag = pe_noroom_e } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 1 } root = { check_variable = { which = pe_here_e value = 1 } } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 1 } root = { check_variable = { which = pe_here_e value = 1 } } } } } }
+pe_can_found_d_pe_firm_eeem = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } num_free_districts = { type = district_generator value > 1 } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } } num_free_districts = { type = district_hab_energy value > 1 } } always = no } } }
+pe_can_buy_d_pe_firm_eeem = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_generator value >= 2 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } } AND = { uses_district_set = habitat num_districts = { type = district_hab_energy value >= 2 } always = no } } }
+pe_can_retool_d_pe_firm_eeem = { NOT = { has_planet_flag = pe_noroom_e } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 1 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 1 } root = { check_variable = { which = pe_here_e value = 1 } } } always = no } } }
+pe_can_found_d_pe_firm_eeef = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } num_free_districts = { type = district_generator value > 1 } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } } num_free_districts = { type = district_hab_energy value > 1 } } always = no } } }
+pe_can_buy_d_pe_firm_eeef = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_generator value >= 2 } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } } AND = { uses_district_set = habitat num_districts = { type = district_hab_energy value >= 2 } always = no } } }
+pe_can_retool_d_pe_firm_eeef = { NOT = { has_planet_flag = pe_noroom_e } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 1 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } root = { check_variable = { which = pe_here_e value = 1 } } } OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 1 } root = { check_variable = { which = pe_here_e value = 1 } } } always = no } } }
+pe_can_found_d_pe_firm_ffff = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } num_free_districts = { type = district_farming value > 1 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } } num_free_districts = { type = district_hab_energy value > 1 } } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } } } }
+pe_can_buy_d_pe_firm_ffff = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_farming value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_energy value >= 2 } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } } } }
+pe_can_retool_d_pe_firm_ffff = { NOT = { has_planet_flag = pe_noroom_f } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 1 } root = { check_variable = { which = pe_here_f value = 1 } } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 1 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } } } }
+pe_can_found_d_pe_firm_fffa = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } num_free_districts = { type = district_farming value > 1 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } } num_free_districts = { type = district_hab_energy value > 1 } } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } } } }
+pe_can_buy_d_pe_firm_fffa = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_farming value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_energy value >= 2 } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } } } }
+pe_can_retool_d_pe_firm_fffa = { NOT = { has_planet_flag = pe_noroom_f } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 1 } root = { check_variable = { which = pe_here_f value = 1 } } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 1 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } } } }
+pe_can_found_d_pe_firm_fffc = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } num_free_districts = { type = district_farming value > 1 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } } num_free_districts = { type = district_hab_energy value > 1 } } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } } } }
+pe_can_buy_d_pe_firm_fffc = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_farming value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_energy value >= 2 } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } } } }
+pe_can_retool_d_pe_firm_fffc = { NOT = { has_planet_flag = pe_noroom_f } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 1 } root = { check_variable = { which = pe_here_f value = 1 } } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 1 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } } } }
+pe_can_found_d_pe_firm_ffft = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } num_free_districts = { type = district_farming value > 1 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } } num_free_districts = { type = district_hab_energy value > 1 } } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } } } }
+pe_can_buy_d_pe_firm_ffft = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_farming value >= 2 } } AND = { uses_district_set = habitat num_districts = { type = district_hab_energy value >= 2 } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } } } }
+pe_can_retool_d_pe_firm_ffft = { NOT = { has_planet_flag = pe_noroom_f } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 1 } root = { check_variable = { which = pe_here_f value = 1 } } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 1 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } } } }
+pe_can_found_d_pe_firm_fffm = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } num_free_districts = { type = district_farming value > 1 } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } } num_free_districts = { type = district_hab_energy value > 1 } } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } always = no } } }
+pe_can_buy_d_pe_firm_fffm = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_farming value >= 2 } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } } AND = { uses_district_set = habitat num_districts = { type = district_hab_energy value >= 2 } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } always = no } } }
+pe_can_retool_d_pe_firm_fffm = { NOT = { has_planet_flag = pe_noroom_f } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 1 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_mining num_free_districts = { type = district_mining value > 0 } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 1 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } always = no } } }
+pe_can_found_d_pe_firm_fffe = { free_district_slots > 0 OR = { AND = { NOT = { uses_district_set = habitat } OR = { AND = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } } num_free_districts = { type = district_farming value > 1 } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } } AND = { uses_district_set = habitat OR = { AND = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } } num_free_districts = { type = district_hab_energy value > 1 } } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } always = no } } }
+pe_can_buy_d_pe_firm_fffe = { OR = { AND = { NOT = { uses_district_set = habitat } num_districts = { type = district_farming value >= 2 } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } } AND = { uses_district_set = habitat num_districts = { type = district_hab_energy value >= 2 } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } always = no } } }
+pe_can_retool_d_pe_firm_fffe = { NOT = { has_planet_flag = pe_noroom_f } OR = { AND = { NOT = { uses_district_set = habitat } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_farming num_free_districts = { type = district_farming value > 1 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_generator num_free_districts = { type = district_generator value > 0 } } } AND = { uses_district_set = habitat OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 0 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { has_district = district_hab_energy num_free_districts = { type = district_hab_energy value > 1 } root = { check_variable = { which = pe_here_f value = 1 } } } OR = { num_zones = { type = zone_habitat_hydroponics value > 0 } } always = no } } }
 
 # Colony or deposit scope (reads root): the variant consumes nothing the empire is short of.
 pe_ok_d_pe_firm_aaac = { OR = { root = { is_catalytic_empire = yes } root = { NOT = { check_variable = { which = pe_def_minerals value = 1 } } } } OR = { root = { is_catalytic_empire = no } root = { NOT = { check_variable = { which = pe_def_food value = 1 } } } } }
@@ -327,17 +337,17 @@ pe_ok_d_pe_firm_fffm = { always = yes }
 pe_ok_d_pe_firm_fffe = { always = yes }
 
 # Colony scope, per main share: the planet's designation suits it.
-pe_desig_a = { OR = { has_designation = col_industrial has_designation = col_foundry has_designation = col_capital_foundry } }
-pe_desig_c = { OR = { has_designation = col_industrial has_designation = col_factory has_designation = col_capital_factory } }
-pe_desig_t = { OR = { has_designation = col_city has_designation = col_capital_trade } }
+pe_desig_a = { OR = { has_designation = col_industrial has_designation = col_foundry has_designation = col_capital_foundry has_designation = col_habitat_industrial has_designation = col_habitat_foundry } }
+pe_desig_c = { OR = { has_designation = col_industrial has_designation = col_factory has_designation = col_capital_factory has_designation = col_habitat_industrial has_designation = col_habitat_factory } }
+pe_desig_t = { OR = { has_designation = col_city has_designation = col_capital_trade has_designation = col_habitat_trade } }
 pe_desig_u = { OR = { has_designation = col_resort has_designation = col_pleasure } }
-pe_desig_x = { OR = { has_designation = col_research } }
-pe_desig_y = { OR = { has_designation = col_research } }
-pe_desig_z = { OR = { has_designation = col_research } }
-pe_desig_b = { OR = { has_designation = col_bureau has_designation = col_bureau_spiritualist } }
-pe_desig_m = { OR = { has_designation = col_mining has_designation = col_capital_extraction } }
-pe_desig_e = { OR = { has_designation = col_generator } }
-pe_desig_f = { OR = { has_designation = col_farming } }
+pe_desig_x = { OR = { has_designation = col_research has_designation = col_habitat_research } }
+pe_desig_y = { OR = { has_designation = col_research has_designation = col_habitat_research } }
+pe_desig_z = { OR = { has_designation = col_research has_designation = col_habitat_research } }
+pe_desig_b = { OR = { has_designation = col_bureau has_designation = col_bureau_spiritualist has_designation = col_habitat_bureau has_designation = col_habitat_bureau_spiritualist } }
+pe_desig_m = { OR = { has_designation = col_mining has_designation = col_capital_extraction has_designation = col_habitat_mining } }
+pe_desig_e = { OR = { has_designation = col_generator has_designation = col_habitat_energy } }
+pe_desig_f = { OR = { has_designation = col_farming has_designation = col_habitat_farming } }
 
 # Colony scope: the firm root.pe_rl_code could be founded here (free slot; rural firms
 # also a free district of their type and the deposits of their side share).
@@ -429,16 +439,16 @@ pe_rl_target_fits = {
 # Colony scope: the planet's designation suits the main share root.pe_rl_prim.
 pe_desig_prim = {
 	OR = {
-		AND = { root = { check_variable = { which = pe_rl_prim value = 1 } } OR = { has_designation = col_industrial has_designation = col_foundry has_designation = col_capital_foundry } }
-		AND = { root = { check_variable = { which = pe_rl_prim value = 2 } } OR = { has_designation = col_industrial has_designation = col_factory has_designation = col_capital_factory } }
-		AND = { root = { check_variable = { which = pe_rl_prim value = 3 } } OR = { has_designation = col_city has_designation = col_capital_trade } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 1 } } OR = { has_designation = col_industrial has_designation = col_foundry has_designation = col_capital_foundry has_designation = col_habitat_industrial has_designation = col_habitat_foundry } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 2 } } OR = { has_designation = col_industrial has_designation = col_factory has_designation = col_capital_factory has_designation = col_habitat_industrial has_designation = col_habitat_factory } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 3 } } OR = { has_designation = col_city has_designation = col_capital_trade has_designation = col_habitat_trade } }
 		AND = { root = { check_variable = { which = pe_rl_prim value = 4 } } OR = { has_designation = col_resort has_designation = col_pleasure } }
-		AND = { root = { check_variable = { which = pe_rl_prim value = 5 } } OR = { has_designation = col_research } }
-		AND = { root = { check_variable = { which = pe_rl_prim value = 6 } } OR = { has_designation = col_research } }
-		AND = { root = { check_variable = { which = pe_rl_prim value = 7 } } OR = { has_designation = col_research } }
-		AND = { root = { check_variable = { which = pe_rl_prim value = 8 } } OR = { has_designation = col_bureau has_designation = col_bureau_spiritualist } }
-		AND = { root = { check_variable = { which = pe_rl_prim value = 9 } } OR = { has_designation = col_mining has_designation = col_capital_extraction } }
-		AND = { root = { check_variable = { which = pe_rl_prim value = 10 } } OR = { has_designation = col_generator } }
-		AND = { root = { check_variable = { which = pe_rl_prim value = 11 } } OR = { has_designation = col_farming } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 5 } } OR = { has_designation = col_research has_designation = col_habitat_research } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 6 } } OR = { has_designation = col_research has_designation = col_habitat_research } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 7 } } OR = { has_designation = col_research has_designation = col_habitat_research } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 8 } } OR = { has_designation = col_bureau has_designation = col_bureau_spiritualist has_designation = col_habitat_bureau has_designation = col_habitat_bureau_spiritualist } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 9 } } OR = { has_designation = col_mining has_designation = col_capital_extraction has_designation = col_habitat_mining } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 10 } } OR = { has_designation = col_generator has_designation = col_habitat_energy } }
+		AND = { root = { check_variable = { which = pe_rl_prim value = 11 } } OR = { has_designation = col_farming has_designation = col_habitat_farming } }
 	}
 }
