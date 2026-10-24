@@ -1728,10 +1728,11 @@ pe_corp_merge = {
 	}
 ${corpChain('pe_mg_w', k => `set_variable = { which = pe_tmp value = ${C(k, 'cash')} }`, '\t')}
 ${corpChain('pe_mg_s', k => `change_variable = { which = ${C(k, 'cash')} value = pe_tmp }`, '\t')}
-	# The weaker one's corporate habitat goes to the stronger one, unless it has one already.
+	# The weaker one's corporate habitat goes to the stronger one, even if it has one already
+	# (the only way to two habitats; a habitat still under construction is lost).
 	every_owned_planet = {
 		limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = root.pe_mg_w } }
-${corpChain('root.pe_mg_s', k => `if = { limit = { root = { NOT = { check_variable = { which = ${C(k, 'hab')} value > 0 } } } } set_variable = { which = pe_chab_corp value = ${k} } set_variable = { which = pe_chab_nm value = root.${C(k, 'name')} } root = { set_variable = { which = ${C(k, 'hab')} value = 2 } } }`, '\t\t')}
+${corpChain('root.pe_mg_s', k => `set_variable = { which = pe_chab_corp value = ${k} } set_variable = { which = pe_chab_nm value = root.${C(k, 'name')} } root = { set_variable = { which = ${C(k, 'hab')} value = 2 } }`, '\t\t')}
 	}
 	every_planet_within_border = {
 		limit = { has_orbital_station = yes }
@@ -2959,10 +2960,11 @@ ${CHAB_DESIG.map(([ps, d, cond], i) => `\t\t\t${i ? 'else_if' : 'if'} = { limit 
 }
 
 # Colony scope (pe_chab_monthly): the headquarters of the corporation pe_chab_corp move to this
-# corporate habitat (flag and headquarters deposit; its production follows next quarter).
+# corporate habitat (flag and headquarters deposit; its production follows next quarter), unless
+# they are on another habitat of it already (two after a merger).
 pe_chab_hq = {
 	root = { set_variable = { which = pe_chab_hqmv value = 0 } }
-${corpChain('pe_chab_corp', k => `if = { limit = { NOT = { has_planet_flag = pe_hq_${k} } } root = { every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } remove_planet_flag = pe_hq_${k} } set_variable = { which = pe_chab_hqid value = ${C(k, 'name')} } set_variable = { which = pe_chab_hqmv value = 1 } } set_planet_flag = pe_hq_${k} }`)}
+${corpChain('pe_chab_corp', k => `if = { limit = { NOT = { has_planet_flag = pe_hq_${k} } root = { NOT = { any_owned_colony = { has_planet_flag = pe_hq_${k} has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = ${k} } } } } } root = { every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } remove_planet_flag = pe_hq_${k} } set_variable = { which = pe_chab_hqid value = ${C(k, 'name')} } set_variable = { which = pe_chab_hqmv value = 1 } } set_planet_flag = pe_hq_${k} }`)}
 	if = {
 		limit = { root = { check_variable = { which = pe_chab_hqmv value = 1 } } }
 ${nameChain('root.pe_chab_hqid', id => `root = { every_owned_colony = { limit = { has_deposit = d_pe_hq_${id} } remove_deposit = d_pe_hq_${id} } } add_deposit = d_pe_hq_${id}`, '\t\t')}

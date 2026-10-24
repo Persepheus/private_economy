@@ -295,7 +295,13 @@ pe_corp_fleet_clear_start = {
 				}
 				export_trigger_value_to_variable = { trigger = fleet_power variable = pe_fp }
 			}
-			set_location = event_target:pe_cl_loc
+			# An AI empire would not send it on its own: there it starts right at the monsters.
+			if = {
+				limit = { root = { is_ai = yes } }
+				set_location = event_target:pe_cl_sys
+				set_fleet_stance = aggressive
+			}
+			else = { set_location = event_target:pe_cl_loc }
 			set_fleet_flag = pe_leased
 			set_fleet_flag = pe_lease_clear
 		}

@@ -31,9 +31,16 @@ Ein laufendes Spiel kann weiterlaufen.
   - Sein Hauptsitz zieht dorthin.
 - **Ausdehnung:** Das Habitat zählt nicht als Kolonie. Seine Distrikte und Firmen zählen nicht, nur seine Pops.
 - **Ende der Rechte:** Krise (Kasse unter 0), Auflösung oder Planwirtschaft. Das Habitat bleibt uns, die Firmen sind unabhängig, bei der Planwirtschaft werden sie Staatsdistrikte.
-  - Bei einer Fusion bekommt der stärkere Konzern das Habitat, wenn er noch keins hat.
+  - Bei einer Fusion bekommt der stärkere Konzern das Habitat, auch wenn er schon eins hat (ab 0.31.1). Nur so kann ein Konzern zwei Habitate haben; sein Hauptsitz bleibt dann auf dem ersten.
   - Bei einer Eroberung zieht der Konzern mit seinem Hauptsitz mit, und die Rechte gehen mit.
 - **Firmenregister:** Auf dem Habitat steht oben „Konzern-Habitat von …“.
+
+- **Einfluss:** Unser Einfluss wird immer bestätigt, unter jeder Wirtschaftsordnung (Angebot pe.300). KI-Reiche bestätigen, wenn sie den Einfluss haben.
+
+## 0.31.1
+- Die Datei `mod/private_economy.mod`, die der Launcher liest, war leer; der Mod wurde nicht geladen (deshalb fand die Konsole `event pe.302` nicht). Sie ist wiederhergestellt. Im Launcher prüfen, dass Private Economy 0.31.1 aktiv ist.
+- Fusion zweier Konzerne mit Habitat: Der stärkere behält beide.
+- Monsterräumung bei KI-Reichen: Die Konzernflotte erscheint direkt im System der Kreaturen (aggressiv), weil die KI sie sonst nicht hinschickt.
 
 ## Konsole
 - `event pe.302`: sofort ein Angebot. Der reichste Konzern ohne Habitat bekommt dafür mindestens 7000 Kasse.
