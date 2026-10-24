@@ -4,7 +4,7 @@ Stellaris 4.5: Eine Richtlinie **Wirtschaftsordnung** legt fest, wie viel der Wi
 
 Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools/validate.mjs` prüft das).
 
-## Stand 0.31.3
+## Stand 0.31.4
 
 Die Privatwirtschaft ist ein Kreislauf:
 
@@ -37,7 +37,7 @@ Die Privatwirtschaft ist ein Kreislauf:
 - **Spezialisierungen und Habitate:** Landfirmen bekommen die Jobs der Spezialisierung ihres Distrikttyps (wie Staatsdistrikte) und lassen dem Staat immer einen Distrikt des Typs. Auf Habitaten belegen Firmen Habitat-Distrikte: Stadtfirmen wie auf Planeten, Labore nur mit Forschungs-Spezialisierung, Minen und Kraftwerke mit halben Grundjobs, Farmen mit Hydroponik; Kosten in Legierungen, Leerenbewohner +50 %.
 - **Konzern-Habitat:** Ein reicher Konzern baut ein eigenes Habitat, eins pro Konzern und System. Er zahlt die Legierungen, wir den Einfluss. Bau und Besiedlung laufen wie in Vanilla. Den Standort wählt er nach seiner Branche. Der Konzern legt die Designation fest, besitzt alle Firmen dort, zahlt dort alle Kosten (25 % günstiger) und verlegt seinen Hauptsitz dorthin. Keine Verstaatlichung oder Räumung; Kolonie, Distrikte und Firmen zählen nicht zur Ausdehnung. Krise, Auflösung oder Planwirtschaft beenden die Rechte. Unseren Einfluss bestätigen wir immer selbst (KI-Reiche, wenn sie ihn haben). Nur durch eine Fusion kann ein Konzern zwei Habitate haben.
 - **Erledigt (0.31.2):** Konzern-Schwarm und -Ofen werden wie in Vanilla gebaut (Baustelle der Holdings, Vanilla-Bauzeit).
-- **Gefunden im Save Hesukaran 7 (2298), Kalibrierung:** Der Rohstoffkonzern Stormgate Utilities hortet 114 Tsd. Kasse (Stationserträge plus Firmengewinne, fast nichts zum Ausgeben), der Investorenpool 40 Tsd.; die Firmen wollen 9600 Gewinn im Quartal, der Staat zahlt wegen der 40-%-Grenze nur 20 % davon (635 Handel im Monat). Es fehlt ein Abfluss für überschüssiges Geld (Vorschläge offen). Konzernnamen kommen in mehreren Reichen doppelt vor.
+- **Gefunden im Save Hesukaran 7 (2298), Kalibrierung:** Der Rohstoffkonzern Stormgate Utilities hortet 114 Tsd. Kasse (Stationserträge plus Firmengewinne, fast nichts zum Ausgeben), der Investorenpool 40 Tsd.; die Firmen wollen 9600 Gewinn im Quartal, der Staat zahlt wegen der 40-%-Grenze nur 20 % davon (635 Handel im Monat). Es fehlt ein Abfluss für überschüssiges Geld. In Arbeit (2026-10-25): Stationsertrag 120 % ohne zusätzliche Kasse, Firmengewinn −50 % (wirkt aber nur, solange die 40-%-Grenze nicht greift); Rüstungsvertrag (Konzern übernimmt einen Teil des Flottenunterhalts), Forschungsinstitut des Konzerns (Jobs, Unterhalt aus der Kasse), Betriebliche Sozialleistungen (Lebensstandard), Förderabgaben statt Steuern. Erledigt: Staatsanleihen (pe.242) im Krieg und bei Defizit viermal so häufig, die KI nimmt sie dann eher an. Konzernnamen kommen in mehreren Reichen doppelt vor.
 - **Cluster:** Mehrere gleiche Firmen auf einem Planeten stärken die ganze Branche dort. Cluster und Lieferverträge zeigt das Vorkommen „Standortvorteile“.
 - **Flair:** Lieferverträge bei Mangel (zwei Jahre monatlich, nur bei weniger als halb vollem Lager), Modernisierung, Rationalisierung, Vermögensabgabe; mit den Nachbarn: Auslandsinvestitionen, ausländische Filialen, Technologielizenzen, Dumping und Schutzzölle.
 - **Planwirtschaft** beendet die Privatwirtschaft: Firmen werden Staatsdistrikte, der Pool verfällt.

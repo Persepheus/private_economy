@@ -59,6 +59,9 @@ Ein laufendes Spiel kann weiterlaufen.
 2. Ein Konzern-Dyson-Schwarm (pe.292) bzw. Arc Furnace (pe.293): Erscheint die Baustelle mit Bauzeit? Nach `event pe.303` und einem Tag: Steht der Schwarm mit Modifikator am Stern bzw. der Ofen mit Vorkommen und Stationen im System?
 3. Firmenregister: Kassen der Konzerne; Kredite an aufgelöste Konzerne sind weg.
 
+## 0.31.4
+- **Staatsanleihen (pe.242):** Im Krieg oder bei einem Defizit (Energie, Handel oder Legierungen) kommt das Angebot viermal so häufig; KI-Reiche nehmen es dann dreimal so gern an.
+
 ## Konsole
 - `event pe.302`: sofort ein Angebot. Der reichste Konzern ohne Habitat bekommt dafür mindestens 7000 Kasse.
 - `event pe.303`: Den Bau unserer Konzern-Habitate sofort fertigstellen.

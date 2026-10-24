@@ -203,7 +203,11 @@ pe_patron_fire = {
 			modifier = { factor = 0 NOT = { check_variable = { which = pe_n_corp value > 0 } } }
 			country_event = { id = pe.241 }
 		}
-		6 = { country_event = { id = pe.242 } }
+		# State bonds: four times as often at war or in a deficit (energy, trade, alloys).
+		6 = {
+			modifier = { factor = 4 OR = { is_at_war = yes has_monthly_income = { resource = energy value < 0 } has_monthly_income = { resource = trade value < 0 } has_monthly_income = { resource = alloys value < 0 } } }
+			country_event = { id = pe.242 }
+		}
 		6 = {
 			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes count_deposits = { category = pe_deposit_cat_firms count >= 2 } } } }
 			random_owned_colony = {

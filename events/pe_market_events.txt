@@ -121,7 +121,10 @@ country_event = {
 			change_variable = { which = pe_bond_month value = pe_bond_new }
 			set_variable = { which = pe_bond_left value = 60 }
 		}
-		ai_chance = { factor = 50 }
+		ai_chance = {
+			factor = 50
+			modifier = { factor = 3 OR = { is_at_war = yes has_monthly_income = { resource = energy value < 0 } has_monthly_income = { resource = trade value < 0 } has_monthly_income = { resource = alloys value < 0 } } }
+		}
 	}
 	option = {
 		name = pe.242.b
