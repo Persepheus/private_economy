@@ -42,6 +42,23 @@ Ein laufendes Spiel kann weiterlaufen.
 - Fusion zweier Konzerne mit Habitat: Der stärkere behält beide.
 - Monsterräumung bei KI-Reichen: Die Konzernflotte erscheint direkt im System der Kreaturen (aggressiv), weil die KI sie sonst nicht hinschickt.
 
+## 0.31.2
+- **Besetzung durch die eigenen Holdings (Yacuri Prime):** Die Habitat-Baustelle stand an einer bewohnten Kolonie. Für die Engine kontrollierten die Holdings damit den Planeten, er galt als besetzt, und die Besatzungs-Kontribution nahm den Firmen dort 25 % ihres Kapitals (1466). Jetzt:
+  - Baustellen nur noch an unbewohnten Himmelskörpern.
+  - Unsere Holdings lösen keine Kontribution und keine Kollaborateurs-Frage mehr aus.
+  - Eine Kolonie, die noch von Holdings kontrolliert wird, ist am nächsten Monatswechsel wieder unsere.
+- **Habitat im selben System zuerst fertig** (bei KI-Reich 4 passiert): Statt die 6000 zu verlieren, bekommt der Konzern sein Geld zurück, wir den Einfluss (pe.304, Nachricht).
+- **Krise:** Ein Konzern, der sein Habitat in einer Krise verliert, baut kein neues mehr.
+- **Kredite an aufgelöste Konzerne** werden abgeschrieben (bei dir 2306, die bisher in leere Konzernplätze zurückgezahlt wurden).
+- **Dyson-Schwarm und Arc Furnace der Konzerne werden wie in Vanilla gebaut:** Eine Baustelle der Holdings mit Vanilla-Bauzeit (Schwarm drei Jahre, Ofen ein Jahr) und unserer Megastruktur-Baugeschwindigkeit. Danach entsteht der echte Schwarm bzw. Ofen; der Ofen verteilt dann wie bisher Vorkommen und Stationen (pe.305). Löst sich der Konzern während des Baus auf, bekommen wir die Baustelle und am Ende einen normalen Schwarm bzw. Ofen.
+- **Log:** Die Habitat-Zeilen im game.log zeigen jetzt die Werte (Klammern in Skript-Effekten müssen maskiert sein).
+- `event pe.303` stellt jetzt auch Konzern-Schwärme und -Öfen sofort fertig.
+
+### Prüfen
+1. Ein neues Konzern-Habitat entsteht nur an einem unbewohnten Himmelskörper; kein Planet wird besetzt.
+2. Ein Konzern-Dyson-Schwarm (pe.292) bzw. Arc Furnace (pe.293): Erscheint die Baustelle mit Bauzeit? Nach `event pe.303` und einem Tag: Steht der Schwarm mit Modifikator am Stern bzw. der Ofen mit Vorkommen und Stationen im System?
+3. Firmenregister: Kassen der Konzerne; Kredite an aufgelöste Konzerne sind weg.
+
 ## Konsole
 - `event pe.302`: sofort ein Angebot. Der reichste Konzern ohne Habitat bekommt dafür mindestens 7000 Kasse.
 - `event pe.303`: Den Bau unserer Konzern-Habitate sofort fertigstellen.

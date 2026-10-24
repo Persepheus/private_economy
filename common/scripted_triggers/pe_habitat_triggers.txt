@@ -32,8 +32,9 @@ pe_chab_system_ok = {
 }
 
 # Planet scope: a body a habitat may orbit (vanilla placement rules; the AI only at bodies
-# with a station deposit, like vanilla).
+# with a station deposit, like vanilla). Not a colony: the holdings' site would occupy it.
 pe_chab_planet_ok = {
+	NOT = { exists = owner }
 	is_surveyed = { who = root status = yes }
 	has_anomaly = no
 	is_asteroid = no

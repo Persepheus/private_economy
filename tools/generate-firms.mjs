@@ -1473,7 +1473,14 @@ ${[1, 2, 3].map(n => `\tif = { limit = { has_modifier = pe_cluster_${l}_${n} } r
 }
 
 # Country scope: firms per corporation (pe_c<slot>_firms), and the cash rounded for display.
+# Loans of a corporation that is gone are written off (older saves repaid into its empty slot).
 pe_corp_census = {
+	every_owned_colony = {
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_lender check_variable = { which = pe_lender value > 0 } }
+${corpChain('pe_lender', k => `if = { limit = { root = { NOT = { check_variable = { which = ${C(k, 'on')} value = 1 } } } } set_variable = { which = pe_loan value = 0 } set_variable = { which = pe_lender value = 0 } set_variable = { which = pe_loan_q value = 0 } }`, '\t\t\t')}
+		}
+	}
 ${CORPS.map(k => `\tset_variable = { which = ${C(k, 'firms')} value = 0 }`).join('\n')}
 	every_owned_colony = {
 		limit = { is_variable_set = pe_mem_1 }
@@ -1486,9 +1493,10 @@ ${CORPS.map(k => `\tif = { limit = { NOT = { is_variable_set = ${C(k, 'cash')} }
 
 # Country scope: free the slot root.pe_corp_free_k (its headquarters, its name, its rival);
 # its stations, its Dyson swarm and its arc furnace go to us. Its firms are not touched (they must have left or merged).
-# Its corporate habitat stays ours without its rights (firms and sites there independent).
+# Its corporate habitat stays ours without its rights (firms and sites there independent); its
+# loans are written off.
 pe_corp_free = {
-${corpChain('pe_corp_free_k', k => `set_variable = { which = pe_corp_free_name value = ${C(k, 'name')} } set_variable = { which = ${C(k, 'on')} value = 0 } set_variable = { which = ${C(k, 'cash')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'firms')} value = 0 } every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } remove_planet_flag = pe_hq_${k} } set_variable = { which = ${C(k, 'scd')} value = 0 } set_variable = { which = ${C(k, 'sv')} value = 0 } set_variable = { which = ${C(k, 'st')} value = 0 } set_variable = { which = ${C(k, 'sw')} value = 0 } set_variable = { which = ${C(k, 'right')} value = 0 } every_planet_within_border = { limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_${k} } } orbital_station = { remove_fleet_flag = pe_stc_${k} remove_fleet_flag = pe_st_share set_owner = root } } random_country = { limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } } every_owned_megastructure = { limit = { planet = { OR = { has_planet_flag = pe_swc_${k} AND = { is_variable_set = pe_afc check_variable = { which = pe_afc value = ${k} } } } } } set_owner = root } } every_planet_within_border = { limit = { has_planet_flag = pe_swc_${k} } remove_planet_flag = pe_swc_${k} } every_planet_within_border = { limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = ${k} } } set_variable = { which = pe_af_corp value = 0 } set_variable = { which = pe_af_h value = 0 } set_variable = { which = pe_af_val value = 0 } } every_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = ${k} } } set_variable = { which = pe_afc value = 0 } } set_variable = { which = ${C(k, 'af')} value = 0 } set_variable = { which = ${C(k, 'afs')} value = 0 } set_variable = { which = ${C(k, 'sws')} value = 0 } set_variable = { which = ${C(k, 'hab')} value = 0 } every_owned_planet = { limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = ${k} } } remove_planet_flag = pe_corp_hab set_variable = { which = pe_chab_corp value = 0 } every_deposit = { limit = { OR = { has_deposit_category = pe_deposit_cat_firms has_deposit_category = pe_deposit_cat_sites } is_variable_set = pe_corp check_variable = { which = pe_corp value = ${k} } } set_variable = { which = pe_corp value = 0 } } }`, '\t')}
+${corpChain('pe_corp_free_k', k => `set_variable = { which = pe_corp_free_name value = ${C(k, 'name')} } set_variable = { which = ${C(k, 'on')} value = 0 } set_variable = { which = ${C(k, 'cash')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'firms')} value = 0 } every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } remove_planet_flag = pe_hq_${k} } set_variable = { which = ${C(k, 'scd')} value = 0 } set_variable = { which = ${C(k, 'sv')} value = 0 } set_variable = { which = ${C(k, 'st')} value = 0 } set_variable = { which = ${C(k, 'sw')} value = 0 } set_variable = { which = ${C(k, 'right')} value = 0 } every_planet_within_border = { limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_${k} } } orbital_station = { remove_fleet_flag = pe_stc_${k} remove_fleet_flag = pe_st_share set_owner = root } } random_country = { limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } } every_owned_megastructure = { limit = { planet = { OR = { has_planet_flag = pe_swc_${k} AND = { is_variable_set = pe_afc check_variable = { which = pe_afc value = ${k} } } } } } set_owner = root } } every_planet_within_border = { limit = { has_planet_flag = pe_swc_${k} } remove_planet_flag = pe_swc_${k} } every_planet_within_border = { limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = ${k} } } set_variable = { which = pe_af_corp value = 0 } set_variable = { which = pe_af_h value = 0 } set_variable = { which = pe_af_val value = 0 } } every_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = ${k} } } set_variable = { which = pe_afc value = 0 } } set_variable = { which = ${C(k, 'af')} value = 0 } set_variable = { which = ${C(k, 'afs')} value = 0 } set_variable = { which = ${C(k, 'sws')} value = 0 } set_variable = { which = ${C(k, 'hab')} value = 0 } every_owned_colony = { every_deposit = { limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_lender check_variable = { which = pe_lender value = ${k} } } set_variable = { which = pe_loan value = 0 } set_variable = { which = pe_lender value = 0 } set_variable = { which = pe_loan_q value = 0 } } } every_owned_planet = { limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = ${k} } } remove_planet_flag = pe_corp_hab set_variable = { which = pe_chab_corp value = 0 } every_deposit = { limit = { OR = { has_deposit_category = pe_deposit_cat_firms has_deposit_category = pe_deposit_cat_sites } is_variable_set = pe_corp check_variable = { which = pe_corp value = ${k} } } set_variable = { which = pe_corp value = 0 } } }`, '\t')}
 ${CORPS.map(k => `\tif = { limit = { check_variable = { which = ${C(k, 'rival')} value = root.pe_corp_free_k } } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } }`).join('\n')}
 ${nameChain('pe_corp_free_name', id => `remove_country_flag = pe_cname_${id} remove_global_flag = pe_gcname_${id} every_owned_colony = { limit = { has_modifier = pe_corp_hq_${id} } remove_modifier = pe_corp_hq_${id} } every_owned_colony = { limit = { has_deposit = d_pe_hq_${id} } remove_deposit = d_pe_hq_${id} } every_owned_colony = { limit = { has_modifier = pe_corp_br_${id} } remove_modifier = pe_corp_br_${id} }`, '\t')}
 }
@@ -2691,7 +2699,8 @@ ${nameChain(`root.${C(k, 'name')}`, id => `event_target:pe_occ_hq = { if = { lim
 }
 `;
 // --- Corporate habitat ----------------------------------------------------------------------
-// One per corporation (pe_c<slot>_hab: 0 none, 1 building, 2 built) and one per system. Our
+// One per corporation (pe_c<slot>_hab: 0 none, 1 building, 2 built, 3 lost in a crisis: no new
+// one) and one per system. Our
 // Private Holdings build it for the corporation (megastructure pe_corp_habitat_complex,
 // common/megastructures/pe_megastructures.txt: vanilla build time at our megastructure build
 // speed). The corporation pays the alloys (1500 = CHAB_COST cash), we pay the influence
@@ -2757,7 +2766,7 @@ ${CORPS.map(k => `	if = {
 	}
 	if = {
 		limit = { check_variable = { which = ${C(k, 'hab')} value = 2 } check_variable = { which = ${C(k, 'cash')} value < 0 } }
-		set_variable = { which = ${C(k, 'hab')} value = 0 }
+		set_variable = { which = ${C(k, 'hab')} value = 3 }
 	}`).join('\n')}
 	if = {
 		limit = {
@@ -2794,7 +2803,7 @@ ${['megastructures_cost_mult', 'megastructures_influence_cost_mult', 'megastruct
 							else = { country_event = { id = pe.300 } }
 						}
 					}
-					log = "private_economy: corporate habitat: slot [Root.pe_chab_k], influence [Root.pe_chab_inf] (have [Root.pe_chab_have]), site found [Root.pe_chab_found]"
+					log = "private_economy: corporate habitat: slot \\\\[Root.pe_chab_k], influence \\\\[Root.pe_chab_inf] (have \\\\[Root.pe_chab_have]), site found \\\\[Root.pe_chab_found]"
 				}
 				80 = { modifier = { factor = 0 check_variable = { which = pe_fl_force value = 1 } } }
 			}
@@ -2858,6 +2867,7 @@ pe_chab_exec = {
 		set_planet_flag = pe_chab_site
 		set_planet_flag = has_megastructure
 		set_variable = { which = pe_chab_k value = root.pe_chab_k }
+		set_variable = { which = pe_chab_inf value = root.pe_chab_inf }
 		save_event_target_as = pe_msg_planet
 	}
 ${corpChain('pe_chab_k', k => `subtract_variable = { which = ${C(k, 'cash')} value = ${CHAB_COST} } set_variable = { which = ${C(k, 'hab')} value = 1 } set_variable = { which = pe_msg_name value = ${C(k, 'name')} } event_target:pe_chab_planet = { set_variable = { which = pe_chab_nm value = root.${C(k, 'name')} } }`)}
@@ -2874,7 +2884,7 @@ ${corpChain('pe_chab_k', k => `subtract_variable = { which = ${C(k, 'cash')} val
 			upgrade_megastructure_to = pe_corp_habitat_complex
 		}
 	}
-	log = "private_economy: corporate habitat started by slot [Root.pe_chab_k] at [event_target:pe_chab_planet.GetName] ([event_target:pe_chab_sys.GetName]), influence [Root.pe_chab_inf]"
+	log = "private_economy: corporate habitat started by slot \\\\[Root.pe_chab_k] at \\\\[event_target:pe_chab_planet.GetName] (\\\\[event_target:pe_chab_sys.GetName]), influence \\\\[Root.pe_chab_inf]"
 	# The message inline (call depth).
 	if = {
 		limit = { is_ai = no }
@@ -2912,7 +2922,7 @@ ${nameChain('pe_chab_nmv', id => `event_target:pe_chab_hab = { set_name = pe_cha
 		event_target:pe_chab_hab = { set_variable = { which = pe_chab_corp value = 0 } }
 		if = { limit = { is_ai = no } create_message = { type = pe_private_economy localization = pe_msg_chab_orphan days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
 	}
-	log = "private_economy: pe.301 corporate habitat [event_target:pe_chab_hab.GetName] done for slot [Root.pe_chab_k], rights [Root.pe_chab_ok]"
+	log = "private_economy: pe.301 corporate habitat \\\\[event_target:pe_chab_hab.GetName] done for slot \\\\[Root.pe_chab_k], rights \\\\[Root.pe_chab_ok]"
 }
 
 # Country scope, monthly (pe.100): the corporate habitats. Rights hold while the corporation of
@@ -2921,6 +2931,11 @@ ${nameChain('pe_chab_nmv', id => `event_target:pe_chab_hab = { set_name = pe_cha
 # corporate habitat every firm and site belongs to the corporation, it sets the designation of
 # its product, and its headquarters move there.
 pe_chab_monthly = {
+	# A colony of ours controlled by holdings (a corporate site at a colony before 0.31.2) is ours again.
+	every_owned_colony = {
+		limit = { exists = controller controller = { is_country_type = pe_holdings } }
+		set_controller = root
+	}
 	every_owned_planet = {
 		limit = { has_planet_flag = pe_corp_hab }
 		if = { limit = { NOT = { is_variable_set = pe_chab_corp } } set_variable = { which = pe_chab_corp value = 0 } }
@@ -3003,6 +3018,16 @@ ${corpChain('root.pe_chab_pk', k => `root = { subtract_variable = { which = ${C(
 		set_variable = { which = pe_chab_due value = 0 }
 		set_variable = { which = pe_chab_pk value = 0 }
 	}
+}
+
+# Country scope (pe.304): the habitat site of corporation pe_chab_rk (name pe_chab_rnm) was done,
+# but the system had a habitat by then (vanilla allows only one): the corporation gets its cash
+# back (if it still waits for it), we our influence (pe_chab_rinf). Message about
+# event_target:pe_msg_planet.
+pe_chab_refund = {
+${CORPS.map(k => `\tif = { limit = { check_variable = { which = pe_chab_rk value = ${k} } check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'name')} value = pe_chab_rnm } check_variable = { which = ${C(k, 'hab')} value = 1 } } change_variable = { which = ${C(k, 'cash')} value = ${CHAB_COST} } set_variable = { which = ${C(k, 'hab')} value = 0 } }`).join('\n')}
+	add_resource = { influence = 1 mult = pe_chab_rinf }
+	if = { limit = { is_ai = no } create_message = { type = pe_private_economy localization = pe_msg_chab_refund days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
 }
 
 # Country scope (debug event pe.302): the richest corporation without a habitat gets at least

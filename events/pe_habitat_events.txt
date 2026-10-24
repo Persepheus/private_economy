@@ -2,7 +2,9 @@
 #   pe.300  a corporation wants to build a habitat (human empires; AI empires decide at once)
 #   pe.301  the habitat is done: the corporation colonizes it (from on_build_complete)
 #   pe.302  debug: an offer now (the richest corporation without a habitat gets 7000 cash)
-#   pe.303  debug: finish the construction of our corporate habitats at once
+#   pe.303  debug: finish the construction of our corporate habitats, swarms and furnaces at once
+#   pe.304  a habitat site was done, but the system had a habitat already: money back
+#   pe.305  a corporate arc furnace site is done: the furnace (from on_build_complete)
 namespace = pe
 
 country_event = {
@@ -57,10 +59,46 @@ country_event = {
 		random_country = {
 			limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } }
 			every_owned_megastructure = {
-				limit = { OR = { is_megastructure_type = pe_corp_habitat_site is_megastructure_type = pe_corp_habitat_complex } }
+				limit = { OR = { is_megastructure_type = pe_corp_habitat_site is_megastructure_type = pe_corp_swarm_site is_megastructure_type = pe_corp_furnace_site } is_upgrading = yes }
 				finish_upgrade = yes
 			}
 		}
 		log = "private_economy: pe.303 corporate habitat construction finished"
+	}
+}
+
+country_event = {
+	id = pe.304
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_planet_within_border = {
+			limit = { has_planet_flag = pe_chab_refund }
+			remove_planet_flag = pe_chab_refund
+			save_event_target_as = pe_msg_planet
+		}
+		pe_chab_refund = yes
+	}
+}
+
+country_event = {
+	id = pe.305
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } }
+			save_event_target_as = pe_hold
+		}
+		random_planet_within_border = {
+			limit = { has_planet_flag = pe_af_done }
+			remove_planet_flag = pe_af_done
+			save_event_target_as = pe_af_p
+			root = { set_variable = { which = pe_af_k value = prev.pe_afc } }
+		}
+		if = {
+			limit = { exists = event_target:pe_hold exists = event_target:pe_af_p }
+			pe_corp_furnace_finish = yes
+		}
 	}
 }

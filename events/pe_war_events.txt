@@ -11,6 +11,8 @@ carrier_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
+		# Not by our own holdings (a corporate site at a colony, before 0.31.2).
+		OR = { NOT = { exists = fromfrom } fromfrom = { NOT = { is_country_type = pe_holdings } } }
 		exists = owner
 		owner = { is_country_type = default is_gestalt = no }
 		count_deposits = { category = pe_deposit_cat_firms count > 0 }
@@ -35,6 +37,7 @@ carrier_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	trigger = {
+		OR = { NOT = { exists = fromfrom } fromfrom = { NOT = { is_country_type = pe_holdings } } }
 		exists = owner
 		owner = { is_country_type = default is_gestalt = no }
 		count_deposits = { category = pe_deposit_cat_firms count > 0 }

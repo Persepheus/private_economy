@@ -118,3 +118,7 @@
  pe_corp_habitat_complex:0 "Zentralkomplex Konzern-Habitat"
  pe_corp_habitat_complex_DESC:0 "Unsere Private Holdings bauen hier ein Habitat für einen unserer Konzerne. Ist es fertig, besiedelt der Konzern es mit unseren Leuten."
  pe_corp_habitat_complex_MEGASTRUCTURE_DETAILS:0 ""
+ pe_msg_chab_refund:0 "Die Habitat-Baustelle bei $PLANET$ ist fertig, aber im System steht schon ein Habitat. Der Konzern bekommt sein Geld zurück, wir unseren Einfluss."
+ pe_msg_swarm_done:0 "Der Dyson-Schwarm eines Konzerns bei $PLANET$ ist fertig."
+ pe_msg_corp_swarm_start:0 "§Y$CORP$§! baut bei $PLANET$ einen eigenen Dyson-Schwarm."
+ pe_msg_corp_furnace_start:0 "§Y$CORP$§! baut über $PLANET$ einen eigenen Arc Furnace."
