@@ -93,3 +93,7 @@
  pe_proto_sprawl_colonies_desc:0 "Prototype: no empire size for this colony?"
  pe_proto_sprawl_total:0 "Sprawl Test: All"
  pe_proto_sprawl_total_desc:0 "Prototype: no empire size at all from this planet?"
+ pe_sprawl_firms:0 "Private Firms (District Slots)"
+ pe_sprawl_firms_desc:0 "Private firms hold district slots and count like districts."
+ pe_sprawl_corp_hab:0 "Corporate Habitats"
+ pe_sprawl_corp_hab_desc:0 "Habitats run by corporations do not count as colonies of ours."

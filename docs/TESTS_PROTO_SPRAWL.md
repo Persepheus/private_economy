@@ -30,3 +30,28 @@ Ziel ist dein erstes Habitat, sonst die Hauptwelt. Die Modifikatoren erscheinen 
 ## Mögliche Ergebnisse
 - **Alle drei wirken nur auf den Planeten:** Das Konzern-Habitat bekommt alle drei als Modifikator, die Ausdehnung ist exakt 0.
 - **Nur die Distrikte wirken pro Planet:** Den Rest (Pops, Kolonie) rechnet die Mod quartalsweise aus und zieht ihn reichsweit ab. Das ist eine Annäherung.
+
+## Ergebnis des ersten Tests
+Keiner der Planeten-Modifikatoren nimmt die Ausdehnung der Kolonie heraus, auch `empire_size_mult` nicht. Daher gilt ab 0.30.1 ein **Abgleich über die Reichs-Ausdehnung** (pe_sprawl_step, quartalsweise):
+- **Firmen zählen wie Distrikte:**
+  - Jede Firma belegt einen Distriktplatz und bringt deshalb wie ein Distrikt 0,5 Ausdehnung.
+  - Eingerechnet werden der Distrikt-Modifikator ihres Planeten (`empire_size_districts_mult`) und seine Planetare Aufstiegsstufe: −5 % je Stufe, mal `planetary_ascension_effect_mult`.
+  - Im Tooltip erscheint das als „Privatfirmen (Distriktplätze)“.
+- **Konzern-Habitate zählen nicht als Kolonie:**
+  - Je Konzern-Habitat −20, mit `empire_size_colonies_mult` und seiner Aufstiegsstufe.
+  - Im Tooltip erscheint das als „Konzern-Habitate“.
+  - Die Pops des Habitats zählen weiter.
+- Die Werte liest die Mod jedes Quartal aus den aktuellen Modifikatoren und setzt sie als Reichs-Modifikator mit Multiplikator.
+
+## Test (0.30.1)
+- **`event pe.35`:** Abgleich der Firmen sofort.
+  - Das Log nennt die Zahl der Firmen, den Distrikt-Modifikator des Reichs und der Hauptwelt sowie die Ausdehnung vorher.
+  - Am nächsten Tag im Tooltip prüfen: Steht „Privatfirmen (Distriktplätze)“ mit Firmen × 0,5 da, und entspricht das dem, was ein Distrikt auf demselben Planeten kostet?
+- **`event pe.33`:** Dein erstes Habitat zählt testweise als Konzern-Habitat.
+  - Am nächsten Tag im Tooltip prüfen: Steht „Konzern-Habitate“ mit −20 da (bzw. mit deinen Modifikatoren), und gleicht es den Kolonie-Anteil des Habitats genau aus?
+- **`event pe.34`:** Das Habitat ist wieder normal.
+
+### Offen
+- Ob die Engine `empire_size_add` vor oder nach `empire_size_mult` anrechnet. Ohne einen solchen Modifikator in deinem Reich ist das egal.
+- Ob der Wert von `empire_size_districts_mult` auf dem Planeten den des Reichs schon enthält. Das Log von pe.35 nennt beide Werte zum Vergleich.
+

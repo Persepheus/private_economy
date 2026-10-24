@@ -238,3 +238,14 @@ pe_proto_sprawl_total = {
 	empire_size_mult = -1
 }
 
+# Empire size of the private economy (pe_sprawl_step, country modifiers with a multiplier):
+# a firm holds a district slot, so it counts like a district (vanilla 0.5 each, with the
+# district sprawl modifiers of its planet and its ascension tier); a corporate habitat does not
+# count as a colony (vanilla 20, with the colony sprawl modifiers and its ascension tier).
+pe_sprawl_firms = {
+	empire_size_add = 0.5
+}
+pe_sprawl_corp_hab = {
+	empire_size_add = -20
+}
+

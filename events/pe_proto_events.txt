@@ -696,3 +696,42 @@ country_event = {
 	}
 }
 
+# --- Empire size of firms and corporate habitats (pe_sprawl_step) -------------------------
+# pe.33: our first habitat counts as a corporate habitat (no colony sprawl); the step runs at
+# once and the log shows the numbers. pe.34: back to normal. pe.35: the step now (firms).
+country_event = {
+	id = pe.33
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_owned_colony = { limit = { uses_district_set = habitat } set_planet_flag = pe_corp_hab_test save_event_target_as = pe_ps_planet }
+		export_trigger_value_to_variable = { trigger = empire_size variable = pe_ps_before }
+		pe_sprawl_step = yes
+		log = "private_economy: pe.33 [event_target:pe_ps_planet.GetName] as a corporate habitat: firms x[Root.pe_spr_firms] (0.5 each), habitat x[Root.pe_spr_hab] (-20 each); colony sprawl mult [Root.pe_spr_cm], ascension effect mult [Root.pe_spr_am]; empire size before [Root.pe_ps_before] (compare the sprawl tooltip next day)"
+	}
+}
+
+country_event = {
+	id = pe.34
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		every_owned_colony = { limit = { has_planet_flag = pe_corp_hab_test } remove_planet_flag = pe_corp_hab_test }
+		pe_sprawl_step = yes
+		log = "private_economy: pe.34 test habitat back to normal: firms x[Root.pe_spr_firms], habitat x[Root.pe_spr_hab]"
+	}
+}
+
+country_event = {
+	id = pe.35
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		export_trigger_value_to_variable = { trigger = empire_size variable = pe_ps_before }
+		capital_scope = { export_modifier_to_variable = { modifier = empire_size_districts_mult variable = pe_spr_d } root = { set_variable = { which = pe_spr_dcap value = prev.pe_spr_d } } }
+		export_modifier_to_variable = { modifier = empire_size_districts_mult variable = pe_spr_dc }
+		pe_sprawl_step = yes
+		log = "private_economy: pe.35 firms count as districts: x[Root.pe_spr_firms] (0.5 each); district sprawl mult: empire [Root.pe_spr_dc], capital [Root.pe_spr_dcap]; empire size before [Root.pe_ps_before] (compare the sprawl tooltip next day)"
+	}
+}
+

@@ -93,3 +93,7 @@
  pe_proto_sprawl_colonies_desc:0 "Prototyp: keine Ausdehnung für diese Kolonie?"
  pe_proto_sprawl_total:0 "Ausdehnungs-Test: Alles"
  pe_proto_sprawl_total_desc:0 "Prototyp: gar keine Ausdehnung durch diesen Planeten?"
+ pe_sprawl_firms:0 "Privatfirmen (Distriktplätze)"
+ pe_sprawl_firms_desc:0 "Privatfirmen belegen Distriktplätze und zählen wie Distrikte."
+ pe_sprawl_corp_hab:0 "Konzern-Habitate"
+ pe_sprawl_corp_hab_desc:0 "Habitate, die Konzerne betreiben, zählen nicht als unsere Kolonien."

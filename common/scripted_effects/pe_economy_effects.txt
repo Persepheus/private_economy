@@ -176,6 +176,7 @@ pe_quarterly = {
 	set_variable = { which = pe_pool_income value = 0 }
 	set_variable = { which = pe_profit_due value = 0 }
 	pe_savings = yes
+	pe_sprawl_step = yes
 	pe_census = yes
 	pe_market = yes
 	pe_job_values = yes
@@ -2107,4 +2108,62 @@ pe_state_district = {
 		else_if = { limit = { root = { check_variable = { which = pe_sd_cls value = 4 } } } add_district = { district_type = district_farming ignore_cap = yes } }
 		else = { add_district = { district_type = district_city ignore_cap = yes } }
 	}
+}
+
+# --- Empire size ---------------------------------------------------------------------------
+# Country scope, quarterly: the empire size of the private economy, as two country modifiers
+# with a multiplier (pe_sprawl_firms +0.5, pe_sprawl_corp_hab -20 each):
+# - every firm counts like the district whose slot it holds: 1 + the planet's
+#   empire_size_districts_mult (pe_spr_d), times its planetary ascension (vanilla -5% per
+#   tier, times 1 + planetary_ascension_effect_mult);
+# - every corporate habitat (planet flag pe_corp_hab; pe_corp_hab_test for the test events)
+#   takes its colony out again: 1 + empire_size_colonies_mult, times its ascension.
+# pe_spr_firms / pe_spr_hab = the multipliers (for the log).
+pe_sprawl_step = {
+	set_variable = { which = pe_spr_firms value = 0 }
+	set_variable = { which = pe_spr_hab value = 0 }
+	export_modifier_to_variable = { modifier = empire_size_colonies_mult variable = pe_spr_cm }
+	export_modifier_to_variable = { modifier = planetary_ascension_effect_mult variable = pe_spr_am }
+	every_owned_colony = {
+		limit = {
+			OR = {
+				count_deposits = { category = pe_deposit_cat_firms count > 0 }
+				has_planet_flag = pe_corp_hab
+				has_planet_flag = pe_corp_hab_test
+			}
+		}
+		# Ascension factor: 1 - 0.05 x tier x (1 + planetary_ascension_effect_mult).
+		set_variable = { which = pe_spr_asc value = 0 }
+		if = { limit = { has_planetary_ascension_tier >= 1 } export_trigger_value_to_variable = { trigger = has_planetary_ascension_tier variable = pe_spr_asc } }
+		multiply_variable = { which = pe_spr_asc value = -0.05 }
+		set_variable = { which = pe_tmp value = root.pe_spr_am }
+		change_variable = { which = pe_tmp value = 1 }
+		multiply_variable = { which = pe_spr_asc value = pe_tmp }
+		change_variable = { which = pe_spr_asc value = 1 }
+		if = { limit = { check_variable = { which = pe_spr_asc value < 0 } } set_variable = { which = pe_spr_asc value = 0 } }
+		# The firms here, like districts.
+		set_variable = { which = pe_spr_n value = 0 }
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms }
+			prev = { change_variable = { which = pe_spr_n value = 1 } }
+		}
+		export_modifier_to_variable = { modifier = empire_size_districts_mult variable = pe_spr_d }
+		set_variable = { which = pe_tmp value = pe_spr_d }
+		change_variable = { which = pe_tmp value = 1 }
+		multiply_variable = { which = pe_tmp value = pe_spr_n }
+		multiply_variable = { which = pe_tmp value = pe_spr_asc }
+		root = { change_variable = { which = pe_spr_firms value = prev.pe_tmp } }
+		# A corporate habitat: no colony.
+		if = {
+			limit = { OR = { has_planet_flag = pe_corp_hab has_planet_flag = pe_corp_hab_test } }
+			set_variable = { which = pe_tmp value = root.pe_spr_cm }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = pe_spr_asc }
+			root = { change_variable = { which = pe_spr_hab value = prev.pe_tmp } }
+		}
+	}
+	if = { limit = { has_modifier = pe_sprawl_firms } remove_modifier = pe_sprawl_firms }
+	if = { limit = { has_modifier = pe_sprawl_corp_hab } remove_modifier = pe_sprawl_corp_hab }
+	if = { limit = { check_variable = { which = pe_spr_firms value > 0 } } add_modifier = { modifier = pe_sprawl_firms days = -1 multiplier = pe_spr_firms } }
+	if = { limit = { check_variable = { which = pe_spr_hab value > 0 } } add_modifier = { modifier = pe_sprawl_corp_hab days = -1 multiplier = pe_spr_hab } }
 }
