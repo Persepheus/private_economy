@@ -1,0 +1,66 @@
+# Corporate habitat (pe_corp_effects_generated.txt, pe_chab_*; common/megastructures/pe_megastructures.txt).
+#   pe.300  a corporation wants to build a habitat (human empires; AI empires decide at once)
+#   pe.301  the habitat is done: the corporation colonizes it (from on_build_complete)
+#   pe.302  debug: an offer now (the richest corporation without a habitat gets 7000 cash)
+#   pe.303  debug: finish the construction of our corporate habitats at once
+namespace = pe
+
+country_event = {
+	id = pe.300
+	title = pe.300.name
+	desc = pe.300.desc
+	picture = GFX_evt_habitat
+	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_chab_k value = 1 } } set_variable = { which = pe_cn300 value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_chab_k value = 2 } } set_variable = { which = pe_cn300 value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_chab_k value = 3 } } set_variable = { which = pe_cn300 value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_chab_k value = 4 } } set_variable = { which = pe_cn300 value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_chab_k value = 5 } } set_variable = { which = pe_cn300 value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_chab_k value = 6 } } set_variable = { which = pe_cn300 value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_chab_k value = 7 } } set_variable = { which = pe_cn300 value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_chab_k value = 8 } } set_variable = { which = pe_cn300 value = pe_c8_name } } } }
+	location = event_target:pe_chab_planet
+
+	option = {
+		name = pe.300.a
+		custom_tooltip = pe.300.a.tt
+		hidden_effect = { pe_chab_exec = yes }
+	}
+	option = { name = pe.300.b }
+}
+
+country_event = {
+	id = pe.301
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_planet_within_border = {
+			limit = { has_planet_flag = pe_chab_new }
+			remove_planet_flag = pe_chab_new
+			save_event_target_as = pe_chab_hab
+		}
+		if = { limit = { exists = event_target:pe_chab_hab } pe_chab_settle = yes }
+	}
+}
+
+country_event = {
+	id = pe.302
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_holdings_ensure = yes
+		pe_chab_debug_cash = yes
+		set_variable = { which = pe_fl_force value = 1 }
+		pe_chab_quarterly = yes
+		set_variable = { which = pe_fl_force value = 0 }
+	}
+}
+
+country_event = {
+	id = pe.303
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } }
+			every_owned_megastructure = {
+				limit = { OR = { is_megastructure_type = pe_corp_habitat_site is_megastructure_type = pe_corp_habitat_complex } }
+				finish_upgrade = yes
+			}
+		}
+		log = "private_economy: pe.303 corporate habitat construction finished"
+	}
+}

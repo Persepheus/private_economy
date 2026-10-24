@@ -8,7 +8,7 @@
 #                    -> pe_job_values (2) -> pe_job_count (3), pe_job_res (3)
 #                    -> pe_compute_values (2)
 #                    -> pe_planet_step (2) -> pe_planet_counts (3)
-#                                          -> pe_planet_prepare (3)
+#                                          -> pe_planet_prepare (3), pe_chab_prep (3), pe_chab_pay (3)
 #                                          -> pe_planet_fill (3)      -> pe_count_planet_job (4)
 #                                          -> pe_firm_accounting (3)  -> pe_firm_identify (4)
 #                                                                     -> pe_deposit_fetch (4)
@@ -29,9 +29,11 @@
 #                                           pe_corp_stations, pe_corp_station_output,
 #                                           pe_holdings_surplus, pe_corp_fleets, pe_corp_charter,
 #                                           pe_corp_convoy, pe_corp_salvage, pe_corp_swarm,
-#                                           pe_corp_furnace, pe_corp_auto_msg (3)
+#                                           pe_corp_furnace, pe_corp_auto_msg,
+#                                           pe_chab_quarterly (3)
 #                                        -> pe_corp_free, pe_corp_msg, pe_corp_found_new,
-#                                           pe_corp_station_pick, pe_ledger_bits (4)
+#                                           pe_corp_station_pick, pe_ledger_bits,
+#                                           pe_chab_pick, pe_chab_exec (4)
 #                    -> pe_relocate (2) -> pe_relocate_from (3) -> pe_relocate_exec (4)
 #                                                             -> pe_relocate_check_dest (4)
 #                    -> pe_patron (2) -> pe_patron_fire (3)   (pe_patron_effects.txt)
@@ -753,6 +755,13 @@ pe_planet_counts = {
 	multiply_variable = { which = pe_target value = root.pe_private_share }
 	divide_variable = { which = pe_target value = 100 }
 	floor_variable = pe_target
+	# A corporate habitat: no limit (the last district of each type stays the state's anyway).
+	if = {
+		limit = { has_planet_flag = pe_corp_hab }
+		set_variable = { which = pe_target value = pe_districts }
+		change_variable = { which = pe_target value = pe_free }
+		change_variable = { which = pe_target value = pe_firms }
+	}
 	# pe_built_up: at least 2/3 of all district slots are used (state districts, firms and
 	# sites). The capital only gives firms away then (pe_relocate).
 	set_variable = { which = pe_fused value = pe_districts }
@@ -815,6 +824,8 @@ pe_planet_step = {
 	}
 	pe_planet_counts = yes
 	pe_planet_prepare = yes
+	# A corporate habitat: its corporation pays founding, buyouts and growth here.
+	pe_chab_prep = yes
 	# Idle pops: civilians minus the jobs still open here (they would take those first) and
 	# minus the jobs of the construction sites here (200 x stage size each; a restructured
 	# firm takes its workers back). At least 50 of them for a new firm or a growth step.
@@ -873,7 +884,7 @@ pe_planet_step = {
 			}
 			else_if = {
 				# At most one buyout (or offer) per planet every two years.
-				limit = { owner = { pe_buyout_allowed = yes } NOT = { has_planet_flag = pe_buy_cd } }
+				limit = { OR = { owner = { pe_buyout_allowed = yes } has_planet_flag = pe_corp_hab } NOT = { has_planet_flag = pe_buy_cd } }
 				# A firm must be worth clearly more than the state district it replaces.
 				root = { set_variable = { which = pe_best_min value = 2 } set_variable = { which = pe_dmode value = 1 } }
 				pe_choose_variant = { MODE = buy }
@@ -898,6 +909,7 @@ pe_planet_step = {
 		}
 		pe_restructure = yes
 	}
+	pe_chab_pay = yes
 }
 
 # Every firm books its quarter.
@@ -1120,7 +1132,19 @@ pe_firm_book = {
 			else_if = { limit = { check_variable = { which = pe_cls value = 3 } } set_variable = { which = pe_tmp value = 225 } }
 			else_if = { limit = { check_variable = { which = pe_cls value = 4 } } set_variable = { which = pe_tmp value = 225 } }
 			else = { set_variable = { which = pe_tmp value = 375 } }
+			# A corporate habitat: its corporation pays, 25% cheaper (pe_chab_prep).
+			set_variable = { which = pe_chab_g value = pe_tmp }
+			multiply_variable = { which = pe_chab_g value = 0.75 }
 			if = {
+				limit = { root = { check_variable = { which = pe_chab_pk value > 0 } check_variable = { which = pe_chab_cash value >= prev.pe_chab_g } } }
+				root = {
+					subtract_variable = { which = pe_chab_cash value = prev.pe_chab_g }
+					change_variable = { which = pe_chab_due value = prev.pe_chab_g }
+				}
+				set_variable = { which = pe_pending value = 1 }
+				root = { set_variable = { which = pe_pend_any value = 1 } }
+			}
+			else_if = {
 				limit = { check_variable = { which = pe_fcap value >= pe_tmp } }
 				subtract_variable = { which = pe_fcap value = pe_tmp }
 				set_variable = { which = pe_pending value = 1 }
@@ -1328,6 +1352,8 @@ pe_auto_invest = {
 		multiply_variable = { which = pe_anext value = pe_vaj_pe_private_$JOB$ }
 		set_variable = { which = pe_acost value = 600 }
 		if = { limit = { check_variable = { which = pe_alvl value = 1 } } set_variable = { which = pe_acost value = 800 } }
+		# A corporate habitat: its corporation pays (all firms there are its own), 25% cheaper.
+		if = { limit = { prev = { has_planet_flag = pe_corp_hab } } multiply_variable = { which = pe_acost value = 0.75 } }
 		# Upkeep of the next level: 4 energy per automated job.
 		set_variable = { which = pe_aupn value = pe_acap }
 		multiply_variable = { which = pe_aupn value = 0.01 }
@@ -1473,15 +1499,39 @@ pe_consider_variant = {
 # The investor pool starts a construction site on a free slot. It costs what the district
 # would cost the state: the pool pays 40% down, the firm owes the rest (pe_debt) and pays
 # it back from its profit. The firm starts with 10 capital, enough to wait about three
-# years for workers.
+# years for workers. On a corporate habitat its corporation pays instead, 25% cheaper and
+# without a loan (pe_chab_prep); the firm is its own.
 pe_found_firm = {
 	root = {
 		set_variable = { which = pe_down value = $COST$ }
 		multiply_variable = { which = pe_down value = 0.4 }
 		set_variable = { which = pe_loan value = $COST$ }
 		subtract_variable = { which = pe_loan value = pe_down }
+		set_variable = { which = pe_chab_c value = $COST$ }
+		multiply_variable = { which = pe_chab_c value = 0.75 }
 	}
 	if = {
+		limit = { root = { check_variable = { which = pe_chab_pk value > 0 } } }
+		if = {
+			limit = { root = { check_variable = { which = pe_chab_cash value >= pe_chab_c } } }
+			add_deposit = $SITE$
+			last_added_deposit = {
+				set_variable = { which = pe_target value = $CODE$ }
+				set_variable = { which = pe_tstage value = 1 }
+				set_variable = { which = pe_fcap value = 10 }
+				set_variable = { which = pe_debt value = 0 }
+				set_variable = { which = pe_left value = $MONTHS$ }
+				set_variable = { which = pe_kind value = 1 }
+				set_variable = { which = pe_corp value = root.pe_chab_pk }
+			}
+			set_planet_flag = pe_site
+			root = {
+				subtract_variable = { which = pe_chab_cash value = pe_chab_c }
+				change_variable = { which = pe_chab_due value = pe_chab_c }
+			}
+		}
+	}
+	else_if = {
 		limit = { root = { check_variable = { which = pe_capital value >= pe_down } } }
 		add_deposit = $SITE$
 		last_added_deposit = {
@@ -1507,11 +1557,27 @@ pe_buyout_execute = {
 	owner = {
 		set_variable = { which = pe_down value = $PRICE$ }
 		multiply_variable = { which = pe_down value = 0.4 }
+		# A corporate habitat: its corporation pays, 25% cheaper and without a loan (pe_chab_prep).
+		set_variable = { which = pe_chab_c value = $PRICE$ }
+		multiply_variable = { which = pe_chab_c value = 0.75 }
+		set_variable = { which = pe_chab_buy value = 0 }
+		if = {
+			limit = { check_variable = { which = pe_chab_pk value > 0 } check_variable = { which = pe_chab_cash value >= pe_chab_c } }
+			set_variable = { which = pe_chab_buy value = 1 }
+		}
 	}
 	if = {
 		limit = {
 			has_district = $DISTRICT$
-			owner = { check_variable = { which = pe_capital value >= pe_down } }
+			owner = {
+				OR = {
+					check_variable = { which = pe_chab_buy value = 1 }
+					AND = {
+						NOT = { check_variable = { which = pe_chab_pk value > 0 } }
+						check_variable = { which = pe_capital value >= pe_down }
+					}
+				}
+			}
 		}
 		export_trigger_value_to_variable = { trigger = num_districts parameters = { type = $DISTRICT$ } variable = pe_before }
 		remove_district = $DISTRICT$
@@ -1528,6 +1594,11 @@ pe_buyout_execute = {
 			set_variable = { which = pe_debt value = $PRICE$ }
 			multiply_variable = { which = pe_debt value = 0.6 }
 			set_variable = { which = pe_age value = 0 }
+			if = {
+				limit = { root = { check_variable = { which = pe_chab_buy value = 1 } } }
+				set_variable = { which = pe_debt value = 0 }
+				set_variable = { which = pe_corp value = root.pe_chab_pk }
+			}
 		}
 		set_timed_planet_flag = { flag = pe_cooldown days = 360 }
 		set_timed_planet_flag = { flag = pe_buy_cd days = 720 }
@@ -1535,7 +1606,12 @@ pe_buyout_execute = {
 		save_event_target_as = pe_msg_planet
 		owner = {
 			add_resource = { $RES$ = $MINERALS$ trade = $TRADE$ }
-			subtract_variable = { which = pe_capital value = pe_down }
+			if = {
+				limit = { check_variable = { which = pe_chab_buy value = 1 } }
+				subtract_variable = { which = pe_chab_cash value = pe_chab_c }
+				change_variable = { which = pe_chab_due value = pe_chab_c }
+			}
+			else = { subtract_variable = { which = pe_capital value = pe_down } }
 			create_message = {
 				type = pe_private_economy
 				localization = pe_msg_buy_$FIRM$
@@ -1656,6 +1732,7 @@ pe_corp_step = {
 	pe_corp_salvage = yes
 	pe_corp_swarm = yes
 	pe_corp_furnace = yes
+	pe_chab_quarterly = yes
 	pe_corp_auto_msg = yes
 	pe_ruins_step = yes
 	change_variable = { which = pe_hq4 value = 1 }
@@ -2117,11 +2194,13 @@ pe_state_district = {
 #   empire_size_districts_mult (pe_spr_d), times its planetary ascension (vanilla -5% per
 #   tier, times 1 + planetary_ascension_effect_mult);
 # - every corporate habitat (planet flag pe_corp_hab; pe_corp_hab_test for the test events)
-#   takes its colony out again: 1 + empire_size_colonies_mult, times its ascension.
-# pe_spr_firms / pe_spr_hab = the multipliers (for the log).
+#   takes its colony out again: 1 + empire_size_colonies_mult, times its ascension; and its
+#   districts (pe_sprawl_corp_hab_d -0.5 each, like the firms above); its firms do not count.
+# pe_spr_firms / pe_spr_hab / pe_spr_hd = the multipliers (for the log).
 pe_sprawl_step = {
 	set_variable = { which = pe_spr_firms value = 0 }
 	set_variable = { which = pe_spr_hab value = 0 }
+	set_variable = { which = pe_spr_hd value = 0 }
 	export_modifier_to_variable = { modifier = empire_size_colonies_mult variable = pe_spr_cm }
 	export_modifier_to_variable = { modifier = planetary_ascension_effect_mult variable = pe_spr_am }
 	every_owned_colony = {
@@ -2141,29 +2220,40 @@ pe_sprawl_step = {
 		multiply_variable = { which = pe_spr_asc value = pe_tmp }
 		change_variable = { which = pe_spr_asc value = 1 }
 		if = { limit = { check_variable = { which = pe_spr_asc value < 0 } } set_variable = { which = pe_spr_asc value = 0 } }
-		# The firms here, like districts.
-		set_variable = { which = pe_spr_n value = 0 }
-		every_deposit = {
-			limit = { has_deposit_category = pe_deposit_cat_firms }
-			prev = { change_variable = { which = pe_spr_n value = 1 } }
-		}
 		export_modifier_to_variable = { modifier = empire_size_districts_mult variable = pe_spr_d }
-		set_variable = { which = pe_tmp value = pe_spr_d }
-		change_variable = { which = pe_tmp value = 1 }
-		multiply_variable = { which = pe_tmp value = pe_spr_n }
-		multiply_variable = { which = pe_tmp value = pe_spr_asc }
-		root = { change_variable = { which = pe_spr_firms value = prev.pe_tmp } }
-		# A corporate habitat: no colony.
+		# A corporate habitat: no colony, its districts out again, its firms not counted.
 		if = {
 			limit = { OR = { has_planet_flag = pe_corp_hab has_planet_flag = pe_corp_hab_test } }
 			set_variable = { which = pe_tmp value = root.pe_spr_cm }
 			change_variable = { which = pe_tmp value = 1 }
 			multiply_variable = { which = pe_tmp value = pe_spr_asc }
 			root = { change_variable = { which = pe_spr_hab value = prev.pe_tmp } }
+			export_trigger_value_to_variable = { trigger = num_districts parameters = { type = any } variable = pe_spr_n }
+			if = { limit = { NOT = { is_variable_set = pe_spr_n } } set_variable = { which = pe_spr_n value = 0 } }
+			set_variable = { which = pe_tmp value = pe_spr_d }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = pe_spr_n }
+			multiply_variable = { which = pe_tmp value = pe_spr_asc }
+			root = { change_variable = { which = pe_spr_hd value = prev.pe_tmp } }
+		}
+		# The firms here, like districts.
+		else = {
+			set_variable = { which = pe_spr_n value = 0 }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms }
+				prev = { change_variable = { which = pe_spr_n value = 1 } }
+			}
+			set_variable = { which = pe_tmp value = pe_spr_d }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = pe_spr_n }
+			multiply_variable = { which = pe_tmp value = pe_spr_asc }
+			root = { change_variable = { which = pe_spr_firms value = prev.pe_tmp } }
 		}
 	}
 	if = { limit = { has_modifier = pe_sprawl_firms } remove_modifier = pe_sprawl_firms }
 	if = { limit = { has_modifier = pe_sprawl_corp_hab } remove_modifier = pe_sprawl_corp_hab }
 	if = { limit = { check_variable = { which = pe_spr_firms value > 0 } } add_modifier = { modifier = pe_sprawl_firms days = -1 multiplier = pe_spr_firms } }
 	if = { limit = { check_variable = { which = pe_spr_hab value > 0 } } add_modifier = { modifier = pe_sprawl_corp_hab days = -1 multiplier = pe_spr_hab } }
+	if = { limit = { has_modifier = pe_sprawl_corp_hab_d } remove_modifier = pe_sprawl_corp_hab_d }
+	if = { limit = { check_variable = { which = pe_spr_hd value > 0 } } add_modifier = { modifier = pe_sprawl_corp_hab_d days = -1 multiplier = pe_spr_hd } }
 }

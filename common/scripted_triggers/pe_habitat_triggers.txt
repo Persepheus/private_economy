@@ -1,0 +1,66 @@
+# Corporate habitat (pe_chab_pick). Root = our empire.
+
+# System scope: a system where a corporate habitat may go (the vanilla rules of the habitat
+# central complex): ours, with a starbase, no habitat, ruin, ring world ruin, orbital debris or
+# habitat construction yet, and a planet for it.
+pe_chab_system_ok = {
+	exists = starbase
+	exists = owner
+	owner = { is_same_value = root }
+	NOT = { has_megastructure = habitat_central_complex_ruined }
+	NOT = {
+		any_system_megastructure = {
+			OR = {
+				is_megastructure_type = ring_world_ruined
+				is_megastructure_type = habitat_central_complex
+				is_megastructure_type = pe_corp_habitat_site
+				is_megastructure_type = pe_corp_habitat_complex
+			}
+		}
+	}
+	NOT = {
+		any_system_planet = {
+			OR = {
+				has_planet_flag = habitat
+				has_planet_flag = hold_the_line_habitat
+				has_planet_flag = pe_chab_site
+				has_carrier_flag = has_orbital_debris
+			}
+		}
+	}
+	any_system_planet = { pe_chab_planet_ok = yes }
+}
+
+# Planet scope: a body a habitat may orbit (vanilla placement rules; the AI only at bodies
+# with a station deposit, like vanilla).
+pe_chab_planet_ok = {
+	is_surveyed = { who = root status = yes }
+	has_anomaly = no
+	is_asteroid = no
+	is_moon = no
+	is_astral_scar = no
+	NOR = {
+		has_planet_flag = megastructure
+		has_planet_flag = has_megastructure
+		is_planet_class = pc_ringworld_habitable
+		is_planet_class = pc_ringworld_habitable_damaged
+		is_planet_class = pc_ringworld_tech
+		is_planet_class = pc_ringworld_tech_damaged
+		is_planet_class = pc_ringworld_seam
+		is_planet_class = pc_ringworld_seam_damaged
+		is_planet_class = pc_habitat
+		is_planet_class = pc_cosmogenesis_world
+	}
+	solar_system = {
+		NOR = {
+			has_star_flag = ring_world_built
+			has_star_flag = ithomes_gate
+			has_star_flag = solarpunk_system_02
+		}
+	}
+	OR = {
+		root = { is_ai = no }
+		has_deposit_for = shipclass_mining_station
+		has_deposit_for = shipclass_research_station
+	}
+}

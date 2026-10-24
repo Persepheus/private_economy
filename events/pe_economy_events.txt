@@ -17,6 +17,7 @@ country_event = {
 		pe_init = yes
 		pe_monthly_sites = yes
 		pe_deal_month = yes
+		pe_chab_monthly = yes
 		pe_sprawl_step = yes
 		pe_corp_defence = yes
 		pe_bombard_step = yes
@@ -67,7 +68,7 @@ country_event = {
 	trigger = {
 		is_country_type = default
 		is_gestalt = no
-		OR = { has_modifier = pe_sprawl_firms has_modifier = pe_sprawl_corp_hab }
+		OR = { has_modifier = pe_sprawl_firms has_modifier = pe_sprawl_corp_hab has_modifier = pe_sprawl_corp_hab_d }
 	}
 	immediate = { pe_sprawl_step = yes }
 }

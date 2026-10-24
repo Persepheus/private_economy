@@ -2854,6 +2854,7 @@ pe_buy_or_offer = {
 	if = { limit = { root = { check_variable = { which = pe_best_variant value = 1 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -2869,13 +2870,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_aaac CODE = 1 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_aaac CODE = 1 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 2 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -2891,13 +2893,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_aaat CODE = 2 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_aaat CODE = 2 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 3 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -2913,13 +2916,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_aaau CODE = 3 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_aaau CODE = 3 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 4 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -2935,13 +2939,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_aacc CODE = 4 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_aacc CODE = 4 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 5 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -2957,13 +2962,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_aact CODE = 5 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_aact CODE = 5 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 6 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -2979,13 +2985,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_aacu CODE = 6 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_aacu CODE = 6 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 7 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3001,13 +3008,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_aatt CODE = 7 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_aatt CODE = 7 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 8 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3023,13 +3031,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_aatu CODE = 8 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_aatu CODE = 8 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 9 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3045,13 +3054,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_aauu CODE = 9 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_aauu CODE = 9 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 10 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3067,13 +3077,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_ccca CODE = 10 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_ccca CODE = 10 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 11 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3089,13 +3100,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_ccat CODE = 11 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_ccat CODE = 11 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 12 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3111,13 +3123,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_ccau CODE = 12 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_ccau CODE = 12 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 13 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3133,13 +3146,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_ttac CODE = 13 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_ttac CODE = 13 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 14 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3155,13 +3169,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_actu CODE = 14 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_actu CODE = 14 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 15 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3177,13 +3192,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_uuac CODE = 15 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_uuac CODE = 15 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 16 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3199,13 +3215,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_ttta CODE = 16 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_ttta CODE = 16 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 17 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3221,13 +3238,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_ttau CODE = 17 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_ttau CODE = 17 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 18 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3243,13 +3261,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_uuat CODE = 18 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_uuat CODE = 18 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 19 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3265,13 +3284,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_uuua CODE = 19 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_uuua CODE = 19 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 20 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3287,13 +3307,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_ccct CODE = 20 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_ccct CODE = 20 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 21 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3309,13 +3330,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_cccu CODE = 21 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_cccu CODE = 21 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 22 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3331,13 +3353,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_cctt CODE = 22 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_cctt CODE = 22 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 23 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3353,13 +3376,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_cctu CODE = 23 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_cctu CODE = 23 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 24 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3375,13 +3399,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_ccuu CODE = 24 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_ccuu CODE = 24 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 25 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3397,13 +3422,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_tttc CODE = 25 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_tttc CODE = 25 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 26 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3419,13 +3445,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_ttcu CODE = 26 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_ttcu CODE = 26 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 27 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3441,13 +3468,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_uuct CODE = 27 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_uuct CODE = 27 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 28 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3463,13 +3491,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_uuuc CODE = 28 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_uuuc CODE = 28 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 29 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3485,13 +3514,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_tttu CODE = 29 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_tttu CODE = 29 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 30 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3507,13 +3537,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_ttuu CODE = 30 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_ttuu CODE = 30 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 31 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3529,13 +3560,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_uuut CODE = 31 DISTRICT = district_hab_housing RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_uuut CODE = 31 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 32 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3551,13 +3583,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_xxxy CODE = 32 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_xxxy CODE = 32 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 33 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3573,13 +3606,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_xxxz CODE = 33 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_xxxz CODE = 33 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 34 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3595,13 +3629,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_xxxb CODE = 34 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_xxxb CODE = 34 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 35 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3617,13 +3652,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_xxyy CODE = 35 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_xxyy CODE = 35 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 36 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3639,13 +3675,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_xxyz CODE = 36 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_xxyz CODE = 36 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 37 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3661,13 +3698,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_xxyb CODE = 37 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_xxyb CODE = 37 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 38 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3683,13 +3721,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_xxzz CODE = 38 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_xxzz CODE = 38 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 39 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3705,13 +3744,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_xxzb CODE = 39 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_xxzb CODE = 39 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 40 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3727,13 +3767,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_xxbb CODE = 40 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_xxbb CODE = 40 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 41 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3749,13 +3790,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_yyyx CODE = 41 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_yyyx CODE = 41 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 42 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3771,13 +3813,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_yyxz CODE = 42 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_yyxz CODE = 42 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 43 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3793,13 +3836,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_yyxb CODE = 43 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_yyxb CODE = 43 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 44 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3815,13 +3859,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_zzxy CODE = 44 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_zzxy CODE = 44 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 45 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3837,13 +3882,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_xyzb CODE = 45 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_xyzb CODE = 45 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 46 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3859,13 +3905,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_bbxy CODE = 46 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_bbxy CODE = 46 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 47 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3881,13 +3928,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_zzzx CODE = 47 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_zzzx CODE = 47 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 48 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3903,13 +3951,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_zzxb CODE = 48 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_zzxb CODE = 48 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 49 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3925,13 +3974,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_bbxz CODE = 49 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_bbxz CODE = 49 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 50 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3947,13 +3997,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_bbbx CODE = 50 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_bbbx CODE = 50 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 51 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3969,13 +4020,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_yyyz CODE = 51 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_yyyz CODE = 51 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 52 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -3991,13 +4043,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_yyyb CODE = 52 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_yyyb CODE = 52 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 53 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4013,13 +4066,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_yyzz CODE = 53 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_yyzz CODE = 53 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 54 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4035,13 +4089,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_yyzb CODE = 54 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_yyzb CODE = 54 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 55 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4057,13 +4112,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_yybb CODE = 55 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_yybb CODE = 55 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 56 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4079,13 +4135,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_zzzy CODE = 56 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_zzzy CODE = 56 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 57 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4101,13 +4158,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_zzyb CODE = 57 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_zzyb CODE = 57 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 58 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4123,13 +4181,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_bbyz CODE = 58 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_bbyz CODE = 58 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 59 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4145,13 +4204,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_bbby CODE = 59 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_bbby CODE = 59 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 60 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4167,13 +4227,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_zzzb CODE = 60 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_zzzb CODE = 60 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 61 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4189,13 +4250,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_zzbb CODE = 61 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_zzbb CODE = 61 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 62 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 360 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4211,13 +4273,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_bbbz CODE = 62 DISTRICT = district_hab_science RES = alloys MINERALS = 225 TRADE = 150 PRICE = 1050 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_bbbz CODE = 62 DISTRICT = district_city RES = minerals MINERALS = 750 TRADE = 150 PRICE = 900 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 63 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4233,13 +4296,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_mmmm CODE = 63 DISTRICT = district_hab_mining RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_mmmm CODE = 63 DISTRICT = district_mining RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 64 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4255,13 +4319,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_mmma CODE = 64 DISTRICT = district_hab_mining RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_mmma CODE = 64 DISTRICT = district_mining RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 65 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4277,13 +4342,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_mmmc CODE = 65 DISTRICT = district_hab_mining RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_mmmc CODE = 65 DISTRICT = district_mining RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 66 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4299,13 +4365,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_mmmt CODE = 66 DISTRICT = district_hab_mining RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_mmmt CODE = 66 DISTRICT = district_mining RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 67 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4321,13 +4388,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_mmme CODE = 67 DISTRICT = district_hab_mining RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_mmme CODE = 67 DISTRICT = district_mining RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 68 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4343,13 +4411,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_mmmf CODE = 68 DISTRICT = district_hab_mining RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_mmmf CODE = 68 DISTRICT = district_mining RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 69 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4365,13 +4434,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_eeee CODE = 69 DISTRICT = district_hab_energy RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_eeee CODE = 69 DISTRICT = district_generator RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 70 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4387,13 +4457,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_eeea CODE = 70 DISTRICT = district_hab_energy RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_eeea CODE = 70 DISTRICT = district_generator RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 71 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4409,13 +4480,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_eeec CODE = 71 DISTRICT = district_hab_energy RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_eeec CODE = 71 DISTRICT = district_generator RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 72 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4431,13 +4503,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_eeet CODE = 72 DISTRICT = district_hab_energy RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_eeet CODE = 72 DISTRICT = district_generator RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 73 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4453,13 +4526,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_eeem CODE = 73 DISTRICT = district_hab_energy RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_eeem CODE = 73 DISTRICT = district_generator RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 74 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4475,13 +4549,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_eeef CODE = 74 DISTRICT = district_hab_energy RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_eeef CODE = 74 DISTRICT = district_generator RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 75 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4497,13 +4572,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_ffff CODE = 75 DISTRICT = district_hab_energy RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_ffff CODE = 75 DISTRICT = district_farming RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 76 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4519,13 +4595,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_fffa CODE = 76 DISTRICT = district_hab_energy RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_fffa CODE = 76 DISTRICT = district_farming RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 77 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4541,13 +4618,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_fffc CODE = 77 DISTRICT = district_hab_energy RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_fffc CODE = 77 DISTRICT = district_farming RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 78 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4563,13 +4641,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_ffft CODE = 78 DISTRICT = district_hab_energy RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_ffft CODE = 78 DISTRICT = district_farming RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 79 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4585,13 +4664,14 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_fffm CODE = 79 DISTRICT = district_hab_energy RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_fffm CODE = 79 DISTRICT = district_farming RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }
 	else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 80 } } } 
 		if = {
 			limit = {
+				NOT = { has_planet_flag = pe_corp_hab }
 				owner = { is_ai = no has_policy_flag = pe_order_free_market NOT = { has_country_flag = pe_offer_pending } check_variable = { which = pe_capital value >= 216 } }
 			}
 			set_timed_planet_flag = { flag = pe_cooldown days = 360 }
@@ -4607,7 +4687,7 @@ pe_buy_or_offer = {
 			}
 		}
 		else_if = {
-			limit = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } }
+			limit = { OR = { owner = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } has_planet_flag = pe_corp_hab } }
 			if = { limit = { uses_district_set = habitat } pe_buyout_execute = { FIRM = d_pe_firm_fffe CODE = 80 DISTRICT = district_hab_energy RES = alloys MINERALS = 225 TRADE = 90 PRICE = 990 } } else = { pe_buyout_execute = { FIRM = d_pe_firm_fffe CODE = 80 DISTRICT = district_farming RES = minerals MINERALS = 450 TRADE = 90 PRICE = 540 } }
 		}
 	 }

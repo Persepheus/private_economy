@@ -248,4 +248,13 @@ pe_sprawl_firms = {
 pe_sprawl_corp_hab = {
 	empire_size_add = -20
 }
+pe_sprawl_corp_hab_d = {
+	empire_size_add = -0.5
+}
 
+# Our Private Holdings build megastructures (the corporate habitat, swarm upgrades) at our
+# megastructure build speed: x the empire's megastructure_build_speed_mult in percent
+# (pe_chab_quarterly).
+pe_hold_mega_speed = {
+	megastructure_build_speed_mult = 0.01
+}
