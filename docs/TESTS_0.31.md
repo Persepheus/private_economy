@@ -48,7 +48,7 @@ Ein laufendes Spiel kann weiterlaufen.
   - Unsere Holdings lösen keine Kontribution und keine Kollaborateurs-Frage mehr aus.
   - Eine Kolonie, die noch von Holdings kontrolliert wird, ist am nächsten Monatswechsel wieder unsere.
 - **Habitat im selben System zuerst fertig** (bei KI-Reich 4 passiert): Statt die 6000 zu verlieren, bekommt der Konzern sein Geld zurück, wir den Einfluss (pe.304, Nachricht).
-- **Krise:** Ein Konzern, der sein Habitat in einer Krise verliert, baut kein neues mehr.
+- **Krise:** Ein Konzern, der sein Habitat in einer Krise verliert, darf später wieder eins bauen (ab 0.31.3 wieder wie zuvor).
 - **Kredite an aufgelöste Konzerne** werden abgeschrieben (bei dir 2306, die bisher in leere Konzernplätze zurückgezahlt wurden).
 - **Dyson-Schwarm und Arc Furnace der Konzerne werden wie in Vanilla gebaut:** Eine Baustelle der Holdings mit Vanilla-Bauzeit (Schwarm drei Jahre, Ofen ein Jahr) und unserer Megastruktur-Baugeschwindigkeit. Danach entsteht der echte Schwarm bzw. Ofen; der Ofen verteilt dann wie bisher Vorkommen und Stationen (pe.305). Löst sich der Konzern während des Baus auf, bekommen wir die Baustelle und am Ende einen normalen Schwarm bzw. Ofen.
 - **Log:** Die Habitat-Zeilen im game.log zeigen jetzt die Werte (Klammern in Skript-Effekten müssen maskiert sein).

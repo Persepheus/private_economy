@@ -11975,7 +11975,7 @@ pe_chab_quarterly = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c1_hab value = 2 } check_variable = { which = pe_c1_cash value < 0 } }
-		set_variable = { which = pe_c1_hab value = 3 }
+		set_variable = { which = pe_c1_hab value = 0 }
 	}
 	if = {
 		limit = { check_variable = { which = pe_c2_hab value = 1 } NOT = { any_planet_within_border = { has_planet_flag = pe_chab_site is_variable_set = pe_chab_k check_variable = { which = pe_chab_k value = 2 } } } }
@@ -11983,7 +11983,7 @@ pe_chab_quarterly = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c2_hab value = 2 } check_variable = { which = pe_c2_cash value < 0 } }
-		set_variable = { which = pe_c2_hab value = 3 }
+		set_variable = { which = pe_c2_hab value = 0 }
 	}
 	if = {
 		limit = { check_variable = { which = pe_c3_hab value = 1 } NOT = { any_planet_within_border = { has_planet_flag = pe_chab_site is_variable_set = pe_chab_k check_variable = { which = pe_chab_k value = 3 } } } }
@@ -11991,7 +11991,7 @@ pe_chab_quarterly = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c3_hab value = 2 } check_variable = { which = pe_c3_cash value < 0 } }
-		set_variable = { which = pe_c3_hab value = 3 }
+		set_variable = { which = pe_c3_hab value = 0 }
 	}
 	if = {
 		limit = { check_variable = { which = pe_c4_hab value = 1 } NOT = { any_planet_within_border = { has_planet_flag = pe_chab_site is_variable_set = pe_chab_k check_variable = { which = pe_chab_k value = 4 } } } }
@@ -11999,7 +11999,7 @@ pe_chab_quarterly = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c4_hab value = 2 } check_variable = { which = pe_c4_cash value < 0 } }
-		set_variable = { which = pe_c4_hab value = 3 }
+		set_variable = { which = pe_c4_hab value = 0 }
 	}
 	if = {
 		limit = { check_variable = { which = pe_c5_hab value = 1 } NOT = { any_planet_within_border = { has_planet_flag = pe_chab_site is_variable_set = pe_chab_k check_variable = { which = pe_chab_k value = 5 } } } }
@@ -12007,7 +12007,7 @@ pe_chab_quarterly = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c5_hab value = 2 } check_variable = { which = pe_c5_cash value < 0 } }
-		set_variable = { which = pe_c5_hab value = 3 }
+		set_variable = { which = pe_c5_hab value = 0 }
 	}
 	if = {
 		limit = { check_variable = { which = pe_c6_hab value = 1 } NOT = { any_planet_within_border = { has_planet_flag = pe_chab_site is_variable_set = pe_chab_k check_variable = { which = pe_chab_k value = 6 } } } }
@@ -12015,7 +12015,7 @@ pe_chab_quarterly = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c6_hab value = 2 } check_variable = { which = pe_c6_cash value < 0 } }
-		set_variable = { which = pe_c6_hab value = 3 }
+		set_variable = { which = pe_c6_hab value = 0 }
 	}
 	if = {
 		limit = { check_variable = { which = pe_c7_hab value = 1 } NOT = { any_planet_within_border = { has_planet_flag = pe_chab_site is_variable_set = pe_chab_k check_variable = { which = pe_chab_k value = 7 } } } }
@@ -12023,7 +12023,7 @@ pe_chab_quarterly = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c7_hab value = 2 } check_variable = { which = pe_c7_cash value < 0 } }
-		set_variable = { which = pe_c7_hab value = 3 }
+		set_variable = { which = pe_c7_hab value = 0 }
 	}
 	if = {
 		limit = { check_variable = { which = pe_c8_hab value = 1 } NOT = { any_planet_within_border = { has_planet_flag = pe_chab_site is_variable_set = pe_chab_k check_variable = { which = pe_chab_k value = 8 } } } }
@@ -12031,7 +12031,7 @@ pe_chab_quarterly = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_c8_hab value = 2 } check_variable = { which = pe_c8_cash value < 0 } }
-		set_variable = { which = pe_c8_hab value = 3 }
+		set_variable = { which = pe_c8_hab value = 0 }
 	}
 	if = {
 		limit = {

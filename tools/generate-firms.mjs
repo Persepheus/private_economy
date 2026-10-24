@@ -2699,8 +2699,8 @@ ${nameChain(`root.${C(k, 'name')}`, id => `event_target:pe_occ_hq = { if = { lim
 }
 `;
 // --- Corporate habitat ----------------------------------------------------------------------
-// One per corporation (pe_c<slot>_hab: 0 none, 1 building, 2 built, 3 lost in a crisis: no new
-// one) and one per system. Our
+// One per corporation (pe_c<slot>_hab: 0 none, 1 building, 2 built) and one per system. A
+// corporation without one (lost in a crisis, by conquest, never built) may build a new one. Our
 // Private Holdings build it for the corporation (megastructure pe_corp_habitat_complex,
 // common/megastructures/pe_megastructures.txt: vanilla build time at our megastructure build
 // speed). The corporation pays the alloys (1500 = CHAB_COST cash), we pay the influence
@@ -2766,7 +2766,7 @@ ${CORPS.map(k => `	if = {
 	}
 	if = {
 		limit = { check_variable = { which = ${C(k, 'hab')} value = 2 } check_variable = { which = ${C(k, 'cash')} value < 0 } }
-		set_variable = { which = ${C(k, 'hab')} value = 3 }
+		set_variable = { which = ${C(k, 'hab')} value = 0 }
 	}`).join('\n')}
 	if = {
 		limit = {
