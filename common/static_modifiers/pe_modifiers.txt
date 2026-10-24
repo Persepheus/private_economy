@@ -234,4 +234,7 @@ pe_proto_sprawl_pops = {
 pe_proto_sprawl_colonies = {
 	empire_size_colonies_mult = -1
 }
+pe_proto_sprawl_total = {
+	empire_size_mult = -1
+}
 

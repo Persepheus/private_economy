@@ -91,3 +91,5 @@
  pe_proto_sprawl_pops_desc:0 "Prototyp: keine Ausdehnung durch die Pops dieses Planeten?"
  pe_proto_sprawl_colonies:0 "Ausdehnungs-Test: Kolonie"
  pe_proto_sprawl_colonies_desc:0 "Prototyp: keine Ausdehnung für diese Kolonie?"
+ pe_proto_sprawl_total:0 "Ausdehnungs-Test: Alles"
+ pe_proto_sprawl_total_desc:0 "Prototyp: gar keine Ausdehnung durch diesen Planeten?"

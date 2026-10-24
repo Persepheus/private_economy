@@ -11,7 +11,8 @@ Ziel ist dein erstes Habitat, sonst die Hauptwelt. Die Modifikatoren erscheinen 
 - `event pe.28`: `empire_size_districts_mult = -1` (Distrikte)
 - `event pe.29`: `empire_size_pops_mult = -1` (Pops)
 - `event pe.30`: `empire_size_colonies_mult = -1` (Kolonie)
-- `event pe.31`: alle drei wieder entfernen
+- `event pe.32`: `empire_size_mult = -1` (alles, Reichs-Modifikator direkt auf der Kolonie)
+- `event pe.31`: alle Test-Modifikatoren wieder entfernen
 
 ## Ablauf
 1. Speichern. Den Tooltip der Ausdehnung (oben, Empire Sprawl) öffnen und die Werte für Distrikte, Pops und Kolonien sowie die Gesamtzahl notieren.
@@ -20,8 +21,11 @@ Ziel ist dein erstes Habitat, sonst die Hauptwelt. Die Modifikatoren erscheinen 
    - Fallen nur die Pops des Habitats heraus, ist es gut.
    - Fallen die Pops des ganzen Reichs heraus, wirkt der Modifikator reichsweit. Dann sofort `event pe.31`.
 4. `event pe.30`, einen Tag laufen lassen, vergleichen. Dieselbe Frage für die Kolonie.
-5. `event pe.31`. Ist alles wieder wie in Schritt 1?
-6. Das game.log zeigt die Ausdehnung vor und nach jedem Schritt (`pe.28` bis `pe.31`). Die Engine zählt eventuell erst am nächsten Tag neu, daher zählt vor allem der Tooltip.
+5. `event pe.31`, dann `event pe.32`, einen Tag laufen lassen, vergleichen.
+   - Fällt nur die Ausdehnung des Habitats weg, ist es gut.
+   - Sinkt die Ausdehnung des ganzen Reichs auf 0, wirkt der Modifikator reichsweit. Dann sofort `event pe.31`.
+6. `event pe.31`. Ist alles wieder wie in Schritt 1?
+7. Das game.log zeigt die Ausdehnung vor und nach jedem Schritt (`pe.28` bis `pe.31`). Die Engine zählt eventuell erst am nächsten Tag neu, daher zählt vor allem der Tooltip.
 
 ## Mögliche Ergebnisse
 - **Alle drei wirken nur auf den Planeten:** Das Konzern-Habitat bekommt alle drei als Modifikator, die Ausdehnung ist exakt 0.
