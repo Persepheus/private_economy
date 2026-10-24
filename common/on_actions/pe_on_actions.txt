@@ -36,3 +36,25 @@ on_ground_combat_started = {
 	}
 }
 
+# Empire size modifiers may change: recount the private economy's empire size (pe.36).
+on_ascension_perk_picked = {
+	events = {
+		pe.36
+	}
+}
+on_tradition_picked = {
+	events = {
+		pe.36
+	}
+}
+on_policy_changed = {
+	events = {
+		pe.36
+	}
+}
+on_tech_increased = {
+	events = {
+		pe.36
+	}
+}
+

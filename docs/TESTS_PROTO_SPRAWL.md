@@ -55,3 +55,12 @@ Keiner der Planeten-Modifikatoren nimmt die Ausdehnung der Kolonie heraus, auch 
 - Ob die Engine `empire_size_add` vor oder nach `empire_size_mult` anrechnet. Ohne einen solchen Modifikator in deinem Reich ist das egal.
 - Ob der Wert von `empire_size_districts_mult` auf dem Planeten den des Reichs schon enthält. Das Log von pe.35 nennt beide Werte zum Vergleich.
 
+## 0.30.2: ständig aktuell
+- **Jeden Monat neu berechnet:** Der Abgleich läuft jetzt jeden Monat statt jedes Quartal.
+- **Sofort neu berechnet** nach einem neuen Aufstiegsvorteil, einer Tradition, einer Richtlinie oder einer Technologie (pe.36). Ein Vorteil wie Imperial Prerogative (Kolonien −25 % Ausdehnung) ändert den Abzug des Konzern-Habitats also sofort: −15 statt −20.
+- **Ohne eigenes Ereignis**, etwa bei Bürgerrechten, einer neuen Aufstiegsstufe oder einer Planeten-Designation, wird es spätestens am nächsten Monatswechsel angepasst.
+
+### Prüfen
+1. `event pe.33`, einen Tag warten, dann einen Aufstiegsvorteil wie Imperial Prerogative nehmen (oder per Konsole): Passt sich „Konzern-Habitate“ sofort an?
+2. `event pe.34` zum Zurücksetzen.
+

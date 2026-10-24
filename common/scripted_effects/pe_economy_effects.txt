@@ -176,7 +176,6 @@ pe_quarterly = {
 	set_variable = { which = pe_pool_income value = 0 }
 	set_variable = { which = pe_profit_due value = 0 }
 	pe_savings = yes
-	pe_sprawl_step = yes
 	pe_census = yes
 	pe_market = yes
 	pe_job_values = yes
@@ -2111,7 +2110,8 @@ pe_state_district = {
 }
 
 # --- Empire size ---------------------------------------------------------------------------
-# Country scope, quarterly: the empire size of the private economy, as two country modifiers
+# Country scope, monthly (pe.100) and right after a new perk, tradition, policy or technology
+# (pe.36): the empire size of the private economy, as two country modifiers
 # with a multiplier (pe_sprawl_firms +0.5, pe_sprawl_corp_hab -20 each):
 # - every firm counts like the district whose slot it holds: 1 + the planet's
 #   empire_size_districts_mult (pe_spr_d), times its planetary ascension (vanilla -5% per

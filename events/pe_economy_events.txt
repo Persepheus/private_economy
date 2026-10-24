@@ -17,6 +17,7 @@ country_event = {
 		pe_init = yes
 		pe_monthly_sites = yes
 		pe_deal_month = yes
+		pe_sprawl_step = yes
 		pe_corp_defence = yes
 		pe_bombard_step = yes
 		pe_occupation_step = yes
@@ -56,3 +57,18 @@ country_event = {
 		remove_country_flag = pe_offer_pending
 	}
 }
+
+# A new ascension perk, tradition, policy or technology may change the empire size modifiers:
+# the empire size of the private economy is recounted at once (pe_sprawl_step).
+country_event = {
+	id = pe.36
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		is_country_type = default
+		is_gestalt = no
+		OR = { has_modifier = pe_sprawl_firms has_modifier = pe_sprawl_corp_hab }
+	}
+	immediate = { pe_sprawl_step = yes }
+}
+
