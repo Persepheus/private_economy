@@ -770,7 +770,7 @@ country_event = {
 				root = { set_variable = { which = pe_proto_cit value = 1 } }
 			}
 		}
-		log = "private_economy: pe.310 deep space citadel of the holdings flagged: \[Root.pe_proto_cit]"
+		log = "private_economy: pe.310 deep space citadel of the holdings flagged: [Root.pe_proto_cit]"
 	}
 }
 
@@ -789,7 +789,7 @@ country_event = {
 				root = { set_variable = { which = pe_proto_cit value = 1 } }
 			}
 		}
-		log = "private_economy: pe.311 citadel of the holdings leased (set_controller on its fleet): \[Root.pe_proto_cit]"
+		log = "private_economy: pe.311 citadel of the holdings leased (set_controller on its fleet): [Root.pe_proto_cit]"
 	}
 }
 
@@ -818,6 +818,6 @@ country_event = {
 				root = { set_variable = { which = pe_proto_cit value = 1 } }
 			}
 		}
-		log = "private_economy: pe.312 our own citadel with the upkeep modifier: \[Root.pe_proto_cit] (needs tech_deep_space_citadel)"
+		log = "private_economy: pe.312 our own citadel with the upkeep modifier: [Root.pe_proto_cit] (needs tech_deep_space_citadel)"
 	}
 }
