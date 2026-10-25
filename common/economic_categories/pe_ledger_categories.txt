@@ -15,3 +15,6 @@ pe_corp_production = {
 pe_supply_deal = {
 	use_for_ai_budget = no
 }
+pe_auto_refund = {
+	use_for_ai_budget = no
+}

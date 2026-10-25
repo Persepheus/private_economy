@@ -10,7 +10,7 @@
 #   event pe.9   try a firm relocation now (stuck planet, ignores the yearly limit)
 #   event pe.10  fire a patron event now
 #   event pe.11  fire a labour event now (a planet with empty private worker jobs)
-#   event pe.309 private automation cover now (country modifier, old planet modifiers removed)
+#   event pe.309 private automation refund now (budget line; old cover modifiers removed)
 #   event pe.12  offer a supply deal now, also without a shortage (a private firm must make the good)
 #   event pe.13  the Command Economy now: every firm becomes a state district
 #   event pe.14  found a corporation now (needs an independent stage-3 firm; run pe.7 first)
@@ -439,8 +439,8 @@ country_event = {
 }
 
 
-# Debug: the automation cover now. The planet modifiers of 0.34.3 go; the private sum is taken
-# from the last quarter (pe_auto_pp on the planets) and the country modifier is set at once.
+# Debug: the automation refund now. The cover modifiers of 0.34.3 / 0.35.1 go; the private sum is
+# taken from the last quarter (pe_auto_pp on the planets) and the refund line is set at once.
 country_event = {
 	id = pe.309
 	hide_window = yes

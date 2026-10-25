@@ -37,6 +37,15 @@ Ein laufendes Spiel kann weiterlaufen. Die Umstellung passiert beim nächsten Qu
   - Im game.log: „automation cover: private P energy a month, budget line E, cover now M %“.
 - **Tooltip „Privatwirtschaft“:** Die Zufriedenheit der Sozialleistungen wird jetzt in ganzen Prozent angezeigt (vorher ein Fehler im error.log).
 
+## 0.35.2: Private Automatisierung als Erstattung
+- **Woran es lag:** Auch der allgemeine Schlüssel wirkte nicht. Im Save stand der Reichsmodifikator auf ×95, die Zeile blieb bei 239. Den Unterhalt automatisierter Privatjobs senkt offenbar kein Modifikator.
+- **Jetzt:** Die Firmen erstatten die Energie als **eigene Einnahmezeile** „Private Automatisierung (Erstattung der Firmen)“, über ein Ledger-Vorkommen auf der Hauptwelt, wie Gewinne und Ersparnisse.
+  - Die Höhe ist die Privat-Summe (4 Energie je automatisiertem Privatjob), höchstens die Zeile selbst.
+  - Die Firmen tragen die Kosten weiter aus ihrem Kapital. Die alten Modifikatoren verschwinden.
+- **Prüfen:** `event pe.309`, einen Tag warten.
+  - Im Energie-Tooltip steht unter den Einnahmen „Private Automatisierung (Erstattung der Firmen)“ in Höhe der Zeile „Automatisierte Arbeitskraft“ (im Save etwa 239).
+  - Im game.log: „automation refund: private P energy a month of the budget line E“.
+
 ## Prüfen
 1. Nach einem Quartal:
    - Planeten mit Konzernfirmen haben „Privatwirtschaft“ mit den Zeilen im Tooltip.

@@ -2298,41 +2298,23 @@ pe_sprawl_step = {
 
 # Country scope, quarterly (after the planets): the energy upkeep the engine charges for the
 # automated jobs of private automation (pe_auto_p, per month: 4 per automated job, summed by
-# pe_auto_book) is carried by the firms, so a country modifier takes that share off our budget
-# line "Automated Workforce" (pe_auto_cover: planet_automated_jobs_upkeep_mult, the key vanilla
-# uses, -1% per point, pe_auto_m). The line without it: observed / (1 - pe_auto_m %). Up to
-# 100% when no colony has vanilla automation, otherwise at most 99% (so the line stays
-# measurable).
+# pe_auto_book) is carried by the firms (pe_aup in their accounts). They pay it back to us as a
+# budget income line (deposit d_pe_ledger_auto on the capital, category pe_auto_refund, energy
+# in bits la). No modifier lowers that upkeep (0.34.1-0.35.1 tried three; the old ones go).
 pe_auto_cover_step = {
-	if = { limit = { NOT = { is_variable_set = pe_auto_m } } set_variable = { which = pe_auto_m value = 0 } }
+	if = { limit = { has_modifier = pe_auto_cover } remove_modifier = pe_auto_cover }
 	export_trigger_value_to_variable = { trigger = resource_expenses_compare parameters = { resource = energy category = planet_automated_jobs } variable = pe_auto_e }
 	if = { limit = { NOT = { is_variable_set = pe_auto_e } } set_variable = { which = pe_auto_e value = 0 } }
-	set_variable = { which = pe_auto_max value = 100 }
-	if = {
-		limit = { any_owned_colony = { OR = { check_modifier_value = { modifier = job_artisan_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_biologist_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_bureaucrat_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_coordinator_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_engineer_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_entertainer_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_fabricator_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_farmer_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_foundry_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_healthcare_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_miner_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_physicist_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_replicator_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_roboticist_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_soldier_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_technician_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_trader_automated_workforce_mult value > 0 } } } }
-		set_variable = { which = pe_auto_max value = 99 }
+	# Never more than the line itself.
+	if = { limit = { check_variable = { which = pe_auto_p value > pe_auto_e } } set_variable = { which = pe_auto_p value = pe_auto_e } }
+	set_variable = { which = pe_lv value = pe_auto_p }
+	capital_scope = {
+		pe_ledger_bits = { V = la }
+		if = {
+			limit = { root = { check_variable = { which = pe_auto_p value >= 0.5 } } }
+			if = { limit = { NOT = { has_deposit = d_pe_ledger_auto } } add_deposit = d_pe_ledger_auto }
+		}
+		else_if = { limit = { has_deposit = d_pe_ledger_auto } remove_deposit = d_pe_ledger_auto }
 	}
-	if = {
-		limit = { check_variable = { which = pe_auto_p value <= 0 } }
-		set_variable = { which = pe_auto_m value = 0 }
-	}
-	else_if = {
-		limit = { check_variable = { which = pe_auto_e value > 0.5 } }
-		set_variable = { which = pe_tmp value = 100 }
-		subtract_variable = { which = pe_tmp value = pe_auto_m }
-		divide_variable = { which = pe_tmp value = 100 }
-		if = { limit = { check_variable = { which = pe_tmp value < 0.01 } } set_variable = { which = pe_tmp value = 0.01 } }
-		set_variable = { which = pe_auto_b value = pe_auto_e }
-		divide_variable = { which = pe_auto_b value = pe_tmp }
-		set_variable = { which = pe_auto_m value = pe_auto_p }
-		divide_variable = { which = pe_auto_m value = pe_auto_b }
-		multiply_variable = { which = pe_auto_m value = 100 }
-		round_variable = pe_auto_m
-	}
-	# (Line at 0 with the modifier: all of it is private; the share stays.)
-	if = { limit = { check_variable = { which = pe_auto_m value > pe_auto_max } } set_variable = { which = pe_auto_m value = pe_auto_max } }
-	if = { limit = { check_variable = { which = pe_auto_m value < 0 } } set_variable = { which = pe_auto_m value = 0 } }
-	if = { limit = { has_modifier = pe_auto_cover } remove_modifier = pe_auto_cover }
-	if = { limit = { check_variable = { which = pe_auto_m value > 0 } } add_modifier = { modifier = pe_auto_cover days = -1 multiplier = pe_auto_m } }
-	log = "private_economy: automation cover: private \\[Root.pe_auto_p] energy a month, budget line \\[Root.pe_auto_e], cover now \\[Root.pe_auto_m] %"
+	log = "private_economy: automation refund: private \\[Root.pe_auto_p] energy a month of the budget line \\[Root.pe_auto_e]"
 }

@@ -446,6 +446,9 @@ pe_corp_production = {
 pe_supply_deal = {
 	use_for_ai_budget = no
 }
+pe_auto_refund = {
+	use_for_ai_budget = no
+}
 `);
 // A supply deal (pe.260): a private firm delivers good X every month for two years and takes
 // good Y; on the capital, amounts as bits (pe_dlxa_b<i>, pe_dlya_b<i>), goods pe_dlx / pe_dly.
@@ -474,7 +477,7 @@ ${DEAL_RES.flatMap((r, ri) => LEDGER_BITS.map((b, i) => `		upkeep = {
 `;
 write('common/deposits/pe_ledger_deposits.txt', header + `# Ledgers of the private economy: what the state pays each month, as trade upkeep (see
 # pe_ledgers), and the supply deal with a private firm. No district slot.
-` + dealDeposit + [['d_pe_ledger_profit', 'pe_private_profits', 'lp', 'upkeep'], ['d_pe_ledger_savings', 'pe_private_savings', 'ls', 'upkeep'], ['d_pe_ledger_dividend', 'pe_private_dividends', 'ld', 'produces']].map(([key, cat, v, kind]) => `
+` + dealDeposit + [['d_pe_ledger_profit', 'pe_private_profits', 'lp', 'upkeep', 'trade'], ['d_pe_ledger_savings', 'pe_private_savings', 'ls', 'upkeep', 'trade'], ['d_pe_ledger_dividend', 'pe_private_dividends', 'ld', 'produces', 'trade'], ['d_pe_ledger_auto', 'pe_auto_refund', 'la', 'produces', 'energy']].map(([key, cat, v, kind, res]) => `
 ${key} = {
 	icon = d_tradestation_interior
 	is_for_colonizable = yes
@@ -487,7 +490,7 @@ ${key} = {
 		category = ${cat}
 ${LEDGER_BITS.map((b, i) => `		${kind} = {
 			trigger = { planet = { check_variable = { which = pe_${v}_b${i} value = 1 } } }
-			trade = ${b}
+			${res} = ${b}
 		}`).join('\n')}
 	}
 }
@@ -1297,6 +1300,8 @@ loc.english.push(' pe_msg_site_cancel:0 "Investors have given up a construction 
 loc.german.push(' pe_msg_site_cancel:0 "Investoren haben eine Baustelle auf $PLANET$ aufgegeben: Zwei Jahre lang fanden sich keine Arbeiter für die neue Firma. Sie haben ihre Anzahlung zurückbekommen."');
 loc.english.push(' pe_private_dividends:0 "Dividends"', ' d_pe_ledger_dividend:0 "State Shareholdings"', ' d_pe_ledger_dividend_desc:0 "Shares the state bought in private corporations; they pay dividends every month."');
 loc.german.push(' pe_private_dividends:0 "Dividenden"', ' d_pe_ledger_dividend:0 "Staatliche Aktienbeteiligungen"', ' d_pe_ledger_dividend_desc:0 "Aktien, die der Staat an Privatkonzernen hält; sie zahlen monatlich Dividende."');
+loc.english.push(' pe_auto_refund:0 "Private Automation (Firms\' Refund)"', ' d_pe_ledger_auto:0 "Refund for Private Automation"', ' d_pe_ledger_auto_desc:0 "The private firms pay the energy the automation of their jobs costs us (the line Automated Workforce) back to us every month, from their own capital."');
+loc.german.push(' pe_auto_refund:0 "Private Automatisierung (Erstattung der Firmen)"', ' d_pe_ledger_auto:0 "Erstattung Private Automatisierung"', ' d_pe_ledger_auto_desc:0 "Die Privatfirmen erstatten uns jeden Monat die Energie, die die Automatisierung ihrer Jobs uns kostet (Zeile Automatisierte Arbeitskraft), aus ihrem eigenen Kapital."');
 loc.english.push(' pe_private_profits:0 "Profit Payouts to Private Firms"', ' pe_private_savings:0 "Private Savings"',
   ' d_pe_ledger_profit:0 "Profit Payout to Private Firms"', ' d_pe_ledger_profit_desc:0 "§HAn expense of the state.§! The private firms on this planet deliver everything they produce to the empire, just like state jobs. In return the state pays them their profit share every month, in trade: a part of the value their jobs create, by economic order (Guided 7.5%, Mixed 10%, Free Market 12.5%, Laissez-faire 17.5%), minus their running costs. With it the firms grow and new ones are founded.\\n\\nProfits and savings together cost at most 40% of the gross trade income; what the state does not pay, the firms do not get either."',
   ' d_pe_ledger_savings:0 "Private Savings"', ' d_pe_ledger_savings_desc:0 "§HAn expense of the state.§! Every month a part of our trade income flows into the investor pool as private savings, by economic order (Guided 5%, Mixed 10%, Free Market 15%, Laissez-faire 20%). From the pool investors found new firms and buy state districts."');

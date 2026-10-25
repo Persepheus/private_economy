@@ -573,3 +573,56 @@ d_pe_ledger_dividend = {
 		}
 	}
 }
+
+d_pe_ledger_auto = {
+	icon = d_tradestation_interior
+	is_for_colonizable = yes
+	category = pe_deposit_cat_ledger
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = pe_auto_refund
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_la_b0 value = 1 } } }
+			energy = 0.5
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_la_b1 value = 1 } } }
+			energy = 1
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_la_b2 value = 1 } } }
+			energy = 2
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_la_b3 value = 1 } } }
+			energy = 4
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_la_b4 value = 1 } } }
+			energy = 8
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_la_b5 value = 1 } } }
+			energy = 16
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_la_b6 value = 1 } } }
+			energy = 32
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_la_b7 value = 1 } } }
+			energy = 64
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_la_b8 value = 1 } } }
+			energy = 128
+		}
+		produces = {
+			trigger = { planet = { check_variable = { which = pe_la_b9 value = 1 } } }
+			energy = 256
+		}
+	}
+}
