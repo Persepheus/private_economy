@@ -31,7 +31,8 @@
 #                                           pe_holdings_surplus, pe_corp_fleets, pe_corp_charter,
 #                                           pe_corp_convoy, pe_corp_salvage, pe_corp_swarm,
 #                                           pe_corp_furnace, pe_corp_auto_msg,
-#                                           pe_chab_quarterly, pe_corp_social, pe_dc_step (3)
+#                                           pe_chab_quarterly, pe_corp_social, pe_dc_step,
+#                                           pe_citadel_step (3, pe_citadel_effects.txt)
 #                                        -> pe_corp_free, pe_corp_msg, pe_corp_found_new,
 #                                           pe_corp_station_pick, pe_ledger_bits,
 #                                           pe_chab_pick, pe_chab_exec (4)
@@ -1767,6 +1768,7 @@ pe_corp_step = {
 	pe_chab_quarterly = yes
 	pe_corp_social = yes
 	pe_dc_step = yes
+	pe_citadel_step = yes
 	pe_corp_auto_msg = yes
 	pe_ruins_step = yes
 	change_variable = { which = pe_hq4 value = 1 }

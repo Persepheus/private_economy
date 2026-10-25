@@ -1,0 +1,310 @@
+# Corporate deep space citadels (pe.315, common/megastructures/pe_megastructures.txt).
+# A rich corporation builds a deep space citadel in its important systems: headquarters,
+# corporate habitat, Dyson swarm or arc furnace, a system with two of its stations (in this
+# order), at most one per system and within the vanilla limit per system. It belongs to our
+# Private Holdings (the state cannot upgrade or dismantle it); the holdings join our wars, so it
+# fights for us. Only with our technology Deep Space Citadel (the holdings get our technologies).
+# Build: a site of the holdings, built up with the vanilla build time (3 years); then the vanilla
+# citadel appears (deep_space_citadel_0). Level II / III when the corporation can afford it
+# (vanilla build time), defence platforms while it can afford them (4 per level). Costs from
+# its cash (alloys x4, unity x3: 11500 / 17500 / 35000), never more than a third of it; the
+# upkeep (level I 10 energy 5 alloys, II 15 / 10, III 30 / 20, platforms 2 energy each) goes to
+# the holdings, the corporation pays its value. A citadel whose corporation is gone or whose system
+# is no longer ours goes to the richest other corporation, otherwise it is decommissioned.
+# Citadel fleet (holdings): flag pe_ccit, pe_ccit_k slot, pe_ccit_nm name, pe_ccit_l level,
+# pe_ccit_ul months left of an upgrade, pe_ccit_p platforms, pe_ccit_new (just built).
+# Call depths: pe_citadel_step 3 (pe_corp_step) -> pe_cit_exec, pe_corp_msg 4;
+# pe_cit_exec 1 (pe.315); pe_cit_war 1 (pe.100).
+
+# Country scope, quarterly.
+pe_citadel_step = {
+	if = {
+		limit = { exists = event_target:pe_hold }
+		# The heir of an orphaned citadel: the richest corporation.
+		set_variable = { which = pe_cit_heir value = 0 }
+		set_variable = { which = pe_cit_hbest value = -1000000 }
+		if = { limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value > pe_cit_hbest } } set_variable = { which = pe_cit_heir value = 1 } set_variable = { which = pe_cit_hbest value = pe_c1_cash } set_variable = { which = pe_cit_hnm value = pe_c1_name } }
+		if = { limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value > pe_cit_hbest } } set_variable = { which = pe_cit_heir value = 2 } set_variable = { which = pe_cit_hbest value = pe_c2_cash } set_variable = { which = pe_cit_hnm value = pe_c2_name } }
+		if = { limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value > pe_cit_hbest } } set_variable = { which = pe_cit_heir value = 3 } set_variable = { which = pe_cit_hbest value = pe_c3_cash } set_variable = { which = pe_cit_hnm value = pe_c3_name } }
+		if = { limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value > pe_cit_hbest } } set_variable = { which = pe_cit_heir value = 4 } set_variable = { which = pe_cit_hbest value = pe_c4_cash } set_variable = { which = pe_cit_hnm value = pe_c4_name } }
+		if = { limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value > pe_cit_hbest } } set_variable = { which = pe_cit_heir value = 5 } set_variable = { which = pe_cit_hbest value = pe_c5_cash } set_variable = { which = pe_cit_hnm value = pe_c5_name } }
+		if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value > pe_cit_hbest } } set_variable = { which = pe_cit_heir value = 6 } set_variable = { which = pe_cit_hbest value = pe_c6_cash } set_variable = { which = pe_cit_hnm value = pe_c6_name } }
+		if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value > pe_cit_hbest } } set_variable = { which = pe_cit_heir value = 7 } set_variable = { which = pe_cit_hbest value = pe_c7_cash } set_variable = { which = pe_cit_hnm value = pe_c7_name } }
+		if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_cit_hbest } } set_variable = { which = pe_cit_heir value = 8 } set_variable = { which = pe_cit_hbest value = pe_c8_cash } set_variable = { which = pe_cit_hnm value = pe_c8_name } }
+		set_variable = { which = pe_c1_citn value = 0 }
+		set_variable = { which = pe_c2_citn value = 0 }
+		set_variable = { which = pe_c3_citn value = 0 }
+		set_variable = { which = pe_c4_citn value = 0 }
+		set_variable = { which = pe_c5_citn value = 0 }
+		set_variable = { which = pe_c6_citn value = 0 }
+		set_variable = { which = pe_c7_citn value = 0 }
+		set_variable = { which = pe_c8_citn value = 0 }
+		set_variable = { which = pe_cit_ge value = 0 }
+		set_variable = { which = pe_cit_ga value = 0 }
+		event_target:pe_hold = {
+			every_owned_fleet = {
+				limit = { has_fleet_flag = pe_ccit }
+				if = { limit = { NOT = { is_variable_set = pe_ccit_l } } set_variable = { which = pe_ccit_l value = 1 } set_variable = { which = pe_ccit_ul value = 0 } set_variable = { which = pe_ccit_p value = 0 } }
+				# Its corporation still there?
+				set_variable = { which = pe_ccit_ok value = 0 }
+				if = { limit = { check_variable = { which = pe_ccit_k value = 1 } root = { check_variable = { which = pe_c1_on value = 1 } } check_variable = { which = pe_ccit_nm value = root.pe_c1_name } } set_variable = { which = pe_ccit_ok value = 1 } }
+				if = { limit = { check_variable = { which = pe_ccit_k value = 2 } root = { check_variable = { which = pe_c2_on value = 1 } } check_variable = { which = pe_ccit_nm value = root.pe_c2_name } } set_variable = { which = pe_ccit_ok value = 1 } }
+				if = { limit = { check_variable = { which = pe_ccit_k value = 3 } root = { check_variable = { which = pe_c3_on value = 1 } } check_variable = { which = pe_ccit_nm value = root.pe_c3_name } } set_variable = { which = pe_ccit_ok value = 1 } }
+				if = { limit = { check_variable = { which = pe_ccit_k value = 4 } root = { check_variable = { which = pe_c4_on value = 1 } } check_variable = { which = pe_ccit_nm value = root.pe_c4_name } } set_variable = { which = pe_ccit_ok value = 1 } }
+				if = { limit = { check_variable = { which = pe_ccit_k value = 5 } root = { check_variable = { which = pe_c5_on value = 1 } } check_variable = { which = pe_ccit_nm value = root.pe_c5_name } } set_variable = { which = pe_ccit_ok value = 1 } }
+				if = { limit = { check_variable = { which = pe_ccit_k value = 6 } root = { check_variable = { which = pe_c6_on value = 1 } } check_variable = { which = pe_ccit_nm value = root.pe_c6_name } } set_variable = { which = pe_ccit_ok value = 1 } }
+				if = { limit = { check_variable = { which = pe_ccit_k value = 7 } root = { check_variable = { which = pe_c7_on value = 1 } } check_variable = { which = pe_ccit_nm value = root.pe_c7_name } } set_variable = { which = pe_ccit_ok value = 1 } }
+				if = { limit = { check_variable = { which = pe_ccit_k value = 8 } root = { check_variable = { which = pe_c8_on value = 1 } } check_variable = { which = pe_ccit_nm value = root.pe_c8_name } } set_variable = { which = pe_ccit_ok value = 1 } }
+				if = {
+					limit = { check_variable = { which = pe_ccit_ok value = 1 } solar_system = { exists = owner owner = { is_same_value = root } } }
+				}
+				# The system is no longer ours, or the corporation is gone: the heir, or nobody.
+				else_if = {
+					limit = { root = { check_variable = { which = pe_cit_heir value > 0 } } solar_system = { exists = owner owner = { is_same_value = root } } }
+					set_variable = { which = pe_ccit_k value = root.pe_cit_heir }
+					set_variable = { which = pe_ccit_nm value = root.pe_cit_hnm }
+					set_variable = { which = pe_ccit_ok value = 1 }
+					if = {
+						limit = { root = { is_ai = no } }
+						solar_system = { star = { save_event_target_as = pe_msg_planet } }
+						root = { set_variable = { which = pe_msg_name value = pe_cit_hnm } pe_corp_msg = { KEY = pe_msg_cit_heir } }
+					}
+				}
+				else = {
+					if = {
+						limit = { root = { is_ai = no } }
+						solar_system = { star = { save_event_target_as = pe_msg_planet } }
+						root = { create_message = { type = pe_private_economy localization = pe_msg_cit_lost days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+					}
+					set_fleet_flag = pe_ccit_kill
+				}
+				if = {
+					limit = { check_variable = { which = pe_ccit_ok value = 1 } }
+					# Just built: message.
+					if = {
+						limit = { is_variable_set = pe_ccit_new check_variable = { which = pe_ccit_new value = 1 } }
+						set_variable = { which = pe_ccit_new value = 0 }
+						if = {
+							limit = { root = { is_ai = no } }
+							solar_system = { star = { save_event_target_as = pe_msg_planet } }
+							root = { set_variable = { which = pe_msg_name value = prev.pe_ccit_nm } pe_corp_msg = { KEY = pe_msg_cit_done } }
+						}
+					}
+					# Upkeep for the next three months: to the holdings; the corporation pays its value.
+					if = { limit = { check_variable = { which = pe_ccit_l value = 1 } } set_variable = { which = pe_ccit_e value = 10 } set_variable = { which = pe_ccit_a value = 5 } }
+					else_if = { limit = { check_variable = { which = pe_ccit_l value = 2 } } set_variable = { which = pe_ccit_e value = 15 } set_variable = { which = pe_ccit_a value = 10 } }
+					else_if = { limit = { check_variable = { which = pe_ccit_l value = 3 } } set_variable = { which = pe_ccit_e value = 30 } set_variable = { which = pe_ccit_a value = 20 } }
+					set_variable = { which = pe_tmp value = pe_ccit_p }
+					multiply_variable = { which = pe_tmp value = 2 }
+					change_variable = { which = pe_ccit_e value = pe_tmp }
+					multiply_variable = { which = pe_ccit_e value = 3 }
+					multiply_variable = { which = pe_ccit_a value = 3 }
+					root = { change_variable = { which = pe_cit_ge value = prev.pe_ccit_e } change_variable = { which = pe_cit_ga value = prev.pe_ccit_a } }
+					set_variable = { which = pe_ccit_v value = pe_ccit_a }
+					multiply_variable = { which = pe_ccit_v value = 4 }
+					change_variable = { which = pe_ccit_v value = pe_ccit_e }
+					if = { limit = { check_variable = { which = pe_ccit_k value = 1 } } root = { subtract_variable = { which = pe_c1_cash value = prev.pe_ccit_v } change_variable = { which = pe_c1_citn value = 1 } set_variable = { which = pe_cit_cash value = pe_c1_cash } } }
+					else_if = { limit = { check_variable = { which = pe_ccit_k value = 2 } } root = { subtract_variable = { which = pe_c2_cash value = prev.pe_ccit_v } change_variable = { which = pe_c2_citn value = 1 } set_variable = { which = pe_cit_cash value = pe_c2_cash } } }
+					else_if = { limit = { check_variable = { which = pe_ccit_k value = 3 } } root = { subtract_variable = { which = pe_c3_cash value = prev.pe_ccit_v } change_variable = { which = pe_c3_citn value = 1 } set_variable = { which = pe_cit_cash value = pe_c3_cash } } }
+					else_if = { limit = { check_variable = { which = pe_ccit_k value = 4 } } root = { subtract_variable = { which = pe_c4_cash value = prev.pe_ccit_v } change_variable = { which = pe_c4_citn value = 1 } set_variable = { which = pe_cit_cash value = pe_c4_cash } } }
+					else_if = { limit = { check_variable = { which = pe_ccit_k value = 5 } } root = { subtract_variable = { which = pe_c5_cash value = prev.pe_ccit_v } change_variable = { which = pe_c5_citn value = 1 } set_variable = { which = pe_cit_cash value = pe_c5_cash } } }
+					else_if = { limit = { check_variable = { which = pe_ccit_k value = 6 } } root = { subtract_variable = { which = pe_c6_cash value = prev.pe_ccit_v } change_variable = { which = pe_c6_citn value = 1 } set_variable = { which = pe_cit_cash value = pe_c6_cash } } }
+					else_if = { limit = { check_variable = { which = pe_ccit_k value = 7 } } root = { subtract_variable = { which = pe_c7_cash value = prev.pe_ccit_v } change_variable = { which = pe_c7_citn value = 1 } set_variable = { which = pe_cit_cash value = pe_c7_cash } } }
+					else_if = { limit = { check_variable = { which = pe_ccit_k value = 8 } } root = { subtract_variable = { which = pe_c8_cash value = prev.pe_ccit_v } change_variable = { which = pe_c8_citn value = 1 } set_variable = { which = pe_cit_cash value = pe_c8_cash } } }
+					# An upgrade under way.
+					if = {
+						limit = { check_variable = { which = pe_ccit_ul value > 0 } }
+						change_variable = { which = pe_ccit_ul value = -3 }
+						if = {
+							limit = { check_variable = { which = pe_ccit_ul value <= 0 } }
+							set_variable = { which = pe_ccit_ul value = 0 }
+							change_variable = { which = pe_ccit_l value = 1 }
+							if = { limit = { check_variable = { which = pe_ccit_l value = 2 } } starbase = { set_starbase_size = starbase_deep_space_citadel_2 } }
+							else_if = { limit = { check_variable = { which = pe_ccit_l value = 3 } } starbase = { set_starbase_size = starbase_deep_space_citadel_3 } }
+							if = {
+								limit = { root = { is_ai = no } }
+								solar_system = { star = { save_event_target_as = pe_msg_planet } }
+								root = { set_variable = { which = pe_msg_name value = prev.pe_ccit_nm } pe_corp_msg = { KEY = pe_msg_cit_up } }
+							}
+						}
+					}
+					# The next level, when it can afford it (a third of its cash; 25% a quarter).
+					else_if = {
+						limit = { check_variable = { which = pe_ccit_l value < 3 } }
+						if = { limit = { check_variable = { which = pe_ccit_l value = 1 } } set_variable = { which = pe_ccit_c value = 17500 } set_variable = { which = pe_ccit_m value = 36 } }
+						else = { set_variable = { which = pe_ccit_c value = 35000 } set_variable = { which = pe_ccit_m value = 48 } }
+						set_variable = { which = pe_tmp value = pe_ccit_c }
+						multiply_variable = { which = pe_tmp value = 3 }
+						if = {
+							limit = { root = { check_variable = { which = pe_cit_cash value >= prev.pe_tmp } } }
+							random = {
+								chance = 25
+								set_variable = { which = pe_ccit_ul value = pe_ccit_m }
+								if = { limit = { check_variable = { which = pe_ccit_k value = 1 } } root = { subtract_variable = { which = pe_c1_cash value = prev.pe_ccit_c } } }
+								else_if = { limit = { check_variable = { which = pe_ccit_k value = 2 } } root = { subtract_variable = { which = pe_c2_cash value = prev.pe_ccit_c } } }
+								else_if = { limit = { check_variable = { which = pe_ccit_k value = 3 } } root = { subtract_variable = { which = pe_c3_cash value = prev.pe_ccit_c } } }
+								else_if = { limit = { check_variable = { which = pe_ccit_k value = 4 } } root = { subtract_variable = { which = pe_c4_cash value = prev.pe_ccit_c } } }
+								else_if = { limit = { check_variable = { which = pe_ccit_k value = 5 } } root = { subtract_variable = { which = pe_c5_cash value = prev.pe_ccit_c } } }
+								else_if = { limit = { check_variable = { which = pe_ccit_k value = 6 } } root = { subtract_variable = { which = pe_c6_cash value = prev.pe_ccit_c } } }
+								else_if = { limit = { check_variable = { which = pe_ccit_k value = 7 } } root = { subtract_variable = { which = pe_c7_cash value = prev.pe_ccit_c } } }
+								else_if = { limit = { check_variable = { which = pe_ccit_k value = 8 } } root = { subtract_variable = { which = pe_c8_cash value = prev.pe_ccit_c } } }
+							}
+						}
+					}
+					# Defence platforms while it can afford them (500 each, 4 per level; a third of its cash).
+					set_variable = { which = pe_tmp value = pe_ccit_l }
+					multiply_variable = { which = pe_tmp value = 4 }
+					if = {
+						limit = { check_variable = { which = pe_ccit_p value < pe_tmp } root = { check_variable = { which = pe_cit_cash value >= 1500 } } }
+						export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n0 }
+						create_ship = { name = random random_existing_design = military_station_small graphical_culture = owner }
+						export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+						if = {
+							limit = { check_variable = { which = pe_fl_n1 value > pe_fl_n0 } }
+							change_variable = { which = pe_ccit_p value = 1 }
+							if = { limit = { check_variable = { which = pe_ccit_k value = 1 } } root = { subtract_variable = { which = pe_c1_cash value = 500 } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 2 } } root = { subtract_variable = { which = pe_c2_cash value = 500 } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 3 } } root = { subtract_variable = { which = pe_c3_cash value = 500 } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 4 } } root = { subtract_variable = { which = pe_c4_cash value = 500 } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 5 } } root = { subtract_variable = { which = pe_c5_cash value = 500 } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 6 } } root = { subtract_variable = { which = pe_c6_cash value = 500 } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 7 } } root = { subtract_variable = { which = pe_c7_cash value = 500 } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 8 } } root = { subtract_variable = { which = pe_c8_cash value = 500 } } }
+						}
+					}
+				}
+			}
+			every_owned_fleet = {
+				limit = { has_fleet_flag = pe_ccit_kill }
+				destroy_fleet = this
+			}
+			add_resource = { energy = 1 mult = root.pe_cit_ge }
+			add_resource = { alloys = 1 mult = root.pe_cit_ga }
+		}
+		# Building claims: a site that is gone ends them.
+		if = { limit = { check_variable = { which = pe_c1_citb value = 1 } NOT = { any_system_within_border = { has_star_flag = pe_cit_site is_variable_set = pe_cit_k check_variable = { which = pe_cit_k value = 1 } } } } set_variable = { which = pe_c1_citb value = 0 } }
+		if = { limit = { check_variable = { which = pe_c2_citb value = 1 } NOT = { any_system_within_border = { has_star_flag = pe_cit_site is_variable_set = pe_cit_k check_variable = { which = pe_cit_k value = 2 } } } } set_variable = { which = pe_c2_citb value = 0 } }
+		if = { limit = { check_variable = { which = pe_c3_citb value = 1 } NOT = { any_system_within_border = { has_star_flag = pe_cit_site is_variable_set = pe_cit_k check_variable = { which = pe_cit_k value = 3 } } } } set_variable = { which = pe_c3_citb value = 0 } }
+		if = { limit = { check_variable = { which = pe_c4_citb value = 1 } NOT = { any_system_within_border = { has_star_flag = pe_cit_site is_variable_set = pe_cit_k check_variable = { which = pe_cit_k value = 4 } } } } set_variable = { which = pe_c4_citb value = 0 } }
+		if = { limit = { check_variable = { which = pe_c5_citb value = 1 } NOT = { any_system_within_border = { has_star_flag = pe_cit_site is_variable_set = pe_cit_k check_variable = { which = pe_cit_k value = 5 } } } } set_variable = { which = pe_c5_citb value = 0 } }
+		if = { limit = { check_variable = { which = pe_c6_citb value = 1 } NOT = { any_system_within_border = { has_star_flag = pe_cit_site is_variable_set = pe_cit_k check_variable = { which = pe_cit_k value = 6 } } } } set_variable = { which = pe_c6_citb value = 0 } }
+		if = { limit = { check_variable = { which = pe_c7_citb value = 1 } NOT = { any_system_within_border = { has_star_flag = pe_cit_site is_variable_set = pe_cit_k check_variable = { which = pe_cit_k value = 7 } } } } set_variable = { which = pe_c7_citb value = 0 } }
+		if = { limit = { check_variable = { which = pe_c8_citb value = 1 } NOT = { any_system_within_border = { has_star_flag = pe_cit_site is_variable_set = pe_cit_k check_variable = { which = pe_cit_k value = 8 } } } } set_variable = { which = pe_c8_citb value = 0 } }
+		# A new citadel: with our technology, not in the pause (two years after an offer), the
+		# richest corporation without a site under way and with three times the cost (20% a quarter).
+		if = {
+			limit = {
+				has_technology = tech_deep_space_citadel
+				OR = { NOT = { has_country_flag = pe_cit_cd } check_variable = { which = pe_fl_force value = 1 } }
+			}
+			set_variable = { which = pe_cit_k value = 0 }
+			set_variable = { which = pe_cit_best value = 34499 }
+			if = { limit = { check_variable = { which = pe_c1_on value = 1 } NOT = { check_variable = { which = pe_c1_citb value = 1 } } check_variable = { which = pe_c1_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 1 } set_variable = { which = pe_cit_best value = pe_c1_cash } }
+			if = { limit = { check_variable = { which = pe_c2_on value = 1 } NOT = { check_variable = { which = pe_c2_citb value = 1 } } check_variable = { which = pe_c2_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 2 } set_variable = { which = pe_cit_best value = pe_c2_cash } }
+			if = { limit = { check_variable = { which = pe_c3_on value = 1 } NOT = { check_variable = { which = pe_c3_citb value = 1 } } check_variable = { which = pe_c3_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 3 } set_variable = { which = pe_cit_best value = pe_c3_cash } }
+			if = { limit = { check_variable = { which = pe_c4_on value = 1 } NOT = { check_variable = { which = pe_c4_citb value = 1 } } check_variable = { which = pe_c4_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 4 } set_variable = { which = pe_cit_best value = pe_c4_cash } }
+			if = { limit = { check_variable = { which = pe_c5_on value = 1 } NOT = { check_variable = { which = pe_c5_citb value = 1 } } check_variable = { which = pe_c5_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 5 } set_variable = { which = pe_cit_best value = pe_c5_cash } }
+			if = { limit = { check_variable = { which = pe_c6_on value = 1 } NOT = { check_variable = { which = pe_c6_citb value = 1 } } check_variable = { which = pe_c6_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 6 } set_variable = { which = pe_cit_best value = pe_c6_cash } }
+			if = { limit = { check_variable = { which = pe_c7_on value = 1 } NOT = { check_variable = { which = pe_c7_citb value = 1 } } check_variable = { which = pe_c7_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 7 } set_variable = { which = pe_cit_best value = pe_c7_cash } }
+			if = { limit = { check_variable = { which = pe_c8_on value = 1 } NOT = { check_variable = { which = pe_c8_citb value = 1 } } check_variable = { which = pe_c8_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 8 } set_variable = { which = pe_cit_best value = pe_c8_cash } }
+			if = {
+				limit = { check_variable = { which = pe_cit_k value > 0 } }
+				random_list = {
+					20 = {
+						set_timed_country_flag = { flag = pe_cit_cd days = 730 }
+						set_variable = { which = pe_cit_found value = 0 }
+						if = { limit = { check_variable = { which = pe_cit_k value = 1 } } random_owned_colony = { limit = { has_planet_flag = pe_hq_1 solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_owned_planet = { limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = 1 } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_planet_within_border = { limit = { OR = { has_planet_flag = pe_swc_1 AND = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 1 } } } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_system_within_border = { limit = { pe_cit_system_ok = yes count_system_planet = { count >= 2 limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_1 } } } } save_event_target_as = pe_cit_sys root = { set_variable = { which = pe_cit_found value = 1 } } } } }
+						else_if = { limit = { check_variable = { which = pe_cit_k value = 2 } } random_owned_colony = { limit = { has_planet_flag = pe_hq_2 solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_owned_planet = { limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = 2 } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_planet_within_border = { limit = { OR = { has_planet_flag = pe_swc_2 AND = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 2 } } } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_system_within_border = { limit = { pe_cit_system_ok = yes count_system_planet = { count >= 2 limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_2 } } } } save_event_target_as = pe_cit_sys root = { set_variable = { which = pe_cit_found value = 1 } } } } }
+						else_if = { limit = { check_variable = { which = pe_cit_k value = 3 } } random_owned_colony = { limit = { has_planet_flag = pe_hq_3 solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_owned_planet = { limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = 3 } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_planet_within_border = { limit = { OR = { has_planet_flag = pe_swc_3 AND = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 3 } } } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_system_within_border = { limit = { pe_cit_system_ok = yes count_system_planet = { count >= 2 limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_3 } } } } save_event_target_as = pe_cit_sys root = { set_variable = { which = pe_cit_found value = 1 } } } } }
+						else_if = { limit = { check_variable = { which = pe_cit_k value = 4 } } random_owned_colony = { limit = { has_planet_flag = pe_hq_4 solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_owned_planet = { limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = 4 } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_planet_within_border = { limit = { OR = { has_planet_flag = pe_swc_4 AND = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 4 } } } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_system_within_border = { limit = { pe_cit_system_ok = yes count_system_planet = { count >= 2 limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_4 } } } } save_event_target_as = pe_cit_sys root = { set_variable = { which = pe_cit_found value = 1 } } } } }
+						else_if = { limit = { check_variable = { which = pe_cit_k value = 5 } } random_owned_colony = { limit = { has_planet_flag = pe_hq_5 solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_owned_planet = { limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = 5 } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_planet_within_border = { limit = { OR = { has_planet_flag = pe_swc_5 AND = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 5 } } } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_system_within_border = { limit = { pe_cit_system_ok = yes count_system_planet = { count >= 2 limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_5 } } } } save_event_target_as = pe_cit_sys root = { set_variable = { which = pe_cit_found value = 1 } } } } }
+						else_if = { limit = { check_variable = { which = pe_cit_k value = 6 } } random_owned_colony = { limit = { has_planet_flag = pe_hq_6 solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_owned_planet = { limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = 6 } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_planet_within_border = { limit = { OR = { has_planet_flag = pe_swc_6 AND = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 6 } } } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_system_within_border = { limit = { pe_cit_system_ok = yes count_system_planet = { count >= 2 limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_6 } } } } save_event_target_as = pe_cit_sys root = { set_variable = { which = pe_cit_found value = 1 } } } } }
+						else_if = { limit = { check_variable = { which = pe_cit_k value = 7 } } random_owned_colony = { limit = { has_planet_flag = pe_hq_7 solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_owned_planet = { limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = 7 } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_planet_within_border = { limit = { OR = { has_planet_flag = pe_swc_7 AND = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 7 } } } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_system_within_border = { limit = { pe_cit_system_ok = yes count_system_planet = { count >= 2 limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_7 } } } } save_event_target_as = pe_cit_sys root = { set_variable = { which = pe_cit_found value = 1 } } } } }
+						else_if = { limit = { check_variable = { which = pe_cit_k value = 8 } } random_owned_colony = { limit = { has_planet_flag = pe_hq_8 solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_owned_planet = { limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = 8 } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_planet_within_border = { limit = { OR = { has_planet_flag = pe_swc_8 AND = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 8 } } } solar_system = { pe_cit_system_ok = yes } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_system_within_border = { limit = { pe_cit_system_ok = yes count_system_planet = { count >= 2 limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_8 } } } } save_event_target_as = pe_cit_sys root = { set_variable = { which = pe_cit_found value = 1 } } } } }
+						if = {
+							limit = { check_variable = { which = pe_cit_found value = 1 } }
+							if = { limit = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } pe_cit_exec = yes }
+							else = { country_event = { id = pe.315 } }
+						}
+						log = "private_economy: corporate citadel: slot \\[Root.pe_cit_k], system found \\[Root.pe_cit_found]"
+					}
+					80 = { modifier = { factor = 0 check_variable = { which = pe_fl_force value = 1 } } }
+				}
+			}
+		}
+	}
+}
+
+# Country scope: the corporation pe_cit_k starts its citadel in event_target:pe_cit_sys (site of
+# the holdings, built up with the vanilla build time).
+pe_cit_exec = {
+	if = { limit = { check_variable = { which = pe_cit_k value = 1 } } subtract_variable = { which = pe_c1_cash value = 11500 } set_variable = { which = pe_c1_citb value = 1 } set_variable = { which = pe_cit_nm value = pe_c1_name } set_variable = { which = pe_msg_name value = pe_c1_name } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 2 } } subtract_variable = { which = pe_c2_cash value = 11500 } set_variable = { which = pe_c2_citb value = 1 } set_variable = { which = pe_cit_nm value = pe_c2_name } set_variable = { which = pe_msg_name value = pe_c2_name } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 3 } } subtract_variable = { which = pe_c3_cash value = 11500 } set_variable = { which = pe_c3_citb value = 1 } set_variable = { which = pe_cit_nm value = pe_c3_name } set_variable = { which = pe_msg_name value = pe_c3_name } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 4 } } subtract_variable = { which = pe_c4_cash value = 11500 } set_variable = { which = pe_c4_citb value = 1 } set_variable = { which = pe_cit_nm value = pe_c4_name } set_variable = { which = pe_msg_name value = pe_c4_name } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 5 } } subtract_variable = { which = pe_c5_cash value = 11500 } set_variable = { which = pe_c5_citb value = 1 } set_variable = { which = pe_cit_nm value = pe_c5_name } set_variable = { which = pe_msg_name value = pe_c5_name } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 6 } } subtract_variable = { which = pe_c6_cash value = 11500 } set_variable = { which = pe_c6_citb value = 1 } set_variable = { which = pe_cit_nm value = pe_c6_name } set_variable = { which = pe_msg_name value = pe_c6_name } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 7 } } subtract_variable = { which = pe_c7_cash value = 11500 } set_variable = { which = pe_c7_citb value = 1 } set_variable = { which = pe_cit_nm value = pe_c7_name } set_variable = { which = pe_msg_name value = pe_c7_name } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 8 } } subtract_variable = { which = pe_c8_cash value = 11500 } set_variable = { which = pe_c8_citb value = 1 } set_variable = { which = pe_cit_nm value = pe_c8_name } set_variable = { which = pe_msg_name value = pe_c8_name } }
+	event_target:pe_cit_sys = {
+		set_star_flag = pe_cit_site
+		set_variable = { which = pe_cit_k value = root.pe_cit_k }
+		set_variable = { which = pe_cit_nm value = root.pe_cit_nm }
+		spawn_megastructure = {
+			type = pe_corp_citadel_site
+			owner = event_target:pe_hold
+			planet = star
+			graphical_culture = root
+			orbit_distance = trigger:inner_radius
+			orbit_angle = 200
+		}
+	}
+	# The holdings need the technology for the vanilla citadel (we have it: pe_citadel_step).
+	event_target:pe_hold = { give_technology = { tech = tech_deep_space_citadel message = no } }
+	event_target:pe_hold = {
+		every_owned_megastructure = {
+			limit = { is_megastructure_type = pe_corp_citadel_site is_upgrading = no }
+			upgrade_megastructure_to = pe_corp_citadel_build
+		}
+	}
+	log = "private_economy: corporate citadel started by slot \\[Root.pe_cit_k] in \\[event_target:pe_cit_sys.GetName]"
+}
+
+# Country scope, monthly (pe.100): while we are at war and our holdings have a citadel, they
+# join our wars (on our side), so that it fights for us.
+pe_cit_war = {
+	if = {
+		limit = { is_at_war = yes }
+		random_country = {
+			limit = {
+				is_country_type = pe_holdings
+				has_relation_flag = { who = root flag = pe_holdings_of }
+				is_at_war = no
+				any_owned_fleet = { has_fleet_flag = pe_ccit }
+			}
+			join_war = root
+		}
+	}
+}
+
+# Country scope (pe.317 debug): the richest corporation gets at least 34500 cash.
+pe_cit_debug_cash = {
+	set_variable = { which = pe_cit_k value = 0 }
+	set_variable = { which = pe_cit_best value = -1000000 }
+	if = { limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 1 } set_variable = { which = pe_cit_best value = pe_c1_cash } }
+	if = { limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 2 } set_variable = { which = pe_cit_best value = pe_c2_cash } }
+	if = { limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 3 } set_variable = { which = pe_cit_best value = pe_c3_cash } }
+	if = { limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 4 } set_variable = { which = pe_cit_best value = pe_c4_cash } }
+	if = { limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 5 } set_variable = { which = pe_cit_best value = pe_c5_cash } }
+	if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 6 } set_variable = { which = pe_cit_best value = pe_c6_cash } }
+	if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 7 } set_variable = { which = pe_cit_best value = pe_c7_cash } }
+	if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_cit_best } } set_variable = { which = pe_cit_k value = 8 } set_variable = { which = pe_cit_best value = pe_c8_cash } }
+	if = { limit = { check_variable = { which = pe_cit_k value = 1 } check_variable = { which = pe_c1_cash value < 34500 } } set_variable = { which = pe_c1_cash value = 34500 } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 2 } check_variable = { which = pe_c2_cash value < 34500 } } set_variable = { which = pe_c2_cash value = 34500 } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 3 } check_variable = { which = pe_c3_cash value < 34500 } } set_variable = { which = pe_c3_cash value = 34500 } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 4 } check_variable = { which = pe_c4_cash value < 34500 } } set_variable = { which = pe_c4_cash value = 34500 } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 5 } check_variable = { which = pe_c5_cash value < 34500 } } set_variable = { which = pe_c5_cash value = 34500 } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 6 } check_variable = { which = pe_c6_cash value < 34500 } } set_variable = { which = pe_c6_cash value = 34500 } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 7 } check_variable = { which = pe_c7_cash value < 34500 } } set_variable = { which = pe_c7_cash value = 34500 } }
+	else_if = { limit = { check_variable = { which = pe_cit_k value = 8 } check_variable = { which = pe_c8_cash value < 34500 } } set_variable = { which = pe_c8_cash value = 34500 } }
+}

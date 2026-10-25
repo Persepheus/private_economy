@@ -251,3 +251,75 @@ pe_corp_furnace_build = {
 		}
 	}
 }
+
+# --- Corporate deep space citadel (pe_cit_exec) ---------------------------------------------
+# A site of the holdings, built up with the vanilla build time of a deep space citadel (3 years);
+# then the vanilla citadel (deep_space_citadel_0, as vanilla's Starlit Citadel origin spawns it)
+# appears for the holdings, flagged for its corporation (system variables pe_cit_k, pe_cit_nm).
+
+pe_corp_citadel_site = {
+	entity = ""
+	construction_entity = "deep_space_01_starbase_citadel_section_1_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	show_in_outliner = no
+	build_time = 1
+	resources = {
+		category = megastructures
+	}
+	construction_blocks_and_blocked_by = none
+	potential = { always = no }
+	possible = { always = yes }
+}
+
+pe_corp_citadel_build = {
+	entity = ""
+	construction_entity = "deep_space_01_starbase_citadel_section_1_entity"
+	portrait = "GFX_megastructure_construction_background"
+	place_entity_on_planet_plane = no
+	show_in_outliner = no
+	build_time = 1080
+	resources = {
+		category = megastructures
+	}
+	construction_blocks_and_blocked_by = none
+	upgrade_from = {
+		pe_corp_citadel_site
+	}
+	potential = { is_country_type = pe_holdings }
+	possible = { always = yes }
+
+	# from = the holdings, fromfrom = this.
+	on_build_complete = {
+		fromfrom.solar_system = { save_event_target_as = pe_cit_tsys }
+		from = { save_event_target_as = pe_cit_owner }
+		remove_megastructure = fromfrom
+		event_target:pe_cit_tsys = {
+			remove_star_flag = pe_cit_site
+			spawn_megastructure = {
+				type = deep_space_citadel_0
+				owner = event_target:pe_cit_owner
+				planet = star
+				graphical_culture = event_target:pe_cit_owner
+				orbit_distance = trigger:inner_radius
+				orbit_angle = 200
+			}
+		}
+		event_target:pe_cit_owner = {
+			random_owned_fleet = {
+				limit = { is_ship_size = starbase_deep_space_citadel_1 NOT = { has_fleet_flag = pe_ccit } NOT = { has_fleet_flag = pe_proto_citadel } }
+				set_fleet_flag = pe_ccit
+				solar_system = {
+					prev = {
+						set_variable = { which = pe_ccit_k value = prev.pe_cit_k }
+						set_variable = { which = pe_ccit_nm value = prev.pe_cit_nm }
+					}
+				}
+				set_variable = { which = pe_ccit_l value = 1 }
+				set_variable = { which = pe_ccit_ul value = 0 }
+				set_variable = { which = pe_ccit_p value = 0 }
+				set_variable = { which = pe_ccit_new value = 1 }
+			}
+		}
+	}
+}

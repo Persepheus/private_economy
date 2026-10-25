@@ -20,6 +20,7 @@ country_event = {
 		pe_chab_monthly = yes
 		pe_sprawl_step = yes
 		pe_corp_defence = yes
+		pe_cit_war = yes
 		pe_bombard_step = yes
 		pe_occupation_step = yes
 		pe_guard_cleanup = yes

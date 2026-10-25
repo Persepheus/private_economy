@@ -55,6 +55,7 @@ on_policy_changed = {
 on_tech_increased = {
 	events = {
 		pe.36
+		pe.316
 	}
 }
 

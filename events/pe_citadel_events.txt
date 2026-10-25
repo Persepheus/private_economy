@@ -1,0 +1,69 @@
+# Corporate deep space citadels (pe_citadel_effects.txt).
+#   pe.315  a corporation wants to build a deep space citadel (human empires, not Laissez-faire)
+#   pe.316  a new technology of ours: the holdings copy our technologies (on_tech_increased)
+#   pe.317  debug: an offer now (the richest corporation gets enough cash)
+#   pe.318  debug: finish the construction of corporate citadels and their upgrades at once
+namespace = pe
+
+country_event = {
+	id = pe.315
+	title = pe.315.name
+	desc = pe.315.desc
+	picture = GFX_evt_deep_space_citadel
+	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_cit_k value = 1 } } set_variable = { which = pe_cn315 value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_cit_k value = 2 } } set_variable = { which = pe_cn315 value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_cit_k value = 3 } } set_variable = { which = pe_cn315 value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_cit_k value = 4 } } set_variable = { which = pe_cn315 value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_cit_k value = 5 } } set_variable = { which = pe_cn315 value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_cit_k value = 6 } } set_variable = { which = pe_cn315 value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_cit_k value = 7 } } set_variable = { which = pe_cn315 value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_cit_k value = 8 } } set_variable = { which = pe_cn315 value = pe_c8_name } } } }
+
+	option = {
+		name = pe.315.a
+		custom_tooltip = pe.315.a.tt
+		hidden_effect = { pe_cit_exec = yes }
+	}
+	option = { name = pe.315.b }
+}
+
+country_event = {
+	id = pe.316
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { is_country_type = default }
+	immediate = {
+		random_country = {
+			limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } }
+			copy_techs_from = { target = root }
+		}
+	}
+}
+
+country_event = {
+	id = pe.317
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_holdings_ensure = yes
+		pe_cit_debug_cash = yes
+		remove_country_flag = pe_cit_cd
+		set_variable = { which = pe_fl_force value = 1 }
+		pe_citadel_step = yes
+		set_variable = { which = pe_fl_force value = 0 }
+	}
+}
+
+country_event = {
+	id = pe.318
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		random_country = {
+			limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } }
+			every_owned_megastructure = {
+				limit = { is_megastructure_type = pe_corp_citadel_site is_upgrading = yes }
+				finish_upgrade = yes
+			}
+			every_owned_fleet = {
+				limit = { has_fleet_flag = pe_ccit is_variable_set = pe_ccit_ul check_variable = { which = pe_ccit_ul value > 0 } }
+				set_variable = { which = pe_ccit_ul value = 1 }
+			}
+		}
+		log = "private_economy: pe.318 corporate citadel construction finished (upgrades finish at the next quarter)"
+	}
+}

@@ -5112,6 +5112,11 @@ pe_holdings_ensure = {
 			}
 		}
 	}
+	# Our holdings have our technologies (also at every new one, pe.316).
+	if = {
+		limit = { exists = event_target:pe_hold }
+		event_target:pe_hold = { copy_techs_from = { target = root } }
+	}
 	# Our own holdings are no strangers (no first contact).
 	if = {
 		limit = { exists = event_target:pe_hold NOT = { has_communications = event_target:pe_hold } }

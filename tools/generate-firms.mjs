@@ -2011,6 +2011,11 @@ pe_holdings_ensure = {
 			}
 		}
 	}
+	# Our holdings have our technologies (also at every new one, pe.316).
+	if = {
+		limit = { exists = event_target:pe_hold }
+		event_target:pe_hold = { copy_techs_from = { target = root } }
+	}
 	# Our own holdings are no strangers (no first contact).
 	if = {
 		limit = { exists = event_target:pe_hold NOT = { has_communications = event_target:pe_hold } }
@@ -3438,7 +3443,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
 
 // Events that name a corporation: each reads its own variable pe_cn<event>, set in its
 // immediate (pe_corp_cur_name is shared and may change before the window is read).
-const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298, 300, 306, 308];
+const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298, 300, 306, 308, 315];
 const corpLoc = (name, varName, keyOf) => dtext(name, varName, NAME_IDS.map(id => [id, keyOf(id)]), 'pe_corp_line_none');
 const flagDt = (name, cond, key) => `defined_text = {\n\tname = ${name}\n\ttext = {\n\t\ttrigger = { ${cond} }\n\t\tlocalization_key = ${key}\n\t}\n\tdefault = pe_corp_line_none\n}\n`;
 locDt += flagDt('GetPeLocCw', 'is_variable_set = pe_cw_m check_variable = { which = pe_cw_m value > 0 }', 'pe_loc_cw') + flagDt('GetPeLocArms', 'is_variable_set = pe_dc_here check_variable = { which = pe_dc_here value = 1 }', 'pe_loc_arms') +
@@ -3474,10 +3479,10 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
     : ` pe_cluster_${l}_${n}:0 "${CLUSTER_NAMES[l][0]} Cluster (${n + 1}${n === 3 ? '+' : ''} firms)"`,
     li ? ` pe_cluster_${l}_${n}_desc:0 "Mehrere Privatfirmen derselben Branche teilen sich hier Zulieferer, Fachkräfte und Wissen."` : ` pe_cluster_${l}_${n}_desc:0 "Several private firms of the same sector share suppliers, skilled people and know-how here."`)));
   CORPS.forEach(k => L.push(li
-    ? ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£, Konzernproduktion +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/Monat[Root.GetPeCorpMega${k}], Sozialleistungen [Root.${C(k, 'wfr')}] £trade£/Quartal, Institut Stufe [Root.${C(k, 'lab')}]\\n"`
-    : ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£, corporate production +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/month[Root.GetPeCorpMega${k}], benefits [Root.${C(k, 'wfr')}] £trade£/quarter, institute level [Root.${C(k, 'lab')}]\\n"`,
-    li ? ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£, Konzernproduktion +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/Monat[Root.GetPeCorpMega${k}], Sozialleistungen [Root.${C(k, 'wfr')}] £trade£/Quartal, Institut Stufe [Root.${C(k, 'lab')}], §RPreiskampf mit [Root.GetPeCorpRival${k}]§!\\n"`
-       : ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£, corporate production +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/month[Root.GetPeCorpMega${k}], benefits [Root.${C(k, 'wfr')}] £trade£/quarter, institute level [Root.${C(k, 'lab')}], §Rprice war with [Root.GetPeCorpRival${k}]§!\\n"`,
+    ? ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£, Konzernproduktion +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/Monat[Root.GetPeCorpMega${k}], Sozialleistungen [Root.${C(k, 'wfr')}] £trade£/Quartal, Institut Stufe [Root.${C(k, 'lab')}], Zitadellen [Root.${C(k, 'citn')}]\\n"`
+    : ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£, corporate production +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/month[Root.GetPeCorpMega${k}], benefits [Root.${C(k, 'wfr')}] £trade£/quarter, institute level [Root.${C(k, 'lab')}], citadels [Root.${C(k, 'citn')}]\\n"`,
+    li ? ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£, Konzernproduktion +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/Monat[Root.GetPeCorpMega${k}], Sozialleistungen [Root.${C(k, 'wfr')}] £trade£/Quartal, Institut Stufe [Root.${C(k, 'lab')}], Zitadellen [Root.${C(k, 'citn')}], §RPreiskampf mit [Root.GetPeCorpRival${k}]§!\\n"`
+       : ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£, corporate production +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/month[Root.GetPeCorpMega${k}], benefits [Root.${C(k, 'wfr')}] £trade£/quarter, institute level [Root.${C(k, 'lab')}], citadels [Root.${C(k, 'citn')}], §Rprice war with [Root.GetPeCorpRival${k}]§!\\n"`,
     ` pe_corp_rn_${k}:0 "[Root.GetPeCorpN${k}]"`));
   const ROMAN = ['', 'I', 'II', 'III', 'IV'];
   [0, 1, 2, 3].forEach(w => [0, 1, 2, 3, 4].forEach(f => { if (w || f) L.push(` pe_corp_mega_${w}_${f}:0 "${[w ? (li ? `, Dyson-Schwarm ${ROMAN[w]}` : `, Dyson swarm ${ROMAN[w]}`) : '', f ? `, Arc Furnace ${ROMAN[f]}` : ''].join('')}"`); }));
