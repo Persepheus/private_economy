@@ -127,6 +127,7 @@ pe_citadel_step = {
 							every_owned_ship = { limit = { is_ship_size = starbase_deep_space_citadel_3 } set_ship_design = { random_existing_design = starbase_deep_space_citadel_3 } }
 						}
 						set_variable = { which = pe_ccit_dl value = pe_ccit_l }
+						log = "private_economy: corporate citadel design set to level \\[This.pe_ccit_l]"
 					}
 					# An upgrade under way.
 					if = {
@@ -139,6 +140,7 @@ pe_citadel_step = {
 							if = { limit = { check_variable = { which = pe_ccit_l value = 2 } } starbase = { set_starbase_size = starbase_deep_space_citadel_2 } }
 							else_if = { limit = { check_variable = { which = pe_ccit_l value = 3 } } starbase = { set_starbase_size = starbase_deep_space_citadel_3 } }
 							set_variable = { which = pe_ccit_dl value = 0 }
+							log = "private_economy: corporate citadel upgrade finished: slot \\[This.pe_ccit_k], level \\[This.pe_ccit_l]"
 							if = {
 								limit = { root = { is_ai = no } }
 								solar_system = { star = { save_event_target_as = pe_msg_planet } }
@@ -146,7 +148,7 @@ pe_citadel_step = {
 							}
 						}
 					}
-					# The next level, when it can afford it (a third of its cash; 25% a quarter).
+					# The next level as soon as it can afford it (a third of its cash).
 					else_if = {
 						limit = { check_variable = { which = pe_ccit_l value < 3 } }
 						if = { limit = { check_variable = { which = pe_ccit_l value = 1 } } set_variable = { which = pe_ccit_c value = 17500 } set_variable = { which = pe_ccit_m value = 36 } }
@@ -155,18 +157,16 @@ pe_citadel_step = {
 						multiply_variable = { which = pe_tmp value = 3 }
 						if = {
 							limit = { root = { check_variable = { which = pe_cit_cash value >= prev.pe_tmp } } }
-							random = {
-								chance = 25
-								set_variable = { which = pe_ccit_ul value = pe_ccit_m }
-								if = { limit = { check_variable = { which = pe_ccit_k value = 1 } } root = { subtract_variable = { which = pe_c1_cash value = prev.pe_ccit_c } } }
-								else_if = { limit = { check_variable = { which = pe_ccit_k value = 2 } } root = { subtract_variable = { which = pe_c2_cash value = prev.pe_ccit_c } } }
-								else_if = { limit = { check_variable = { which = pe_ccit_k value = 3 } } root = { subtract_variable = { which = pe_c3_cash value = prev.pe_ccit_c } } }
-								else_if = { limit = { check_variable = { which = pe_ccit_k value = 4 } } root = { subtract_variable = { which = pe_c4_cash value = prev.pe_ccit_c } } }
-								else_if = { limit = { check_variable = { which = pe_ccit_k value = 5 } } root = { subtract_variable = { which = pe_c5_cash value = prev.pe_ccit_c } } }
-								else_if = { limit = { check_variable = { which = pe_ccit_k value = 6 } } root = { subtract_variable = { which = pe_c6_cash value = prev.pe_ccit_c } } }
-								else_if = { limit = { check_variable = { which = pe_ccit_k value = 7 } } root = { subtract_variable = { which = pe_c7_cash value = prev.pe_ccit_c } } }
-								else_if = { limit = { check_variable = { which = pe_ccit_k value = 8 } } root = { subtract_variable = { which = pe_c8_cash value = prev.pe_ccit_c } } }
-							}
+							set_variable = { which = pe_ccit_ul value = pe_ccit_m }
+							if = { limit = { check_variable = { which = pe_ccit_k value = 1 } } root = { subtract_variable = { which = pe_c1_cash value = prev.pe_ccit_c } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 2 } } root = { subtract_variable = { which = pe_c2_cash value = prev.pe_ccit_c } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 3 } } root = { subtract_variable = { which = pe_c3_cash value = prev.pe_ccit_c } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 4 } } root = { subtract_variable = { which = pe_c4_cash value = prev.pe_ccit_c } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 5 } } root = { subtract_variable = { which = pe_c5_cash value = prev.pe_ccit_c } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 6 } } root = { subtract_variable = { which = pe_c6_cash value = prev.pe_ccit_c } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 7 } } root = { subtract_variable = { which = pe_c7_cash value = prev.pe_ccit_c } } }
+							else_if = { limit = { check_variable = { which = pe_ccit_k value = 8 } } root = { subtract_variable = { which = pe_c8_cash value = prev.pe_ccit_c } } }
+							log = "private_economy: corporate citadel upgrade started: slot \\[This.pe_ccit_k], to level \\[This.pe_ccit_l] + 1, \\[This.pe_ccit_m] months"
 						}
 					}
 					# Defence platforms while it can afford them (500 each, 4 per level; a third of its cash).

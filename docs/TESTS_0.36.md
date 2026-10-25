@@ -65,3 +65,9 @@ Ein laufendes Spiel kann weiterlaufen.
 
 - **Maschinen-Leasing (pe.212) wird erstattet:** Nach Annahme des Leasings steigt die Vanilla-Zeile „Automatisierte Jobs“ im nächsten Monat. Ab diesem Monat steigt „Private Automatisierung (Erstattung)“ um denselben Betrag, nicht erst im nächsten Quartal. Die Erstattung wird jetzt jeden Monat gegen die aktuelle Budgetzeile neu berechnet.
 - Log am Quartalsende: `automation refund: private X of Y energy a month, budget line Z`. X ist die Erstattung, Y die Schätzung der privaten Kosten. Liegt Y deutlich über Z, ist die Schätzung zu hoch; liegt X deutlich unter dem Leasing-Anteil, ist sie zu niedrig.
+
+## 0.36.4
+
+- **Upgrade der Konzern-Zitadelle ohne Würfel:** Bisher startete ein Upgrade nur mit 25 % Chance pro Quartal, auch wenn der Konzern reich genug war. Im Save Hesukaran 7 (2313.06) hatte Konzern 1 153k in der Kasse und war nach vier Quartalen immer noch auf Stufe 1, das ist Pech mit etwa 32 % Wahrscheinlichkeit. Jetzt startet das Upgrade im ersten Quartal, in dem die Kasse mindestens das Dreifache der Kosten hat (Stufe II: 17.500, 36 Monate; Stufe III: 35.000, 48 Monate).
+- Logs: `corporate citadel upgrade started`, `... upgrade finished`, `... design set to level N`. Im Quartal nach dem Abschluss muss „design set“ folgen; danach muss die Station die Werte der neuen Stufe haben (Waffen, Hülle).
+- Debug: `event pe.318` schließt laufende Upgrades zum nächsten Quartal ab.
