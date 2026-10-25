@@ -1,0 +1,32 @@
+# Prototyp Konzern-Zitadelle (Deep Space Citadel) – Testablauf
+
+**Frage:** Kann ein Konzern (über unsere Private Holdings) eine Deep Space Citadel in unserem System besitzen und an uns verleasen? Und wenn nicht: Lässt sie sich uns übergeben?
+
+**Hintergrund:**
+- Die Deep Space Citadel ist eine eigene Sternenbasis, zusätzlich zur normalen.
+- Vanilla baut sie als Megastruktur: Stufe I in 3 Jahren für 2.500 Einheit und 1.000 Legierungen. Ausbau auf Stufe II und III wie eine Sternenbasis.
+- Sie gehört dem Erbauer.
+- Laut Engine-Dokumentation ist `set_controller` auf eine Sternenbasis eine **Besetzung**, kein Leasing. Was das bei einer Station der eigenen Holdings bedeutet, zeigt erst der Test.
+
+## Konsole (Scope: dein Reich)
+- `event pe.310`: Die Holdings bekommen eine Deep Space Citadel (Stufe I) in deinem Hauptsystem (`create_starbase`).
+- `event pe.311`: Die Citadel wird an dich verleast (`set_controller`).
+- `event pe.312`: Die Citadel wird dir übergeben (`set_owner`).
+- **Vorher speichern, danach neu laden.** Der Prototyp räumt nichts auf.
+
+## Ablauf
+1. Speichern. `event pe.310`, einen Tag laufen lassen.
+   - Steht im Hauptsystem eine zweite Station, eine Deep Space Citadel mit der Flagge der Holdings?
+   - Im game.log: „pe.310 deep space citadel created“ oder „create_starbase failed“.
+2. `event pe.311`, einen Tag laufen lassen.
+   - Wie sieht die Citadel jetzt aus: deine Flagge, besetzt, Holdings?
+   - Kannst du sie anklicken oder ausbauen?
+   - Steht ihr Unterhalt in deinem Haushalt?
+   - Im Krieg (falls möglich): Schießt sie auf deine Feinde?
+3. Neu laden. `event pe.310`, dann `event pe.312`.
+   - Gehört die Citadel jetzt dir: Flagge, Unterhalt in deinem Haushalt, ausbaubar?
+4. Logs: Fehler zu `create_starbase`, `set_controller` oder `set_owner` im error.log.
+
+## Danach
+- **Leasing funktioniert:** Die Citadel gehört dem Konzern (Holdings) und steht dir zur Verfügung, wie die Konzernflotten.
+- **Sonst:** Der Konzern baut sie für uns und übergibt sie (`set_owner`). Bau und Unterhalt zahlt er.

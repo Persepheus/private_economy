@@ -735,3 +735,58 @@ country_event = {
 	}
 }
 
+
+# --- Prototype: a deep space citadel of a corporation (holdings), leased to us -------------
+# pe.310: our Private Holdings get a deep space citadel (level I) in our capital system.
+# pe.311: lease it to us (set_controller). pe.312: hand it over to us (set_owner).
+# Save before the test and reload afterwards (nothing is cleaned up).
+country_event = {
+	id = pe.310
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_holdings_ensure = yes
+		capital_scope = {
+			solar_system = {
+				create_starbase = {
+					owner = event_target:pe_hold
+					size = starbase_deep_space_citadel_1
+					effect = { save_global_event_target_as = pe_proto_citadel }
+				}
+			}
+		}
+		if = {
+			limit = { exists = event_target:pe_proto_citadel }
+			log = "private_economy: pe.310 deep space citadel created for the holdings in our capital system"
+		}
+		else = { log = "private_economy: pe.310 no deep space citadel (create_starbase failed)" }
+	}
+}
+
+country_event = {
+	id = pe.311
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { exists = event_target:pe_proto_citadel }
+			event_target:pe_proto_citadel = { set_controller = root }
+			log = "private_economy: pe.311 citadel leased (set_controller) to [Root.GetName]"
+		}
+		else = { log = "private_economy: pe.311 no citadel saved (run pe.310 first, in the same session)" }
+	}
+}
+
+country_event = {
+	id = pe.312
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		if = {
+			limit = { exists = event_target:pe_proto_citadel }
+			event_target:pe_proto_citadel = { set_owner = root }
+			log = "private_economy: pe.312 citadel handed over (set_owner) to [Root.GetName]"
+		}
+		else = { log = "private_economy: pe.312 no citadel saved (run pe.310 first, in the same session)" }
+	}
+}
