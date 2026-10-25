@@ -160,3 +160,6 @@
  pe.308.a:0 "Verstanden."
  pe_pat_foundation:0 "Stiftung von [Root.GetPeCorpNamePat]"
  pe_pat_foundation_rep:0 "eine Konzern-Stiftung"
+ PE_CORP_CITADEL_1:0 "Konzern-Zitadelle"
+ pe_proto_citadel_upkeep:0 "Prototyp: Unterhalt der Zitadelle"
+ pe_proto_citadel_upkeep_desc:0 "Test der Konzern-Zitadelle: Der Konzern trägt ihren Unterhalt."

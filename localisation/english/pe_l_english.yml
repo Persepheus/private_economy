@@ -160,3 +160,6 @@
  pe.308.a:0 "Understood."
  pe_pat_foundation:0 "The Foundation of [Root.GetPeCorpNamePat]"
  pe_pat_foundation_rep:0 "a corporate foundation"
+ PE_CORP_CITADEL_1:0 "Corporate Citadel"
+ pe_proto_citadel_upkeep:0 "Prototype: Citadel Upkeep"
+ pe_proto_citadel_upkeep_desc:0 "Test of the corporate citadel: the corporation carries its upkeep."

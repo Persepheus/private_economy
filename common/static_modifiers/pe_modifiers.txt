@@ -284,3 +284,9 @@ pe_arms_centre = {
 pe_auto_cover = {
 	planet_automated_jobs_upkeep_mult = -0.01
 }
+
+# Prototype pe.312: which upkeep key works on a deep space citadel's fleet.
+pe_proto_citadel_upkeep = {
+	ships_upkeep_mult = -1
+	starbases_upkeep_mult = -1
+}

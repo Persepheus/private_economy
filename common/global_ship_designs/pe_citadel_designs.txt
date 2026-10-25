@@ -1,0 +1,32 @@
+# Private Economy: the design of a corporate deep space citadel (create_starbase needs a global
+# design for this ship size). Basic components, so that it is valid for every empire.
+ship_design = {
+	name = "PE_CORP_CITADEL_1"
+	ship_size = starbase_deep_space_citadel_1
+	section = {
+		template = "DEEP_SPACE_CITADEL_STAGE_1"
+		slot = "core"
+		component = { slot = "SMALL_GUN_01" template = "POINT_DEFENCE_1" }
+		component = { slot = "SMALL_GUN_02" template = "POINT_DEFENCE_1" }
+		component = { slot = "SMALL_GUN_03" template = "POINT_DEFENCE_1" }
+		component = { slot = "SMALL_GUN_04" template = "POINT_DEFENCE_1" }
+		component = { slot = "SMALL_GUN_05" template = "POINT_DEFENCE_1" }
+		component = { slot = "SMALL_GUN_06" template = "POINT_DEFENCE_1" }
+		component = { slot = "SMALL_GUN_07" template = "POINT_DEFENCE_1" }
+		component = { slot = "SMALL_GUN_08" template = "POINT_DEFENCE_1" }
+		component = { slot = "SMALL_GUN_09" template = "POINT_DEFENCE_1" }
+		component = { slot = "LARGE_GUN_01" template = "LARGE_MASS_DRIVER_1" }
+		component = { slot = "LARGE_GUN_02" template = "LARGE_MASS_DRIVER_1" }
+		component = { slot = "LARGE_GUN_03" template = "LARGE_MASS_DRIVER_1" }
+		component = { slot = "STRIKE_CRAFT_01" template = "STRIKE_CRAFT_HANGAR_1" }
+		component = { slot = "STRIKE_CRAFT_02" template = "STRIKE_CRAFT_HANGAR_1" }
+		component = { slot = "STRIKE_CRAFT_03" template = "STRIKE_CRAFT_HANGAR_1" }
+		component = { slot = "LARGE_UTILITY_1" template = "LARGE_ARMOR_1" }
+		component = { slot = "LARGE_UTILITY_2" template = "LARGE_ARMOR_1" }
+		component = { slot = "LARGE_UTILITY_3" template = "LARGE_ARMOR_1" }
+		component = { slot = "LARGE_UTILITY_4" template = "LARGE_SHIELD_1" }
+		component = { slot = "LARGE_UTILITY_5" template = "LARGE_SHIELD_1" }
+		component = { slot = "LARGE_UTILITY_6" template = "LARGE_SHIELD_1" }
+		component = { slot = "AUX_UTILITY_1" template = "FIRE_CONTROL_1" }
+	}
+}

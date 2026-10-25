@@ -737,8 +737,10 @@ country_event = {
 
 
 # --- Prototype: a deep space citadel of a corporation (holdings), leased to us -------------
-# pe.310: our Private Holdings get a deep space citadel (level I) in our capital system.
-# pe.311: lease it to us (set_controller). pe.312: hand it over to us (set_owner).
+# pe.310: our Private Holdings get a deep space citadel (level I, global design
+# PE_CORP_CITADEL_1) in our capital system.
+# pe.311: lease it to us (its fleet: set_controller, leased-fleet modifier: upkeep -100%).
+# pe.312: hand it over to us (set_owner; its fleet: upkeep modifier pe_proto_citadel_upkeep).
 # Save before the test and reload afterwards (nothing is cleaned up).
 country_event = {
 	id = pe.310
@@ -751,6 +753,7 @@ country_event = {
 				create_starbase = {
 					owner = event_target:pe_hold
 					size = starbase_deep_space_citadel_1
+					design = "PE_CORP_CITADEL_1"
 					effect = { save_global_event_target_as = pe_proto_citadel }
 				}
 			}
@@ -770,7 +773,12 @@ country_event = {
 	immediate = {
 		if = {
 			limit = { exists = event_target:pe_proto_citadel }
-			event_target:pe_proto_citadel = { set_controller = root }
+			event_target:pe_proto_citadel = {
+				fleet = {
+					set_controller = root
+					add_modifier = { modifier = pe_leased_fleet days = -1 }
+				}
+			}
 			log = "private_economy: pe.311 citadel leased (set_controller) to [Root.GetName]"
 		}
 		else = { log = "private_economy: pe.311 no citadel saved (run pe.310 first, in the same session)" }
@@ -784,7 +792,10 @@ country_event = {
 	immediate = {
 		if = {
 			limit = { exists = event_target:pe_proto_citadel }
-			event_target:pe_proto_citadel = { set_owner = root }
+			event_target:pe_proto_citadel = {
+				set_owner = root
+				fleet = { add_modifier = { modifier = pe_proto_citadel_upkeep days = -1 } }
+			}
 			log = "private_economy: pe.312 citadel handed over (set_owner) to [Root.GetName]"
 		}
 		else = { log = "private_economy: pe.312 no citadel saved (run pe.310 first, in the same session)" }
