@@ -3242,6 +3242,7 @@ ${[8, 7, 6, 5, 4, 3, 2, 1, 0].map(i => `		if = { limit = { check_variable = { wh
 		else = { set_variable = { which = pe_cwb_${i} value = 0 } }`).join('\n')}
 		set_variable = { which = pe_cw_pct value = pe_cw_m }
 		divide_variable = { which = pe_cw_pct value = 10 }
+		round_variable = pe_cw_pct
 	}
 ${CORPS.map(k => `	set_variable = { which = ${C(k, 'wfr')} value = ${C(k, 'wfq')} }\n	round_variable = ${C(k, 'wfr')}`).join('\n')}
 }
@@ -3420,7 +3421,9 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
     L.push(` pe_loc_${l}_${n}_${c}:0 "§Y${LOC_SECTOR[l][li]}§!: ${parts.join(', ')}\\n"`);
   }));
   L.push(li ? ` pe_loc_tt:0 "§HHerkunft der Boni§!\\n${LETTERS.map(l => `[This.GetPeLoc_${l}]`).join('')}[This.GetPeLocCw][This.GetPeLocArms][This.GetPeLocPw][This.GetPeLocLab_x][This.GetPeLocLab_y][This.GetPeLocLab_z]"` : ` pe_loc_tt:0 "§HWhere the bonuses come from§!\\n${LETTERS.map(l => `[This.GetPeLoc_${l}]`).join('')}[This.GetPeLocCw][This.GetPeLocArms][This.GetPeLocPw][This.GetPeLocLab_x][This.GetPeLocLab_y][This.GetPeLocLab_z]"`);
-  L.push(li ? ` pe_loc_cw:0 "§YBetriebliche Sozialleistungen§!: +[This.pe_cw_pct] % Zufriedenheit (Konzern-Beschäftigte auf utopischem Niveau)\\n"` : ` pe_loc_cw:0 "§YCorporate benefits§!: +[This.pe_cw_pct]% happiness (corporate staff at the utopian standard)\\n"`,
+  [...Array(30).keys()].forEach(i => L.push(` pe_pct_${i + 1}:0 "${i + 1}"`));
+  L.push(li ? ' pe_pct_lt1:0 "<1"' : ' pe_pct_lt1:0 "<1"');
+  L.push(li ? ` pe_loc_cw:0 "§YBetriebliche Sozialleistungen§!: +[This.GetPeCwPct] % Zufriedenheit (Konzern-Beschäftigte auf utopischem Niveau)\\n"` : ` pe_loc_cw:0 "§YCorporate benefits§!: +[This.GetPeCwPct]% happiness (corporate staff at the utopian standard)\\n"`,
     li ? ` pe_loc_arms:0 "§YRüstungsaufträge§!: +10 % Arbeitskraft privater Metallurgen\\n"` : ` pe_loc_arms:0 "§YArms orders§!: +10% workforce of private metallurgists\\n"`,
     li ? ` pe_loc_pw:0 "§YPreiskampf§!: +3 % Ertrag aller Jobs, weniger Gewinn für die Konzerne\\n"` : ` pe_loc_pw:0 "§YPrice war§!: +3% output of all jobs, less profit for the corporations\\n"`,
     li ? ` pe_loc_lab_x:0 "§YKonzern-Forschungsinstitut§!: +25 % Arbeitskraft privater Physiker\\n"` : ` pe_loc_lab_x:0 "§YCorporate research institute§!: +25% workforce of private physicists\\n"`,
@@ -3435,6 +3438,7 @@ const corpLoc = (name, varName, keyOf) => dtext(name, varName, NAME_IDS.map(id =
 const flagDt = (name, cond, key) => `defined_text = {\n\tname = ${name}\n\ttext = {\n\t\ttrigger = { ${cond} }\n\t\tlocalization_key = ${key}\n\t}\n\tdefault = pe_corp_line_none\n}\n`;
 locDt += flagDt('GetPeLocCw', 'is_variable_set = pe_cw_m check_variable = { which = pe_cw_m value > 0 }', 'pe_loc_cw') + flagDt('GetPeLocArms', 'is_variable_set = pe_dc_here check_variable = { which = pe_dc_here value = 1 }', 'pe_loc_arms') +
   flagDt('GetPeLocPw', 'is_variable_set = pe_pw check_variable = { which = pe_pw value = 1 }', 'pe_loc_pw') + ['x', 'y', 'z'].map(f => flagDt(`GetPeLocLab_${f}`, `is_variable_set = pe_labeq_${f} check_variable = { which = pe_labeq_${f} value = 1 }`, `pe_loc_lab_${f}`)).join('') +
+  dtext('GetPeCwPct', 'pe_cw_pct', [...Array(30).keys()].map(i => [i + 1, `pe_pct_${i + 1}`]), 'pe_pct_lt1') +
   AUTO_JOBS.map(a => dtext(`GetPeAuto_${a}`, `pe_al_${a}`, [[1, `pe_auto_line_${a}_1`], [2, `pe_auto_line_${a}_2`]], 'pe_corp_line_none')).join('');
 write('common/scripted_loc/pe_corp_loc_generated.txt', header + locDt + `# Corporation names (country scope).\n` +
   corpLoc('GetPeCorpName', 'pe_corp_cur_name', id => `pe_cname_${id}`) + CORP_EVENTS.map(e => corpLoc(`GetPeCorpName${e}`, `pe_cn${e}`, id => `pe_cname_${id}`)).join('') + corpLoc('GetPeCorpA', 'pe_corp_a_name', id => `pe_cname_${id}`) + corpLoc('GetPeCorpNamePat', 'pe_cnpat', id => `pe_cname_${id}`) + corpLoc('GetPeCorpB', 'pe_corp_b_name', id => `pe_cname_${id}`) +

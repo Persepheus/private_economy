@@ -27,6 +27,16 @@ Ein laufendes Spiel kann weiterlaufen. Die Umstellung passiert beim nächsten Qu
 - Lehnst du ab, geht das Geld an den Konzern zurück (bei Mäzenen an den Pool).
 - Im Text steht „Stiftung von <Konzern> (eine Konzern-Stiftung)“ an Stelle des Mäzens. Manche Sätze sind auf eine Person zugeschnitten und lesen sich dann etwas holprig.
 
+## 0.35.1: Private Automatisierung, dritter Anlauf
+- **Woran es lag:** Weder als Reichs- noch als Planeten-Modifikator senkte der ressourcenspezifische Schlüssel (`planet_automated_jobs_energy_upkeep_mult`) die Zeile. Im Save stand der Planeten-Modifikator mit −100 %, die Zeile blieb bei 257.
+- **Jetzt:** Ein Reichsmodifikator „Private Automatisierung“ mit dem allgemeinen Schlüssel `planet_automated_jobs_upkeep_mult`, wie ihn Vanilla beim Civic „Tankbound“ nutzt.
+  - Der Anteil ergibt sich aus der genauen Privat-Summe und der beobachteten Zeile.
+  - Bis 100 % ohne staatliche Vanilla-Automatisierung, sonst höchstens 99 %.
+- **Sofort testen:** `event pe.309` entfernt die alten Planeten-Modifikatoren und setzt den Reichsmodifikator sofort. Einen Tag später sollte die Zeile „Automatisierte Arbeitskraft“ im Energie-Tooltip bei etwa 0 stehen.
+  - Bleibt sie stehen, wirkt auch dieser Schlüssel nicht. Dann gehe ich auf eine sichtbare Erstattung als Einnahmezeile.
+  - Im game.log: „automation cover: private P energy a month, budget line E, cover now M %“.
+- **Tooltip „Privatwirtschaft“:** Die Zufriedenheit der Sozialleistungen wird jetzt in ganzen Prozent angezeigt (vorher ein Fehler im error.log).
+
 ## Prüfen
 1. Nach einem Quartal:
    - Planeten mit Konzernfirmen haben „Privatwirtschaft“ mit den Zeilen im Tooltip.

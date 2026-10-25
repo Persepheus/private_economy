@@ -278,8 +278,9 @@ pe_arms_centre = {
 	pop_pe_private_metallurgist_bonus_workforce_mult = 0.1
 }
 
-# Private automation (pe_automation, planet modifier): the firms carry the energy upkeep of their
-# automated jobs, so this share of the planet's upkeep for automated workforce is taken off.
+# Private automation (pe_auto_cover_step, country modifier): the firms carry the energy upkeep of
+# their automated jobs, so this share of our upkeep for automated workforce is taken off (the
+# general key, as the vanilla civic Tankbound uses it; the energy key had no effect).
 pe_auto_cover = {
-	planet_automated_jobs_energy_upkeep_mult = -0.01
+	planet_automated_jobs_upkeep_mult = -0.01
 }

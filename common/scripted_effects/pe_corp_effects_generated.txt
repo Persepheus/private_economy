@@ -14343,6 +14343,7 @@ pe_corp_social = {
 		else = { set_variable = { which = pe_cwb_0 value = 0 } }
 		set_variable = { which = pe_cw_pct value = pe_cw_m }
 		divide_variable = { which = pe_cw_pct value = 10 }
+		round_variable = pe_cw_pct
 	}
 	set_variable = { which = pe_c1_wfr value = pe_c1_wfq }
 	round_variable = pe_c1_wfr
