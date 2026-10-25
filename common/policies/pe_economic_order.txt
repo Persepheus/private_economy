@@ -1,6 +1,6 @@
 # Economic order: share of district slots run by private firms (0/20/40/60/80%), stored as
 # pe_private_share (percent). Private jobs produce like state jobs; the firms' profit
-# (pe_profit_share of their value added: 0/15/20/25/35%) is paid by the state in trade each
+# (pe_profit_share of their value added: 0/7.5/10/12.5/17.5%) is paid by the state in trade each
 # quarter. A share of the trade income goes to the investor pool as private savings
 # (pe_savings_rate: 0/5/10/15/20%).
 pe_economic_order = {
@@ -36,8 +36,8 @@ pe_economic_order = {
 			custom_tooltip = pe_order_guided_tt
 			hidden_effect = {
 				set_variable = { which = pe_private_share value = 20 }
-				set_variable = { which = pe_profit_share value = 0.15 }
-				set_variable = { which = pe_profit_pct value = 15 }
+				set_variable = { which = pe_profit_share value = 0.075 }
+				set_variable = { which = pe_profit_pct value = 7.5 }
 				set_variable = { which = pe_savings_rate value = 0.05 }
 			}
 		}
@@ -53,8 +53,8 @@ pe_economic_order = {
 			custom_tooltip = pe_order_mixed_tt
 			hidden_effect = {
 				set_variable = { which = pe_private_share value = 40 }
-				set_variable = { which = pe_profit_share value = 0.2 }
-				set_variable = { which = pe_profit_pct value = 20 }
+				set_variable = { which = pe_profit_share value = 0.1 }
+				set_variable = { which = pe_profit_pct value = 10 }
 				set_variable = { which = pe_savings_rate value = 0.1 }
 			}
 		}
@@ -69,8 +69,8 @@ pe_economic_order = {
 			custom_tooltip = pe_order_free_market_tt
 			hidden_effect = {
 				set_variable = { which = pe_private_share value = 60 }
-				set_variable = { which = pe_profit_share value = 0.25 }
-				set_variable = { which = pe_profit_pct value = 25 }
+				set_variable = { which = pe_profit_share value = 0.125 }
+				set_variable = { which = pe_profit_pct value = 12.5 }
 				set_variable = { which = pe_savings_rate value = 0.15 }
 			}
 		}
@@ -87,8 +87,8 @@ pe_economic_order = {
 			custom_tooltip = pe_order_laissez_faire_tt
 			hidden_effect = {
 				set_variable = { which = pe_private_share value = 80 }
-				set_variable = { which = pe_profit_share value = 0.35 }
-				set_variable = { which = pe_profit_pct value = 35 }
+				set_variable = { which = pe_profit_share value = 0.175 }
+				set_variable = { which = pe_profit_pct value = 17.5 }
 				set_variable = { which = pe_savings_rate value = 0.2 }
 			}
 		}

@@ -5519,8 +5519,10 @@ pe_corp_station_exec = {
 # Country scope, quarterly: what the corporate stations bring. Per corporation its stations'
 # value at base prices (pe_c<slot>_sv, per month) and their number (pe_c<slot>_st). The
 # holdings hand the stored output to the corporation (it is used up); the corporation
-# produces 1.5 x the value in its own product on its headquarters (pe_cpv_<res> on the
-# planet, deposit lines), and books half the value (per quarter: x 3) as its own earnings.
+# delivers 1.2 x the value in its own product on its headquarters (deposit lines), less
+# the upkeep of its swarm and furnace (pe_c<slot>_swu, _afu: value per month, set by
+# pe_corp_swarm / pe_corp_furnace), and books 0.2 x the value (per quarter: x 3) as its
+# margin.
 # Stations bought under Free Market or Mixed pay us a fifth of their value a year.
 pe_corp_station_output = {
 	set_variable = { which = pe_c1_sv value = 0 }
@@ -5985,18 +5987,23 @@ pe_corp_station_output = {
 	if = {
 		limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_sv value > 0 } }
 		if = { limit = { NOT = { is_variable_set = pe_c1_prod } } if = { limit = { check_variable = { which = pe_c1_grp value = 1 } } set_variable = { which = pe_c1_prod value = 1 } } else_if = { limit = { check_variable = { which = pe_c1_grp value = 2 } } set_variable = { which = pe_c1_prod value = 3 } } else_if = { limit = { check_variable = { which = pe_c1_grp value = 3 } } set_variable = { which = pe_c1_prod value = 4 } } else_if = { limit = { check_variable = { which = pe_c1_grp value = 4 } } set_variable = { which = pe_c1_prod value = 8 } } }
-		if = { limit = { check_variable = { which = pe_c1_prod value = 1 } } set_variable = { which = pe_tmp value = pe_c1_sv } multiply_variable = { which = pe_tmp value = 0.375 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
-		else_if = { limit = { check_variable = { which = pe_c1_prod value = 2 } } set_variable = { which = pe_tmp value = pe_c1_sv } multiply_variable = { which = pe_tmp value = 0.75 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
-		else_if = { limit = { check_variable = { which = pe_c1_prod value = 3 } } set_variable = { which = pe_tmp value = pe_c1_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
-		else_if = { limit = { check_variable = { which = pe_c1_prod value = 4 } } set_variable = { which = pe_tmp value = pe_c1_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
-		else_if = { limit = { check_variable = { which = pe_c1_prod value = 5 } } set_variable = { which = pe_tmp value = pe_c1_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
-		else_if = { limit = { check_variable = { which = pe_c1_prod value = 6 } } set_variable = { which = pe_tmp value = pe_c1_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
-		else_if = { limit = { check_variable = { which = pe_c1_prod value = 7 } } set_variable = { which = pe_tmp value = pe_c1_sv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
-		else_if = { limit = { check_variable = { which = pe_c1_prod value = 8 } } set_variable = { which = pe_tmp value = pe_c1_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
-		else_if = { limit = { check_variable = { which = pe_c1_prod value = 9 } } set_variable = { which = pe_tmp value = pe_c1_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
-		else_if = { limit = { check_variable = { which = pe_c1_prod value = 10 } } set_variable = { which = pe_tmp value = pe_c1_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
+		set_variable = { which = pe_cpv value = pe_c1_sv }
+		multiply_variable = { which = pe_cpv value = 1.2 }
+		if = { limit = { check_variable = { which = pe_c1_sw value = 1 } is_variable_set = pe_c1_swu } subtract_variable = { which = pe_cpv value = pe_c1_swu } }
+		if = { limit = { check_variable = { which = pe_c1_af value = 1 } is_variable_set = pe_c1_afu } subtract_variable = { which = pe_cpv value = pe_c1_afu } }
+		if = { limit = { check_variable = { which = pe_cpv value < 0 } } set_variable = { which = pe_cpv value = 0 } }
+		if = { limit = { check_variable = { which = pe_c1_prod value = 1 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.25 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
+		else_if = { limit = { check_variable = { which = pe_c1_prod value = 2 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
+		else_if = { limit = { check_variable = { which = pe_c1_prod value = 3 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
+		else_if = { limit = { check_variable = { which = pe_c1_prod value = 4 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
+		else_if = { limit = { check_variable = { which = pe_c1_prod value = 5 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
+		else_if = { limit = { check_variable = { which = pe_c1_prod value = 6 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
+		else_if = { limit = { check_variable = { which = pe_c1_prod value = 7 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.3333 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
+		else_if = { limit = { check_variable = { which = pe_c1_prod value = 8 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
+		else_if = { limit = { check_variable = { which = pe_c1_prod value = 9 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
+		else_if = { limit = { check_variable = { which = pe_c1_prod value = 10 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c1_out value = pe_tmp } round_variable = pe_c1_out }
 		set_variable = { which = pe_tmp value = pe_c1_sv }
-		multiply_variable = { which = pe_tmp value = 1.5 }
+		multiply_variable = { which = pe_tmp value = 0.6 }
 		change_variable = { which = pe_c1_cash value = pe_tmp }
 		if = {
 			limit = { check_variable = { which = pe_c1_shv value > 0 } }
@@ -6009,18 +6016,23 @@ pe_corp_station_output = {
 	if = {
 		limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_sv value > 0 } }
 		if = { limit = { NOT = { is_variable_set = pe_c2_prod } } if = { limit = { check_variable = { which = pe_c2_grp value = 1 } } set_variable = { which = pe_c2_prod value = 1 } } else_if = { limit = { check_variable = { which = pe_c2_grp value = 2 } } set_variable = { which = pe_c2_prod value = 3 } } else_if = { limit = { check_variable = { which = pe_c2_grp value = 3 } } set_variable = { which = pe_c2_prod value = 4 } } else_if = { limit = { check_variable = { which = pe_c2_grp value = 4 } } set_variable = { which = pe_c2_prod value = 8 } } }
-		if = { limit = { check_variable = { which = pe_c2_prod value = 1 } } set_variable = { which = pe_tmp value = pe_c2_sv } multiply_variable = { which = pe_tmp value = 0.375 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
-		else_if = { limit = { check_variable = { which = pe_c2_prod value = 2 } } set_variable = { which = pe_tmp value = pe_c2_sv } multiply_variable = { which = pe_tmp value = 0.75 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
-		else_if = { limit = { check_variable = { which = pe_c2_prod value = 3 } } set_variable = { which = pe_tmp value = pe_c2_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
-		else_if = { limit = { check_variable = { which = pe_c2_prod value = 4 } } set_variable = { which = pe_tmp value = pe_c2_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
-		else_if = { limit = { check_variable = { which = pe_c2_prod value = 5 } } set_variable = { which = pe_tmp value = pe_c2_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
-		else_if = { limit = { check_variable = { which = pe_c2_prod value = 6 } } set_variable = { which = pe_tmp value = pe_c2_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
-		else_if = { limit = { check_variable = { which = pe_c2_prod value = 7 } } set_variable = { which = pe_tmp value = pe_c2_sv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
-		else_if = { limit = { check_variable = { which = pe_c2_prod value = 8 } } set_variable = { which = pe_tmp value = pe_c2_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
-		else_if = { limit = { check_variable = { which = pe_c2_prod value = 9 } } set_variable = { which = pe_tmp value = pe_c2_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
-		else_if = { limit = { check_variable = { which = pe_c2_prod value = 10 } } set_variable = { which = pe_tmp value = pe_c2_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
+		set_variable = { which = pe_cpv value = pe_c2_sv }
+		multiply_variable = { which = pe_cpv value = 1.2 }
+		if = { limit = { check_variable = { which = pe_c2_sw value = 1 } is_variable_set = pe_c2_swu } subtract_variable = { which = pe_cpv value = pe_c2_swu } }
+		if = { limit = { check_variable = { which = pe_c2_af value = 1 } is_variable_set = pe_c2_afu } subtract_variable = { which = pe_cpv value = pe_c2_afu } }
+		if = { limit = { check_variable = { which = pe_cpv value < 0 } } set_variable = { which = pe_cpv value = 0 } }
+		if = { limit = { check_variable = { which = pe_c2_prod value = 1 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.25 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
+		else_if = { limit = { check_variable = { which = pe_c2_prod value = 2 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
+		else_if = { limit = { check_variable = { which = pe_c2_prod value = 3 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
+		else_if = { limit = { check_variable = { which = pe_c2_prod value = 4 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
+		else_if = { limit = { check_variable = { which = pe_c2_prod value = 5 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
+		else_if = { limit = { check_variable = { which = pe_c2_prod value = 6 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
+		else_if = { limit = { check_variable = { which = pe_c2_prod value = 7 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.3333 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
+		else_if = { limit = { check_variable = { which = pe_c2_prod value = 8 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
+		else_if = { limit = { check_variable = { which = pe_c2_prod value = 9 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
+		else_if = { limit = { check_variable = { which = pe_c2_prod value = 10 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c2_out value = pe_tmp } round_variable = pe_c2_out }
 		set_variable = { which = pe_tmp value = pe_c2_sv }
-		multiply_variable = { which = pe_tmp value = 1.5 }
+		multiply_variable = { which = pe_tmp value = 0.6 }
 		change_variable = { which = pe_c2_cash value = pe_tmp }
 		if = {
 			limit = { check_variable = { which = pe_c2_shv value > 0 } }
@@ -6033,18 +6045,23 @@ pe_corp_station_output = {
 	if = {
 		limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_sv value > 0 } }
 		if = { limit = { NOT = { is_variable_set = pe_c3_prod } } if = { limit = { check_variable = { which = pe_c3_grp value = 1 } } set_variable = { which = pe_c3_prod value = 1 } } else_if = { limit = { check_variable = { which = pe_c3_grp value = 2 } } set_variable = { which = pe_c3_prod value = 3 } } else_if = { limit = { check_variable = { which = pe_c3_grp value = 3 } } set_variable = { which = pe_c3_prod value = 4 } } else_if = { limit = { check_variable = { which = pe_c3_grp value = 4 } } set_variable = { which = pe_c3_prod value = 8 } } }
-		if = { limit = { check_variable = { which = pe_c3_prod value = 1 } } set_variable = { which = pe_tmp value = pe_c3_sv } multiply_variable = { which = pe_tmp value = 0.375 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
-		else_if = { limit = { check_variable = { which = pe_c3_prod value = 2 } } set_variable = { which = pe_tmp value = pe_c3_sv } multiply_variable = { which = pe_tmp value = 0.75 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
-		else_if = { limit = { check_variable = { which = pe_c3_prod value = 3 } } set_variable = { which = pe_tmp value = pe_c3_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
-		else_if = { limit = { check_variable = { which = pe_c3_prod value = 4 } } set_variable = { which = pe_tmp value = pe_c3_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
-		else_if = { limit = { check_variable = { which = pe_c3_prod value = 5 } } set_variable = { which = pe_tmp value = pe_c3_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
-		else_if = { limit = { check_variable = { which = pe_c3_prod value = 6 } } set_variable = { which = pe_tmp value = pe_c3_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
-		else_if = { limit = { check_variable = { which = pe_c3_prod value = 7 } } set_variable = { which = pe_tmp value = pe_c3_sv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
-		else_if = { limit = { check_variable = { which = pe_c3_prod value = 8 } } set_variable = { which = pe_tmp value = pe_c3_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
-		else_if = { limit = { check_variable = { which = pe_c3_prod value = 9 } } set_variable = { which = pe_tmp value = pe_c3_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
-		else_if = { limit = { check_variable = { which = pe_c3_prod value = 10 } } set_variable = { which = pe_tmp value = pe_c3_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
+		set_variable = { which = pe_cpv value = pe_c3_sv }
+		multiply_variable = { which = pe_cpv value = 1.2 }
+		if = { limit = { check_variable = { which = pe_c3_sw value = 1 } is_variable_set = pe_c3_swu } subtract_variable = { which = pe_cpv value = pe_c3_swu } }
+		if = { limit = { check_variable = { which = pe_c3_af value = 1 } is_variable_set = pe_c3_afu } subtract_variable = { which = pe_cpv value = pe_c3_afu } }
+		if = { limit = { check_variable = { which = pe_cpv value < 0 } } set_variable = { which = pe_cpv value = 0 } }
+		if = { limit = { check_variable = { which = pe_c3_prod value = 1 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.25 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
+		else_if = { limit = { check_variable = { which = pe_c3_prod value = 2 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
+		else_if = { limit = { check_variable = { which = pe_c3_prod value = 3 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
+		else_if = { limit = { check_variable = { which = pe_c3_prod value = 4 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
+		else_if = { limit = { check_variable = { which = pe_c3_prod value = 5 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
+		else_if = { limit = { check_variable = { which = pe_c3_prod value = 6 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
+		else_if = { limit = { check_variable = { which = pe_c3_prod value = 7 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.3333 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
+		else_if = { limit = { check_variable = { which = pe_c3_prod value = 8 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
+		else_if = { limit = { check_variable = { which = pe_c3_prod value = 9 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
+		else_if = { limit = { check_variable = { which = pe_c3_prod value = 10 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c3_out value = pe_tmp } round_variable = pe_c3_out }
 		set_variable = { which = pe_tmp value = pe_c3_sv }
-		multiply_variable = { which = pe_tmp value = 1.5 }
+		multiply_variable = { which = pe_tmp value = 0.6 }
 		change_variable = { which = pe_c3_cash value = pe_tmp }
 		if = {
 			limit = { check_variable = { which = pe_c3_shv value > 0 } }
@@ -6057,18 +6074,23 @@ pe_corp_station_output = {
 	if = {
 		limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_sv value > 0 } }
 		if = { limit = { NOT = { is_variable_set = pe_c4_prod } } if = { limit = { check_variable = { which = pe_c4_grp value = 1 } } set_variable = { which = pe_c4_prod value = 1 } } else_if = { limit = { check_variable = { which = pe_c4_grp value = 2 } } set_variable = { which = pe_c4_prod value = 3 } } else_if = { limit = { check_variable = { which = pe_c4_grp value = 3 } } set_variable = { which = pe_c4_prod value = 4 } } else_if = { limit = { check_variable = { which = pe_c4_grp value = 4 } } set_variable = { which = pe_c4_prod value = 8 } } }
-		if = { limit = { check_variable = { which = pe_c4_prod value = 1 } } set_variable = { which = pe_tmp value = pe_c4_sv } multiply_variable = { which = pe_tmp value = 0.375 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
-		else_if = { limit = { check_variable = { which = pe_c4_prod value = 2 } } set_variable = { which = pe_tmp value = pe_c4_sv } multiply_variable = { which = pe_tmp value = 0.75 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
-		else_if = { limit = { check_variable = { which = pe_c4_prod value = 3 } } set_variable = { which = pe_tmp value = pe_c4_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
-		else_if = { limit = { check_variable = { which = pe_c4_prod value = 4 } } set_variable = { which = pe_tmp value = pe_c4_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
-		else_if = { limit = { check_variable = { which = pe_c4_prod value = 5 } } set_variable = { which = pe_tmp value = pe_c4_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
-		else_if = { limit = { check_variable = { which = pe_c4_prod value = 6 } } set_variable = { which = pe_tmp value = pe_c4_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
-		else_if = { limit = { check_variable = { which = pe_c4_prod value = 7 } } set_variable = { which = pe_tmp value = pe_c4_sv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
-		else_if = { limit = { check_variable = { which = pe_c4_prod value = 8 } } set_variable = { which = pe_tmp value = pe_c4_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
-		else_if = { limit = { check_variable = { which = pe_c4_prod value = 9 } } set_variable = { which = pe_tmp value = pe_c4_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
-		else_if = { limit = { check_variable = { which = pe_c4_prod value = 10 } } set_variable = { which = pe_tmp value = pe_c4_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
+		set_variable = { which = pe_cpv value = pe_c4_sv }
+		multiply_variable = { which = pe_cpv value = 1.2 }
+		if = { limit = { check_variable = { which = pe_c4_sw value = 1 } is_variable_set = pe_c4_swu } subtract_variable = { which = pe_cpv value = pe_c4_swu } }
+		if = { limit = { check_variable = { which = pe_c4_af value = 1 } is_variable_set = pe_c4_afu } subtract_variable = { which = pe_cpv value = pe_c4_afu } }
+		if = { limit = { check_variable = { which = pe_cpv value < 0 } } set_variable = { which = pe_cpv value = 0 } }
+		if = { limit = { check_variable = { which = pe_c4_prod value = 1 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.25 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
+		else_if = { limit = { check_variable = { which = pe_c4_prod value = 2 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
+		else_if = { limit = { check_variable = { which = pe_c4_prod value = 3 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
+		else_if = { limit = { check_variable = { which = pe_c4_prod value = 4 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
+		else_if = { limit = { check_variable = { which = pe_c4_prod value = 5 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
+		else_if = { limit = { check_variable = { which = pe_c4_prod value = 6 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
+		else_if = { limit = { check_variable = { which = pe_c4_prod value = 7 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.3333 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
+		else_if = { limit = { check_variable = { which = pe_c4_prod value = 8 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
+		else_if = { limit = { check_variable = { which = pe_c4_prod value = 9 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
+		else_if = { limit = { check_variable = { which = pe_c4_prod value = 10 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c4_out value = pe_tmp } round_variable = pe_c4_out }
 		set_variable = { which = pe_tmp value = pe_c4_sv }
-		multiply_variable = { which = pe_tmp value = 1.5 }
+		multiply_variable = { which = pe_tmp value = 0.6 }
 		change_variable = { which = pe_c4_cash value = pe_tmp }
 		if = {
 			limit = { check_variable = { which = pe_c4_shv value > 0 } }
@@ -6081,18 +6103,23 @@ pe_corp_station_output = {
 	if = {
 		limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_sv value > 0 } }
 		if = { limit = { NOT = { is_variable_set = pe_c5_prod } } if = { limit = { check_variable = { which = pe_c5_grp value = 1 } } set_variable = { which = pe_c5_prod value = 1 } } else_if = { limit = { check_variable = { which = pe_c5_grp value = 2 } } set_variable = { which = pe_c5_prod value = 3 } } else_if = { limit = { check_variable = { which = pe_c5_grp value = 3 } } set_variable = { which = pe_c5_prod value = 4 } } else_if = { limit = { check_variable = { which = pe_c5_grp value = 4 } } set_variable = { which = pe_c5_prod value = 8 } } }
-		if = { limit = { check_variable = { which = pe_c5_prod value = 1 } } set_variable = { which = pe_tmp value = pe_c5_sv } multiply_variable = { which = pe_tmp value = 0.375 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
-		else_if = { limit = { check_variable = { which = pe_c5_prod value = 2 } } set_variable = { which = pe_tmp value = pe_c5_sv } multiply_variable = { which = pe_tmp value = 0.75 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
-		else_if = { limit = { check_variable = { which = pe_c5_prod value = 3 } } set_variable = { which = pe_tmp value = pe_c5_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
-		else_if = { limit = { check_variable = { which = pe_c5_prod value = 4 } } set_variable = { which = pe_tmp value = pe_c5_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
-		else_if = { limit = { check_variable = { which = pe_c5_prod value = 5 } } set_variable = { which = pe_tmp value = pe_c5_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
-		else_if = { limit = { check_variable = { which = pe_c5_prod value = 6 } } set_variable = { which = pe_tmp value = pe_c5_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
-		else_if = { limit = { check_variable = { which = pe_c5_prod value = 7 } } set_variable = { which = pe_tmp value = pe_c5_sv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
-		else_if = { limit = { check_variable = { which = pe_c5_prod value = 8 } } set_variable = { which = pe_tmp value = pe_c5_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
-		else_if = { limit = { check_variable = { which = pe_c5_prod value = 9 } } set_variable = { which = pe_tmp value = pe_c5_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
-		else_if = { limit = { check_variable = { which = pe_c5_prod value = 10 } } set_variable = { which = pe_tmp value = pe_c5_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
+		set_variable = { which = pe_cpv value = pe_c5_sv }
+		multiply_variable = { which = pe_cpv value = 1.2 }
+		if = { limit = { check_variable = { which = pe_c5_sw value = 1 } is_variable_set = pe_c5_swu } subtract_variable = { which = pe_cpv value = pe_c5_swu } }
+		if = { limit = { check_variable = { which = pe_c5_af value = 1 } is_variable_set = pe_c5_afu } subtract_variable = { which = pe_cpv value = pe_c5_afu } }
+		if = { limit = { check_variable = { which = pe_cpv value < 0 } } set_variable = { which = pe_cpv value = 0 } }
+		if = { limit = { check_variable = { which = pe_c5_prod value = 1 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.25 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
+		else_if = { limit = { check_variable = { which = pe_c5_prod value = 2 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
+		else_if = { limit = { check_variable = { which = pe_c5_prod value = 3 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
+		else_if = { limit = { check_variable = { which = pe_c5_prod value = 4 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
+		else_if = { limit = { check_variable = { which = pe_c5_prod value = 5 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
+		else_if = { limit = { check_variable = { which = pe_c5_prod value = 6 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
+		else_if = { limit = { check_variable = { which = pe_c5_prod value = 7 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.3333 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
+		else_if = { limit = { check_variable = { which = pe_c5_prod value = 8 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
+		else_if = { limit = { check_variable = { which = pe_c5_prod value = 9 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
+		else_if = { limit = { check_variable = { which = pe_c5_prod value = 10 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c5_out value = pe_tmp } round_variable = pe_c5_out }
 		set_variable = { which = pe_tmp value = pe_c5_sv }
-		multiply_variable = { which = pe_tmp value = 1.5 }
+		multiply_variable = { which = pe_tmp value = 0.6 }
 		change_variable = { which = pe_c5_cash value = pe_tmp }
 		if = {
 			limit = { check_variable = { which = pe_c5_shv value > 0 } }
@@ -6105,18 +6132,23 @@ pe_corp_station_output = {
 	if = {
 		limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_sv value > 0 } }
 		if = { limit = { NOT = { is_variable_set = pe_c6_prod } } if = { limit = { check_variable = { which = pe_c6_grp value = 1 } } set_variable = { which = pe_c6_prod value = 1 } } else_if = { limit = { check_variable = { which = pe_c6_grp value = 2 } } set_variable = { which = pe_c6_prod value = 3 } } else_if = { limit = { check_variable = { which = pe_c6_grp value = 3 } } set_variable = { which = pe_c6_prod value = 4 } } else_if = { limit = { check_variable = { which = pe_c6_grp value = 4 } } set_variable = { which = pe_c6_prod value = 8 } } }
-		if = { limit = { check_variable = { which = pe_c6_prod value = 1 } } set_variable = { which = pe_tmp value = pe_c6_sv } multiply_variable = { which = pe_tmp value = 0.375 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
-		else_if = { limit = { check_variable = { which = pe_c6_prod value = 2 } } set_variable = { which = pe_tmp value = pe_c6_sv } multiply_variable = { which = pe_tmp value = 0.75 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
-		else_if = { limit = { check_variable = { which = pe_c6_prod value = 3 } } set_variable = { which = pe_tmp value = pe_c6_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
-		else_if = { limit = { check_variable = { which = pe_c6_prod value = 4 } } set_variable = { which = pe_tmp value = pe_c6_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
-		else_if = { limit = { check_variable = { which = pe_c6_prod value = 5 } } set_variable = { which = pe_tmp value = pe_c6_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
-		else_if = { limit = { check_variable = { which = pe_c6_prod value = 6 } } set_variable = { which = pe_tmp value = pe_c6_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
-		else_if = { limit = { check_variable = { which = pe_c6_prod value = 7 } } set_variable = { which = pe_tmp value = pe_c6_sv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
-		else_if = { limit = { check_variable = { which = pe_c6_prod value = 8 } } set_variable = { which = pe_tmp value = pe_c6_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
-		else_if = { limit = { check_variable = { which = pe_c6_prod value = 9 } } set_variable = { which = pe_tmp value = pe_c6_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
-		else_if = { limit = { check_variable = { which = pe_c6_prod value = 10 } } set_variable = { which = pe_tmp value = pe_c6_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
+		set_variable = { which = pe_cpv value = pe_c6_sv }
+		multiply_variable = { which = pe_cpv value = 1.2 }
+		if = { limit = { check_variable = { which = pe_c6_sw value = 1 } is_variable_set = pe_c6_swu } subtract_variable = { which = pe_cpv value = pe_c6_swu } }
+		if = { limit = { check_variable = { which = pe_c6_af value = 1 } is_variable_set = pe_c6_afu } subtract_variable = { which = pe_cpv value = pe_c6_afu } }
+		if = { limit = { check_variable = { which = pe_cpv value < 0 } } set_variable = { which = pe_cpv value = 0 } }
+		if = { limit = { check_variable = { which = pe_c6_prod value = 1 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.25 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
+		else_if = { limit = { check_variable = { which = pe_c6_prod value = 2 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
+		else_if = { limit = { check_variable = { which = pe_c6_prod value = 3 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
+		else_if = { limit = { check_variable = { which = pe_c6_prod value = 4 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
+		else_if = { limit = { check_variable = { which = pe_c6_prod value = 5 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
+		else_if = { limit = { check_variable = { which = pe_c6_prod value = 6 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
+		else_if = { limit = { check_variable = { which = pe_c6_prod value = 7 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.3333 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
+		else_if = { limit = { check_variable = { which = pe_c6_prod value = 8 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
+		else_if = { limit = { check_variable = { which = pe_c6_prod value = 9 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
+		else_if = { limit = { check_variable = { which = pe_c6_prod value = 10 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c6_out value = pe_tmp } round_variable = pe_c6_out }
 		set_variable = { which = pe_tmp value = pe_c6_sv }
-		multiply_variable = { which = pe_tmp value = 1.5 }
+		multiply_variable = { which = pe_tmp value = 0.6 }
 		change_variable = { which = pe_c6_cash value = pe_tmp }
 		if = {
 			limit = { check_variable = { which = pe_c6_shv value > 0 } }
@@ -6129,18 +6161,23 @@ pe_corp_station_output = {
 	if = {
 		limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_sv value > 0 } }
 		if = { limit = { NOT = { is_variable_set = pe_c7_prod } } if = { limit = { check_variable = { which = pe_c7_grp value = 1 } } set_variable = { which = pe_c7_prod value = 1 } } else_if = { limit = { check_variable = { which = pe_c7_grp value = 2 } } set_variable = { which = pe_c7_prod value = 3 } } else_if = { limit = { check_variable = { which = pe_c7_grp value = 3 } } set_variable = { which = pe_c7_prod value = 4 } } else_if = { limit = { check_variable = { which = pe_c7_grp value = 4 } } set_variable = { which = pe_c7_prod value = 8 } } }
-		if = { limit = { check_variable = { which = pe_c7_prod value = 1 } } set_variable = { which = pe_tmp value = pe_c7_sv } multiply_variable = { which = pe_tmp value = 0.375 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
-		else_if = { limit = { check_variable = { which = pe_c7_prod value = 2 } } set_variable = { which = pe_tmp value = pe_c7_sv } multiply_variable = { which = pe_tmp value = 0.75 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
-		else_if = { limit = { check_variable = { which = pe_c7_prod value = 3 } } set_variable = { which = pe_tmp value = pe_c7_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
-		else_if = { limit = { check_variable = { which = pe_c7_prod value = 4 } } set_variable = { which = pe_tmp value = pe_c7_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
-		else_if = { limit = { check_variable = { which = pe_c7_prod value = 5 } } set_variable = { which = pe_tmp value = pe_c7_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
-		else_if = { limit = { check_variable = { which = pe_c7_prod value = 6 } } set_variable = { which = pe_tmp value = pe_c7_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
-		else_if = { limit = { check_variable = { which = pe_c7_prod value = 7 } } set_variable = { which = pe_tmp value = pe_c7_sv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
-		else_if = { limit = { check_variable = { which = pe_c7_prod value = 8 } } set_variable = { which = pe_tmp value = pe_c7_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
-		else_if = { limit = { check_variable = { which = pe_c7_prod value = 9 } } set_variable = { which = pe_tmp value = pe_c7_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
-		else_if = { limit = { check_variable = { which = pe_c7_prod value = 10 } } set_variable = { which = pe_tmp value = pe_c7_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
+		set_variable = { which = pe_cpv value = pe_c7_sv }
+		multiply_variable = { which = pe_cpv value = 1.2 }
+		if = { limit = { check_variable = { which = pe_c7_sw value = 1 } is_variable_set = pe_c7_swu } subtract_variable = { which = pe_cpv value = pe_c7_swu } }
+		if = { limit = { check_variable = { which = pe_c7_af value = 1 } is_variable_set = pe_c7_afu } subtract_variable = { which = pe_cpv value = pe_c7_afu } }
+		if = { limit = { check_variable = { which = pe_cpv value < 0 } } set_variable = { which = pe_cpv value = 0 } }
+		if = { limit = { check_variable = { which = pe_c7_prod value = 1 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.25 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
+		else_if = { limit = { check_variable = { which = pe_c7_prod value = 2 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
+		else_if = { limit = { check_variable = { which = pe_c7_prod value = 3 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
+		else_if = { limit = { check_variable = { which = pe_c7_prod value = 4 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
+		else_if = { limit = { check_variable = { which = pe_c7_prod value = 5 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
+		else_if = { limit = { check_variable = { which = pe_c7_prod value = 6 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
+		else_if = { limit = { check_variable = { which = pe_c7_prod value = 7 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.3333 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
+		else_if = { limit = { check_variable = { which = pe_c7_prod value = 8 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
+		else_if = { limit = { check_variable = { which = pe_c7_prod value = 9 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
+		else_if = { limit = { check_variable = { which = pe_c7_prod value = 10 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c7_out value = pe_tmp } round_variable = pe_c7_out }
 		set_variable = { which = pe_tmp value = pe_c7_sv }
-		multiply_variable = { which = pe_tmp value = 1.5 }
+		multiply_variable = { which = pe_tmp value = 0.6 }
 		change_variable = { which = pe_c7_cash value = pe_tmp }
 		if = {
 			limit = { check_variable = { which = pe_c7_shv value > 0 } }
@@ -6153,18 +6190,23 @@ pe_corp_station_output = {
 	if = {
 		limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_sv value > 0 } }
 		if = { limit = { NOT = { is_variable_set = pe_c8_prod } } if = { limit = { check_variable = { which = pe_c8_grp value = 1 } } set_variable = { which = pe_c8_prod value = 1 } } else_if = { limit = { check_variable = { which = pe_c8_grp value = 2 } } set_variable = { which = pe_c8_prod value = 3 } } else_if = { limit = { check_variable = { which = pe_c8_grp value = 3 } } set_variable = { which = pe_c8_prod value = 4 } } else_if = { limit = { check_variable = { which = pe_c8_grp value = 4 } } set_variable = { which = pe_c8_prod value = 8 } } }
-		if = { limit = { check_variable = { which = pe_c8_prod value = 1 } } set_variable = { which = pe_tmp value = pe_c8_sv } multiply_variable = { which = pe_tmp value = 0.375 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
-		else_if = { limit = { check_variable = { which = pe_c8_prod value = 2 } } set_variable = { which = pe_tmp value = pe_c8_sv } multiply_variable = { which = pe_tmp value = 0.75 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
-		else_if = { limit = { check_variable = { which = pe_c8_prod value = 3 } } set_variable = { which = pe_tmp value = pe_c8_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
-		else_if = { limit = { check_variable = { which = pe_c8_prod value = 4 } } set_variable = { which = pe_tmp value = pe_c8_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
-		else_if = { limit = { check_variable = { which = pe_c8_prod value = 5 } } set_variable = { which = pe_tmp value = pe_c8_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
-		else_if = { limit = { check_variable = { which = pe_c8_prod value = 6 } } set_variable = { which = pe_tmp value = pe_c8_sv } multiply_variable = { which = pe_tmp value = 0.4286 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
-		else_if = { limit = { check_variable = { which = pe_c8_prod value = 7 } } set_variable = { which = pe_tmp value = pe_c8_sv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
-		else_if = { limit = { check_variable = { which = pe_c8_prod value = 8 } } set_variable = { which = pe_tmp value = pe_c8_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
-		else_if = { limit = { check_variable = { which = pe_c8_prod value = 9 } } set_variable = { which = pe_tmp value = pe_c8_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
-		else_if = { limit = { check_variable = { which = pe_c8_prod value = 10 } } set_variable = { which = pe_tmp value = pe_c8_sv } multiply_variable = { which = pe_tmp value = 1.5 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
+		set_variable = { which = pe_cpv value = pe_c8_sv }
+		multiply_variable = { which = pe_cpv value = 1.2 }
+		if = { limit = { check_variable = { which = pe_c8_sw value = 1 } is_variable_set = pe_c8_swu } subtract_variable = { which = pe_cpv value = pe_c8_swu } }
+		if = { limit = { check_variable = { which = pe_c8_af value = 1 } is_variable_set = pe_c8_afu } subtract_variable = { which = pe_cpv value = pe_c8_afu } }
+		if = { limit = { check_variable = { which = pe_cpv value < 0 } } set_variable = { which = pe_cpv value = 0 } }
+		if = { limit = { check_variable = { which = pe_c8_prod value = 1 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.25 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
+		else_if = { limit = { check_variable = { which = pe_c8_prod value = 2 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.5 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
+		else_if = { limit = { check_variable = { which = pe_c8_prod value = 3 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
+		else_if = { limit = { check_variable = { which = pe_c8_prod value = 4 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
+		else_if = { limit = { check_variable = { which = pe_c8_prod value = 5 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
+		else_if = { limit = { check_variable = { which = pe_c8_prod value = 6 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.2857 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
+		else_if = { limit = { check_variable = { which = pe_c8_prod value = 7 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 0.3333 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
+		else_if = { limit = { check_variable = { which = pe_c8_prod value = 8 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
+		else_if = { limit = { check_variable = { which = pe_c8_prod value = 9 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
+		else_if = { limit = { check_variable = { which = pe_c8_prod value = 10 } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = 1 } set_variable = { which = pe_c8_out value = pe_tmp } round_variable = pe_c8_out }
 		set_variable = { which = pe_tmp value = pe_c8_sv }
-		multiply_variable = { which = pe_tmp value = 1.5 }
+		multiply_variable = { which = pe_tmp value = 0.6 }
 		change_variable = { which = pe_c8_cash value = pe_tmp }
 		if = {
 			limit = { check_variable = { which = pe_c8_shv value > 0 } }

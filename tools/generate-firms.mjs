@@ -1282,10 +1282,10 @@ loc.german.push(' pe_msg_site_cancel:0 "Investoren haben eine Baustelle auf $PLA
 loc.english.push(' pe_private_dividends:0 "Dividends"', ' d_pe_ledger_dividend:0 "State Shareholdings"', ' d_pe_ledger_dividend_desc:0 "Shares the state bought in private corporations; they pay dividends every month."');
 loc.german.push(' pe_private_dividends:0 "Dividenden"', ' d_pe_ledger_dividend:0 "Staatliche Aktienbeteiligungen"', ' d_pe_ledger_dividend_desc:0 "Aktien, die der Staat an Privatkonzernen hält; sie zahlen monatlich Dividende."');
 loc.english.push(' pe_private_profits:0 "Profit Payouts to Private Firms"', ' pe_private_savings:0 "Private Savings"',
-  ' d_pe_ledger_profit:0 "Profit Payout to Private Firms"', ' d_pe_ledger_profit_desc:0 "§HAn expense of the state.§! The private firms on this planet deliver everything they produce to the empire, just like state jobs. In return the state pays them their profit share every month, in trade: a part of the value their jobs create, by economic order (Guided 15%, Mixed 20%, Free Market 25%, Laissez-faire 35%), minus their running costs. With it the firms grow and new ones are founded.\\n\\nProfits and savings together cost at most 40% of the gross trade income; what the state does not pay, the firms do not get either."',
+  ' d_pe_ledger_profit:0 "Profit Payout to Private Firms"', ' d_pe_ledger_profit_desc:0 "§HAn expense of the state.§! The private firms on this planet deliver everything they produce to the empire, just like state jobs. In return the state pays them their profit share every month, in trade: a part of the value their jobs create, by economic order (Guided 7.5%, Mixed 10%, Free Market 12.5%, Laissez-faire 17.5%), minus their running costs. With it the firms grow and new ones are founded.\\n\\nProfits and savings together cost at most 40% of the gross trade income; what the state does not pay, the firms do not get either."',
   ' d_pe_ledger_savings:0 "Private Savings"', ' d_pe_ledger_savings_desc:0 "§HAn expense of the state.§! Every month a part of our trade income flows into the investor pool as private savings, by economic order (Guided 5%, Mixed 10%, Free Market 15%, Laissez-faire 20%). From the pool investors found new firms and buy state districts."');
 loc.german.push(' pe_private_profits:0 "Gewinnauszahlung an Privatfirmen"', ' pe_private_savings:0 "Private Ersparnisse"',
-  ' d_pe_ledger_profit:0 "Gewinnauszahlung an Privatfirmen"', ' d_pe_ledger_profit_desc:0 "§HEine Ausgabe des Staates.§! Die Privatfirmen auf diesem Planeten liefern ihre ganze Produktion an das Reich, genau wie Staatsjobs. Dafür zahlt der Staat ihnen jeden Monat ihren Gewinnanteil in Handel: einen Teil des Werts, den ihre Jobs schaffen, je nach Wirtschaftsordnung (Gelenkt 15 %, Gemischt 20 %, Freie Marktwirtschaft 25 %, Laissez-faire 35 %), abzüglich ihrer laufenden Kosten. Davon wachsen die Firmen, und neue werden gegründet.\\n\\nGewinne und Ersparnisse zusammen kosten höchstens 40 % des Brutto-Handels; was der Staat nicht zahlt, bekommen die Firmen auch nicht."',
+  ' d_pe_ledger_profit:0 "Gewinnauszahlung an Privatfirmen"', ' d_pe_ledger_profit_desc:0 "§HEine Ausgabe des Staates.§! Die Privatfirmen auf diesem Planeten liefern ihre ganze Produktion an das Reich, genau wie Staatsjobs. Dafür zahlt der Staat ihnen jeden Monat ihren Gewinnanteil in Handel: einen Teil des Werts, den ihre Jobs schaffen, je nach Wirtschaftsordnung (Gelenkt 7,5 %, Gemischt 10 %, Freie Marktwirtschaft 12,5 %, Laissez-faire 17,5 %), abzüglich ihrer laufenden Kosten. Davon wachsen die Firmen, und neue werden gegründet.\\n\\nGewinne und Ersparnisse zusammen kosten höchstens 40 % des Brutto-Handels; was der Staat nicht zahlt, bekommen die Firmen auch nicht."',
   ' d_pe_ledger_savings:0 "Private Ersparnisse"', ' d_pe_ledger_savings_desc:0 "§HEine Ausgabe des Staates.§! Jeden Monat fließt ein Teil unseres Handelseinkommens als private Ersparnisse in den Investorenpool, je nach Wirtschaftsordnung (Gelenkt 5 %, Gemischt 10 %, Freie Marktwirtschaft 15 %, Laissez-faire 20 %). Aus dem Pool gründen Investoren neue Firmen und kaufen Staatsdistrikte."');
 loc.german.push(' pe_deposit_cat_automation:0 "Private Automatisierung"');
 loc.english.push(' pe_msg_conq_hq_lost:0 "With $PLANET$ we have lost the headquarters of §Y$CORP$§!. The corporation leaves our economy; its firms here are independent now, its stations and megastructures are ours."', ' pe_msg_conq_hq_gained:0 "With $PLANET$ the corporation §Y$CORP$§! has come under our rule: its headquarters and its firms there are part of our economy now."', ' pe_msg_conq_corp_gone:0 "§Y$CORP$§! has its headquarters on $PLANET$, which is ours now, but our economy has no room for it: the corporation is dissolved, its firms are independent."');
@@ -1882,14 +1882,16 @@ ${CORPS.map(k => `	if = {
 // pe_holdings), linked by the relation flag pe_holdings_of. Corporations build stations on
 // free orbital deposits or buy the state's stations (Laissez-faire without asking, Free
 // Market and Mixed by offer, pe.280). Only deposits of ordinary resources; strategic ones stay
-// out. The station's output goes to the holdings and is used by the corporation: it produces
-// one and a half times the station's value (base prices) more in its own product (deposit
-// lines on its headquarters, budget line "Corporate production"). A corporate Dyson swarm
-// counts like a station at its star, times the swarm's stage.
+// out. The station's output goes to the holdings and is used by the corporation. Private firms
+// are more efficient: it makes 140% of the stations' value (base prices) in its own product;
+// first it pays the upkeep of its megastructures from that, then 120% of the value go to us
+// (deposit lines on its headquarters, budget line "Corporate production") and 20% are its
+// margin (cash). A corporate Dyson swarm counts like a station at its star, times the swarm's
+// stage; an arc furnace by its deposits.
 const ST_VAL = {minerals: 1, energy: 1, food: 1, trade: 1, alloys: 4, consumer_goods: 2, unity: 3, physics_research: 3.5, society_research: 3.5, engineering_research: 3.5};
 const ST_RES = Object.keys(ST_VAL);
 const ST_STOCK = ['minerals', 'energy', 'food', 'trade', 'alloys', 'consumer_goods', 'unity'];
-const ST_BONUS = 1.5;
+const ST_SHARE = 1.2, ST_MARGIN = 0.2;
 // Which station resources a sector group can use.
 const GROUP_RES = {1: ['minerals', 'energy', 'alloys'], 2: ['trade', 'energy', 'consumer_goods'], 3: ['physics_research', 'society_research', 'engineering_research', 'unity'], 4: ['minerals', 'energy', 'food']};
 const ST_LIMIT = [['pe_order_laissez_faire', 0.4], ['pe_order_free_market', 0.25], ['pe_order_mixed', 0.15]];
@@ -2128,8 +2130,10 @@ ${nameChain('pe_msg_name', id => `if = { limit = { check_variable = { which = pe
 # Country scope, quarterly: what the corporate stations bring. Per corporation its stations'
 # value at base prices (pe_c<slot>_sv, per month) and their number (pe_c<slot>_st). The
 # holdings hand the stored output to the corporation (it is used up); the corporation
-# produces ${ST_BONUS} x the value in its own product on its headquarters (pe_cpv_<res> on the
-# planet, deposit lines), and books half the value (per quarter: x 3) as its own earnings.
+# delivers ${ST_SHARE} x the value in its own product on its headquarters (deposit lines), less
+# the upkeep of its swarm and furnace (pe_c<slot>_swu, _afu: value per month, set by
+# pe_corp_swarm / pe_corp_furnace), and books ${ST_MARGIN} x the value (per quarter: x 3) as its
+# margin.
 # Stations bought under Free Market or Mixed pay us a fifth of their value a year.
 pe_corp_station_output = {
 ${CORPS.map(k => `\tset_variable = { which = ${C(k, 'sv')} value = 0 }\n\tset_variable = { which = ${C(k, 'out')} value = 0 }\n\tset_variable = { which = ${C(k, 'st')} value = 0 }\n\tset_variable = { which = ${C(k, 'shv')} value = 0 }`).join('\n')}
@@ -2195,9 +2199,14 @@ ${ST_STOCK.map(r => `			export_resource_stockpile_to_variable = { resource = ${r
 ${CORPS.map(k => `	if = {
 		limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'sv')} value > 0 } }
 		if = { limit = { NOT = { is_variable_set = ${C(k, 'prod')} } } ${GROUPS.map((g, i) => `${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = ${C(k, 'grp')} value = ${g} } } set_variable = { which = ${C(k, 'prod')} value = ${GROUP_PROD[g]} } }`).join(' ')} }
-${PROD.map((r, i) => `		${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = ${C(k, 'prod')} value = ${i + 1} } } set_variable = { which = pe_tmp value = ${C(k, 'sv')} } multiply_variable = { which = pe_tmp value = ${+(ST_BONUS / ST_VAL[r]).toFixed(4)} } set_variable = { which = ${C(k, 'out')} value = pe_tmp } round_variable = ${C(k, 'out')} }`).join('\n')}
+		set_variable = { which = pe_cpv value = ${C(k, 'sv')} }
+		multiply_variable = { which = pe_cpv value = ${ST_SHARE} }
+		if = { limit = { check_variable = { which = ${C(k, 'sw')} value = 1 } is_variable_set = ${C(k, 'swu')} } subtract_variable = { which = pe_cpv value = ${C(k, 'swu')} } }
+		if = { limit = { check_variable = { which = ${C(k, 'af')} value = 1 } is_variable_set = ${C(k, 'afu')} } subtract_variable = { which = pe_cpv value = ${C(k, 'afu')} } }
+		if = { limit = { check_variable = { which = pe_cpv value < 0 } } set_variable = { which = pe_cpv value = 0 } }
+${PROD.map((r, i) => `		${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = ${C(k, 'prod')} value = ${i + 1} } } set_variable = { which = pe_tmp value = pe_cpv } multiply_variable = { which = pe_tmp value = ${+(1 / ST_VAL[r]).toFixed(4)} } set_variable = { which = ${C(k, 'out')} value = pe_tmp } round_variable = ${C(k, 'out')} }`).join('\n')}
 		set_variable = { which = pe_tmp value = ${C(k, 'sv')} }
-		multiply_variable = { which = pe_tmp value = 1.5 }
+		multiply_variable = { which = pe_tmp value = ${+(ST_MARGIN * 3).toFixed(4)} }
 		change_variable = { which = ${C(k, 'cash')} value = pe_tmp }
 		if = {
 			limit = { check_variable = { which = ${C(k, 'shv')} value > 0 } }
@@ -2332,9 +2341,9 @@ const PROD_NAMES = {alloys: ['Alloys', 'Legierungen'], consumer_goods: ['Consume
 for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
   const L = loc[lang];
   NAME_IDS.forEach(id => L.push(li ? ` d_pe_hq_${id}:0 "Hauptsitz: ${CORP_NAMES[id - 1]}"` : ` d_pe_hq_${id}:0 "Headquarters: ${CORP_NAMES[id - 1]}"`,
-    li ? ` d_pe_hq_${id}_desc:0 "Der Konzern ${CORP_NAMES[id - 1]} hat hier seinen Sitz.\\n\\n§HKonzernproduktion§!\\nDer Konzern besitzt Orbitalstationen und Dyson-Schwärme, verwaltet von unseren Private Holdings. Die Stationen hat er auf Vorkommen gebaut, die wir nicht genutzt haben, oder uns abgekauft. Ihren Ertrag verarbeitet er selbst und liefert uns dafür hier jeden Monat das Anderthalbfache ihres Werts (zu Grundpreisen) in seinem eigenen Produkt: die Ressource oben. Mehr Stationen oder ein größerer Schwarm bedeuten mehr Konzernproduktion.\\n\\nStationen und Produktion jedes Konzerns zeigt die Planeten-Entscheidung §YFirmenregister§!."` : ` d_pe_hq_${id}_desc:0 "The corporation ${CORP_NAMES[id - 1]} has its headquarters here.\\n\\n§HCorporate production§!\\nThe corporation owns orbital stations and Dyson swarms, held by our Private Holdings. It built the stations on deposits we did not use, or bought them from us. It processes their output itself and delivers us here, every month, one and a half times their value (at base prices) in its own product: the resource above. More stations or a bigger swarm mean more corporate production.\\n\\nThe planet decision §YRegister of Firms§! shows each corporation's stations and production."`));
+    li ? ` d_pe_hq_${id}_desc:0 "Der Konzern ${CORP_NAMES[id - 1]} hat hier seinen Sitz.\\n\\n§HKonzernproduktion§!\\nDer Konzern besitzt Orbitalstationen und Dyson-Schwärme, verwaltet von unseren Private Holdings. Die Stationen hat er auf Vorkommen gebaut, die wir nicht genutzt haben, oder uns abgekauft. Ihren Ertrag verarbeitet er effizienter als wir (140 %): Er bezahlt davon den Unterhalt seiner Megastrukturen, liefert uns hier jeden Monat 120 % ihres Werts (zu Grundpreisen) in seinem eigenen Produkt, die Ressource oben, und behält 20 % als Marge. Mehr Stationen oder ein größerer Schwarm bedeuten mehr Konzernproduktion.\\n\\nStationen und Produktion jedes Konzerns zeigt die Planeten-Entscheidung §YFirmenregister§!."` : ` d_pe_hq_${id}_desc:0 "The corporation ${CORP_NAMES[id - 1]} has its headquarters here.\\n\\n§HCorporate production§!\\nThe corporation owns orbital stations and Dyson swarms, held by our Private Holdings. It built the stations on deposits we did not use, or bought them from us. It processes their output more efficiently than we would (140%): it pays the upkeep of its megastructures from it, delivers us here, every month, 120% of their value (at base prices) in its own product, the resource above, and keeps 20% as its margin. More stations or a bigger swarm mean more corporate production.\\n\\nThe planet decision §YRegister of Firms§! shows each corporation's stations and production."`));
   PROD.forEach(r => L.push(li ? ` d_pe_cprod_${r}:0 "Konzernproduktion: ${PROD_NAMES[r][1]}"` : ` d_pe_cprod_${r}:0 "Corporate Production: ${PROD_NAMES[r][0]}"`,
-    li ? ` d_pe_cprod_${r}_desc:0 "Ein Konzern mit Hauptsitz hier verarbeitet den Ertrag seiner Orbitalstationen und Dyson-Schwärme und produziert dafür das Anderthalbfache ihres Werts in seinem eigenen Produkt."` : ` d_pe_cprod_${r}_desc:0 "A corporation headquartered here processes the output of its orbital stations and Dyson swarms and produces one and a half times its value in its own product."`));
+    li ? ` d_pe_cprod_${r}_desc:0 "Ein Konzern mit Hauptsitz hier verarbeitet den Ertrag seiner Orbitalstationen und Dyson-Schwärme und liefert dafür 120 % ihres Werts in seinem eigenen Produkt, abzüglich des Unterhalts seiner Megastrukturen."` : ` d_pe_cprod_${r}_desc:0 "A corporation headquartered here processes the output of its orbital stations and Dyson swarms and delivers 120% of its value in its own product, less the upkeep of its megastructures."`));
   PROD.forEach(r => L.push(` pe_prod_${r}:0 "${li ? PROD_NAMES[r][1] : PROD_NAMES[r][0]}"`));
   L.push(li ? ' d_pe_location:0 "Standortvorteile"' : ' d_pe_location:0 "Location Advantages"',
     li ? ' d_pe_location_desc:0 "Was die Privatwirtschaft hier stärker macht, für die ganze Branche (auch Staatsjobs): §HCluster§! (2 / 3 / 4+ Privatfirmen mit demselben Hauptprodukt: +3 / 6 / 9 % Ertrag ihrer Branche) und §HLieferverträge§! (feste Verträge mit Lieferanten oder Abnehmern auf anderen Planeten: +5 %). Ingenieurslabore: der halbe Wert für alle Forscher."'

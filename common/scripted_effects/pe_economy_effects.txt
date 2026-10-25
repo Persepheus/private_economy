@@ -143,6 +143,11 @@ pe_monthly_sites = {
 pe_init = {
 	if = { limit = { NOT = { is_variable_set = pe_private_share } } set_variable = { which = pe_private_share value = 0 } }
 	if = { limit = { NOT = { is_variable_set = pe_profit_share } } set_variable = { which = pe_profit_share value = 0 } }
+	# Profit share by economic order (halved in 0.33; set here too, for running games).
+	if = { limit = { has_policy_flag = pe_order_guided } set_variable = { which = pe_profit_share value = 0.075 } set_variable = { which = pe_profit_pct value = 7.5 } }
+	else_if = { limit = { has_policy_flag = pe_order_mixed } set_variable = { which = pe_profit_share value = 0.1 } set_variable = { which = pe_profit_pct value = 10 } }
+	else_if = { limit = { has_policy_flag = pe_order_free_market } set_variable = { which = pe_profit_share value = 0.125 } set_variable = { which = pe_profit_pct value = 12.5 } }
+	else_if = { limit = { has_policy_flag = pe_order_laissez_faire } set_variable = { which = pe_profit_share value = 0.175 } set_variable = { which = pe_profit_pct value = 17.5 } }
 	if = { limit = { NOT = { is_variable_set = pe_savings_rate } } set_variable = { which = pe_savings_rate value = 0 } }
 	if = { limit = { NOT = { is_variable_set = pe_capital } } set_variable = { which = pe_capital value = 500 } }
 	if = { limit = { NOT = { is_variable_set = pe_pool_income } } set_variable = { which = pe_pool_income value = 0 } }
