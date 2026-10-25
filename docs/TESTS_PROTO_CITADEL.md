@@ -25,26 +25,36 @@
   3. Danach existiert die Citadel als Flotte der Holdings.
 - Verleast bzw. übergeben wird diese Flotte.
 
+## Dritter Test
+- **Die Station entstand** und gehörte den Holdings.
+- pe.311 und pe.312 fanden sie nicht wieder: Die globale Merkvariable aus pe.310 war im nächsten Event weg.
+- Nach dem Neuladen (pe.310 → pe.312 in einem Zug) stürzte das Spiel bei `set_owner` ab. Eine Citadel der Holdings an uns zu **übergeben, ist nicht möglich.**
+
+## Vierter Anlauf
+- Die Citadel wird über eine Flotten-Markierung wiedergefunden.
+- Getestet werden zwei Varianten:
+  - **A, Leasing:** Die Holdings besitzen die Citadel, wir kontrollieren sie.
+  - **B, unsere Citadel vom Konzern bezahlt:** Sie gehört von Anfang an uns.
+
 ## Konsole (Scope: dein Reich)
-- `event pe.310`: Die Holdings bekommen die Technologie und eine Deep Space Citadel (Stufe I) in deinem Hauptsystem, wie beim Ursprung „Starlit Citadel“.
-- `event pe.311`: Die Citadel wird an dich verleast: Die Kontrolle über ihre Flotte geht an dich (`set_controller`), dazu der Leasing-Modifikator der Konzernflotten (Unterhalt −100 %, die Engine kappt bei 90 %).
-- `event pe.312`: Die Citadel wird dir übergeben (`set_owner`), dazu der Modifikator „Prototyp: Unterhalt der Zitadelle“ auf ihrer Flotte (`ships_upkeep_mult` und `starbases_upkeep_mult` je −100 %).
+- `event pe.310`: Die Holdings bekommen Technologie und Citadel im Hauptsystem (wie beim Ursprung „Starlit Citadel“).
+- `event pe.311`: **Variante A.** Leasing an dich: Kontrolle über ihre Flotte (`set_controller`), dazu der Leasing-Modifikator (Unterhalt −100 %, Engine kappt bei 90 %).
+- `event pe.312`: **Variante B.** Eine Citadel, die von Anfang an dir gehört, dazu der Unterhalts-Modifikator auf ihrer Flotte. Dafür brauchst du die Technologie Deep Space Citadel.
 - **Vorher speichern, danach neu laden.** Der Prototyp räumt nichts auf.
 
 ## Ablauf
-1. Speichern. `event pe.310`, einen Tag laufen lassen.
-   - Steht im Hauptsystem eine zweite Station, eine Deep Space Citadel mit der Flagge der Holdings?
-   - Im game.log: „pe.310 deep space citadel created“ oder „create_starbase failed“.
-2. Vorher den Energie- und Legierungs-Tooltip ansehen (Zeilen „Starbases“ und „Ships“). Dann `event pe.311`, einen Tag laufen lassen.
-   - Wie sieht die Citadel jetzt aus: deine Flagge, besetzt, Holdings?
-   - Kannst du sie anklicken oder ausbauen?
-   - Steht ihr Unterhalt in deinem Haushalt, und ist er durch den Modifikator auf etwa 10 % gesenkt? Die Citadel kostet 10 Energie und 5 Legierungen im Monat.
-   - Im Krieg (falls möglich): Schießt sie auf deine Feinde?
-3. Neu laden. `event pe.310`, dann `event pe.312`.
-   - Gehört die Citadel jetzt dir: Flagge, ausbaubar?
-   - Ist ihr Unterhalt in deinem Haushalt durch den Modifikator gesenkt? Ist er unter „Starbases“ oder unter „Ships“ verbucht?
-4. Logs: Fehler zu `create_starbase`, `set_controller` oder `set_owner` im error.log.
+1. Speichern. Energie- und Legierungs-Tooltip merken (Zeilen „Starbases“ und „Ships“). Die Citadel Stufe I kostet 10 Energie und 5 Legierungen im Monat.
+2. `event pe.310`, einen Tag laufen lassen. Die Citadel der Holdings steht im Hauptsystem.
+3. `event pe.311`, einen Tag laufen lassen (game.log: „leased …: 1“).
+   - Flagge oder Besetzungsanzeige?
+   - Kannst du sie anklicken, steuern, ausbauen?
+   - Steht ihr Unterhalt bei dir, und ist er auf etwa 10 % gesenkt?
+   - Im Krieg: Schießt sie auf deine Feinde?
+4. Neu laden. `event pe.312`, einen Tag laufen lassen (game.log: „our own citadel …: 1“).
+   - Gehört sie dir?
+   - Ist ihr Unterhalt gesenkt? Ist er unter „Starbases“ oder „Ships“ verbucht?
+5. Logs: Fehler zu `spawn_megastructure`, `set_controller` oder `add_modifier` im error.log.
 
 ## Danach
-- **Leasing funktioniert:** Die Citadel gehört dem Konzern (Holdings) und steht dir zur Verfügung, wie die Konzernflotten.
-- **Sonst:** Der Konzern baut sie für uns und übergibt sie (`set_owner`). Bau und Unterhalt zahlt er.
+- **A funktioniert:** Die Citadel gehört dem Konzern (Holdings), du kontrollierst sie geleast.
+- **Sonst B:** Der Konzern bezahlt Bau und Unterhalt, die Citadel gehört uns.

@@ -739,9 +739,12 @@ country_event = {
 # --- Prototype: a deep space citadel of a corporation (holdings), leased to us -------------
 # pe.310: our Private Holdings get the deep space citadel technology (and so a design) and a
 # deep space citadel (level I) in our capital system, the way vanilla's Starlit Citadel origin
-# spawns one (spawn_megastructure deep_space_citadel_0 at the star, inner radius).
+# spawns one (spawn_megastructure deep_space_citadel_0 at the star, inner radius). Its fleet is
+# flagged pe_proto_citadel (global event targets did not last to the next event).
 # pe.311: lease it to us (its fleet: set_controller, leased-fleet modifier: upkeep -100%).
-# pe.312: hand it over to us (set_owner; its fleet: upkeep modifier pe_proto_citadel_upkeep).
+# pe.312: instead (variant B): a deep space citadel of ours in the capital system, as if a
+# corporation had paid for it, with the upkeep modifier pe_proto_citadel_upkeep on its fleet.
+# (Handing the holdings' citadel over with set_owner crashed the game.)
 # Save before the test and reload afterwards (nothing is cleaned up).
 country_event = {
 	id = pe.310
@@ -762,15 +765,12 @@ country_event = {
 		}
 		event_target:pe_hold = {
 			random_owned_fleet = {
-				limit = { is_ship_size = starbase_deep_space_citadel_1 }
-				save_global_event_target_as = pe_proto_citadel
+				limit = { is_ship_size = starbase_deep_space_citadel_1 NOT = { has_fleet_flag = pe_proto_citadel } }
+				set_fleet_flag = pe_proto_citadel
+				root = { set_variable = { which = pe_proto_cit value = 1 } }
 			}
 		}
-		if = {
-			limit = { exists = event_target:pe_proto_citadel }
-			log = "private_economy: pe.310 deep space citadel of the holdings in our capital system"
-		}
-		else = { log = "private_economy: pe.310 no deep space citadel fleet of the holdings after the spawn" }
+		log = "private_economy: pe.310 deep space citadel of the holdings flagged: \[Root.pe_proto_cit]"
 	}
 }
 
@@ -779,15 +779,17 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
-		if = {
-			limit = { exists = event_target:pe_proto_citadel }
-			event_target:pe_proto_citadel = {
+		set_variable = { which = pe_proto_cit value = 0 }
+		random_country = {
+			limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } }
+			random_owned_fleet = {
+				limit = { has_fleet_flag = pe_proto_citadel }
 				set_controller = root
 				add_modifier = { modifier = pe_leased_fleet days = -1 }
+				root = { set_variable = { which = pe_proto_cit value = 1 } }
 			}
-			log = "private_economy: pe.311 citadel leased (set_controller on its fleet)"
 		}
-		else = { log = "private_economy: pe.311 no citadel saved (run pe.310 first, in the same session)" }
+		log = "private_economy: pe.311 citadel of the holdings leased (set_controller on its fleet): \[Root.pe_proto_cit]"
 	}
 }
 
@@ -796,14 +798,26 @@ country_event = {
 	hide_window = yes
 	is_triggered_only = yes
 	immediate = {
+		set_variable = { which = pe_proto_cit value = 0 }
 		if = {
-			limit = { exists = event_target:pe_proto_citadel }
-			event_target:pe_proto_citadel = {
-				add_modifier = { modifier = pe_proto_citadel_upkeep days = -1 }
-				starbase = { set_owner = root }
+			limit = { has_technology = tech_deep_space_citadel }
+			capital_scope.solar_system = {
+				spawn_megastructure = {
+					type = deep_space_citadel_0
+					owner = root
+					planet = star
+					graphical_culture = root
+					orbit_distance = trigger:inner_radius
+					orbit_angle = 160
+				}
 			}
-			log = "private_economy: pe.312 citadel handed over (set_owner on its starbase)"
+			random_owned_fleet = {
+				limit = { is_ship_size = starbase_deep_space_citadel_1 NOT = { has_fleet_flag = pe_proto_citadel } }
+				set_fleet_flag = pe_proto_citadel
+				add_modifier = { modifier = pe_proto_citadel_upkeep days = -1 }
+				root = { set_variable = { which = pe_proto_cit value = 1 } }
+			}
 		}
-		else = { log = "private_economy: pe.312 no citadel saved (run pe.310 first, in the same session)" }
+		log = "private_economy: pe.312 our own citadel with the upkeep modifier: \[Root.pe_proto_cit] (needs tech_deep_space_citadel)"
 	}
 }
