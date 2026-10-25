@@ -737,8 +737,9 @@ country_event = {
 
 
 # --- Prototype: a deep space citadel of a corporation (holdings), leased to us -------------
-# pe.310: our Private Holdings get a deep space citadel (level I, global design
-# PE_CORP_CITADEL_1) in our capital system.
+# pe.310: our Private Holdings get the deep space citadel technology (and so a design) and a
+# deep space citadel (level I) in our capital system, the way vanilla's Starlit Citadel origin
+# spawns one (spawn_megastructure deep_space_citadel_0 at the star, inner radius).
 # pe.311: lease it to us (its fleet: set_controller, leased-fleet modifier: upkeep -100%).
 # pe.312: hand it over to us (set_owner; its fleet: upkeep modifier pe_proto_citadel_upkeep).
 # Save before the test and reload afterwards (nothing is cleaned up).
@@ -748,21 +749,28 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		pe_holdings_ensure = yes
-		capital_scope = {
-			solar_system = {
-				create_starbase = {
-					owner = event_target:pe_hold
-					size = starbase_deep_space_citadel_1
-					design = "PE_CORP_CITADEL_1"
-					effect = { save_global_event_target_as = pe_proto_citadel }
-				}
+		event_target:pe_hold = { give_technology = { tech = tech_deep_space_citadel message = no } }
+		capital_scope.solar_system = {
+			spawn_megastructure = {
+				type = deep_space_citadel_0
+				owner = event_target:pe_hold
+				planet = star
+				graphical_culture = root
+				orbit_distance = trigger:inner_radius
+				orbit_angle = 200
+			}
+		}
+		event_target:pe_hold = {
+			random_owned_fleet = {
+				limit = { is_ship_size = starbase_deep_space_citadel_1 }
+				save_global_event_target_as = pe_proto_citadel
 			}
 		}
 		if = {
 			limit = { exists = event_target:pe_proto_citadel }
-			log = "private_economy: pe.310 deep space citadel created for the holdings in our capital system"
+			log = "private_economy: pe.310 deep space citadel of the holdings in our capital system"
 		}
-		else = { log = "private_economy: pe.310 no deep space citadel (create_starbase failed)" }
+		else = { log = "private_economy: pe.310 no deep space citadel fleet of the holdings after the spawn" }
 	}
 }
 
@@ -774,12 +782,10 @@ country_event = {
 		if = {
 			limit = { exists = event_target:pe_proto_citadel }
 			event_target:pe_proto_citadel = {
-				fleet = {
-					set_controller = root
-					add_modifier = { modifier = pe_leased_fleet days = -1 }
-				}
+				set_controller = root
+				add_modifier = { modifier = pe_leased_fleet days = -1 }
 			}
-			log = "private_economy: pe.311 citadel leased (set_controller) to [Root.GetName]"
+			log = "private_economy: pe.311 citadel leased (set_controller on its fleet)"
 		}
 		else = { log = "private_economy: pe.311 no citadel saved (run pe.310 first, in the same session)" }
 	}
@@ -793,10 +799,10 @@ country_event = {
 		if = {
 			limit = { exists = event_target:pe_proto_citadel }
 			event_target:pe_proto_citadel = {
-				set_owner = root
-				fleet = { add_modifier = { modifier = pe_proto_citadel_upkeep days = -1 } }
+				add_modifier = { modifier = pe_proto_citadel_upkeep days = -1 }
+				starbase = { set_owner = root }
 			}
-			log = "private_economy: pe.312 citadel handed over (set_owner) to [Root.GetName]"
+			log = "private_economy: pe.312 citadel handed over (set_owner on its starbase)"
 		}
 		else = { log = "private_economy: pe.312 no citadel saved (run pe.310 first, in the same session)" }
 	}

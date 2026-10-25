@@ -14,8 +14,19 @@
 - `set_controller` wirkt nur auf die Flotte der Station, nicht auf die Sternenbasis selbst (error.log: „Wrong scope“).
 - Der Absturz bei pe.312 kam vermutlich vom `set_owner` auf die nicht entstandene Station.
 
+## Zweiter Test (gescheitert)
+- Mit eigenem Entwurf entstand ein kaputtes Objekt. Im Spiel-Log stand „Fleet in system state but missing origin, went MIA“, danach stürzte das Spiel bei pe.312 ab.
+- Ursache: `create_starbase` legt eine Sternenbasis am Stern an; eine Deep Space Citadel als zweite Basis im System bekommt so keine Position.
+
+## Dritter Anlauf
+- So, wie Vanilla beim Ursprung „Starlit Citadel“ eine Citadel erzeugt:
+  1. Die Holdings bekommen die Technologie Deep Space Citadel und damit einen Entwurf.
+  2. Dann entsteht die Megastruktur `deep_space_citadel_0` am Stern, im inneren Bahnradius.
+  3. Danach existiert die Citadel als Flotte der Holdings.
+- Verleast bzw. übergeben wird diese Flotte.
+
 ## Konsole (Scope: dein Reich)
-- `event pe.310`: Die Holdings bekommen eine Deep Space Citadel (Stufe I) in deinem Hauptsystem (`create_starbase`).
+- `event pe.310`: Die Holdings bekommen die Technologie und eine Deep Space Citadel (Stufe I) in deinem Hauptsystem, wie beim Ursprung „Starlit Citadel“.
 - `event pe.311`: Die Citadel wird an dich verleast: Die Kontrolle über ihre Flotte geht an dich (`set_controller`), dazu der Leasing-Modifikator der Konzernflotten (Unterhalt −100 %, die Engine kappt bei 90 %).
 - `event pe.312`: Die Citadel wird dir übergeben (`set_owner`), dazu der Modifikator „Prototyp: Unterhalt der Zitadelle“ auf ihrer Flotte (`ships_upkeep_mult` und `starbases_upkeep_mult` je −100 %).
 - **Vorher speichern, danach neu laden.** Der Prototyp räumt nichts auf.
