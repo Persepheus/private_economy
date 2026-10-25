@@ -34,6 +34,11 @@ Ein laufendes Spiel kann weiterlaufen.
   1. Nach dem nächsten Quartal: Modifikator „Private Automatisierung“ beim Reich, Zeile „Automatisierte Arbeitskraft“ nahe 0 (im Save etwa 268 vorher).
   2. Im game.log jedes Quartal: „automation cover: private P of E energy a month observed, cover now M %“. Bleibt eine Restzeile, liegt die Schätzung daneben; die Zahlen aus dem Log helfen beim Nachjustieren.
 
+## 0.34.2
+- Texte für die Baustellen von Konzern-Schwarm und -Ofen und für die Arbeitskraft-Modifikatoren der privaten Forscher und Metallurgen (fehlten im error.log).
+- Forschungsinstitut: Ausbau nur, solange am Hauptsitz mindestens 100 Pops frei sind (es soll keine Arbeiter abziehen; am Konzern-Habitat hielt es die Gründungen auf).
+- Log-Zeile des Konzern-Habitats ohne Fehler, wenn kein Standort gesucht wurde.
+
 ## Konsole
 - `event pe.307`: sofort ein Angebot (wenn keiner läuft). Der reichste Industriekonzern bekommt dafür mindestens 5000 Kasse.
 

@@ -2787,6 +2787,7 @@ ${CORPS.map(k => `	if = {
 			OR = { NOT = { has_country_flag = pe_chab_cd } check_variable = { which = pe_fl_force value = 1 } }
 		}
 		set_variable = { which = pe_chab_k value = 0 }
+		set_variable = { which = pe_chab_found value = 0 }
 		set_variable = { which = pe_chab_best value = ${CHAB_MIN - 1} }
 ${CORPS.map(k => `\t\tif = { limit = { check_variable = { which = ${C(k, 'on')} value = 1 } NOT = { check_variable = { which = ${C(k, 'hab')} value > 0 } } check_variable = { which = ${C(k, 'cash')} value > pe_chab_best } } set_variable = { which = pe_chab_k value = ${k} } set_variable = { which = pe_chab_best value = ${C(k, 'cash')} } }`).join('\n')}
 		if = {
@@ -3064,8 +3065,9 @@ const CW_STD = [['living_standard_utopian', 0, 0], ['living_standard_decadent', 
 const CW_DEFAULT = [0.75, 0.2];
 // Institute: research jobs of the corporation's field at its headquarters (100 per level) with
 // the best equipment (+25% output of these private researchers there). Level up at 4000 /
-// 8000 / 12000 cash (25% a quarter, 800 for the equipment), 30 a quarter per level to run it,
-// a level down when its cash is below zero.
+// 8000 / 12000 cash (25% a quarter, 800 for the equipment) and only while at least 100 pops at
+// the headquarters are idle (pops are scarce: it must not take workers away), 30 a quarter per
+// level to run it, a level down when its cash is below zero.
 const LAB_FIELD = {1: 'z', 2: 'z', 3: 'y', 4: 'x', 5: 'y', 6: 'z', 7: 'y', 8: 'z', 9: 'x', 10: 'y'};
 const LAB_JOB = {x: 'pe_private_physicist', y: 'pe_private_biologist', z: 'pe_private_engineer'};
 corp += `
@@ -3093,7 +3095,7 @@ ${CORPS.map(k => `	if = { limit = { NOT = { is_variable_set = ${C(k, 'lab')} } }
 			change_variable = { which = ${C(k, 'lab')} value = -1 }
 		}
 		else_if = {
-			limit = { check_variable = { which = ${C(k, 'lab')} value < 3 } any_owned_colony = { has_planet_flag = pe_hq_${k} } }
+			limit = { check_variable = { which = ${C(k, 'lab')} value < 3 } any_owned_colony = { has_planet_flag = pe_hq_${k} is_variable_set = pe_idle check_variable = { which = pe_idle value >= 100 } } }
 			set_variable = { which = pe_tmp value = ${C(k, 'lab')} }
 			change_variable = { which = pe_tmp value = 1 }
 			multiply_variable = { which = pe_tmp value = 4000 }

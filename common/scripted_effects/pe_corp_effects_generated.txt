@@ -12083,6 +12083,7 @@ pe_chab_quarterly = {
 			OR = { NOT = { has_country_flag = pe_chab_cd } check_variable = { which = pe_fl_force value = 1 } }
 		}
 		set_variable = { which = pe_chab_k value = 0 }
+		set_variable = { which = pe_chab_found value = 0 }
 		set_variable = { which = pe_chab_best value = 6999 }
 		if = { limit = { check_variable = { which = pe_c1_on value = 1 } NOT = { check_variable = { which = pe_c1_hab value > 0 } } check_variable = { which = pe_c1_cash value > pe_chab_best } } set_variable = { which = pe_chab_k value = 1 } set_variable = { which = pe_chab_best value = pe_c1_cash } }
 		if = { limit = { check_variable = { which = pe_c2_on value = 1 } NOT = { check_variable = { which = pe_c2_hab value > 0 } } check_variable = { which = pe_c2_cash value > pe_chab_best } } set_variable = { which = pe_chab_k value = 2 } set_variable = { which = pe_chab_best value = pe_c2_cash } }
@@ -12834,7 +12835,7 @@ pe_corp_social = {
 			change_variable = { which = pe_c1_lab value = -1 }
 		}
 		else_if = {
-			limit = { check_variable = { which = pe_c1_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_1 } }
+			limit = { check_variable = { which = pe_c1_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_1 is_variable_set = pe_idle check_variable = { which = pe_idle value >= 100 } } }
 			set_variable = { which = pe_tmp value = pe_c1_lab }
 			change_variable = { which = pe_tmp value = 1 }
 			multiply_variable = { which = pe_tmp value = 4000 }
@@ -12865,7 +12866,7 @@ pe_corp_social = {
 			change_variable = { which = pe_c2_lab value = -1 }
 		}
 		else_if = {
-			limit = { check_variable = { which = pe_c2_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_2 } }
+			limit = { check_variable = { which = pe_c2_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_2 is_variable_set = pe_idle check_variable = { which = pe_idle value >= 100 } } }
 			set_variable = { which = pe_tmp value = pe_c2_lab }
 			change_variable = { which = pe_tmp value = 1 }
 			multiply_variable = { which = pe_tmp value = 4000 }
@@ -12896,7 +12897,7 @@ pe_corp_social = {
 			change_variable = { which = pe_c3_lab value = -1 }
 		}
 		else_if = {
-			limit = { check_variable = { which = pe_c3_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_3 } }
+			limit = { check_variable = { which = pe_c3_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_3 is_variable_set = pe_idle check_variable = { which = pe_idle value >= 100 } } }
 			set_variable = { which = pe_tmp value = pe_c3_lab }
 			change_variable = { which = pe_tmp value = 1 }
 			multiply_variable = { which = pe_tmp value = 4000 }
@@ -12927,7 +12928,7 @@ pe_corp_social = {
 			change_variable = { which = pe_c4_lab value = -1 }
 		}
 		else_if = {
-			limit = { check_variable = { which = pe_c4_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_4 } }
+			limit = { check_variable = { which = pe_c4_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_4 is_variable_set = pe_idle check_variable = { which = pe_idle value >= 100 } } }
 			set_variable = { which = pe_tmp value = pe_c4_lab }
 			change_variable = { which = pe_tmp value = 1 }
 			multiply_variable = { which = pe_tmp value = 4000 }
@@ -12958,7 +12959,7 @@ pe_corp_social = {
 			change_variable = { which = pe_c5_lab value = -1 }
 		}
 		else_if = {
-			limit = { check_variable = { which = pe_c5_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_5 } }
+			limit = { check_variable = { which = pe_c5_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_5 is_variable_set = pe_idle check_variable = { which = pe_idle value >= 100 } } }
 			set_variable = { which = pe_tmp value = pe_c5_lab }
 			change_variable = { which = pe_tmp value = 1 }
 			multiply_variable = { which = pe_tmp value = 4000 }
@@ -12989,7 +12990,7 @@ pe_corp_social = {
 			change_variable = { which = pe_c6_lab value = -1 }
 		}
 		else_if = {
-			limit = { check_variable = { which = pe_c6_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_6 } }
+			limit = { check_variable = { which = pe_c6_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_6 is_variable_set = pe_idle check_variable = { which = pe_idle value >= 100 } } }
 			set_variable = { which = pe_tmp value = pe_c6_lab }
 			change_variable = { which = pe_tmp value = 1 }
 			multiply_variable = { which = pe_tmp value = 4000 }
@@ -13020,7 +13021,7 @@ pe_corp_social = {
 			change_variable = { which = pe_c7_lab value = -1 }
 		}
 		else_if = {
-			limit = { check_variable = { which = pe_c7_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_7 } }
+			limit = { check_variable = { which = pe_c7_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_7 is_variable_set = pe_idle check_variable = { which = pe_idle value >= 100 } } }
 			set_variable = { which = pe_tmp value = pe_c7_lab }
 			change_variable = { which = pe_tmp value = 1 }
 			multiply_variable = { which = pe_tmp value = 4000 }
@@ -13051,7 +13052,7 @@ pe_corp_social = {
 			change_variable = { which = pe_c8_lab value = -1 }
 		}
 		else_if = {
-			limit = { check_variable = { which = pe_c8_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_8 } }
+			limit = { check_variable = { which = pe_c8_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_8 is_variable_set = pe_idle check_variable = { which = pe_idle value >= 100 } } }
 			set_variable = { which = pe_tmp value = pe_c8_lab }
 			change_variable = { which = pe_tmp value = 1 }
 			multiply_variable = { which = pe_tmp value = 4000 }
