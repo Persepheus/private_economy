@@ -1,0 +1,56 @@
+# Defence contract (pe_dc_step in pe_corp_effects_generated.txt).
+#   pe.306  an industry corporation offers to carry part of our fleet upkeep (human empires)
+#   pe.307  debug: an offer now
+namespace = pe
+
+country_event = {
+	id = pe.306
+	title = pe.306.name
+	desc = pe.306.desc
+	picture = GFX_evt_federation_fleet
+	is_triggered_only = yes
+	immediate = { hidden_effect = { if = { limit = { check_variable = { which = pe_dc_cand value = 1 } } set_variable = { which = pe_cn306 value = pe_c1_name } } else_if = { limit = { check_variable = { which = pe_dc_cand value = 2 } } set_variable = { which = pe_cn306 value = pe_c2_name } } else_if = { limit = { check_variable = { which = pe_dc_cand value = 3 } } set_variable = { which = pe_cn306 value = pe_c3_name } } else_if = { limit = { check_variable = { which = pe_dc_cand value = 4 } } set_variable = { which = pe_cn306 value = pe_c4_name } } else_if = { limit = { check_variable = { which = pe_dc_cand value = 5 } } set_variable = { which = pe_cn306 value = pe_c5_name } } else_if = { limit = { check_variable = { which = pe_dc_cand value = 6 } } set_variable = { which = pe_cn306 value = pe_c6_name } } else_if = { limit = { check_variable = { which = pe_dc_cand value = 7 } } set_variable = { which = pe_cn306 value = pe_c7_name } } else_if = { limit = { check_variable = { which = pe_dc_cand value = 8 } } set_variable = { which = pe_cn306 value = pe_c8_name } } } }
+
+	option = {
+		name = pe.306.a
+		custom_tooltip = pe.306.a.tt
+		hidden_effect = { pe_dc_accept = yes }
+		ai_chance = { factor = 100 }
+	}
+	option = {
+		name = pe.306.b
+		ai_chance = { factor = 0 }
+	}
+}
+
+# Debug: a contract offer now (if none runs; the richest industry corporation gets 5000 cash).
+country_event = {
+	id = pe.307
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		# The richest industry corporation gets at least 5000 cash for the test.
+		set_variable = { which = pe_dc_cand value = 0 }
+		set_variable = { which = pe_dc_best value = -1000000 }
+		if = { limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_grp value = 1 } check_variable = { which = pe_c1_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 1 } set_variable = { which = pe_dc_best value = pe_c1_cash } }
+		if = { limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_grp value = 1 } check_variable = { which = pe_c2_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 2 } set_variable = { which = pe_dc_best value = pe_c2_cash } }
+		if = { limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_grp value = 1 } check_variable = { which = pe_c3_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 3 } set_variable = { which = pe_dc_best value = pe_c3_cash } }
+		if = { limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_grp value = 1 } check_variable = { which = pe_c4_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 4 } set_variable = { which = pe_dc_best value = pe_c4_cash } }
+		if = { limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_grp value = 1 } check_variable = { which = pe_c5_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 5 } set_variable = { which = pe_dc_best value = pe_c5_cash } }
+		if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_grp value = 1 } check_variable = { which = pe_c6_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 6 } set_variable = { which = pe_dc_best value = pe_c6_cash } }
+		if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_grp value = 1 } check_variable = { which = pe_c7_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 7 } set_variable = { which = pe_dc_best value = pe_c7_cash } }
+		if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_grp value = 1 } check_variable = { which = pe_c8_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 8 } set_variable = { which = pe_dc_best value = pe_c8_cash } }
+		if = { limit = { check_variable = { which = pe_dc_cand value = 1 } check_variable = { which = pe_c1_cash value < 5000 } } set_variable = { which = pe_c1_cash value = 5000 } }
+		else_if = { limit = { check_variable = { which = pe_dc_cand value = 2 } check_variable = { which = pe_c2_cash value < 5000 } } set_variable = { which = pe_c2_cash value = 5000 } }
+		else_if = { limit = { check_variable = { which = pe_dc_cand value = 3 } check_variable = { which = pe_c3_cash value < 5000 } } set_variable = { which = pe_c3_cash value = 5000 } }
+		else_if = { limit = { check_variable = { which = pe_dc_cand value = 4 } check_variable = { which = pe_c4_cash value < 5000 } } set_variable = { which = pe_c4_cash value = 5000 } }
+		else_if = { limit = { check_variable = { which = pe_dc_cand value = 5 } check_variable = { which = pe_c5_cash value < 5000 } } set_variable = { which = pe_c5_cash value = 5000 } }
+		else_if = { limit = { check_variable = { which = pe_dc_cand value = 6 } check_variable = { which = pe_c6_cash value < 5000 } } set_variable = { which = pe_c6_cash value = 5000 } }
+		else_if = { limit = { check_variable = { which = pe_dc_cand value = 7 } check_variable = { which = pe_c7_cash value < 5000 } } set_variable = { which = pe_c7_cash value = 5000 } }
+		else_if = { limit = { check_variable = { which = pe_dc_cand value = 8 } check_variable = { which = pe_c8_cash value < 5000 } } set_variable = { which = pe_c8_cash value = 5000 } }
+		set_variable = { which = pe_fl_force value = 1 }
+		pe_dc_step = yes
+		set_variable = { which = pe_fl_force value = 0 }
+		log = "private_economy: pe.307 defence contract: contractor slot [Root.pe_dc_k], candidate [Root.pe_dc_cand], share [Root.pe_dc_s]"
+	}
+}

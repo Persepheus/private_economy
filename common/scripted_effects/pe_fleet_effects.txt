@@ -70,6 +70,15 @@ pe_corp_fleets = {
 			if = { limit = { check_variable = { which = pe_c7_on value = 1 }  check_variable = { which = pe_c7_cash value > pe_wl_best } } set_variable = { which = pe_wl_k value = 7 } set_variable = { which = pe_wl_best value = pe_c7_cash } }
 			if = { limit = { check_variable = { which = pe_c8_on value = 1 }  check_variable = { which = pe_c8_cash value > pe_wl_best } } set_variable = { which = pe_wl_k value = 8 } set_variable = { which = pe_wl_best value = pe_c8_cash } }
 		}
+		# Our defence contractor (pe_dc_k) comes first.
+		if = { limit = { check_variable = { which = pe_dc_k value = 1 } check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value >= 600 } } set_variable = { which = pe_wl_k value = 1 } set_variable = { which = pe_wl_best value = pe_c1_cash } }
+		if = { limit = { check_variable = { which = pe_dc_k value = 2 } check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value >= 600 } } set_variable = { which = pe_wl_k value = 2 } set_variable = { which = pe_wl_best value = pe_c2_cash } }
+		if = { limit = { check_variable = { which = pe_dc_k value = 3 } check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value >= 600 } } set_variable = { which = pe_wl_k value = 3 } set_variable = { which = pe_wl_best value = pe_c3_cash } }
+		if = { limit = { check_variable = { which = pe_dc_k value = 4 } check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value >= 600 } } set_variable = { which = pe_wl_k value = 4 } set_variable = { which = pe_wl_best value = pe_c4_cash } }
+		if = { limit = { check_variable = { which = pe_dc_k value = 5 } check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value >= 600 } } set_variable = { which = pe_wl_k value = 5 } set_variable = { which = pe_wl_best value = pe_c5_cash } }
+		if = { limit = { check_variable = { which = pe_dc_k value = 6 } check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value >= 600 } } set_variable = { which = pe_wl_k value = 6 } set_variable = { which = pe_wl_best value = pe_c6_cash } }
+		if = { limit = { check_variable = { which = pe_dc_k value = 7 } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value >= 600 } } set_variable = { which = pe_wl_k value = 7 } set_variable = { which = pe_wl_best value = pe_c7_cash } }
+		if = { limit = { check_variable = { which = pe_dc_k value = 8 } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value >= 600 } } set_variable = { which = pe_wl_k value = 8 } set_variable = { which = pe_wl_best value = pe_c8_cash } }
 		if = {
 			limit = { check_variable = { which = pe_wl_k value > 0 } }
 			random_list = {

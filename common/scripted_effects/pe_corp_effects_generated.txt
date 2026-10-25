@@ -13343,3 +13343,249 @@ pe_corp_social = {
 	set_variable = { which = pe_c8_wfr value = pe_c8_wfq }
 	round_variable = pe_c8_wfr
 }
+
+# --- Defence contract (pe.306) -------------------------------------------------------------
+# Country scope, quarterly (pe_corp_step, call depth 3, no calls). pe_dc_k = the contractor's
+# slot (0 none), pe_dc_nm its name, pe_dc_s its share in percent, pe_dc_paid what it paid last
+# quarter. Planet modifiers: pe_arms_orders (its steelworks), pe_arms_centre (headquarters).
+pe_dc_step = {
+	if = { limit = { NOT = { is_variable_set = pe_dc_k } } set_variable = { which = pe_dc_k value = 0 } }
+	# A running contract: still valid (the corporation exists and has 1000 cash)?
+	set_variable = { which = pe_dc_ok value = 0 }
+	if = { limit = { check_variable = { which = pe_dc_k value = 1 } check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_name value = pe_dc_nm } check_variable = { which = pe_c1_cash value >= 1000 } } set_variable = { which = pe_dc_ok value = 1 } }
+	if = { limit = { check_variable = { which = pe_dc_k value = 2 } check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_name value = pe_dc_nm } check_variable = { which = pe_c2_cash value >= 1000 } } set_variable = { which = pe_dc_ok value = 1 } }
+	if = { limit = { check_variable = { which = pe_dc_k value = 3 } check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_name value = pe_dc_nm } check_variable = { which = pe_c3_cash value >= 1000 } } set_variable = { which = pe_dc_ok value = 1 } }
+	if = { limit = { check_variable = { which = pe_dc_k value = 4 } check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_name value = pe_dc_nm } check_variable = { which = pe_c4_cash value >= 1000 } } set_variable = { which = pe_dc_ok value = 1 } }
+	if = { limit = { check_variable = { which = pe_dc_k value = 5 } check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_name value = pe_dc_nm } check_variable = { which = pe_c5_cash value >= 1000 } } set_variable = { which = pe_dc_ok value = 1 } }
+	if = { limit = { check_variable = { which = pe_dc_k value = 6 } check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_name value = pe_dc_nm } check_variable = { which = pe_c6_cash value >= 1000 } } set_variable = { which = pe_dc_ok value = 1 } }
+	if = { limit = { check_variable = { which = pe_dc_k value = 7 } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_name value = pe_dc_nm } check_variable = { which = pe_c7_cash value >= 1000 } } set_variable = { which = pe_dc_ok value = 1 } }
+	if = { limit = { check_variable = { which = pe_dc_k value = 8 } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_name value = pe_dc_nm } check_variable = { which = pe_c8_cash value >= 1000 } } set_variable = { which = pe_dc_ok value = 1 } }
+	if = {
+		limit = { check_variable = { which = pe_dc_k value > 0 } check_variable = { which = pe_dc_ok value = 0 } }
+		set_variable = { which = pe_dc_k value = 0 }
+		set_timed_country_flag = { flag = pe_dc_cd days = 1080 }
+		if = {
+			limit = { is_ai = no }
+			capital_scope = { save_event_target_as = pe_msg_planet }
+			create_message = { type = pe_private_economy localization = pe_msg_dc_end days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } }
+		}
+	}
+	# Its share by its cash, and its payment for the quarter: our fleet upkeep x share / (100 - share).
+	set_variable = { which = pe_dc_paid value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_dc_k value > 0 } }
+		set_variable = { which = pe_dc_s value = 10 }
+		if = { limit = { check_variable = { which = pe_dc_k value = 1 } } if = { limit = { check_variable = { which = pe_c1_cash value >= 15000 } } set_variable = { which = pe_dc_s value = 20 } } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 2 } } if = { limit = { check_variable = { which = pe_c2_cash value >= 15000 } } set_variable = { which = pe_dc_s value = 20 } } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 3 } } if = { limit = { check_variable = { which = pe_c3_cash value >= 15000 } } set_variable = { which = pe_dc_s value = 20 } } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 4 } } if = { limit = { check_variable = { which = pe_c4_cash value >= 15000 } } set_variable = { which = pe_dc_s value = 20 } } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 5 } } if = { limit = { check_variable = { which = pe_c5_cash value >= 15000 } } set_variable = { which = pe_dc_s value = 20 } } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 6 } } if = { limit = { check_variable = { which = pe_c6_cash value >= 15000 } } set_variable = { which = pe_dc_s value = 20 } } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 7 } } if = { limit = { check_variable = { which = pe_c7_cash value >= 15000 } } set_variable = { which = pe_dc_s value = 20 } } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 8 } } if = { limit = { check_variable = { which = pe_c8_cash value >= 15000 } } set_variable = { which = pe_dc_s value = 20 } } }
+		export_trigger_value_to_variable = { trigger = resource_expenses_compare parameters = { resource = energy category = ships } variable = pe_dc_v }
+		export_trigger_value_to_variable = { trigger = resource_expenses_compare parameters = { resource = alloys category = ships } variable = pe_tmp }
+		multiply_variable = { which = pe_tmp value = 4 }
+		change_variable = { which = pe_dc_v value = pe_tmp }
+		export_trigger_value_to_variable = { trigger = resource_expenses_compare parameters = { resource = trade category = ships } variable = pe_tmp }
+		change_variable = { which = pe_dc_v value = pe_tmp }
+		multiply_variable = { which = pe_dc_v value = pe_dc_s }
+		set_variable = { which = pe_tmp value = 100 }
+		subtract_variable = { which = pe_tmp value = pe_dc_s }
+		divide_variable = { which = pe_dc_v value = pe_tmp }
+		multiply_variable = { which = pe_dc_v value = 3 }
+		if = { limit = { check_variable = { which = pe_dc_v value < 0 } } set_variable = { which = pe_dc_v value = 0 } }
+		if = { limit = { check_variable = { which = pe_dc_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_dc_v } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_dc_v } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_dc_v } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_dc_v } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_dc_v } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_dc_v } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_dc_v } }
+		else_if = { limit = { check_variable = { which = pe_dc_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_dc_v } }
+		set_variable = { which = pe_dc_paid value = pe_dc_v }
+		round_variable = pe_dc_paid
+	}
+	# A new contract: none running, no pause, the richest industry corporation with 5000 cash
+	# (15% a quarter). Human empires get an offer (pe.306), AI empires sign.
+	if = {
+		limit = {
+			check_variable = { which = pe_dc_k value = 0 }
+			OR = { NOT = { has_country_flag = pe_dc_cd } check_variable = { which = pe_fl_force value = 1 } }
+		}
+		set_variable = { which = pe_dc_cand value = 0 }
+		set_variable = { which = pe_dc_best value = 4999 }
+		if = { limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_grp value = 1 } check_variable = { which = pe_c1_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 1 } set_variable = { which = pe_dc_best value = pe_c1_cash } }
+		if = { limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_grp value = 1 } check_variable = { which = pe_c2_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 2 } set_variable = { which = pe_dc_best value = pe_c2_cash } }
+		if = { limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_grp value = 1 } check_variable = { which = pe_c3_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 3 } set_variable = { which = pe_dc_best value = pe_c3_cash } }
+		if = { limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_grp value = 1 } check_variable = { which = pe_c4_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 4 } set_variable = { which = pe_dc_best value = pe_c4_cash } }
+		if = { limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_grp value = 1 } check_variable = { which = pe_c5_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 5 } set_variable = { which = pe_dc_best value = pe_c5_cash } }
+		if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_grp value = 1 } check_variable = { which = pe_c6_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 6 } set_variable = { which = pe_dc_best value = pe_c6_cash } }
+		if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_grp value = 1 } check_variable = { which = pe_c7_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 7 } set_variable = { which = pe_dc_best value = pe_c7_cash } }
+		if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_grp value = 1 } check_variable = { which = pe_c8_cash value > pe_dc_best } } set_variable = { which = pe_dc_cand value = 8 } set_variable = { which = pe_dc_best value = pe_c8_cash } }
+		if = {
+			limit = { check_variable = { which = pe_dc_cand value > 0 } }
+			random_list = {
+				15 = {
+					set_timed_country_flag = { flag = pe_dc_cd days = 1800 }
+					set_variable = { which = pe_dc_s value = 10 }
+					if = { limit = { check_variable = { which = pe_dc_best value >= 15000 } } set_variable = { which = pe_dc_s value = 20 } }
+					if = {
+						limit = { is_ai = yes }
+						if = { limit = { check_variable = { which = pe_dc_cand value = 1 } } set_variable = { which = pe_dc_k value = 1 } set_variable = { which = pe_dc_nm value = pe_c1_name } }
+						else_if = { limit = { check_variable = { which = pe_dc_cand value = 2 } } set_variable = { which = pe_dc_k value = 2 } set_variable = { which = pe_dc_nm value = pe_c2_name } }
+						else_if = { limit = { check_variable = { which = pe_dc_cand value = 3 } } set_variable = { which = pe_dc_k value = 3 } set_variable = { which = pe_dc_nm value = pe_c3_name } }
+						else_if = { limit = { check_variable = { which = pe_dc_cand value = 4 } } set_variable = { which = pe_dc_k value = 4 } set_variable = { which = pe_dc_nm value = pe_c4_name } }
+						else_if = { limit = { check_variable = { which = pe_dc_cand value = 5 } } set_variable = { which = pe_dc_k value = 5 } set_variable = { which = pe_dc_nm value = pe_c5_name } }
+						else_if = { limit = { check_variable = { which = pe_dc_cand value = 6 } } set_variable = { which = pe_dc_k value = 6 } set_variable = { which = pe_dc_nm value = pe_c6_name } }
+						else_if = { limit = { check_variable = { which = pe_dc_cand value = 7 } } set_variable = { which = pe_dc_k value = 7 } set_variable = { which = pe_dc_nm value = pe_c7_name } }
+						else_if = { limit = { check_variable = { which = pe_dc_cand value = 8 } } set_variable = { which = pe_dc_k value = 8 } set_variable = { which = pe_dc_nm value = pe_c8_name } }
+					}
+					else = { country_event = { id = pe.306 } }
+				}
+				85 = { modifier = { factor = 0 check_variable = { which = pe_fl_force value = 1 } } }
+			}
+		}
+	}
+	# The modifiers.
+	if = { limit = { has_modifier = pe_defence_contract } remove_modifier = pe_defence_contract }
+	if = { limit = { check_variable = { which = pe_dc_k value > 0 } } add_modifier = { modifier = pe_defence_contract days = -1 multiplier = pe_dc_s } }
+	every_owned_colony = {
+		if = { limit = { has_modifier = pe_arms_orders } remove_modifier = pe_arms_orders }
+		if = { limit = { has_modifier = pe_arms_centre } remove_modifier = pe_arms_centre }
+	}
+	if = {
+		limit = { check_variable = { which = pe_dc_k value = 1 } }
+		every_owned_colony = {
+			limit = { has_planet_flag = pe_hq_1 }
+			add_modifier = { modifier = pe_arms_centre days = -1 }
+		}
+		every_owned_colony = {
+			set_variable = { which = pe_dc_here value = 0 }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = 1 } check_variable = { which = pe_prim value = 1 } }
+				prev = { set_variable = { which = pe_dc_here value = 1 } }
+			}
+			if = { limit = { check_variable = { which = pe_dc_here value = 1 } } add_modifier = { modifier = pe_arms_orders days = -1 } }
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_dc_k value = 2 } }
+		every_owned_colony = {
+			limit = { has_planet_flag = pe_hq_2 }
+			add_modifier = { modifier = pe_arms_centre days = -1 }
+		}
+		every_owned_colony = {
+			set_variable = { which = pe_dc_here value = 0 }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = 2 } check_variable = { which = pe_prim value = 1 } }
+				prev = { set_variable = { which = pe_dc_here value = 1 } }
+			}
+			if = { limit = { check_variable = { which = pe_dc_here value = 1 } } add_modifier = { modifier = pe_arms_orders days = -1 } }
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_dc_k value = 3 } }
+		every_owned_colony = {
+			limit = { has_planet_flag = pe_hq_3 }
+			add_modifier = { modifier = pe_arms_centre days = -1 }
+		}
+		every_owned_colony = {
+			set_variable = { which = pe_dc_here value = 0 }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = 3 } check_variable = { which = pe_prim value = 1 } }
+				prev = { set_variable = { which = pe_dc_here value = 1 } }
+			}
+			if = { limit = { check_variable = { which = pe_dc_here value = 1 } } add_modifier = { modifier = pe_arms_orders days = -1 } }
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_dc_k value = 4 } }
+		every_owned_colony = {
+			limit = { has_planet_flag = pe_hq_4 }
+			add_modifier = { modifier = pe_arms_centre days = -1 }
+		}
+		every_owned_colony = {
+			set_variable = { which = pe_dc_here value = 0 }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = 4 } check_variable = { which = pe_prim value = 1 } }
+				prev = { set_variable = { which = pe_dc_here value = 1 } }
+			}
+			if = { limit = { check_variable = { which = pe_dc_here value = 1 } } add_modifier = { modifier = pe_arms_orders days = -1 } }
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_dc_k value = 5 } }
+		every_owned_colony = {
+			limit = { has_planet_flag = pe_hq_5 }
+			add_modifier = { modifier = pe_arms_centre days = -1 }
+		}
+		every_owned_colony = {
+			set_variable = { which = pe_dc_here value = 0 }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = 5 } check_variable = { which = pe_prim value = 1 } }
+				prev = { set_variable = { which = pe_dc_here value = 1 } }
+			}
+			if = { limit = { check_variable = { which = pe_dc_here value = 1 } } add_modifier = { modifier = pe_arms_orders days = -1 } }
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_dc_k value = 6 } }
+		every_owned_colony = {
+			limit = { has_planet_flag = pe_hq_6 }
+			add_modifier = { modifier = pe_arms_centre days = -1 }
+		}
+		every_owned_colony = {
+			set_variable = { which = pe_dc_here value = 0 }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = 6 } check_variable = { which = pe_prim value = 1 } }
+				prev = { set_variable = { which = pe_dc_here value = 1 } }
+			}
+			if = { limit = { check_variable = { which = pe_dc_here value = 1 } } add_modifier = { modifier = pe_arms_orders days = -1 } }
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_dc_k value = 7 } }
+		every_owned_colony = {
+			limit = { has_planet_flag = pe_hq_7 }
+			add_modifier = { modifier = pe_arms_centre days = -1 }
+		}
+		every_owned_colony = {
+			set_variable = { which = pe_dc_here value = 0 }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = 7 } check_variable = { which = pe_prim value = 1 } }
+				prev = { set_variable = { which = pe_dc_here value = 1 } }
+			}
+			if = { limit = { check_variable = { which = pe_dc_here value = 1 } } add_modifier = { modifier = pe_arms_orders days = -1 } }
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_dc_k value = 8 } }
+		every_owned_colony = {
+			limit = { has_planet_flag = pe_hq_8 }
+			add_modifier = { modifier = pe_arms_centre days = -1 }
+		}
+		every_owned_colony = {
+			set_variable = { which = pe_dc_here value = 0 }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = 8 } check_variable = { which = pe_prim value = 1 } }
+				prev = { set_variable = { which = pe_dc_here value = 1 } }
+			}
+			if = { limit = { check_variable = { which = pe_dc_here value = 1 } } add_modifier = { modifier = pe_arms_orders days = -1 } }
+		}
+	}
+}
+
+# Country scope (pe.306): we sign with the candidate pe_dc_cand (share pe_dc_s).
+pe_dc_accept = {
+	if = { limit = { check_variable = { which = pe_dc_cand value = 1 } } set_variable = { which = pe_dc_k value = 1 } set_variable = { which = pe_dc_nm value = pe_c1_name } }
+	else_if = { limit = { check_variable = { which = pe_dc_cand value = 2 } } set_variable = { which = pe_dc_k value = 2 } set_variable = { which = pe_dc_nm value = pe_c2_name } }
+	else_if = { limit = { check_variable = { which = pe_dc_cand value = 3 } } set_variable = { which = pe_dc_k value = 3 } set_variable = { which = pe_dc_nm value = pe_c3_name } }
+	else_if = { limit = { check_variable = { which = pe_dc_cand value = 4 } } set_variable = { which = pe_dc_k value = 4 } set_variable = { which = pe_dc_nm value = pe_c4_name } }
+	else_if = { limit = { check_variable = { which = pe_dc_cand value = 5 } } set_variable = { which = pe_dc_k value = 5 } set_variable = { which = pe_dc_nm value = pe_c5_name } }
+	else_if = { limit = { check_variable = { which = pe_dc_cand value = 6 } } set_variable = { which = pe_dc_k value = 6 } set_variable = { which = pe_dc_nm value = pe_c6_name } }
+	else_if = { limit = { check_variable = { which = pe_dc_cand value = 7 } } set_variable = { which = pe_dc_k value = 7 } set_variable = { which = pe_dc_nm value = pe_c7_name } }
+	else_if = { limit = { check_variable = { which = pe_dc_cand value = 8 } } set_variable = { which = pe_dc_k value = 8 } set_variable = { which = pe_dc_nm value = pe_c8_name } }
+	if = { limit = { has_modifier = pe_defence_contract } remove_modifier = pe_defence_contract }
+	add_modifier = { modifier = pe_defence_contract days = -1 multiplier = pe_dc_s }
+}

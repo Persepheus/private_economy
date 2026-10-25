@@ -2415,6 +2415,8 @@ for (const i of REG) {
   regLoc += dtext(`GetPeFl${i}Stage`, `pe_fl${i}_stage`, STAGES.map(s => [s, `pe_reg_stage_${s}`]), 'pe_corp_line_none');
   regLoc += dtext(`GetPeFl${i}Corp`, `pe_fl${i}_name`, [[0, 'pe_reg_independent'], ...NAME_IDS.map(id => [id, `pe_cname_${id}`])], 'pe_reg_independent');
 }
+regLoc += `defined_text = {\n\tname = GetPeDcLine\n\ttext = {\n\t\ttrigger = { check_variable = { which = pe_dc_k value > 0 } }\n\t\tlocalization_key = pe_dc_reg_line\n\t}\n\tdefault = pe_corp_line_none\n}\n`;
+regLoc += dtext('GetPeDcName', 'pe_dc_nm', NAME_IDS.map(id => [id, `pe_cname_${id}`]), 'pe_corp_line_none');
 regLoc += `defined_text = {\n\tname = GetPeChabReg\n\ttext = {\n\t\ttrigger = { check_variable = { which = pe_reg_chab value > 0 } }\n\t\tlocalization_key = pe_chab_reg_line\n\t}\n\tdefault = pe_corp_line_none\n}\n`;
 regLoc += dtext('GetPeChabRegName', 'pe_reg_chab', NAME_IDS.map(id => [id, `pe_cname_${id}`]), 'pe_corp_line_none');
 regLoc += `defined_text = {\n\tname = GetPeFlMore\n\ttext = {\n\t\ttrigger = { check_variable = { which = pe_fl_more value > 0 } }\n\t\tlocalization_key = pe_reg_more\n\t}\n\tdefault = pe_corp_line_none\n}\n`;
@@ -2428,7 +2430,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
     li ? ' decision_pe_firm_register:0 "Firmenregister"' : ' decision_pe_firm_register:0 "Register of Firms"',
     li ? ' decision_pe_firm_register_desc:0 "Zeigt die Privatfirmen auf diesem Planeten und die Konzerne, zu denen sie gehören."' : ' decision_pe_firm_register_desc:0 "Shows the private firms on this planet and the corporations they belong to."',
     li ? ' pe.276.name:0 "Firmenregister: [pe_reg_planet.GetName]"' : ' pe.276.name:0 "Register of Firms: [pe_reg_planet.GetName]"',
-    ` pe.276.desc:0 "[Root.GetPeChabReg]${REG.map(i => `[Root.GetPeFl${i}]`).join('')}[Root.GetPeFlMore]\\n\\n${li ? '§HKonzerne des Reichs§!' : '§HCorporations of the empire§!'}\\n${CORPS.map(k => `[Root.GetPeCorpLine${k}]`).join('')}"`,
+    ` pe.276.desc:0 "[Root.GetPeChabReg]${REG.map(i => `[Root.GetPeFl${i}]`).join('')}[Root.GetPeFlMore]\\n\\n${li ? '§HKonzerne des Reichs§!' : '§HCorporations of the empire§!'}\\n${CORPS.map(k => `[Root.GetPeCorpLine${k}]`).join('')}[Root.GetPeDcLine]"`,
     li ? ' pe.276.a:0 "Schließen."' : ' pe.276.a:0 "Close."');
 }
 corp += `
@@ -3182,6 +3184,113 @@ ${CORPS.map(k => `			set_variable = { which = pe_cw_w value = pe_pfa }
 ${CORPS.map(k => `	set_variable = { which = ${C(k, 'wfr')} value = ${C(k, 'wfq')} }\n	round_variable = ${C(k, 'wfr')}`).join('\n')}
 }
 `;
+// --- Defence contract (pe_dc_step, pe.306) ------------------------------------------------
+// An industry corporation with 5000 cash offers to carry part of our fleet upkeep (10%, 20%
+// from 15000 cash): we get ships_upkeep_mult, it pays the value saved every quarter (base
+// prices: energy 1, alloys 4, trade 1). In return: arms orders (+10% workforce of the private
+// metallurgists on planets with its steelworks), first call for war leases, and an arms centre
+// at its headquarters. It ends when its cash falls below 1000. One contract per empire.
+const DC_MIN = 5000, DC_RICH = 15000, DC_END = 1000;
+corp += `
+# --- Defence contract (pe.306) -------------------------------------------------------------
+# Country scope, quarterly (pe_corp_step, call depth 3, no calls). pe_dc_k = the contractor's
+# slot (0 none), pe_dc_nm its name, pe_dc_s its share in percent, pe_dc_paid what it paid last
+# quarter. Planet modifiers: pe_arms_orders (its steelworks), pe_arms_centre (headquarters).
+pe_dc_step = {
+	if = { limit = { NOT = { is_variable_set = pe_dc_k } } set_variable = { which = pe_dc_k value = 0 } }
+	# A running contract: still valid (the corporation exists and has ${DC_END} cash)?
+	set_variable = { which = pe_dc_ok value = 0 }
+${CORPS.map(k => `\tif = { limit = { check_variable = { which = pe_dc_k value = ${k} } check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'name')} value = pe_dc_nm } check_variable = { which = ${C(k, 'cash')} value >= ${DC_END} } } set_variable = { which = pe_dc_ok value = 1 } }`).join('\n')}
+	if = {
+		limit = { check_variable = { which = pe_dc_k value > 0 } check_variable = { which = pe_dc_ok value = 0 } }
+		set_variable = { which = pe_dc_k value = 0 }
+		set_timed_country_flag = { flag = pe_dc_cd days = 1080 }
+		if = {
+			limit = { is_ai = no }
+			capital_scope = { save_event_target_as = pe_msg_planet }
+			create_message = { type = pe_private_economy localization = pe_msg_dc_end days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } }
+		}
+	}
+	# Its share by its cash, and its payment for the quarter: our fleet upkeep x share / (100 - share).
+	set_variable = { which = pe_dc_paid value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_dc_k value > 0 } }
+		set_variable = { which = pe_dc_s value = 10 }
+${corpChain('pe_dc_k', k => `if = { limit = { check_variable = { which = ${C(k, 'cash')} value >= ${DC_RICH} } } set_variable = { which = pe_dc_s value = 20 } }`, '\t\t')}
+		export_trigger_value_to_variable = { trigger = resource_expenses_compare parameters = { resource = energy category = ships } variable = pe_dc_v }
+		export_trigger_value_to_variable = { trigger = resource_expenses_compare parameters = { resource = alloys category = ships } variable = pe_tmp }
+		multiply_variable = { which = pe_tmp value = 4 }
+		change_variable = { which = pe_dc_v value = pe_tmp }
+		export_trigger_value_to_variable = { trigger = resource_expenses_compare parameters = { resource = trade category = ships } variable = pe_tmp }
+		change_variable = { which = pe_dc_v value = pe_tmp }
+		multiply_variable = { which = pe_dc_v value = pe_dc_s }
+		set_variable = { which = pe_tmp value = 100 }
+		subtract_variable = { which = pe_tmp value = pe_dc_s }
+		divide_variable = { which = pe_dc_v value = pe_tmp }
+		multiply_variable = { which = pe_dc_v value = 3 }
+		if = { limit = { check_variable = { which = pe_dc_v value < 0 } } set_variable = { which = pe_dc_v value = 0 } }
+${corpChain('pe_dc_k', k => `subtract_variable = { which = ${C(k, 'cash')} value = pe_dc_v }`, '\t\t')}
+		set_variable = { which = pe_dc_paid value = pe_dc_v }
+		round_variable = pe_dc_paid
+	}
+	# A new contract: none running, no pause, the richest industry corporation with ${DC_MIN} cash
+	# (15% a quarter). Human empires get an offer (pe.306), AI empires sign.
+	if = {
+		limit = {
+			check_variable = { which = pe_dc_k value = 0 }
+			OR = { NOT = { has_country_flag = pe_dc_cd } check_variable = { which = pe_fl_force value = 1 } }
+		}
+		set_variable = { which = pe_dc_cand value = 0 }
+		set_variable = { which = pe_dc_best value = ${DC_MIN - 1} }
+${CORPS.map(k => `\t\tif = { limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'grp')} value = 1 } check_variable = { which = ${C(k, 'cash')} value > pe_dc_best } } set_variable = { which = pe_dc_cand value = ${k} } set_variable = { which = pe_dc_best value = ${C(k, 'cash')} } }`).join('\n')}
+		if = {
+			limit = { check_variable = { which = pe_dc_cand value > 0 } }
+			random_list = {
+				15 = {
+					set_timed_country_flag = { flag = pe_dc_cd days = 1800 }
+					set_variable = { which = pe_dc_s value = 10 }
+					if = { limit = { check_variable = { which = pe_dc_best value >= ${DC_RICH} } } set_variable = { which = pe_dc_s value = 20 } }
+					if = {
+						limit = { is_ai = yes }
+${corpChain('pe_dc_cand', k => `set_variable = { which = pe_dc_k value = ${k} } set_variable = { which = pe_dc_nm value = ${C(k, 'name')} }`, '\t\t\t\t\t\t')}
+					}
+					else = { country_event = { id = pe.306 } }
+				}
+				85 = { modifier = { factor = 0 check_variable = { which = pe_fl_force value = 1 } } }
+			}
+		}
+	}
+	# The modifiers.
+	if = { limit = { has_modifier = pe_defence_contract } remove_modifier = pe_defence_contract }
+	if = { limit = { check_variable = { which = pe_dc_k value > 0 } } add_modifier = { modifier = pe_defence_contract days = -1 multiplier = pe_dc_s } }
+	every_owned_colony = {
+		if = { limit = { has_modifier = pe_arms_orders } remove_modifier = pe_arms_orders }
+		if = { limit = { has_modifier = pe_arms_centre } remove_modifier = pe_arms_centre }
+	}
+${CORPS.map(k => `	if = {
+		limit = { check_variable = { which = pe_dc_k value = ${k} } }
+		every_owned_colony = {
+			limit = { has_planet_flag = pe_hq_${k} }
+			add_modifier = { modifier = pe_arms_centre days = -1 }
+		}
+		every_owned_colony = {
+			set_variable = { which = pe_dc_here value = 0 }
+			every_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = ${k} } check_variable = { which = pe_prim value = ${prim('a')} } }
+				prev = { set_variable = { which = pe_dc_here value = 1 } }
+			}
+			if = { limit = { check_variable = { which = pe_dc_here value = 1 } } add_modifier = { modifier = pe_arms_orders days = -1 } }
+		}
+	}`).join('\n')}
+}
+
+# Country scope (pe.306): we sign with the candidate pe_dc_cand (share pe_dc_s).
+pe_dc_accept = {
+${corpChain('pe_dc_cand', k => `set_variable = { which = pe_dc_k value = ${k} } set_variable = { which = pe_dc_nm value = ${C(k, 'name')} }`)}
+	if = { limit = { has_modifier = pe_defence_contract } remove_modifier = pe_defence_contract }
+	add_modifier = { modifier = pe_defence_contract days = -1 multiplier = pe_dc_s }
+}
+`;
 write('common/deposits/pe_corp_lab_deposits_generated.txt', header + `# Research institutes of corporations (pe_corp_social): jobs of the field at the headquarters,
 # 100 per level, with the best equipment (+25% workforce of these private researchers here).
 # Running costs and wages: paid by the corporation.
@@ -3233,7 +3342,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
 
 // Events that name a corporation: each reads its own variable pe_cn<event>, set in its
 // immediate (pe_corp_cur_name is shared and may change before the window is read).
-const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298, 300];
+const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298, 300, 306];
 const corpLoc = (name, varName, keyOf) => dtext(name, varName, NAME_IDS.map(id => [id, keyOf(id)]), 'pe_corp_line_none');
 write('common/scripted_loc/pe_corp_loc_generated.txt', header + locDt + `# Corporation names (country scope).\n` +
   corpLoc('GetPeCorpName', 'pe_corp_cur_name', id => `pe_cname_${id}`) + CORP_EVENTS.map(e => corpLoc(`GetPeCorpName${e}`, `pe_cn${e}`, id => `pe_cname_${id}`)).join('') + corpLoc('GetPeCorpA', 'pe_corp_a_name', id => `pe_cname_${id}`) + corpLoc('GetPeCorpB', 'pe_corp_b_name', id => `pe_cname_${id}`) +

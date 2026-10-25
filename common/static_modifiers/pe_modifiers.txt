@@ -264,3 +264,16 @@ pe_hold_mega_speed = {
 pe_corp_welfare = {
 	pop_happiness = 0.001
 }
+
+# Defence contract (pe_dc_step): the contractor carries pe_dc_s percent of our fleet upkeep
+# (multiplier); arms orders at its steelworks; arms centre at its headquarters.
+pe_defence_contract = {
+	ships_upkeep_mult = -0.01
+}
+pe_arms_orders = {
+	pop_pe_private_metallurgist_bonus_workforce_mult = 0.1
+}
+pe_arms_centre = {
+	planet_stability_add = 2
+	pop_pe_private_metallurgist_bonus_workforce_mult = 0.1
+}
