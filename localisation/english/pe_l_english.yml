@@ -158,3 +158,5 @@
  pe.308.name:0 "Defence Contract Ended"
  pe.308.desc:0 "Our defence contract with §Y[Root.GetPeCorpName308]§! has ended: the corporation has run into a crisis (its cash is used up) or no longer exists. Our fleet upkeep is ours alone again. A new corporation may offer a contract in a few years."
  pe.308.a:0 "Understood."
+ pe_pat_foundation:0 "The Foundation of [Root.GetPeCorpNamePat]"
+ pe_pat_foundation_rep:0 "a corporate foundation"

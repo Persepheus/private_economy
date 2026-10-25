@@ -158,3 +158,5 @@
  pe.308.name:0 "Rüstungsvertrag beendet"
  pe.308.desc:0 "Unser Rüstungsvertrag mit §Y[Root.GetPeCorpName308]§! ist beendet: Der Konzern ist in eine Krise geraten (seine Kasse ist aufgebraucht) oder existiert nicht mehr. Den Unterhalt unserer Flotte tragen wir wieder allein. In einigen Jahren kann ein Konzern einen neuen Vertrag anbieten."
  pe.308.a:0 "Verstanden."
+ pe_pat_foundation:0 "Stiftung von [Root.GetPeCorpNamePat]"
+ pe_pat_foundation_rep:0 "eine Konzern-Stiftung"

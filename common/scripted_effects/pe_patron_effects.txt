@@ -16,6 +16,7 @@
 # Country scope, quarterly: with a full investor pool (4500 or more) and no patron event
 # in the last two years, a 25% chance per quarter of a patron event.
 pe_patron = {
+	set_variable = { which = pe_fd_fire value = 0 }
 	if = {
 		limit = {
 			check_variable = { which = pe_capital value >= 4500 }
@@ -23,8 +24,36 @@ pe_patron = {
 		}
 		random = {
 			chance = 25
+			set_variable = { which = pe_pat_src value = 0 }
+			set_variable = { which = pe_fd_fire value = 1 }
 			pe_patron_fire = yes
 		}
+	}
+	# Corporate foundations: the richest corporation with 20000 cash funds such an event with a
+	# tenth of its cash (25% a quarter, not in a quarter with a patron, then two years' pause;
+	# the patrons keep their own pause). Its foundation stands in for the magnate.
+	if = {
+		limit = { check_variable = { which = pe_fd_fire value = 0 } NOT = { has_country_flag = pe_found_cd } }
+		set_variable = { which = pe_pat_src value = 0 }
+		set_variable = { which = pe_fd_best value = 19999 }
+		if = { limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value > pe_fd_best } } set_variable = { which = pe_pat_src value = 1 } set_variable = { which = pe_fd_best value = pe_c1_cash } set_variable = { which = pe_pat_srcn value = pe_c1_name } }
+		if = { limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value > pe_fd_best } } set_variable = { which = pe_pat_src value = 2 } set_variable = { which = pe_fd_best value = pe_c2_cash } set_variable = { which = pe_pat_srcn value = pe_c2_name } }
+		if = { limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value > pe_fd_best } } set_variable = { which = pe_pat_src value = 3 } set_variable = { which = pe_fd_best value = pe_c3_cash } set_variable = { which = pe_pat_srcn value = pe_c3_name } }
+		if = { limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value > pe_fd_best } } set_variable = { which = pe_pat_src value = 4 } set_variable = { which = pe_fd_best value = pe_c4_cash } set_variable = { which = pe_pat_srcn value = pe_c4_name } }
+		if = { limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value > pe_fd_best } } set_variable = { which = pe_pat_src value = 5 } set_variable = { which = pe_fd_best value = pe_c5_cash } set_variable = { which = pe_pat_srcn value = pe_c5_name } }
+		if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value > pe_fd_best } } set_variable = { which = pe_pat_src value = 6 } set_variable = { which = pe_fd_best value = pe_c6_cash } set_variable = { which = pe_pat_srcn value = pe_c6_name } }
+		if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value > pe_fd_best } } set_variable = { which = pe_pat_src value = 7 } set_variable = { which = pe_fd_best value = pe_c7_cash } set_variable = { which = pe_pat_srcn value = pe_c7_name } }
+		if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_fd_best } } set_variable = { which = pe_pat_src value = 8 } set_variable = { which = pe_fd_best value = pe_c8_cash } set_variable = { which = pe_pat_srcn value = pe_c8_name } }
+		if = {
+			limit = { check_variable = { which = pe_pat_src value > 0 } }
+			random = {
+				chance = 25
+				set_timed_country_flag = { flag = pe_found_cd days = 730 }
+				set_variable = { which = pe_cnpat value = pe_pat_srcn }
+				pe_patron_fire = yes
+			}
+		}
+		if = { limit = { NOT = { has_country_flag = pe_found_cd } } set_variable = { which = pe_pat_src value = 0 } }
 	}
 }
 
@@ -32,7 +61,7 @@ pe_patron = {
 # (pe_pat_spend); options that decline it pay it back. The results grow with it: amounts
 # directly, modifiers, deposits and settlers by pe_pat_mult (see pe_pat_amounts).
 pe_patron_fire = {
-	set_timed_country_flag = { flag = pe_patron_cd days = 730 }
+	if = { limit = { NOT = { check_variable = { which = pe_pat_src value > 0 } } } set_timed_country_flag = { flag = pe_patron_cd days = 730 } }
 	pe_pat_amounts = yes
 	capital_scope = { save_event_target_as = pe_pat_planet }
 	capital_scope = { owner_main_species = { save_event_target_as = pe_main_species } }
@@ -269,8 +298,10 @@ pe_patron_fire = {
 # Country scope: the magnate (a new one after four events), the amount (30% of the
 # investor pool, taken from it) and what the options give, all rounded.
 pe_pat_amounts = {
+	if = { limit = { NOT = { is_variable_set = pe_pat_src } } set_variable = { which = pe_pat_src value = 0 } }
 	if = {
 		limit = {
+			check_variable = { which = pe_pat_src value = 0 }
 			OR = {
 				NOT = { is_variable_set = pe_mag_id }
 				check_variable = { which = pe_mag_events value >= 4 }
@@ -287,11 +318,26 @@ pe_pat_amounts = {
 		set_variable = { which = pe_mag_events value = 0 }
 		set_variable = { which = pe_mag_rep value = 0 }
 	}
-	change_variable = { which = pe_mag_events value = 1 }
-	set_variable = { which = pe_pat_spend value = pe_capital }
-	multiply_variable = { which = pe_pat_spend value = 0.3 }
-	round_variable = pe_pat_spend
-	subtract_variable = { which = pe_capital value = pe_pat_spend }
+	# The money: a patron puts in 30% of the investor pool, a corporate foundation 10% of the
+	# corporation's cash (pe_pat_src).
+	if = {
+		limit = { check_variable = { which = pe_pat_src value > 0 } }
+		if = { limit = { check_variable = { which = pe_pat_src value = 1 } } set_variable = { which = pe_pat_spend value = pe_c1_cash } multiply_variable = { which = pe_pat_spend value = 0.1 } round_variable = pe_pat_spend subtract_variable = { which = pe_c1_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 2 } } set_variable = { which = pe_pat_spend value = pe_c2_cash } multiply_variable = { which = pe_pat_spend value = 0.1 } round_variable = pe_pat_spend subtract_variable = { which = pe_c2_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 3 } } set_variable = { which = pe_pat_spend value = pe_c3_cash } multiply_variable = { which = pe_pat_spend value = 0.1 } round_variable = pe_pat_spend subtract_variable = { which = pe_c3_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 4 } } set_variable = { which = pe_pat_spend value = pe_c4_cash } multiply_variable = { which = pe_pat_spend value = 0.1 } round_variable = pe_pat_spend subtract_variable = { which = pe_c4_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 5 } } set_variable = { which = pe_pat_spend value = pe_c5_cash } multiply_variable = { which = pe_pat_spend value = 0.1 } round_variable = pe_pat_spend subtract_variable = { which = pe_c5_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 6 } } set_variable = { which = pe_pat_spend value = pe_c6_cash } multiply_variable = { which = pe_pat_spend value = 0.1 } round_variable = pe_pat_spend subtract_variable = { which = pe_c6_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 7 } } set_variable = { which = pe_pat_spend value = pe_c7_cash } multiply_variable = { which = pe_pat_spend value = 0.1 } round_variable = pe_pat_spend subtract_variable = { which = pe_c7_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 8 } } set_variable = { which = pe_pat_spend value = pe_c8_cash } multiply_variable = { which = pe_pat_spend value = 0.1 } round_variable = pe_pat_spend subtract_variable = { which = pe_c8_cash value = pe_pat_spend } }
+	}
+	else = {
+		change_variable = { which = pe_mag_events value = 1 }
+		set_variable = { which = pe_pat_spend value = pe_capital }
+		multiply_variable = { which = pe_pat_spend value = 0.3 }
+		round_variable = pe_pat_spend
+		subtract_variable = { which = pe_capital value = pe_pat_spend }
+	}
 	set_variable = { which = pe_pat_unity value = pe_pat_spend }
 	multiply_variable = { which = pe_pat_unity value = 0.3 }
 	round_variable = pe_pat_unity
@@ -406,6 +452,7 @@ pe_labour = {
 # Country scope: a labour event on a planet with empty private worker jobs. pe_lab_job:
 # the job with the most empty places there (1 miner, 2 technician, 3 farmer).
 pe_labour_fire = {
+	set_variable = { which = pe_pat_src value = 0 }
 	set_timed_country_flag = { flag = pe_labour_cd days = 730 }
 	pe_pat_amounts = yes
 	random_owned_colony = {
@@ -918,4 +965,21 @@ pe_pick_free_spec = {
 		set_variable = { which = pe_rat_jobs value = pe_rat_mult }
 		multiply_variable = { which = pe_rat_jobs value = 100 }
 	}
+}
+
+# Country scope (options of the patron events that decline the money): it goes back where it
+# came from, to the investor pool or to the corporation of the foundation (if it still exists).
+pe_pat_refund = {
+	if = {
+		limit = { check_variable = { which = pe_pat_src value > 0 } }
+		if = { limit = { check_variable = { which = pe_pat_src value = 1 } check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_name value = pe_pat_srcn } } change_variable = { which = pe_c1_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 2 } check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_name value = pe_pat_srcn } } change_variable = { which = pe_c2_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 3 } check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_name value = pe_pat_srcn } } change_variable = { which = pe_c3_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 4 } check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_name value = pe_pat_srcn } } change_variable = { which = pe_c4_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 5 } check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_name value = pe_pat_srcn } } change_variable = { which = pe_c5_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 6 } check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_name value = pe_pat_srcn } } change_variable = { which = pe_c6_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 7 } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_name value = pe_pat_srcn } } change_variable = { which = pe_c7_cash value = pe_pat_spend } }
+		else_if = { limit = { check_variable = { which = pe_pat_src value = 8 } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_name value = pe_pat_srcn } } change_variable = { which = pe_c8_cash value = pe_pat_spend } }
+	}
+	else = { change_variable = { which = pe_capital value = pe_pat_spend } }
 }

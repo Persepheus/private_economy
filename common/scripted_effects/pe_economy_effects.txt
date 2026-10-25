@@ -1192,12 +1192,28 @@ pe_firm_book = {
 # Colony scope: private automation of the three worker jobs vanilla automates.
 pe_automation = {
 	set_variable = { which = pe_auto_pp value = 0 }
+	# Levels per job (pe_al_<job>); older saves had one deposit per job and level.
+	if = { limit = { has_deposit = d_pe_auto_miner_1 } remove_deposit = d_pe_auto_miner_1 set_variable = { which = pe_al_miner value = 1 } }
+	if = { limit = { has_deposit = d_pe_auto_miner_2 } remove_deposit = d_pe_auto_miner_2 set_variable = { which = pe_al_miner value = 2 } }
+	if = { limit = { NOT = { is_variable_set = pe_al_miner } } set_variable = { which = pe_al_miner value = 0 } }
+	if = { limit = { has_deposit = d_pe_auto_technician_1 } remove_deposit = d_pe_auto_technician_1 set_variable = { which = pe_al_technician value = 1 } }
+	if = { limit = { has_deposit = d_pe_auto_technician_2 } remove_deposit = d_pe_auto_technician_2 set_variable = { which = pe_al_technician value = 2 } }
+	if = { limit = { NOT = { is_variable_set = pe_al_technician } } set_variable = { which = pe_al_technician value = 0 } }
+	if = { limit = { has_deposit = d_pe_auto_farmer_1 } remove_deposit = d_pe_auto_farmer_1 set_variable = { which = pe_al_farmer value = 1 } }
+	if = { limit = { has_deposit = d_pe_auto_farmer_2 } remove_deposit = d_pe_auto_farmer_2 set_variable = { which = pe_al_farmer value = 2 } }
+	if = { limit = { NOT = { is_variable_set = pe_al_farmer } } set_variable = { which = pe_al_farmer value = 0 } }
 	pe_auto_book = { JOB = miner }
 	pe_auto_invest = { JOB = miner }
 	pe_auto_book = { JOB = technician }
 	pe_auto_invest = { JOB = technician }
 	pe_auto_book = { JOB = farmer }
 	pe_auto_invest = { JOB = farmer }
+	# One deposit for all of it.
+	if = {
+		limit = { OR = { check_variable = { which = pe_al_miner value > 0 } check_variable = { which = pe_al_technician value > 0 } check_variable = { which = pe_al_farmer value > 0 } } }
+		if = { limit = { NOT = { has_deposit = d_pe_automation } } add_deposit = d_pe_automation }
+	}
+	else_if = { limit = { has_deposit = d_pe_automation } remove_deposit = d_pe_automation }
 	# The firms carry the energy upkeep of their automated jobs here (pe_auto_pp per month, 4 per
 	# automated job): this share of the planet's upkeep for automated workforce is taken off
 	# (planet modifier pe_auto_cover, -1% per point; the upkeep category is a planet one). Vanilla
@@ -1420,8 +1436,8 @@ pe_auto_book = {
 			subtract_variable = { which = pe_capital value = pe_tmp }
 		}
 	}
-	if = { limit = { has_deposit = d_pe_auto_$JOB$_1 } root = { set_variable = { which = pe_alvl value = 1 } } }
-	if = { limit = { has_deposit = d_pe_auto_$JOB$_2 } root = { set_variable = { which = pe_alvl value = 2 } } }
+	if = { limit = { check_variable = { which = pe_al_$JOB$ value = 1 } } root = { set_variable = { which = pe_alvl value = 1 } } }
+	if = { limit = { check_variable = { which = pe_al_$JOB$ value = 2 } } root = { set_variable = { which = pe_alvl value = 2 } } }
 	root = {
 		# Automated value per month: jobs x 25% x level x value added per job.
 		set_variable = { which = pe_aval value = pe_acap }
@@ -1505,8 +1521,8 @@ pe_auto_book = {
 	if = {
 		limit = { root = { check_variable = { which = pe_adown value = 1 } } }
 		save_event_target_as = pe_msg_planet
-		if = { limit = { has_deposit = d_pe_auto_$JOB$_2 } remove_deposit = d_pe_auto_$JOB$_2 add_deposit = d_pe_auto_$JOB$_1 }
-		else = { remove_deposit = d_pe_auto_$JOB$_1 }
+		if = { limit = { check_variable = { which = pe_al_$JOB$ value = 2 } } set_variable = { which = pe_al_$JOB$ value = 1 } }
+		else = { set_variable = { which = pe_al_$JOB$ value = 0 } }
 		check_planet_employment = yes
 		owner = {
 			create_message = {
@@ -1628,12 +1644,12 @@ pe_auto_invest = {
 		save_event_target_as = pe_msg_planet
 		if = {
 			limit = { root = { check_variable = { which = pe_alvl value = 0 } } }
-			add_deposit = d_pe_auto_$JOB$_1
+			set_variable = { which = pe_al_$JOB$ value = 1 }
+			if = { limit = { NOT = { has_deposit = d_pe_automation } } add_deposit = d_pe_automation }
 			if = { limit = { root = { check_variable = { which = pe_acorp value = 0 } } } owner = { create_message = { type = pe_private_economy localization = pe_msg_auto_$JOB$_1 days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } } }
 		}
 		else = {
-			remove_deposit = d_pe_auto_$JOB$_1
-			add_deposit = d_pe_auto_$JOB$_2
+			set_variable = { which = pe_al_$JOB$ value = 2 }
 			if = { limit = { root = { check_variable = { which = pe_acorp value = 0 } } } owner = { create_message = { type = pe_private_economy localization = pe_msg_auto_$JOB$_2 days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } } }
 		}
 		check_planet_employment = yes
@@ -1935,6 +1951,7 @@ pe_corp_step = {
 		limit = { is_variable_set = pe_mem_1 }
 		pe_corp_branches = yes
 	}
+	pe_status_apply = yes
 }
 
 # Country scope, quarterly (after the planets have counted their firms): supply chains.
@@ -2341,6 +2358,9 @@ pe_firms_to_state = {
 			remove_deposit = yes
 		}
 	}
+	set_variable = { which = pe_al_miner value = 0 }
+	set_variable = { which = pe_al_technician value = 0 }
+	set_variable = { which = pe_al_farmer value = 0 }
 	if = { limit = { has_deposit = d_pe_ledger_profit } remove_deposit = d_pe_ledger_profit }
 	if = { limit = { has_deposit = d_pe_cprod_alloys } remove_deposit = d_pe_cprod_alloys }
 	if = { limit = { has_deposit = d_pe_cprod_consumer_goods } remove_deposit = d_pe_cprod_consumer_goods }

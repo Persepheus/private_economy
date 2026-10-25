@@ -388,10 +388,26 @@ ${d ? `
 `}}
 `).join(''));
 
-write('common/deposits/pe_automation_deposits.txt', header + `# Private automation of a worker job on a planet, like the vanilla automation buildings
-# (level I +25%, level II +50% automated workforce). A joint investment of the firms with
-# that job on the planet; they pay its cost and upkeep from their capital (no upkeep for
-# the state). No district slot.
+write('common/deposits/pe_automation_deposits.txt', header + `# Private automation of the worker jobs on a planet, like the vanilla automation buildings
+# (level I +25%, level II +50% automated workforce), one deposit for all jobs (levels: planet
+# variables pe_al_<job>, pe_automation). A joint investment of the firms with that job on the
+# planet; they pay its cost and upkeep from their capital. No district slot.
+
+d_pe_automation = {
+	icon = d_pe_automation_1
+	is_for_colonizable = yes
+	category = pe_deposit_cat_automation
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+	custom_tooltip = pe_auto_tt
+${AUTO_JOBS.flatMap(a => [1, 2].map(l => `	triggered_planet_modifier = {
+		potential = { is_variable_set = pe_al_${a} check_variable = { which = pe_al_${a} value = ${l} } }
+		job_pe_private_${a}_automated_workforce_mult = ${l * 0.25}
+	}`)).join('\n')}
+}
+
+# Before 0.35: one deposit per job and level (replaced in pe_automation).
 ` + AUTO_JOBS.flatMap(a => [1, 2].map(l => `
 d_pe_auto_${a}_${l} = {
 	icon = d_pe_automation_${l}
@@ -1294,8 +1310,14 @@ loc.english.push(' pe_msg_firm_ruined:0 "A private firm on $PLANET$ has been des
 loc.german.push(' pe_msg_firm_ruined:0 "Eine Privatfirma auf $PLANET$ ist durch das Bombardement zerstört worden. Ihre Trümmer blockieren den Distriktplatz, bis sie geräumt oder wieder aufgebaut sind."', ' d_pe_ruins:0 "Trümmer einer Privatfirma"', ' d_pe_ruins_desc:0 "Was das Bombardement von einer Privatfirma übrig gelassen hat. Die Trümmer blockieren einen Distriktplatz. Sie lassen sich räumen oder wieder aufbauen: durch den Konzern der Firma aus seiner Kasse, sonst mit einem Zuschuss von uns."', ' pe_deposit_cat_ruins:0 "Trümmer"');
 loc.english.push(' pe_supply_deal:0 "Supply Deal with a Private Firm"', ' d_pe_supply_deal:0 "Supply Deal"', ' d_pe_supply_deal_desc:0 "A private firm delivers us this good every month for two years and takes another one in return, of which we had plenty (event §YA Special Deal§!). The deal ends early if we run out of the good we pay with."');
 loc.german.push(' pe_supply_deal:0 "Liefervertrag mit einer Privatfirma"', ' d_pe_supply_deal:0 "Liefervertrag"', ' d_pe_supply_deal_desc:0 "Eine Privatfirma liefert uns zwei Jahre lang jeden Monat diese Ware und nimmt dafür eine andere, von der wir reichlich hatten (Ereignis §YEin besonderes Angebot§!). Der Vertrag endet vorzeitig, wenn uns die Ware ausgeht, mit der wir bezahlen."');
+loc.english.push(' d_pe_automation:0 "Private Automation"', ' d_pe_automation_desc:0 "The private firms here have automated part of their worker jobs, like the vanilla automation buildings (level I 25%, level II 50% of the jobs need no pops). The firms pay for it from their own capital, and its energy upkeep too: the modifier Private Automation takes it off our budget."',
+  ' pe_auto_tt:0 "§HAutomated§!\\n' + AUTO_JOBS.map(a => `[This.GetPeAuto_${a}]`).join('') + '"');
+loc.german.push(' d_pe_automation:0 "Private Automatisierung"', ' d_pe_automation_desc:0 "Die Privatfirmen hier haben einen Teil ihrer Arbeiterjobs automatisiert, wie mit den Vanilla-Automatisierungsgebäuden (Stufe I 25 %, Stufe II 50 % der Jobs brauchen keine Pops). Die Firmen zahlen sie aus ihrem eigenen Kapital, auch den Energieunterhalt: Der Modifikator Private Automatisierung nimmt ihn aus unserem Haushalt."',
+  ' pe_auto_tt:0 "§HAutomatisiert§!\\n' + AUTO_JOBS.map(a => `[This.GetPeAuto_${a}]`).join('') + '"');
 for (const a of AUTO_JOBS) for (const l of [1, 2]) {
   const [en, de] = AUTO_NAMES[a], lv = l === 1 ? 'I' : 'II';
+  loc.english.push(` pe_auto_line_${a}_${l}:0 "§Y${en}§!: level ${lv} (${l * 25}% of the private jobs)\\n"`);
+  loc.german.push(` pe_auto_line_${a}_${l}:0 "§Y${de}§!: Stufe ${lv} (${l * 25} % der Privatjobs)\\n"`);
   loc.english.push(` d_pe_auto_${a}_${l}:0 "Private Automation (${en}) ${lv}"`,
     ` d_pe_auto_${a}_${l}_desc:0 "The private firms here have automated part of their work: ${l * 25}% of their $job_pe_private_${a}_plural$ jobs need no pops. The firms pay for it from their own capital."`,
     ` pe_msg_auto_${a}_${l}:0 "Lacking workers, the private firms on $PLANET$ have invested in §YPrivate Automation (${en}) ${lv}§!."`);
@@ -1465,11 +1487,7 @@ ${LETTERS.map(l => `	set_variable = { which = pe_cl_${l} value = pe_cn_${l} }
 	if = { limit = { check_variable = { which = pe_cl_${l} value > 3 } } set_variable = { which = pe_cl_${l} value = 3 } }
 	if = { limit = { check_variable = { which = pe_cl_${l} value > 0 } } set_variable = { which = pe_loc_any value = 1 } }
 ${[1, 2, 3].map(n => `\tif = { limit = { has_modifier = pe_cluster_${l}_${n} } remove_modifier = pe_cluster_${l}_${n} }`).join('\n')}`).join('\n')}
-	if = {
-		limit = { check_variable = { which = pe_loc_any value = 1 } }
-		if = { limit = { NOT = { has_deposit = d_pe_location } } add_deposit = d_pe_location }
-	}
-	else_if = { limit = { has_deposit = d_pe_location } remove_deposit = d_pe_location }
+	# The deposit itself: pe_status_apply (with the corporations' lines).
 }
 
 # Country scope: firms per corporation (pe_c<slot>_firms), and the cash rounded for display.
@@ -1498,7 +1516,7 @@ ${CORPS.map(k => `\tif = { limit = { NOT = { is_variable_set = ${C(k, 'cash')} }
 pe_corp_free = {
 ${corpChain('pe_corp_free_k', k => `set_variable = { which = pe_corp_free_name value = ${C(k, 'name')} } set_variable = { which = ${C(k, 'on')} value = 0 } set_variable = { which = ${C(k, 'cash')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'firms')} value = 0 } every_owned_colony = { limit = { has_planet_flag = pe_hq_${k} } remove_planet_flag = pe_hq_${k} } set_variable = { which = ${C(k, 'scd')} value = 0 } set_variable = { which = ${C(k, 'sv')} value = 0 } set_variable = { which = ${C(k, 'st')} value = 0 } set_variable = { which = ${C(k, 'sw')} value = 0 } set_variable = { which = ${C(k, 'right')} value = 0 } every_planet_within_border = { limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_${k} } } orbital_station = { remove_fleet_flag = pe_stc_${k} remove_fleet_flag = pe_st_share set_owner = root } } random_country = { limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } } every_owned_megastructure = { limit = { planet = { OR = { has_planet_flag = pe_swc_${k} AND = { is_variable_set = pe_afc check_variable = { which = pe_afc value = ${k} } } } } } set_owner = root } } every_planet_within_border = { limit = { has_planet_flag = pe_swc_${k} } remove_planet_flag = pe_swc_${k} } every_planet_within_border = { limit = { is_variable_set = pe_af_corp check_variable = { which = pe_af_corp value = ${k} } } set_variable = { which = pe_af_corp value = 0 } set_variable = { which = pe_af_h value = 0 } set_variable = { which = pe_af_val value = 0 } } every_planet_within_border = { limit = { is_variable_set = pe_afc check_variable = { which = pe_afc value = ${k} } } set_variable = { which = pe_afc value = 0 } } set_variable = { which = ${C(k, 'af')} value = 0 } set_variable = { which = ${C(k, 'afs')} value = 0 } set_variable = { which = ${C(k, 'sws')} value = 0 } set_variable = { which = ${C(k, 'hab')} value = 0 } every_owned_colony = { every_deposit = { limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_lender check_variable = { which = pe_lender value = ${k} } } set_variable = { which = pe_loan value = 0 } set_variable = { which = pe_lender value = 0 } set_variable = { which = pe_loan_q value = 0 } } } every_owned_planet = { limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = ${k} } } remove_planet_flag = pe_corp_hab set_variable = { which = pe_chab_corp value = 0 } every_deposit = { limit = { OR = { has_deposit_category = pe_deposit_cat_firms has_deposit_category = pe_deposit_cat_sites } is_variable_set = pe_corp check_variable = { which = pe_corp value = ${k} } } set_variable = { which = pe_corp value = 0 } } }`, '\t')}
 ${CORPS.map(k => `\tif = { limit = { check_variable = { which = ${C(k, 'rival')} value = root.pe_corp_free_k } } set_variable = { which = ${C(k, 'rival')} value = 0 } set_variable = { which = ${C(k, 'war')} value = 0 } }`).join('\n')}
-${nameChain('pe_corp_free_name', id => `remove_country_flag = pe_cname_${id} remove_global_flag = pe_gcname_${id} every_owned_colony = { limit = { has_modifier = pe_corp_hq_${id} } remove_modifier = pe_corp_hq_${id} } every_owned_colony = { limit = { has_deposit = d_pe_hq_${id} } remove_deposit = d_pe_hq_${id} } every_owned_colony = { limit = { has_modifier = pe_corp_br_${id} } remove_modifier = pe_corp_br_${id} }`, '\t')}
+${nameChain('pe_corp_free_name', id => `set_variable = { which = pe_labl_n${id} value = 0 } remove_country_flag = pe_cname_${id} remove_global_flag = pe_gcname_${id} every_owned_colony = { limit = { has_modifier = pe_corp_hq_${id} } remove_modifier = pe_corp_hq_${id} } every_owned_colony = { limit = { has_deposit = d_pe_hq_${id} } remove_deposit = d_pe_hq_${id} } every_owned_colony = { limit = { has_modifier = pe_corp_br_${id} } remove_modifier = pe_corp_br_${id} }`, '\t')}
 }
 
 # Country scope: a message naming the corporation root.pe_msg_name, about
@@ -1764,9 +1782,11 @@ pe_corp_branches = {
 ${NAME_IDS.map(id => `\tif = { limit = { has_modifier = pe_corp_br_${id} } remove_modifier = pe_corp_br_${id} }`).join('\n')}
 	if = { limit = { has_modifier = pe_price_war } remove_modifier = pe_price_war }
 ${NAME_IDS.map(id => `\tif = { limit = { has_modifier = pe_corp_hq_${id} } remove_modifier = pe_corp_hq_${id} add_deposit = d_pe_hq_${id} }`).join('\n')}
+	# Price war: a line of the status deposit (pe_pw).
+	set_variable = { which = pe_pw value = 0 }
 ${CORPS.map(k => `	if = {
-		limit = { check_variable = { which = pe_mem_${k} value > 0 } root = { check_variable = { which = ${C(k, 'war')} value > 0 } } NOT = { has_modifier = pe_price_war } }
-		add_modifier = { modifier = pe_price_war days = -1 }
+		limit = { check_variable = { which = pe_mem_${k} value > 0 } root = { check_variable = { which = ${C(k, 'war')} value > 0 } } }
+		set_variable = { which = pe_pw value = 1 }
 	}`).join('\n')}
 }
 
@@ -1775,6 +1795,7 @@ pe_corp_reset = {
 ${CORPS.map(k => `\tif = { limit = { check_variable = { which = ${C(k, 'on')} value = 1 } } set_variable = { which = pe_corp_free_k value = ${k} } pe_corp_free = yes }`).join('\n')}
 	every_owned_colony = {
 		if = { limit = { has_modifier = pe_price_war } remove_modifier = pe_price_war }
+		set_variable = { which = pe_pw value = 0 }
 	}
 }
 `;
@@ -2291,6 +2312,15 @@ d_pe_hq_${id} = {
 		planet_stability_add = 1
 		planet_jobs_produces_mult = 0.02
 	}
+${['x', 'y', 'z'].flatMap((f, fi) => [1, 2, 3].map(l => `	triggered_planet_modifier = {
+		potential = { exists = owner owner = { is_variable_set = pe_labl_n${id} check_variable = { which = pe_labl_n${id} value = ${l} } check_variable = { which = pe_labf_n${id} value = ${fi + 1} } } }
+		job_${{x: 'pe_private_physicist', y: 'pe_private_biologist', z: 'pe_private_engineer'}[f]}_add = ${100 * l}
+	}`)).join('\n')}
+	triggered_planet_modifier = {
+		potential = { exists = owner owner = { is_variable_set = pe_dc_nm check_variable = { which = pe_dc_k value > 0 } check_variable = { which = pe_dc_nm value = ${id} } } }
+		planet_stability_add = 2
+		pop_pe_private_metallurgist_bonus_workforce_mult = 0.1
+	}
 
 	resources = {
 		category = pe_corp_production
@@ -2310,6 +2340,22 @@ d_pe_location = {
 	drop_weight = { weight = 0 }
 	custom_tooltip = pe_loc_tt
 
+${[0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => `	triggered_planet_modifier = {
+		potential = { is_variable_set = pe_cwb_${i} check_variable = { which = pe_cwb_${i} value = 1 } }
+		pop_happiness = ${+(0.001 * 2 ** i).toFixed(3)}
+	}`).join('\n')}
+	triggered_planet_modifier = {
+		potential = { is_variable_set = pe_dc_here check_variable = { which = pe_dc_here value = 1 } }
+		pop_pe_private_metallurgist_bonus_workforce_mult = 0.1
+	}
+	triggered_planet_modifier = {
+		potential = { is_variable_set = pe_pw check_variable = { which = pe_pw value = 1 } }
+		planet_jobs_produces_mult = 0.03
+	}
+${['x', 'y', 'z'].map(f => `	triggered_planet_modifier = {
+		potential = { is_variable_set = pe_labeq_${f} check_variable = { which = pe_labeq_${f} value = 1 } }
+		pop_${{x: 'pe_private_physicist', y: 'pe_private_biologist', z: 'pe_private_engineer'}[f]}_bonus_workforce_mult = 0.25
+	}`).join('\n')}
 ${LETTERS.flatMap(l => [1, 2, 3].map(n => `	triggered_planet_modifier = {
 		potential = { check_variable = { which = pe_cl_${l} value = ${n} } }
 		${CLUSTER_CAT[l]}_produces_mult = ${+(n * CLUSTER_STEP * (l === 'z' ? 0.5 : 1)).toFixed(3)}
@@ -2341,13 +2387,13 @@ const PROD_NAMES = {alloys: ['Alloys', 'Legierungen'], consumer_goods: ['Consume
 for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
   const L = loc[lang];
   NAME_IDS.forEach(id => L.push(li ? ` d_pe_hq_${id}:0 "Hauptsitz: ${CORP_NAMES[id - 1]}"` : ` d_pe_hq_${id}:0 "Headquarters: ${CORP_NAMES[id - 1]}"`,
-    li ? ` d_pe_hq_${id}_desc:0 "Der Konzern ${CORP_NAMES[id - 1]} hat hier seinen Sitz.\\n\\n§HKonzernproduktion§!\\nDer Konzern besitzt Orbitalstationen und Dyson-Schwärme, verwaltet von unseren Private Holdings. Die Stationen hat er auf Vorkommen gebaut, die wir nicht genutzt haben, oder uns abgekauft. Ihren Ertrag verarbeitet er effizienter als wir (140 %): Er bezahlt davon den Unterhalt seiner Megastrukturen, liefert uns hier jeden Monat 120 % ihres Werts (zu Grundpreisen) in seinem eigenen Produkt, die Ressource oben, und behält 20 % als Marge. Mehr Stationen oder ein größerer Schwarm bedeuten mehr Konzernproduktion.\\n\\nStationen und Produktion jedes Konzerns zeigt die Planeten-Entscheidung §YFirmenregister§!."` : ` d_pe_hq_${id}_desc:0 "The corporation ${CORP_NAMES[id - 1]} has its headquarters here.\\n\\n§HCorporate production§!\\nThe corporation owns orbital stations and Dyson swarms, held by our Private Holdings. It built the stations on deposits we did not use, or bought them from us. It processes their output more efficiently than we would (140%): it pays the upkeep of its megastructures from it, delivers us here, every month, 120% of their value (at base prices) in its own product, the resource above, and keeps 20% as its margin. More stations or a bigger swarm mean more corporate production.\\n\\nThe planet decision §YRegister of Firms§! shows each corporation's stations and production."`));
+    li ? ` d_pe_hq_${id}_desc:0 "Der Konzern ${CORP_NAMES[id - 1]} hat hier seinen Sitz.\\n\\n§HKonzernproduktion§!\\nDer Konzern besitzt Orbitalstationen und Dyson-Schwärme, verwaltet von unseren Private Holdings. Die Stationen hat er auf Vorkommen gebaut, die wir nicht genutzt haben, oder uns abgekauft. Ihren Ertrag verarbeitet er effizienter als wir (140 %): Er bezahlt davon den Unterhalt seiner Megastrukturen, liefert uns hier jeden Monat 120 % ihres Werts (zu Grundpreisen) in seinem eigenen Produkt, die Ressource oben, und behält 20 % als Marge. Mehr Stationen oder ein größerer Schwarm bedeuten mehr Konzernproduktion.\\n\\n§HForschungsinstitut und Rüstungszentrum§!\\nEin reicher Konzern betreibt hier ein Forschungsinstitut seines Fachs (100 Forscherstellen je Stufe). Ist er unser Rüstungskonzern, ist sein Hauptsitz ein Rüstungszentrum (+2 Stabilität, +10 % Arbeitskraft privater Metallurgen).\\n\\nStationen und Produktion jedes Konzerns zeigt die Planeten-Entscheidung §YFirmenregister§!."` : ` d_pe_hq_${id}_desc:0 "The corporation ${CORP_NAMES[id - 1]} has its headquarters here.\\n\\n§HCorporate production§!\\nThe corporation owns orbital stations and Dyson swarms, held by our Private Holdings. It built the stations on deposits we did not use, or bought them from us. It processes their output more efficiently than we would (140%): it pays the upkeep of its megastructures from it, delivers us here, every month, 120% of their value (at base prices) in its own product, the resource above, and keeps 20% as its margin. More stations or a bigger swarm mean more corporate production.\\n\\n§HResearch institute and arms centre§!\\nA rich corporation runs a research institute of its field here (100 research positions per level). If it is our defence contractor, its headquarters are an arms centre (+2 stability, +10% workforce of private metallurgists).\\n\\nThe planet decision §YRegister of Firms§! shows each corporation's stations and production."`));
   PROD.forEach(r => L.push(li ? ` d_pe_cprod_${r}:0 "Konzernproduktion: ${PROD_NAMES[r][1]}"` : ` d_pe_cprod_${r}:0 "Corporate Production: ${PROD_NAMES[r][0]}"`,
     li ? ` d_pe_cprod_${r}_desc:0 "Ein Konzern mit Hauptsitz hier verarbeitet den Ertrag seiner Orbitalstationen und Dyson-Schwärme und liefert dafür 120 % ihres Werts in seinem eigenen Produkt, abzüglich des Unterhalts seiner Megastrukturen."` : ` d_pe_cprod_${r}_desc:0 "A corporation headquartered here processes the output of its orbital stations and Dyson swarms and delivers 120% of its value in its own product, less the upkeep of its megastructures."`));
   PROD.forEach(r => L.push(` pe_prod_${r}:0 "${li ? PROD_NAMES[r][1] : PROD_NAMES[r][0]}"`));
-  L.push(li ? ' d_pe_location:0 "Standortvorteile"' : ' d_pe_location:0 "Location Advantages"',
-    li ? ' d_pe_location_desc:0 "Was die Privatwirtschaft hier stärker macht, für die ganze Branche (auch Staatsjobs): §HCluster§! (2 / 3 / 4+ Privatfirmen mit demselben Hauptprodukt: +3 / 6 / 9 % Ertrag ihrer Branche) und §HLieferverträge§! (feste Verträge mit Lieferanten oder Abnehmern auf anderen Planeten: +5 %). Ingenieurslabore: der halbe Wert für alle Forscher."'
-       : ' d_pe_location_desc:0 "What makes the private economy stronger here, for the whole sector (state jobs too): §HClusters§! (2 / 3 / 4+ private firms with the same main product: +3 / 6 / 9% output of their sector) and §HSupply contracts§! (fixed contracts with suppliers or buyers on other planets: +5%). Engineering labs: half of it for all researchers."');
+  L.push(li ? ' d_pe_location:0 "Privatwirtschaft"' : ' d_pe_location:0 "Private Economy"',
+    li ? ' d_pe_location_desc:0 "Was die Privatwirtschaft hier bewirkt: §HCluster§! (2 / 3 / 4+ Privatfirmen mit demselben Hauptprodukt: +3 / 6 / 9 % Ertrag ihrer Branche, auch Staatsjobs), §HLieferverträge§! (feste Verträge mit Firmen auf anderen Planeten), §HBetriebliche Sozialleistungen§! reicher Konzerne, §HRüstungsaufträge§! unseres Rüstungskonzerns, §HPreiskämpfe§! und die Ausstattung von §HKonzern-Forschungsinstituten§!. Die Einzelheiten zeigt der Tooltip."'
+       : ' d_pe_location_desc:0 "What the private economy does here: §HClusters§! (2 / 3 / 4+ private firms with the same main product: +3 / 6 / 9% output of their sector, state jobs too), §HSupply contracts§! (fixed contracts with firms on other planets), §HCorporate benefits§! of rich corporations, §HArms orders§! of our defence contractor, §HPrice wars§! and the equipment of §HCorporate research institutes§!. The tooltip shows the details."');
   L.push(li ? ' pe_corp_production:0 "Konzernproduktion"' : ' pe_corp_production:0 "Corporate Production"',
     li ? ' pe_deposit_cat_corp:0 "Konzerne"' : ' pe_deposit_cat_corp:0 "Corporations"',
     li ? ' pe_msg_corp_st_build:0 "§Y$CORP$§! hat über $PLANET$ eine eigene Station errichtet. Ihren Ertrag verarbeitet der Konzern selbst."' : ' pe_msg_corp_st_build:0 "§Y$CORP$§! has built a station of its own above $PLANET$. The corporation processes its output itself."',
@@ -3116,28 +3162,37 @@ ${CORPS.map(k => `	if = { limit = { NOT = { is_variable_set = ${C(k, 'lab')} } }
 		}
 	}
 	else = { set_variable = { which = ${C(k, 'lab')} value = 0 } }`).join('\n')}
-	# Institutes in the wrong place or of the wrong level go; the right ones are noted.
+	# Institutes are lines of the headquarters deposit (jobs: our variables pe_labl_n<name> =
+	# level, pe_labf_n<name> = field 1 physics, 2 biology, 3 engineering) and of the status
+	# deposit (equipment, once per field: planet variables pe_labeq_<field>). The institute
+	# deposits of 0.32 go.
 	every_owned_colony = {
 		every_deposit = {
 			limit = { is_variable_set = pe_labk }
-			set_variable = { which = pe_labok value = 0 }
-${CORPS.map((k, i) => `\t\t\t${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_labk value = ${k} } root = { check_variable = { which = ${C(k, 'on')} value = 1 } } prev = { has_planet_flag = pe_hq_${k} } check_variable = { which = pe_labl value = root.${C(k, 'lab')} } } set_variable = { which = pe_labok value = 1 } root = { set_variable = { which = pe_labhas_${k} value = 1 } } }`).join('\n')}
-			if = { limit = { check_variable = { which = pe_labok value = 0 } } remove_deposit = yes }
+			remove_deposit = yes
 		}
+		set_variable = { which = pe_labeq_x value = 0 }
+		set_variable = { which = pe_labeq_y value = 0 }
+		set_variable = { which = pe_labeq_z value = 0 }
 	}
-	# A missing institute at the headquarters.
 ${CORPS.map(k => `	if = {
-		limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'lab')} value > 0 } check_variable = { which = pe_labhas_${k} value = 0 } }
-		random_owned_colony = {
-			limit = { has_planet_flag = pe_hq_${k} }
-${['x', 'y', 'z'].map((f, i) => `\t\t\t${i ? 'else_if' : 'if'} = { limit = { root = { OR = { ${Object.entries(LAB_FIELD).filter(([, ff]) => ff === f).map(([p]) => `check_variable = { which = ${C(k, 'prod')} value = ${p} }`).join(' ')} } } } ${[1, 2, 3].map((l, j) => `${j ? 'else_if' : 'if'} = { limit = { root = { check_variable = { which = ${C(k, 'lab')} value = ${l} } } } add_deposit = d_pe_corp_lab_${f}_${l} last_added_deposit = { set_variable = { which = pe_labk value = ${k} } set_variable = { which = pe_labl value = root.${C(k, 'lab')} } } }`).join(' ')} }`).join('\n')}
-			check_planet_employment = yes
+		limit = { check_variable = { which = ${C(k, 'on')} value = 1 } }
+		set_variable = { which = pe_lab_f value = 3 }
+${['x', 'y'].map((f, i) => `\t\tif = { limit = { OR = { ${Object.entries(LAB_FIELD).filter(([, ff]) => ff === f).map(([p]) => `check_variable = { which = ${C(k, 'prod')} value = ${p} }`).join(' ')} } } set_variable = { which = pe_lab_f value = ${i + 1} } }`).join('\n')}
+${nameChain(C(k, 'name'), id => `set_variable = { which = pe_labl_n${id} value = ${C(k, 'lab')} } set_variable = { which = pe_labf_n${id} value = pe_lab_f }`, '\t\t')}
+		if = {
+			limit = { check_variable = { which = ${C(k, 'lab')} value > 0 } }
+			every_owned_colony = {
+				limit = { has_planet_flag = pe_hq_${k} }
+${['x', 'y', 'z'].map((f, i) => `\t\t\t\tif = { limit = { root = { check_variable = { which = pe_lab_f value = ${i + 1} } } } set_variable = { which = pe_labeq_${f} value = 1 } }`).join('\n')}
+			}
 		}
 	}`).join('\n')}
 	# Benefits.
 	every_owned_colony = {
 		limit = { is_variable_set = pe_mem_1 }
 		if = { limit = { has_modifier = pe_corp_welfare } remove_modifier = pe_corp_welfare }
+		set_variable = { which = pe_cw_m value = 0 }
 		set_variable = { which = pe_cw_l value = ${CW_DEFAULT[0]} }
 		set_variable = { which = pe_cw_h value = ${CW_DEFAULT[1]} }
 		owner_main_species = {
@@ -3180,8 +3235,13 @@ ${CORPS.map(k => `			set_variable = { which = pe_cw_w value = pe_pfa }
 			multiply_variable = { which = pe_cw_m value = pe_cw_h }
 			multiply_variable = { which = pe_cw_m value = 1000 }
 			round_variable = pe_cw_m
-			if = { limit = { check_variable = { which = pe_cw_m value > 0 } } add_modifier = { modifier = pe_corp_welfare days = -1 multiplier = pe_cw_m } }
 		}
+		# A line of the status deposit: the happiness in bits (0.1% each), and in percent.
+		set_variable = { which = pe_cw_r value = pe_cw_m }
+${[8, 7, 6, 5, 4, 3, 2, 1, 0].map(i => `		if = { limit = { check_variable = { which = pe_cw_r value >= ${2 ** i} } } set_variable = { which = pe_cwb_${i} value = 1 } change_variable = { which = pe_cw_r value = -${2 ** i} } }
+		else = { set_variable = { which = pe_cwb_${i} value = 0 } }`).join('\n')}
+		set_variable = { which = pe_cw_pct value = pe_cw_m }
+		divide_variable = { which = pe_cw_pct value = 10 }
 	}
 ${CORPS.map(k => `	set_variable = { which = ${C(k, 'wfr')} value = ${C(k, 'wfq')} }\n	round_variable = ${C(k, 'wfr')}`).join('\n')}
 }
@@ -3262,23 +3322,21 @@ ${corpChain('pe_dc_cand', k => `set_variable = { which = pe_dc_k value = ${k} } 
 	# The modifiers.
 	if = { limit = { has_modifier = pe_defence_contract } remove_modifier = pe_defence_contract }
 	if = { limit = { check_variable = { which = pe_dc_k value > 0 } } add_modifier = { modifier = pe_defence_contract days = -1 multiplier = pe_dc_s } }
+	# Arms orders: a line of the status deposit (pe_dc_here); the arms centre: a line of the
+	# headquarters deposit (by pe_dc_nm). The planet modifiers of 0.34 go.
 	every_owned_colony = {
 		if = { limit = { has_modifier = pe_arms_orders } remove_modifier = pe_arms_orders }
 		if = { limit = { has_modifier = pe_arms_centre } remove_modifier = pe_arms_centre }
+		set_variable = { which = pe_dc_here value = 0 }
 	}
+	if = { limit = { NOT = { is_variable_set = pe_dc_nm } } set_variable = { which = pe_dc_nm value = 0 } }
 ${CORPS.map(k => `	if = {
 		limit = { check_variable = { which = pe_dc_k value = ${k} } }
 		every_owned_colony = {
-			limit = { has_planet_flag = pe_hq_${k} }
-			add_modifier = { modifier = pe_arms_centre days = -1 }
-		}
-		every_owned_colony = {
-			set_variable = { which = pe_dc_here value = 0 }
 			every_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_corp check_variable = { which = pe_corp value = ${k} } check_variable = { which = pe_prim value = ${prim('a')} } }
 				prev = { set_variable = { which = pe_dc_here value = 1 } }
 			}
-			if = { limit = { check_variable = { which = pe_dc_here value = 1 } } add_modifier = { modifier = pe_arms_orders days = -1 } }
 		}
 	}`).join('\n')}
 }
@@ -3288,6 +3346,31 @@ pe_dc_accept = {
 ${corpChain('pe_dc_cand', k => `set_variable = { which = pe_dc_k value = ${k} } set_variable = { which = pe_dc_nm value = ${C(k, 'name')} }`)}
 	if = { limit = { has_modifier = pe_defence_contract } remove_modifier = pe_defence_contract }
 	add_modifier = { modifier = pe_defence_contract days = -1 multiplier = pe_dc_s }
+}
+`;
+corp += `
+# Country scope, quarterly (end of pe_corp_step, depth 3): the status deposit "Private Economy"
+# (d_pe_location) on every colony with something to show: clusters or supply contracts
+# (pe_loc_any), corporate benefits (pe_cw_m), arms orders (pe_dc_here), a price war (pe_pw), an
+# institute's equipment (pe_labeq_<field>).
+pe_status_apply = {
+	every_owned_colony = {
+		if = {
+			limit = {
+				OR = {
+					AND = { is_variable_set = pe_loc_any check_variable = { which = pe_loc_any value = 1 } }
+					AND = { is_variable_set = pe_cw_m check_variable = { which = pe_cw_m value > 0 } }
+					AND = { is_variable_set = pe_dc_here check_variable = { which = pe_dc_here value = 1 } }
+					AND = { is_variable_set = pe_pw check_variable = { which = pe_pw value = 1 } }
+					AND = { is_variable_set = pe_labeq_x check_variable = { which = pe_labeq_x value = 1 } }
+					AND = { is_variable_set = pe_labeq_y check_variable = { which = pe_labeq_y value = 1 } }
+					AND = { is_variable_set = pe_labeq_z check_variable = { which = pe_labeq_z value = 1 } }
+				}
+			}
+			if = { limit = { NOT = { has_deposit = d_pe_location } } add_deposit = d_pe_location }
+		}
+		else_if = { limit = { has_deposit = d_pe_location } remove_deposit = d_pe_location }
+	}
 }
 `;
 write('common/deposits/pe_corp_lab_deposits_generated.txt', header + `# Research institutes of corporations (pe_corp_social): jobs of the field at the headquarters,
@@ -3336,15 +3419,25 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
     if (c) parts.push(li ? `Lieferverträge (+${pctOf(l, SUP_STEP)} %)` : `supply contracts (+${pctOf(l, SUP_STEP)}%)`);
     L.push(` pe_loc_${l}_${n}_${c}:0 "§Y${LOC_SECTOR[l][li]}§!: ${parts.join(', ')}\\n"`);
   }));
-  L.push(li ? ` pe_loc_tt:0 "§HHerkunft der Boni§!\\n${LETTERS.map(l => `[This.GetPeLoc_${l}]`).join('')}"` : ` pe_loc_tt:0 "§HWhere the bonuses come from§!\\n${LETTERS.map(l => `[This.GetPeLoc_${l}]`).join('')}"`);
+  L.push(li ? ` pe_loc_tt:0 "§HHerkunft der Boni§!\\n${LETTERS.map(l => `[This.GetPeLoc_${l}]`).join('')}[This.GetPeLocCw][This.GetPeLocArms][This.GetPeLocPw][This.GetPeLocLab_x][This.GetPeLocLab_y][This.GetPeLocLab_z]"` : ` pe_loc_tt:0 "§HWhere the bonuses come from§!\\n${LETTERS.map(l => `[This.GetPeLoc_${l}]`).join('')}[This.GetPeLocCw][This.GetPeLocArms][This.GetPeLocPw][This.GetPeLocLab_x][This.GetPeLocLab_y][This.GetPeLocLab_z]"`);
+  L.push(li ? ` pe_loc_cw:0 "§YBetriebliche Sozialleistungen§!: +[This.pe_cw_pct] % Zufriedenheit (Konzern-Beschäftigte auf utopischem Niveau)\\n"` : ` pe_loc_cw:0 "§YCorporate benefits§!: +[This.pe_cw_pct]% happiness (corporate staff at the utopian standard)\\n"`,
+    li ? ` pe_loc_arms:0 "§YRüstungsaufträge§!: +10 % Arbeitskraft privater Metallurgen\\n"` : ` pe_loc_arms:0 "§YArms orders§!: +10% workforce of private metallurgists\\n"`,
+    li ? ` pe_loc_pw:0 "§YPreiskampf§!: +3 % Ertrag aller Jobs, weniger Gewinn für die Konzerne\\n"` : ` pe_loc_pw:0 "§YPrice war§!: +3% output of all jobs, less profit for the corporations\\n"`,
+    li ? ` pe_loc_lab_x:0 "§YKonzern-Forschungsinstitut§!: +25 % Arbeitskraft privater Physiker\\n"` : ` pe_loc_lab_x:0 "§YCorporate research institute§!: +25% workforce of private physicists\\n"`,
+    li ? ` pe_loc_lab_y:0 "§YKonzern-Forschungsinstitut§!: +25 % Arbeitskraft privater Biologen\\n"` : ` pe_loc_lab_y:0 "§YCorporate research institute§!: +25% workforce of private biologists\\n"`,
+    li ? ` pe_loc_lab_z:0 "§YKonzern-Forschungsinstitut§!: +25 % Arbeitskraft privater Ingenieure\\n"` : ` pe_loc_lab_z:0 "§YCorporate research institute§!: +25% workforce of private engineers\\n"`);
 }
 
 // Events that name a corporation: each reads its own variable pe_cn<event>, set in its
 // immediate (pe_corp_cur_name is shared and may change before the window is read).
 const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298, 300, 306, 308];
 const corpLoc = (name, varName, keyOf) => dtext(name, varName, NAME_IDS.map(id => [id, keyOf(id)]), 'pe_corp_line_none');
+const flagDt = (name, cond, key) => `defined_text = {\n\tname = ${name}\n\ttext = {\n\t\ttrigger = { ${cond} }\n\t\tlocalization_key = ${key}\n\t}\n\tdefault = pe_corp_line_none\n}\n`;
+locDt += flagDt('GetPeLocCw', 'is_variable_set = pe_cw_m check_variable = { which = pe_cw_m value > 0 }', 'pe_loc_cw') + flagDt('GetPeLocArms', 'is_variable_set = pe_dc_here check_variable = { which = pe_dc_here value = 1 }', 'pe_loc_arms') +
+  flagDt('GetPeLocPw', 'is_variable_set = pe_pw check_variable = { which = pe_pw value = 1 }', 'pe_loc_pw') + ['x', 'y', 'z'].map(f => flagDt(`GetPeLocLab_${f}`, `is_variable_set = pe_labeq_${f} check_variable = { which = pe_labeq_${f} value = 1 }`, `pe_loc_lab_${f}`)).join('') +
+  AUTO_JOBS.map(a => dtext(`GetPeAuto_${a}`, `pe_al_${a}`, [[1, `pe_auto_line_${a}_1`], [2, `pe_auto_line_${a}_2`]], 'pe_corp_line_none')).join('');
 write('common/scripted_loc/pe_corp_loc_generated.txt', header + locDt + `# Corporation names (country scope).\n` +
-  corpLoc('GetPeCorpName', 'pe_corp_cur_name', id => `pe_cname_${id}`) + CORP_EVENTS.map(e => corpLoc(`GetPeCorpName${e}`, `pe_cn${e}`, id => `pe_cname_${id}`)).join('') + corpLoc('GetPeCorpA', 'pe_corp_a_name', id => `pe_cname_${id}`) + corpLoc('GetPeCorpB', 'pe_corp_b_name', id => `pe_cname_${id}`) +
+  corpLoc('GetPeCorpName', 'pe_corp_cur_name', id => `pe_cname_${id}`) + CORP_EVENTS.map(e => corpLoc(`GetPeCorpName${e}`, `pe_cn${e}`, id => `pe_cname_${id}`)).join('') + corpLoc('GetPeCorpA', 'pe_corp_a_name', id => `pe_cname_${id}`) + corpLoc('GetPeCorpNamePat', 'pe_cnpat', id => `pe_cname_${id}`) + corpLoc('GetPeCorpB', 'pe_corp_b_name', id => `pe_cname_${id}`) +
   CORPS.map(k => corpLoc(`GetPeCorpN${k}`, C(k, 'name'), id => `pe_cname_${id}`)).join('') +
   dtext('GetPeCorpGroup', 'pe_corp_grp', GROUPS.map(g => [g, `pe_corp_grp_${g}`]), 'pe_corp_line_none') +
   dtext('GetPeCorpGroup270', 'pe_cg270', GROUPS.map(g => [g, `pe_corp_grp_${g}`]), 'pe_corp_line_none') +

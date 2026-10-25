@@ -2,6 +2,10 @@
 defined_text = {
 	name = GetPeMagnate
 	text = {
+		trigger = { check_variable = { which = pe_pat_src value > 0 } }
+		localization_key = pe_pat_foundation
+	}
+	text = {
 		trigger = { check_variable = { which = pe_mag_id value = 1 } }
 		localization_key = pe_magnate_1
 	}
@@ -70,6 +74,10 @@ defined_text = {
 
 defined_text = {
 	name = GetPeMagRep
+	text = {
+		trigger = { check_variable = { which = pe_pat_src value > 0 } }
+		localization_key = pe_pat_foundation_rep
+	}
 	text = {
 		trigger = { check_variable = { which = pe_mag_rep value >= 2 } }
 		localization_key = pe_mag_rep_high
