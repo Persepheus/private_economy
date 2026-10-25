@@ -851,3 +851,23 @@ country_event = {
 		log = "private_economy: pe.313 our own citadel, upkeep modifier on its ship: [Root.pe_proto_cit] (needs tech_deep_space_citadel)"
 	}
 }
+
+# pe.314 (variant C): the holdings keep their citadel (pe.310) and join our wars on our side, so
+# that it fights for us. Only while we are at war.
+country_event = {
+	id = pe.314
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		set_variable = { which = pe_proto_cit value = 0 }
+		if = {
+			limit = { is_at_war = yes }
+			random_country = {
+				limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } }
+				join_war = root
+				root = { set_variable = { which = pe_proto_cit value = 1 } }
+			}
+		}
+		log = "private_economy: pe.314 holdings joined our wars: [Root.pe_proto_cit] (needs a war)"
+	}
+}

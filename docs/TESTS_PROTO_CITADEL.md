@@ -47,3 +47,15 @@
 - **Prüfen:**
   - Steht „Prototyp: Unterhalt der Zitadelle“ in der Ansicht der Citadel?
   - Sinkt ihr Unterhalt (10 Energie, 5 Legierungen im Monat) in den Zeilen „Starbases“ bzw. „Ships“ des Haushalts auf etwa 10 %?
+
+## Variante C: Die Citadel bleibt bei den Holdings
+- Die Citadel gehört dem Konzern (Holdings) und bleibt dort. Du kannst sie nicht ausbauen, nicht abreißen und keine Plattformen bauen; das macht der Konzern.
+- Ihren Unterhalt zahlen die Holdings. Der Konzern gibt ihnen die Energie und Legierungen aus seiner Kasse, wie beim Konzern-Schwarm. Dafür braucht es keinen Modifikator.
+- Damit sie für uns kämpft, treten die Holdings unseren Kriegen bei (`join_war`).
+- **Test (nur im Krieg):**
+  1. Speichern.
+  2. `event pe.310` (Citadel der Holdings), dann `event pe.314` (Holdings treten unseren Kriegen bei; game.log: „holdings joined our wars: 1“).
+  3. Steht in der Kriegsübersicht unsere Holdings auf unserer Seite?
+  4. Kommt ein Gegner ins Hauptsystem: Schießt die Citadel auf ihn?
+  5. Friedensschluss: Gibt es Probleme (z. B. kann der Krieg nicht beendet werden)?
+
