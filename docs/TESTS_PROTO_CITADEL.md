@@ -36,25 +36,14 @@
   - **A, Leasing:** Die Holdings besitzen die Citadel, wir kontrollieren sie.
   - **B, unsere Citadel vom Konzern bezahlt:** Sie gehört von Anfang an uns.
 
-## Konsole (Scope: dein Reich)
-- `event pe.310`: Die Holdings bekommen Technologie und Citadel im Hauptsystem (wie beim Ursprung „Starlit Citadel“).
-- `event pe.311`: **Variante A.** Leasing an dich: Kontrolle über ihre Flotte (`set_controller`), dazu der Leasing-Modifikator (Unterhalt −100 %, Engine kappt bei 90 %).
-- `event pe.312`: **Variante B.** Eine Citadel, die von Anfang an dir gehört, dazu der Unterhalts-Modifikator auf ihrer Flotte. Dafür brauchst du die Technologie Deep Space Citadel.
-- **Vorher speichern, danach neu laden.** Der Prototyp räumt nichts auf.
+## Vierter Test
+- **A, Leasing:** geht nicht.
+- **B:** Die Citadel gehört uns, aber der Unterhalts-Modifikator auf ihrer **Flotte** wirkte nicht.
 
-## Ablauf
-1. Speichern. Energie- und Legierungs-Tooltip merken (Zeilen „Starbases“ und „Ships“). Die Citadel Stufe I kostet 10 Energie und 5 Legierungen im Monat.
-2. `event pe.310`, einen Tag laufen lassen. Die Citadel der Holdings steht im Hauptsystem.
-3. `event pe.311`, einen Tag laufen lassen (game.log: „leased …: 1“).
-   - Flagge oder Besetzungsanzeige?
-   - Kannst du sie anklicken, steuern, ausbauen?
-   - Steht ihr Unterhalt bei dir, und ist er auf etwa 10 % gesenkt?
-   - Im Krieg: Schießt sie auf deine Feinde?
-4. Neu laden. `event pe.312`, einen Tag laufen lassen (game.log: „our own citadel …: 1“).
-   - Gehört sie dir?
-   - Ist ihr Unterhalt gesenkt? Ist er unter „Starbases“ oder „Ships“ verbucht?
-5. Logs: Fehler zu `spawn_megastructure`, `set_controller` oder `add_modifier` im error.log.
-
-## Danach
-- **A funktioniert:** Die Citadel gehört dem Konzern (Holdings), du kontrollierst sie geleast.
-- **Sonst B:** Der Konzern bezahlt Bau und Unterhalt, die Citadel gehört uns.
+## Fünfter Anlauf (nur B)
+- `event pe.312`: unsere Citadel, Unterhalts-Modifikator auf ihrer **Sternenbasis**.
+- `event pe.313`: unsere Citadel, Unterhalts-Modifikator auf ihrem **Schiff**.
+- Beide brauchen die Technologie Deep Space Citadel. Jedes Mal vorher neu laden.
+- **Prüfen:**
+  - Steht „Prototyp: Unterhalt der Zitadelle“ in der Ansicht der Citadel?
+  - Sinkt ihr Unterhalt (10 Energie, 5 Legierungen im Monat) in den Zeilen „Starbases“ bzw. „Ships“ des Haushalts auf etwa 10 %?

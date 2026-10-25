@@ -742,8 +742,9 @@ country_event = {
 # spawns one (spawn_megastructure deep_space_citadel_0 at the star, inner radius). Its fleet is
 # flagged pe_proto_citadel (global event targets did not last to the next event).
 # pe.311: lease it to us (its fleet: set_controller, leased-fleet modifier: upkeep -100%).
-# pe.312: instead (variant B): a deep space citadel of ours in the capital system, as if a
-# corporation had paid for it, with the upkeep modifier pe_proto_citadel_upkeep on its fleet.
+# pe.312 / 313: instead (variant B): a deep space citadel of ours in the capital system, as if a
+# corporation had paid for it, with the upkeep modifier on its starbase (pe.312) or on its ship
+# (pe.313); on its fleet (fourth try) it had no effect.
 # (Handing the holdings' citadel over with set_owner crashed the game.)
 # Save before the test and reload afterwards (nothing is cleaned up).
 country_event = {
@@ -814,10 +815,39 @@ country_event = {
 			random_owned_fleet = {
 				limit = { is_ship_size = starbase_deep_space_citadel_1 NOT = { has_fleet_flag = pe_proto_citadel } }
 				set_fleet_flag = pe_proto_citadel
-				add_modifier = { modifier = pe_proto_citadel_upkeep days = -1 }
+				starbase = { add_modifier = { modifier = pe_proto_citadel_upkeep days = -1 } }
 				root = { set_variable = { which = pe_proto_cit value = 1 } }
 			}
 		}
-		log = "private_economy: pe.312 our own citadel with the upkeep modifier: [Root.pe_proto_cit] (needs tech_deep_space_citadel)"
+		log = "private_economy: pe.312 our own citadel, upkeep modifier on its starbase: [Root.pe_proto_cit] (needs tech_deep_space_citadel)"
+	}
+}
+
+country_event = {
+	id = pe.313
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		set_variable = { which = pe_proto_cit value = 0 }
+		if = {
+			limit = { has_technology = tech_deep_space_citadel }
+			capital_scope.solar_system = {
+				spawn_megastructure = {
+					type = deep_space_citadel_0
+					owner = root
+					planet = star
+					graphical_culture = root
+					orbit_distance = trigger:inner_radius
+					orbit_angle = 160
+				}
+			}
+			random_owned_fleet = {
+				limit = { is_ship_size = starbase_deep_space_citadel_1 NOT = { has_fleet_flag = pe_proto_citadel } }
+				set_fleet_flag = pe_proto_citadel
+				every_owned_ship = { add_modifier = { modifier = pe_proto_citadel_upkeep days = -1 } }
+				root = { set_variable = { which = pe_proto_cit value = 1 } }
+			}
+		}
+		log = "private_economy: pe.313 our own citadel, upkeep modifier on its ship: [Root.pe_proto_cit] (needs tech_deep_space_citadel)"
 	}
 }
