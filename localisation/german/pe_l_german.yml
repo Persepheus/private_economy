@@ -137,3 +137,5 @@
  pe_arms_orders_desc:0 "Die Stahlwerke unseres Rüstungskonzerns fahren Sonderschichten: volle Auftragsbücher."
  pe_arms_centre:0 "Rüstungszentrum"
  pe_arms_centre_desc:0 "Der Hauptsitz unseres Rüstungskonzerns: ein Zentrum der Rüstungsindustrie, angesehen und gut bezahlt."
+ pe_auto_cover:0 "Private Automatisierung"
+ pe_auto_cover_desc:0 "Die Privatfirmen bezahlen die Energie für ihre automatisierten Jobs selbst; dieser Anteil unseres Unterhalts für automatisierte Arbeitskraft entfällt."

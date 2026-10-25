@@ -24,6 +24,7 @@
 #                                                                     -> pe_retool_guard (4)
 #                    -> pe_command_economy (2) -> pe_firm_identify (3), pe_deposit_fetch (3)
 #                    -> pe_supply_step (2)
+#                    -> pe_auto_cover_step (2)
 #                    -> pe_corp_step (2) -> pe_corp_census, _crisis, _dissolve, _found, _acquire,
 #                                           _rivalry, _branches, pe_holdings_ensure,
 #                                           pe_corp_stations, pe_corp_station_output,
@@ -182,6 +183,7 @@ pe_quarterly = {
 	}
 	set_variable = { which = pe_pool_income value = 0 }
 	set_variable = { which = pe_profit_due value = 0 }
+	set_variable = { which = pe_auto_p value = 0 }
 	pe_savings = yes
 	pe_census = yes
 	pe_market = yes
@@ -199,6 +201,7 @@ pe_quarterly = {
 	}
 	pe_supply_step = yes
 	pe_relocate = yes
+	pe_auto_cover_step = yes
 	pe_corp_step = yes
 	pe_patron = yes
 	pe_labour = yes
@@ -1223,7 +1226,7 @@ pe_auto_book = {
 	}
 	# Leased machines (pe.212): the lease includes the energy the engine charges for the
 	# automated jobs (25% of the private jobs x the lease size, 4 energy per job a month);
-	# the investor pool pays it back to the state each quarter.
+	# the investor pool pays for it, the state's upkeep is taken off by pe_auto_cover.
 	if = {
 		limit = { has_modifier = pe_leasing_$JOB$ }
 		# Size of the lease (pe.212; 1 for leases from before 0.16).
@@ -1232,7 +1235,9 @@ pe_auto_book = {
 			set_variable = { which = pe_tmp value = pe_acap }
 			multiply_variable = { which = pe_tmp value = 0.03 }
 			multiply_variable = { which = pe_tmp value = prev.pe_lease_m }
-			add_resource = { energy = 1 mult = pe_tmp }
+			set_variable = { which = pe_tmp2 value = pe_tmp }
+			divide_variable = { which = pe_tmp2 value = 3 }
+			change_variable = { which = pe_auto_p value = pe_tmp2 }
 			multiply_variable = { which = pe_tmp value = pe_s_energy }
 			subtract_variable = { which = pe_capital value = pe_tmp }
 		}
@@ -1275,12 +1280,9 @@ pe_auto_book = {
 					}
 				}
 			}
-			# The firms reimburse the state's energy upkeep of this quarter.
-			root = {
-				set_variable = { which = pe_tmp value = pe_aen }
-				multiply_variable = { which = pe_tmp value = 3 }
-				add_resource = { energy = 1 mult = pe_tmp }
-			}
+			# The firms carry the energy upkeep (pe_aup in their accounts); the state's upkeep line
+			# is taken off by the country modifier pe_auto_cover (pe_auto_cover_step).
+			root = { change_variable = { which = pe_auto_p value = pe_aen } }
 			every_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_wf_$JOB$ value > 0 } }
 				if = {
@@ -2265,4 +2267,44 @@ pe_sprawl_step = {
 	if = { limit = { check_variable = { which = pe_spr_hab value > 0 } } add_modifier = { modifier = pe_sprawl_corp_hab days = -1 multiplier = pe_spr_hab } }
 	if = { limit = { has_modifier = pe_sprawl_corp_hab_d } remove_modifier = pe_sprawl_corp_hab_d }
 	if = { limit = { check_variable = { which = pe_spr_hd value > 0 } } add_modifier = { modifier = pe_sprawl_corp_hab_d days = -1 multiplier = pe_spr_hd } }
+}
+
+# Country scope, quarterly (after the planets): the energy upkeep the engine charges for the
+# automated jobs of private automation (pe_auto_p, per month: 4 per automated job, summed by
+# pe_auto_book) is carried by the firms, so a country modifier takes that share off our budget
+# line "Automated Workforce" (pe_auto_cover, -1% per point, pe_auto_m). The line without it:
+# observed / (1 - pe_auto_m %). At most 95% while any colony also has vanilla automation (so it
+# stays visible), otherwise up to 100%.
+pe_auto_cover_step = {
+	if = { limit = { NOT = { is_variable_set = pe_auto_m } } set_variable = { which = pe_auto_m value = 0 } }
+	export_trigger_value_to_variable = { trigger = resource_expenses_compare parameters = { resource = energy category = planet_automated_jobs } variable = pe_auto_e }
+	if = { limit = { NOT = { is_variable_set = pe_auto_e } } set_variable = { which = pe_auto_e value = 0 } }
+	set_variable = { which = pe_auto_max value = 100 }
+	if = {
+		limit = { any_owned_colony = { OR = { check_modifier_value = { modifier = job_artisan_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_biologist_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_bureaucrat_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_coordinator_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_engineer_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_entertainer_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_fabricator_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_farmer_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_foundry_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_healthcare_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_miner_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_physicist_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_replicator_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_roboticist_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_soldier_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_technician_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_trader_automated_workforce_mult value > 0 } } } }
+		set_variable = { which = pe_auto_max value = 95 }
+	}
+	if = {
+		limit = { check_variable = { which = pe_auto_p value <= 0 } }
+		set_variable = { which = pe_auto_m value = 0 }
+	}
+	else_if = {
+		limit = { check_variable = { which = pe_auto_e value > 0.5 } }
+		set_variable = { which = pe_tmp value = 100 }
+		subtract_variable = { which = pe_tmp value = pe_auto_m }
+		divide_variable = { which = pe_tmp value = 100 }
+		if = { limit = { check_variable = { which = pe_tmp value < 0.05 } } set_variable = { which = pe_tmp value = 0.05 } }
+		set_variable = { which = pe_auto_b value = pe_auto_e }
+		divide_variable = { which = pe_auto_b value = pe_tmp }
+		set_variable = { which = pe_auto_m value = pe_auto_p }
+		divide_variable = { which = pe_auto_m value = pe_auto_b }
+		multiply_variable = { which = pe_auto_m value = 100 }
+		round_variable = pe_auto_m
+	}
+	# (Line at 0 with the modifier: all of it is private; the share stays.)
+	if = { limit = { check_variable = { which = pe_auto_m value > pe_auto_max } } set_variable = { which = pe_auto_m value = pe_auto_max } }
+	if = { limit = { check_variable = { which = pe_auto_m value < 0 } } set_variable = { which = pe_auto_m value = 0 } }
+	if = { limit = { has_modifier = pe_auto_cover } remove_modifier = pe_auto_cover }
+	if = { limit = { check_variable = { which = pe_auto_m value > 0 } } add_modifier = { modifier = pe_auto_cover days = -1 multiplier = pe_auto_m } }
+	log = "private_economy: automation cover: private \\[Root.pe_auto_p] of \\[Root.pe_auto_e] energy a month observed, cover now \\[Root.pe_auto_m] %"
 }

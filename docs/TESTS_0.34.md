@@ -20,6 +20,20 @@ Ein laufendes Spiel kann weiterlaufen.
   - Die Modifikatoren verschwinden; Schiffe verschwinden nie.
 - **Firmenregister:** Unter den Konzernen steht „Rüstungsvertrag mit …: x % des Flottenunterhalts, letztes Quartal y £trade£“.
 
+## 0.34.1: Private Automatisierung im Haushalt
+- **Bisher:** Die Energie für automatisierte Privatjobs stand voll in deiner Haushaltszeile „Automatisierte Arbeitskraft“. Die Firmen erstatteten sie einmal im Quartal unsichtbar ins Lager, als Schätzung von 4 Energie je automatisiertem Job.
+- **Jetzt:**
+  - Der Reichsmodifikator **„Private Automatisierung“** senkt diese Zeile um den privaten Anteil. Die Haushaltsanzeige stimmt also.
+  - Die Firmen zahlen die Energie weiter aus ihrem Kapital (beim Maschinen-Leasing der Investorenpool); das Geld verlässt die Wirtschaft.
+  - Die verdeckten Energiegutschriften entfallen.
+- **Wie der Anteil entsteht:**
+  - Jedes Quartal schätzt die Mod die privaten Kosten, also automatisierte Privatjobs × 4 Energie.
+  - Daraus und aus der beobachteten Haushaltszeile ergibt sich der Anteil.
+  - Bis 100 %, solange keine Kolonie Vanilla-Automatisierung des Staats hat; sonst höchstens 95 %, damit staatliche Kosten sichtbar bleiben.
+- **Prüfen:**
+  1. Nach dem nächsten Quartal: Modifikator „Private Automatisierung“ beim Reich, Zeile „Automatisierte Arbeitskraft“ nahe 0 (im Save etwa 268 vorher).
+  2. Im game.log jedes Quartal: „automation cover: private P of E energy a month observed, cover now M %“. Bleibt eine Restzeile, liegt die Schätzung daneben; die Zahlen aus dem Log helfen beim Nachjustieren.
+
 ## Konsole
 - `event pe.307`: sofort ein Angebot (wenn keiner läuft). Der reichste Industriekonzern bekommt dafür mindestens 5000 Kasse.
 

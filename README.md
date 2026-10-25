@@ -4,7 +4,7 @@ Stellaris 4.5: Eine Richtlinie **Wirtschaftsordnung** legt fest, wie viel der Wi
 
 Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools/validate.mjs` prüft das).
 
-## Stand 0.34.0
+## Stand 0.34.1
 
 Die Privatwirtschaft ist ein Kreislauf:
 
@@ -45,7 +45,7 @@ Die Privatwirtschaft ist ein Kreislauf:
 - **Planwirtschaft** beendet die Privatwirtschaft: Firmen werden Staatsdistrikte, der Pool verfällt.
 - **Börse:** Aktien mit Dividende, Staatsanleihen, Übernahmen, Monopole, Spionage, Exportboom, Umweltskandale, Crash und Rally, Insiderhandel, Gentrifizierung, Abschied der Mäzene.
 - **Investitions-Dreieck:** Legierungen, Forschung und Einheit (private Medienhäuser) werden nach einem Zielmix gewichtet, der sich nach Ethik und Krieg richtet. Keins der drei fällt hinten runter.
-- **Arbeitermangel:** Firmen automatisieren Bergbau, Energie und Landwirtschaft, wie die Vanilla-Gebäude, aber auf eigene Kosten. Firmen behalten eine Rücklage, der Rest geht an den Pool. Gehören die Firmen zu einem Konzern, bezahlt er die Automatisierung aus seiner Kasse.
+- **Arbeitermangel:** Firmen automatisieren Bergbau, Energie und Landwirtschaft, wie die Vanilla-Gebäude, aber auf eigene Kosten: Ein Reichsmodifikator „Private Automatisierung“ nimmt ihren Anteil aus unserer Haushaltszeile „Automatisierte Arbeitskraft“. Firmen behalten eine Rücklage, der Rest geht an den Pool. Gehören die Firmen zu einem Konzern, bezahlt er die Automatisierung aus seiner Kasse.
 
 Testablauf: [docs/TESTS_0.34.md](docs/TESTS_0.34.md). Ältere Stände: [0.33](docs/TESTS_0.33.md), [0.32](docs/TESTS_0.32.md), [0.31](docs/TESTS_0.31.md), [0.30](docs/TESTS_0.30.md), [0.29](docs/TESTS_0.29.md), [0.28](docs/TESTS_0.28.md), [0.27](docs/TESTS_0.27.md), [0.26](docs/TESTS_0.26.md), [0.25](docs/TESTS_0.25.md), [0.24](docs/TESTS_0.24.md), [0.23](docs/TESTS_0.23.md), [0.22](docs/TESTS_0.22.md), [0.21](docs/TESTS_0.21.md), [0.20](docs/TESTS_0.20.md), [0.19](docs/TESTS_0.19.md), [0.18](docs/TESTS_0.18.md), [0.17](docs/TESTS_0.17.md), [0.16](docs/TESTS_0.16.md), [0.15](docs/TESTS_0.15.md), [0.14](docs/TESTS_0.14.md), [0.13](docs/TESTS_0.13.md), [0.12](docs/TESTS_0.12.md), [0.11](docs/TESTS_0.11.md), [0.10](docs/TESTS_0.10.md), [0.9](docs/TESTS_0.9.md), [0.8](docs/TESTS_0.8.md), [0.7](docs/TESTS_0.7.md), [0.6](docs/TESTS_0.6.md), [0.5](docs/TESTS_0.5.md), [0.4](docs/TESTS_0.4.md), [0.3](docs/TESTS_0.3.md), [0.2](docs/TESTS_0.2.md), [0.1](docs/TESTS_0.1.md), [Prototyp](docs/PROTOTYPE_TESTS.md), [Prototyp Holdings](docs/TESTS_PROTO_HOLDINGS.md), [Prototyp Arc Furnace](docs/TESTS_PROTO_FURNACE.md).
 

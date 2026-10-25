@@ -137,3 +137,5 @@
  pe_arms_orders_desc:0 "The steelworks of our defence contractor work extra shifts: full order books."
  pe_arms_centre:0 "Arms Centre"
  pe_arms_centre_desc:0 "The headquarters of our defence contractor: a centre of the arms industry, prestigious and well paid."
+ pe_auto_cover:0 "Private Automation"
+ pe_auto_cover_desc:0 "The private firms pay the energy for their automated jobs themselves; this share of our upkeep for automated workforce falls away."
