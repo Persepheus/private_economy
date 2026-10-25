@@ -4,7 +4,7 @@ Stellaris 4.5: Eine Richtlinie **Wirtschaftsordnung** legt fest, wie viel der Wi
 
 Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools/validate.mjs` prüft das).
 
-## Stand 0.36.0
+## Stand 0.36.1
 
 Die Privatwirtschaft ist ein Kreislauf:
 
@@ -44,7 +44,7 @@ Die Privatwirtschaft ist ein Kreislauf:
 - **Rüstungsvertrag:** Ein reicher Industriekonzern trägt 10–20 % unseres Flottenunterhalts und zahlt den Gegenwert aus seiner Kasse (keine Schiffe aus dem Nichts). Dafür Rüstungsaufträge für seine Stahlwerke, ein Rüstungszentrum am Hauptsitz und Vorrang beim Kriegsleasing.
 - **Konzern-Stiftungen:** Der reichste Konzern (ab 20.000 Kasse) stiftet Mäzen-Events mit 10 % seiner Kasse; abgelehntes Geld geht an ihn zurück.
 - **Vorkommen „Privatwirtschaft“:** ein Status-Vorkommen je Planet für Cluster, Lieferverträge, Sozialleistungen, Rüstungsaufträge, Preiskampf und Institutsausstattung; Institutsstellen und Rüstungszentrum stehen im Hauptsitz-Vorkommen, die Automatisierung in einem Vorkommen.
-- **Konzern-Zitadellen:** Reiche Konzerne bauen in ihren wichtigen Systemen je eine Deep Space Citadel (Vanilla-Bauzeit, Ausbau auf II/III, Verteidigungsplattformen), sobald wir die Technologie haben. Sie gehört den Holdings (Bau und Unterhalt aus der Konzernkasse); die Holdings treten unseren Kriegen bei. Die Holdings haben unsere Technologien.
+- **Konzern-Zitadellen:** Jeder Konzern, der es sich leisten kann, baut in seinen wichtigen Systemen je eine Deep Space Citadel (eine je Konzern und System) (Vanilla-Bauzeit, Ausbau auf II/III, Verteidigungsplattformen), sobald wir die Technologie haben. Sie gehört den Holdings (Bau und Unterhalt aus der Konzernkasse); die Holdings treten unseren Kriegen bei. Die Holdings haben unsere Technologien.
 - **Cluster:** Mehrere gleiche Firmen auf einem Planeten stärken die ganze Branche dort. Cluster und Lieferverträge zeigt das Vorkommen „Standortvorteile“.
 - **Flair:** Lieferverträge bei Mangel (zwei Jahre monatlich, nur bei weniger als halb vollem Lager), Modernisierung, Rationalisierung, Vermögensabgabe; mit den Nachbarn: Auslandsinvestitionen, ausländische Filialen, Technologielizenzen, Dumping und Schutzzölle.
 - **Planwirtschaft** beendet die Privatwirtschaft: Firmen werden Staatsdistrikte, der Pool verfällt.

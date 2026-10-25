@@ -289,13 +289,11 @@ pe_corp_citadel_build = {
 	potential = { is_country_type = pe_holdings }
 	possible = { always = yes }
 
-	# from = the holdings, fromfrom = this.
+	# from = the holdings, fromfrom = this (variables pe_cit_k, pe_cit_nm: its corporation).
 	on_build_complete = {
 		fromfrom.solar_system = { save_event_target_as = pe_cit_tsys }
 		from = { save_event_target_as = pe_cit_owner }
-		remove_megastructure = fromfrom
 		event_target:pe_cit_tsys = {
-			remove_star_flag = pe_cit_site
 			spawn_megastructure = {
 				type = deep_space_citadel_0
 				owner = event_target:pe_cit_owner
@@ -309,17 +307,30 @@ pe_corp_citadel_build = {
 			random_owned_fleet = {
 				limit = { is_ship_size = starbase_deep_space_citadel_1 NOT = { has_fleet_flag = pe_ccit } NOT = { has_fleet_flag = pe_proto_citadel } }
 				set_fleet_flag = pe_ccit
-				solar_system = {
-					prev = {
-						set_variable = { which = pe_ccit_k value = prev.pe_cit_k }
-						set_variable = { which = pe_ccit_nm value = prev.pe_cit_nm }
-					}
-				}
+				save_event_target_as = pe_cit_newfleet
 				set_variable = { which = pe_ccit_l value = 1 }
 				set_variable = { which = pe_ccit_ul value = 0 }
 				set_variable = { which = pe_ccit_p value = 0 }
 				set_variable = { which = pe_ccit_new value = 1 }
 			}
 		}
+		fromfrom = {
+			if = {
+				limit = { exists = event_target:pe_cit_newfleet }
+				event_target:pe_cit_newfleet = {
+					set_variable = { which = pe_ccit_k value = prev.pe_cit_k }
+					set_variable = { which = pe_ccit_nm value = prev.pe_cit_nm }
+				}
+			}
+			if = { limit = { check_variable = { which = pe_cit_k value = 1 } } event_target:pe_cit_tsys = { remove_star_flag = pe_cit_site_1 } }
+			else_if = { limit = { check_variable = { which = pe_cit_k value = 2 } } event_target:pe_cit_tsys = { remove_star_flag = pe_cit_site_2 } }
+			else_if = { limit = { check_variable = { which = pe_cit_k value = 3 } } event_target:pe_cit_tsys = { remove_star_flag = pe_cit_site_3 } }
+			else_if = { limit = { check_variable = { which = pe_cit_k value = 4 } } event_target:pe_cit_tsys = { remove_star_flag = pe_cit_site_4 } }
+			else_if = { limit = { check_variable = { which = pe_cit_k value = 5 } } event_target:pe_cit_tsys = { remove_star_flag = pe_cit_site_5 } }
+			else_if = { limit = { check_variable = { which = pe_cit_k value = 6 } } event_target:pe_cit_tsys = { remove_star_flag = pe_cit_site_6 } }
+			else_if = { limit = { check_variable = { which = pe_cit_k value = 7 } } event_target:pe_cit_tsys = { remove_star_flag = pe_cit_site_7 } }
+			else_if = { limit = { check_variable = { which = pe_cit_k value = 8 } } event_target:pe_cit_tsys = { remove_star_flag = pe_cit_site_8 } }
+		}
+		remove_megastructure = fromfrom
 	}
 }

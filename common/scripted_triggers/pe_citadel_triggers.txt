@@ -1,13 +1,10 @@
 # Corporate deep space citadels (pe_citadel_step). System scope, root = our empire: a system of
-# ours with a starbase, no corporate citadel or site yet, and below the vanilla citadel limit.
+# ours with a starbase where corporation $K$ has no citadel and no site yet (one per corporation
+# and system; other corporations may have theirs there too).
 pe_cit_system_ok = {
 	exists = starbase
 	exists = owner
 	owner = { is_same_value = root }
-	NOT = { has_star_flag = pe_cit_site }
-	NOT = { any_fleet_in_system = { has_fleet_flag = pe_ccit } }
-	count_ship_in_system = {
-		limit = { is_space_citadel_ship_size = yes }
-		count < root.modifier:deep_space_citadel_limit_add
-	}
+	NOT = { has_star_flag = pe_cit_site_$K$ }
+	NOT = { any_fleet_in_system = { has_fleet_flag = pe_ccit is_variable_set = pe_ccit_k check_variable = { which = pe_ccit_k value = $K$ } } }
 }
