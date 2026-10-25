@@ -30,7 +30,7 @@
 #                                           pe_holdings_surplus, pe_corp_fleets, pe_corp_charter,
 #                                           pe_corp_convoy, pe_corp_salvage, pe_corp_swarm,
 #                                           pe_corp_furnace, pe_corp_auto_msg,
-#                                           pe_chab_quarterly (3)
+#                                           pe_chab_quarterly, pe_corp_social (3)
 #                                        -> pe_corp_free, pe_corp_msg, pe_corp_found_new,
 #                                           pe_corp_station_pick, pe_ledger_bits,
 #                                           pe_chab_pick, pe_chab_exec (4)
@@ -845,6 +845,8 @@ pe_planet_step = {
 	}
 	if = { limit = { check_variable = { which = pe_idle value >= 50 } } root = { set_variable = { which = pe_unemp value = 1 } } }
 	pe_planet_fill = yes
+	# Filled private jobs here (corporate benefits, pe_corp_social).
+	set_variable = { which = pe_pfa value = root.pe_fa }
 	pe_firm_accounting = yes
 	# Firms per main product, sector group and corporation; cluster modifiers.
 	pe_cluster_counts = yes
@@ -1733,6 +1735,7 @@ pe_corp_step = {
 	pe_corp_swarm = yes
 	pe_corp_furnace = yes
 	pe_chab_quarterly = yes
+	pe_corp_social = yes
 	pe_corp_auto_msg = yes
 	pe_ruins_step = yes
 	change_variable = { which = pe_hq4 value = 1 }

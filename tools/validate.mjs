@@ -249,7 +249,7 @@ for (const lang of languages)
   const gen = ['common/deposits/pe_firm_deposits.txt', 'common/deposits/pe_ledger_deposits.txt', 'common/economic_categories/pe_ledger_categories.txt', 'common/deposits/pe_automation_deposits.txt', 'common/deposits/pe_site_deposits.txt', 'common/scripted_triggers/pe_firm_triggers_generated.txt', 'common/scripted_effects/pe_firm_effects_generated.txt',
     'common/pop_jobs/pe_private_jobs.txt', 'common/scripted_loc/pe_scripted_loc_generated.txt',
     'common/scripted_effects/pe_corp_effects_generated.txt', 'common/static_modifiers/pe_corp_modifiers_generated.txt', 'common/scripted_loc/pe_corp_loc_generated.txt',
-    'common/scripted_triggers/pe_corp_triggers_generated.txt', 'common/deposits/pe_corp_deposits_generated.txt',
+    'common/scripted_triggers/pe_corp_triggers_generated.txt', 'common/deposits/pe_corp_deposits_generated.txt', 'common/deposits/pe_corp_lab_deposits_generated.txt',
     'common/decisions/pe_decisions.txt', 'common/scripted_loc/pe_register_loc_generated.txt'];
   const before = gen.map(g => fs.readFileSync(path.join(root, g), 'utf8'));
   execFileSync(process.execPath, [path.join(root, 'tools/generate-firms.mjs'), game]);

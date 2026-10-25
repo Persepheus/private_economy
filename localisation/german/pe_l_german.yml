@@ -122,3 +122,5 @@
  pe_msg_swarm_done:0 "Der Dyson-Schwarm eines Konzerns bei $PLANET$ ist fertig."
  pe_msg_corp_swarm_start:0 "§Y$CORP$§! baut bei $PLANET$ einen eigenen Dyson-Schwarm."
  pe_msg_corp_furnace_start:0 "§Y$CORP$§! baut über $PLANET$ einen eigenen Arc Furnace."
+ pe_corp_welfare:0 "Betriebliche Sozialleistungen"
+ pe_corp_welfare_desc:0 "Reiche Konzerne behandeln ihre Beschäftigten hier wie Beamte: beste Löhne, Betriebsrenten und Sozialleistungen, bezahlt aus der eigenen Kasse. Ihre Arbeiter leben auf dem Niveau des utopischen Überflusses."

@@ -122,3 +122,5 @@
  pe_msg_swarm_done:0 "The Dyson swarm of a corporation at $PLANET$ is done."
  pe_msg_corp_swarm_start:0 "§Y$CORP$§! is building a Dyson swarm of its own at $PLANET$."
  pe_msg_corp_furnace_start:0 "§Y$CORP$§! is building an arc furnace of its own over $PLANET$."
+ pe_corp_welfare:0 "Corporate Benefits"
+ pe_corp_welfare_desc:0 "Rich corporations treat their staff here like civil servants: top pay, pensions and benefits, paid from their own cash. Their workers live at the standard of Utopian Abundance."

@@ -12767,3 +12767,537 @@ pe_chab_debug_cash = {
 	else_if = { limit = { check_variable = { which = pe_chab_k value = 7 } } if = { limit = { check_variable = { which = pe_c7_cash value < 7000 } } set_variable = { which = pe_c7_cash value = 7000 } } }
 	else_if = { limit = { check_variable = { which = pe_chab_k value = 8 } } if = { limit = { check_variable = { which = pe_c8_cash value < 7000 } } set_variable = { which = pe_c8_cash value = 7000 } } }
 }
+
+# --- Social benefits and research institutes ----------------------------------------------
+# Country scope, quarterly (pe_corp_step, call depth 3, no calls). Institutes: one per
+# corporation at its headquarters, deposit d_pe_corp_lab_<field>_<level> (pe_labk = slot,
+# pe_labl = level); levels by cash (pe_c<slot>_lab). Benefits: on each planet with firms of a
+# corporation with at least 3000 cash, its workers (its share of the filled private jobs,
+# pe_pfa, by stage size, plus its institute) get the top living standard: it pays the extra
+# consumer goods (gap to Utopian Abundance x 3 months per 100 pops, market price) and the planet
+# gets the happiness gap for their share of the pops (pe_corp_welfare, 0.1% per point).
+# pe_c<slot>_wfr = what it paid this quarter (register).
+pe_corp_social = {
+	export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = consumer_goods amount = 100 trade_type = market_buy } variable = pe_cw_price }
+	if = { limit = { NOT = { is_variable_set = pe_cw_price } } set_variable = { which = pe_cw_price value = 200 } }
+	if = { limit = { check_variable = { which = pe_cw_price value <= 0 } } set_variable = { which = pe_cw_price value = 200 } }
+	divide_variable = { which = pe_cw_price value = 100 }
+	if = { limit = { NOT = { is_variable_set = pe_c1_lab } } set_variable = { which = pe_c1_lab value = 0 } }
+	set_variable = { which = pe_c1_wfq value = 0 }
+	set_variable = { which = pe_labhas_1 value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_c1_on value = 1 } }
+		if = {
+			limit = { check_variable = { which = pe_c1_cash value < 0 } check_variable = { which = pe_c1_lab value > 0 } }
+			change_variable = { which = pe_c1_lab value = -1 }
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_c1_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_1 } }
+			set_variable = { which = pe_tmp value = pe_c1_lab }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = 4000 }
+			if = {
+				limit = { check_variable = { which = pe_c1_cash value >= pe_tmp } }
+				random = {
+					chance = 25
+					change_variable = { which = pe_c1_lab value = 1 }
+					change_variable = { which = pe_c1_cash value = -800 }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c1_lab value > 0 } }
+			set_variable = { which = pe_tmp value = pe_c1_lab }
+			multiply_variable = { which = pe_tmp value = 30 }
+			subtract_variable = { which = pe_c1_cash value = pe_tmp }
+		}
+	}
+	else = { set_variable = { which = pe_c1_lab value = 0 } }
+	if = { limit = { NOT = { is_variable_set = pe_c2_lab } } set_variable = { which = pe_c2_lab value = 0 } }
+	set_variable = { which = pe_c2_wfq value = 0 }
+	set_variable = { which = pe_labhas_2 value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_c2_on value = 1 } }
+		if = {
+			limit = { check_variable = { which = pe_c2_cash value < 0 } check_variable = { which = pe_c2_lab value > 0 } }
+			change_variable = { which = pe_c2_lab value = -1 }
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_c2_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_2 } }
+			set_variable = { which = pe_tmp value = pe_c2_lab }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = 4000 }
+			if = {
+				limit = { check_variable = { which = pe_c2_cash value >= pe_tmp } }
+				random = {
+					chance = 25
+					change_variable = { which = pe_c2_lab value = 1 }
+					change_variable = { which = pe_c2_cash value = -800 }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c2_lab value > 0 } }
+			set_variable = { which = pe_tmp value = pe_c2_lab }
+			multiply_variable = { which = pe_tmp value = 30 }
+			subtract_variable = { which = pe_c2_cash value = pe_tmp }
+		}
+	}
+	else = { set_variable = { which = pe_c2_lab value = 0 } }
+	if = { limit = { NOT = { is_variable_set = pe_c3_lab } } set_variable = { which = pe_c3_lab value = 0 } }
+	set_variable = { which = pe_c3_wfq value = 0 }
+	set_variable = { which = pe_labhas_3 value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_c3_on value = 1 } }
+		if = {
+			limit = { check_variable = { which = pe_c3_cash value < 0 } check_variable = { which = pe_c3_lab value > 0 } }
+			change_variable = { which = pe_c3_lab value = -1 }
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_c3_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_3 } }
+			set_variable = { which = pe_tmp value = pe_c3_lab }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = 4000 }
+			if = {
+				limit = { check_variable = { which = pe_c3_cash value >= pe_tmp } }
+				random = {
+					chance = 25
+					change_variable = { which = pe_c3_lab value = 1 }
+					change_variable = { which = pe_c3_cash value = -800 }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c3_lab value > 0 } }
+			set_variable = { which = pe_tmp value = pe_c3_lab }
+			multiply_variable = { which = pe_tmp value = 30 }
+			subtract_variable = { which = pe_c3_cash value = pe_tmp }
+		}
+	}
+	else = { set_variable = { which = pe_c3_lab value = 0 } }
+	if = { limit = { NOT = { is_variable_set = pe_c4_lab } } set_variable = { which = pe_c4_lab value = 0 } }
+	set_variable = { which = pe_c4_wfq value = 0 }
+	set_variable = { which = pe_labhas_4 value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_c4_on value = 1 } }
+		if = {
+			limit = { check_variable = { which = pe_c4_cash value < 0 } check_variable = { which = pe_c4_lab value > 0 } }
+			change_variable = { which = pe_c4_lab value = -1 }
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_c4_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_4 } }
+			set_variable = { which = pe_tmp value = pe_c4_lab }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = 4000 }
+			if = {
+				limit = { check_variable = { which = pe_c4_cash value >= pe_tmp } }
+				random = {
+					chance = 25
+					change_variable = { which = pe_c4_lab value = 1 }
+					change_variable = { which = pe_c4_cash value = -800 }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c4_lab value > 0 } }
+			set_variable = { which = pe_tmp value = pe_c4_lab }
+			multiply_variable = { which = pe_tmp value = 30 }
+			subtract_variable = { which = pe_c4_cash value = pe_tmp }
+		}
+	}
+	else = { set_variable = { which = pe_c4_lab value = 0 } }
+	if = { limit = { NOT = { is_variable_set = pe_c5_lab } } set_variable = { which = pe_c5_lab value = 0 } }
+	set_variable = { which = pe_c5_wfq value = 0 }
+	set_variable = { which = pe_labhas_5 value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_c5_on value = 1 } }
+		if = {
+			limit = { check_variable = { which = pe_c5_cash value < 0 } check_variable = { which = pe_c5_lab value > 0 } }
+			change_variable = { which = pe_c5_lab value = -1 }
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_c5_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_5 } }
+			set_variable = { which = pe_tmp value = pe_c5_lab }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = 4000 }
+			if = {
+				limit = { check_variable = { which = pe_c5_cash value >= pe_tmp } }
+				random = {
+					chance = 25
+					change_variable = { which = pe_c5_lab value = 1 }
+					change_variable = { which = pe_c5_cash value = -800 }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c5_lab value > 0 } }
+			set_variable = { which = pe_tmp value = pe_c5_lab }
+			multiply_variable = { which = pe_tmp value = 30 }
+			subtract_variable = { which = pe_c5_cash value = pe_tmp }
+		}
+	}
+	else = { set_variable = { which = pe_c5_lab value = 0 } }
+	if = { limit = { NOT = { is_variable_set = pe_c6_lab } } set_variable = { which = pe_c6_lab value = 0 } }
+	set_variable = { which = pe_c6_wfq value = 0 }
+	set_variable = { which = pe_labhas_6 value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_c6_on value = 1 } }
+		if = {
+			limit = { check_variable = { which = pe_c6_cash value < 0 } check_variable = { which = pe_c6_lab value > 0 } }
+			change_variable = { which = pe_c6_lab value = -1 }
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_c6_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_6 } }
+			set_variable = { which = pe_tmp value = pe_c6_lab }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = 4000 }
+			if = {
+				limit = { check_variable = { which = pe_c6_cash value >= pe_tmp } }
+				random = {
+					chance = 25
+					change_variable = { which = pe_c6_lab value = 1 }
+					change_variable = { which = pe_c6_cash value = -800 }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c6_lab value > 0 } }
+			set_variable = { which = pe_tmp value = pe_c6_lab }
+			multiply_variable = { which = pe_tmp value = 30 }
+			subtract_variable = { which = pe_c6_cash value = pe_tmp }
+		}
+	}
+	else = { set_variable = { which = pe_c6_lab value = 0 } }
+	if = { limit = { NOT = { is_variable_set = pe_c7_lab } } set_variable = { which = pe_c7_lab value = 0 } }
+	set_variable = { which = pe_c7_wfq value = 0 }
+	set_variable = { which = pe_labhas_7 value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_c7_on value = 1 } }
+		if = {
+			limit = { check_variable = { which = pe_c7_cash value < 0 } check_variable = { which = pe_c7_lab value > 0 } }
+			change_variable = { which = pe_c7_lab value = -1 }
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_c7_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_7 } }
+			set_variable = { which = pe_tmp value = pe_c7_lab }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = 4000 }
+			if = {
+				limit = { check_variable = { which = pe_c7_cash value >= pe_tmp } }
+				random = {
+					chance = 25
+					change_variable = { which = pe_c7_lab value = 1 }
+					change_variable = { which = pe_c7_cash value = -800 }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c7_lab value > 0 } }
+			set_variable = { which = pe_tmp value = pe_c7_lab }
+			multiply_variable = { which = pe_tmp value = 30 }
+			subtract_variable = { which = pe_c7_cash value = pe_tmp }
+		}
+	}
+	else = { set_variable = { which = pe_c7_lab value = 0 } }
+	if = { limit = { NOT = { is_variable_set = pe_c8_lab } } set_variable = { which = pe_c8_lab value = 0 } }
+	set_variable = { which = pe_c8_wfq value = 0 }
+	set_variable = { which = pe_labhas_8 value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_c8_on value = 1 } }
+		if = {
+			limit = { check_variable = { which = pe_c8_cash value < 0 } check_variable = { which = pe_c8_lab value > 0 } }
+			change_variable = { which = pe_c8_lab value = -1 }
+		}
+		else_if = {
+			limit = { check_variable = { which = pe_c8_lab value < 3 } any_owned_colony = { has_planet_flag = pe_hq_8 } }
+			set_variable = { which = pe_tmp value = pe_c8_lab }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = 4000 }
+			if = {
+				limit = { check_variable = { which = pe_c8_cash value >= pe_tmp } }
+				random = {
+					chance = 25
+					change_variable = { which = pe_c8_lab value = 1 }
+					change_variable = { which = pe_c8_cash value = -800 }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_c8_lab value > 0 } }
+			set_variable = { which = pe_tmp value = pe_c8_lab }
+			multiply_variable = { which = pe_tmp value = 30 }
+			subtract_variable = { which = pe_c8_cash value = pe_tmp }
+		}
+	}
+	else = { set_variable = { which = pe_c8_lab value = 0 } }
+	# Institutes in the wrong place or of the wrong level go; the right ones are noted.
+	every_owned_colony = {
+		every_deposit = {
+			limit = { is_variable_set = pe_labk }
+			set_variable = { which = pe_labok value = 0 }
+			if = { limit = { check_variable = { which = pe_labk value = 1 } root = { check_variable = { which = pe_c1_on value = 1 } } prev = { has_planet_flag = pe_hq_1 } check_variable = { which = pe_labl value = root.pe_c1_lab } } set_variable = { which = pe_labok value = 1 } root = { set_variable = { which = pe_labhas_1 value = 1 } } }
+			else_if = { limit = { check_variable = { which = pe_labk value = 2 } root = { check_variable = { which = pe_c2_on value = 1 } } prev = { has_planet_flag = pe_hq_2 } check_variable = { which = pe_labl value = root.pe_c2_lab } } set_variable = { which = pe_labok value = 1 } root = { set_variable = { which = pe_labhas_2 value = 1 } } }
+			else_if = { limit = { check_variable = { which = pe_labk value = 3 } root = { check_variable = { which = pe_c3_on value = 1 } } prev = { has_planet_flag = pe_hq_3 } check_variable = { which = pe_labl value = root.pe_c3_lab } } set_variable = { which = pe_labok value = 1 } root = { set_variable = { which = pe_labhas_3 value = 1 } } }
+			else_if = { limit = { check_variable = { which = pe_labk value = 4 } root = { check_variable = { which = pe_c4_on value = 1 } } prev = { has_planet_flag = pe_hq_4 } check_variable = { which = pe_labl value = root.pe_c4_lab } } set_variable = { which = pe_labok value = 1 } root = { set_variable = { which = pe_labhas_4 value = 1 } } }
+			else_if = { limit = { check_variable = { which = pe_labk value = 5 } root = { check_variable = { which = pe_c5_on value = 1 } } prev = { has_planet_flag = pe_hq_5 } check_variable = { which = pe_labl value = root.pe_c5_lab } } set_variable = { which = pe_labok value = 1 } root = { set_variable = { which = pe_labhas_5 value = 1 } } }
+			else_if = { limit = { check_variable = { which = pe_labk value = 6 } root = { check_variable = { which = pe_c6_on value = 1 } } prev = { has_planet_flag = pe_hq_6 } check_variable = { which = pe_labl value = root.pe_c6_lab } } set_variable = { which = pe_labok value = 1 } root = { set_variable = { which = pe_labhas_6 value = 1 } } }
+			else_if = { limit = { check_variable = { which = pe_labk value = 7 } root = { check_variable = { which = pe_c7_on value = 1 } } prev = { has_planet_flag = pe_hq_7 } check_variable = { which = pe_labl value = root.pe_c7_lab } } set_variable = { which = pe_labok value = 1 } root = { set_variable = { which = pe_labhas_7 value = 1 } } }
+			else_if = { limit = { check_variable = { which = pe_labk value = 8 } root = { check_variable = { which = pe_c8_on value = 1 } } prev = { has_planet_flag = pe_hq_8 } check_variable = { which = pe_labl value = root.pe_c8_lab } } set_variable = { which = pe_labok value = 1 } root = { set_variable = { which = pe_labhas_8 value = 1 } } }
+			if = { limit = { check_variable = { which = pe_labok value = 0 } } remove_deposit = yes }
+		}
+	}
+	# A missing institute at the headquarters.
+	if = {
+		limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_lab value > 0 } check_variable = { which = pe_labhas_1 value = 0 } }
+		random_owned_colony = {
+			limit = { has_planet_flag = pe_hq_1 }
+			if = { limit = { root = { OR = { check_variable = { which = pe_c1_prod value = 4 } check_variable = { which = pe_c1_prod value = 9 } } } } if = { limit = { root = { check_variable = { which = pe_c1_lab value = 1 } } } add_deposit = d_pe_corp_lab_x_1 last_added_deposit = { set_variable = { which = pe_labk value = 1 } set_variable = { which = pe_labl value = root.pe_c1_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c1_lab value = 2 } } } add_deposit = d_pe_corp_lab_x_2 last_added_deposit = { set_variable = { which = pe_labk value = 1 } set_variable = { which = pe_labl value = root.pe_c1_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c1_lab value = 3 } } } add_deposit = d_pe_corp_lab_x_3 last_added_deposit = { set_variable = { which = pe_labk value = 1 } set_variable = { which = pe_labl value = root.pe_c1_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c1_prod value = 3 } check_variable = { which = pe_c1_prod value = 5 } check_variable = { which = pe_c1_prod value = 7 } check_variable = { which = pe_c1_prod value = 10 } } } } if = { limit = { root = { check_variable = { which = pe_c1_lab value = 1 } } } add_deposit = d_pe_corp_lab_y_1 last_added_deposit = { set_variable = { which = pe_labk value = 1 } set_variable = { which = pe_labl value = root.pe_c1_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c1_lab value = 2 } } } add_deposit = d_pe_corp_lab_y_2 last_added_deposit = { set_variable = { which = pe_labk value = 1 } set_variable = { which = pe_labl value = root.pe_c1_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c1_lab value = 3 } } } add_deposit = d_pe_corp_lab_y_3 last_added_deposit = { set_variable = { which = pe_labk value = 1 } set_variable = { which = pe_labl value = root.pe_c1_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c1_prod value = 1 } check_variable = { which = pe_c1_prod value = 2 } check_variable = { which = pe_c1_prod value = 6 } check_variable = { which = pe_c1_prod value = 8 } } } } if = { limit = { root = { check_variable = { which = pe_c1_lab value = 1 } } } add_deposit = d_pe_corp_lab_z_1 last_added_deposit = { set_variable = { which = pe_labk value = 1 } set_variable = { which = pe_labl value = root.pe_c1_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c1_lab value = 2 } } } add_deposit = d_pe_corp_lab_z_2 last_added_deposit = { set_variable = { which = pe_labk value = 1 } set_variable = { which = pe_labl value = root.pe_c1_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c1_lab value = 3 } } } add_deposit = d_pe_corp_lab_z_3 last_added_deposit = { set_variable = { which = pe_labk value = 1 } set_variable = { which = pe_labl value = root.pe_c1_lab } } } }
+			check_planet_employment = yes
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_lab value > 0 } check_variable = { which = pe_labhas_2 value = 0 } }
+		random_owned_colony = {
+			limit = { has_planet_flag = pe_hq_2 }
+			if = { limit = { root = { OR = { check_variable = { which = pe_c2_prod value = 4 } check_variable = { which = pe_c2_prod value = 9 } } } } if = { limit = { root = { check_variable = { which = pe_c2_lab value = 1 } } } add_deposit = d_pe_corp_lab_x_1 last_added_deposit = { set_variable = { which = pe_labk value = 2 } set_variable = { which = pe_labl value = root.pe_c2_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c2_lab value = 2 } } } add_deposit = d_pe_corp_lab_x_2 last_added_deposit = { set_variable = { which = pe_labk value = 2 } set_variable = { which = pe_labl value = root.pe_c2_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c2_lab value = 3 } } } add_deposit = d_pe_corp_lab_x_3 last_added_deposit = { set_variable = { which = pe_labk value = 2 } set_variable = { which = pe_labl value = root.pe_c2_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c2_prod value = 3 } check_variable = { which = pe_c2_prod value = 5 } check_variable = { which = pe_c2_prod value = 7 } check_variable = { which = pe_c2_prod value = 10 } } } } if = { limit = { root = { check_variable = { which = pe_c2_lab value = 1 } } } add_deposit = d_pe_corp_lab_y_1 last_added_deposit = { set_variable = { which = pe_labk value = 2 } set_variable = { which = pe_labl value = root.pe_c2_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c2_lab value = 2 } } } add_deposit = d_pe_corp_lab_y_2 last_added_deposit = { set_variable = { which = pe_labk value = 2 } set_variable = { which = pe_labl value = root.pe_c2_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c2_lab value = 3 } } } add_deposit = d_pe_corp_lab_y_3 last_added_deposit = { set_variable = { which = pe_labk value = 2 } set_variable = { which = pe_labl value = root.pe_c2_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c2_prod value = 1 } check_variable = { which = pe_c2_prod value = 2 } check_variable = { which = pe_c2_prod value = 6 } check_variable = { which = pe_c2_prod value = 8 } } } } if = { limit = { root = { check_variable = { which = pe_c2_lab value = 1 } } } add_deposit = d_pe_corp_lab_z_1 last_added_deposit = { set_variable = { which = pe_labk value = 2 } set_variable = { which = pe_labl value = root.pe_c2_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c2_lab value = 2 } } } add_deposit = d_pe_corp_lab_z_2 last_added_deposit = { set_variable = { which = pe_labk value = 2 } set_variable = { which = pe_labl value = root.pe_c2_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c2_lab value = 3 } } } add_deposit = d_pe_corp_lab_z_3 last_added_deposit = { set_variable = { which = pe_labk value = 2 } set_variable = { which = pe_labl value = root.pe_c2_lab } } } }
+			check_planet_employment = yes
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_lab value > 0 } check_variable = { which = pe_labhas_3 value = 0 } }
+		random_owned_colony = {
+			limit = { has_planet_flag = pe_hq_3 }
+			if = { limit = { root = { OR = { check_variable = { which = pe_c3_prod value = 4 } check_variable = { which = pe_c3_prod value = 9 } } } } if = { limit = { root = { check_variable = { which = pe_c3_lab value = 1 } } } add_deposit = d_pe_corp_lab_x_1 last_added_deposit = { set_variable = { which = pe_labk value = 3 } set_variable = { which = pe_labl value = root.pe_c3_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c3_lab value = 2 } } } add_deposit = d_pe_corp_lab_x_2 last_added_deposit = { set_variable = { which = pe_labk value = 3 } set_variable = { which = pe_labl value = root.pe_c3_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c3_lab value = 3 } } } add_deposit = d_pe_corp_lab_x_3 last_added_deposit = { set_variable = { which = pe_labk value = 3 } set_variable = { which = pe_labl value = root.pe_c3_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c3_prod value = 3 } check_variable = { which = pe_c3_prod value = 5 } check_variable = { which = pe_c3_prod value = 7 } check_variable = { which = pe_c3_prod value = 10 } } } } if = { limit = { root = { check_variable = { which = pe_c3_lab value = 1 } } } add_deposit = d_pe_corp_lab_y_1 last_added_deposit = { set_variable = { which = pe_labk value = 3 } set_variable = { which = pe_labl value = root.pe_c3_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c3_lab value = 2 } } } add_deposit = d_pe_corp_lab_y_2 last_added_deposit = { set_variable = { which = pe_labk value = 3 } set_variable = { which = pe_labl value = root.pe_c3_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c3_lab value = 3 } } } add_deposit = d_pe_corp_lab_y_3 last_added_deposit = { set_variable = { which = pe_labk value = 3 } set_variable = { which = pe_labl value = root.pe_c3_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c3_prod value = 1 } check_variable = { which = pe_c3_prod value = 2 } check_variable = { which = pe_c3_prod value = 6 } check_variable = { which = pe_c3_prod value = 8 } } } } if = { limit = { root = { check_variable = { which = pe_c3_lab value = 1 } } } add_deposit = d_pe_corp_lab_z_1 last_added_deposit = { set_variable = { which = pe_labk value = 3 } set_variable = { which = pe_labl value = root.pe_c3_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c3_lab value = 2 } } } add_deposit = d_pe_corp_lab_z_2 last_added_deposit = { set_variable = { which = pe_labk value = 3 } set_variable = { which = pe_labl value = root.pe_c3_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c3_lab value = 3 } } } add_deposit = d_pe_corp_lab_z_3 last_added_deposit = { set_variable = { which = pe_labk value = 3 } set_variable = { which = pe_labl value = root.pe_c3_lab } } } }
+			check_planet_employment = yes
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_lab value > 0 } check_variable = { which = pe_labhas_4 value = 0 } }
+		random_owned_colony = {
+			limit = { has_planet_flag = pe_hq_4 }
+			if = { limit = { root = { OR = { check_variable = { which = pe_c4_prod value = 4 } check_variable = { which = pe_c4_prod value = 9 } } } } if = { limit = { root = { check_variable = { which = pe_c4_lab value = 1 } } } add_deposit = d_pe_corp_lab_x_1 last_added_deposit = { set_variable = { which = pe_labk value = 4 } set_variable = { which = pe_labl value = root.pe_c4_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c4_lab value = 2 } } } add_deposit = d_pe_corp_lab_x_2 last_added_deposit = { set_variable = { which = pe_labk value = 4 } set_variable = { which = pe_labl value = root.pe_c4_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c4_lab value = 3 } } } add_deposit = d_pe_corp_lab_x_3 last_added_deposit = { set_variable = { which = pe_labk value = 4 } set_variable = { which = pe_labl value = root.pe_c4_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c4_prod value = 3 } check_variable = { which = pe_c4_prod value = 5 } check_variable = { which = pe_c4_prod value = 7 } check_variable = { which = pe_c4_prod value = 10 } } } } if = { limit = { root = { check_variable = { which = pe_c4_lab value = 1 } } } add_deposit = d_pe_corp_lab_y_1 last_added_deposit = { set_variable = { which = pe_labk value = 4 } set_variable = { which = pe_labl value = root.pe_c4_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c4_lab value = 2 } } } add_deposit = d_pe_corp_lab_y_2 last_added_deposit = { set_variable = { which = pe_labk value = 4 } set_variable = { which = pe_labl value = root.pe_c4_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c4_lab value = 3 } } } add_deposit = d_pe_corp_lab_y_3 last_added_deposit = { set_variable = { which = pe_labk value = 4 } set_variable = { which = pe_labl value = root.pe_c4_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c4_prod value = 1 } check_variable = { which = pe_c4_prod value = 2 } check_variable = { which = pe_c4_prod value = 6 } check_variable = { which = pe_c4_prod value = 8 } } } } if = { limit = { root = { check_variable = { which = pe_c4_lab value = 1 } } } add_deposit = d_pe_corp_lab_z_1 last_added_deposit = { set_variable = { which = pe_labk value = 4 } set_variable = { which = pe_labl value = root.pe_c4_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c4_lab value = 2 } } } add_deposit = d_pe_corp_lab_z_2 last_added_deposit = { set_variable = { which = pe_labk value = 4 } set_variable = { which = pe_labl value = root.pe_c4_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c4_lab value = 3 } } } add_deposit = d_pe_corp_lab_z_3 last_added_deposit = { set_variable = { which = pe_labk value = 4 } set_variable = { which = pe_labl value = root.pe_c4_lab } } } }
+			check_planet_employment = yes
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_lab value > 0 } check_variable = { which = pe_labhas_5 value = 0 } }
+		random_owned_colony = {
+			limit = { has_planet_flag = pe_hq_5 }
+			if = { limit = { root = { OR = { check_variable = { which = pe_c5_prod value = 4 } check_variable = { which = pe_c5_prod value = 9 } } } } if = { limit = { root = { check_variable = { which = pe_c5_lab value = 1 } } } add_deposit = d_pe_corp_lab_x_1 last_added_deposit = { set_variable = { which = pe_labk value = 5 } set_variable = { which = pe_labl value = root.pe_c5_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c5_lab value = 2 } } } add_deposit = d_pe_corp_lab_x_2 last_added_deposit = { set_variable = { which = pe_labk value = 5 } set_variable = { which = pe_labl value = root.pe_c5_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c5_lab value = 3 } } } add_deposit = d_pe_corp_lab_x_3 last_added_deposit = { set_variable = { which = pe_labk value = 5 } set_variable = { which = pe_labl value = root.pe_c5_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c5_prod value = 3 } check_variable = { which = pe_c5_prod value = 5 } check_variable = { which = pe_c5_prod value = 7 } check_variable = { which = pe_c5_prod value = 10 } } } } if = { limit = { root = { check_variable = { which = pe_c5_lab value = 1 } } } add_deposit = d_pe_corp_lab_y_1 last_added_deposit = { set_variable = { which = pe_labk value = 5 } set_variable = { which = pe_labl value = root.pe_c5_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c5_lab value = 2 } } } add_deposit = d_pe_corp_lab_y_2 last_added_deposit = { set_variable = { which = pe_labk value = 5 } set_variable = { which = pe_labl value = root.pe_c5_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c5_lab value = 3 } } } add_deposit = d_pe_corp_lab_y_3 last_added_deposit = { set_variable = { which = pe_labk value = 5 } set_variable = { which = pe_labl value = root.pe_c5_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c5_prod value = 1 } check_variable = { which = pe_c5_prod value = 2 } check_variable = { which = pe_c5_prod value = 6 } check_variable = { which = pe_c5_prod value = 8 } } } } if = { limit = { root = { check_variable = { which = pe_c5_lab value = 1 } } } add_deposit = d_pe_corp_lab_z_1 last_added_deposit = { set_variable = { which = pe_labk value = 5 } set_variable = { which = pe_labl value = root.pe_c5_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c5_lab value = 2 } } } add_deposit = d_pe_corp_lab_z_2 last_added_deposit = { set_variable = { which = pe_labk value = 5 } set_variable = { which = pe_labl value = root.pe_c5_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c5_lab value = 3 } } } add_deposit = d_pe_corp_lab_z_3 last_added_deposit = { set_variable = { which = pe_labk value = 5 } set_variable = { which = pe_labl value = root.pe_c5_lab } } } }
+			check_planet_employment = yes
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_lab value > 0 } check_variable = { which = pe_labhas_6 value = 0 } }
+		random_owned_colony = {
+			limit = { has_planet_flag = pe_hq_6 }
+			if = { limit = { root = { OR = { check_variable = { which = pe_c6_prod value = 4 } check_variable = { which = pe_c6_prod value = 9 } } } } if = { limit = { root = { check_variable = { which = pe_c6_lab value = 1 } } } add_deposit = d_pe_corp_lab_x_1 last_added_deposit = { set_variable = { which = pe_labk value = 6 } set_variable = { which = pe_labl value = root.pe_c6_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c6_lab value = 2 } } } add_deposit = d_pe_corp_lab_x_2 last_added_deposit = { set_variable = { which = pe_labk value = 6 } set_variable = { which = pe_labl value = root.pe_c6_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c6_lab value = 3 } } } add_deposit = d_pe_corp_lab_x_3 last_added_deposit = { set_variable = { which = pe_labk value = 6 } set_variable = { which = pe_labl value = root.pe_c6_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c6_prod value = 3 } check_variable = { which = pe_c6_prod value = 5 } check_variable = { which = pe_c6_prod value = 7 } check_variable = { which = pe_c6_prod value = 10 } } } } if = { limit = { root = { check_variable = { which = pe_c6_lab value = 1 } } } add_deposit = d_pe_corp_lab_y_1 last_added_deposit = { set_variable = { which = pe_labk value = 6 } set_variable = { which = pe_labl value = root.pe_c6_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c6_lab value = 2 } } } add_deposit = d_pe_corp_lab_y_2 last_added_deposit = { set_variable = { which = pe_labk value = 6 } set_variable = { which = pe_labl value = root.pe_c6_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c6_lab value = 3 } } } add_deposit = d_pe_corp_lab_y_3 last_added_deposit = { set_variable = { which = pe_labk value = 6 } set_variable = { which = pe_labl value = root.pe_c6_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c6_prod value = 1 } check_variable = { which = pe_c6_prod value = 2 } check_variable = { which = pe_c6_prod value = 6 } check_variable = { which = pe_c6_prod value = 8 } } } } if = { limit = { root = { check_variable = { which = pe_c6_lab value = 1 } } } add_deposit = d_pe_corp_lab_z_1 last_added_deposit = { set_variable = { which = pe_labk value = 6 } set_variable = { which = pe_labl value = root.pe_c6_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c6_lab value = 2 } } } add_deposit = d_pe_corp_lab_z_2 last_added_deposit = { set_variable = { which = pe_labk value = 6 } set_variable = { which = pe_labl value = root.pe_c6_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c6_lab value = 3 } } } add_deposit = d_pe_corp_lab_z_3 last_added_deposit = { set_variable = { which = pe_labk value = 6 } set_variable = { which = pe_labl value = root.pe_c6_lab } } } }
+			check_planet_employment = yes
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_lab value > 0 } check_variable = { which = pe_labhas_7 value = 0 } }
+		random_owned_colony = {
+			limit = { has_planet_flag = pe_hq_7 }
+			if = { limit = { root = { OR = { check_variable = { which = pe_c7_prod value = 4 } check_variable = { which = pe_c7_prod value = 9 } } } } if = { limit = { root = { check_variable = { which = pe_c7_lab value = 1 } } } add_deposit = d_pe_corp_lab_x_1 last_added_deposit = { set_variable = { which = pe_labk value = 7 } set_variable = { which = pe_labl value = root.pe_c7_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c7_lab value = 2 } } } add_deposit = d_pe_corp_lab_x_2 last_added_deposit = { set_variable = { which = pe_labk value = 7 } set_variable = { which = pe_labl value = root.pe_c7_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c7_lab value = 3 } } } add_deposit = d_pe_corp_lab_x_3 last_added_deposit = { set_variable = { which = pe_labk value = 7 } set_variable = { which = pe_labl value = root.pe_c7_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c7_prod value = 3 } check_variable = { which = pe_c7_prod value = 5 } check_variable = { which = pe_c7_prod value = 7 } check_variable = { which = pe_c7_prod value = 10 } } } } if = { limit = { root = { check_variable = { which = pe_c7_lab value = 1 } } } add_deposit = d_pe_corp_lab_y_1 last_added_deposit = { set_variable = { which = pe_labk value = 7 } set_variable = { which = pe_labl value = root.pe_c7_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c7_lab value = 2 } } } add_deposit = d_pe_corp_lab_y_2 last_added_deposit = { set_variable = { which = pe_labk value = 7 } set_variable = { which = pe_labl value = root.pe_c7_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c7_lab value = 3 } } } add_deposit = d_pe_corp_lab_y_3 last_added_deposit = { set_variable = { which = pe_labk value = 7 } set_variable = { which = pe_labl value = root.pe_c7_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c7_prod value = 1 } check_variable = { which = pe_c7_prod value = 2 } check_variable = { which = pe_c7_prod value = 6 } check_variable = { which = pe_c7_prod value = 8 } } } } if = { limit = { root = { check_variable = { which = pe_c7_lab value = 1 } } } add_deposit = d_pe_corp_lab_z_1 last_added_deposit = { set_variable = { which = pe_labk value = 7 } set_variable = { which = pe_labl value = root.pe_c7_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c7_lab value = 2 } } } add_deposit = d_pe_corp_lab_z_2 last_added_deposit = { set_variable = { which = pe_labk value = 7 } set_variable = { which = pe_labl value = root.pe_c7_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c7_lab value = 3 } } } add_deposit = d_pe_corp_lab_z_3 last_added_deposit = { set_variable = { which = pe_labk value = 7 } set_variable = { which = pe_labl value = root.pe_c7_lab } } } }
+			check_planet_employment = yes
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_lab value > 0 } check_variable = { which = pe_labhas_8 value = 0 } }
+		random_owned_colony = {
+			limit = { has_planet_flag = pe_hq_8 }
+			if = { limit = { root = { OR = { check_variable = { which = pe_c8_prod value = 4 } check_variable = { which = pe_c8_prod value = 9 } } } } if = { limit = { root = { check_variable = { which = pe_c8_lab value = 1 } } } add_deposit = d_pe_corp_lab_x_1 last_added_deposit = { set_variable = { which = pe_labk value = 8 } set_variable = { which = pe_labl value = root.pe_c8_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c8_lab value = 2 } } } add_deposit = d_pe_corp_lab_x_2 last_added_deposit = { set_variable = { which = pe_labk value = 8 } set_variable = { which = pe_labl value = root.pe_c8_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c8_lab value = 3 } } } add_deposit = d_pe_corp_lab_x_3 last_added_deposit = { set_variable = { which = pe_labk value = 8 } set_variable = { which = pe_labl value = root.pe_c8_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c8_prod value = 3 } check_variable = { which = pe_c8_prod value = 5 } check_variable = { which = pe_c8_prod value = 7 } check_variable = { which = pe_c8_prod value = 10 } } } } if = { limit = { root = { check_variable = { which = pe_c8_lab value = 1 } } } add_deposit = d_pe_corp_lab_y_1 last_added_deposit = { set_variable = { which = pe_labk value = 8 } set_variable = { which = pe_labl value = root.pe_c8_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c8_lab value = 2 } } } add_deposit = d_pe_corp_lab_y_2 last_added_deposit = { set_variable = { which = pe_labk value = 8 } set_variable = { which = pe_labl value = root.pe_c8_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c8_lab value = 3 } } } add_deposit = d_pe_corp_lab_y_3 last_added_deposit = { set_variable = { which = pe_labk value = 8 } set_variable = { which = pe_labl value = root.pe_c8_lab } } } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_c8_prod value = 1 } check_variable = { which = pe_c8_prod value = 2 } check_variable = { which = pe_c8_prod value = 6 } check_variable = { which = pe_c8_prod value = 8 } } } } if = { limit = { root = { check_variable = { which = pe_c8_lab value = 1 } } } add_deposit = d_pe_corp_lab_z_1 last_added_deposit = { set_variable = { which = pe_labk value = 8 } set_variable = { which = pe_labl value = root.pe_c8_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c8_lab value = 2 } } } add_deposit = d_pe_corp_lab_z_2 last_added_deposit = { set_variable = { which = pe_labk value = 8 } set_variable = { which = pe_labl value = root.pe_c8_lab } } } else_if = { limit = { root = { check_variable = { which = pe_c8_lab value = 3 } } } add_deposit = d_pe_corp_lab_z_3 last_added_deposit = { set_variable = { which = pe_labk value = 8 } set_variable = { which = pe_labl value = root.pe_c8_lab } } } }
+			check_planet_employment = yes
+		}
+	}
+	# Benefits.
+	every_owned_colony = {
+		limit = { is_variable_set = pe_mem_1 }
+		if = { limit = { has_modifier = pe_corp_welfare } remove_modifier = pe_corp_welfare }
+		set_variable = { which = pe_cw_l value = 0.75 }
+		set_variable = { which = pe_cw_h value = 0.2 }
+		owner_main_species = {
+			if = { limit = { has_living_standard = { country = root type = living_standard_utopian } } prev = { set_variable = { which = pe_cw_l value = 0 } set_variable = { which = pe_cw_h value = 0 } } }
+			else_if = { limit = { has_living_standard = { country = root type = living_standard_decadent } } prev = { set_variable = { which = pe_cw_l value = 0 } set_variable = { which = pe_cw_h value = 0 } } }
+			else_if = { limit = { has_living_standard = { country = root type = living_standard_good } } prev = { set_variable = { which = pe_cw_l value = 0.5 } set_variable = { which = pe_cw_h value = 0.15 } } }
+			else_if = { limit = { has_living_standard = { country = root type = living_standard_stratified } } prev = { set_variable = { which = pe_cw_l value = 0.9 } set_variable = { which = pe_cw_h value = 0.3 } } }
+		}
+		set_variable = { which = pe_cw_all value = 0 }
+		set_variable = { which = pe_cw_s1 value = 0 }
+		set_variable = { which = pe_cw_s2 value = 0 }
+		set_variable = { which = pe_cw_s3 value = 0 }
+		set_variable = { which = pe_cw_s4 value = 0 }
+		set_variable = { which = pe_cw_s5 value = 0 }
+		set_variable = { which = pe_cw_s6 value = 0 }
+		set_variable = { which = pe_cw_s7 value = 0 }
+		set_variable = { which = pe_cw_s8 value = 0 }
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_stage }
+			set_variable = { which = pe_tmp value = pe_stage }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = 0.5 }
+			prev = { change_variable = { which = pe_cw_all value = prev.pe_tmp } }
+			if = { limit = { check_variable = { which = pe_corp value = 1 } } prev = { change_variable = { which = pe_cw_s1 value = prev.pe_tmp } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 2 } } prev = { change_variable = { which = pe_cw_s2 value = prev.pe_tmp } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 3 } } prev = { change_variable = { which = pe_cw_s3 value = prev.pe_tmp } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 4 } } prev = { change_variable = { which = pe_cw_s4 value = prev.pe_tmp } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 5 } } prev = { change_variable = { which = pe_cw_s5 value = prev.pe_tmp } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 6 } } prev = { change_variable = { which = pe_cw_s6 value = prev.pe_tmp } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 7 } } prev = { change_variable = { which = pe_cw_s7 value = prev.pe_tmp } } }
+			else_if = { limit = { check_variable = { which = pe_corp value = 8 } } prev = { change_variable = { which = pe_cw_s8 value = prev.pe_tmp } } }
+		}
+		if = { limit = { NOT = { is_variable_set = pe_pfa } } set_variable = { which = pe_pfa value = 0 } }
+		export_trigger_value_to_variable = { trigger = pop_amount variable = pe_cw_pops }
+		set_variable = { which = pe_cw_n value = 0 }
+		if = {
+			limit = { check_variable = { which = pe_cw_l value > 0 } check_variable = { which = pe_cw_all value > 0 } }
+			set_variable = { which = pe_cw_w value = pe_pfa }
+			multiply_variable = { which = pe_cw_w value = pe_cw_s1 }
+			divide_variable = { which = pe_cw_w value = pe_cw_all }
+			if = { limit = { has_planet_flag = pe_hq_1 } set_variable = { which = pe_tmp value = root.pe_c1_lab } multiply_variable = { which = pe_tmp value = 100 } change_variable = { which = pe_cw_w value = pe_tmp } }
+			if = {
+				limit = { check_variable = { which = pe_cw_w value > 0 } root = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value >= 3000 } } }
+				set_variable = { which = pe_cw_c value = pe_cw_w }
+				multiply_variable = { which = pe_cw_c value = 0.03 }
+				multiply_variable = { which = pe_cw_c value = pe_cw_l }
+				multiply_variable = { which = pe_cw_c value = root.pe_cw_price }
+				root = { subtract_variable = { which = pe_c1_cash value = prev.pe_cw_c } change_variable = { which = pe_c1_wfq value = prev.pe_cw_c } }
+				change_variable = { which = pe_cw_n value = pe_cw_w }
+			}
+			set_variable = { which = pe_cw_w value = pe_pfa }
+			multiply_variable = { which = pe_cw_w value = pe_cw_s2 }
+			divide_variable = { which = pe_cw_w value = pe_cw_all }
+			if = { limit = { has_planet_flag = pe_hq_2 } set_variable = { which = pe_tmp value = root.pe_c2_lab } multiply_variable = { which = pe_tmp value = 100 } change_variable = { which = pe_cw_w value = pe_tmp } }
+			if = {
+				limit = { check_variable = { which = pe_cw_w value > 0 } root = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value >= 3000 } } }
+				set_variable = { which = pe_cw_c value = pe_cw_w }
+				multiply_variable = { which = pe_cw_c value = 0.03 }
+				multiply_variable = { which = pe_cw_c value = pe_cw_l }
+				multiply_variable = { which = pe_cw_c value = root.pe_cw_price }
+				root = { subtract_variable = { which = pe_c2_cash value = prev.pe_cw_c } change_variable = { which = pe_c2_wfq value = prev.pe_cw_c } }
+				change_variable = { which = pe_cw_n value = pe_cw_w }
+			}
+			set_variable = { which = pe_cw_w value = pe_pfa }
+			multiply_variable = { which = pe_cw_w value = pe_cw_s3 }
+			divide_variable = { which = pe_cw_w value = pe_cw_all }
+			if = { limit = { has_planet_flag = pe_hq_3 } set_variable = { which = pe_tmp value = root.pe_c3_lab } multiply_variable = { which = pe_tmp value = 100 } change_variable = { which = pe_cw_w value = pe_tmp } }
+			if = {
+				limit = { check_variable = { which = pe_cw_w value > 0 } root = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value >= 3000 } } }
+				set_variable = { which = pe_cw_c value = pe_cw_w }
+				multiply_variable = { which = pe_cw_c value = 0.03 }
+				multiply_variable = { which = pe_cw_c value = pe_cw_l }
+				multiply_variable = { which = pe_cw_c value = root.pe_cw_price }
+				root = { subtract_variable = { which = pe_c3_cash value = prev.pe_cw_c } change_variable = { which = pe_c3_wfq value = prev.pe_cw_c } }
+				change_variable = { which = pe_cw_n value = pe_cw_w }
+			}
+			set_variable = { which = pe_cw_w value = pe_pfa }
+			multiply_variable = { which = pe_cw_w value = pe_cw_s4 }
+			divide_variable = { which = pe_cw_w value = pe_cw_all }
+			if = { limit = { has_planet_flag = pe_hq_4 } set_variable = { which = pe_tmp value = root.pe_c4_lab } multiply_variable = { which = pe_tmp value = 100 } change_variable = { which = pe_cw_w value = pe_tmp } }
+			if = {
+				limit = { check_variable = { which = pe_cw_w value > 0 } root = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value >= 3000 } } }
+				set_variable = { which = pe_cw_c value = pe_cw_w }
+				multiply_variable = { which = pe_cw_c value = 0.03 }
+				multiply_variable = { which = pe_cw_c value = pe_cw_l }
+				multiply_variable = { which = pe_cw_c value = root.pe_cw_price }
+				root = { subtract_variable = { which = pe_c4_cash value = prev.pe_cw_c } change_variable = { which = pe_c4_wfq value = prev.pe_cw_c } }
+				change_variable = { which = pe_cw_n value = pe_cw_w }
+			}
+			set_variable = { which = pe_cw_w value = pe_pfa }
+			multiply_variable = { which = pe_cw_w value = pe_cw_s5 }
+			divide_variable = { which = pe_cw_w value = pe_cw_all }
+			if = { limit = { has_planet_flag = pe_hq_5 } set_variable = { which = pe_tmp value = root.pe_c5_lab } multiply_variable = { which = pe_tmp value = 100 } change_variable = { which = pe_cw_w value = pe_tmp } }
+			if = {
+				limit = { check_variable = { which = pe_cw_w value > 0 } root = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value >= 3000 } } }
+				set_variable = { which = pe_cw_c value = pe_cw_w }
+				multiply_variable = { which = pe_cw_c value = 0.03 }
+				multiply_variable = { which = pe_cw_c value = pe_cw_l }
+				multiply_variable = { which = pe_cw_c value = root.pe_cw_price }
+				root = { subtract_variable = { which = pe_c5_cash value = prev.pe_cw_c } change_variable = { which = pe_c5_wfq value = prev.pe_cw_c } }
+				change_variable = { which = pe_cw_n value = pe_cw_w }
+			}
+			set_variable = { which = pe_cw_w value = pe_pfa }
+			multiply_variable = { which = pe_cw_w value = pe_cw_s6 }
+			divide_variable = { which = pe_cw_w value = pe_cw_all }
+			if = { limit = { has_planet_flag = pe_hq_6 } set_variable = { which = pe_tmp value = root.pe_c6_lab } multiply_variable = { which = pe_tmp value = 100 } change_variable = { which = pe_cw_w value = pe_tmp } }
+			if = {
+				limit = { check_variable = { which = pe_cw_w value > 0 } root = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value >= 3000 } } }
+				set_variable = { which = pe_cw_c value = pe_cw_w }
+				multiply_variable = { which = pe_cw_c value = 0.03 }
+				multiply_variable = { which = pe_cw_c value = pe_cw_l }
+				multiply_variable = { which = pe_cw_c value = root.pe_cw_price }
+				root = { subtract_variable = { which = pe_c6_cash value = prev.pe_cw_c } change_variable = { which = pe_c6_wfq value = prev.pe_cw_c } }
+				change_variable = { which = pe_cw_n value = pe_cw_w }
+			}
+			set_variable = { which = pe_cw_w value = pe_pfa }
+			multiply_variable = { which = pe_cw_w value = pe_cw_s7 }
+			divide_variable = { which = pe_cw_w value = pe_cw_all }
+			if = { limit = { has_planet_flag = pe_hq_7 } set_variable = { which = pe_tmp value = root.pe_c7_lab } multiply_variable = { which = pe_tmp value = 100 } change_variable = { which = pe_cw_w value = pe_tmp } }
+			if = {
+				limit = { check_variable = { which = pe_cw_w value > 0 } root = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value >= 3000 } } }
+				set_variable = { which = pe_cw_c value = pe_cw_w }
+				multiply_variable = { which = pe_cw_c value = 0.03 }
+				multiply_variable = { which = pe_cw_c value = pe_cw_l }
+				multiply_variable = { which = pe_cw_c value = root.pe_cw_price }
+				root = { subtract_variable = { which = pe_c7_cash value = prev.pe_cw_c } change_variable = { which = pe_c7_wfq value = prev.pe_cw_c } }
+				change_variable = { which = pe_cw_n value = pe_cw_w }
+			}
+			set_variable = { which = pe_cw_w value = pe_pfa }
+			multiply_variable = { which = pe_cw_w value = pe_cw_s8 }
+			divide_variable = { which = pe_cw_w value = pe_cw_all }
+			if = { limit = { has_planet_flag = pe_hq_8 } set_variable = { which = pe_tmp value = root.pe_c8_lab } multiply_variable = { which = pe_tmp value = 100 } change_variable = { which = pe_cw_w value = pe_tmp } }
+			if = {
+				limit = { check_variable = { which = pe_cw_w value > 0 } root = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value >= 3000 } } }
+				set_variable = { which = pe_cw_c value = pe_cw_w }
+				multiply_variable = { which = pe_cw_c value = 0.03 }
+				multiply_variable = { which = pe_cw_c value = pe_cw_l }
+				multiply_variable = { which = pe_cw_c value = root.pe_cw_price }
+				root = { subtract_variable = { which = pe_c8_cash value = prev.pe_cw_c } change_variable = { which = pe_c8_wfq value = prev.pe_cw_c } }
+				change_variable = { which = pe_cw_n value = pe_cw_w }
+			}
+		}
+		if = {
+			limit = { check_variable = { which = pe_cw_n value > 0 } check_variable = { which = pe_cw_pops value > 0 } }
+			set_variable = { which = pe_cw_m value = pe_cw_n }
+			divide_variable = { which = pe_cw_m value = pe_cw_pops }
+			if = { limit = { check_variable = { which = pe_cw_m value > 1 } } set_variable = { which = pe_cw_m value = 1 } }
+			multiply_variable = { which = pe_cw_m value = pe_cw_h }
+			multiply_variable = { which = pe_cw_m value = 1000 }
+			round_variable = pe_cw_m
+			if = { limit = { check_variable = { which = pe_cw_m value > 0 } } add_modifier = { modifier = pe_corp_welfare days = -1 multiplier = pe_cw_m } }
+		}
+	}
+	set_variable = { which = pe_c1_wfr value = pe_c1_wfq }
+	round_variable = pe_c1_wfr
+	set_variable = { which = pe_c2_wfr value = pe_c2_wfq }
+	round_variable = pe_c2_wfr
+	set_variable = { which = pe_c3_wfr value = pe_c3_wfq }
+	round_variable = pe_c3_wfr
+	set_variable = { which = pe_c4_wfr value = pe_c4_wfq }
+	round_variable = pe_c4_wfr
+	set_variable = { which = pe_c5_wfr value = pe_c5_wfq }
+	round_variable = pe_c5_wfr
+	set_variable = { which = pe_c6_wfr value = pe_c6_wfq }
+	round_variable = pe_c6_wfr
+	set_variable = { which = pe_c7_wfr value = pe_c7_wfq }
+	round_variable = pe_c7_wfr
+	set_variable = { which = pe_c8_wfr value = pe_c8_wfq }
+	round_variable = pe_c8_wfr
+}

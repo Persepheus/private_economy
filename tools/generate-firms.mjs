@@ -3041,6 +3041,161 @@ ${corpChain('pe_chab_k', k => `if = { limit = { check_variable = { which = ${C(k
 `;
 for (const [li, lang] of [[0, 'english'], [1, 'german']])
   NAME_IDS.forEach(id => loc[lang].push(li ? ` pe_chab_name_${id}:0 "Habitat ${CORP_NAMES[id - 1]}"` : ` pe_chab_name_${id}:0 "${CORP_NAMES[id - 1]} Habitat"`));
+
+// --- Corporate social benefits and research institutes (pe_corp_social) ---------------------
+// Rich corporations treat their staff like civil servants: on every planet with their firms
+// (and at their institute) their workers live at the top standard (Utopian Abundance). The
+// corporation buys the extra consumer goods at market price from its cash; the planet gets
+// the happiness of that standard for that share of its pops (modifier pe_corp_welfare).
+// Gap to Utopian Abundance for workers: luxuries per 100 pops and happiness, by our standard.
+const CW_MIN = 3000;
+const CW_STD = [['living_standard_utopian', 0, 0], ['living_standard_decadent', 0, 0], ['living_standard_good', 0.5, 0.15], ['living_standard_stratified', 0.9, 0.3]];
+const CW_DEFAULT = [0.75, 0.2];
+// Institute: research jobs of the corporation's field at its headquarters (100 per level) with
+// the best equipment (+25% output of these private researchers there). Level up at 4000 /
+// 8000 / 12000 cash (25% a quarter, 800 for the equipment), 30 a quarter per level to run it,
+// a level down when its cash is below zero.
+const LAB_FIELD = {1: 'z', 2: 'z', 3: 'y', 4: 'x', 5: 'y', 6: 'z', 7: 'y', 8: 'z', 9: 'x', 10: 'y'};
+const LAB_JOB = {x: 'pe_private_physicist', y: 'pe_private_biologist', z: 'pe_private_engineer'};
+corp += `
+# --- Social benefits and research institutes ----------------------------------------------
+# Country scope, quarterly (pe_corp_step, call depth 3, no calls). Institutes: one per
+# corporation at its headquarters, deposit d_pe_corp_lab_<field>_<level> (pe_labk = slot,
+# pe_labl = level); levels by cash (pe_c<slot>_lab). Benefits: on each planet with firms of a
+# corporation with at least ${CW_MIN} cash, its workers (its share of the filled private jobs,
+# pe_pfa, by stage size, plus its institute) get the top living standard: it pays the extra
+# consumer goods (gap to Utopian Abundance x 3 months per 100 pops, market price) and the planet
+# gets the happiness gap for their share of the pops (pe_corp_welfare, 0.1% per point).
+# pe_c<slot>_wfr = what it paid this quarter (register).
+pe_corp_social = {
+	export_trigger_value_to_variable = { trigger = market_resource_price parameters = { resource = consumer_goods amount = 100 trade_type = market_buy } variable = pe_cw_price }
+	if = { limit = { NOT = { is_variable_set = pe_cw_price } } set_variable = { which = pe_cw_price value = 200 } }
+	if = { limit = { check_variable = { which = pe_cw_price value <= 0 } } set_variable = { which = pe_cw_price value = 200 } }
+	divide_variable = { which = pe_cw_price value = 100 }
+${CORPS.map(k => `	if = { limit = { NOT = { is_variable_set = ${C(k, 'lab')} } } set_variable = { which = ${C(k, 'lab')} value = 0 } }
+	set_variable = { which = ${C(k, 'wfq')} value = 0 }
+	set_variable = { which = pe_labhas_${k} value = 0 }
+	if = {
+		limit = { check_variable = { which = ${C(k, 'on')} value = 1 } }
+		if = {
+			limit = { check_variable = { which = ${C(k, 'cash')} value < 0 } check_variable = { which = ${C(k, 'lab')} value > 0 } }
+			change_variable = { which = ${C(k, 'lab')} value = -1 }
+		}
+		else_if = {
+			limit = { check_variable = { which = ${C(k, 'lab')} value < 3 } any_owned_colony = { has_planet_flag = pe_hq_${k} } }
+			set_variable = { which = pe_tmp value = ${C(k, 'lab')} }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = 4000 }
+			if = {
+				limit = { check_variable = { which = ${C(k, 'cash')} value >= pe_tmp } }
+				random = {
+					chance = 25
+					change_variable = { which = ${C(k, 'lab')} value = 1 }
+					change_variable = { which = ${C(k, 'cash')} value = -800 }
+				}
+			}
+		}
+		if = {
+			limit = { check_variable = { which = ${C(k, 'lab')} value > 0 } }
+			set_variable = { which = pe_tmp value = ${C(k, 'lab')} }
+			multiply_variable = { which = pe_tmp value = 30 }
+			subtract_variable = { which = ${C(k, 'cash')} value = pe_tmp }
+		}
+	}
+	else = { set_variable = { which = ${C(k, 'lab')} value = 0 } }`).join('\n')}
+	# Institutes in the wrong place or of the wrong level go; the right ones are noted.
+	every_owned_colony = {
+		every_deposit = {
+			limit = { is_variable_set = pe_labk }
+			set_variable = { which = pe_labok value = 0 }
+${CORPS.map((k, i) => `\t\t\t${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_labk value = ${k} } root = { check_variable = { which = ${C(k, 'on')} value = 1 } } prev = { has_planet_flag = pe_hq_${k} } check_variable = { which = pe_labl value = root.${C(k, 'lab')} } } set_variable = { which = pe_labok value = 1 } root = { set_variable = { which = pe_labhas_${k} value = 1 } } }`).join('\n')}
+			if = { limit = { check_variable = { which = pe_labok value = 0 } } remove_deposit = yes }
+		}
+	}
+	# A missing institute at the headquarters.
+${CORPS.map(k => `	if = {
+		limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'lab')} value > 0 } check_variable = { which = pe_labhas_${k} value = 0 } }
+		random_owned_colony = {
+			limit = { has_planet_flag = pe_hq_${k} }
+${['x', 'y', 'z'].map((f, i) => `\t\t\t${i ? 'else_if' : 'if'} = { limit = { root = { OR = { ${Object.entries(LAB_FIELD).filter(([, ff]) => ff === f).map(([p]) => `check_variable = { which = ${C(k, 'prod')} value = ${p} }`).join(' ')} } } } ${[1, 2, 3].map((l, j) => `${j ? 'else_if' : 'if'} = { limit = { root = { check_variable = { which = ${C(k, 'lab')} value = ${l} } } } add_deposit = d_pe_corp_lab_${f}_${l} last_added_deposit = { set_variable = { which = pe_labk value = ${k} } set_variable = { which = pe_labl value = root.${C(k, 'lab')} } } }`).join(' ')} }`).join('\n')}
+			check_planet_employment = yes
+		}
+	}`).join('\n')}
+	# Benefits.
+	every_owned_colony = {
+		limit = { is_variable_set = pe_mem_1 }
+		if = { limit = { has_modifier = pe_corp_welfare } remove_modifier = pe_corp_welfare }
+		set_variable = { which = pe_cw_l value = ${CW_DEFAULT[0]} }
+		set_variable = { which = pe_cw_h value = ${CW_DEFAULT[1]} }
+		owner_main_species = {
+${CW_STD.map(([t, l, h], i) => `\t\t\t${i ? 'else_if' : 'if'} = { limit = { has_living_standard = { country = root type = ${t} } } prev = { set_variable = { which = pe_cw_l value = ${l} } set_variable = { which = pe_cw_h value = ${h} } } }`).join('\n')}
+		}
+		set_variable = { which = pe_cw_all value = 0 }
+${CORPS.map(k => `\t\tset_variable = { which = pe_cw_s${k} value = 0 }`).join('\n')}
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_stage }
+			set_variable = { which = pe_tmp value = pe_stage }
+			change_variable = { which = pe_tmp value = 1 }
+			multiply_variable = { which = pe_tmp value = 0.5 }
+			prev = { change_variable = { which = pe_cw_all value = prev.pe_tmp } }
+${corpChain('pe_corp', k => `prev = { change_variable = { which = pe_cw_s${k} value = prev.pe_tmp } }`, '\t\t\t')}
+		}
+		if = { limit = { NOT = { is_variable_set = pe_pfa } } set_variable = { which = pe_pfa value = 0 } }
+		export_trigger_value_to_variable = { trigger = pop_amount variable = pe_cw_pops }
+		set_variable = { which = pe_cw_n value = 0 }
+		if = {
+			limit = { check_variable = { which = pe_cw_l value > 0 } check_variable = { which = pe_cw_all value > 0 } }
+${CORPS.map(k => `			set_variable = { which = pe_cw_w value = pe_pfa }
+			multiply_variable = { which = pe_cw_w value = pe_cw_s${k} }
+			divide_variable = { which = pe_cw_w value = pe_cw_all }
+			if = { limit = { has_planet_flag = pe_hq_${k} } set_variable = { which = pe_tmp value = root.${C(k, 'lab')} } multiply_variable = { which = pe_tmp value = 100 } change_variable = { which = pe_cw_w value = pe_tmp } }
+			if = {
+				limit = { check_variable = { which = pe_cw_w value > 0 } root = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'cash')} value >= ${CW_MIN} } } }
+				set_variable = { which = pe_cw_c value = pe_cw_w }
+				multiply_variable = { which = pe_cw_c value = 0.03 }
+				multiply_variable = { which = pe_cw_c value = pe_cw_l }
+				multiply_variable = { which = pe_cw_c value = root.pe_cw_price }
+				root = { subtract_variable = { which = ${C(k, 'cash')} value = prev.pe_cw_c } change_variable = { which = ${C(k, 'wfq')} value = prev.pe_cw_c } }
+				change_variable = { which = pe_cw_n value = pe_cw_w }
+			}`).join('\n')}
+		}
+		if = {
+			limit = { check_variable = { which = pe_cw_n value > 0 } check_variable = { which = pe_cw_pops value > 0 } }
+			set_variable = { which = pe_cw_m value = pe_cw_n }
+			divide_variable = { which = pe_cw_m value = pe_cw_pops }
+			if = { limit = { check_variable = { which = pe_cw_m value > 1 } } set_variable = { which = pe_cw_m value = 1 } }
+			multiply_variable = { which = pe_cw_m value = pe_cw_h }
+			multiply_variable = { which = pe_cw_m value = 1000 }
+			round_variable = pe_cw_m
+			if = { limit = { check_variable = { which = pe_cw_m value > 0 } } add_modifier = { modifier = pe_corp_welfare days = -1 multiplier = pe_cw_m } }
+		}
+	}
+${CORPS.map(k => `	set_variable = { which = ${C(k, 'wfr')} value = ${C(k, 'wfq')} }\n	round_variable = ${C(k, 'wfr')}`).join('\n')}
+}
+`;
+write('common/deposits/pe_corp_lab_deposits_generated.txt', header + `# Research institutes of corporations (pe_corp_social): jobs of the field at the headquarters,
+# 100 per level, with the best equipment (+25% workforce of these private researchers here).
+# Running costs and wages: paid by the corporation.
+` + ['x', 'y', 'z'].flatMap(f => [1, 2, 3].map(l => `
+d_pe_corp_lab_${f}_${l} = {
+	icon = d_tradestation_interior
+	is_for_colonizable = yes
+	category = pe_deposit_cat_corp
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+	planet_modifier = {
+		job_${LAB_JOB[f]}_add = ${100 * l}
+		pop_${LAB_JOB[f]}_bonus_workforce_mult = 0.25
+	}
+}
+`)).join(''));
+const LAB_FIELD_NAME = {x: ['Physics', 'Physik'], y: ['Biology', 'Biologie'], z: ['Engineering', 'Ingenieurwesen']};
+for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
+  for (const f of ['x', 'y', 'z']) for (const l of [1, 2, 3]) loc[lang].push(
+    li ? ` d_pe_corp_lab_${f}_${l}:0 "Konzern-Forschungsinstitut (${LAB_FIELD_NAME[f][1]}, Stufe ${['I', 'II', 'III'][l - 1]})"` : ` d_pe_corp_lab_${f}_${l}:0 "Corporate Research Institute (${LAB_FIELD_NAME[f][0]}, Level ${['I', 'II', 'III'][l - 1]})"`,
+    li ? ` d_pe_corp_lab_${f}_${l}_desc:0 "Der Konzern mit Hauptsitz hier betreibt ein eigenes Institut: ${100 * l} Forscherstellen, beste Ausstattung (+25 % Arbeitskraft der privaten Forscher dieses Fachs hier) und Löhne wie im öffentlichen Dienst. Betrieb und Löhne zahlt der Konzern."` : ` d_pe_corp_lab_${f}_${l}_desc:0 "The corporation headquartered here runs an institute of its own: ${100 * l} research positions, the best equipment (+25% workforce of the private researchers of this field here) and civil-service pay. The corporation pays for running it and for the wages."`);
+}
 write('common/scripted_effects/pe_corp_effects_generated.txt', corp);
 
 write('common/static_modifiers/pe_corp_modifiers_generated.txt', header + `# Clusters (pe_cluster_apply), supply contracts, corporation headquarters and branches (one
@@ -3100,10 +3255,10 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
     : ` pe_cluster_${l}_${n}:0 "${CLUSTER_NAMES[l][0]} Cluster (${n + 1}${n === 3 ? '+' : ''} firms)"`,
     li ? ` pe_cluster_${l}_${n}_desc:0 "Mehrere Privatfirmen derselben Branche teilen sich hier Zulieferer, Fachkräfte und Wissen."` : ` pe_cluster_${l}_${n}_desc:0 "Several private firms of the same sector share suppliers, skilled people and know-how here."`)));
   CORPS.forEach(k => L.push(li
-    ? ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£, Konzernproduktion +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/Monat[Root.GetPeCorpMega${k}]\\n"`
-    : ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£, corporate production +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/month[Root.GetPeCorpMega${k}]\\n"`,
-    li ? ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£, Konzernproduktion +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/Monat[Root.GetPeCorpMega${k}], §RPreiskampf mit [Root.GetPeCorpRival${k}]§!\\n"`
-       : ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£, corporate production +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/month[Root.GetPeCorpMega${k}], §Rprice war with [Root.GetPeCorpRival${k}]§!\\n"`,
+    ? ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£, Konzernproduktion +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/Monat[Root.GetPeCorpMega${k}], Sozialleistungen [Root.${C(k, 'wfr')}] £trade£/Quartal, Institut Stufe [Root.${C(k, 'lab')}]\\n"`
+    : ` pe_corp_line_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£, corporate production +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/month[Root.GetPeCorpMega${k}], benefits [Root.${C(k, 'wfr')}] £trade£/quarter, institute level [Root.${C(k, 'lab')}]\\n"`,
+    li ? ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] Firmen, [Root.${C(k, 'st')}] Stationen, Kasse [Root.${C(k, 'cashr')}] £trade£, Konzernproduktion +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/Monat[Root.GetPeCorpMega${k}], Sozialleistungen [Root.${C(k, 'wfr')}] £trade£/Quartal, Institut Stufe [Root.${C(k, 'lab')}], §RPreiskampf mit [Root.GetPeCorpRival${k}]§!\\n"`
+       : ` pe_corp_line_war_${k}:0 "§Y[Root.GetPeCorpN${k}]§!: [Root.${C(k, 'firms')}] firms, [Root.${C(k, 'st')}] stations, cash [Root.${C(k, 'cashr')}] £trade£, corporate production +[Root.${C(k, 'out')}] [Root.GetPeCorpProd${k}]/month[Root.GetPeCorpMega${k}], benefits [Root.${C(k, 'wfr')}] £trade£/quarter, institute level [Root.${C(k, 'lab')}], §Rprice war with [Root.GetPeCorpRival${k}]§!\\n"`,
     ` pe_corp_rn_${k}:0 "[Root.GetPeCorpN${k}]"`));
   const ROMAN = ['', 'I', 'II', 'III', 'IV'];
   [0, 1, 2, 3].forEach(w => [0, 1, 2, 3, 4].forEach(f => { if (w || f) L.push(` pe_corp_mega_${w}_${f}:0 "${[w ? (li ? `, Dyson-Schwarm ${ROMAN[w]}` : `, Dyson swarm ${ROMAN[w]}`) : '', f ? `, Arc Furnace ${ROMAN[f]}` : ''].join('')}"`); }));

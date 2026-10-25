@@ -258,3 +258,9 @@ pe_sprawl_corp_hab_d = {
 pe_hold_mega_speed = {
 	megastructure_build_speed_mult = 0.01
 }
+
+# Corporate benefits (pe_corp_social): the happiness of the top living standard for the share
+# of the pops that corporations employ here, x 0.1% per point.
+pe_corp_welfare = {
+	pop_happiness = 0.001
+}
