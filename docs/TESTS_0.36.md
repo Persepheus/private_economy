@@ -36,6 +36,15 @@ Ein laufendes Spiel kann weiterlaufen.
 - Eine Citadel **je Konzern und System**: Zwei Hauptsitze in einem System erlauben zwei Citadels. Das Vanilla-Limit je System gilt für Konzern-Zitadellen nicht.
 - Gleichzeitige Baustellen zweier Konzerne im selben System stören sich nicht (die Konzerndaten stehen auf der Baustelle selbst).
 
+## 0.36.2
+- **Baustelle sichtbar:** Sie hatte kein eigenes Modell; ein Ausbau zeigt das Modell der aktuellen Stufe. Jetzt hat sie das Bau-Modell der Citadel.
+- **Ausbau mit Entwurf der neuen Stufe:** `set_starbase_size` ändert die Stufe, behält aber den Entwurf der alten. Deshalb hatte deine Stufe III die Werte und Waffen von Stufe I.
+  - Jetzt bekommt das Citadel-Schiff selbst (nicht die Plattformen) den Entwurf seiner Stufe (`set_ship_design`).
+  - Bestehende Citadels mit falschem Entwurf werden am nächsten Quartal repariert.
+  - Haben die Holdings keinen Entwurf für Stufe II/III, steht das im error.log.
+- **Meldung beim Baubeginn** auch unter Laissez-faire und ohne Nachfrage („baut im System … eine eigene Deep Space Citadel“).
+- **Gastarbeiter (pe.211) und Kolonisten (pe.223):** Der Tooltip der Option zeigte 0 Pops, weil die Zahl erst beim Ausführen auf den Planeten geschrieben wurde. Es kamen trotzdem die richtigen Pops. Jetzt steht die Zahl schon im Tooltip.
+
 ## Konsole
 - `event pe.317`: sofort ein Angebot (der reichste Konzern bekommt mindestens 34.500 Kasse, damit es einen Kandidaten gibt). Voraussetzung ist unsere Technologie Deep Space Citadel.
 - `event pe.318`: Bau der Konzern-Zitadellen sofort fertig; ein laufender Ausbau wird am nächsten Quartal fertig.

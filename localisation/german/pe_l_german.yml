@@ -178,3 +178,4 @@
  pe_msg_cit_up:0 "Die Deep Space Citadel von §Y$CORP$§! im System $PLANET$ ist ausgebaut."
  pe_msg_cit_heir:0 "§Y$CORP$§! hat die Konzern-Zitadelle im System $PLANET$ übernommen."
  pe_msg_cit_lost:0 "Die Konzern-Zitadelle im System $PLANET$ ist stillgelegt: Kein Konzern kann sie halten."
+ pe_msg_cit_start:0 "§Y$CORP$§! baut im System $PLANET$ eine eigene Deep Space Citadel (Vanilla-Bauzeit)."

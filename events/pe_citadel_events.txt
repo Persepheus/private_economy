@@ -3,6 +3,7 @@
 #   pe.316  a new technology of ours: the holdings copy our technologies (on_tech_increased)
 #   pe.317  debug: an offer now (the richest corporation gets enough cash)
 #   pe.318  debug: finish the construction of corporate citadels and their upgrades at once
+#   pe.319  the citadel starts without asking (AI empires, Laissez-faire): with a message
 namespace = pe
 
 country_event = {
@@ -16,7 +17,11 @@ country_event = {
 	option = {
 		name = pe.315.a
 		custom_tooltip = pe.315.a.tt
-		hidden_effect = { pe_cit_exec = yes }
+		hidden_effect = {
+			pe_cit_exec = yes
+			event_target:pe_cit_sys = { star = { save_event_target_as = pe_msg_planet } }
+			pe_corp_msg = { KEY = pe_msg_cit_start }
+		}
 	}
 	option = { name = pe.315.b }
 }
@@ -65,5 +70,19 @@ country_event = {
 			}
 		}
 		log = "private_economy: pe.318 corporate citadel construction finished (upgrades finish at the next quarter)"
+	}
+}
+
+country_event = {
+	id = pe.319
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		pe_cit_exec = yes
+		if = {
+			limit = { is_ai = no }
+			event_target:pe_cit_sys = { star = { save_event_target_as = pe_msg_planet } }
+			pe_corp_msg = { KEY = pe_msg_cit_start }
+		}
 	}
 }

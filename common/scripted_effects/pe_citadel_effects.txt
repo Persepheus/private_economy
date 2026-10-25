@@ -15,8 +15,8 @@
 # is no longer ours goes to the richest other corporation, otherwise it is decommissioned.
 # Citadel fleet (holdings): flag pe_ccit, pe_ccit_k slot, pe_ccit_nm name, pe_ccit_l level,
 # pe_ccit_ul months left of an upgrade, pe_ccit_p platforms, pe_ccit_new (just built).
-# Call depths: pe_citadel_step 3 (pe_corp_step) -> pe_cit_exec, pe_corp_msg 4;
-# pe_cit_exec 1 (pe.315); pe_cit_war 1 (pe.100).
+# Call depths: pe_citadel_step 3 (pe_corp_step) -> pe_corp_msg 4; pe_cit_exec 1 (pe.315 /
+# pe.319, with the start message); pe_cit_war 1 (pe.100).
 
 # Country scope, quarterly.
 pe_citadel_step = {
@@ -113,6 +113,21 @@ pe_citadel_step = {
 					else_if = { limit = { check_variable = { which = pe_ccit_k value = 6 } } root = { subtract_variable = { which = pe_c6_cash value = prev.pe_ccit_v } change_variable = { which = pe_c6_citn value = 1 } set_variable = { which = pe_cit_cash value = pe_c6_cash } } }
 					else_if = { limit = { check_variable = { which = pe_ccit_k value = 7 } } root = { subtract_variable = { which = pe_c7_cash value = prev.pe_ccit_v } change_variable = { which = pe_c7_citn value = 1 } set_variable = { which = pe_cit_cash value = pe_c7_cash } } }
 					else_if = { limit = { check_variable = { which = pe_ccit_k value = 8 } } root = { subtract_variable = { which = pe_c8_cash value = prev.pe_ccit_v } change_variable = { which = pe_c8_citn value = 1 } set_variable = { which = pe_cit_cash value = pe_c8_cash } } }
+					# The design of its level (set_starbase_size keeps the old one): only the citadel's own
+					# ship, not the platforms (pe_ccit_dl = the level its design is for).
+					if = { limit = { NOT = { is_variable_set = pe_ccit_dl } } set_variable = { which = pe_ccit_dl value = 1 } }
+					if = {
+						limit = { NOT = { check_variable = { which = pe_ccit_dl value = pe_ccit_l } } }
+						if = {
+							limit = { check_variable = { which = pe_ccit_l value = 2 } }
+							every_owned_ship = { limit = { is_ship_size = starbase_deep_space_citadel_2 } set_ship_design = { random_existing_design = starbase_deep_space_citadel_2 } }
+						}
+						else_if = {
+							limit = { check_variable = { which = pe_ccit_l value = 3 } }
+							every_owned_ship = { limit = { is_ship_size = starbase_deep_space_citadel_3 } set_ship_design = { random_existing_design = starbase_deep_space_citadel_3 } }
+						}
+						set_variable = { which = pe_ccit_dl value = pe_ccit_l }
+					}
 					# An upgrade under way.
 					if = {
 						limit = { check_variable = { which = pe_ccit_ul value > 0 } }
@@ -123,6 +138,7 @@ pe_citadel_step = {
 							change_variable = { which = pe_ccit_l value = 1 }
 							if = { limit = { check_variable = { which = pe_ccit_l value = 2 } } starbase = { set_starbase_size = starbase_deep_space_citadel_2 } }
 							else_if = { limit = { check_variable = { which = pe_ccit_l value = 3 } } starbase = { set_starbase_size = starbase_deep_space_citadel_3 } }
+							set_variable = { which = pe_ccit_dl value = 0 }
 							if = {
 								limit = { root = { is_ai = no } }
 								solar_system = { star = { save_event_target_as = pe_msg_planet } }
@@ -243,7 +259,7 @@ pe_citadel_step = {
 						else_if = { limit = { check_variable = { which = pe_cit_k value = 8 } } random_owned_colony = { limit = { has_planet_flag = pe_hq_8 solar_system = { pe_cit_system_ok = { K = 8 } } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_owned_planet = { limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = 8 } solar_system = { pe_cit_system_ok = { K = 8 } } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_planet_within_border = { limit = { OR = { has_planet_flag = pe_swc_8 AND = { is_variable_set = pe_afc check_variable = { which = pe_afc value = 8 } } } solar_system = { pe_cit_system_ok = { K = 8 } } } solar_system = { save_event_target_as = pe_cit_sys } root = { set_variable = { which = pe_cit_found value = 1 } } } } if = { limit = { check_variable = { which = pe_cit_found value = 0 } } random_system_within_border = { limit = { pe_cit_system_ok = { K = 8 } count_system_planet = { count >= 2 limit = { has_orbital_station = yes orbital_station = { has_fleet_flag = pe_stc_8 } } } } save_event_target_as = pe_cit_sys root = { set_variable = { which = pe_cit_found value = 1 } } } } }
 						if = {
 							limit = { check_variable = { which = pe_cit_found value = 1 } }
-							if = { limit = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } pe_cit_exec = yes }
+							if = { limit = { OR = { is_ai = yes has_policy_flag = pe_order_laissez_faire } } country_event = { id = pe.319 } }
 							else = { country_event = { id = pe.315 } }
 						}
 						log = "private_economy: corporate citadel: slot \\[Root.pe_cit_k], system found \\[Root.pe_cit_found]"

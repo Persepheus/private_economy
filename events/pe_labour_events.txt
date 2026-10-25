@@ -60,6 +60,9 @@ country_event = {
 	is_triggered_only = yes
 	location = event_target:pe_pat_planet
 
+	# The number for the option's tooltip (create_pop_group reads it from the planet).
+	immediate = { hidden_effect = { event_target:pe_pat_planet = { set_variable = { which = pe_gw_pops value = root.pe_gw_pops } } } }
+
 	# The guests must find the planet habitable and must not be purged here.
 	trigger = {
 		exists = event_target:pe_gw_species

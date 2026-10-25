@@ -258,7 +258,7 @@ pe_corp_furnace_build = {
 # appears for the holdings, flagged for its corporation (system variables pe_cit_k, pe_cit_nm).
 
 pe_corp_citadel_site = {
-	entity = ""
+	entity = "deep_space_01_starbase_citadel_section_1_entity"
 	construction_entity = "deep_space_01_starbase_citadel_section_1_entity"
 	portrait = "GFX_megastructure_construction_background"
 	place_entity_on_planet_plane = no
@@ -273,7 +273,7 @@ pe_corp_citadel_site = {
 }
 
 pe_corp_citadel_build = {
-	entity = ""
+	entity = "deep_space_01_starbase_citadel_section_1_entity"
 	construction_entity = "deep_space_01_starbase_citadel_section_1_entity"
 	portrait = "GFX_megastructure_construction_background"
 	place_entity_on_planet_plane = no

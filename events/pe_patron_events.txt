@@ -514,6 +514,8 @@ country_event = {
 	picture = GFX_evt_colony_settlement
 	is_triggered_only = yes
 
+	# The number for the option's tooltip (create_pop_group reads it from the planet).
+	immediate = { hidden_effect = { if = { limit = { exists = event_target:pe_pat_colony } event_target:pe_pat_colony = { set_variable = { which = pe_col_pops value = root.pe_col_pops } } } } }
 	trigger = {
 		exists = event_target:pe_pat_colony
 		event_target:pe_pat_colony = { NOT = { exists = owner } }
