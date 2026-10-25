@@ -278,8 +278,8 @@ pe_arms_centre = {
 	pop_pe_private_metallurgist_bonus_workforce_mult = 0.1
 }
 
-# Private automation (pe_auto_cover_step): the firms carry the energy upkeep of their automated
-# jobs, so this share of the budget line "Automated Workforce" is taken off (multiplier).
+# Private automation (pe_automation, planet modifier): the firms carry the energy upkeep of their
+# automated jobs, so this share of the planet's upkeep for automated workforce is taken off.
 pe_auto_cover = {
 	planet_automated_jobs_energy_upkeep_mult = -0.01
 }

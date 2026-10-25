@@ -155,3 +155,6 @@
  mod_pop_pe_private_physicist_bonus_workforce_mult:0 "Private Physicist Workforce"
  mod_pop_pe_private_biologist_bonus_workforce_mult:0 "Private Biologist Workforce"
  mod_pop_pe_private_engineer_bonus_workforce_mult:0 "Private Engineer Workforce"
+ pe.308.name:0 "Defence Contract Ended"
+ pe.308.desc:0 "Our defence contract with §Y[Root.GetPeCorpName308]§! has ended: the corporation has run into a crisis (its cash is used up) or no longer exists. Our fleet upkeep is ours alone again. A new corporation may offer a contract in a few years."
+ pe.308.a:0 "Understood."

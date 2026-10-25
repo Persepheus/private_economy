@@ -231,10 +231,18 @@ pe_corp_fleet_war_start = {
 					check_variable = { which = pe_fp value < root.pe_wl_need }
 					root = { check_variable = { which = pe_wl_spent value < pe_wl_budget } }
 				}
-				if = { limit = { root = { check_variable = { which = pe_fl_class value = 1 } } } create_ship = { name = random random_existing_design = corvette } }
-				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 2 } } } create_ship = { name = random random_existing_design = destroyer } }
-				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 3 } } } create_ship = { name = random random_existing_design = cruiser } }
-				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 4 } } } create_ship = { name = random random_existing_design = battleship } }
+				# The best class we have a design for: without one, the next smaller class (and from
+				# then on, pe_fl_class / pe_fl_ccost); without any, no ship and no cost (class 0).
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n0 }
+				if = { limit = { root = { check_variable = { which = pe_fl_class value = 4 } } } create_ship = { name = random random_existing_design = battleship } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } root = { check_variable = { which = pe_fl_class value >= 3 } } } root = { set_variable = { which = pe_fl_class value = 3 } set_variable = { which = pe_fl_ccost value = 600 } set_variable = { which = pe_fl_cprice value = 160 } } create_ship = { name = random random_existing_design = cruiser } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } root = { check_variable = { which = pe_fl_class value >= 2 } } } root = { set_variable = { which = pe_fl_class value = 2 } set_variable = { which = pe_fl_ccost value = 300 } set_variable = { which = pe_fl_cprice value = 80 } } create_ship = { name = random random_existing_design = destroyer } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } root = { check_variable = { which = pe_fl_class value >= 1 } } } root = { set_variable = { which = pe_fl_class value = 1 } set_variable = { which = pe_fl_ccost value = 150 } set_variable = { which = pe_fl_cprice value = 40 } } create_ship = { name = random random_existing_design = corvette } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } } root = { set_variable = { which = pe_fl_class value = 0 } set_variable = { which = pe_fl_ccost value = 0 } set_variable = { which = pe_fl_cprice value = 0 } } }
 				root = {
 					change_variable = { which = pe_wl_spent value = pe_fl_ccost }
 					change_variable = { which = pe_wl_ships value = 1 }
@@ -294,10 +302,18 @@ pe_corp_fleet_clear_start = {
 					check_variable = { which = pe_fp value < root.pe_cl_need }
 					root = { check_variable = { which = pe_cl_spent value < pe_cl_budget } }
 				}
-				if = { limit = { root = { check_variable = { which = pe_fl_class value = 1 } } } create_ship = { name = random random_existing_design = corvette } }
-				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 2 } } } create_ship = { name = random random_existing_design = destroyer } }
-				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 3 } } } create_ship = { name = random random_existing_design = cruiser } }
-				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 4 } } } create_ship = { name = random random_existing_design = battleship } }
+				# The best class we have a design for: without one, the next smaller class (and from
+				# then on, pe_fl_class / pe_fl_ccost); without any, no ship and no cost (class 0).
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n0 }
+				if = { limit = { root = { check_variable = { which = pe_fl_class value = 4 } } } create_ship = { name = random random_existing_design = battleship } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } root = { check_variable = { which = pe_fl_class value >= 3 } } } root = { set_variable = { which = pe_fl_class value = 3 } set_variable = { which = pe_fl_ccost value = 600 } set_variable = { which = pe_fl_cprice value = 160 } } create_ship = { name = random random_existing_design = cruiser } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } root = { check_variable = { which = pe_fl_class value >= 2 } } } root = { set_variable = { which = pe_fl_class value = 2 } set_variable = { which = pe_fl_ccost value = 300 } set_variable = { which = pe_fl_cprice value = 80 } } create_ship = { name = random random_existing_design = destroyer } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } root = { check_variable = { which = pe_fl_class value >= 1 } } } root = { set_variable = { which = pe_fl_class value = 1 } set_variable = { which = pe_fl_ccost value = 150 } set_variable = { which = pe_fl_cprice value = 40 } } create_ship = { name = random random_existing_design = corvette } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } } root = { set_variable = { which = pe_fl_class value = 0 } set_variable = { which = pe_fl_ccost value = 0 } set_variable = { which = pe_fl_cprice value = 0 } } }
 				root = {
 					change_variable = { which = pe_cl_spent value = pe_fl_ccost }
 					change_variable = { which = pe_cl_ships value = 1 }
@@ -595,10 +611,18 @@ pe_corp_convoy_start = {
 					check_variable = { which = pe_fp value < root.pe_cv_need }
 					root = { check_variable = { which = pe_cv_spent value < pe_cv_budget } }
 				}
-				if = { limit = { root = { check_variable = { which = pe_fl_class value = 1 } } } create_ship = { name = random random_existing_design = corvette } }
-				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 2 } } } create_ship = { name = random random_existing_design = destroyer } }
-				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 3 } } } create_ship = { name = random random_existing_design = cruiser } }
-				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 4 } } } create_ship = { name = random random_existing_design = battleship } }
+				# The best class we have a design for: without one, the next smaller class (and from
+				# then on, pe_fl_class / pe_fl_ccost); without any, no ship and no cost (class 0).
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n0 }
+				if = { limit = { root = { check_variable = { which = pe_fl_class value = 4 } } } create_ship = { name = random random_existing_design = battleship } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } root = { check_variable = { which = pe_fl_class value >= 3 } } } root = { set_variable = { which = pe_fl_class value = 3 } set_variable = { which = pe_fl_ccost value = 600 } set_variable = { which = pe_fl_cprice value = 160 } } create_ship = { name = random random_existing_design = cruiser } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } root = { check_variable = { which = pe_fl_class value >= 2 } } } root = { set_variable = { which = pe_fl_class value = 2 } set_variable = { which = pe_fl_ccost value = 300 } set_variable = { which = pe_fl_cprice value = 80 } } create_ship = { name = random random_existing_design = destroyer } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } root = { check_variable = { which = pe_fl_class value >= 1 } } } root = { set_variable = { which = pe_fl_class value = 1 } set_variable = { which = pe_fl_ccost value = 150 } set_variable = { which = pe_fl_cprice value = 40 } } create_ship = { name = random random_existing_design = corvette } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } } root = { set_variable = { which = pe_fl_class value = 0 } set_variable = { which = pe_fl_ccost value = 0 } set_variable = { which = pe_fl_cprice value = 0 } } }
 				root = {
 					change_variable = { which = pe_cv_spent value = pe_fl_ccost }
 					change_variable = { which = pe_cv_ships value = 1 }
@@ -3278,10 +3302,18 @@ pe_corp_defence_start = {
 					check_variable = { which = pe_fp value < root.pe_df_need }
 					root = { check_variable = { which = pe_df_spent value < pe_df_budget } }
 				}
-				if = { limit = { root = { check_variable = { which = pe_fl_class value = 1 } } } create_ship = { name = random random_existing_design = corvette } }
-				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 2 } } } create_ship = { name = random random_existing_design = destroyer } }
-				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 3 } } } create_ship = { name = random random_existing_design = cruiser } }
-				else_if = { limit = { root = { check_variable = { which = pe_fl_class value = 4 } } } create_ship = { name = random random_existing_design = battleship } }
+				# The best class we have a design for: without one, the next smaller class (and from
+				# then on, pe_fl_class / pe_fl_ccost); without any, no ship and no cost (class 0).
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n0 }
+				if = { limit = { root = { check_variable = { which = pe_fl_class value = 4 } } } create_ship = { name = random random_existing_design = battleship } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } root = { check_variable = { which = pe_fl_class value >= 3 } } } root = { set_variable = { which = pe_fl_class value = 3 } set_variable = { which = pe_fl_ccost value = 600 } set_variable = { which = pe_fl_cprice value = 160 } } create_ship = { name = random random_existing_design = cruiser } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } root = { check_variable = { which = pe_fl_class value >= 2 } } } root = { set_variable = { which = pe_fl_class value = 2 } set_variable = { which = pe_fl_ccost value = 300 } set_variable = { which = pe_fl_cprice value = 80 } } create_ship = { name = random random_existing_design = destroyer } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } root = { check_variable = { which = pe_fl_class value >= 1 } } } root = { set_variable = { which = pe_fl_class value = 1 } set_variable = { which = pe_fl_ccost value = 150 } set_variable = { which = pe_fl_cprice value = 40 } } create_ship = { name = random random_existing_design = corvette } }
+				export_trigger_value_to_variable = { trigger = num_ships variable = pe_fl_n1 }
+				if = { limit = { check_variable = { which = pe_fl_n1 value = pe_fl_n0 } } root = { set_variable = { which = pe_fl_class value = 0 } set_variable = { which = pe_fl_ccost value = 0 } set_variable = { which = pe_fl_cprice value = 0 } } }
 				root = { change_variable = { which = pe_df_spent value = pe_fl_ccost } }
 				export_trigger_value_to_variable = { trigger = fleet_power variable = pe_fp }
 			}

@@ -3191,8 +3191,9 @@ ${CORPS.map(k => `	set_variable = { which = ${C(k, 'wfr')} value = ${C(k, 'wfq')
 // from 15000 cash): we get ships_upkeep_mult, it pays the value saved every quarter (base
 // prices: energy 1, alloys 4, trade 1). In return: arms orders (+10% workforce of the private
 // metallurgists on planets with its steelworks), first call for war leases, and an arms centre
-// at its headquarters. It ends when its cash falls below 1000. One contract per empire.
-const DC_MIN = 5000, DC_RICH = 15000, DC_END = 1000;
+// at its headquarters. It ends in a crisis (cash below 0 at the end of a quarter; its loans may
+// take it below 1000 for a while) or when the corporation is gone. One contract per empire.
+const DC_MIN = 5000, DC_RICH = 15000, DC_END = 0;
 corp += `
 # --- Defence contract (pe.306) -------------------------------------------------------------
 # Country scope, quarterly (pe_corp_step, call depth 3, no calls). pe_dc_k = the contractor's
@@ -3200,18 +3201,14 @@ corp += `
 # quarter. Planet modifiers: pe_arms_orders (its steelworks), pe_arms_centre (headquarters).
 pe_dc_step = {
 	if = { limit = { NOT = { is_variable_set = pe_dc_k } } set_variable = { which = pe_dc_k value = 0 } }
-	# A running contract: still valid (the corporation exists and has ${DC_END} cash)?
+	# A running contract: still valid (the corporation exists and its cash is not below ${DC_END})?
 	set_variable = { which = pe_dc_ok value = 0 }
 ${CORPS.map(k => `\tif = { limit = { check_variable = { which = pe_dc_k value = ${k} } check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'name')} value = pe_dc_nm } check_variable = { which = ${C(k, 'cash')} value >= ${DC_END} } } set_variable = { which = pe_dc_ok value = 1 } }`).join('\n')}
 	if = {
 		limit = { check_variable = { which = pe_dc_k value > 0 } check_variable = { which = pe_dc_ok value = 0 } }
 		set_variable = { which = pe_dc_k value = 0 }
 		set_timed_country_flag = { flag = pe_dc_cd days = 1080 }
-		if = {
-			limit = { is_ai = no }
-			capital_scope = { save_event_target_as = pe_msg_planet }
-			create_message = { type = pe_private_economy localization = pe_msg_dc_end days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } }
-		}
+		if = { limit = { is_ai = no } country_event = { id = pe.308 } }
 	}
 	# Its share by its cash, and its payment for the quarter: our fleet upkeep x share / (100 - share).
 	set_variable = { which = pe_dc_paid value = 0 }
@@ -3344,7 +3341,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
 
 // Events that name a corporation: each reads its own variable pe_cn<event>, set in its
 // immediate (pe_corp_cur_name is shared and may change before the window is read).
-const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298, 300, 306];
+const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298, 300, 306, 308];
 const corpLoc = (name, varName, keyOf) => dtext(name, varName, NAME_IDS.map(id => [id, keyOf(id)]), 'pe_corp_line_none');
 write('common/scripted_loc/pe_corp_loc_generated.txt', header + locDt + `# Corporation names (country scope).\n` +
   corpLoc('GetPeCorpName', 'pe_corp_cur_name', id => `pe_cname_${id}`) + CORP_EVENTS.map(e => corpLoc(`GetPeCorpName${e}`, `pe_cn${e}`, id => `pe_cname_${id}`)).join('') + corpLoc('GetPeCorpA', 'pe_corp_a_name', id => `pe_cname_${id}`) + corpLoc('GetPeCorpB', 'pe_corp_b_name', id => `pe_cname_${id}`) +

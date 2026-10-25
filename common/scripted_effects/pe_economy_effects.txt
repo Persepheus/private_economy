@@ -1191,12 +1191,189 @@ pe_firm_book = {
 # buying, minus the value of the state district it replaces (weighted like a variant).
 # Colony scope: private automation of the three worker jobs vanilla automates.
 pe_automation = {
+	set_variable = { which = pe_auto_pp value = 0 }
 	pe_auto_book = { JOB = miner }
 	pe_auto_invest = { JOB = miner }
 	pe_auto_book = { JOB = technician }
 	pe_auto_invest = { JOB = technician }
 	pe_auto_book = { JOB = farmer }
 	pe_auto_invest = { JOB = farmer }
+	# The firms carry the energy upkeep of their automated jobs here (pe_auto_pp per month, 4 per
+	# automated job): this share of the planet's upkeep for automated workforce is taken off
+	# (planet modifier pe_auto_cover, -1% per point; the upkeep category is a planet one). Vanilla
+	# automation here (state jobs) is estimated: jobs x automated share x 4 (workers) / 8 (specialists).
+	if = { limit = { has_modifier = pe_auto_cover } remove_modifier = pe_auto_cover }
+	if = {
+		limit = { check_variable = { which = pe_auto_pp value > 0 } }
+		set_variable = { which = pe_auto_v value = 0 }
+		if = {
+			limit = { check_modifier_value = { modifier = job_miner_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_miner_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = miner } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = miner } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.04 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_technician_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_technician_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = technician } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = technician } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.04 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_farmer_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_farmer_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = farmer } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = farmer } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.04 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_artisan_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_artisan_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = artisan } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = artisan } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.04 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_foundry_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_foundry_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = foundry } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = foundry } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.04 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_soldier_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_soldier_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = soldier } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = soldier } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.04 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_fabricator_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_fabricator_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = fabricator } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = fabricator } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.04 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_replicator_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_replicator_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = replicator } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = replicator } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.04 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_physicist_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_physicist_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = physicist } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = physicist } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.08 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_biologist_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_biologist_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = biologist } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = biologist } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.08 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_engineer_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_engineer_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = engineer } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = engineer } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.08 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_bureaucrat_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_bureaucrat_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = bureaucrat } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = bureaucrat } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.08 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_trader_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_trader_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = trader } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = trader } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.08 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_entertainer_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_entertainer_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = entertainer } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = entertainer } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.08 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_healthcare_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_healthcare_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = healthcare } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = healthcare } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.08 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		if = {
+			limit = { check_modifier_value = { modifier = job_roboticist_automated_workforce_mult value > 0 } }
+			export_modifier_to_variable = { modifier = job_roboticist_automated_workforce_mult variable = pe_auto_vm }
+			export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = roboticist } variable = pe_auto_vj }
+			export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = roboticist } variable = pe_tmp }
+			change_variable = { which = pe_auto_vj value = pe_tmp }
+			multiply_variable = { which = pe_auto_vj value = pe_auto_vm }
+			multiply_variable = { which = pe_auto_vj value = 0.08 }
+			change_variable = { which = pe_auto_v value = pe_auto_vj }
+		}
+		set_variable = { which = pe_auto_f value = pe_auto_pp }
+		change_variable = { which = pe_auto_v value = pe_auto_pp }
+		divide_variable = { which = pe_auto_f value = pe_auto_v }
+		multiply_variable = { which = pe_auto_f value = 100 }
+		round_variable = pe_auto_f
+		if = { limit = { check_variable = { which = pe_auto_f value > 100 } } set_variable = { which = pe_auto_f value = 100 } }
+		if = { limit = { check_variable = { which = pe_auto_f value > 0 } } add_modifier = { modifier = pe_auto_cover days = -1 multiplier = pe_auto_f } }
+	}
 }
 
 # Colony scope. Like the vanilla automation buildings: level I +25% automated workforce
@@ -1238,6 +1415,7 @@ pe_auto_book = {
 			set_variable = { which = pe_tmp2 value = pe_tmp }
 			divide_variable = { which = pe_tmp2 value = 3 }
 			change_variable = { which = pe_auto_p value = pe_tmp2 }
+			prev = { change_variable = { which = pe_auto_pp value = root.pe_tmp2 } }
 			multiply_variable = { which = pe_tmp value = pe_s_energy }
 			subtract_variable = { which = pe_capital value = pe_tmp }
 		}
@@ -1283,6 +1461,7 @@ pe_auto_book = {
 			# The firms carry the energy upkeep (pe_aup in their accounts); the state's upkeep line
 			# is taken off by the country modifier pe_auto_cover (pe_auto_cover_step).
 			root = { change_variable = { which = pe_auto_p value = pe_aen } }
+			change_variable = { which = pe_auto_pp value = root.pe_aen }
 			every_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_wf_$JOB$ value > 0 } }
 				if = {
@@ -2269,42 +2448,12 @@ pe_sprawl_step = {
 	if = { limit = { check_variable = { which = pe_spr_hd value > 0 } } add_modifier = { modifier = pe_sprawl_corp_hab_d days = -1 multiplier = pe_spr_hd } }
 }
 
-# Country scope, quarterly (after the planets): the energy upkeep the engine charges for the
-# automated jobs of private automation (pe_auto_p, per month: 4 per automated job, summed by
-# pe_auto_book) is carried by the firms, so a country modifier takes that share off our budget
-# line "Automated Workforce" (pe_auto_cover, -1% per point, pe_auto_m). The line without it:
-# observed / (1 - pe_auto_m %). At most 95% while any colony also has vanilla automation (so it
-# stays visible), otherwise up to 100%.
+# Country scope, quarterly (after the planets): the private automation (pe_auto_p, energy a
+# month) against our budget line "Automated Workforce" (log). The cover itself is a planet
+# modifier (pe_automation); the country modifier of 0.34.1 did not work and goes.
 pe_auto_cover_step = {
-	if = { limit = { NOT = { is_variable_set = pe_auto_m } } set_variable = { which = pe_auto_m value = 0 } }
+	if = { limit = { has_modifier = pe_auto_cover } remove_modifier = pe_auto_cover }
 	export_trigger_value_to_variable = { trigger = resource_expenses_compare parameters = { resource = energy category = planet_automated_jobs } variable = pe_auto_e }
 	if = { limit = { NOT = { is_variable_set = pe_auto_e } } set_variable = { which = pe_auto_e value = 0 } }
-	set_variable = { which = pe_auto_max value = 100 }
-	if = {
-		limit = { any_owned_colony = { OR = { check_modifier_value = { modifier = job_artisan_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_biologist_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_bureaucrat_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_coordinator_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_engineer_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_entertainer_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_fabricator_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_farmer_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_foundry_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_healthcare_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_miner_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_physicist_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_replicator_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_roboticist_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_soldier_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_technician_automated_workforce_mult value > 0 } check_modifier_value = { modifier = job_trader_automated_workforce_mult value > 0 } } } }
-		set_variable = { which = pe_auto_max value = 95 }
-	}
-	if = {
-		limit = { check_variable = { which = pe_auto_p value <= 0 } }
-		set_variable = { which = pe_auto_m value = 0 }
-	}
-	else_if = {
-		limit = { check_variable = { which = pe_auto_e value > 0.5 } }
-		set_variable = { which = pe_tmp value = 100 }
-		subtract_variable = { which = pe_tmp value = pe_auto_m }
-		divide_variable = { which = pe_tmp value = 100 }
-		if = { limit = { check_variable = { which = pe_tmp value < 0.05 } } set_variable = { which = pe_tmp value = 0.05 } }
-		set_variable = { which = pe_auto_b value = pe_auto_e }
-		divide_variable = { which = pe_auto_b value = pe_tmp }
-		set_variable = { which = pe_auto_m value = pe_auto_p }
-		divide_variable = { which = pe_auto_m value = pe_auto_b }
-		multiply_variable = { which = pe_auto_m value = 100 }
-		round_variable = pe_auto_m
-	}
-	# (Line at 0 with the modifier: all of it is private; the share stays.)
-	if = { limit = { check_variable = { which = pe_auto_m value > pe_auto_max } } set_variable = { which = pe_auto_m value = pe_auto_max } }
-	if = { limit = { check_variable = { which = pe_auto_m value < 0 } } set_variable = { which = pe_auto_m value = 0 } }
-	if = { limit = { has_modifier = pe_auto_cover } remove_modifier = pe_auto_cover }
-	if = { limit = { check_variable = { which = pe_auto_m value > 0 } } add_modifier = { modifier = pe_auto_cover days = -1 multiplier = pe_auto_m } }
-	log = "private_economy: automation cover: private \\[Root.pe_auto_p] of \\[Root.pe_auto_e] energy a month observed, cover now \\[Root.pe_auto_m] %"
+	log = "private_economy: automation cover: private \\[Root.pe_auto_p] energy a month, budget line \\[Root.pe_auto_e] (after the planet covers)"
 }

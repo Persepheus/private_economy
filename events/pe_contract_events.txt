@@ -1,6 +1,7 @@
 # Defence contract (pe_dc_step in pe_corp_effects_generated.txt).
 #   pe.306  an industry corporation offers to carry part of our fleet upkeep (human empires)
 #   pe.307  debug: an offer now
+#   pe.308  the contract has ended (human empires)
 namespace = pe
 
 country_event = {
@@ -53,4 +54,15 @@ country_event = {
 		set_variable = { which = pe_fl_force value = 0 }
 		log = "private_economy: pe.307 defence contract: contractor slot [Root.pe_dc_k], candidate [Root.pe_dc_cand], share [Root.pe_dc_s]"
 	}
+}
+
+# The defence contract has ended: the corporation is in a crisis or gone.
+country_event = {
+	id = pe.308
+	title = pe.308.name
+	desc = pe.308.desc
+	picture = GFX_evt_federation_fleet
+	is_triggered_only = yes
+	immediate = { hidden_effect = { set_variable = { which = pe_cn308 value = pe_dc_nm } } }
+	option = { name = pe.308.a }
 }

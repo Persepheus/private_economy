@@ -155,3 +155,6 @@
  mod_pop_pe_private_physicist_bonus_workforce_mult:0 "Arbeitskraft privater Physiker"
  mod_pop_pe_private_biologist_bonus_workforce_mult:0 "Arbeitskraft privater Biologen"
  mod_pop_pe_private_engineer_bonus_workforce_mult:0 "Arbeitskraft privater Ingenieure"
+ pe.308.name:0 "Rüstungsvertrag beendet"
+ pe.308.desc:0 "Unser Rüstungsvertrag mit §Y[Root.GetPeCorpName308]§! ist beendet: Der Konzern ist in eine Krise geraten (seine Kasse ist aufgebraucht) oder existiert nicht mehr. Den Unterhalt unserer Flotte tragen wir wieder allein. In einigen Jahren kann ein Konzern einen neuen Vertrag anbieten."
+ pe.308.a:0 "Verstanden."

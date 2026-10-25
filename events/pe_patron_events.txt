@@ -688,6 +688,12 @@ country_event = {
 					set_location = root.capital_scope
 				}
 			}
+			# No design for it: the patron gives its value in alloys instead.
+			if = {
+				limit = { last_created_fleet = { num_ships < 1 } }
+				delete_fleet = last_created_fleet
+				add_resource = { alloys = 100 }
+			}
 			change_variable = { which = pe_mag_rep value = 1 }
 			remove_country_flag = pe_ship_lost
 			remove_country_flag = pe_ship_lost_sci

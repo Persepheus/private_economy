@@ -39,6 +39,21 @@ Ein laufendes Spiel kann weiterlaufen.
 - Forschungsinstitut: Ausbau nur, solange am Hauptsitz mindestens 100 Pops frei sind (es soll keine Arbeiter abziehen; am Konzern-Habitat hielt es die Gründungen auf).
 - Log-Zeile des Konzern-Habitats ohne Fehler, wenn kein Standort gesucht wurde.
 
+## 0.34.3
+- **Private Automatisierung, zweiter Anlauf:**
+  - Der Reichsmodifikator aus 0.34.1 wirkte nicht, weil der Unterhalt automatisierter Jobs eine Planeten-Kategorie ist. Deshalb pendelte der Anteil zwischen 5 und 95 %.
+  - Jetzt bekommt jeder Planet mit privater Automatisierung den Planeten-Modifikator „Private Automatisierung“: Er senkt den Unterhalt dort um den privaten Anteil.
+  - Ohne staatliche Vanilla-Automatisierung auf dem Planeten sind das 100 %. Mit ihr wird der staatliche Teil geschätzt (Jobs × Automatisierungsanteil × 4 für Arbeiter, 8 für Spezialisten).
+  - Die Schätzung der privaten Kosten traf die echte Zeile im Log fast genau.
+  - Prüfen: Zeile „Automatisierte Arbeitskraft“ nach einem Quartal nahe 0. Im game.log: „automation cover: private P energy a month, budget line E“.
+- **Rüstungsvertrag:**
+  - Er endet nur noch in einer Krise, also mit Kasse unter 0 am Quartalsende, oder wenn der Konzern verschwindet. Bisher endete er schon unter 1000, und Konzerne verleihen Kredite bis −200 Kasse; deshalb endete deiner nach einem Quartal.
+  - Das Ende kommt jetzt als Fenster (pe.308) statt als Nachricht.
+- **Unbekannter Schiffsentwurf:**
+  - Konzernflotten (Kriegsleasing, Räumung, Konvoischutz, Schutzflotte) nehmen ohne Entwurf der gewünschten Klasse die nächstkleinere, für den Rest der Flotte, mit passendem Preis.
+  - Ohne jeden Entwurf entsteht kein Schiff und es kostet nichts.
+  - Eine Schiffsspende eines Mäzens ohne passenden Entwurf wird zu 100 Legierungen.
+
 ## Konsole
 - `event pe.307`: sofort ein Angebot (wenn keiner läuft). Der reichste Industriekonzern bekommt dafür mindestens 5000 Kasse.
 
