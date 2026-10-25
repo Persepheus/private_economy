@@ -60,3 +60,8 @@ Ein laufendes Spiel kann weiterlaufen.
 ## Offen (erst im Spiel prüfbar)
 - Ob der Ausbau per `set_starbase_size` auf Stufe II/III sauber funktioniert. Vanilla hat nur eine Citadel-Megastruktur (`deep_space_citadel_0`, den Bau); Stufe II und III sind Sternenbasis-Stufen der Citadel (`next_level`) und werden wie eine Sternenbasis ausgebaut, nicht wie ein Dyson-Schwarm.
 - Ob die Holdings Plattformen-Entwürfe haben (sonst entstehen keine Plattformen und es kostet nichts).
+
+## 0.36.3
+
+- **Maschinen-Leasing (pe.212) wird erstattet:** Nach Annahme des Leasings steigt die Vanilla-Zeile „Automatisierte Jobs“ im nächsten Monat. Ab diesem Monat steigt „Private Automatisierung (Erstattung)“ um denselben Betrag, nicht erst im nächsten Quartal. Die Erstattung wird jetzt jeden Monat gegen die aktuelle Budgetzeile neu berechnet.
+- Log am Quartalsende: `automation refund: private X of Y energy a month, budget line Z`. X ist die Erstattung, Y die Schätzung der privaten Kosten. Liegt Y deutlich über Z, ist die Schätzung zu hoch; liegt X deutlich unter dem Leasing-Anteil, ist sie zu niedrig.

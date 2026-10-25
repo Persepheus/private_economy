@@ -30,6 +30,7 @@ country_event = {
 			set_variable = { which = pe_months value = 0 }
 			pe_quarterly = yes
 		}
+		pe_auto_cover_step = yes
 	}
 }
 

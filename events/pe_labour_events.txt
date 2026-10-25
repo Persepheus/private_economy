@@ -132,6 +132,11 @@ country_event = {
 			else_if = { limit = { root = { check_variable = { which = pe_lab_job value = 2 } } } add_modifier = { modifier = pe_leasing_technician days = 1800 multiplier = root.pe_lease_mult } }
 			else = { add_modifier = { modifier = pe_leasing_farmer days = 1800 multiplier = root.pe_lease_mult } }
 			check_planet_employment = yes
+			hidden_effect = {
+				if = { limit = { root = { check_variable = { which = pe_lab_job value = 1 } } } pe_lease_est = { JOB = miner } }
+				else_if = { limit = { root = { check_variable = { which = pe_lab_job value = 2 } } } pe_lease_est = { JOB = technician } }
+				else = { pe_lease_est = { JOB = farmer } }
+			}
 		}
 		ai_chance = { factor = 80 }
 	}
