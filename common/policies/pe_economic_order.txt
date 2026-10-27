@@ -24,9 +24,9 @@ pe_economic_order = {
 			}
 			hidden_effect = { pe_command_economy = yes }
 		}
+		# AI empires never choose it (0.42: pe_ai_order).
 		ai_weight = {
-			weight = 50
-			modifier = { factor = 3 is_authoritarian = yes }
+			weight = 0
 		}
 	}
 	option = {
@@ -42,8 +42,8 @@ pe_economic_order = {
 			}
 		}
 		ai_weight = {
-			weight = 80
-			modifier = { factor = 2 is_authoritarian = yes }
+			weight = 100
+			modifier = { factor = 0 NOT = { pe_ai_order_guided = yes } }
 		}
 	}
 	option = {
@@ -60,6 +60,7 @@ pe_economic_order = {
 		}
 		ai_weight = {
 			weight = 100
+			modifier = { factor = 0 NOT = { pe_ai_order_mixed = yes } }
 		}
 	}
 	option = {
@@ -75,9 +76,8 @@ pe_economic_order = {
 			}
 		}
 		ai_weight = {
-			weight = 80
-			modifier = { factor = 2 is_egalitarian = yes }
-			modifier = { factor = 2 has_authority = auth_corporate }
+			weight = 100
+			modifier = { factor = 0 NOT = { pe_ai_order_fm = yes } }
 		}
 	}
 	option = {
@@ -93,8 +93,8 @@ pe_economic_order = {
 			}
 		}
 		ai_weight = {
-			weight = 30
-			modifier = { factor = 5 has_authority = auth_corporate }
+			weight = 100
+			modifier = { factor = 0 NOT = { pe_ai_order_lf = yes } }
 		}
 	}
 }

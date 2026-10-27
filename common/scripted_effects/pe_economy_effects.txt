@@ -41,6 +41,7 @@
 #                    -> pe_patron (2) -> pe_patron_fire (3)   (pe_patron_effects.txt)
 #                    -> pe_deal (2) -> pe_deal_fire (3)   (pe_patron_effects.txt)
 #                    -> pe_ledgers (2) -> pe_ledger_planet (3) -> pe_ledger_bits (4)
+#                    -> pe_ai_order (2), pe_pool_bonds (2)
 #                                      -> pe_ledger_bits (3)
 # Variant lists and dispatchers: pe_firm_effects_generated.txt (tools/generate-firms.mjs).
 #
@@ -166,7 +167,46 @@ pe_init = {
 	}
 }
 
+# Country scope, quarterly: an AI empire keeps the economic order its government suits (0.42):
+# megacorporations and egalitarians Laissez-faire, fanatic authoritarians Guided,
+# authoritarians Mixed, everyone else Free Market. The policy's ai_weight says the same; this
+# also moves AI empires of older saves. The variables of on_enabled are set here as well.
+pe_ai_order = {
+	if = {
+		limit = { is_ai = yes }
+		if = {
+			limit = { pe_ai_order_lf = yes NOT = { has_policy_flag = pe_order_laissez_faire } }
+			set_policy = { policy = pe_economic_order option = pe_order_laissez_faire cooldown = yes }
+			set_variable = { which = pe_private_share value = 80 }
+			set_variable = { which = pe_savings_rate value = 0.2 }
+			log = "private_economy: AI economic order set to laissez_faire"
+		}
+		else_if = {
+			limit = { pe_ai_order_guided = yes NOT = { has_policy_flag = pe_order_guided } }
+			set_policy = { policy = pe_economic_order option = pe_order_guided cooldown = yes }
+			set_variable = { which = pe_private_share value = 20 }
+			set_variable = { which = pe_savings_rate value = 0.05 }
+			log = "private_economy: AI economic order set to guided"
+		}
+		else_if = {
+			limit = { pe_ai_order_mixed = yes NOT = { has_policy_flag = pe_order_mixed } }
+			set_policy = { policy = pe_economic_order option = pe_order_mixed cooldown = yes }
+			set_variable = { which = pe_private_share value = 40 }
+			set_variable = { which = pe_savings_rate value = 0.1 }
+			log = "private_economy: AI economic order set to mixed"
+		}
+		else_if = {
+			limit = { pe_ai_order_fm = yes NOT = { has_policy_flag = pe_order_free_market } }
+			set_policy = { policy = pe_economic_order option = pe_order_free_market cooldown = yes }
+			set_variable = { which = pe_private_share value = 60 }
+			set_variable = { which = pe_savings_rate value = 0.15 }
+			log = "private_economy: AI economic order set to free_market"
+		}
+	}
+}
+
 pe_quarterly = {
+	pe_ai_order = yes
 	pe_init = yes
 	# Command economy: no private economy at all (firms that appeared anyway are removed).
 	if = {
@@ -206,6 +246,51 @@ pe_quarterly = {
 	pe_labour = yes
 	pe_deal = yes
 	pe_ledgers = yes
+	pe_pool_bonds = yes
+}
+
+# Country scope, quarterly: idle private capital (0.42). Above 10000 the investor pool has
+# nothing to spend it on; it lends the surplus to the state, interest-free, as trade (only
+# what fits into our store). Below 3000 the state repays (pe_pb_held), at most 2000 a quarter
+# and only while it keeps at least twice that in its store.
+pe_pool_bonds = {
+	if = { limit = { NOT = { is_variable_set = pe_pb_held } } set_variable = { which = pe_pb_held value = 0 } }
+	if = {
+		limit = { check_variable = { which = pe_capital value > 10000 } }
+		set_variable = { which = pe_pb_x value = pe_capital }
+		change_variable = { which = pe_pb_x value = -10000 }
+		export_resource_stockpile_to_variable = { resource = trade variable = pe_pb_st }
+		export_resource_maximum_to_variable = { resource = trade variable = pe_pb_mx }
+		subtract_variable = { which = pe_pb_mx value = pe_pb_st }
+		if = { limit = { check_variable = { which = pe_pb_x value > pe_pb_mx } } set_variable = { which = pe_pb_x value = pe_pb_mx } }
+		floor_variable = pe_pb_x
+		if = {
+			limit = { check_variable = { which = pe_pb_x value >= 100 } }
+			subtract_variable = { which = pe_capital value = pe_pb_x }
+			change_variable = { which = pe_pb_held value = pe_pb_x }
+			add_resource = { trade = 1 mult = pe_pb_x }
+			if = { limit = { is_ai = no } log = "private_economy: state bonds: the investor pool lends us \\[Root.pe_pb_x] trade, held \\[Root.pe_pb_held]" }
+		}
+	}
+	else_if = {
+		limit = { check_variable = { which = pe_capital value < 3000 } check_variable = { which = pe_pb_held value > 0 } }
+		set_variable = { which = pe_pb_x value = 3000 }
+		subtract_variable = { which = pe_pb_x value = pe_capital }
+		if = { limit = { check_variable = { which = pe_pb_x value > 2000 } } set_variable = { which = pe_pb_x value = 2000 } }
+		if = { limit = { check_variable = { which = pe_pb_x value > pe_pb_held } } set_variable = { which = pe_pb_x value = pe_pb_held } }
+		export_resource_stockpile_to_variable = { resource = trade variable = pe_pb_st }
+		set_variable = { which = pe_tmp value = pe_pb_x }
+		multiply_variable = { which = pe_tmp value = 2 }
+		if = {
+			limit = { check_variable = { which = pe_pb_st value >= pe_tmp } }
+			add_resource = { trade = -1 mult = pe_pb_x }
+			change_variable = { which = pe_capital value = pe_pb_x }
+			subtract_variable = { which = pe_pb_held value = pe_pb_x }
+			if = { limit = { is_ai = no } log = "private_economy: state bonds: we repay \\[Root.pe_pb_x] trade, held \\[Root.pe_pb_held]" }
+		}
+	}
+	set_variable = { which = pe_pb_r value = pe_pb_held }
+	round_variable = pe_pb_r
 }
 
 # Country scope: a firm moves to another planet with its workers, at most once a year per

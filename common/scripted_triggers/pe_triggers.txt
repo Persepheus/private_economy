@@ -55,3 +55,11 @@ pe_rural_short = {
 		free_jobs_of_type = { job = pe_private_farmer value >= 100 }
 	}
 }
+
+# Country scope: the economic order an AI empire keeps (0.42; pe_ai_order, policy ai_weight):
+# megacorporations and egalitarians Laissez-faire, fanatic authoritarians Guided,
+# authoritarians Mixed, everyone else Free Market.
+pe_ai_order_lf = { OR = { is_megacorp = yes is_egalitarian = yes } }
+pe_ai_order_guided = { NOT = { pe_ai_order_lf = yes } has_ethic = ethic_fanatic_authoritarian }
+pe_ai_order_mixed = { NOT = { pe_ai_order_lf = yes } has_ethic = ethic_authoritarian }
+pe_ai_order_fm = { NOT = { pe_ai_order_lf = yes } NOT = { has_ethic = ethic_fanatic_authoritarian } NOT = { has_ethic = ethic_authoritarian } }

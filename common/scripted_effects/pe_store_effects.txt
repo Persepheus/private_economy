@@ -3,7 +3,7 @@
 # Storage contract: when a store is 95% full and still growing, a private firm that makes the
 # resource (a member of a corporation if there is one) offers to store the surplus: +20% of
 # the store's maximum (modifier pe_store_<res>, country_resource_max_<res>_add = 100 x
-# pe_sto_<s>_mult) for five years. Its fee: every month 5% of our net production of that
+# pe_sto_<s>_mult) for five years. Its fee: every month 20% of our net production of that
 # resource, which the firm sells on its own account (its base value goes to its corporation's
 # cash or to the investor pool). A warehouse of the firm (deposit d_pe_store_<s>) stands on
 # its planet while the contract runs. Six months before the end the firm offers to extend it
@@ -14,7 +14,8 @@
 # Offer: pe_sto_r (1-6, order of R below), pe_sto_kn, pe_sto_capn, pe_sto_feen,
 # event_target:pe_sto_planet; renewal: pe_sto_rr.
 #
-# Arms order: at most every ten years, when the alloy store is 90% full, our defence
+# Arms order: at most every ten years (AI empires five), when the alloy store is 90% full (AI
+# empires: half full or 10000 alloys), our defence
 # contractor (otherwise the richest industrial corporation) offers to build warships of our
 # newest design from half our alloys at its own yards (ours stay free; the price per ship
 # grows with armour, shield and reactor techs): delivered after a
@@ -233,7 +234,7 @@ pe_store_offer = {
 			multiply_variable = { which = pe_sto_capn value = 0.2 }
 			round_variable = pe_sto_capn
 			set_variable = { which = pe_sto_feen value = pe_sto_net }
-			multiply_variable = { which = pe_sto_feen value = 0.05 }
+			multiply_variable = { which = pe_sto_feen value = 0.2 }
 			round_variable = pe_sto_feen
 			if = { limit = { check_variable = { which = pe_sto_kn value = 1 } } set_variable = { which = pe_cn324 value = pe_c1_name } }
 			else_if = { limit = { check_variable = { which = pe_sto_kn value = 2 } } set_variable = { which = pe_cn324 value = pe_c2_name } }
@@ -337,12 +338,12 @@ pe_store_month = {
 	if = {
 		limit = { check_variable = { which = pe_sto_mi_m value > 0 } }
 		change_variable = { which = pe_sto_mi_m value = -1 }
-		# The fee: 5% of our net production, sold by the firm at its base value.
+		# The fee: 20% of our net production (0.42, before 5%), sold by the firm at its base value.
 		export_resource_income_to_variable = { resource = minerals variable = pe_sto_net }
 		if = {
 			limit = { check_variable = { which = pe_sto_net value > 0 } }
 			set_variable = { which = pe_sto_fee value = pe_sto_net }
-			multiply_variable = { which = pe_sto_fee value = 0.05 }
+			multiply_variable = { which = pe_sto_fee value = 0.2 }
 			add_resource = { minerals = -1 mult = pe_sto_fee }
 			multiply_variable = { which = pe_sto_fee value = 1 }
 			set_variable = { which = pe_sto_paid value = 0 }
@@ -398,12 +399,12 @@ pe_store_month = {
 	if = {
 		limit = { check_variable = { which = pe_sto_en_m value > 0 } }
 		change_variable = { which = pe_sto_en_m value = -1 }
-		# The fee: 5% of our net production, sold by the firm at its base value.
+		# The fee: 20% of our net production (0.42, before 5%), sold by the firm at its base value.
 		export_resource_income_to_variable = { resource = energy variable = pe_sto_net }
 		if = {
 			limit = { check_variable = { which = pe_sto_net value > 0 } }
 			set_variable = { which = pe_sto_fee value = pe_sto_net }
-			multiply_variable = { which = pe_sto_fee value = 0.05 }
+			multiply_variable = { which = pe_sto_fee value = 0.2 }
 			add_resource = { energy = -1 mult = pe_sto_fee }
 			multiply_variable = { which = pe_sto_fee value = 1 }
 			set_variable = { which = pe_sto_paid value = 0 }
@@ -459,12 +460,12 @@ pe_store_month = {
 	if = {
 		limit = { check_variable = { which = pe_sto_fo_m value > 0 } }
 		change_variable = { which = pe_sto_fo_m value = -1 }
-		# The fee: 5% of our net production, sold by the firm at its base value.
+		# The fee: 20% of our net production (0.42, before 5%), sold by the firm at its base value.
 		export_resource_income_to_variable = { resource = food variable = pe_sto_net }
 		if = {
 			limit = { check_variable = { which = pe_sto_net value > 0 } }
 			set_variable = { which = pe_sto_fee value = pe_sto_net }
-			multiply_variable = { which = pe_sto_fee value = 0.05 }
+			multiply_variable = { which = pe_sto_fee value = 0.2 }
 			add_resource = { food = -1 mult = pe_sto_fee }
 			multiply_variable = { which = pe_sto_fee value = 1 }
 			set_variable = { which = pe_sto_paid value = 0 }
@@ -520,12 +521,12 @@ pe_store_month = {
 	if = {
 		limit = { check_variable = { which = pe_sto_al_m value > 0 } }
 		change_variable = { which = pe_sto_al_m value = -1 }
-		# The fee: 5% of our net production, sold by the firm at its base value.
+		# The fee: 20% of our net production (0.42, before 5%), sold by the firm at its base value.
 		export_resource_income_to_variable = { resource = alloys variable = pe_sto_net }
 		if = {
 			limit = { check_variable = { which = pe_sto_net value > 0 } }
 			set_variable = { which = pe_sto_fee value = pe_sto_net }
-			multiply_variable = { which = pe_sto_fee value = 0.05 }
+			multiply_variable = { which = pe_sto_fee value = 0.2 }
 			add_resource = { alloys = -1 mult = pe_sto_fee }
 			multiply_variable = { which = pe_sto_fee value = 4 }
 			set_variable = { which = pe_sto_paid value = 0 }
@@ -581,12 +582,12 @@ pe_store_month = {
 	if = {
 		limit = { check_variable = { which = pe_sto_cg_m value > 0 } }
 		change_variable = { which = pe_sto_cg_m value = -1 }
-		# The fee: 5% of our net production, sold by the firm at its base value.
+		# The fee: 20% of our net production (0.42, before 5%), sold by the firm at its base value.
 		export_resource_income_to_variable = { resource = consumer_goods variable = pe_sto_net }
 		if = {
 			limit = { check_variable = { which = pe_sto_net value > 0 } }
 			set_variable = { which = pe_sto_fee value = pe_sto_net }
-			multiply_variable = { which = pe_sto_fee value = 0.05 }
+			multiply_variable = { which = pe_sto_fee value = 0.2 }
 			add_resource = { consumer_goods = -1 mult = pe_sto_fee }
 			multiply_variable = { which = pe_sto_fee value = 2 }
 			set_variable = { which = pe_sto_paid value = 0 }
@@ -642,12 +643,12 @@ pe_store_month = {
 	if = {
 		limit = { check_variable = { which = pe_sto_tr_m value > 0 } }
 		change_variable = { which = pe_sto_tr_m value = -1 }
-		# The fee: 5% of our net production, sold by the firm at its base value.
+		# The fee: 20% of our net production (0.42, before 5%), sold by the firm at its base value.
 		export_resource_income_to_variable = { resource = trade variable = pe_sto_net }
 		if = {
 			limit = { check_variable = { which = pe_sto_net value > 0 } }
 			set_variable = { which = pe_sto_fee value = pe_sto_net }
-			multiply_variable = { which = pe_sto_fee value = 0.05 }
+			multiply_variable = { which = pe_sto_fee value = 0.2 }
 			add_resource = { trade = -1 mult = pe_sto_fee }
 			multiply_variable = { which = pe_sto_fee value = 1 }
 			set_variable = { which = pe_sto_paid value = 0 }
@@ -708,7 +709,9 @@ pe_arms_offer = {
 		limit = { NOT = { has_country_flag = pe_ao_cd } NOT = { check_variable = { which = pe_ao_n value > 0 } } }
 		export_resource_stockpile_to_variable = { resource = alloys variable = pe_ao_st }
 		export_resource_maximum_to_variable = { resource = alloys variable = pe_ao_mx }
-		multiply_variable = { which = pe_ao_mx value = 0.9 }
+		# AI empires (0.42): already from half the store or 10000 alloys, which they hoard.
+		if = { limit = { is_ai = yes } multiply_variable = { which = pe_ao_mx value = 0.5 } if = { limit = { check_variable = { which = pe_ao_mx value > 10000 } } set_variable = { which = pe_ao_mx value = 10000 } } }
+		else = { multiply_variable = { which = pe_ao_mx value = 0.9 } }
 		if = {
 			limit = { check_variable = { which = pe_ao_mx value > 0 } check_variable = { which = pe_ao_st value >= pe_ao_mx } }
 			# The defence contractor, otherwise the richest industrial corporation.
@@ -755,7 +758,8 @@ pe_arms_offer = {
 				if = { limit = { check_variable = { which = pe_ao_nn value > 20 } } set_variable = { which = pe_ao_nn value = 20 } }
 				if = {
 					limit = { check_variable = { which = pe_ao_nn value >= 2 } }
-					set_timed_country_flag = { flag = pe_ao_cd days = 3600 }
+					if = { limit = { is_ai = yes } set_timed_country_flag = { flag = pe_ao_cd days = 1800 } }
+					else = { set_timed_country_flag = { flag = pe_ao_cd days = 3600 } }
 					set_variable = { which = pe_ao_al value = pe_ao_nn }
 					multiply_variable = { which = pe_ao_al value = pe_ao_cc }
 					set_variable = { which = pe_ao_fee value = pe_ao_al }

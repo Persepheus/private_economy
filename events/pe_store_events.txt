@@ -86,11 +86,11 @@ country_event = {
 		}
 		custom_tooltip = pe.326.a.tt
 		hidden_effect = { pe_arms_sign = yes }
-		ai_chance = { factor = 50 }
+		ai_chance = { factor = 80 }
 	}
 	option = {
 		name = pe.326.b
-		ai_chance = { factor = 50 }
+		ai_chance = { factor = 20 }
 	}
 }
 

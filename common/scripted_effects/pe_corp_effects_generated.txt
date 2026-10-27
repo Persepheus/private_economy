@@ -7501,6 +7501,7 @@ pe_firm_register = {
 		if = { limit = { is_variable_set = pe_why } root = { set_variable = { which = pe_reg_why value = prev.pe_why } } }
 	}
 	if = { limit = { NOT = { is_variable_set = pe_lpay_pct } } set_variable = { which = pe_lpay_pct value = 100 } set_variable = { which = pe_lcap_r value = 0 } set_variable = { which = pe_lnet_r value = 0 } }
+	if = { limit = { NOT = { is_variable_set = pe_pb_r } } set_variable = { which = pe_pb_r value = 0 } }
 	}
 
 # Colony scope: split root.pe_lv (corporate production per month) into the bit variables
