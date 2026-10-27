@@ -1,5 +1,7 @@
 # Firms beyond the economic order's share while pops are idle (pe_planet_step).
 #   pe.323  investors want to found a firm beyond the share (human empires, not Laissez-faire)
+#   pe.328  founds it (one call of pe_xq_found for both options: the engine copies every
+#           scripted effect call while loading)
 namespace = pe
 
 country_event = {
@@ -23,7 +25,7 @@ country_event = {
 		custom_tooltip = pe.323.a.tt
 		hidden_effect = {
 			set_variable = { which = pe_xq_mode value = 1 }
-			event_target:pe_xq_planet = { pe_xq_found = yes }
+			country_event = { id = pe.328 }
 			remove_country_flag = pe_xq_pending
 		}
 	}
@@ -32,7 +34,7 @@ country_event = {
 		custom_tooltip = pe.323.b.tt
 		hidden_effect = {
 			set_variable = { which = pe_xq_mode value = 2 }
-			event_target:pe_xq_planet = { pe_xq_found = yes }
+			country_event = { id = pe.328 }
 			remove_country_flag = pe_xq_pending
 		}
 	}
@@ -43,5 +45,14 @@ country_event = {
 			event_target:pe_xq_planet = { set_timed_planet_flag = { flag = pe_xq_no days = 1800 } }
 			remove_country_flag = pe_xq_pending
 		}
+	}
+}
+
+country_event = {
+	id = pe.328
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		event_target:pe_xq_planet = { pe_xq_found = yes }
 	}
 }

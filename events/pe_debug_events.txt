@@ -4,8 +4,9 @@
 #   event pe.3   private exchange building on your capital
 #   event pe.4   remove all firms and the private exchange from your capital
 #   event pe.5   steelworks with trade division on every non-gestalt AI capital
-#   event pe.6   diagnosis popup: capital, resource scores, the capital's counts and best firm
-#   event pe.7   run the quarterly logic now and clear all planet cooldowns first
+#   event pe.6   diagnosis popup: capital, resource scores, the capital's counts and the best
+#                firm of the last quarter
+#   event pe.7   run the quarterly logic now (through pe.100) and clear all planet cooldowns first
 #   event pe.8   finish all private construction sites now
 #   event pe.9   try a firm relocation now (stuck planet, ignores the yearly limit)
 #   event pe.10  fire a patron event now
@@ -116,14 +117,8 @@ country_event = {
 			pe_planet_counts = yes
 			pe_planet_prepare = yes
 			pe_planet_fill = yes
-			root = { set_variable = { which = pe_best_min value = 0 } }
-			if = {
-				limit = { free_district_slots > 0 }
-				pe_choose_variant = { MODE = found }
-			}
-			else = {
-				pe_choose_variant = { MODE = buy }
-			}
+			# No pe_choose_variant here (0.40.1): the engine copies every scripted effect call
+			# into the event while loading, and this one costs 70 million tokens per call.
 			root = {
 				set_variable = { which = pe_diag_districts value = prev.pe_districts }
 				set_variable = { which = pe_diag_free value = prev.pe_free }
@@ -142,9 +137,10 @@ country_event = {
 	is_triggered_only = yes
 	immediate = {
 		every_owned_planet = { remove_planet_flag = pe_cooldown }
-		pe_monthly_sites = yes
-		set_variable = { which = pe_months value = 0 }
-		pe_quarterly = yes
+		# Through pe.100 (its next month is a quarter): calling pe_quarterly here as well doubled
+		# the inlined script and crashed the game while loading (0.40.1).
+		set_variable = { which = pe_months value = 2 }
+		country_event = { id = pe.100 }
 		log = "private_economy: pe.7 ran the quarterly logic"
 	}
 }

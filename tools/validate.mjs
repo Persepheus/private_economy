@@ -39,7 +39,9 @@ for (const [kind, list] of [['job', jobs], ['deposit', deposits], ['building', b
 
 // 4. Modifier keys exist (engine list, or job_<own job>_add).
 const modifiers = new Set([...fs.readFileSync(path.join(docs, 'modifiers.log'), 'utf8').matchAll(/^- (\w+),/gm)].map(m => m[1]));
-for (const j of jobs) modifiers.add(`job_${j}_add`);
+// The engine generates these for every job, the mod's too (modifiers.log lists them only when
+// the game last ran with the mod loaded).
+for (const j of jobs) for (const m of [`job_${j}_add`, `job_${j}_automated_workforce_mult`, `job_${j}_max_workforce_add`, `job_${j}_max_workforce_mult`, `job_${j}_per_crime`, `job_${j}_per_pop`, `pop_${j}_bonus_workforce_mult`, `pop_${j}_workforce_mult`]) modifiers.add(m);
 for (const c of econCats) for (const k of ['produces', 'upkeep']) modifiers.add(`${c}_${k}_mult`);
 // Category modifiers <category>_<kind>_mult exist only where the vanilla category generates
 // them (generate_mult_modifiers, comments stripped): the engine rejects the rest, even if an
@@ -153,6 +155,32 @@ for (const f of files(path.join(root, 'common/scripted_triggers')).filter(f => f
       assert.match(call, /\btarget = /, `${rel(f)}: create_message without target`);
     }
   }
+}
+
+// 7d. Inlined size: the engine copies every scripted effect into its caller while loading.
+//     Summed over the calls in events and decisions, the mod's effects must stay well below
+//     the size at which 0.39/0.40 made Stellaris crash while loading (about 1.09 billion
+//     tokens; 0.36.8 still loaded at 0.98 billion, slowly).
+{
+  const EXPANDED_MAX = 700e6;
+  const tokenCount = new Map(), memo = new Map();
+  const calls = body => [...body.matchAll(/(\w+) = (?:yes|\{)/g)].map(m => m[1]).filter(k => ownEffects.has(k));
+  const sizeOf = k => {
+    if (memo.has(k)) return memo.get(k);
+    memo.set(k, 0);
+    const body = effectBodies.get(k);
+    let n = (body.match(/"[^"]*"|[{}=<>]|[^\s{}=<>"]+/g) || []).length;
+    for (const c of calls(body)) if (c !== k) n += sizeOf(c);
+    memo.set(k, n);
+    return n;
+  };
+  let total = 0;
+  const perRoot = new Map();
+  for (const f of [...files(path.join(root, 'events')), ...files(path.join(root, 'common/decisions'))].filter(f => f.endsWith('.txt')))
+    for (const c of calls(strip(fs.readFileSync(f, 'utf8')))) { const s = sizeOf(c); total += s; perRoot.set(c, (perRoot.get(c) || 0) + s); }
+  const top = [...perRoot].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([k, s]) => `${k} ${(s / 1e6).toFixed(0)}M`).join(', ');
+  assert(total <= EXPANDED_MAX, `scripted effects inline to ${(total / 1e6).toFixed(0)}M tokens from events and decisions (limit ${EXPANDED_MAX / 1e6}M): ${top}`);
+  console.log(`PASS: inlined scripted effects ${(total / 1e6).toFixed(0)}M tokens (limit ${EXPANDED_MAX / 1e6}M); largest: ${top}.`);
 }
 
 // 7c. Typos the engine only reports at runtime: glued keys ("ownerif = {"), job tags

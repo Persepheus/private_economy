@@ -1,4 +1,18 @@
-# Tests 0.40.0
+# Tests 0.40.0 / 0.40.1
+
+## 0.40.1: Absturz beim Laden
+
+- **Befund:** Ab 0.39 lädt Stellaris mehrere Minuten und stürzt dann ab, bevor das Hauptmenü erscheint (E06D7363, im Dump `bad_alloc`).
+- **Ursache:** Die Engine kopiert beim Laden jeden Aufruf eines Skript-Effekts samt allem, was er aufruft, in das aufrufende Event.
+  - Die Effekte der Mod waren insgesamt auf rund 1.091 Mio. Tokens angewachsen. 0.36.8 hatte 985 Mio. und lud noch, wenn auch langsam.
+  - Den größten Teil machten Debug-Events aus: pe.7 rief die ganze Quartalslogik ein zweites Mal auf (425 Mio.), pe.6 die Firmenwahl zweimal (140 Mio.). Dazu kamen zwei gleiche Gründungsaufrufe in pe.323 (aus 0.39).
+- **Jetzt:** 508 Mio. Tokens, etwa halb so viel wie bei 0.36.8. Das Laden sollte deshalb auch deutlich schneller gehen.
+  - pe.7 läuft über pe.100.
+  - pe.6 zeigt die beste Firma des letzten Quartals, statt neu zu wählen.
+  - pe.323 gründet über ein verstecktes Event pe.328.
+- **Validator:** Er prüft jetzt die eingesetzte Größe und bricht ab 700 Mio. ab.
+- **Prüfen:** Das Spiel kommt ins Hauptmenü. Wie lange dauert das Laden jetzt?
+
 
 Statisch geprüft (Validator einschließlich der Codex-Tests). Im Spiel noch nicht getestet.
 

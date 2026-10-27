@@ -6,6 +6,10 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
+## Stand 0.40.1
+
+**Absturz beim Laden behoben:** Debug-Events verdoppelten die Skriptmenge, die die Engine beim Laden einsetzt. Seit 0.39 stürzte das Spiel deshalb vor dem Hauptmenü ab. Der Validator prüft diese Größe jetzt ([TESTS_0.40.md](docs/TESTS_0.40.md)).
+
 ## Stand 0.40.0
 
 **Buchhaltung und Erklärbarkeit** ([TESTS_0.40.md](docs/TESTS_0.40.md)):
