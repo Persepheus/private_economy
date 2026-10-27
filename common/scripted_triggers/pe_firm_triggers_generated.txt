@@ -336,6 +336,83 @@ pe_ok_d_pe_firm_ffft = { root = { NOT = { check_variable = { which = pe_def_cons
 pe_ok_d_pe_firm_fffm = { always = yes }
 pe_ok_d_pe_firm_fffe = { always = yes }
 
+# Deposit scope (reads root): the firm consumes something the empire is short of.
+pe_firm_short = {
+	OR = {
+		AND = { check_variable = { which = pe_code value = 1 } NOT = { pe_ok_d_pe_firm_aaac = yes } }
+		AND = { check_variable = { which = pe_code value = 2 } NOT = { pe_ok_d_pe_firm_aaat = yes } }
+		AND = { check_variable = { which = pe_code value = 3 } NOT = { pe_ok_d_pe_firm_aaau = yes } }
+		AND = { check_variable = { which = pe_code value = 4 } NOT = { pe_ok_d_pe_firm_aacc = yes } }
+		AND = { check_variable = { which = pe_code value = 5 } NOT = { pe_ok_d_pe_firm_aact = yes } }
+		AND = { check_variable = { which = pe_code value = 6 } NOT = { pe_ok_d_pe_firm_aacu = yes } }
+		AND = { check_variable = { which = pe_code value = 7 } NOT = { pe_ok_d_pe_firm_aatt = yes } }
+		AND = { check_variable = { which = pe_code value = 8 } NOT = { pe_ok_d_pe_firm_aatu = yes } }
+		AND = { check_variable = { which = pe_code value = 9 } NOT = { pe_ok_d_pe_firm_aauu = yes } }
+		AND = { check_variable = { which = pe_code value = 10 } NOT = { pe_ok_d_pe_firm_ccca = yes } }
+		AND = { check_variable = { which = pe_code value = 11 } NOT = { pe_ok_d_pe_firm_ccat = yes } }
+		AND = { check_variable = { which = pe_code value = 12 } NOT = { pe_ok_d_pe_firm_ccau = yes } }
+		AND = { check_variable = { which = pe_code value = 13 } NOT = { pe_ok_d_pe_firm_ttac = yes } }
+		AND = { check_variable = { which = pe_code value = 14 } NOT = { pe_ok_d_pe_firm_actu = yes } }
+		AND = { check_variable = { which = pe_code value = 15 } NOT = { pe_ok_d_pe_firm_uuac = yes } }
+		AND = { check_variable = { which = pe_code value = 16 } NOT = { pe_ok_d_pe_firm_ttta = yes } }
+		AND = { check_variable = { which = pe_code value = 17 } NOT = { pe_ok_d_pe_firm_ttau = yes } }
+		AND = { check_variable = { which = pe_code value = 18 } NOT = { pe_ok_d_pe_firm_uuat = yes } }
+		AND = { check_variable = { which = pe_code value = 19 } NOT = { pe_ok_d_pe_firm_uuua = yes } }
+		AND = { check_variable = { which = pe_code value = 20 } NOT = { pe_ok_d_pe_firm_ccct = yes } }
+		AND = { check_variable = { which = pe_code value = 21 } NOT = { pe_ok_d_pe_firm_cccu = yes } }
+		AND = { check_variable = { which = pe_code value = 22 } NOT = { pe_ok_d_pe_firm_cctt = yes } }
+		AND = { check_variable = { which = pe_code value = 23 } NOT = { pe_ok_d_pe_firm_cctu = yes } }
+		AND = { check_variable = { which = pe_code value = 24 } NOT = { pe_ok_d_pe_firm_ccuu = yes } }
+		AND = { check_variable = { which = pe_code value = 25 } NOT = { pe_ok_d_pe_firm_tttc = yes } }
+		AND = { check_variable = { which = pe_code value = 26 } NOT = { pe_ok_d_pe_firm_ttcu = yes } }
+		AND = { check_variable = { which = pe_code value = 27 } NOT = { pe_ok_d_pe_firm_uuct = yes } }
+		AND = { check_variable = { which = pe_code value = 28 } NOT = { pe_ok_d_pe_firm_uuuc = yes } }
+		AND = { check_variable = { which = pe_code value = 29 } NOT = { pe_ok_d_pe_firm_tttu = yes } }
+		AND = { check_variable = { which = pe_code value = 30 } NOT = { pe_ok_d_pe_firm_ttuu = yes } }
+		AND = { check_variable = { which = pe_code value = 31 } NOT = { pe_ok_d_pe_firm_uuut = yes } }
+		AND = { check_variable = { which = pe_code value = 32 } NOT = { pe_ok_d_pe_firm_xxxy = yes } }
+		AND = { check_variable = { which = pe_code value = 33 } NOT = { pe_ok_d_pe_firm_xxxz = yes } }
+		AND = { check_variable = { which = pe_code value = 34 } NOT = { pe_ok_d_pe_firm_xxxb = yes } }
+		AND = { check_variable = { which = pe_code value = 35 } NOT = { pe_ok_d_pe_firm_xxyy = yes } }
+		AND = { check_variable = { which = pe_code value = 36 } NOT = { pe_ok_d_pe_firm_xxyz = yes } }
+		AND = { check_variable = { which = pe_code value = 37 } NOT = { pe_ok_d_pe_firm_xxyb = yes } }
+		AND = { check_variable = { which = pe_code value = 38 } NOT = { pe_ok_d_pe_firm_xxzz = yes } }
+		AND = { check_variable = { which = pe_code value = 39 } NOT = { pe_ok_d_pe_firm_xxzb = yes } }
+		AND = { check_variable = { which = pe_code value = 40 } NOT = { pe_ok_d_pe_firm_xxbb = yes } }
+		AND = { check_variable = { which = pe_code value = 41 } NOT = { pe_ok_d_pe_firm_yyyx = yes } }
+		AND = { check_variable = { which = pe_code value = 42 } NOT = { pe_ok_d_pe_firm_yyxz = yes } }
+		AND = { check_variable = { which = pe_code value = 43 } NOT = { pe_ok_d_pe_firm_yyxb = yes } }
+		AND = { check_variable = { which = pe_code value = 44 } NOT = { pe_ok_d_pe_firm_zzxy = yes } }
+		AND = { check_variable = { which = pe_code value = 45 } NOT = { pe_ok_d_pe_firm_xyzb = yes } }
+		AND = { check_variable = { which = pe_code value = 46 } NOT = { pe_ok_d_pe_firm_bbxy = yes } }
+		AND = { check_variable = { which = pe_code value = 47 } NOT = { pe_ok_d_pe_firm_zzzx = yes } }
+		AND = { check_variable = { which = pe_code value = 48 } NOT = { pe_ok_d_pe_firm_zzxb = yes } }
+		AND = { check_variable = { which = pe_code value = 49 } NOT = { pe_ok_d_pe_firm_bbxz = yes } }
+		AND = { check_variable = { which = pe_code value = 50 } NOT = { pe_ok_d_pe_firm_bbbx = yes } }
+		AND = { check_variable = { which = pe_code value = 51 } NOT = { pe_ok_d_pe_firm_yyyz = yes } }
+		AND = { check_variable = { which = pe_code value = 52 } NOT = { pe_ok_d_pe_firm_yyyb = yes } }
+		AND = { check_variable = { which = pe_code value = 53 } NOT = { pe_ok_d_pe_firm_yyzz = yes } }
+		AND = { check_variable = { which = pe_code value = 54 } NOT = { pe_ok_d_pe_firm_yyzb = yes } }
+		AND = { check_variable = { which = pe_code value = 55 } NOT = { pe_ok_d_pe_firm_yybb = yes } }
+		AND = { check_variable = { which = pe_code value = 56 } NOT = { pe_ok_d_pe_firm_zzzy = yes } }
+		AND = { check_variable = { which = pe_code value = 57 } NOT = { pe_ok_d_pe_firm_zzyb = yes } }
+		AND = { check_variable = { which = pe_code value = 58 } NOT = { pe_ok_d_pe_firm_bbyz = yes } }
+		AND = { check_variable = { which = pe_code value = 59 } NOT = { pe_ok_d_pe_firm_bbby = yes } }
+		AND = { check_variable = { which = pe_code value = 60 } NOT = { pe_ok_d_pe_firm_zzzb = yes } }
+		AND = { check_variable = { which = pe_code value = 61 } NOT = { pe_ok_d_pe_firm_zzbb = yes } }
+		AND = { check_variable = { which = pe_code value = 62 } NOT = { pe_ok_d_pe_firm_bbbz = yes } }
+		AND = { check_variable = { which = pe_code value = 64 } NOT = { pe_ok_d_pe_firm_mmma = yes } }
+		AND = { check_variable = { which = pe_code value = 65 } NOT = { pe_ok_d_pe_firm_mmmc = yes } }
+		AND = { check_variable = { which = pe_code value = 66 } NOT = { pe_ok_d_pe_firm_mmmt = yes } }
+		AND = { check_variable = { which = pe_code value = 70 } NOT = { pe_ok_d_pe_firm_eeea = yes } }
+		AND = { check_variable = { which = pe_code value = 71 } NOT = { pe_ok_d_pe_firm_eeec = yes } }
+		AND = { check_variable = { which = pe_code value = 72 } NOT = { pe_ok_d_pe_firm_eeet = yes } }
+		AND = { check_variable = { which = pe_code value = 76 } NOT = { pe_ok_d_pe_firm_fffa = yes } }
+		AND = { check_variable = { which = pe_code value = 77 } NOT = { pe_ok_d_pe_firm_fffc = yes } }
+		AND = { check_variable = { which = pe_code value = 78 } NOT = { pe_ok_d_pe_firm_ffft = yes } }
+	}
+}
+
 # Colony scope, per main share: the planet's designation suits it.
 pe_desig_a = { OR = { has_designation = col_industrial has_designation = col_foundry has_designation = col_capital_foundry has_designation = col_habitat_industrial has_designation = col_habitat_foundry } }
 pe_desig_c = { OR = { has_designation = col_industrial has_designation = col_factory has_designation = col_capital_factory has_designation = col_habitat_industrial has_designation = col_habitat_factory } }

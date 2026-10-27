@@ -1,0 +1,56 @@
+# Restructuring of a firm that cannot carry its corporate loan (pe_sanierung_effects.txt).
+#   pe.321  the lender asks us (human empires)
+#   pe.322  the lender decides itself (debt for shares; AI empires, muted crises, at most one
+#           event in two years)
+namespace = pe
+
+country_event = {
+	id = pe.321
+	title = pe.321.name
+	desc = {
+		trigger = { check_variable = { which = pe_san_own value = 1 } }
+		text = pe.321.desc.own
+	}
+	desc = {
+		trigger = { NOT = { check_variable = { which = pe_san_own value = 1 } } }
+		text = pe.321.desc.ind
+	}
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+	location = event_target:pe_san_planet
+
+	option = {
+		name = pe.321.a
+		custom_tooltip = pe.321.a.tt
+		hidden_effect = { set_variable = { which = pe_san_mode value = 1 } pe_san_apply = yes }
+		ai_chance = { factor = 70 }
+	}
+	option = {
+		name = pe.321.b
+		allow = {
+			custom_tooltip = {
+				fail_text = pe.321.b.fail
+				check_variable = { which = pe_san_tr value >= pe_san_aid }
+			}
+		}
+		custom_tooltip = pe.321.b.tt
+		hidden_effect = { set_variable = { which = pe_san_mode value = 2 } pe_san_apply = yes }
+		ai_chance = { factor = 20 }
+	}
+	option = {
+		name = pe.321.c
+		custom_tooltip = pe.321.c.tt
+		hidden_effect = { set_variable = { which = pe_san_mode value = 3 } pe_san_apply = yes }
+		ai_chance = { factor = 10 }
+	}
+}
+
+country_event = {
+	id = pe.322
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = {
+		set_variable = { which = pe_san_mode value = 1 }
+		pe_san_apply = yes
+	}
+}

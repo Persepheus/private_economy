@@ -576,6 +576,7 @@ for (const v of variants) {
 // pe_ok_<firm>: none of its inputs is in deficit (pe_def_<res>, set when pricing).
 // Inputs differ with Catalytic Processing (food instead of minerals).
 trg += `\n# Colony or deposit scope (reads root): the variant consumes nothing the empire is short of.\n`;
+const shortCodes = [];
 for (const v of variants) {
   const both = new Set(), nonCat = new Set(), catOnly = new Set();
   for (const job of Object.keys(v.workforce)) {
@@ -590,7 +591,10 @@ for (const v of variants) {
     ...[...nonCat].filter(r => !both.has(r)).map(r => `OR = { root = { is_catalytic_empire = yes } ${notDef(r)} }`),
     ...[...catOnly].filter(r => !both.has(r)).map(r => `OR = { root = { is_catalytic_empire = no } ${notDef(r)} }`)];
   trg += `pe_ok_${v.key} = { ${conds.length ? conds.join(' ') : 'always = yes'} }\n`;
+  if (conds.length) shortCodes.push(v);
 }
+// pe_firm_short (deposit scope, reads root): the firm consumes something the empire is short of.
+trg += `\n# Deposit scope (reads root): the firm consumes something the empire is short of.\npe_firm_short = {\n\tOR = {\n${shortCodes.map(v => `\t\tAND = { check_variable = { which = pe_code value = ${v.code} } NOT = { pe_ok_${v.key} = yes } }`).join('\n')}\n\t}\n}\n`;
 
 // --- Effects --------------------------------------------------------------------
 const ifChain = (items, cond, body, ind = '\t') => items.map((it, i) => `${ind}${i ? 'else_if' : 'if'} = { limit = { ${cond(it)} } ${body(it)} }`).join('\n');
@@ -1047,6 +1051,8 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM
 		if = { limit = { check_variable = { which = pe_thr value < 3 } } set_variable = { which = pe_thr value = 3 } }
 		# A supply contract (as buyer or supplier) makes it less willing to change.
 		if = { limit = { OR = { check_variable = { which = pe_sup_fid value > 0 } check_variable = { which = pe_sup_n value > 0 } } } multiply_variable = { which = pe_thr value = 1.5 } }
+		# It consumes what the empire is short of: a third of that is enough (0.38).
+		if = { limit = { pe_firm_short = yes } multiply_variable = { which = pe_thr value = 0.33 } }
 		if = {
 			limit = {
 				check_variable = { which = pe_debt value <= 0 }
@@ -1116,6 +1122,7 @@ ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = $
 		else = {
 			set_planet_flag = pe_site
 			set_timed_planet_flag = { flag = pe_retool_cd days = ${RETOOL_CD} }
+			set_timed_planet_flag = { flag = pe_retool_scd days = 360 }
 			${safety.reserve("pe_safe_out")}
 		}
 		check_planet_employment = yes
@@ -3459,7 +3466,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
 
 // Events that name a corporation: each reads its own variable pe_cn<event>, set in its
 // immediate (pe_corp_cur_name is shared and may change before the window is read).
-const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298, 300, 306, 308, 315];
+const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298, 300, 306, 308, 315, 321];
 const corpLoc = (name, varName, keyOf) => dtext(name, varName, NAME_IDS.map(id => [id, keyOf(id)]), 'pe_corp_line_none');
 const flagDt = (name, cond, key) => `defined_text = {\n\tname = ${name}\n\ttext = {\n\t\ttrigger = { ${cond} }\n\t\tlocalization_key = ${key}\n\t}\n\tdefault = pe_corp_line_none\n}\n`;
 locDt += flagDt('GetPeLocCw', 'is_variable_set = pe_cw_m check_variable = { which = pe_cw_m value > 0 }', 'pe_loc_cw') + flagDt('GetPeLocArms', 'is_variable_set = pe_dc_here check_variable = { which = pe_dc_here value = 1 }', 'pe_loc_arms') +

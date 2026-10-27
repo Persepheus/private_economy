@@ -1,0 +1,11 @@
+﻿l_german:
+ pe.321.name:0 "Ein Sanierungsfall"
+ pe.321.desc.own:0 "§Y[Root.GetPeCorpName321]§! hält eine eigene Firma auf §Y[pe_san_planet.GetName]§! seit Jahren mit Krediten am Leben: inzwischen §Y[Root.pe_san_loan]§! £trade£, und die Firma verdient nicht einmal die Zinsen. Der Vorstand will das beenden.\n\nDer Finanzvorstand schlägt vor, den Kredit abzuschreiben und die Firma gesundzuschrumpfen. Die Gewerkschaften fordern eine Staatsbürgschaft, und unter den Aktionären fällt das Wort Insolvenz."
+ pe.321.desc.ind:0 "§Y[Root.GetPeCorpName321]§! hat einer Firma auf §Y[pe_san_planet.GetName]§! inzwischen §Y[Root.pe_san_loan]§! £trade£ geliehen, und die Firma verdient nicht einmal die Zinsen.\n\nDer Konzern bietet an, die Schulden in Anteile zu tauschen: Er übernimmt die Firma und schrumpft sie gesund. Die Gewerkschaften fordern eine Staatsbürgschaft, die Gläubiger sähen sie lieber in der Insolvenz."
+ pe.321.a:0 "Schulden gegen Anteile."
+ pe.321.a.tt:0 "Der Konzern schreibt den Kredit ab und besitzt die Firma; sie schrumpft um eine Stufe (auf der kleinsten Stufe bleibt sie, wie sie ist)."
+ pe.321.b:0 "Eine Staatsbürgschaft."
+ pe.321.b.tt:0 "Wir zahlen dem Konzern §Y[Root.pe_san_aid]§! £trade£, ein Viertel des Kredits; den Rest schreibt er ab. Die Firma behält ihre Arbeitsplätze."
+ pe.321.c:0 "Insolvenz anmelden lassen."
+ pe.321.c.tt:0 "Die Firma schließt und gibt ihren Distriktplatz frei; der Konzern verliert den Kredit."
+ pe.321.b.fail:0 "Die Bürgschaft können wir nicht bezahlen."

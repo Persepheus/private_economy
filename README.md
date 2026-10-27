@@ -6,7 +6,13 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
-## Stand 0.37.1
+## Stand 0.38.0
+
+**Wirtschaft im späten Spiel** ([TESTS_0.38.md](docs/TESTS_0.38.md)):
+- **Arbeitslosigkeit:** Solange Pops arbeitslos und Plätze frei sind, gründen Investoren über die Quote der Wirtschaftsordnung hinaus (eine Firma je 200 Arbeitslose). Ab 600 Arbeitslosen dürfen zwei Baustellen gleichzeitig laufen.
+- **Legierungen und Mineralien:** Legierungen bleiben bei vollem Lager mindestens halb so viel wert wie ihr Grundwert. Firmen, die eine knappe Ressource verbrauchen, dürfen schneller umbauen (ein Jahr statt fünf, ein Drittel der Gewinnschwelle).
+- **Sanierung:** Konzernkredite an eigene Firmen kosten 1 % statt 3 %. Kann eine Firma vier Quartale lang die Zinsen nicht verdienen, saniert sie der Konzern. Bei dir geschieht das per Event „Ein Sanierungsfall“: Schulden gegen Anteile, Staatsbürgschaft oder Insolvenz.
+
 
 **0.37.1:** Labore auf Habitaten erkennen jetzt alle Forschungszonen des Vanilla-Sets `habitat_research`, auch Physik, Gesellschaft und Ingenieurwesen. Vorher konnten auf solchen Habitaten nie Labore entstehen.
 
@@ -85,6 +91,7 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Erledigt (0.30):** Landfirmen bekommen die Jobs der Spezialisierung ihres Distrikttyps; der letzte Distrikt eines Typs bleibt beim Staat.
 - **Gefunden im Save Hesukaran 7 (2287):** Schutzflotte der KI ohne passenden Schiffsentwurf (create_ship ungültig, leere Flotte); Kredite eines aufgelösten Konzerns zahlen weiter in seinen leeren Platz; zwei Rohstoffkonzerne horten je 13-14 Tsd. Kasse (Verwendung bzw. Kalibrierung).
 - **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen.
+- **Vorschläge zu vollen Lagern (offen, 27.10.2026):** Legierungsüberschuss in Kampfstärke umsetzen (Rüstungsauftrag aus dem Lager, Werftausbau durch Konzerne, Modernisierung von Sternenbasen und Plattformen); höhere Lagergrenze über eine strategische Reserve der Holdings oder private Lagerhäuser. Siehe Chat vom 27.10.2026, Entscheidung des Nutzers steht aus.
 - **Längere Lieferketten (Supply Chains):** mehrstufige Wertschöpfung zwischen Firmen (Vorprodukte, Zulieferer), gemerkt am 27.10.2026.
 - **Danach (beschlossen):** Lobbys der Branchengruppen (bauen auf den Konzernen auf); private Werften erst, wenn klar ist, was sie spielerisch bringen.
 - **Konjunkturzyklus:** erst, wenn die Wirtschaft stabil läuft.

@@ -676,6 +676,10 @@ pe_shadow = {
 			limit = { check_variable = { which = pe_frac value >= 0.95 } }
 			set_variable = { which = pe_s_$RES$ value = pe_psell }
 			multiply_variable = { which = pe_s_$RES$ value = 0.33 }
+			# Alloys stay the economy's end goal: never below half their base value (0.38).
+			set_variable = { which = pe_tmp value = $BASE$ }
+			multiply_variable = { which = pe_tmp value = 0.5 }
+			if = { limit = { check_variable = { which = pe_s_$RES$ value < pe_tmp } } set_variable = { which = pe_s_$RES$ value = pe_tmp } }
 		}
 	}
 	if = {
@@ -852,6 +856,31 @@ pe_planet_step = {
 		prev = { subtract_variable = { which = pe_idle value = prev.pe_tmp } }
 	}
 	if = { limit = { check_variable = { which = pe_idle value >= 50 } } root = { set_variable = { which = pe_unemp value = 1 } } }
+	# Unemployment (0.38): while pops are idle and district slots free, the investors may go
+	# beyond the economic order's share, one more firm per 200 idle pops (never the last free
+	# slot). Firms founded beyond it (pe_xq) are not nationalised when the idle pops are gone;
+	# only firms beyond the share and these are (pe_tbase = the share alone).
+	set_variable = { which = pe_tbase value = pe_target }
+	if = { limit = { NOT = { is_variable_set = pe_xq } } set_variable = { which = pe_xq value = 0 } }
+	if = { limit = { root = { check_variable = { which = pe_private_share value <= 0 } } } set_variable = { which = pe_xq value = 0 } }
+	set_variable = { which = pe_tmp value = pe_firms }
+	subtract_variable = { which = pe_tmp value = pe_tbase }
+	if = { limit = { check_variable = { which = pe_tmp value < 0 } } set_variable = { which = pe_tmp value = 0 } }
+	if = { limit = { check_variable = { which = pe_xq value > pe_tmp } } set_variable = { which = pe_xq value = pe_tmp } }
+	if = {
+		limit = {
+			NOT = { has_planet_flag = pe_corp_hab }
+			root = { check_variable = { which = pe_private_share value > 0 } }
+			check_variable = { which = pe_idle value >= 200 }
+		}
+		set_variable = { which = pe_xt value = pe_idle }
+		divide_variable = { which = pe_xt value = 200 }
+		floor_variable = pe_xt
+		set_variable = { which = pe_tmp value = pe_free }
+		change_variable = { which = pe_tmp value = -1 }
+		if = { limit = { check_variable = { which = pe_xt value > pe_tmp } } set_variable = { which = pe_xt value = pe_tmp } }
+		if = { limit = { check_variable = { which = pe_xt value > 0 } } change_variable = { which = pe_target value = pe_xt } }
+	}
 	pe_planet_fill = yes
 	# Filled private jobs here (corporate benefits, pe_corp_social).
 	set_variable = { which = pe_pfa value = root.pe_fa }
@@ -870,11 +899,21 @@ pe_planet_step = {
 		if = { limit = { check_variable = { which = pe_idle value < 50 } } root = { set_variable = { which = pe_unemp value = 0 } } }
 	}
 	pe_automation = yes
+	set_variable = { which = pe_tnat value = pe_tbase }
+	change_variable = { which = pe_tnat value = pe_xq }
+	# Many idle pops (600 more than the sites here will employ): a second site at once.
 	if = {
 		limit = {
-			NOT = { has_planet_flag = pe_site }
+			OR = {
+				NOT = { has_planet_flag = pe_site }
+				AND = {
+					check_variable = { which = pe_idle value >= 600 }
+					count_deposits = { category = pe_deposit_cat_sites count < 2 }
+				}
+			}
 			NOT = { has_planet_flag = pe_cooldown }
 		}
+		export_trigger_value_to_variable = { trigger = count_deposits parameters = { category = pe_deposit_cat_sites } variable = pe_sc0 }
 		if = {
 			limit = { check_variable = { which = pe_firms value < pe_target } NOT = { has_modifier = pe_warzone } }
 			if = {
@@ -891,6 +930,12 @@ pe_planet_step = {
 				else_if = { limit = { free_district_slots = 2 } root = { set_variable = { which = pe_best_min value = 4 } } }
 				pe_choose_variant = { MODE = found }
 				pe_found_variant = yes
+				# Beyond the share: this firm stays when the idle pops are gone.
+				export_trigger_value_to_variable = { trigger = count_deposits parameters = { category = pe_deposit_cat_sites } variable = pe_sc1 }
+				if = {
+					limit = { check_variable = { which = pe_sc1 value > pe_sc0 } check_variable = { which = pe_firms value >= pe_tbase } }
+					change_variable = { which = pe_xq value = 1 }
+				}
 			}
 			else_if = {
 				# At most one buyout (or offer) per planet every two years.
@@ -902,7 +947,10 @@ pe_planet_step = {
 			}
 		}
 		else_if = {
-			limit = { check_variable = { which = pe_firms value > pe_target } }
+			limit = {
+				check_variable = { which = pe_firms value > pe_target }
+				check_variable = { which = pe_firms value > pe_tnat }
+			}
 			pe_nationalise_one = yes
 		}
 	}
@@ -912,7 +960,15 @@ pe_planet_step = {
 		limit = {
 			NOT = { has_planet_flag = pe_site }
 			NOT = { has_planet_flag = pe_cooldown }
-			NOT = { has_planet_flag = pe_retool_cd }
+			# Five years between two restructurings; one year for a firm that consumes what the
+			# empire is short of (0.38: alloy works eating up the minerals).
+			OR = {
+				NOT = { has_planet_flag = pe_retool_cd }
+				AND = {
+					NOT = { has_planet_flag = pe_retool_scd }
+					any_deposit = { has_deposit_category = pe_deposit_cat_firms pe_firm_short = yes }
+				}
+			}
 			NOT = { has_modifier = pe_warzone }
 			check_variable = { which = pe_firms_real value > 0 }
 			root = { check_variable = { which = pe_fill_cur value >= 0.8 } }
@@ -984,8 +1040,15 @@ pe_firm_book = {
 	if = { limit = { NOT = { is_variable_set = pe_debt } } set_variable = { which = pe_debt value = 0 } }
 	set_variable = { which = pe_want_loan value = 0 }
 	set_variable = { which = pe_want_bridge value = 0 }
-	# A corporate loan costs 3% interest a quarter.
-	if = { limit = { check_variable = { which = pe_loan value > 0 } } multiply_variable = { which = pe_loan value = 1.03 } }
+	# A corporate loan costs 3% interest a quarter, 1% from the firm's own corporation (0.38).
+	if = {
+		limit = { check_variable = { which = pe_loan value > 0 } }
+		if = {
+			limit = { check_variable = { which = pe_corp value > 0 } check_variable = { which = pe_lender value = pe_corp } }
+			multiply_variable = { which = pe_loan value = 1.01 }
+		}
+		else = { multiply_variable = { which = pe_loan value = 1.03 } }
+	}
 	if = {
 		limit = { check_variable = { which = pe_profit value > 0 } }
 		root = {
@@ -1007,6 +1070,17 @@ pe_firm_book = {
 		if = { limit = { check_variable = { which = pe_corp value = 8 } root = { check_variable = { which = pe_c8_war value > 0 } } } multiply_variable = { which = pe_profit value = 0.7 } }
 		}
 	}
+	# A corporate loan the firm cannot carry (its profit below the interest of 3%): after four
+	# such quarters in a row its lender restructures it (pe_sanierung_step, pe.321 / pe.322).
+	if = { limit = { NOT = { is_variable_set = pe_zq } } set_variable = { which = pe_zq value = 0 } }
+	if = {
+		limit = { check_variable = { which = pe_loan value > 0 } }
+		set_variable = { which = pe_tmp value = pe_loan }
+		multiply_variable = { which = pe_tmp value = 0.03 }
+		if = { limit = { check_variable = { which = pe_profit value < pe_tmp } } change_variable = { which = pe_zq value = 1 } }
+		else = { set_variable = { which = pe_zq value = 0 } }
+	}
+	else = { set_variable = { which = pe_zq value = 0 } }
 	if = {
 		# In debt: all profit pays the loan back; the rest of a final instalment is lost.
 		limit = {
@@ -1180,6 +1254,13 @@ pe_firm_book = {
 			check_variable = { which = pe_fcap value >= 0 }
 		}
 		set_variable = { which = pe_loan_q value = 0 }
+	}
+	# Restructured by its lender (pe_san_apply): 2 = one stage smaller, 3 = closed.
+	if = {
+		limit = { is_variable_set = pe_san check_variable = { which = pe_san value > 0 } }
+		if = { limit = { check_variable = { which = pe_san value = 3 } } set_variable = { which = pe_pending value = 3 } root = { set_variable = { which = pe_pend_any value = 1 } } }
+		else_if = { limit = { check_variable = { which = pe_stage value > 1 } } set_variable = { which = pe_pending value = 2 } root = { set_variable = { which = pe_pend_any value = 1 } } }
+		set_variable = { which = pe_san value = 0 }
 	}
 	# Hit by a bombardment (pe_bombard_step): it loses a stage, at stage 1 it is destroyed
 	# (ruins, see pe_firm_change). This replaces whatever else it planned.
@@ -1756,6 +1837,7 @@ pe_command_economy = {
 pe_corp_step = {
 	pe_corp_census = yes
 	pe_corp_crisis = yes
+	pe_sanierung_step = yes
 	pe_corp_dissolve = yes
 	pe_corp_found = yes
 	pe_corp_acquire = yes

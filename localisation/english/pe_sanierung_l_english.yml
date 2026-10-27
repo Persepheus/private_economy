@@ -1,0 +1,11 @@
+﻿l_english:
+ pe.321.name:0 "A Case for Restructuring"
+ pe.321.desc.own:0 "§Y[Root.GetPeCorpName321]§! has been keeping one of its own firms on §Y[pe_san_planet.GetName]§! alive with loans for years: §Y[Root.pe_san_loan]§! £trade£ by now, and the firm does not even earn the interest. The board wants to end it.\n\nThe chief financial officer proposes to write the loan off and cut the firm down to a sound size. The unions ask for a state guarantee, and the shareholders whisper about insolvency."
+ pe.321.desc.ind:0 "§Y[Root.GetPeCorpName321]§! has lent a firm on §Y[pe_san_planet.GetName]§! §Y[Root.pe_san_loan]§! £trade£ by now, and the firm does not even earn the interest.\n\nThe corporation offers to turn the debt into shares: it would take the firm over and cut it down to a sound size. The unions ask for a state guarantee, and the creditors would rather see it go bankrupt."
+ pe.321.a:0 "Debt for shares."
+ pe.321.a.tt:0 "The corporation writes the loan off and owns the firm; the firm shrinks a stage (at the smallest stage it stays as it is)."
+ pe.321.b:0 "A state guarantee."
+ pe.321.b.tt:0 "We pay the corporation §Y[Root.pe_san_aid]§! £trade£, a quarter of the loan; it writes off the rest. The firm keeps its jobs."
+ pe.321.c:0 "Let it go bankrupt."
+ pe.321.c.tt:0 "The firm closes and frees its district slot; the corporation loses the loan."
+ pe.321.b.fail:0 "We cannot pay the guarantee."

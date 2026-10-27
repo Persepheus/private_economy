@@ -14644,6 +14644,8 @@ pe_restructure = {
 		if = { limit = { check_variable = { which = pe_thr value < 3 } } set_variable = { which = pe_thr value = 3 } }
 		# A supply contract (as buyer or supplier) makes it less willing to change.
 		if = { limit = { OR = { check_variable = { which = pe_sup_fid value > 0 } check_variable = { which = pe_sup_n value > 0 } } } multiply_variable = { which = pe_thr value = 1.5 } }
+		# It consumes what the empire is short of: a third of that is enough (0.38).
+		if = { limit = { pe_firm_short = yes } multiply_variable = { which = pe_thr value = 0.33 } }
 		if = {
 			limit = {
 				check_variable = { which = pe_debt value <= 0 }
@@ -15028,6 +15030,7 @@ pe_restructure = {
 		else = {
 			set_planet_flag = pe_site
 			set_timed_planet_flag = { flag = pe_retool_cd days = 1800 }
+			set_timed_planet_flag = { flag = pe_retool_scd days = 360 }
 			root = { change_variable = { which = pe_safe_reserved_energy value = pe_safe_out_energy } change_variable = { which = pe_safe_reserved_minerals value = pe_safe_out_minerals } change_variable = { which = pe_safe_reserved_food value = pe_safe_out_food } change_variable = { which = pe_safe_reserved_consumer_goods value = pe_safe_out_consumer_goods } change_variable = { which = pe_safe_reserved_trade value = pe_safe_out_trade } }
 		}
 		check_planet_employment = yes

@@ -1,0 +1,90 @@
+# Restructuring of firms that cannot carry their corporate loan (0.38).
+#
+# A firm whose quarterly profit stays below the interest on its corporate loan for four
+# quarters in a row (pe_zq, counted in pe_firm_book) is a case for restructuring. Once a
+# quarter its lender deals with one such firm: in human empires at most once in two years as
+# an event (pe.321), otherwise as the lender would decide itself (pe.322):
+#   a) debt for shares: the lender writes the loan off and takes the firm over (if it is
+#      independent); the firm shrinks a stage (at stage 1 it stays as it is).
+#   b) state guarantee (event only): we pay the lender a quarter of the loan in trade, it
+#      writes off the rest, the firm keeps its jobs.
+#   c) insolvency (event only): the firm closes, the lender loses the loan.
+# The chosen firm carries pe_zsel = 1, its planet is event_target:pe_san_planet. Country
+# variables: pe_san_k lender slot, pe_san_loan the loan, pe_san_aid the guarantee, pe_san_own
+# 1 = the firm already belongs to the lender, pe_cn321 the lender's name (scripted loc).
+# Call depths: pe_sanierung_step 3 (pe_corp_step); pe_san_apply 1 (pe.321, pe.322).
+
+# Country scope, quarterly (pe_corp_step).
+pe_sanierung_step = {
+	if = {
+		limit = { any_owned_colony = { any_deposit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_zq value >= 4 } check_variable = { which = pe_loan value > 0 } } } }
+		random_owned_colony = {
+			limit = { any_deposit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_zq value >= 4 } check_variable = { which = pe_loan value > 0 } } }
+			save_event_target_as = pe_san_planet
+			every_deposit = { limit = { has_deposit_category = pe_deposit_cat_firms } set_variable = { which = pe_zsel value = 0 } }
+			random_deposit = {
+				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_zq value >= 4 } check_variable = { which = pe_loan value > 0 } }
+				set_variable = { which = pe_zsel value = 1 }
+				root = {
+					set_variable = { which = pe_san_k value = prev.pe_lender }
+					set_variable = { which = pe_san_loan value = prev.pe_loan }
+					round_variable = pe_san_loan
+					set_variable = { which = pe_san_aid value = prev.pe_loan }
+					multiply_variable = { which = pe_san_aid value = 0.25 }
+					round_variable = pe_san_aid
+					set_variable = { which = pe_san_own value = 0 }
+					if = { limit = { prev = { check_variable = { which = pe_corp value = root.pe_san_k } } } set_variable = { which = pe_san_own value = 1 } }
+				}
+			}
+		}
+		if = { limit = { check_variable = { which = pe_san_k value = 1 } } set_variable = { which = pe_cn321 value = pe_c1_name } }
+		else_if = { limit = { check_variable = { which = pe_san_k value = 2 } } set_variable = { which = pe_cn321 value = pe_c2_name } }
+		else_if = { limit = { check_variable = { which = pe_san_k value = 3 } } set_variable = { which = pe_cn321 value = pe_c3_name } }
+		else_if = { limit = { check_variable = { which = pe_san_k value = 4 } } set_variable = { which = pe_cn321 value = pe_c4_name } }
+		else_if = { limit = { check_variable = { which = pe_san_k value = 5 } } set_variable = { which = pe_cn321 value = pe_c5_name } }
+		else_if = { limit = { check_variable = { which = pe_san_k value = 6 } } set_variable = { which = pe_cn321 value = pe_c6_name } }
+		else_if = { limit = { check_variable = { which = pe_san_k value = 7 } } set_variable = { which = pe_cn321 value = pe_c7_name } }
+		else_if = { limit = { check_variable = { which = pe_san_k value = 8 } } set_variable = { which = pe_cn321 value = pe_c8_name } }
+		# Our trade at the time of the offer (the guarantee needs it).
+		export_resource_stockpile_to_variable = { resource = trade variable = pe_san_tr }
+		if = {
+			limit = { is_ai = no NOT = { has_country_flag = pe_san_cd } NOT = { has_country_flag = pe_mute_crises } }
+			set_timed_country_flag = { flag = pe_san_cd days = 720 }
+			country_event = { id = pe.321 }
+		}
+		else = { country_event = { id = pe.322 } }
+	}
+}
+
+# Country scope (pe.321 / pe.322): MODE 1 debt for shares, 2 state guarantee, 3 insolvency.
+pe_san_apply = {
+	event_target:pe_san_planet = {
+		random_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_zsel value = 1 } }
+			set_variable = { which = pe_zsel value = 0 }
+			set_variable = { which = pe_zq value = 0 }
+			set_variable = { which = pe_loan_q value = 0 }
+			if = {
+				limit = { root = { check_variable = { which = pe_san_mode value = 1 } } }
+				if = { limit = { check_variable = { which = pe_corp value = 0 } } set_variable = { which = pe_corp value = pe_lender } }
+				set_variable = { which = pe_san value = 2 }
+			}
+			else_if = {
+				limit = { root = { check_variable = { which = pe_san_mode value = 2 } } }
+				if = { limit = { check_variable = { which = pe_lender value = 1 } } root = { change_variable = { which = pe_c1_cash value = pe_san_aid } } }
+				else_if = { limit = { check_variable = { which = pe_lender value = 2 } } root = { change_variable = { which = pe_c2_cash value = pe_san_aid } } }
+				else_if = { limit = { check_variable = { which = pe_lender value = 3 } } root = { change_variable = { which = pe_c3_cash value = pe_san_aid } } }
+				else_if = { limit = { check_variable = { which = pe_lender value = 4 } } root = { change_variable = { which = pe_c4_cash value = pe_san_aid } } }
+				else_if = { limit = { check_variable = { which = pe_lender value = 5 } } root = { change_variable = { which = pe_c5_cash value = pe_san_aid } } }
+				else_if = { limit = { check_variable = { which = pe_lender value = 6 } } root = { change_variable = { which = pe_c6_cash value = pe_san_aid } } }
+				else_if = { limit = { check_variable = { which = pe_lender value = 7 } } root = { change_variable = { which = pe_c7_cash value = pe_san_aid } } }
+				else_if = { limit = { check_variable = { which = pe_lender value = 8 } } root = { change_variable = { which = pe_c8_cash value = pe_san_aid } } }
+			}
+			else = { set_variable = { which = pe_san value = 3 } }
+			set_variable = { which = pe_loan value = 0 }
+			set_variable = { which = pe_lender value = 0 }
+		}
+	}
+	if = { limit = { check_variable = { which = pe_san_mode value = 2 } } add_resource = { trade = -1 mult = pe_san_aid } }
+	log = "private_economy: restructuring by corporation slot \\[Root.pe_san_k] on \\[event_target:pe_san_planet.GetName]: mode \\[Root.pe_san_mode], loan \\[Root.pe_san_loan]"
+}
