@@ -655,6 +655,10 @@ defined_text = {
 defined_text = {
 	name = GetPeFl1Stage
 	text = {
+		trigger = { check_variable = { which = pe_fl1_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
+	text = {
 		trigger = { check_variable = { which = pe_fl1_stage value = 1 } }
 		localization_key = pe_reg_stage_1
 	}
@@ -1810,6 +1814,10 @@ defined_text = {
 }
 defined_text = {
 	name = GetPeFl2Stage
+	text = {
+		trigger = { check_variable = { which = pe_fl2_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
 	text = {
 		trigger = { check_variable = { which = pe_fl2_stage value = 1 } }
 		localization_key = pe_reg_stage_1
@@ -2967,6 +2975,10 @@ defined_text = {
 defined_text = {
 	name = GetPeFl3Stage
 	text = {
+		trigger = { check_variable = { which = pe_fl3_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
+	text = {
 		trigger = { check_variable = { which = pe_fl3_stage value = 1 } }
 		localization_key = pe_reg_stage_1
 	}
@@ -4122,6 +4134,10 @@ defined_text = {
 }
 defined_text = {
 	name = GetPeFl4Stage
+	text = {
+		trigger = { check_variable = { which = pe_fl4_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
 	text = {
 		trigger = { check_variable = { which = pe_fl4_stage value = 1 } }
 		localization_key = pe_reg_stage_1
@@ -5279,6 +5295,10 @@ defined_text = {
 defined_text = {
 	name = GetPeFl5Stage
 	text = {
+		trigger = { check_variable = { which = pe_fl5_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
+	text = {
 		trigger = { check_variable = { which = pe_fl5_stage value = 1 } }
 		localization_key = pe_reg_stage_1
 	}
@@ -6434,6 +6454,10 @@ defined_text = {
 }
 defined_text = {
 	name = GetPeFl6Stage
+	text = {
+		trigger = { check_variable = { which = pe_fl6_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
 	text = {
 		trigger = { check_variable = { which = pe_fl6_stage value = 1 } }
 		localization_key = pe_reg_stage_1
@@ -7591,6 +7615,10 @@ defined_text = {
 defined_text = {
 	name = GetPeFl7Stage
 	text = {
+		trigger = { check_variable = { which = pe_fl7_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
+	text = {
 		trigger = { check_variable = { which = pe_fl7_stage value = 1 } }
 		localization_key = pe_reg_stage_1
 	}
@@ -8746,6 +8774,10 @@ defined_text = {
 }
 defined_text = {
 	name = GetPeFl8Stage
+	text = {
+		trigger = { check_variable = { which = pe_fl8_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
 	text = {
 		trigger = { check_variable = { which = pe_fl8_stage value = 1 } }
 		localization_key = pe_reg_stage_1
@@ -9903,6 +9935,10 @@ defined_text = {
 defined_text = {
 	name = GetPeFl9Stage
 	text = {
+		trigger = { check_variable = { which = pe_fl9_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
+	text = {
 		trigger = { check_variable = { which = pe_fl9_stage value = 1 } }
 		localization_key = pe_reg_stage_1
 	}
@@ -11058,6 +11094,10 @@ defined_text = {
 }
 defined_text = {
 	name = GetPeFl10Stage
+	text = {
+		trigger = { check_variable = { which = pe_fl10_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
 	text = {
 		trigger = { check_variable = { which = pe_fl10_stage value = 1 } }
 		localization_key = pe_reg_stage_1
@@ -12215,6 +12255,10 @@ defined_text = {
 defined_text = {
 	name = GetPeFl11Stage
 	text = {
+		trigger = { check_variable = { which = pe_fl11_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
+	text = {
 		trigger = { check_variable = { which = pe_fl11_stage value = 1 } }
 		localization_key = pe_reg_stage_1
 	}
@@ -13370,6 +13414,10 @@ defined_text = {
 }
 defined_text = {
 	name = GetPeFl12Stage
+	text = {
+		trigger = { check_variable = { which = pe_fl12_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
 	text = {
 		trigger = { check_variable = { which = pe_fl12_stage value = 1 } }
 		localization_key = pe_reg_stage_1
@@ -14527,6 +14575,10 @@ defined_text = {
 defined_text = {
 	name = GetPeFl13Stage
 	text = {
+		trigger = { check_variable = { which = pe_fl13_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
+	text = {
 		trigger = { check_variable = { which = pe_fl13_stage value = 1 } }
 		localization_key = pe_reg_stage_1
 	}
@@ -15682,6 +15734,10 @@ defined_text = {
 }
 defined_text = {
 	name = GetPeFl14Stage
+	text = {
+		trigger = { check_variable = { which = pe_fl14_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
 	text = {
 		trigger = { check_variable = { which = pe_fl14_stage value = 1 } }
 		localization_key = pe_reg_stage_1
@@ -16839,6 +16895,10 @@ defined_text = {
 defined_text = {
 	name = GetPeFl15Stage
 	text = {
+		trigger = { check_variable = { which = pe_fl15_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
+	text = {
 		trigger = { check_variable = { which = pe_fl15_stage value = 1 } }
 		localization_key = pe_reg_stage_1
 	}
@@ -17994,6 +18054,10 @@ defined_text = {
 }
 defined_text = {
 	name = GetPeFl16Stage
+	text = {
+		trigger = { check_variable = { which = pe_fl16_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
 	text = {
 		trigger = { check_variable = { which = pe_fl16_stage value = 1 } }
 		localization_key = pe_reg_stage_1
@@ -19151,6 +19215,10 @@ defined_text = {
 defined_text = {
 	name = GetPeFl17Stage
 	text = {
+		trigger = { check_variable = { which = pe_fl17_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
+	text = {
 		trigger = { check_variable = { which = pe_fl17_stage value = 1 } }
 		localization_key = pe_reg_stage_1
 	}
@@ -20306,6 +20374,10 @@ defined_text = {
 }
 defined_text = {
 	name = GetPeFl18Stage
+	text = {
+		trigger = { check_variable = { which = pe_fl18_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
 	text = {
 		trigger = { check_variable = { which = pe_fl18_stage value = 1 } }
 		localization_key = pe_reg_stage_1
@@ -21463,6 +21535,10 @@ defined_text = {
 defined_text = {
 	name = GetPeFl19Stage
 	text = {
+		trigger = { check_variable = { which = pe_fl19_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
+	text = {
 		trigger = { check_variable = { which = pe_fl19_stage value = 1 } }
 		localization_key = pe_reg_stage_1
 	}
@@ -22618,6 +22694,10 @@ defined_text = {
 }
 defined_text = {
 	name = GetPeFl20Stage
+	text = {
+		trigger = { check_variable = { which = pe_fl20_stage value = 0 } }
+		localization_key = pe_reg_stage_0
+	}
 	text = {
 		trigger = { check_variable = { which = pe_fl20_stage value = 1 } }
 		localization_key = pe_reg_stage_1

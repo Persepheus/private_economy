@@ -6,6 +6,23 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
+## Stand 0.43.0
+
+**Firmenstufen getrennt von der Spezialisierung** ([TESTS_0.43.md](docs/TESTS_0.43.md)):
+- **Vier Stufen:** klein, normal, mittel, groß. „Normal“ entspricht einem Vanilla-Distrikt mit Spezialisierung. Die Jobs hängen nicht mehr von der Spezialisierung des Planeten ab.
+
+| Arbeitskraft | klein | normal | mittel | groß |
+|---|---|---|---|---|
+| Landfirma (Mine, Kraftwerk, Farm) | 200 | 300 | 400 | 500 |
+| Stadtfirma und Labor | 130 | 200 | 300 | 400 |
+| Habitat ohne Void Dweller, alle Firmen | 130 | 200 | 300 | 400 |
+| Habitat mit Void Dweller (Ursprung oder Voidborn), alle Firmen | 200 | 300 | 400 | 500 |
+
+- **Neue Firmen** starten klein, gekaufte Distrikte werden normale Firmen. Kosten, Unterhalt, Räumung und Verstaatlichung richten sich nach der Größe relativ zu „normal“.
+- **Labore auf Habitaten** zählen als Landfirma: Sie belegen einen Forschungsdistrikt und brauchen keine Forschungsspezialisierung mehr.
+- **Bestehende Firmen** behalten ihre Stufe: Die bisherigen Stufen klein, mittel und groß heißen jetzt normal, mittel und groß. Stadtfirmen ändern sich dadurch nicht. Landfirmen haben normal immer 300 Jobs (vorher 200 plus 100 nur mit Spezialisierung), mittel 400 statt 450 und groß 500 statt 600.
+- **Wachstum** kostet pro Stufe das Doppelte der Umbaukosten für die zusätzliche Größe (Stadt 375, Land 150, klein zu normal in der Stadt 263).
+
 ## Stand 0.42.4
 
 **KI-Reiche stärken** ([TESTS_0.42.md](docs/TESTS_0.42.md)):
@@ -105,7 +122,7 @@ Die Privatwirtschaft ist ein Kreislauf:
 - **Bombardement:** Firmen bombardierter Planeten verlieren Kapital (0,1–0,3 % je Punkt Verwüstung und Monat), selten Stufen bis zur Zerstörung (Trümmer); danach drei Jahre Kriegsgebiet ohne neue Investitionen; Konzerne bauen ihre Firmen wieder auf, unabhängige gegen einen Zuschuss.
 - **Eroberung:** Geht ein Planet an ein anderes Reich, gehen seine Firmen mit; Konzernbindungen und Kredite enden, ein Konzern mit Hauptsitz dort zieht mit um (oder wird aufgelöst, wenn das neue Reich keinen Platz hat). Ohne Privatwirtschaft beim neuen Besitzer werden die Firmen Staatsdistrikte. Stationen und Megastrukturen der Holdings folgen dem Gebiet.
 - **Besatzung und Bodenkampf:** Firmen besetzter Planeten stehen still, der Besatzer erhebt Kontributionen; nach der Befreiung bestrafst, begnadigst oder enteignest du Kollaborateure. Ein besetzter Konzernsitz friert die Kasse ein und zieht nach fünf Jahren womöglich um. Bei einer Invasion schicken Konzerne Werkschutz (für den eigenen Sitz kostenlos, sonst gegen Firmen, Legierungen oder Einfluss).
-- **Spezialisierungen und Habitate:** Landfirmen bekommen die Jobs der Spezialisierung ihres Distrikttyps (wie Staatsdistrikte) und lassen dem Staat immer einen Distrikt des Typs. Auf Habitaten belegen Firmen Habitat-Distrikte: Stadtfirmen wie auf Planeten, Labore nur mit Forschungs-Spezialisierung, Minen und Kraftwerke mit halben Grundjobs, Farmen mit Hydroponik; Kosten in Legierungen, Leerenbewohner +50 %.
+- **Spezialisierungen und Habitate:** Firmenjobs hängen nicht von Spezialisierungen ab (seit 0.43, Stufen siehe oben). Landfirmen lassen dem Staat immer einen Distrikt des Typs, damit eine Spezialisierung möglich bleibt. Auf Habitaten belegen Firmen Habitat-Distrikte: Stadtfirmen den Wohndistrikt, Labore einen Forschungsdistrikt, Minen und Kraftwerke ihren Distrikt, Farmen den Energiedistrikt (nur mit Hydroponik); Kosten in Legierungen.
 - **Konzern-Habitat:** Ein reicher Konzern baut ein eigenes Habitat, eins pro Konzern und System. Er zahlt die Legierungen, wir den Einfluss. Bau und Besiedlung laufen wie in Vanilla. Den Standort wählt er nach seiner Branche. Der Konzern legt die Designation fest, besitzt alle Firmen dort, zahlt dort alle Kosten (25 % günstiger) und verlegt seinen Hauptsitz dorthin. Keine Verstaatlichung oder Räumung; Kolonie, Distrikte und Firmen zählen nicht zur Ausdehnung. Krise, Auflösung oder Planwirtschaft beenden die Rechte. Unseren Einfluss bestätigen wir immer selbst (KI-Reiche, wenn sie ihn haben). Nur durch eine Fusion kann ein Konzern zwei Habitate haben.
 - **Erledigt (0.31.2):** Konzern-Schwarm und -Ofen werden wie in Vanilla gebaut (Baustelle der Holdings, Vanilla-Bauzeit).
 - **Neu testen (beschlossen):** Die Wirtschaftswerte ab 0.33 (Marge, halbierter Gewinnanteil, Sozialleistungen, Institute, Rüstungsvertrag, Stiftungen) in einem **neuen Spiel**; bisher nur mit schon reichen Firmen getestet.
@@ -150,7 +167,7 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Spezialisierungsgebäude durch Konzerne (Variante C, beschlossen 27.10.2026):** Ein Konzern baut auf einem Planeten mit seinen Firmen das passende Gebäude der Spezialisierung (Mineralienaufbereitung, Energienetz, Nahrungsverarbeitung) als Konzernanlage, aus seiner Kasse, und bekommt dafür einen Gewinnanteil. Hilft der KI und nimmt dem Spieler Mikromanagement ab. Offen: Platzierung (`add_building` wählt den Slot selbst; nur bei passender Spezialisierung mit freiem Gebäudeplatz), Höhe des Gewinnanteils, Angebot per Event für Spieler, KI nimmt automatisch an. Ersetzt womöglich die Staatsanleihen der KI (die nur Handel ins Lager legen).
 - **KI in einem neuen Spiel beobachten (27.10.2026):** Vergleich 2301 → 2304 zeigte Fortschritt bei Militär und Firmenzahl, aber kaum mehr Legierungen; Staatsanleihen landen ungenutzt im Handelslager, Gewinnauszahlung bei kleinen KIs nur 21–39 %.
 - **Effizienzbonus der Konzernstationen prüfen (27.10.2026):** Stationen erzeugen 140 % des Vanilla-Werts, 120 % gehen an uns, 20 % sind Marge. Damit kostet Privatwirtschaft dort nichts und bringt dem Staat sogar mehr; vermutlich zu stark. Neu kalibrieren, sodass Privatisierung auch bei Stationen einen spürbaren Preis hat.
-- **Neue Firmenstufen, getrennt von der Spezialisierung (in Diskussion, 27.10.2026):** Landfirmen 200/300/400/500 Jobs, Stadtfirmen 130/200/300/400; „normal“ entspricht dem Vanilla-Distrikt. Habitate ohne Void Dweller (Ursprung oder Aufstiegsvorteil Voidborn): alle Firmen wie Stadtfirmen; mit Void Dweller: alle wie Landfirmen. Forschungsfirmen zählen auf Habitaten als Landfirmen (belegen einen Forschungsdistrikt). Bestehende Firmen werden zu „normal“, „mittel“ und „groß“; „klein“ kommt neu dazu.
+- **Erledigt (0.43): Neue Firmenstufen, getrennt von der Spezialisierung** (beschlossen 28.10.2026, im Spiel noch ungetestet).
 - **Bezahlung der Firmen (in Diskussion, 27.10.2026):** Die reine Handelszahlung bremst KIs mit wenig Handel. Verworfen: Effizienzbonus auf Jobs wie bei den Stationen (Privatwirtschaft hätte keine Kosten mehr) und eine Marge über dem Bonus (schwächt die Wirtschaft stärker als heute).
 - **Gemerkte Ideen, noch offen:**
   - Rationalisierung als eigene Firmenstufe („schlank“ statt „groß“), nicht nur als Event.

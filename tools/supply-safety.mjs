@@ -4,7 +4,7 @@ export const safetyFile = 'common/scripted_effects/pe_supply_safety_generated.tx
 export const costVar = (job, r) => `pe_cost_${job.replace('pe_private_', '')}_${r}`;
 
 export function supplySafety({variants, JOBS, RES, outVar, HAB, NOT_HAB, VOID, HAB_DISTRICT,
-  ZONE_JOBS, ZONES, UPKEEP, HAB_UPKEEP, zoneVar, ifChain, write, header}) {
+  ZONE_JOBS, ZONES, UPKEEP, HAB_UPKEEP, CITY_F, RURAL_F, szCalc, zoneVar, ifChain, write, header}) {
   const S = safetyResources;
   const jobs = Object.fromEntries(JOBS.map(j => [j.key, j]));
   const set = (a, b) => `set_variable = { which = ${a} value = ${b} }`;
@@ -17,18 +17,17 @@ export function supplySafety({variants, JOBS, RES, outVar, HAB, NOT_HAB, VOID, H
       `${set('pe_ss_tmp', src)} ${mul('pe_ss_tmp', +count.toFixed(4))} ${mul('pe_ss_tmp', factor)} ${mul('pe_ss_tmp', 'pe_ss_scale')} ${add(`${dst}_${r}`, 'pe_ss_tmp')}`).join(' ')).join(' ');
   const zone = (district) => (ZONE_JOBS[district] || []).map(([z, js]) =>
     `if = { limit = { num_zones = { type = ${z} value > 0 } } root = { ${Object.entries(js).map(([j,n]) => job(`pe_private_${j}`, n / 100, 'pe_ss_void')).join(' ')} } }`).join('\n');
-  // A lab on a habitat: the other half of its base jobs with a research specialisation.
-  const HAB_RES_ZONES = ['zone_habitat_research', 'zone_habitat_research_unity', 'zone_research_physics', 'zone_research_society', 'zone_research_engineering'];
-  const labZone = v => `if = { limit = { OR = { ${HAB_RES_ZONES.map(z => `num_zones = { type = ${z} value > 0 }`).join(' ')} } } root = { ${Object.entries(v.workforce).map(([j,w]) => job(j, w/200, 'pe_ss_void')).join(' ')} } }`;
   const upkeep = (values, sign = 1) => `root = { ${Object.entries(values).map(([r,n]) =>
     `${set('pe_ss_tmp', n * sign)} ${mul('pe_ss_tmp', 'pe_ss_scale')} ${sub(`pe_sd_${r}`, 'pe_ss_tmp')} ${add(`pe_sc_${r}`, 'pe_ss_tmp')}`).join(' ')} }`;
+  // A firm at stage "normal" here (workforce per 200: city firms and labs CITY_F, rural firms
+  // RURAL_F, on a habitat CITY_F, void dwellers RURAL_F), times pe_ss_scale (its size).
   const vector = v => `
-    root = { ${set('pe_ss_base', 1)} ${set('pe_ss_void', 1)} }
-    if = { limit = { ${HAB} } root = { ${set('pe_ss_base', v.cityLike && v.cls !== 'l' ? 1 : 0.5)} }
-      if = { limit = { ${VOID} } root = { ${mul('pe_ss_base', 1.5)} ${set('pe_ss_void', 1.5)} } } }
+    root = { ${set('pe_ss_base', v.cityLike ? CITY_F[1] : RURAL_F[1])} }
+    if = { limit = { ${HAB} } root = { ${set('pe_ss_base', CITY_F[1])} }
+      if = { limit = { ${VOID} } root = { ${set('pe_ss_base', RURAL_F[1])} } } }
     root = { ${Object.entries(v.workforce).map(([j,w]) => job(j,w/100)).join(' ')} }
-    if = { limit = { ${HAB} } ${v.cityLike ? (v.cls === 'l' ? labZone(v) : '') : zone(HAB_DISTRICT[v.cls])} ${upkeep(HAB_UPKEEP)} }
-    else = { ${v.cityLike ? '' : zone(v.district)} ${upkeep({energy: UPKEEP[v.k]})} }
+    if = { limit = { ${HAB} } ${upkeep(HAB_UPKEEP)} }
+    else = { ${upkeep({energy: UPKEEP[v.k]})} }
   `;
   const zero = () => `root = { ${RES.flatMap(r => [set(`pe_sd_${r}`,0),set(`pe_sc_${r}`,0)]).join(' ')} }`;
   const dispatch = () => zero() + ifChain(variants, v => `root = { check_variable = { which = pe_ss_code value = ${v.code} } }`, vector);
@@ -60,13 +59,14 @@ export function supplySafety({variants, JOBS, RES, outVar, HAB, NOT_HAB, VOID, H
   // Per variant its own vector (pe_safe_vec_<code>, pe_safe_buy_<code>): the engine copies every
   // scripted effect call while loading, and a call of the full dispatch (all 80 variants) per
   // candidate made 0.36.8-0.40.0 crash before the main menu (0.40.2).
-  const founding = code => `root = { ${set('pe_ss_code',code)} ${set('pe_ss_scale',1)} } pe_safe_vec_${code} = yes
+  // A new firm starts small (city ${CITY_F[0]}, rural ${RURAL_F[0]}/${RURAL_F[1]} of "normal"; the larger).
+  const founding = code => `root = { ${set('pe_ss_code',code)} ${set('pe_ss_scale',+Math.max(CITY_F[0], RURAL_F[0] / RURAL_F[1]).toFixed(2))} } pe_safe_vec_${code} = yes
     root = { ${S.map(r => `${set(`pe_safe_build_${r}`,`pe_sc_${r}`)} ${mul(`pe_safe_build_${r}`,-1)}`).join(' ')} }
     ${check('pe_sd','pe_safe_build')}`;
   const buy = code => `root = { ${set('pe_ss_code',code)} ${set('pe_ss_scale',1)} } pe_safe_buy_${code} = yes ${check()}`;
-  const growth = `root = { ${set('pe_ss_code','prev.pe_code')} ${set('pe_ss_scale',0.5)} }
+  const growth = `root = { ${set('pe_ss_code','prev.pe_code')} ${set('pe_ss_scale','prev.pe_szd')} }
     planet = { ${dispatch()} ${check()} }`;
-  const retool = `root = { ${set('pe_ss_code','prev.pe_code')} ${set('pe_ss_target','prev.pe_to_c')} ${set('pe_ss_scale','prev.pe_stage')} ${add('pe_ss_scale',1)} ${mul('pe_ss_scale',0.5)} }
+  const retool = `root = { ${set('pe_ss_code','prev.pe_code')} ${set('pe_ss_target','prev.pe_to_c')} ${set('pe_ss_scale','prev.pe_sz')} }
     planet = { ${dispatch()}
       root = { ${RES.map(r=>set(`pe_safe_old_${r}`,`pe_sd_${r}`)).join(' ')} ${set('pe_ss_code','pe_ss_target')} }
       ${dispatch()}
@@ -87,13 +87,15 @@ export function supplySafety({variants, JOBS, RES, outVar, HAB, NOT_HAB, VOID, H
       if = { limit = { check_variable = { which = pe_safe_margin_${r} value > 250 } } ${set(`pe_safe_margin_${r}`,250)} }
       ${set(`pe_safe_reserved_${r}`,0)}`).join('\n')}
     every_owned_colony = { every_deposit = { limit = { has_deposit_category = pe_deposit_cat_sites }
-      root = { ${set('pe_ss_code','prev.pe_target')} ${set('pe_ss_scale','prev.pe_tstage')} ${add('pe_ss_scale',1)} ${mul('pe_ss_scale',0.5)} }
+      ${szCalc('pe_ss_sz', 'pe_tstage', 'pe_target')}
+      root = { ${set('pe_ss_code','prev.pe_target')} ${set('pe_ss_scale','prev.pe_ss_sz')} }
       planet = { pe_safe_vector = yes root = { ${S.map(r=>sub(`pe_safe_reserved_${r}`,`pe_sc_${r}`)).join(' ')} } }
     } }
     set_country_flag = pe_safe_ready
   }`;
   write(safetyFile, header + `# Supply safety: monthly cached budget plus an empire-wide commitment ledger.
-# Full staffing, observed job rates, stage/habitat/zone jobs, direct base upkeep.
+# Full staffing, observed job rates, stage/habitat jobs (the state's districts also their
+# specialisation jobs), direct base upkeep.
 # Population maintenance is already in the budget; no population is created by a job.
 # Dispatchers by root.pe_ss_code (monthly reconciliation); candidates call their own variant.
 pe_safe_vector = { ${zero()} ${ifChain(variants, v => `root = { check_variable = { which = pe_ss_code value = ${v.code} } }`, v => `pe_safe_vec_${v.code} = yes`)} }

@@ -13,18 +13,18 @@ d_pe_site_city = {
 	can_be_cleared_potential = { exists = owner NOT = { has_planet_flag = pe_corp_hab } owner = { OR = { has_policy_flag = pe_order_guided has_policy_flag = pe_order_mixed } } }
 	can_be_cleared = { exists = owner NOT = { has_planet_flag = pe_corp_hab } owner = { OR = { has_policy_flag = pe_order_guided has_policy_flag = pe_order_mixed } } }
 	ai_weight = { weight = 0 }
-	on_cleared = { pe_firm_cleared = { COMP = 500 } }
+	on_cleared = { pe_firm_cleared = { COMP = 325 } }
 
 	resources = {
 		category = planet_deposits
 		cost = {
 			trigger = { planet = { owner = { has_policy_flag = pe_order_guided } } }
-			influence = 30
+			influence = 20
 		}
 		cost = {
 			trigger = { planet = { owner = { has_policy_flag = pe_order_mixed } } }
-			influence = 50
-			trade = 500
+			influence = 33
+			trade = 325
 		}
 	}
 
@@ -48,18 +48,18 @@ d_pe_site_mining = {
 	can_be_cleared_potential = { exists = owner NOT = { has_planet_flag = pe_corp_hab } owner = { OR = { has_policy_flag = pe_order_guided has_policy_flag = pe_order_mixed } } }
 	can_be_cleared = { exists = owner NOT = { has_planet_flag = pe_corp_hab } owner = { OR = { has_policy_flag = pe_order_guided has_policy_flag = pe_order_mixed } } }
 	ai_weight = { weight = 0 }
-	on_cleared = { pe_firm_cleared = { COMP = 300 } }
+	on_cleared = { pe_firm_cleared = { COMP = 200 } }
 
 	resources = {
 		category = planet_deposits
 		cost = {
 			trigger = { planet = { owner = { has_policy_flag = pe_order_guided } } }
-			influence = 30
+			influence = 20
 		}
 		cost = {
 			trigger = { planet = { owner = { has_policy_flag = pe_order_mixed } } }
-			influence = 50
-			trade = 300
+			influence = 33
+			trade = 200
 		}
 	}
 
@@ -88,18 +88,18 @@ d_pe_site_generator = {
 	can_be_cleared_potential = { exists = owner NOT = { has_planet_flag = pe_corp_hab } owner = { OR = { has_policy_flag = pe_order_guided has_policy_flag = pe_order_mixed } } }
 	can_be_cleared = { exists = owner NOT = { has_planet_flag = pe_corp_hab } owner = { OR = { has_policy_flag = pe_order_guided has_policy_flag = pe_order_mixed } } }
 	ai_weight = { weight = 0 }
-	on_cleared = { pe_firm_cleared = { COMP = 300 } }
+	on_cleared = { pe_firm_cleared = { COMP = 200 } }
 
 	resources = {
 		category = planet_deposits
 		cost = {
 			trigger = { planet = { owner = { has_policy_flag = pe_order_guided } } }
-			influence = 30
+			influence = 20
 		}
 		cost = {
 			trigger = { planet = { owner = { has_policy_flag = pe_order_mixed } } }
-			influence = 50
-			trade = 300
+			influence = 33
+			trade = 200
 		}
 	}
 
@@ -128,18 +128,18 @@ d_pe_site_farming = {
 	can_be_cleared_potential = { exists = owner NOT = { has_planet_flag = pe_corp_hab } owner = { OR = { has_policy_flag = pe_order_guided has_policy_flag = pe_order_mixed } } }
 	can_be_cleared = { exists = owner NOT = { has_planet_flag = pe_corp_hab } owner = { OR = { has_policy_flag = pe_order_guided has_policy_flag = pe_order_mixed } } }
 	ai_weight = { weight = 0 }
-	on_cleared = { pe_firm_cleared = { COMP = 300 } }
+	on_cleared = { pe_firm_cleared = { COMP = 200 } }
 
 	resources = {
 		category = planet_deposits
 		cost = {
 			trigger = { planet = { owner = { has_policy_flag = pe_order_guided } } }
-			influence = 30
+			influence = 20
 		}
 		cost = {
 			trigger = { planet = { owner = { has_policy_flag = pe_order_mixed } } }
-			influence = 50
-			trade = 300
+			influence = 33
+			trade = 200
 		}
 	}
 

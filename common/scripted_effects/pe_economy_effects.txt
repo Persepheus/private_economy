@@ -349,25 +349,23 @@ pe_relocate_from = {
 		limit = {
 			has_deposit_category = pe_deposit_cat_firms
 			is_variable_set = pe_prim
+			is_variable_set = pe_sz
 		}
 		set_variable = { which = pe_rl_cand value = 0 }
 		if = {
 			limit = { root = { check_variable = { which = pe_rl_done value = 0 } } }
-			# Workers (200 x stage size) and the moving cost (city 250 / rural 150 x stage size).
-			set_variable = { which = pe_tmp value = pe_stage }
-			change_variable = { which = pe_tmp value = 1 }
-			multiply_variable = { which = pe_tmp value = 0.5 }
+			# Workers (pe_wfall) and the moving cost (city 250 / rural 150 x size, pe_sz; see
+			# pe_deposit_fetch_scale).
 			if = {
 				limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } }
 				set_variable = { which = pe_rl_c value = 250 }
 			}
 			else = { set_variable = { which = pe_rl_c value = 150 } }
-			multiply_variable = { which = pe_rl_c value = pe_tmp }
+			multiply_variable = { which = pe_rl_c value = pe_sz }
 			root = {
 				set_variable = { which = pe_rl_prim value = prev.pe_prim }
 				set_variable = { which = pe_rl_code value = prev.pe_code }
-				set_variable = { which = pe_rl_wf value = prev.pe_tmp }
-				multiply_variable = { which = pe_rl_wf value = 200 }
+				set_variable = { which = pe_rl_wf value = prev.pe_wfall }
 				set_variable = { which = pe_rl_cost value = prev.pe_rl_c }
 				set_variable = { which = pe_rl_best value = -1 }
 			}
@@ -986,8 +984,9 @@ pe_planet_step = {
 	# A corporate habitat: its corporation pays founding, buyouts and growth here.
 	pe_chab_prep = yes
 	# Idle pops: civilians minus the jobs still open here (they would take those first) and
-	# minus the jobs of the construction sites here (200 x stage size each; a restructured
-	# firm takes its workers back). At least 50 of them for a new firm or a growth step.
+	# minus the jobs of the construction sites here (about 150 + 100 per stage each; a
+	# restructured firm takes its workers back). At least 50 of them for a new firm or a
+	# growth step.
 	root = { set_variable = { which = pe_unemp value = 0 } }
 	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = civilian } variable = pe_civ }
 	export_trigger_value_to_variable = { trigger = free_jobs variable = pe_fj }
@@ -998,8 +997,8 @@ pe_planet_step = {
 	every_deposit = {
 		limit = { has_deposit_category = pe_deposit_cat_sites }
 		set_variable = { which = pe_tmp value = pe_tstage }
-		change_variable = { which = pe_tmp value = 1 }
 		multiply_variable = { which = pe_tmp value = 100 }
+		change_variable = { which = pe_tmp value = 150 }
 		prev = { subtract_variable = { which = pe_idle value = prev.pe_tmp } }
 	}
 	if = { limit = { check_variable = { which = pe_idle value >= 50 } } root = { set_variable = { which = pe_unemp value = 1 } } }
@@ -1203,26 +1202,26 @@ pe_firm_accounting = {
 	set_variable = { which = pe_pl_profit value = root.pe_pl_acc }
 }
 
-# Deposit scope. Quarterly profit = value added x stage size x fill x profit share,
-# minus overhead (0.3 per stage and month). A firm in debt pays all of it back first: the
+# Deposit scope. Quarterly profit = value added x size (pe_sz, 1 = stage "normal") x fill x
+# profit share, minus overhead (0.3 x (2 x size - 1) a month: 0.3 for a normal firm, 0.9
+# for a large city firm). A firm in debt pays all of it back first: the
 # investor pool's founding loan, then a corporate loan (3% interest a quarter). Lacking
 # capital for growth, or in losses, it asks a corporation for a loan (pe_corp_lending).
 # Then half goes to the firm and half to the investor pool (a corporation keeps it all),
 # but a firm only keeps a reserve for its own restructuring and next growth step; the
 # rest goes to the pool. Losses hit the firm. Then at most one stage change
-# per planet and quarter: expand (+100 workforce, half a district) when the firm can pay
-# half a district's cost (city 250, rural 150),
+# per planet and quarter: expand (next stage, +70 or +100 workforce) when the firm can pay
+# its restructuring cost per size it adds x 2 (city 375 / rural 225 x 2 x pe_szd),
 # its jobs are filled and the planet has idle civilians; shrink or go bankrupt when its
 # capital runs out.
 pe_firm_book = {
 	set_variable = { which = pe_profit value = pe_va }
-	set_variable = { which = pe_tmp value = pe_stage }
-	change_variable = { which = pe_tmp value = 1 }
-	multiply_variable = { which = pe_tmp value = 0.5 }
-	multiply_variable = { which = pe_profit value = pe_tmp }
+	multiply_variable = { which = pe_profit value = pe_sz }
 	multiply_variable = { which = pe_profit value = root.pe_fill_cur }
 	multiply_variable = { which = pe_profit value = root.pe_profit_share }
-	set_variable = { which = pe_tmp value = pe_stage }
+	set_variable = { which = pe_tmp value = pe_sz }
+	multiply_variable = { which = pe_tmp value = 2 }
+	change_variable = { which = pe_tmp value = -1 }
 	multiply_variable = { which = pe_tmp value = 0.3 }
 	subtract_variable = { which = pe_profit value = pe_tmp }
 	multiply_variable = { which = pe_profit value = 3 }
@@ -1337,18 +1336,15 @@ pe_firm_book = {
 		else = {
 			change_variable = { which = pe_fcap value = pe_profit }
 		}
-		# Reserve: the firm keeps what its own restructuring would cost (city 250 / rural
-		# 150 x stage size), plus its next growth step below a corporation. The rest goes
+		# Reserve: the firm keeps what its own restructuring would cost (city 375 / rural
+		# 225 x size), plus about its next growth step below a corporation. The rest goes
 		# to the investor pool.
 		if = { limit = { check_variable = { which = pe_cls value = 2 } } set_variable = { which = pe_res value = 225 } }
 		else_if = { limit = { check_variable = { which = pe_cls value = 3 } } set_variable = { which = pe_res value = 225 } }
 		else_if = { limit = { check_variable = { which = pe_cls value = 4 } } set_variable = { which = pe_res value = 225 } }
 		else = { set_variable = { which = pe_res value = 375 } }
-		set_variable = { which = pe_tmp value = pe_stage }
-		change_variable = { which = pe_tmp value = 1 }
-		multiply_variable = { which = pe_tmp value = 0.5 }
 		set_variable = { which = pe_res2 value = pe_res }
-		multiply_variable = { which = pe_res2 value = pe_tmp }
+		multiply_variable = { which = pe_res2 value = pe_sz }
 		if = { limit = { check_variable = { which = pe_stage value < 3 } } change_variable = { which = pe_res2 value = pe_res } }
 		if = {
 			limit = { check_variable = { which = pe_fcap value > pe_res2 } }
@@ -1390,7 +1386,7 @@ pe_firm_book = {
 		else_if = {
 			limit = { check_variable = { which = pe_fcap value < 0 } }
 			set_variable = { which = pe_fcap value = 0 }
-			if = { limit = { check_variable = { which = pe_stage value > 1 } } set_variable = { which = pe_pending value = 2 } }
+			if = { limit = { check_variable = { which = pe_stage value > 0 } } set_variable = { which = pe_pending value = 2 } }
 			else = { set_variable = { which = pe_pending value = 3 } }
 			root = { set_variable = { which = pe_pend_any value = 1 } }
 		}
@@ -1411,6 +1407,8 @@ pe_firm_book = {
 			else_if = { limit = { check_variable = { which = pe_cls value = 3 } } set_variable = { which = pe_tmp value = 225 } }
 			else_if = { limit = { check_variable = { which = pe_cls value = 4 } } set_variable = { which = pe_tmp value = 225 } }
 			else = { set_variable = { which = pe_tmp value = 375 } }
+			multiply_variable = { which = pe_tmp value = pe_szd }
+			multiply_variable = { which = pe_tmp value = 2 }
 			# A corporate habitat: its corporation pays, 25% cheaper (pe_chab_prep).
 			set_variable = { which = pe_chab_g value = pe_tmp }
 			multiply_variable = { which = pe_chab_g value = 0.75 }
@@ -1451,14 +1449,14 @@ pe_firm_book = {
 	if = {
 		limit = { is_variable_set = pe_san check_variable = { which = pe_san value > 0 } }
 		if = { limit = { check_variable = { which = pe_san value = 3 } } set_variable = { which = pe_pending value = 3 } root = { set_variable = { which = pe_pend_any value = 1 } } }
-		else_if = { limit = { check_variable = { which = pe_stage value > 1 } } set_variable = { which = pe_pending value = 2 } root = { set_variable = { which = pe_pend_any value = 1 } } }
+		else_if = { limit = { check_variable = { which = pe_stage value > 0 } } set_variable = { which = pe_pending value = 2 } root = { set_variable = { which = pe_pend_any value = 1 } } }
 		set_variable = { which = pe_san value = 0 }
 	}
-	# Hit by a bombardment (pe_bombard_step): it loses a stage, at stage 1 it is destroyed
-	# (ruins, see pe_firm_change). This replaces whatever else it planned.
+	# Hit by a bombardment (pe_bombard_step): it loses a stage, a small one (stage 0) is
+	# destroyed (ruins, see pe_firm_change). This replaces whatever else it planned.
 	if = {
 		limit = { is_variable_set = pe_bomb_hit check_variable = { which = pe_bomb_hit value = 1 } }
-		if = { limit = { check_variable = { which = pe_stage value > 1 } } set_variable = { which = pe_pending value = 2 } }
+		if = { limit = { check_variable = { which = pe_stage value > 0 } } set_variable = { which = pe_pending value = 2 } }
 		else = { set_variable = { which = pe_pending value = 3 } }
 		root = { set_variable = { which = pe_pend_any value = 1 } }
 	}
@@ -1789,11 +1787,10 @@ pe_consider_variant = {
 	if = {
 		limit = { pe_can_$MODE$_$V$ = yes root = { check_variable = { which = pe_safe_ok value = 1 } } }
 		root = {
-			# Its value here: habitat and void dwellers (pe_pf_u / pe_pf_r), the jobs of the
-			# specialisation of its district type (pe_zb_<rural>, see pe_planet_prepare).
+			# Its value here at stage "normal": planet, habitat or void dwellers (pe_pf_u /
+			# pe_pf_r, see pe_planet_prepare).
 			set_variable = { which = pe_cand value = pe_val_$V$ }
 			multiply_variable = { which = pe_cand value = pe_pf_$K$ }
-			change_variable = { which = pe_cand value = $ZB$ }
 			set_variable = { which = pe_tmp value = pe_ent_val }
 			multiply_variable = { which = pe_tmp value = $ENT$ }
 			change_variable = { which = pe_cand value = pe_tmp }
@@ -1829,8 +1826,8 @@ pe_consider_variant = {
 	}
 }
 
-# The investor pool starts a construction site on a free slot. It costs what the district
-# would cost the state: the pool pays 40% down, the firm owes the rest (pe_debt) and pays
+# The investor pool starts a construction site for a small firm (stage 0) on a free slot. It
+# costs what the district would cost the state, x its size: the pool pays 40% down, the firm owes the rest (pe_debt) and pays
 # it back from its profit. The firm starts with 10 capital, enough to wait about three
 # years for workers. On a corporate habitat its corporation pays instead, 25% cheaper and
 # without a loan (pe_chab_prep); the firm is its own.
@@ -1851,7 +1848,7 @@ pe_found_firm = {
 		add_deposit = $SITE$
 			last_added_deposit = {
 				set_variable = { which = pe_target value = $CODE$ }
-				set_variable = { which = pe_tstage value = 1 }
+				set_variable = { which = pe_tstage value = 0 }
 				set_variable = { which = pe_fcap value = 10 }
 				set_variable = { which = pe_debt value = 0 }
 				set_variable = { which = pe_left value = $MONTHS$ }
@@ -1871,7 +1868,7 @@ pe_found_firm = {
 		add_deposit = $SITE$
 		last_added_deposit = {
 			set_variable = { which = pe_target value = $CODE$ }
-			set_variable = { which = pe_tstage value = 1 }
+			set_variable = { which = pe_tstage value = 0 }
 			set_variable = { which = pe_fcap value = 10 }
 			set_variable = { which = pe_debt value = root.pe_loan }
 			set_variable = { which = pe_left value = $MONTHS$ }
@@ -1979,7 +1976,6 @@ pe_retool_consider = {
 			# Its value here (as in pe_consider_variant).
 			set_variable = { which = pe_rv value = pe_val_$V$ }
 			multiply_variable = { which = pe_rv value = pe_pf_$K$ }
-			change_variable = { which = pe_rv value = $ZB$ }
 			if = {
 				limit = { check_variable = { which = pe_rv value > pe_cls_val_all } }
 				set_variable = { which = pe_cls_val_all value = pe_rv }

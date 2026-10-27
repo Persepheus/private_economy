@@ -102,8 +102,9 @@ function code(key) {
 function vector(c,key,scale=1,kind='pe_safe_vector') {
   Object.assign(c.root.vars,{pe_ss_code:code(key),pe_ss_scale:scale});run(definitions.get(kind),c);return c.root.vars;
 }
-function grow(c,key) {
-  const firm={vars:{pe_code:code(key)},flags:new Set()};
+// pe_szd: what the next stage adds to the size (pe_deposit_fetch_scale): city 0.5, rural 1/3.
+function grow(c,key,szd=0.5) {
+  const firm={vars:{pe_code:code(key),pe_szd:szd},flags:new Set()};
   run(definitions.get('pe_safe_growth'),enter(c,firm));return c.root.vars;
 }
 const near=(a,b)=>assert(Math.abs(a-b)<.001,`${a} != ${b}`);
@@ -112,28 +113,36 @@ v=grow(c,'aaac');near(v.pe_sd_minerals,-6);near(v.pe_sd_energy,-1);assert.equal(
 c.root.vars.pe_safe_net_minerals=15;v=grow(c,'aaac');assert.equal(v.pe_safe_ok,0);
 c.root.vars.pe_safe_net_minerals=16;v=grow(c,'aaac');assert.equal(v.pe_safe_ok,1); // exact boundary
 c.root.vars.pe_safe_reserved_minerals=-6;v=grow(c,'aaac');assert.equal(v.pe_safe_ok,0); // no second use of surplus
-c=fixture();c.root.vars.pe_safe_net_minerals=-100;v=grow(c,'mmma');near(v.pe_sd_minerals,1.5);assert.equal(v.pe_safe_ok,1); // mixed mine improves shortage
-c.root.vars.pe_safe_net_energy=9;assert.equal(grow(c,'mmma').pe_safe_ok,0); // other input still matters
+c=fixture();c.root.vars.pe_safe_net_minerals=-100;v=grow(c,'mmma',1/3);near(v.pe_sd_minerals,1.5);assert.equal(v.pe_safe_ok,1); // mixed mine improves shortage
+c.root.vars.pe_safe_net_energy=9;assert.equal(grow(c,'mmma',1/3).pe_safe_ok,0); // other input still matters
 c=fixture();Object.assign(c.root.vars,{pe_o_metallurgist_minerals:0,pe_cost_metallurgist_minerals:0,pe_o_metallurgist_food:-9,pe_cost_metallurgist_food:9});
 c.root.vars.pe_safe_net_food=12;assert.equal(grow(c,'aaac').pe_safe_ok,0); // catalytic input
-c=fixture({hab:true,voidDweller:true,zones:{zone_minerals:1}});v=vector(c,'mmmm');near(v.pe_sd_minerals,12);near(v.pe_sd_energy,-2); // 150 base + 150 zone workforce
+c=fixture({hab:true,voidDweller:true,zones:{zone_minerals:1}});v=vector(c,'mmmm');near(v.pe_sd_minerals,12);near(v.pe_sd_energy,-2); // void dwellers: 300 workforce like a rural firm
 c=fixture({zones:{zone_foundry:1,zone_factory:1}});v=vector(c,'aaac',1,'pe_safe_buy_vector');near(v.pe_sd_minerals,0);near(v.pe_sd_energy,0); // subtract replaced district
 c=fixture({hab:true,zones:{zone_habitat_hydroponics:1}});v=vector(c,'ffff',1,'pe_safe_buy_vector');near(v.pe_sd_energy,-6);near(v.pe_sd_food,6); // farming replaces energy district
 c=fixture({hab:true,zones:{zone_habitat_research:1}});v=vector(c,'xxxy',1,'pe_safe_buy_vector');near(v.pe_sd_consumer_goods,-.3); // 180 replaced vs 200 new research workforce
+// Firm size by stage (pe_deposit_fetch_scale): city 130/200/300/400, rural 200/300/400/500;
+// a habitat counts like a city, void dwellers like rural firms.
+for(const [key,stage,opt,sz,wf,szd] of [['aaac',0,{},.65,130,.35],['aaac',1,{},1,200,.5],['aaac',3,{},2,400,.5],
+  ['mmmm',0,{},2/3,200,.33],['mmmm',1,{},1,300,.33],['mmmm',3,{},5/3,500,.33],
+  ['mmmm',2,{hab:true},1.5,300,.5],['aaac',3,{hab:true,voidDweller:true},5/3,500,.33],['xxxy',0,{hab:true,voidDweller:true},2/3,200,.33]]) {
+  c=fixture(opt);const d={vars:{pe_code:code(key),pe_stage:stage},flags:new Set()};
+  run(definitions.get('pe_deposit_fetch_scale'),enter(c,d));near(d.vars.pe_sz,sz);near(d.vars.pe_wfall,wf);near(d.vars.pe_szd,szd);
+}
 // Actual emitted restructuring guard: reject a profitable destination if the outage
 // would remove too much of the old supply, independently of final output.
 c=fixture();c.root.vars.pe_safe_net_minerals=20;
-let firm={vars:{pe_code:code('mmmm'),pe_to_c:code('mmma'),pe_stage:3},flags:new Set()};
+let firm={vars:{pe_code:code('mmmm'),pe_to_c:code('mmma'),pe_stage:2,pe_sz:4/3},flags:new Set()};
 run(definitions.get('pe_retool_guard'),enter(c,firm));assert.equal(c.root.vars.pe_guard_ok,0);near(c.root.vars.pe_safe_out_minerals,-22);
 // Monthly reconciliation: drop last month's instantaneous reservations, retain the
 // full consumption of still unfinished sites; do not count their future production.
 c=fixture();Object.assign(c.root.net,{energy:100,minerals:100,food:100,consumer_goods:100,trade:100});
 Object.assign(c.root.expenses,{energy:100,minerals:1000,food:20000});
 c.root.vars.pe_safe_reserved_minerals=-500;
-const site={category:'pe_deposit_cat_sites',vars:{pe_target:code('mmma'),pe_tstage:3},flags:new Set()};c.planet.deposits.push(site);
+const site={category:'pe_deposit_cat_sites',vars:{pe_target:code('mmma'),pe_tstage:2},flags:new Set()};c.planet.deposits.push(site);
 run(definitions.get('pe_safe_month'),enter(c,c.root));
 near(c.root.vars.pe_safe_margin_energy,10);near(c.root.vars.pe_safe_margin_minerals,50);near(c.root.vars.pe_safe_margin_food,250);
-near(c.root.vars.pe_safe_reserved_minerals,-6);near(c.root.vars.pe_safe_reserved_energy,-2);
+near(c.root.vars.pe_safe_reserved_minerals,-6);near(c.root.vars.pe_safe_reserved_energy,-4/3); // rural mid-size: 400 workforce
 // Once the site is a firm and the budget contains it, no old construction debt remains.
 c.planet.deposits=[];c.root.net.minerals=106;run(definitions.get('pe_safe_month'),enter(c,c.root));
 near(c.root.vars.pe_safe_reserved_minerals,0);near(c.root.vars.pe_safe_net_minerals,106);

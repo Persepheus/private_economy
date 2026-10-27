@@ -1859,7 +1859,7 @@ pe_corp_found_new = {
 
 # Country scope, quarterly: each corporation with enough cash may take over one independent
 # firm of its sector group (35% per quarter). It pays the owners 30% of what the district
-# costs (city 150 / rural 90 x stage size) into the investor pool.
+# costs (city 150 / rural 90 x size) into the investor pool.
 pe_corp_acquire = {
 	if = {
 		limit = {
@@ -1876,9 +1876,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 1 } check_variable = { which = pe_prim value = 2 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -1919,9 +1917,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 3 } check_variable = { which = pe_prim value = 4 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -1962,9 +1958,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 5 } check_variable = { which = pe_prim value = 6 } check_variable = { which = pe_prim value = 7 } check_variable = { which = pe_prim value = 8 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2005,9 +1999,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 9 } check_variable = { which = pe_prim value = 10 } check_variable = { which = pe_prim value = 11 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2048,9 +2040,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 1 } check_variable = { which = pe_prim value = 2 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2091,9 +2081,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 3 } check_variable = { which = pe_prim value = 4 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2134,9 +2122,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 5 } check_variable = { which = pe_prim value = 6 } check_variable = { which = pe_prim value = 7 } check_variable = { which = pe_prim value = 8 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2177,9 +2163,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 9 } check_variable = { which = pe_prim value = 10 } check_variable = { which = pe_prim value = 11 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2220,9 +2204,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 1 } check_variable = { which = pe_prim value = 2 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2263,9 +2245,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 3 } check_variable = { which = pe_prim value = 4 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2306,9 +2286,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 5 } check_variable = { which = pe_prim value = 6 } check_variable = { which = pe_prim value = 7 } check_variable = { which = pe_prim value = 8 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2349,9 +2327,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 9 } check_variable = { which = pe_prim value = 10 } check_variable = { which = pe_prim value = 11 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2392,9 +2368,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 1 } check_variable = { which = pe_prim value = 2 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2435,9 +2409,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 3 } check_variable = { which = pe_prim value = 4 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2478,9 +2450,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 5 } check_variable = { which = pe_prim value = 6 } check_variable = { which = pe_prim value = 7 } check_variable = { which = pe_prim value = 8 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2521,9 +2491,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 9 } check_variable = { which = pe_prim value = 10 } check_variable = { which = pe_prim value = 11 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2564,9 +2532,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 1 } check_variable = { which = pe_prim value = 2 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2607,9 +2573,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 3 } check_variable = { which = pe_prim value = 4 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2650,9 +2614,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 5 } check_variable = { which = pe_prim value = 6 } check_variable = { which = pe_prim value = 7 } check_variable = { which = pe_prim value = 8 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2693,9 +2655,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 9 } check_variable = { which = pe_prim value = 10 } check_variable = { which = pe_prim value = 11 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2736,9 +2696,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 1 } check_variable = { which = pe_prim value = 2 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2779,9 +2737,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 3 } check_variable = { which = pe_prim value = 4 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2822,9 +2778,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 5 } check_variable = { which = pe_prim value = 6 } check_variable = { which = pe_prim value = 7 } check_variable = { which = pe_prim value = 8 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2865,9 +2819,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 9 } check_variable = { which = pe_prim value = 10 } check_variable = { which = pe_prim value = 11 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2908,9 +2860,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 1 } check_variable = { which = pe_prim value = 2 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2951,9 +2901,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 3 } check_variable = { which = pe_prim value = 4 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -2994,9 +2942,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 5 } check_variable = { which = pe_prim value = 6 } check_variable = { which = pe_prim value = 7 } check_variable = { which = pe_prim value = 8 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -3037,9 +2983,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 9 } check_variable = { which = pe_prim value = 10 } check_variable = { which = pe_prim value = 11 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -3080,9 +3024,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 1 } check_variable = { which = pe_prim value = 2 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -3123,9 +3065,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 3 } check_variable = { which = pe_prim value = 4 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -3166,9 +3106,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 5 } check_variable = { which = pe_prim value = 6 } check_variable = { which = pe_prim value = 7 } check_variable = { which = pe_prim value = 8 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -3209,9 +3147,7 @@ pe_corp_acquire = {
 				save_event_target_as = pe_msg_planet
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } OR = { check_variable = { which = pe_prim value = 9 } check_variable = { which = pe_prim value = 10 } check_variable = { which = pe_prim value = 11 } } }
-					set_variable = { which = pe_tmp value = pe_stage }
-					change_variable = { which = pe_tmp value = 1 }
-					multiply_variable = { which = pe_tmp value = 0.5 }
+					set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 					else = { multiply_variable = { which = pe_tmp value = 90 } }
 					if = {
@@ -4879,7 +4815,7 @@ pe_corp_lending = {
 				root = { check_variable = { which = pe_pend_any value = 0 } }
 			}
 			set_variable = { which = pe_fcap value = 0 }
-			if = { limit = { check_variable = { which = pe_stage value > 1 } } set_variable = { which = pe_pending value = 2 } set_variable = { which = pe_fst value = 2 } }
+			if = { limit = { check_variable = { which = pe_stage value > 0 } } set_variable = { which = pe_pending value = 2 } set_variable = { which = pe_fst value = 2 } }
 			else = { set_variable = { which = pe_pending value = 3 } set_variable = { which = pe_fst value = 3 } }
 			root = { set_variable = { which = pe_pend_any value = 1 } }
 		}
@@ -4895,7 +4831,7 @@ pe_corp_lending = {
 
 # Country scope, quarterly: a corporation whose cash is below zero (too many loans, too many
 # defaults) sells one of its firms. It becomes independent; the investor pool pays the
-# corporation 30% of what the district costs (city 150 / rural 90 x stage size). Message.
+# corporation 30% of what the district costs (city 150 / rural 90 x size). Message.
 pe_corp_crisis = {
 	if = {
 		limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value < 0 } any_owned_colony = { check_variable = { which = pe_mem_1 value > 0 } } }
@@ -4905,9 +4841,7 @@ pe_corp_crisis = {
 			random_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 1 } }
 				set_variable = { which = pe_corp value = 0 }
-				set_variable = { which = pe_tmp value = pe_stage }
-				change_variable = { which = pe_tmp value = 1 }
-				multiply_variable = { which = pe_tmp value = 0.5 }
+				set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 				else = { multiply_variable = { which = pe_tmp value = 90 } }
 				root = {
@@ -4929,9 +4863,7 @@ pe_corp_crisis = {
 			random_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 2 } }
 				set_variable = { which = pe_corp value = 0 }
-				set_variable = { which = pe_tmp value = pe_stage }
-				change_variable = { which = pe_tmp value = 1 }
-				multiply_variable = { which = pe_tmp value = 0.5 }
+				set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 				else = { multiply_variable = { which = pe_tmp value = 90 } }
 				root = {
@@ -4953,9 +4885,7 @@ pe_corp_crisis = {
 			random_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 3 } }
 				set_variable = { which = pe_corp value = 0 }
-				set_variable = { which = pe_tmp value = pe_stage }
-				change_variable = { which = pe_tmp value = 1 }
-				multiply_variable = { which = pe_tmp value = 0.5 }
+				set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 				else = { multiply_variable = { which = pe_tmp value = 90 } }
 				root = {
@@ -4977,9 +4907,7 @@ pe_corp_crisis = {
 			random_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 4 } }
 				set_variable = { which = pe_corp value = 0 }
-				set_variable = { which = pe_tmp value = pe_stage }
-				change_variable = { which = pe_tmp value = 1 }
-				multiply_variable = { which = pe_tmp value = 0.5 }
+				set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 				else = { multiply_variable = { which = pe_tmp value = 90 } }
 				root = {
@@ -5001,9 +4929,7 @@ pe_corp_crisis = {
 			random_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 5 } }
 				set_variable = { which = pe_corp value = 0 }
-				set_variable = { which = pe_tmp value = pe_stage }
-				change_variable = { which = pe_tmp value = 1 }
-				multiply_variable = { which = pe_tmp value = 0.5 }
+				set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 				else = { multiply_variable = { which = pe_tmp value = 90 } }
 				root = {
@@ -5025,9 +4951,7 @@ pe_corp_crisis = {
 			random_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 6 } }
 				set_variable = { which = pe_corp value = 0 }
-				set_variable = { which = pe_tmp value = pe_stage }
-				change_variable = { which = pe_tmp value = 1 }
-				multiply_variable = { which = pe_tmp value = 0.5 }
+				set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 				else = { multiply_variable = { which = pe_tmp value = 90 } }
 				root = {
@@ -5049,9 +4973,7 @@ pe_corp_crisis = {
 			random_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 7 } }
 				set_variable = { which = pe_corp value = 0 }
-				set_variable = { which = pe_tmp value = pe_stage }
-				change_variable = { which = pe_tmp value = 1 }
-				multiply_variable = { which = pe_tmp value = 0.5 }
+				set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 				else = { multiply_variable = { which = pe_tmp value = 90 } }
 				root = {
@@ -5073,9 +4995,7 @@ pe_corp_crisis = {
 			random_deposit = {
 				limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 8 } }
 				set_variable = { which = pe_corp value = 0 }
-				set_variable = { which = pe_tmp value = pe_stage }
-				change_variable = { which = pe_tmp value = 1 }
-				multiply_variable = { which = pe_tmp value = 0.5 }
+				set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 				if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
 				else = { multiply_variable = { which = pe_tmp value = 90 } }
 				root = {
@@ -12844,7 +12764,7 @@ pe_chab_debug_cash = {
 # corporation at its headquarters, deposit d_pe_corp_lab_<field>_<level> (pe_labk = slot,
 # pe_labl = level); levels by cash (pe_c<slot>_lab). Benefits: on each planet with firms of a
 # corporation with at least 3000 cash, its workers (its share of the filled private jobs,
-# pe_pfa, by stage size, plus its institute) get the top living standard: it pays the extra
+# pe_pfa, by size, plus its institute) get the top living standard: it pays the extra
 # consumer goods (gap to Utopian Abundance x 3 months per 100 pops, market price) and the planet
 # gets the happiness gap for their share of the pops (pe_corp_welfare, 0.1% per point).
 # pe_c<slot>_wfr = what it paid this quarter (register).
@@ -14218,9 +14138,7 @@ pe_corp_social = {
 		set_variable = { which = pe_cw_s8 value = 0 }
 		every_deposit = {
 			limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_stage }
-			set_variable = { which = pe_tmp value = pe_stage }
-			change_variable = { which = pe_tmp value = 1 }
-			multiply_variable = { which = pe_tmp value = 0.5 }
+			set_variable = { which = pe_tmp value = pe_stage } if = { limit = { OR = { AND = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_code value > 62 } } planet = { uses_district_set = habitat exists = owner owner = { is_void_dweller_empire = yes } } } } change_variable = { which = pe_tmp value = 2 } divide_variable = { which = pe_tmp value = 3 } } else_if = { limit = { check_variable = { which = pe_stage value = 0 } } set_variable = { which = pe_tmp value = 0.65 } } else = { change_variable = { which = pe_tmp value = 1 } multiply_variable = { which = pe_tmp value = 0.5 } }
 			prev = { change_variable = { which = pe_cw_all value = prev.pe_tmp } }
 			if = { limit = { check_variable = { which = pe_corp value = 1 } } prev = { change_variable = { which = pe_cw_s1 value = prev.pe_tmp } } }
 			else_if = { limit = { check_variable = { which = pe_corp value = 2 } } prev = { change_variable = { which = pe_cw_s2 value = prev.pe_tmp } } }
