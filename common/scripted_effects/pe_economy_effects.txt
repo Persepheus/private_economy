@@ -1624,6 +1624,13 @@ pe_buyout_execute = {
 		export_trigger_value_to_variable = { trigger = num_districts parameters = { type = $DISTRICT$ } variable = pe_after }
 		if = { limit = { NOT = { is_variable_set = pe_after } } set_variable = { which = pe_after value = 0 } }
 	}
+	# Every sale logs its outcome (0.37.0: a sale on a habitat did not happen, cause unknown).
+	if = {
+		limit = { owner = { is_ai = no } }
+		set_variable = { which = pe_buy_safe value = root.pe_safe_ok }
+		owner = { prev = { set_variable = { which = pe_buy_cap value = prev.pe_capital } } }
+		log = "private_economy: buyout $FIRM$ on \\[This.GetName]: $DISTRICT$ before \\[This.pe_before] after \\[This.pe_after], private capital \\[This.pe_buy_cap] (down payment $PRICE$ x 0.4), supply check \\[This.pe_buy_safe]"
+	}
 	if = {
 		limit = { check_variable = { which = pe_before value > pe_after } }
 		root = { change_variable = { which = pe_safe_reserved_energy value = pe_sd_energy } change_variable = { which = pe_safe_reserved_minerals value = pe_sd_minerals } change_variable = { which = pe_safe_reserved_food value = pe_sd_food } change_variable = { which = pe_safe_reserved_consumer_goods value = pe_sd_consumer_goods } change_variable = { which = pe_safe_reserved_trade value = pe_sd_trade } }

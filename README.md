@@ -6,6 +6,16 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
+## Stand 0.37.0
+
+**Korrekturen 0.37.0** ([TESTS_0.37.md](docs/TESTS_0.37.md)):
+- Forschungsfirmen auf Habitaten bekommen die halben Basisjobs; die andere Hälfte nur, solange das Habitat eine Forschungsspezialisierung (Zone) hat. Das entspricht Vanilla (Forschungsdistrikt 90, mit Zone 180) und dem Bergbau.
+- Die größte Firmenstufe heißt jetzt „Großbetrieb“ (Large) statt „Konzern“, damit sie nicht mit den echten Konzernen verwechselt wird.
+- Familienförderung kommt nur auf Planeten, auf denen Pops wachsen (nicht bei reinen Roboter- und Maschinenplaneten).
+- Jagdrechte werden nur gegen Weltraumkreaturen angeboten, die uns feindlich gesinnt sind.
+- „Lagerbestand zu verkaufen“ nennt den Rohstoff. Der Text der Konzern-Station nennt die tatsächlichen 120 % statt „doppelt“.
+- Das Kaufangebot zeigt keine Variablen mehr im Tooltip. Jeder Verkauf schreibt sein Ergebnis ins game.log.
+
 ## Stand 0.36.8
 
 **Versorgung vor Expansion:** Gründung, Wachstum (einschließlich Konzernkrediten und Konzernhabitat-Finanzierung), Distriktkäufe und Umbauten verwenden eine gemeinsame Prüfung für Energie, Mineralien, Nahrung, Konsumgüter und Handel. Eine netto verschlechterte Ressource muss nach der Investition mindestens 5 % ihrer monatlichen Ausgaben als Überschuss behalten, begrenzt auf 10–250. Bereits zugesagte Investitionen und der volle künftige Verbrauch laufender Baustellen werden reichsweit reserviert; deren künftige Produktion finanziert noch keine weitere Expansion. Bestehende Firmen und Überbrückungskredite laufen weiter. Initialisierung im bestehenden Spielstand am nächsten Monatspuls. [Rechenmodell, Prüfungen und Einschränkungen](docs/TESTS_0.36.8.md). Statisch geprüft; Spielprüfung durch den Nutzer steht aus.
@@ -73,6 +83,7 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Erledigt (0.30):** Landfirmen bekommen die Jobs der Spezialisierung ihres Distrikttyps; der letzte Distrikt eines Typs bleibt beim Staat.
 - **Gefunden im Save Hesukaran 7 (2287):** Schutzflotte der KI ohne passenden Schiffsentwurf (create_ship ungültig, leere Flotte); Kredite eines aufgelösten Konzerns zahlen weiter in seinen leeren Platz; zwei Rohstoffkonzerne horten je 13-14 Tsd. Kasse (Verwendung bzw. Kalibrierung).
 - **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen.
+- **Längere Lieferketten (Supply Chains):** mehrstufige Wertschöpfung zwischen Firmen (Vorprodukte, Zulieferer), gemerkt am 27.10.2026.
 - **Danach (beschlossen):** Lobbys der Branchengruppen (bauen auf den Konzernen auf); private Werften erst, wenn klar ist, was sie spielerisch bringen.
 - **Konjunkturzyklus:** erst, wenn die Wirtschaft stabil läuft.
 - **Aufräumen:** alter Holdings-Prototyp (pe.15-21) und diese Weltraum-Zeile sind überholt.

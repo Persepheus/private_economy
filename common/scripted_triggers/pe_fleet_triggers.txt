@@ -1,6 +1,7 @@
-# Corporate fleets: hostile space creatures in this system (system scope).
+# Corporate fleets: space creatures in this system that are hostile to us (system scope,
+# root = our country; hunting rights).
 pe_monster_system = {
-	any_fleet_in_system = { owner = { OR = { is_amoeba_country_type = yes is_crystal_country_type = yes is_drone_country_type = yes is_voidworms_hostile_country_type = yes } } }
+	any_fleet_in_system = { owner = { OR = { is_amoeba_country_type = yes is_crystal_country_type = yes is_drone_country_type = yes is_voidworms_hostile_country_type = yes } is_hostile = root } }
 }
 
 # Corporate fleets: pirates or marauder raiders in this system (system scope).

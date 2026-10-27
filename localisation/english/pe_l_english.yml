@@ -48,6 +48,7 @@
  pe_buyout_refused_desc:0 "The government blocked a private investment here. Business circles are unhappy."
  pe.110.name:0 "A Buyout Offer"
  pe.110.a:0 "Sell the district."
+ pe.110.a.tt:0 "The investors buy the district and turn it into the private firm; we get the payment, they pay from the private capital."
  pe.110.b:0 "The district stays in state hands."
  pe.6.name:0 "Private Economy: Diagnosis"
  pe.6.a:0 "Understood."

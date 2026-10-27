@@ -50,7 +50,8 @@ country_event = {
 
 	option = {
 		name = pe.110.a
-		event_target:pe_offer_planet = { pe_buyout_by_offer = yes }
+		custom_tooltip = pe.110.a.tt
+		hidden_effect = { event_target:pe_offer_planet = { pe_buyout_by_offer = yes } }
 		remove_country_flag = pe_offer_pending
 	}
 	option = {

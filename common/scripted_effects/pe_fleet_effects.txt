@@ -186,7 +186,7 @@ pe_corp_fleets = {
 					set_variable = { which = pe_cl_power value = 0 }
 					event_target:pe_cl_sys = {
 						every_fleet_in_system = {
-							limit = { owner = { OR = { is_amoeba_country_type = yes is_crystal_country_type = yes is_drone_country_type = yes is_voidworms_hostile_country_type = yes } } }
+							limit = { owner = { OR = { is_amoeba_country_type = yes is_crystal_country_type = yes is_drone_country_type = yes is_voidworms_hostile_country_type = yes } is_hostile = root } }
 							export_trigger_value_to_variable = { trigger = fleet_power variable = pe_tmp }
 							root = { change_variable = { which = pe_cl_power value = prev.pe_tmp } }
 						}

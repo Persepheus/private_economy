@@ -48,6 +48,7 @@
  pe_buyout_refused_desc:0 "Die Regierung hat hier eine private Investition blockiert. Die Wirtschaft ist verstimmt."
  pe.110.name:0 "Ein Übernahmeangebot"
  pe.110.a:0 "Den Distrikt verkaufen."
+ pe.110.a.tt:0 "Die Investoren kaufen den Distrikt und machen daraus die Privatfirma; wir bekommen die Zahlung, sie zahlen aus dem Privatkapital."
  pe.110.b:0 "Der Distrikt bleibt in Staatshand."
  pe.6.name:0 "Privatwirtschaft: Diagnose"
  pe.6.a:0 "Verstanden."

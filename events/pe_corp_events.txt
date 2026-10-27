@@ -116,7 +116,12 @@ country_event = {
 country_event = {
 	id = pe.281
 	title = pe.281.name
-	desc = pe.281.desc
+	desc = { trigger = { check_variable = { which = pe_hsx value = 1 } } text = pe.281.desc.minerals }
+	desc = { trigger = { check_variable = { which = pe_hsx value = 2 } } text = pe.281.desc.energy }
+	desc = { trigger = { check_variable = { which = pe_hsx value = 3 } } text = pe.281.desc.food }
+	desc = { trigger = { check_variable = { which = pe_hsx value = 4 } } text = pe.281.desc.trade }
+	desc = { trigger = { check_variable = { which = pe_hsx value = 5 } } text = pe.281.desc.alloys }
+	desc = { trigger = { check_variable = { which = pe_hsx value = 6 } } text = pe.281.desc.consumer_goods }
 	picture = GFX_evt_tradedeal
 	is_triggered_only = yes
 

@@ -14,7 +14,7 @@
 //  - Rural firms (one slot plus one district of their primary type): the primary
 //    resource plus a second share of it or of alloys, consumer goods, trade or another
 //    rural resource.
-// Each variant exists in 3 stages (small / mid-size / corporation): workforce and upkeep
+// Each variant exists in 3 stages (small / mid-size / large): workforce and upkeep
 // x1 / x1.5 / x2 on the same slot. Housing like the district the firm replaces.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -196,9 +196,10 @@ const HOUSING = {u: housingOf('district_city'), m: housingOf('district_mining'),
 
 // --- Habitats and district specialisations (zones) ---------------------------------
 // On a habitat a firm takes a habitat district instead: city firms the housing district
-// (same jobs), labs also a research district (only with a research specialisation there),
-// mines and power plants the mining / energy district with half the base jobs (100 instead
-// of 200), farms the energy district (only with hydroponics). Void dwellers get +50% on all
+// (same jobs), labs also a research district with half the base jobs and the other half
+// only while the habitat has a research specialisation (zone; vanilla: a research district
+// 90 workforce, 180 with the zone), mines and power plants the mining / energy district with
+// half the base jobs (100 instead of 200), farms the energy district (only with hydroponics). Void dwellers get +50% on all
 // habitat jobs, as vanilla. Costs and upkeep like a habitat district (150 alloys = 600,
 // 2 energy + 0.25 alloys, 360 days).
 const HAB = 'uses_district_set = habitat';
@@ -314,12 +315,14 @@ let dep = header + `# Firm variants and stages: one district slot each (rural on
 # housing like the matching district, scaled by stage. Rural firms get the jobs of their
 # district type's specialisation (zone) where the planet has it. On a habitat (conditional
 # modifiers): a habitat district instead, half the base jobs for rural firms, labs also a
-# research district, void dwellers +50% jobs, habitat upkeep.
+# research district (half the base jobs, the other half with a research specialisation),
+# void dwellers +50% jobs, habitat upkeep.
 `;
 const withCond = (blocks, cond) => blocks.map(b => b.replace('potential = {', `potential = { ${cond}`));
 const fmt = n => +n.toFixed(2);
 const jobsOf = (v, s, f) => Object.entries(v.workforce).map(([job, wf]) => `job_${job}_add = ${fmt(wf * stageMult(s) * f)}`);
 const tpm = (cond, mods) => mods.length ? `triggered_planet_modifier = {\n\t\tpotential = { ${cond} }\n${mods.map(m => '\t\t' + m).join('\n')}\n\t}` : '';
+const HAB_LAB_ZONE = `OR = { ${HAB_RESEARCH_ZONES.map(z => `num_zones = { type = ${z} value > 0 }`).join(' ')} }`;
 const zoneBlocks = (district, s, cond, f) => (ZONE_JOBS[district] || []).map(([z, jobs]) => tpm(`${cond} num_zones = { type = ${z} value > 0 }`, Object.entries(jobs).map(([jb, n]) => `job_${ZJOB(jb)}_add = ${fmt(n * stageMult(s) * f)}`)));
 const housingMods = h => h.base;
 for (const {v, s, key} of pairs) {
@@ -327,13 +330,14 @@ for (const {v, s, key} of pairs) {
   const housing = HOUSING[v.cityLike ? 'u' : v.cls], habHousing = HAB_HOUSING[v.cityLike ? 'u' : v.cls];
   const sumH = h => h.base.reduce((sum, m) => sum + Number(m.split(' = ')[1]), 0) + (v.cityLike ? zoneHousing(v) : 0);
   const planetMods = [...(sumH(housing) ? [`planet_housing_add = ${sumH(housing)}`] : []), ...(rural ? [`${v.district}_max_add = -1`] : []), ...jobsOf(v, s, 1)];
-  const habMods = [...(sumH(habHousing) ? [`planet_housing_add = ${sumH(habHousing)}`] : []), ...(rural ? [`${HAB_DISTRICT[v.cls]}_max_add = -1`] : lab ? [`${HAB_DISTRICT.l}_max_add = -1`] : []), ...jobsOf(v, s, rural ? HAB_RURAL : 1)];
+  const habMods = [...(sumH(habHousing) ? [`planet_housing_add = ${sumH(habHousing)}`] : []), ...(rural ? [`${HAB_DISTRICT[v.cls]}_max_add = -1`] : lab ? [`${HAB_DISTRICT.l}_max_add = -1`] : []), ...jobsOf(v, s, rural || lab ? HAB_RURAL : 1)];
   const parts = [
     tpm(NOT_HAB, planetMods),
     ...withCond(housing.blocks, NOT_HAB),
     ...(rural ? zoneBlocks(v.district, s, NOT_HAB, 1) : []),
     tpm(HAB, habMods),
-    tpm(`${HAB} ${VOID}`, jobsOf(v, s, (rural ? HAB_RURAL : 1) * 0.5)),
+    tpm(`${HAB} ${VOID}`, jobsOf(v, s, (rural || lab ? HAB_RURAL : 1) * 0.5)),
+    ...(lab ? [tpm(`${HAB} ${HAB_LAB_ZONE}`, jobsOf(v, s, 1 - HAB_RURAL)), tpm(`${HAB} ${HAB_LAB_ZONE} ${VOID}`, jobsOf(v, s, (1 - HAB_RURAL) * 0.5))] : []),
     ...withCond(habHousing.blocks, HAB),
     ...(rural ? zoneBlocks(HAB_DISTRICT[v.cls], s, HAB, 1) : []),
     ...(rural ? zoneBlocks(HAB_DISTRICT[v.cls], s, `${HAB} ${VOID}`, 0.5) : []),
@@ -1285,7 +1289,7 @@ const nameOf = (v, s, L) => {
   else if (c[0] === 2) base = L ? `${art(o[0])} with ${div(o[1])} and ${div(o[2])} Divisions` : `${art(o[0])} mit ${div(o[1])}- und ${div(o[2])}sparte`;
   else if (v.cls === 'l') base = L ? 'Private Research and Media Institute' : 'Privates Forschungs- und Medieninstitut';
   else base = L ? 'Private Conglomerate' : 'Privater Mischkonzern';
-  return base + ['', L ? ' (Mid-size)' : ' (Mittelstand)', L ? ' (Corporation)' : ' (Konzern)'][s - 1];
+  return base + ['', L ? ' (Mid-size)' : ' (Mittelstand)', L ? ' (Large)' : ' (Großbetrieb)'][s - 1];
 };
 const distName = (c, L) => c === 1 || c === 5 ? (L ? 'city' : 'Stadt') : P[rural[c - 2]][L ? 'enDist' : 'deDist'];
 const loc = {english: [], german: []};

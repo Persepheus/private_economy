@@ -17,14 +17,16 @@ export function supplySafety({variants, JOBS, RES, outVar, HAB, NOT_HAB, VOID, H
       `${set('pe_ss_tmp', src)} ${mul('pe_ss_tmp', +count.toFixed(4))} ${mul('pe_ss_tmp', factor)} ${mul('pe_ss_tmp', 'pe_ss_scale')} ${add(`${dst}_${r}`, 'pe_ss_tmp')}`).join(' ')).join(' ');
   const zone = (district) => (ZONE_JOBS[district] || []).map(([z, js]) =>
     `if = { limit = { num_zones = { type = ${z} value > 0 } } root = { ${Object.entries(js).map(([j,n]) => job(`pe_private_${j}`, n / 100, 'pe_ss_void')).join(' ')} } }`).join('\n');
+  // A lab on a habitat: the other half of its base jobs with a research specialisation.
+  const labZone = v => `if = { limit = { OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } } root = { ${Object.entries(v.workforce).map(([j,w]) => job(j, w/200, 'pe_ss_void')).join(' ')} } }`;
   const upkeep = (values, sign = 1) => `root = { ${Object.entries(values).map(([r,n]) =>
     `${set('pe_ss_tmp', n * sign)} ${mul('pe_ss_tmp', 'pe_ss_scale')} ${sub(`pe_sd_${r}`, 'pe_ss_tmp')} ${add(`pe_sc_${r}`, 'pe_ss_tmp')}`).join(' ')} }`;
   const vector = v => `
     root = { ${set('pe_ss_base', 1)} ${set('pe_ss_void', 1)} }
-    if = { limit = { ${HAB} } root = { ${set('pe_ss_base', v.cityLike ? 1 : 0.5)} }
+    if = { limit = { ${HAB} } root = { ${set('pe_ss_base', v.cityLike && v.cls !== 'l' ? 1 : 0.5)} }
       if = { limit = { ${VOID} } root = { ${mul('pe_ss_base', 1.5)} ${set('pe_ss_void', 1.5)} } } }
     root = { ${Object.entries(v.workforce).map(([j,w]) => job(j,w/100)).join(' ')} }
-    if = { limit = { ${HAB} } ${v.cityLike ? '' : zone(HAB_DISTRICT[v.cls])} ${upkeep(HAB_UPKEEP)} }
+    if = { limit = { ${HAB} } ${v.cityLike ? (v.cls === 'l' ? labZone(v) : '') : zone(HAB_DISTRICT[v.cls])} ${upkeep(HAB_UPKEEP)} }
     else = { ${v.cityLike ? '' : zone(v.district)} ${upkeep({energy: UPKEEP[v.k]})} }
   `;
   const zero = () => `root = { ${RES.flatMap(r => [set(`pe_sd_${r}`,0),set(`pe_sc_${r}`,0)]).join(' ')} }`;

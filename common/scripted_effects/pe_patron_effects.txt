@@ -507,7 +507,11 @@ pe_labour_fire = {
 			country_event = { id = pe.231 }
 		}
 		30 = { country_event = { id = pe.232 } }
-		15 = { country_event = { id = pe.233 } }
+		# Family support: only where pops grow (organic ones; not robots, not machines).
+		15 = {
+			modifier = { factor = 0 event_target:pe_pat_planet = { NOT = { any_owned_pop_group = { species = { is_robotic = no } } } } }
+			country_event = { id = pe.233 }
+		}
 	}
 }
 
