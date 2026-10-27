@@ -32,6 +32,7 @@ country_event = {
 			pe_quarterly = yes
 		}
 		pe_auto_cover_step = yes
+		pe_store_month = yes
 	}
 }
 

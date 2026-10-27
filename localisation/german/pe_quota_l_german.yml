@@ -1,0 +1,9 @@
+﻿l_german:
+ pe.323.name:0 "Investoren über der Quote"
+ pe.323.desc:0 "Auf §Y[pe_xq_planet.GetName]§! sind §Y[Root.pe_xq_idle_r]§! Pops ohne Arbeit, und der Anteil, den unsere Wirtschaftsordnung dort privaten Firmen lässt, ist ausgeschöpft. Investoren wollen trotzdem eine §Y[Root.GetPeXqFirm]§! gründen, auf einem freien Distriktplatz.\n\nDas Arbeitsamt ist dafür. Das Ministerium fragt, ob wir sie umsonst hereinlassen sollen."
+ pe.323.a:0 "Sollen sie bauen."
+ pe.323.a.tt:0 "Die Firma wird über die Quote hinaus gegründet. Sie bleibt, wenn die Arbeitslosigkeit vorbei ist."
+ pe.323.b:0 "Sollen sie bauen, gegen eine Lizenzgebühr."
+ pe.323.b.tt:0 "Wie oben, und die Investoren zahlen uns §G[Root.pe_xq_fee]§! £trade£ aus dem Privatkapital, sobald die Baustelle beginnt."
+ pe.323.c:0 "Die Quote gilt."
+ pe.323.c.tt:0 "Fünf Jahre lang keine Firma über der Quote auf diesem Planeten."

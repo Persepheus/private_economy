@@ -929,12 +929,36 @@ pe_planet_step = {
 				if = { limit = { free_district_slots = 1 } root = { set_variable = { which = pe_best_min value = 8 } } }
 				else_if = { limit = { free_district_slots = 2 } root = { set_variable = { which = pe_best_min value = 4 } } }
 				pe_choose_variant = { MODE = found }
-				pe_found_variant = yes
-				# Beyond the share: this firm stays when the idle pops are gone.
-				export_trigger_value_to_variable = { trigger = count_deposits parameters = { category = pe_deposit_cat_sites } variable = pe_sc1 }
+				# Beyond the share in a human empire (not under Laissez-faire): we decide (pe.323;
+				# one request at a time, a planet that was refused waits five years).
 				if = {
-					limit = { check_variable = { which = pe_sc1 value > pe_sc0 } check_variable = { which = pe_firms value >= pe_tbase } }
-					change_variable = { which = pe_xq value = 1 }
+					limit = {
+						check_variable = { which = pe_firms value >= pe_tbase }
+						owner = { is_ai = no NOT = { has_policy_flag = pe_order_laissez_faire } }
+					}
+					if = {
+						limit = {
+							NOT = { has_planet_flag = pe_xq_no }
+							owner = { NOT = { has_country_flag = pe_xq_pending } }
+							root = { check_variable = { which = pe_best_variant value > 0 } }
+						}
+						save_event_target_as = pe_xq_planet
+						root = {
+							set_variable = { which = pe_xq_code value = pe_best_variant }
+							set_variable = { which = pe_xq_idle value = prev.pe_idle }
+							set_timed_country_flag = { flag = pe_xq_pending days = 360 }
+							country_event = { id = pe.323 }
+						}
+					}
+				}
+				else = {
+					pe_found_variant = yes
+					# Beyond the share: this firm stays when the idle pops are gone.
+					export_trigger_value_to_variable = { trigger = count_deposits parameters = { category = pe_deposit_cat_sites } variable = pe_sc1 }
+					if = {
+						limit = { check_variable = { which = pe_sc1 value > pe_sc0 } check_variable = { which = pe_firms value >= pe_tbase } }
+						change_variable = { which = pe_xq value = 1 }
+					}
 				}
 			}
 			else_if = {
@@ -955,20 +979,14 @@ pe_planet_step = {
 		}
 	}
 	# Nothing started on this planet this quarter, its private jobs are filled, and no
-	# restructuring in the last five years: one firm may restructure.
+	# restructuring here in the last year: one firm may restructure.
 	if = {
 		limit = {
 			NOT = { has_planet_flag = pe_site }
 			NOT = { has_planet_flag = pe_cooldown }
-			# Five years between two restructurings; one year for a firm that consumes what the
-			# empire is short of (0.38: alloy works eating up the minerals).
-			OR = {
-				NOT = { has_planet_flag = pe_retool_cd }
-				AND = {
-					NOT = { has_planet_flag = pe_retool_scd }
-					any_deposit = { has_deposit_category = pe_deposit_cat_firms pe_firm_short = yes }
-				}
-			}
+			# A year between two restructurings on a planet; each firm has its own pause (pe_age,
+			# pe_restructure: ten years, two for a firm consuming what the empire is short of).
+			NOT = { has_planet_flag = pe_retool_cd }
 			NOT = { has_modifier = pe_warzone }
 			check_variable = { which = pe_firms_real value > 0 }
 			root = { check_variable = { which = pe_fill_cur value >= 0.8 } }
@@ -1838,6 +1856,8 @@ pe_corp_step = {
 	pe_corp_census = yes
 	pe_corp_crisis = yes
 	pe_sanierung_step = yes
+	pe_store_offer = yes
+	pe_arms_offer = yes
 	pe_corp_dissolve = yes
 	pe_corp_found = yes
 	pe_corp_acquire = yes
@@ -2442,4 +2462,33 @@ pe_auto_cover_step = {
 		limit = { check_variable = { which = pe_months value = 0 } }
 		log = "private_economy: automation refund: private \\[Root.pe_auto_r] of \\[Root.pe_auto_p] energy a month, budget line \\[Root.pe_auto_e]"
 	}
+}
+
+# Colony scope, root = country (pe.323): found the firm root.pe_xq_code beyond the economic
+# order's share. Only with a free district slot besides the last one. MODE 1 allowed, 2 with
+# a licence fee (pe_xq_fee trade from the investor pool to us, only if the firm is founded).
+pe_xq_found = {
+	if = {
+		limit = { free_district_slots > 1 }
+		root = {
+			set_variable = { which = pe_best_variant value = pe_xq_code }
+			set_variable = { which = pe_chab_pk value = 0 }
+		}
+		export_trigger_value_to_variable = { trigger = count_deposits parameters = { category = pe_deposit_cat_sites } variable = pe_sc0 }
+		pe_found_variant = yes
+		export_trigger_value_to_variable = { trigger = count_deposits parameters = { category = pe_deposit_cat_sites } variable = pe_sc1 }
+		if = {
+			limit = { check_variable = { which = pe_sc1 value > pe_sc0 } }
+			if = { limit = { NOT = { is_variable_set = pe_xq } } set_variable = { which = pe_xq value = 0 } }
+			change_variable = { which = pe_xq value = 1 }
+			if = {
+				limit = { root = { check_variable = { which = pe_xq_mode value = 2 } } }
+				root = {
+					add_resource = { trade = 1 mult = pe_xq_fee }
+					subtract_variable = { which = pe_capital value = pe_xq_fee }
+				}
+			}
+		}
+	}
+	log = "private_economy: firm beyond the share on \\[This.GetName]: mode \\[Root.pe_xq_mode], sites before \\[This.pe_sc0] after \\[This.pe_sc1]"
 }

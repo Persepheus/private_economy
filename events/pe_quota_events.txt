@@ -1,0 +1,47 @@
+# Firms beyond the economic order's share while pops are idle (pe_planet_step).
+#   pe.323  investors want to found a firm beyond the share (human empires, not Laissez-faire)
+namespace = pe
+
+country_event = {
+	id = pe.323
+	title = pe.323.name
+	desc = pe.323.desc
+	picture = GFX_evt_city_planet
+	is_triggered_only = yes
+	location = event_target:pe_xq_planet
+
+	immediate = {
+		hidden_effect = {
+			# The licence fee: 120 trade from the investor pool (paid once the site is started).
+			set_variable = { which = pe_xq_fee value = 120 }
+			set_variable = { which = pe_xq_idle_r value = pe_xq_idle }
+			round_variable = pe_xq_idle_r
+		}
+	}
+	option = {
+		name = pe.323.a
+		custom_tooltip = pe.323.a.tt
+		hidden_effect = {
+			set_variable = { which = pe_xq_mode value = 1 }
+			event_target:pe_xq_planet = { pe_xq_found = yes }
+			remove_country_flag = pe_xq_pending
+		}
+	}
+	option = {
+		name = pe.323.b
+		custom_tooltip = pe.323.b.tt
+		hidden_effect = {
+			set_variable = { which = pe_xq_mode value = 2 }
+			event_target:pe_xq_planet = { pe_xq_found = yes }
+			remove_country_flag = pe_xq_pending
+		}
+	}
+	option = {
+		name = pe.323.c
+		custom_tooltip = pe.323.c.tt
+		hidden_effect = {
+			event_target:pe_xq_planet = { set_timed_planet_flag = { flag = pe_xq_no days = 1800 } }
+			remove_country_flag = pe_xq_pending
+		}
+	}
+}

@@ -1,0 +1,17 @@
+# Storage contracts (pe.324 / pe.325): who offers it.
+defined_text = {
+	name = GetPeStoreWho
+	text = {
+		trigger = { check_variable = { which = pe_sto_kn value > 0 } }
+		localization_key = pe_store_who_corp
+	}
+	default = pe_store_who_inv
+}
+defined_text = {
+	name = GetPeStoreWhoR
+	text = {
+		trigger = { check_variable = { which = pe_sto_kr value > 0 } }
+		localization_key = pe_store_who_corp_r
+	}
+	default = pe_store_who_inv_r
+}

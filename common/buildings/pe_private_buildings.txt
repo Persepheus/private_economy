@@ -27,3 +27,33 @@ pe_building_private_exchange = {
 		job_pe_private_trader_add = 100
 	}
 }
+
+# A firm's warehouse while it stores our surplus (storage contract, pe_store_effects.txt).
+# Placed and removed by script; the extra capacity is a country modifier (pe_store_<res>).
+pe_building_corp_storage = {
+	base_buildtime = 180
+	can_build = no
+	can_demolish = no
+	can_be_ruined = no
+	can_be_disabled = no
+
+	category = resource
+
+	building_sets = {
+		generator
+		mining
+		farming
+		foundry
+		factory
+		trade
+		urban
+	}
+
+	potential = {
+		exists = owner
+	}
+
+	resources = {
+		category = planet_buildings
+	}
+}

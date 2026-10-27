@@ -14523,7 +14523,7 @@ pe_nationalise_one = {
 # least +3 trade per month), the firm is at least 10 years old (founded or last
 # restructured), and nothing it makes becomes short by the switch (pe_retool_guard). It
 # closes for half the build time (a construction site), and the planet pauses
-# restructuring for 5 years. Cost: city 375 / rural 225 x stage size, paid
+# restructuring for 1 years. Cost: city 375 / rural 225 x stage size, paid
 # from the firm's own capital only (never on credit). A rural target needs a free district of
 # its type once the old firm is gone; if there is none, the old firm is restored, the
 # cost paid back, and that rural type is not tried again on this planet for a year.
@@ -14650,7 +14650,12 @@ pe_restructure = {
 			limit = {
 				check_variable = { which = pe_debt value <= 0 }
 				check_variable = { which = pe_loan value <= 0 }
-				check_variable = { which = pe_age value >= 40 }
+				# Each firm's own pause (pe_age, quarters since founded or restructured): 10
+				# years, 2 if it consumes what the empire is short of.
+				OR = {
+					check_variable = { which = pe_age value >= 40 }
+					AND = { pe_firm_short = yes check_variable = { which = pe_age value >= 8 } }
+				}
 				check_variable = { which = pe_gain value > pe_thr }
 				check_variable = { which = pe_gain value > root.pe_best_gain }
 			}
@@ -15029,8 +15034,7 @@ pe_restructure = {
 		}
 		else = {
 			set_planet_flag = pe_site
-			set_timed_planet_flag = { flag = pe_retool_cd days = 1800 }
-			set_timed_planet_flag = { flag = pe_retool_scd days = 360 }
+			set_timed_planet_flag = { flag = pe_retool_cd days = 360 }
 			root = { change_variable = { which = pe_safe_reserved_energy value = pe_safe_out_energy } change_variable = { which = pe_safe_reserved_minerals value = pe_safe_out_minerals } change_variable = { which = pe_safe_reserved_food value = pe_safe_out_food } change_variable = { which = pe_safe_reserved_consumer_goods value = pe_safe_out_consumer_goods } change_variable = { which = pe_safe_reserved_trade value = pe_safe_out_trade } }
 		}
 		check_planet_employment = yes

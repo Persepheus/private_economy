@@ -290,3 +290,23 @@ pe_proto_citadel_upkeep = {
 	ships_upkeep_mult = -1
 	starbases_upkeep_mult = -1
 }
+
+# Storage contracts (pe_store_effects.txt): x pe_sto_<s>_mult (the extra capacity / 100).
+pe_store_minerals = {
+	country_resource_max_minerals_add = 100
+}
+pe_store_energy = {
+	country_resource_max_energy_add = 100
+}
+pe_store_food = {
+	country_resource_max_food_add = 100
+}
+pe_store_alloys = {
+	country_resource_max_alloys_add = 100
+}
+pe_store_consumer_goods = {
+	country_resource_max_consumer_goods_add = 100
+}
+pe_store_trade = {
+	country_resource_max_trade_add = 100
+}

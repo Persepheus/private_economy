@@ -606,7 +606,8 @@ const msg = loc => `owner = { create_message = { type = pe_private_economy local
 // pe_loan_q: quarters of bridging loans in a row).
 const initFirm = (code, stage, fcap, debt, age = 'root.pe_chg_age', corp = 'root.pe_chg_corp') => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } set_variable = { which = pe_debt value = ${debt} } set_variable = { which = pe_age value = ${age} } set_variable = { which = pe_corp value = ${corp} } set_variable = { which = pe_loan value = root.pe_chg_loan } set_variable = { which = pe_lender value = root.pe_chg_lender } set_variable = { which = pe_loan_q value = root.pe_chg_loanq } set_variable = { which = pe_fid value = root.pe_chg_fid } set_variable = { which = pe_sup_fid value = root.pe_chg_supfid } }`;
 const RETOOL_AGE = 40;                                 // quarters (10 years) before a firm may restructure
-const RETOOL_CD = 1800;                                // days (5 years) between two restructurings on a planet
+const RETOOL_AGE_SHORT = 8;                            // quarters (2 years) for a firm consuming what the empire is short of
+const RETOOL_CD = 360;                                 // days (1 year) between two restructurings on a planet
 // Real net output per filled job (one job = 100 workforce) of each private job, measured
 // from its category like the value added: country variables pe_o_<job>_<res>.
 const outVar = (job, r) => `pe_o_${job.replace('pe_private_', '')}_${r}`;
@@ -1057,7 +1058,12 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM
 			limit = {
 				check_variable = { which = pe_debt value <= 0 }
 				check_variable = { which = pe_loan value <= 0 }
-				check_variable = { which = pe_age value >= ${RETOOL_AGE} }
+				# Each firm's own pause (pe_age, quarters since founded or restructured): ${RETOOL_AGE / 4}
+				# years, ${RETOOL_AGE_SHORT / 4} if it consumes what the empire is short of.
+				OR = {
+					check_variable = { which = pe_age value >= ${RETOOL_AGE} }
+					AND = { pe_firm_short = yes check_variable = { which = pe_age value >= ${RETOOL_AGE_SHORT} } }
+				}
 				check_variable = { which = pe_gain value > pe_thr }
 				check_variable = { which = pe_gain value > root.pe_best_gain }
 			}
@@ -1122,7 +1128,6 @@ ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = $
 		else = {
 			set_planet_flag = pe_site
 			set_timed_planet_flag = { flag = pe_retool_cd days = ${RETOOL_CD} }
-			set_timed_planet_flag = { flag = pe_retool_scd days = 360 }
 			${safety.reserve("pe_safe_out")}
 		}
 		check_planet_employment = yes
@@ -1282,6 +1287,7 @@ ${entries.map(([val, key]) => `	text = {
 write('common/scripted_loc/pe_scripted_loc_generated.txt', header +
   dtext('GetPeBestFirm', 'pe_best_variant', variants.map(v => [v.code, v.key]), 'pe_no_firm') + '\n' +
   dtext('GetPeOfferFirm', 'pe_offer_variant', variants.map(v => [v.code, v.key]), 'pe_no_firm') + '\n' +
+  dtext('GetPeXqFirm', 'pe_xq_code', variants.map(v => [v.code, v.key]), 'pe_no_firm') + '\n' +
   dtext('GetPeOfferDistrict', 'pe_offer_class', [[1, 'pe_dist_city'], [2, 'pe_dist_mining'], [3, 'pe_dist_generator'], [4, 'pe_dist_farming'], [5, 'pe_dist_city']], 'pe_dist_city'));
 
 // --- Localisation -------------------------------------------------------------------
@@ -3466,7 +3472,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
 
 // Events that name a corporation: each reads its own variable pe_cn<event>, set in its
 // immediate (pe_corp_cur_name is shared and may change before the window is read).
-const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298, 300, 306, 308, 315, 321];
+const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298, 300, 306, 308, 315, 321, 324, 325, 326];
 const corpLoc = (name, varName, keyOf) => dtext(name, varName, NAME_IDS.map(id => [id, keyOf(id)]), 'pe_corp_line_none');
 const flagDt = (name, cond, key) => `defined_text = {\n\tname = ${name}\n\ttext = {\n\t\ttrigger = { ${cond} }\n\t\tlocalization_key = ${key}\n\t}\n\tdefault = pe_corp_line_none\n}\n`;
 locDt += flagDt('GetPeLocCw', 'is_variable_set = pe_cw_m check_variable = { which = pe_cw_m value > 0 }', 'pe_loc_cw') + flagDt('GetPeLocArms', 'is_variable_set = pe_dc_here check_variable = { which = pe_dc_here value = 1 }', 'pe_loc_arms') +

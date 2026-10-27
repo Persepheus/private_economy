@@ -1,0 +1,102 @@
+# Storage contracts and arms orders (pe_store_effects.txt).
+#   pe.324  a firm offers to store a full store's surplus
+#   pe.325  it offers to extend the contract
+#   pe.326  arms order from the alloy store
+#   pe.327  the arms order is delivered (hidden)
+namespace = pe
+
+country_event = {
+	id = pe.324
+	title = pe.324.name
+	desc = { trigger = { check_variable = { which = pe_sto_r value = 1 } } text = pe.324.desc.mi }
+	desc = { trigger = { check_variable = { which = pe_sto_r value = 2 } } text = pe.324.desc.en }
+	desc = { trigger = { check_variable = { which = pe_sto_r value = 3 } } text = pe.324.desc.fo }
+	desc = { trigger = { check_variable = { which = pe_sto_r value = 4 } } text = pe.324.desc.al }
+	desc = { trigger = { check_variable = { which = pe_sto_r value = 5 } } text = pe.324.desc.cg }
+	desc = { trigger = { check_variable = { which = pe_sto_r value = 6 } } text = pe.324.desc.tr }
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+	location = event_target:pe_sto_planet
+
+	option = {
+		name = pe.324.a
+		custom_tooltip = pe.324.a.tt
+		hidden_effect = { pe_store_sign = yes }
+		ai_chance = { factor = 80 }
+	}
+	option = {
+		name = pe.324.b
+		hidden_effect = {
+			if = { limit = { check_variable = { which = pe_sto_r value = 1 } } set_timed_country_flag = { flag = pe_sto_cd_mi days = 1800 } }
+			else_if = { limit = { check_variable = { which = pe_sto_r value = 2 } } set_timed_country_flag = { flag = pe_sto_cd_en days = 1800 } }
+			else_if = { limit = { check_variable = { which = pe_sto_r value = 3 } } set_timed_country_flag = { flag = pe_sto_cd_fo days = 1800 } }
+			else_if = { limit = { check_variable = { which = pe_sto_r value = 4 } } set_timed_country_flag = { flag = pe_sto_cd_al days = 1800 } }
+			else_if = { limit = { check_variable = { which = pe_sto_r value = 5 } } set_timed_country_flag = { flag = pe_sto_cd_cg days = 1800 } }
+			else_if = { limit = { check_variable = { which = pe_sto_r value = 6 } } set_timed_country_flag = { flag = pe_sto_cd_tr days = 1800 } }
+		}
+		ai_chance = { factor = 20 }
+	}
+}
+
+country_event = {
+	id = pe.325
+	title = pe.325.name
+	desc = { trigger = { check_variable = { which = pe_sto_rr value = 1 } } text = pe.325.desc.mi }
+	desc = { trigger = { check_variable = { which = pe_sto_rr value = 2 } } text = pe.325.desc.en }
+	desc = { trigger = { check_variable = { which = pe_sto_rr value = 3 } } text = pe.325.desc.fo }
+	desc = { trigger = { check_variable = { which = pe_sto_rr value = 4 } } text = pe.325.desc.al }
+	desc = { trigger = { check_variable = { which = pe_sto_rr value = 5 } } text = pe.325.desc.cg }
+	desc = { trigger = { check_variable = { which = pe_sto_rr value = 6 } } text = pe.325.desc.tr }
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+
+	option = {
+		name = pe.325.a
+		custom_tooltip = pe.325.a.tt
+		hidden_effect = {
+			if = { limit = { check_variable = { which = pe_sto_rr value = 1 } } change_variable = { which = pe_sto_mi_m value = 60 } }
+			else_if = { limit = { check_variable = { which = pe_sto_rr value = 2 } } change_variable = { which = pe_sto_en_m value = 60 } }
+			else_if = { limit = { check_variable = { which = pe_sto_rr value = 3 } } change_variable = { which = pe_sto_fo_m value = 60 } }
+			else_if = { limit = { check_variable = { which = pe_sto_rr value = 4 } } change_variable = { which = pe_sto_al_m value = 60 } }
+			else_if = { limit = { check_variable = { which = pe_sto_rr value = 5 } } change_variable = { which = pe_sto_cg_m value = 60 } }
+			else_if = { limit = { check_variable = { which = pe_sto_rr value = 6 } } change_variable = { which = pe_sto_tr_m value = 60 } }
+		}
+		ai_chance = { factor = 80 }
+	}
+	option = {
+		name = pe.325.b
+		ai_chance = { factor = 20 }
+	}
+}
+
+country_event = {
+	id = pe.326
+	title = pe.326.name
+	desc = pe.326.desc
+	picture = GFX_evt_fleet_good
+	is_triggered_only = yes
+
+	option = {
+		name = pe.326.a
+		allow = {
+			custom_tooltip = {
+				fail_text = pe.326.a.fail
+				check_variable = { which = pe_ao_tr value >= pe_ao_fee }
+			}
+		}
+		custom_tooltip = pe.326.a.tt
+		hidden_effect = { pe_arms_sign = yes }
+		ai_chance = { factor = 50 }
+	}
+	option = {
+		name = pe.326.b
+		ai_chance = { factor = 50 }
+	}
+}
+
+country_event = {
+	id = pe.327
+	hide_window = yes
+	is_triggered_only = yes
+	immediate = { pe_arms_deliver = yes }
+}

@@ -6,6 +6,14 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
+## Stand 0.39.0
+
+**Volle Lager** ([TESTS_0.39.md](docs/TESTS_0.39.md)):
+- **Lagervertrag:** Ist ein Lager zu 95 % voll, bietet eine Firma an, den Überschuss zu lagern. Das bringt fünf Jahre lang +20 % Lagergrenze und kostet jeden Monat 5 % der Nettoproduktion dieser Ressource. Ein Firmenlager-Gebäude steht auf ihrem Planeten. Vor Ablauf gibt es ein Verlängerungsangebot.
+- **Rüstungsauftrag:** Höchstens alle zehn Jahre baut ein Konzern aus der Hälfte eines vollen Legierungslagers Kriegsschiffe auf eigenen Werften, gegen einen Aufpreis in Handel. Die Schiffe werden nach einem Jahr geliefert.
+- **Umbau:** Die Pause gilt jetzt pro Firma (zehn Jahre, bei knappen Vorprodukten zwei). Pro Planet ist nur noch ein Jahr Abstand nötig.
+- **Über der Quote:** Bei Arbeitslosigkeit fragen die Investoren dich in einem Fenster: erlauben, gegen Lizenzgebühr erlauben oder ablehnen.
+
 ## Stand 0.38.0
 
 **Wirtschaft im späten Spiel** ([TESTS_0.38.md](docs/TESTS_0.38.md)):
@@ -91,7 +99,7 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Erledigt (0.30):** Landfirmen bekommen die Jobs der Spezialisierung ihres Distrikttyps; der letzte Distrikt eines Typs bleibt beim Staat.
 - **Gefunden im Save Hesukaran 7 (2287):** Schutzflotte der KI ohne passenden Schiffsentwurf (create_ship ungültig, leere Flotte); Kredite eines aufgelösten Konzerns zahlen weiter in seinen leeren Platz; zwei Rohstoffkonzerne horten je 13-14 Tsd. Kasse (Verwendung bzw. Kalibrierung).
 - **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen.
-- **Vorschläge zu vollen Lagern (offen, 27.10.2026):** Legierungsüberschuss in Kampfstärke umsetzen (Rüstungsauftrag aus dem Lager, Werftausbau durch Konzerne, Modernisierung von Sternenbasen und Plattformen); höhere Lagergrenze über eine strategische Reserve der Holdings oder private Lagerhäuser. Siehe Chat vom 27.10.2026, Entscheidung des Nutzers steht aus.
+- **Volle Lager (27.10.2026):** Rüstungsauftrag und Lagervertrag sind in 0.39 umgesetzt. Verworfen: Modernisierung der Verteidigung und Werftausbau durch Konzerne.
 - **Längere Lieferketten (Supply Chains):** mehrstufige Wertschöpfung zwischen Firmen (Vorprodukte, Zulieferer), gemerkt am 27.10.2026.
 - **Danach (beschlossen):** Lobbys der Branchengruppen (bauen auf den Konzernen auf); private Werften erst, wenn klar ist, was sie spielerisch bringen.
 - **Konjunkturzyklus:** erst, wenn die Wirtschaft stabil läuft.

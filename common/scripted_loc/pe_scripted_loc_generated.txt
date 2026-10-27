@@ -650,6 +650,331 @@ defined_text = {
 }
 
 defined_text = {
+	name = GetPeXqFirm
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 1 } }
+		localization_key = d_pe_firm_aaac
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 2 } }
+		localization_key = d_pe_firm_aaat
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 3 } }
+		localization_key = d_pe_firm_aaau
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 4 } }
+		localization_key = d_pe_firm_aacc
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 5 } }
+		localization_key = d_pe_firm_aact
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 6 } }
+		localization_key = d_pe_firm_aacu
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 7 } }
+		localization_key = d_pe_firm_aatt
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 8 } }
+		localization_key = d_pe_firm_aatu
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 9 } }
+		localization_key = d_pe_firm_aauu
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 10 } }
+		localization_key = d_pe_firm_ccca
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 11 } }
+		localization_key = d_pe_firm_ccat
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 12 } }
+		localization_key = d_pe_firm_ccau
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 13 } }
+		localization_key = d_pe_firm_ttac
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 14 } }
+		localization_key = d_pe_firm_actu
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 15 } }
+		localization_key = d_pe_firm_uuac
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 16 } }
+		localization_key = d_pe_firm_ttta
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 17 } }
+		localization_key = d_pe_firm_ttau
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 18 } }
+		localization_key = d_pe_firm_uuat
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 19 } }
+		localization_key = d_pe_firm_uuua
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 20 } }
+		localization_key = d_pe_firm_ccct
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 21 } }
+		localization_key = d_pe_firm_cccu
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 22 } }
+		localization_key = d_pe_firm_cctt
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 23 } }
+		localization_key = d_pe_firm_cctu
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 24 } }
+		localization_key = d_pe_firm_ccuu
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 25 } }
+		localization_key = d_pe_firm_tttc
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 26 } }
+		localization_key = d_pe_firm_ttcu
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 27 } }
+		localization_key = d_pe_firm_uuct
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 28 } }
+		localization_key = d_pe_firm_uuuc
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 29 } }
+		localization_key = d_pe_firm_tttu
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 30 } }
+		localization_key = d_pe_firm_ttuu
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 31 } }
+		localization_key = d_pe_firm_uuut
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 32 } }
+		localization_key = d_pe_firm_xxxy
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 33 } }
+		localization_key = d_pe_firm_xxxz
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 34 } }
+		localization_key = d_pe_firm_xxxb
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 35 } }
+		localization_key = d_pe_firm_xxyy
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 36 } }
+		localization_key = d_pe_firm_xxyz
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 37 } }
+		localization_key = d_pe_firm_xxyb
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 38 } }
+		localization_key = d_pe_firm_xxzz
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 39 } }
+		localization_key = d_pe_firm_xxzb
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 40 } }
+		localization_key = d_pe_firm_xxbb
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 41 } }
+		localization_key = d_pe_firm_yyyx
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 42 } }
+		localization_key = d_pe_firm_yyxz
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 43 } }
+		localization_key = d_pe_firm_yyxb
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 44 } }
+		localization_key = d_pe_firm_zzxy
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 45 } }
+		localization_key = d_pe_firm_xyzb
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 46 } }
+		localization_key = d_pe_firm_bbxy
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 47 } }
+		localization_key = d_pe_firm_zzzx
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 48 } }
+		localization_key = d_pe_firm_zzxb
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 49 } }
+		localization_key = d_pe_firm_bbxz
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 50 } }
+		localization_key = d_pe_firm_bbbx
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 51 } }
+		localization_key = d_pe_firm_yyyz
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 52 } }
+		localization_key = d_pe_firm_yyyb
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 53 } }
+		localization_key = d_pe_firm_yyzz
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 54 } }
+		localization_key = d_pe_firm_yyzb
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 55 } }
+		localization_key = d_pe_firm_yybb
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 56 } }
+		localization_key = d_pe_firm_zzzy
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 57 } }
+		localization_key = d_pe_firm_zzyb
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 58 } }
+		localization_key = d_pe_firm_bbyz
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 59 } }
+		localization_key = d_pe_firm_bbby
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 60 } }
+		localization_key = d_pe_firm_zzzb
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 61 } }
+		localization_key = d_pe_firm_zzbb
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 62 } }
+		localization_key = d_pe_firm_bbbz
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 63 } }
+		localization_key = d_pe_firm_mmmm
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 64 } }
+		localization_key = d_pe_firm_mmma
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 65 } }
+		localization_key = d_pe_firm_mmmc
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 66 } }
+		localization_key = d_pe_firm_mmmt
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 67 } }
+		localization_key = d_pe_firm_mmme
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 68 } }
+		localization_key = d_pe_firm_mmmf
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 69 } }
+		localization_key = d_pe_firm_eeee
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 70 } }
+		localization_key = d_pe_firm_eeea
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 71 } }
+		localization_key = d_pe_firm_eeec
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 72 } }
+		localization_key = d_pe_firm_eeet
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 73 } }
+		localization_key = d_pe_firm_eeem
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 74 } }
+		localization_key = d_pe_firm_eeef
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 75 } }
+		localization_key = d_pe_firm_ffff
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 76 } }
+		localization_key = d_pe_firm_fffa
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 77 } }
+		localization_key = d_pe_firm_fffc
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 78 } }
+		localization_key = d_pe_firm_ffft
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 79 } }
+		localization_key = d_pe_firm_fffm
+	}
+	text = {
+		trigger = { check_variable = { which = pe_xq_code value = 80 } }
+		localization_key = d_pe_firm_fffe
+	}
+	default = pe_no_firm
+}
+
+defined_text = {
 	name = GetPeOfferDistrict
 	text = {
 		trigger = { check_variable = { which = pe_offer_class value = 1 } }

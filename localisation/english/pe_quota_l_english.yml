@@ -1,0 +1,9 @@
+﻿l_english:
+ pe.323.name:0 "Investors Beyond the Quota"
+ pe.323.desc:0 "On §Y[pe_xq_planet.GetName]§! §Y[Root.pe_xq_idle_r]§! pops are out of work, and the share of the economy our economic order leaves to private firms there is taken. Investors want to found a §Y[Root.GetPeXqFirm]§! anyway, on a free district slot.\n\nThe labour office is all for it. The ministry asks whether we should let them in for free."
+ pe.323.a:0 "Let them build."
+ pe.323.a.tt:0 "The firm is founded beyond the quota. It stays when the unemployment is over."
+ pe.323.b:0 "Let them build, for a licence fee."
+ pe.323.b.tt:0 "As above, and the investors pay us §G[Root.pe_xq_fee]§! £trade£ from the private capital once the site is started."
+ pe.323.c:0 "The quota stands."
+ pe.323.c.tt:0 "No firm beyond the quota on this planet for five years."
