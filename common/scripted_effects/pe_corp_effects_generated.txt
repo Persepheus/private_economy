@@ -12533,8 +12533,13 @@ pe_chab_settle = {
 # the habitat (slot pe_chab_corp, name pe_chab_nm) still has it (hab = 2); otherwise they end:
 # the habitat stays ours, its firms and sites become independent (message). On a colonized
 # corporate habitat every firm and site belongs to the corporation, it sets the designation of
-# its product, and its headquarters move there.
+# its product (once even if auto-designation already chose it, so that it is fixed; flag
+# pe_chab_desig), and its headquarters move there.
 pe_chab_monthly = {
+	every_owned_planet = {
+		limit = { has_planet_flag = pe_chab_desig NOT = { has_planet_flag = pe_corp_hab } }
+		remove_planet_flag = pe_chab_desig
+	}
 	# A colony of ours controlled by holdings (a corporate site at a colony before 0.31.2) is ours again.
 	every_owned_colony = {
 		limit = { exists = controller controller = { is_country_type = pe_holdings } }
@@ -12593,16 +12598,16 @@ pe_chab_monthly = {
 		else_if = { limit = { check_variable = { which = pe_chab_corp value = 8 } } root = { set_variable = { which = pe_chab_prod value = pe_c8_prod } } }
 		if = {
 			limit = { is_capital = no }
-			if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 1 } } }  } if = { limit = { NOT = { has_designation = col_habitat_foundry } } set_colony_type = col_habitat_foundry } }
-			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 2 } } } owner = { country_uses_consumer_goods = yes } } if = { limit = { NOT = { has_designation = col_habitat_factory } } set_colony_type = col_habitat_factory } }
-			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 2 } } }  } if = { limit = { NOT = { has_designation = col_habitat_foundry } } set_colony_type = col_habitat_foundry } }
-			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 3 } } }  } if = { limit = { NOT = { has_designation = col_habitat_trade } } set_colony_type = col_habitat_trade } }
-			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 4 } check_variable = { which = pe_chab_prod value = 5 } check_variable = { which = pe_chab_prod value = 6 } } } check_modifier_value = { modifier = district_hab_science_max_add value > 0 } } if = { limit = { NOT = { has_designation = col_habitat_research } } set_colony_type = col_habitat_research } }
-			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 7 } } } owner = { is_spiritualist = no has_make_spiritualist_perk = no } } if = { limit = { NOT = { has_designation = col_habitat_bureau } } set_colony_type = col_habitat_bureau } }
-			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 7 } } }  } if = { limit = { NOT = { has_designation = col_habitat_bureau_spiritualist } } set_colony_type = col_habitat_bureau_spiritualist } }
-			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 8 } } } check_modifier_value = { modifier = district_hab_mining_max_add value > 0 } } if = { limit = { NOT = { has_designation = col_habitat_mining } } set_colony_type = col_habitat_mining } }
-			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 9 } } } check_modifier_value = { modifier = district_hab_energy_max_add value > 0 } } if = { limit = { NOT = { has_designation = col_habitat_energy } } set_colony_type = col_habitat_energy } }
-			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 10 } } }  } if = { limit = { NOT = { has_designation = col_habitat_farming } } set_colony_type = col_habitat_farming } }
+			if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 1 } } }  } if = { limit = { OR = { NOT = { has_designation = col_habitat_foundry } NOT = { has_planet_flag = pe_chab_desig } } } set_colony_type = col_habitat_foundry set_planet_flag = pe_chab_desig } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 2 } } } owner = { country_uses_consumer_goods = yes } } if = { limit = { OR = { NOT = { has_designation = col_habitat_factory } NOT = { has_planet_flag = pe_chab_desig } } } set_colony_type = col_habitat_factory set_planet_flag = pe_chab_desig } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 2 } } }  } if = { limit = { OR = { NOT = { has_designation = col_habitat_foundry } NOT = { has_planet_flag = pe_chab_desig } } } set_colony_type = col_habitat_foundry set_planet_flag = pe_chab_desig } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 3 } } }  } if = { limit = { OR = { NOT = { has_designation = col_habitat_trade } NOT = { has_planet_flag = pe_chab_desig } } } set_colony_type = col_habitat_trade set_planet_flag = pe_chab_desig } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 4 } check_variable = { which = pe_chab_prod value = 5 } check_variable = { which = pe_chab_prod value = 6 } } } check_modifier_value = { modifier = district_hab_science_max_add value > 0 } } if = { limit = { OR = { NOT = { has_designation = col_habitat_research } NOT = { has_planet_flag = pe_chab_desig } } } set_colony_type = col_habitat_research set_planet_flag = pe_chab_desig } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 7 } } } owner = { is_spiritualist = no has_make_spiritualist_perk = no } } if = { limit = { OR = { NOT = { has_designation = col_habitat_bureau } NOT = { has_planet_flag = pe_chab_desig } } } set_colony_type = col_habitat_bureau set_planet_flag = pe_chab_desig } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 7 } } }  } if = { limit = { OR = { NOT = { has_designation = col_habitat_bureau_spiritualist } NOT = { has_planet_flag = pe_chab_desig } } } set_colony_type = col_habitat_bureau_spiritualist set_planet_flag = pe_chab_desig } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 8 } } } check_modifier_value = { modifier = district_hab_mining_max_add value > 0 } } if = { limit = { OR = { NOT = { has_designation = col_habitat_mining } NOT = { has_planet_flag = pe_chab_desig } } } set_colony_type = col_habitat_mining set_planet_flag = pe_chab_desig } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 9 } } } check_modifier_value = { modifier = district_hab_energy_max_add value > 0 } } if = { limit = { OR = { NOT = { has_designation = col_habitat_energy } NOT = { has_planet_flag = pe_chab_desig } } } set_colony_type = col_habitat_energy set_planet_flag = pe_chab_desig } }
+			else_if = { limit = { root = { OR = { check_variable = { which = pe_chab_prod value = 10 } } }  } if = { limit = { OR = { NOT = { has_designation = col_habitat_farming } NOT = { has_planet_flag = pe_chab_desig } } } set_colony_type = col_habitat_farming set_planet_flag = pe_chab_desig } }
 		}
 		pe_chab_hq = yes
 	}

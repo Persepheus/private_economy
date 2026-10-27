@@ -6,7 +6,7 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
-## Stand 0.42.1
+## Stand 0.42.2
 
 **KI-Reiche stärken** ([TESTS_0.42.md](docs/TESTS_0.42.md)):
 - **Wirtschaftsordnung der KI:**
@@ -17,6 +17,7 @@ Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien u
 - **Rüstungsaufträge der KI** schon ab halbvollem Lager oder 10.000 Legierungen, alle fünf Jahre.
 - **Staatsanleihen (nur KI):** Privatkapital über 10.000 leiht der Pool einem KI-Staat zinslos. Unter 3.000 zahlt der Staat zurück. Spielerreiche sind nicht betroffen.
 - **Lagervertrag:** Gebühr 20 % der Nettoproduktion.
+- **Konzern-Habitat:** Die Designation wird einmal fest gesetzt, auch wenn die automatische Designation schon passt (0.42.2).
 
 ## Stand 0.41.0
 

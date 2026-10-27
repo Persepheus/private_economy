@@ -3102,8 +3102,13 @@ ${nameChain('pe_chab_nmv', id => `event_target:pe_chab_hab = { set_name = pe_cha
 # the habitat (slot pe_chab_corp, name pe_chab_nm) still has it (hab = 2); otherwise they end:
 # the habitat stays ours, its firms and sites become independent (message). On a colonized
 # corporate habitat every firm and site belongs to the corporation, it sets the designation of
-# its product, and its headquarters move there.
+# its product (once even if auto-designation already chose it, so that it is fixed; flag
+# pe_chab_desig), and its headquarters move there.
 pe_chab_monthly = {
+	every_owned_planet = {
+		limit = { has_planet_flag = pe_chab_desig NOT = { has_planet_flag = pe_corp_hab } }
+		remove_planet_flag = pe_chab_desig
+	}
 	# A colony of ours controlled by holdings (a corporate site at a colony before 0.31.2) is ours again.
 	every_owned_colony = {
 		limit = { exists = controller controller = { is_country_type = pe_holdings } }
@@ -3141,7 +3146,7 @@ ${CORPS.map(k => `\tif = { limit = { check_variable = { which = ${C(k, 'hab')} v
 ${corpChain('pe_chab_corp', k => `root = { set_variable = { which = pe_chab_prod value = ${C(k, 'prod')} } }`, '\t\t')}
 		if = {
 			limit = { is_capital = no }
-${CHAB_DESIG.map(([ps, d, cond], i) => `\t\t\t${i ? 'else_if' : 'if'} = { limit = { root = { OR = { ${ps.map(p => `check_variable = { which = pe_chab_prod value = ${p} }`).join(' ')} } } ${cond} } if = { limit = { NOT = { has_designation = ${d} } } set_colony_type = ${d} } }`).join('\n')}
+${CHAB_DESIG.map(([ps, d, cond], i) => `\t\t\t${i ? 'else_if' : 'if'} = { limit = { root = { OR = { ${ps.map(p => `check_variable = { which = pe_chab_prod value = ${p} }`).join(' ')} } } ${cond} } if = { limit = { OR = { NOT = { has_designation = ${d} } NOT = { has_planet_flag = pe_chab_desig } } } set_colony_type = ${d} set_planet_flag = pe_chab_desig } }`).join('\n')}
 		}
 		pe_chab_hq = yes
 	}

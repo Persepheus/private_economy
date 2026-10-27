@@ -26,6 +26,11 @@ Statisch geprüft (Validator einschließlich der Codex-Tests). Im Spiel noch nic
 - Das gilt nur für KI-Reiche. Dein Pool bleibt unberührt; dein Handel darf sich durch Anleihen nicht ändern.
 - Log: `AI state bonds: the investor pool lends …` bzw. `AI state bonds: repaid …`.
 
+## Konzern-Habitat: Designation fest gesetzt (0.42.2)
+
+- Ein Konzern-Habitat, das auf automatischer Designation stand und schon die passende hatte, hat sie nach dem nächsten Monat fest eingestellt.
+- Stellst du danach selbst wieder auf automatisch, bleibt das so, solange die automatische Designation passt. Weicht sie ab, setzt der Konzern seine wieder.
+
 ## Lagervertrag: Gebühr 20 %
 
 - Die Gebühr steigt von 5 % auf 20 % der monatlichen Nettoproduktion, weil das Firmenlager jetzt keinen Bauplatz mehr kostet.
