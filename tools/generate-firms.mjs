@@ -845,12 +845,14 @@ ${ifChain(variants, v => rootIs('pe_best_variant', v.code), v => {
 })}
 }
 
-# Event pe.110 scope (country), colony = event_target:pe_offer_planet.
+# Event pe.110 scope (country), colony = event_target:pe_offer_planet. Only if the offer still
+# holds (pe_offer_still_ok, 0.40); the supply check runs again in buyCall.
 pe_buyout_by_offer = {
-${ifChain(variants, v => rootIs('pe_offer_variant', v.code), v => {
-  const [m, t] = PRICE[v.k];
-  return buyCall(v);
-})}
+	if = {
+		limit = { root = { pe_offer_still_ok = yes } }
+${ifChain(variants, v => rootIs('pe_offer_variant', v.code), v => buyCall(v), '\t\t')}
+	}
+	else = { log = "private_economy: buyout offer on \\\\[This.GetName] no longer holds" }
 }
 
 # Colony scope, monthly: a finished construction site becomes its firm (unless it waits for
@@ -1157,6 +1159,21 @@ ${LETTERS.filter(l => specFor(l).length).map(l => `		AND = { root = { check_vari
 	}
 }
 `;
+trg += `
+# Country scope (event pe.110): the buyout offer for event_target:pe_offer_planet still holds:
+# the planet is ours and not occupied, our economic order allows buyouts, and the state keeps
+# a district of the type (pe_can_buy_<variant>).
+pe_offer_still_ok = {
+	pe_buyout_allowed = yes
+	event_target:pe_offer_planet = {
+		owner = { is_same_value = root }
+		is_occupied_flag = no
+		OR = {
+${variants.map(v => `\t\t\tAND = { ${rootIs('pe_offer_variant', v.code)} pe_can_buy_${v.key} = yes }`).join('\n')}
+		}
+	}
+}
+`;
 write('common/scripted_triggers/pe_firm_triggers_generated.txt', trg);
 const eff_relocate = `
 # Colony scope (the source planet): move the marked firm (pe_rl_cand) to
@@ -1327,10 +1344,10 @@ loc.german.push(' pe_private_dividends:0 "Dividenden"', ' d_pe_ledger_dividend:0
 loc.english.push(' pe_auto_refund:0 "Private Automation (Firms\' Refund)"', ' d_pe_ledger_auto:0 "Refund for Private Automation"', ' d_pe_ledger_auto_desc:0 "The private firms pay the energy the automation of their jobs costs us (the line Automated Workforce) back to us every month, from their own capital."');
 loc.german.push(' pe_auto_refund:0 "Private Automatisierung (Erstattung der Firmen)"', ' d_pe_ledger_auto:0 "Erstattung Private Automatisierung"', ' d_pe_ledger_auto_desc:0 "Die Privatfirmen erstatten uns jeden Monat die Energie, die die Automatisierung ihrer Jobs uns kostet (Zeile Automatisierte Arbeitskraft), aus ihrem eigenen Kapital."');
 loc.english.push(' pe_private_profits:0 "Profit Payouts to Private Firms"', ' pe_private_savings:0 "Private Savings"',
-  ' d_pe_ledger_profit:0 "Profit Payout to Private Firms"', ' d_pe_ledger_profit_desc:0 "§HAn expense of the state.§! The private firms on this planet deliver everything they produce to the empire, just like state jobs. In return the state pays them their profit share every month, in trade: a part of the value their jobs create, by economic order (Guided 7.5%, Mixed 10%, Free Market 12.5%, Laissez-faire 17.5%), minus their running costs. With it the firms grow and new ones are founded.\\n\\nProfits and savings together cost at most 40% of the gross trade income; what the state does not pay, the firms do not get either."',
+  ' d_pe_ledger_profit:0 "Profit Payout to Private Firms"', ' d_pe_ledger_profit_desc:0 "§HAn expense of the state.§! The private firms on this planet deliver everything they produce to the empire, just like state jobs. In return the state pays them their profit share every month, in trade: a part of the value their jobs create, by economic order (Guided 7.5%, Mixed 10%, Free Market 12.5%, Laissez-faire 17.5%), minus their running costs. With it the firms grow and new ones are founded.\\n\\nProfits and savings together cost at most a share of the net trade income we would have without them: 40% of the first 100 a month, 70% of the next 200, 85% of everything above. So they never turn our trade balance negative, and a rich trade economy invests more. What the state does not pay, the firms do not get either."',
   ' d_pe_ledger_savings:0 "Private Savings"', ' d_pe_ledger_savings_desc:0 "§HAn expense of the state.§! Every month a part of our trade income flows into the investor pool as private savings, by economic order (Guided 5%, Mixed 10%, Free Market 15%, Laissez-faire 20%). From the pool investors found new firms and buy state districts."');
 loc.german.push(' pe_private_profits:0 "Gewinnauszahlung an Privatfirmen"', ' pe_private_savings:0 "Private Ersparnisse"',
-  ' d_pe_ledger_profit:0 "Gewinnauszahlung an Privatfirmen"', ' d_pe_ledger_profit_desc:0 "§HEine Ausgabe des Staates.§! Die Privatfirmen auf diesem Planeten liefern ihre ganze Produktion an das Reich, genau wie Staatsjobs. Dafür zahlt der Staat ihnen jeden Monat ihren Gewinnanteil in Handel: einen Teil des Werts, den ihre Jobs schaffen, je nach Wirtschaftsordnung (Gelenkt 7,5 %, Gemischt 10 %, Freie Marktwirtschaft 12,5 %, Laissez-faire 17,5 %), abzüglich ihrer laufenden Kosten. Davon wachsen die Firmen, und neue werden gegründet.\\n\\nGewinne und Ersparnisse zusammen kosten höchstens 40 % des Brutto-Handels; was der Staat nicht zahlt, bekommen die Firmen auch nicht."',
+  ' d_pe_ledger_profit:0 "Gewinnauszahlung an Privatfirmen"', ' d_pe_ledger_profit_desc:0 "§HEine Ausgabe des Staates.§! Die Privatfirmen auf diesem Planeten liefern ihre ganze Produktion an das Reich, genau wie Staatsjobs. Dafür zahlt der Staat ihnen jeden Monat ihren Gewinnanteil in Handel: einen Teil des Werts, den ihre Jobs schaffen, je nach Wirtschaftsordnung (Gelenkt 7,5 %, Gemischt 10 %, Freie Marktwirtschaft 12,5 %, Laissez-faire 17,5 %), abzüglich ihrer laufenden Kosten. Davon wachsen die Firmen, und neue werden gegründet.\\n\\nGewinne und Ersparnisse zusammen kosten höchstens einen Anteil des Netto-Handels, den wir ohne sie hätten: 40 % der ersten 100 im Monat, 70 % der nächsten 200, 85 % von allem darüber. So drücken sie unsere Handelsbilanz nie ins Minus, und eine reiche Handelswirtschaft investiert mehr. Was der Staat nicht zahlt, bekommen die Firmen auch nicht."',
   ' d_pe_ledger_savings:0 "Private Ersparnisse"', ' d_pe_ledger_savings_desc:0 "§HEine Ausgabe des Staates.§! Jeden Monat fließt ein Teil unseres Handelseinkommens als private Ersparnisse in den Investorenpool, je nach Wirtschaftsordnung (Gelenkt 5 %, Gemischt 10 %, Freie Marktwirtschaft 15 %, Laissez-faire 20 %). Aus dem Pool gründen Investoren neue Firmen und kaufen Staatsdistrikte."');
 loc.german.push(' pe_deposit_cat_automation:0 "Private Automatisierung"');
 loc.english.push(' pe_msg_conq_hq_lost:0 "With $PLANET$ we have lost the headquarters of §Y$CORP$§!. The corporation leaves our economy; its firms here are independent now, its stations and megastructures are ours."', ' pe_msg_conq_hq_gained:0 "With $PLANET$ the corporation §Y$CORP$§! has come under our rule: its headquarters and its firms there are part of our economy now."', ' pe_msg_conq_corp_gone:0 "§Y$CORP$§! has its headquarters on $PLANET$, which is ours now, but our economy has no room for it: the corporation is dissolved, its firms are independent."');
@@ -1848,7 +1865,7 @@ pe_corp_lending = {
 		}
 		if = { limit = { check_variable = { which = pe_want_loan value > 0 } }
 			pe_safe_growth = yes
-			if = { limit = { root = { check_variable = { which = pe_safe_ok value = 0 } } } set_variable = { which = pe_want_loan value = 0 } }
+			if = { limit = { root = { check_variable = { which = pe_safe_ok value = 0 } } } set_variable = { which = pe_want_loan value = 0 } set_variable = { which = pe_fst value = 9 } }
 		}
 		set_variable = { which = pe_lamt value = pe_want_loan }
 		change_variable = { which = pe_lamt value = pe_want_bridge }
@@ -1884,8 +1901,9 @@ ${corpChain('root.pe_lend_k', k => `root = { subtract_variable = { which = ${C(k
 				subtract_variable = { which = pe_fcap value = pe_want_cost }
 				set_variable = { which = pe_pending value = 1 }
 				root = { set_variable = { which = pe_pend_any value = 1 } }
+				set_variable = { which = pe_fst value = 14 }
 			}
-			else = { change_variable = { which = pe_loan_q value = 1 } }
+			else = { change_variable = { which = pe_loan_q value = 1 } set_variable = { which = pe_fst value = 15 } }
 		}
 		else_if = {
 			limit = {
@@ -1893,9 +1911,14 @@ ${corpChain('root.pe_lend_k', k => `root = { subtract_variable = { which = ${C(k
 				root = { check_variable = { which = pe_pend_any value = 0 } }
 			}
 			set_variable = { which = pe_fcap value = 0 }
-			if = { limit = { check_variable = { which = pe_stage value > 1 } } set_variable = { which = pe_pending value = 2 } }
-			else = { set_variable = { which = pe_pending value = 3 } }
+			if = { limit = { check_variable = { which = pe_stage value > 1 } } set_variable = { which = pe_pending value = 2 } set_variable = { which = pe_fst value = 2 } }
+			else = { set_variable = { which = pe_pending value = 3 } set_variable = { which = pe_fst value = 3 } }
 			root = { set_variable = { which = pe_pend_any value = 1 } }
+		}
+		# Growth without a loan because another firm here already changes this quarter.
+		if = {
+			limit = { check_variable = { which = pe_want_loan value > 0 } check_variable = { which = pe_fst value = 10 } root = { check_variable = { which = pe_pend_any value = 1 } } }
+			set_variable = { which = pe_fst value = 13 }
 		}
 		set_variable = { which = pe_want_loan value = 0 }
 		set_variable = { which = pe_want_bridge value = 0 }
@@ -2441,6 +2464,47 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
 // Firm register of a planet (decision -> event pe.276): up to REG_LINES firms with stage and
 // corporation. The deposit tooltip cannot show it (it is read in planet scope).
 const REG_LINES = 20;
+// What a firm did last quarter (pe_fst, pe_firm_book / pe_corp_lending) and why the investors
+// did or did not do something on the planet (pe_why, pe_planet_step); 0.40.
+const REG_FST = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+const REG_WHY = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18];
+const REG_FST_TEXT = {
+  0: ['no quarterly accounts yet', 'noch keine Quartalsbilanz'],
+  1: ['expands', 'baut aus'],
+  2: ['shrinks a stage', 'schrumpft um eine Stufe'],
+  3: ['closes', 'schließt'],
+  4: ['largest stage', 'größte Stufe'],
+  5: ['repays its founding debt', 'zahlt die Gründungsschuld ab'],
+  6: ['repays a corporate loan', 'zahlt einen Konzernkredit ab'],
+  7: ['losses', 'Verluste'],
+  8: ['growth waits: private jobs here below 90% filled', 'Ausbau wartet: private Stellen hier unter 90 % besetzt'],
+  9: ['growth stopped: it would consume what we are short of', 'Ausbau gestoppt: würde knappe Rohstoffe verbrauchen'],
+  10: ['saves for the next stage, no corporation lends', 'spart für den Ausbau, kein Konzern leiht'],
+  11: ['case for restructuring: does not earn its interest', 'Sanierungsfall: verdient die Zinsen nicht'],
+  12: ['growth waits: no idle pops here', 'Ausbau wartet: keine Arbeitslosen hier'],
+  13: ['growth waits: another firm here changes this quarter', 'Ausbau wartet: eine andere Firma hier baut gerade um oder aus'],
+  14: ['expands with a corporate loan', 'baut mit Konzernkredit aus'],
+  15: ['losses, bridged by a corporate loan', 'Verluste, mit Konzernkredit überbrückt'],
+};
+const REG_WHY_TEXT = {
+  0: ['Not evaluated yet (next quarter).', 'Noch nicht ausgewertet (nächstes Quartal).'],
+  1: ['A construction site is running; the investors wait until it is done.', 'Eine Baustelle läuft; die Investoren warten, bis sie fertig ist.'],
+  2: ['A year\'s pause after the last founding or buyout here.', 'Ein Jahr Pause nach der letzten Gründung oder dem letzten Kauf hier.'],
+  3: ['War zone: the investors wait.', 'Kriegsgebiet: Die Investoren warten ab.'],
+  4: ['The share our economic order leaves to private firms here is taken.', 'Der Anteil, den unsere Wirtschaftsordnung hier privaten Firmen lässt, ist ausgeschöpft.'],
+  5: ['No free district slot. The investors can only buy state districts (Free Market, Laissez-faire), at most every two years.', 'Kein freier Distriktplatz. Die Investoren können nur Staatsdistrikte kaufen (Freie Marktwirtschaft, Laissez-faire), höchstens alle zwei Jahre.'],
+  6: ['The private jobs here are less than 80% filled: no workers for another firm.', 'Die privaten Stellen hier sind zu weniger als 80 % besetzt: Für eine weitere Firma fehlen Arbeiter.'],
+  7: ['No idle pops: new firms only by buying state districts (Free Market, Laissez-faire), at most every two years.', 'Keine Arbeitslosen: Neue Firmen entstehen nur durch den Kauf von Staatsdistrikten (Freie Marktwirtschaft, Laissez-faire), höchstens alle zwei Jahre.'],
+  8: ['No firm is worth it here: too little value, or it would consume what we are short of.', 'Hier lohnt sich keine Firma: zu wenig Wert, oder sie würde knappe Rohstoffe verbrauchen.'],
+  9: ['A firm would be worth it, but the private capital does not cover the down payment.', 'Eine Firma würde sich lohnen, aber das Privatkapital reicht nicht für die Anzahlung.'],
+  10: ['The investors founded a new firm here.', 'Die Investoren haben hier eine neue Firma gegründet.'],
+  11: ['The investors bought a state district or offered to.', 'Die Investoren haben einen Staatsdistrikt gekauft oder einen Kauf angeboten.'],
+  12: ['The investors want to found beyond the quota and wait for our decision.', 'Die Investoren wollen über der Quote gründen und warten auf unsere Entscheidung.'],
+  13: ['We refused firms beyond the quota here (five years).', 'Wir haben Firmen über der Quote hier abgelehnt (fünf Jahre).'],
+  14: ['The chosen firm would consume what we are short of (supply check).', 'Die gewählte Firma würde knappe Rohstoffe verbrauchen (Versorgungsprüfung).'],
+  17: ['Beyond the quota: another request is still open.', 'Über der Quote: Eine andere Anfrage ist noch offen.'],
+  18: ['More firms than our economic order allows: one is nationalised.', 'Mehr Firmen, als unsere Wirtschaftsordnung erlaubt: Eine wird verstaatlicht.'],
+};
 const REG = [...Array(REG_LINES).keys()].map(i => i + 1);
 corp += `
 # Country scope (event pe.276): fill the register lines for event_target:pe_reg_planet:
@@ -2453,8 +2517,10 @@ ${REG.map(i => `\tset_variable = { which = pe_fl${i}_code value = 0 }`).join('\n
 			limit = { has_deposit_category = pe_deposit_cat_firms }
 			if = { limit = { NOT = { is_variable_set = pe_code } } pe_firm_identify = yes }
 			if = { limit = { NOT = { is_variable_set = pe_corp } } set_variable = { which = pe_corp value = 0 } }
+			if = { limit = { NOT = { is_variable_set = pe_fst } } set_variable = { which = pe_fst value = 0 } }
+			if = { limit = { NOT = { is_variable_set = pe_lastp } } set_variable = { which = pe_lastp value = 0 } }
 			root = { change_variable = { which = pe_fl_n value = 1 } }
-${REG.map((i, n) => `\t\t\t${n ? 'else_if' : 'if'} = { limit = { root = { check_variable = { which = pe_fl_n value = ${i} } } } root = { set_variable = { which = pe_fl${i}_code value = prev.pe_code } set_variable = { which = pe_fl${i}_stage value = prev.pe_stage } set_variable = { which = pe_fl${i}_name value = 0 } } ${CORPS.map((k, j) => `${j ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_corp value = ${k} } } root = { set_variable = { which = pe_fl${i}_name value = ${C(k, 'name')} } } }`).join(' ')} }`).join('\n')}
+${REG.map((i, n) => `\t\t\t${n ? 'else_if' : 'if'} = { limit = { root = { check_variable = { which = pe_fl_n value = ${i} } } } root = { set_variable = { which = pe_fl${i}_code value = prev.pe_code } set_variable = { which = pe_fl${i}_stage value = prev.pe_stage } set_variable = { which = pe_fl${i}_st value = prev.pe_fst } set_variable = { which = pe_fl${i}_p value = prev.pe_lastp } set_variable = { which = pe_fl${i}_name value = 0 } } ${CORPS.map((k, j) => `${j ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_corp value = ${k} } } root = { set_variable = { which = pe_fl${i}_name value = ${C(k, 'name')} } } }`).join(' ')} }`).join('\n')}
 		}
 	}
 	set_variable = { which = pe_fl_more value = pe_fl_n }
@@ -2464,6 +2530,12 @@ ${REG.map((i, n) => `\t\t\t${n ? 'else_if' : 'if'} = { limit = { root = { check_
 	event_target:pe_reg_planet = {
 		if = { limit = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_nm } root = { set_variable = { which = pe_reg_chab value = prev.pe_chab_nm } } }
 	}
+	# Why the investors did or did not do something here last quarter (pe_planet_step).
+	set_variable = { which = pe_reg_why value = 0 }
+	event_target:pe_reg_planet = {
+		if = { limit = { is_variable_set = pe_why } root = { set_variable = { which = pe_reg_why value = prev.pe_why } } }
+	}
+	if = { limit = { NOT = { is_variable_set = pe_lpay_pct } } set_variable = { which = pe_lpay_pct value = 100 } set_variable = { which = pe_lcap_r value = 0 } set_variable = { which = pe_lnet_r value = 0 } }
 }
 `;
 write('common/decisions/pe_decisions.txt', header + `# Planet decision: the register of the private firms on this planet and their corporations
@@ -2504,18 +2576,22 @@ regLoc += `defined_text = {\n\tname = GetPeDcLine\n\ttext = {\n\t\ttrigger = { c
 regLoc += dtext('GetPeDcName', 'pe_dc_nm', NAME_IDS.map(id => [id, `pe_cname_${id}`]), 'pe_corp_line_none');
 regLoc += `defined_text = {\n\tname = GetPeChabReg\n\ttext = {\n\t\ttrigger = { check_variable = { which = pe_reg_chab value > 0 } }\n\t\tlocalization_key = pe_chab_reg_line\n\t}\n\tdefault = pe_corp_line_none\n}\n`;
 regLoc += dtext('GetPeChabRegName', 'pe_reg_chab', NAME_IDS.map(id => [id, `pe_cname_${id}`]), 'pe_corp_line_none');
+for (const i of REG) regLoc += dtext(`GetPeFl${i}St`, `pe_fl${i}_st`, REG_FST.map(c => [c, `pe_reg_fst_${c}`]), 'pe_reg_fst_0');
+regLoc += dtext('GetPeRegWhy', 'pe_reg_why', REG_WHY.map(c => [c, `pe_reg_why_${c}`]), 'pe_reg_why_0');
 regLoc += `defined_text = {\n\tname = GetPeFlMore\n\ttext = {\n\t\ttrigger = { check_variable = { which = pe_fl_more value > 0 } }\n\t\tlocalization_key = pe_reg_more\n\t}\n\tdefault = pe_corp_line_none\n}\n`;
 write('common/scripted_loc/pe_register_loc_generated.txt', regLoc);
 for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
   const L = loc[lang];
-  REG.forEach(i => L.push(` pe_fl_line_${i}:0 "[Root.GetPeFl${i}Firm] ([Root.GetPeFl${i}Stage]): §Y[Root.GetPeFl${i}Corp]§!\\n"`));
+  REG.forEach(i => L.push(` pe_fl_line_${i}:0 "[Root.GetPeFl${i}Firm] ([Root.GetPeFl${i}Stage]): §Y[Root.GetPeFl${i}Corp]§!, ${li ? 'Gewinn' : 'profit'} [Root.pe_fl${i}_p], [Root.GetPeFl${i}St]\\n"`));
+  REG_FST.forEach(c => L.push(` pe_reg_fst_${c}:0 "${REG_FST_TEXT[c][li]}"`));
+  REG_WHY.forEach(c => L.push(` pe_reg_why_${c}:0 "${REG_WHY_TEXT[c][li]}"`));
   STAGES.forEach(s => L.push(` pe_reg_stage_${s}:0 "${li ? ['klein', 'mittel', 'groß'][s - 1] : ['small', 'mid-size', 'large'][s - 1]}"`));
   L.push(li ? ' pe_reg_independent:0 "unabhängig"' : ' pe_reg_independent:0 "independent"',
     li ? ' pe_reg_more:0 "… und [Root.pe_fl_more] weitere"' : ' pe_reg_more:0 "… and [Root.pe_fl_more] more"',
     li ? ' decision_pe_firm_register:0 "Firmenregister"' : ' decision_pe_firm_register:0 "Register of Firms"',
     li ? ' decision_pe_firm_register_desc:0 "Zeigt die Privatfirmen auf diesem Planeten und die Konzerne, zu denen sie gehören."' : ' decision_pe_firm_register_desc:0 "Shows the private firms on this planet and the corporations they belong to."',
     li ? ' pe.276.name:0 "Firmenregister: [pe_reg_planet.GetName]"' : ' pe.276.name:0 "Register of Firms: [pe_reg_planet.GetName]"',
-    ` pe.276.desc:0 "[Root.GetPeChabReg]${REG.map(i => `[Root.GetPeFl${i}]`).join('')}[Root.GetPeFlMore]\\n\\n${li ? '§HKonzerne des Reichs§!' : '§HCorporations of the empire§!'}\\n${CORPS.map(k => `[Root.GetPeCorpLine${k}]`).join('')}[Root.GetPeDcLine]"`,
+    ` pe.276.desc:0 "${li ? '§HLage:§!' : '§HSituation:§!'} [Root.GetPeRegWhy]\\n\\n[Root.GetPeChabReg]${li ? '§HFirmen§! (Gewinn des letzten Quartals in £trade£)' : '§HFirms§! (profit of the last quarter in £trade£)'}\\n${REG.map(i => `[Root.GetPeFl${i}]`).join('')}[Root.GetPeFlMore]\\n\\n${li ? '§HKonzerne des Reichs§!' : '§HCorporations of the empire§!'}\\n${CORPS.map(k => `[Root.GetPeCorpLine${k}]`).join('')}[Root.GetPeDcLine]\\n${li ? '§HGewinnauszahlung:§! Der Staat zahlt §Y[Root.pe_lpay_pct] %§! der Firmengewinne aus. Gewinne und Ersparnisse dürfen höchstens §Y[Root.pe_lcap_r]§! £trade£ im Monat kosten, bei §Y[Root.pe_lnet_r]§! £trade£ Netto-Handel ohne sie (40 % der ersten 100, 70 % der nächsten 200, 85 % darüber).' : '§HProfit payout:§! The state pays §Y[Root.pe_lpay_pct]%§! of the firms\' profits. Profits and savings may cost at most §Y[Root.pe_lcap_r]§! £trade£ a month, with §Y[Root.pe_lnet_r]§! £trade£ net trade without them (40% of the first 100, 70% of the next 200, 85% above).'}"`,
     li ? ' pe.276.a:0 "Schließen."' : ' pe.276.a:0 "Close."');
 }
 corp += `

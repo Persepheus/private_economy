@@ -51,15 +51,25 @@ country_event = {
 
 	option = {
 		name = pe.110.a
+		trigger = { pe_offer_still_ok = yes }
 		custom_tooltip = pe.110.a.tt
 		hidden_effect = { event_target:pe_offer_planet = { pe_buyout_by_offer = yes } }
 		remove_country_flag = pe_offer_pending
 	}
 	option = {
 		name = pe.110.b
+		trigger = { pe_offer_still_ok = yes }
 		event_target:pe_offer_planet = {
 			add_modifier = { modifier = pe_buyout_refused days = 720 }
 		}
+		remove_country_flag = pe_offer_pending
+	}
+	# The planet changed hands, the economic order changed, or the state is down to its last
+	# district of the type while the window was open (0.40).
+	option = {
+		name = pe.110.c
+		trigger = { NOT = { pe_offer_still_ok = yes } }
+		custom_tooltip = pe.110.c.tt
 		remove_country_flag = pe_offer_pending
 	}
 }

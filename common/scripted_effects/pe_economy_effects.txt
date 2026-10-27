@@ -153,9 +153,8 @@ pe_init = {
 	if = { limit = { NOT = { is_variable_set = pe_savings_rate } } set_variable = { which = pe_savings_rate value = 0 } }
 	if = { limit = { NOT = { is_variable_set = pe_capital } } set_variable = { which = pe_capital value = 500 } }
 	if = { limit = { NOT = { is_variable_set = pe_pool_income } } set_variable = { which = pe_pool_income value = 0 } }
-	# Share of the profits and savings the state paid last quarter (see pe_ledgers).
+	# Share of the profits the state paid last quarter (see pe_ledgers).
 	if = { limit = { NOT = { is_variable_set = pe_lpay } } set_variable = { which = pe_lpay value = 1 } }
-	if = { limit = { NOT = { is_variable_set = pe_lsc_last } } set_variable = { which = pe_lsc_last value = 1 } }
 	if = {
 		limit = { NOT = { is_variable_set = pe_seed } }
 		set_variable_to_random_value = { which = pe_seed min = 0 max = 1008 rounded = yes }
@@ -370,14 +369,54 @@ pe_relocate_check_dest = {
 
 # Country scope: what the private economy costs the state, as monthly trade upkeep that
 # shows in the budget: each planet's firms' profits (profit ledger) and the private savings
-# (savings ledger on the capital), for the next three months. Together at most 40% of
-# the gross trade income. What the state does not pay, the firms and the investor pool do
-# not get either: next quarter they book profits and savings at the share paid now
-# (pe_lpay, pe_lsc_last).
+# (savings ledger on the capital), for the next three months.
+# Cap (0.40): a progressive share of the net trade income the empire would have without
+# these two ledgers (pe_lnet, per month): 40% of the first 100, 70% of the next 200, 85% of
+# everything above 300. So the trade balance never turns negative because of them, and a
+# rich trade economy may invest far more. Without a net trade income nothing is paid.
+# What the state does not pay, the firms and the investor pool do not get either. The firms
+# booked this quarter's profits at last quarter's share (pe_lpay, pe_firm_book); the
+# difference to the share paid now is settled with the investor pool (pe_lcorr), so not a
+# single trade is created or lost. Savings reach the pool only here, at the share paid.
 pe_ledgers = {
-	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = trade } variable = pe_lcap }
-	multiply_variable = { which = pe_lcap value = 1.2 }
+	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = trade } variable = pe_lnet }
+	export_trigger_value_to_variable = { trigger = resource_expenses_compare parameters = { resource = trade } variable = pe_tmp }
+	subtract_variable = { which = pe_lnet value = pe_tmp }
+	# Last quarter's profit and savings ledgers are in the expenses: add them back.
+	if = { limit = { NOT = { is_variable_set = pe_lpaid_m } } set_variable = { which = pe_lpaid_m value = 0 } }
+	change_variable = { which = pe_lnet value = pe_lpaid_m }
+	set_variable = { which = pe_lcap_m value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_lnet value > 0 } }
+		set_variable = { which = pe_tmp value = pe_lnet }
+		if = { limit = { check_variable = { which = pe_tmp value > 100 } } set_variable = { which = pe_tmp value = 100 } }
+		multiply_variable = { which = pe_tmp value = 0.4 }
+		change_variable = { which = pe_lcap_m value = pe_tmp }
+	}
+	if = {
+		limit = { check_variable = { which = pe_lnet value > 100 } }
+		set_variable = { which = pe_tmp value = pe_lnet }
+		if = { limit = { check_variable = { which = pe_tmp value > 300 } } set_variable = { which = pe_tmp value = 300 } }
+		change_variable = { which = pe_tmp value = -100 }
+		multiply_variable = { which = pe_tmp value = 0.7 }
+		change_variable = { which = pe_lcap_m value = pe_tmp }
+	}
+	if = {
+		limit = { check_variable = { which = pe_lnet value > 300 } }
+		set_variable = { which = pe_tmp value = pe_lnet }
+		change_variable = { which = pe_tmp value = -300 }
+		multiply_variable = { which = pe_tmp value = 0.85 }
+		change_variable = { which = pe_lcap_m value = pe_tmp }
+	}
+	set_variable = { which = pe_lcap value = pe_lcap_m }
+	multiply_variable = { which = pe_lcap value = 3 }
+	# What is due: profits (half after disaster relief, pe.226 gratitude; a quarter more under
+	# a monopoly, pe.244; both inside the cap) and savings.
+	set_variable = { which = pe_lfac value = 1 }
+	if = { limit = { has_country_flag = pe_gratitude } multiply_variable = { which = pe_lfac value = 0.5 } }
+	if = { limit = { has_country_flag = pe_monopoly } multiply_variable = { which = pe_lfac value = 1.25 } }
 	set_variable = { which = pe_ltot value = pe_profit_due }
+	multiply_variable = { which = pe_ltot value = pe_lfac }
 	change_variable = { which = pe_ltot value = pe_savings_last }
 	set_variable = { which = pe_lscale value = 1 }
 	if = {
@@ -388,13 +427,20 @@ pe_ledgers = {
 		set_variable = { which = pe_lscale value = pe_lcap }
 		divide_variable = { which = pe_lscale value = pe_ltot }
 	}
-	# Profits: half after disaster relief (pe.226, gratitude), a quarter more under a
-	# monopoly (pe.244).
 	set_variable = { which = pe_lprof value = pe_lscale }
-	if = { limit = { has_country_flag = pe_gratitude } multiply_variable = { which = pe_lprof value = 0.5 } }
-	if = { limit = { has_country_flag = pe_monopoly } multiply_variable = { which = pe_lprof value = 1.25 } }
+	multiply_variable = { which = pe_lprof value = pe_lfac }
+	# Settle the profits the firms booked at last quarter's share.
+	set_variable = { which = pe_lcorr value = pe_lprof }
+	subtract_variable = { which = pe_lcorr value = pe_lpay }
+	multiply_variable = { which = pe_lcorr value = pe_profit_due }
+	change_variable = { which = pe_capital value = pe_lcorr }
+	change_variable = { which = pe_pool_income value = pe_lcorr }
+	# The savings the state pays.
+	set_variable = { which = pe_tmp value = pe_savings_last }
+	multiply_variable = { which = pe_tmp value = pe_lscale }
+	change_variable = { which = pe_capital value = pe_tmp }
+	change_variable = { which = pe_pool_income value = pe_tmp }
 	set_variable = { which = pe_lpay value = pe_lprof }
-	set_variable = { which = pe_lsc_last value = pe_lscale }
 	every_owned_colony = { pe_ledger_planet = yes }
 	set_variable = { which = pe_sav_month value = pe_savings_last }
 	multiply_variable = { which = pe_sav_month value = pe_lscale }
@@ -402,6 +448,25 @@ pe_ledgers = {
 	set_variable = { which = pe_profit_month value = pe_profit_due }
 	multiply_variable = { which = pe_profit_month value = pe_lprof }
 	divide_variable = { which = pe_profit_month value = 3 }
+	set_variable = { which = pe_lpaid_m value = pe_profit_month }
+	change_variable = { which = pe_lpaid_m value = pe_sav_month }
+	# For the register (pe.276) and the log.
+	set_variable = { which = pe_lpay_pct value = pe_lprof }
+	multiply_variable = { which = pe_lpay_pct value = 100 }
+	round_variable = pe_lpay_pct
+	set_variable = { which = pe_lnet_r value = pe_lnet }
+	round_variable = pe_lnet_r
+	set_variable = { which = pe_lcap_r value = pe_lcap_m }
+	round_variable = pe_lcap_r
+	set_variable = { which = pe_ldue_r value = pe_ltot }
+	divide_variable = { which = pe_ldue_r value = 3 }
+	round_variable = pe_ldue_r
+	set_variable = { which = pe_lcorr_r value = pe_lcorr }
+	round_variable = pe_lcorr_r
+	if = {
+		limit = { is_ai = no }
+		log = "private_economy: ledgers: net trade without them \\[Root.pe_lnet_r], cap \\[Root.pe_lcap_r], due \\[Root.pe_ldue_r] a month, profits paid \\[Root.pe_lpay_pct]%, pool settlement \\[Root.pe_lcorr_r]"
+	}
 	# State bonds (pe.242): the state repays the investor pool monthly, shown with the savings.
 	if = {
 		limit = { check_variable = { which = pe_bond_left value > 0 } }
@@ -489,8 +554,9 @@ pe_ledger_planet = {
 
 # Country scope: private savings. A share of the gross trade income (pe_savings_rate, set by
 # the economic order: 0/5/10/15/20%) goes to the investor pool each quarter; the state
-# pays it monthly as trade upkeep (savings ledger on the capital, see pe_ledgers). Only if the stockpile can pay it, and only while the pool holds less than
-# 3000 (otherwise it could not spend it).
+# pays it monthly as trade upkeep (savings ledger on the capital, see pe_ledgers), and the
+# pool gets what the state pays. Only if the stockpile can pay it, and only while the pool
+# holds less than 4500 (otherwise it could not spend it).
 pe_savings = {
 	set_variable = { which = pe_savings_last value = 0 }
 	export_trigger_value_to_variable = { trigger = resource_revenue_compare parameters = { resource = trade } variable = pe_sav }
@@ -504,11 +570,8 @@ pe_savings = {
 			# A full pool (it has nothing to spend it on) saves no more.
 			check_variable = { which = pe_capital value < 4500 }
 		}
+		# The pool gets them at the end of the quarter, as far as the state pays them (pe_ledgers).
 		set_variable = { which = pe_savings_last value = pe_sav }
-		# The pool gets what the state paid (capped ledgers, see pe_ledgers).
-		multiply_variable = { which = pe_sav value = pe_lsc_last }
-		change_variable = { which = pe_capital value = pe_sav }
-		change_variable = { which = pe_pool_income value = pe_sav }
 	}
 }
 
@@ -901,6 +964,17 @@ pe_planet_step = {
 	pe_automation = yes
 	set_variable = { which = pe_tnat value = pe_tbase }
 	change_variable = { which = pe_tnat value = pe_xq }
+	# Why the investors did or did not do something here this quarter, for the register
+	# (pe.276, 0.40), pe_why: 1 a site is running, 2 pause after a founding or buyout, 3 war
+	# zone, 4 the economic order's share is taken, 5 no free district slot, 6 private jobs
+	# below 80%, 7 no idle pops, 8 no firm worth it, 9 not enough private capital, 10 founded,
+	# 11 bought a state district or offered to, 12 waiting for our decision beyond the share,
+	# 13 we refused firms beyond the share, 14 supply check, 17 another request beyond the
+	# share is open, 18 a firm is nationalised.
+	set_variable = { which = pe_why value = 0 }
+	if = { limit = { has_modifier = pe_warzone } set_variable = { which = pe_why value = 3 } }
+	else_if = { limit = { has_planet_flag = pe_cooldown } set_variable = { which = pe_why value = 2 } }
+	else_if = { limit = { has_planet_flag = pe_site } set_variable = { which = pe_why value = 1 } }
 	# Many idle pops (600 more than the sites here will employ): a second site at once.
 	if = {
 		limit = {
@@ -936,12 +1010,11 @@ pe_planet_step = {
 						check_variable = { which = pe_firms value >= pe_tbase }
 						owner = { is_ai = no NOT = { has_policy_flag = pe_order_laissez_faire } }
 					}
-					if = {
-						limit = {
-							NOT = { has_planet_flag = pe_xq_no }
-							owner = { NOT = { has_country_flag = pe_xq_pending } }
-							root = { check_variable = { which = pe_best_variant value > 0 } }
-						}
+					if = { limit = { root = { check_variable = { which = pe_best_variant value = 0 } } } set_variable = { which = pe_why value = 8 } }
+					else_if = { limit = { has_planet_flag = pe_xq_no } set_variable = { which = pe_why value = 13 } }
+					else_if = { limit = { owner = { has_country_flag = pe_xq_pending } } set_variable = { which = pe_why value = 17 } }
+					else = {
+						set_variable = { which = pe_why value = 12 }
 						save_event_target_as = pe_xq_planet
 						root = {
 							set_variable = { which = pe_xq_code value = pe_best_variant }
@@ -959,15 +1032,25 @@ pe_planet_step = {
 						limit = { check_variable = { which = pe_sc1 value > pe_sc0 } check_variable = { which = pe_firms value >= pe_tbase } }
 						change_variable = { which = pe_xq value = 1 }
 					}
+					if = { limit = { check_variable = { which = pe_sc1 value > pe_sc0 } } set_variable = { which = pe_why value = 10 } }
+					else_if = { limit = { root = { check_variable = { which = pe_best_variant value = 0 } } } set_variable = { which = pe_why value = 8 } }
+					else_if = { limit = { root = { check_variable = { which = pe_safe_ok value = 0 } } } set_variable = { which = pe_why value = 14 } }
+					else = { set_variable = { which = pe_why value = 9 } }
 				}
 			}
-			else_if = {
-				# At most one buyout (or offer) per planet every two years.
-				limit = { OR = { owner = { pe_buyout_allowed = yes } has_planet_flag = pe_corp_hab } NOT = { has_planet_flag = pe_buy_cd } }
-				# A firm must be worth clearly more than the state district it replaces.
-				root = { set_variable = { which = pe_best_min value = 2 } set_variable = { which = pe_dmode value = 1 } }
-				pe_choose_variant = { MODE = buy }
-				pe_buy_or_offer = yes
+			else = {
+				if = { limit = { free_district_slots < 1 } set_variable = { which = pe_why value = 5 } }
+				else_if = { limit = { root = { check_variable = { which = pe_unemp value = 0 } } } set_variable = { which = pe_why value = 7 } }
+				else = { set_variable = { which = pe_why value = 6 } }
+				if = {
+					# At most one buyout (or offer) per planet every two years.
+					limit = { OR = { owner = { pe_buyout_allowed = yes } has_planet_flag = pe_corp_hab } NOT = { has_planet_flag = pe_buy_cd } }
+					# A firm must be worth clearly more than the state district it replaces.
+					root = { set_variable = { which = pe_best_min value = 2 } set_variable = { which = pe_dmode value = 1 } }
+					pe_choose_variant = { MODE = buy }
+					pe_buy_or_offer = yes
+					if = { limit = { has_planet_flag = pe_buy_cd } set_variable = { which = pe_why value = 11 } }
+				}
 			}
 		}
 		else_if = {
@@ -976,6 +1059,11 @@ pe_planet_step = {
 				check_variable = { which = pe_firms value > pe_tnat }
 			}
 			pe_nationalise_one = yes
+			set_variable = { which = pe_why value = 18 }
+		}
+		else_if = {
+			limit = { NOT = { has_modifier = pe_warzone } }
+			set_variable = { which = pe_why value = 4 }
 		}
 	}
 	# Nothing started on this planet this quarter, its private jobs are filled, and no
@@ -1069,12 +1157,6 @@ pe_firm_book = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_profit value > 0 } }
-		root = {
-			change_variable = { which = pe_profit_due value = prev.pe_profit }
-			change_variable = { which = pe_pl_acc value = prev.pe_profit }
-		}
-		# The firm only gets what the state pays (capped ledgers, see pe_ledgers).
-		multiply_variable = { which = pe_profit value = root.pe_lpay }
 		# A price war of its corporation: 30% less profit.
 		if = {
 			limit = { check_variable = { which = pe_corp value > 0 } }
@@ -1087,6 +1169,14 @@ pe_firm_book = {
 		if = { limit = { check_variable = { which = pe_corp value = 7 } root = { check_variable = { which = pe_c7_war value > 0 } } } multiply_variable = { which = pe_profit value = 0.7 } }
 		if = { limit = { check_variable = { which = pe_corp value = 8 } root = { check_variable = { which = pe_c8_war value > 0 } } } multiply_variable = { which = pe_profit value = 0.7 } }
 		}
+		# The state pays this profit (profit ledger, pe_ledgers). The firm books it at the share
+		# the state paid last quarter (pe_lpay); pe_ledgers settles the difference with the
+		# investor pool (0.40).
+		root = {
+			change_variable = { which = pe_profit_due value = prev.pe_profit }
+			change_variable = { which = pe_pl_acc value = prev.pe_profit }
+		}
+		multiply_variable = { which = pe_profit value = root.pe_lpay }
 	}
 	# A corporate loan the firm cannot carry (its profit below the interest of 3%): after four
 	# such quarters in a row its lender restructures it (pe_sanierung_step, pe.321 / pe.322).
@@ -1288,6 +1378,29 @@ pe_firm_book = {
 		else = { set_variable = { which = pe_pending value = 3 } }
 		root = { set_variable = { which = pe_pend_any value = 1 } }
 	}
+	# What the firm did this quarter and why, for the register (pe.276, 0.40): pe_lastp the
+	# profit it kept, pe_fst the state (pe_corp_lending updates 10 to 13, 14 or 15):
+	#   1 expands, 2 shrinks, 3 closes, 4 largest stage, 5 repays its founding debt, 6 repays
+	#   a corporate loan, 7 losses, 8 growth waits: private jobs here below 90%, 9 growth
+	#   stopped: it would consume what the empire is short of, 10 saves for the next stage (no
+	#   corporate loan), 11 restructuring case, 12 growth waits: no idle pops, 13 growth waits:
+	#   another firm here changes this quarter, 14 expands with a corporate loan, 15 losses
+	#   bridged by a corporate loan.
+	set_variable = { which = pe_lastp value = pe_profit }
+	round_variable = pe_lastp
+	if = { limit = { check_variable = { which = pe_pending value = 1 } } set_variable = { which = pe_fst value = 1 } }
+	else_if = { limit = { check_variable = { which = pe_pending value = 2 } } set_variable = { which = pe_fst value = 2 } }
+	else_if = { limit = { check_variable = { which = pe_pending value = 3 } } set_variable = { which = pe_fst value = 3 } }
+	else_if = { limit = { check_variable = { which = pe_zq value >= 4 } } set_variable = { which = pe_fst value = 11 } }
+	else_if = { limit = { OR = { check_variable = { which = pe_profit value <= 0 } check_variable = { which = pe_fcap value < 0 } } } set_variable = { which = pe_fst value = 7 } }
+	else_if = { limit = { check_variable = { which = pe_debt value > 0 } } set_variable = { which = pe_fst value = 5 } }
+	else_if = { limit = { check_variable = { which = pe_loan value > 0 } } set_variable = { which = pe_fst value = 6 } }
+	else_if = { limit = { check_variable = { which = pe_stage value >= 3 } } set_variable = { which = pe_fst value = 4 } }
+	else_if = { limit = { root = { check_variable = { which = pe_safe_ok value = 0 } } } set_variable = { which = pe_fst value = 9 } }
+	else_if = { limit = { root = { check_variable = { which = pe_fill_cur value < 0.9 } } } set_variable = { which = pe_fst value = 8 } }
+	else_if = { limit = { root = { check_variable = { which = pe_unemp value = 0 } } } set_variable = { which = pe_fst value = 12 } }
+	else_if = { limit = { check_variable = { which = pe_want_loan value > 0 } } set_variable = { which = pe_fst value = 10 } }
+	else = { set_variable = { which = pe_fst value = 13 } }
 }
 
 # Value of a variant on this planet: country value, plus entertainment need here, times

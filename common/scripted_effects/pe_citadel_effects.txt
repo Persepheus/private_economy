@@ -314,18 +314,31 @@ pe_cit_exec = {
 }
 
 # Country scope, monthly (pe.100): while we are at war and our holdings have a citadel, they
-# join our wars (on our side), so that it fights for us.
+# join our wars (on our side), so that it fights for us. join_war joins all of them, so the
+# holdings join again as soon as one of our wars is without them (0.40: before, a second war
+# found them already at war and they stayed out).
 pe_cit_war = {
 	if = {
-		limit = { is_at_war = yes }
+		limit = {
+			is_at_war = yes
+			any_country = {
+				is_country_type = pe_holdings
+				has_relation_flag = { who = root flag = pe_holdings_of }
+				any_owned_fleet = { has_fleet_flag = pe_ccit }
+			}
+		}
 		random_country = {
 			limit = {
 				is_country_type = pe_holdings
 				has_relation_flag = { who = root flag = pe_holdings_of }
-				is_at_war = no
 				any_owned_fleet = { has_fleet_flag = pe_ccit }
 			}
-			join_war = root
+			save_event_target_as = pe_cit_holder
+		}
+		if = {
+			limit = { any_war = { NOT = { is_war_participant = { who = event_target:pe_cit_holder } } } }
+			event_target:pe_cit_holder = { join_war = root }
+			log = "private_economy: the holdings with the citadel join our wars"
 		}
 	}
 }

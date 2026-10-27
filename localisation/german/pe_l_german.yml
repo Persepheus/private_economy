@@ -50,6 +50,8 @@
  pe.110.a:0 "Den Distrikt verkaufen."
  pe.110.a.tt:0 "Die Investoren kaufen den Distrikt und machen daraus die Privatfirma; wir bekommen die Zahlung, sie zahlen aus dem Privatkapital."
  pe.110.b:0 "Der Distrikt bleibt in Staatshand."
+ pe.110.c:0 "Das Angebot ist hinfällig."
+ pe.110.c.tt:0 "Seit dem Angebot haben sich der Planet, unsere Wirtschaftsordnung oder seine Distrikte geändert: Die Investoren ziehen sich zurück."
  pe.6.name:0 "Privatwirtschaft: Diagnose"
  pe.6.a:0 "Verstanden."
  pe.110.desc.urban:0 "Investoren wollen einen staatlichen Stadtdistrikt auf §Y[pe_offer_planet.GetName]§! kaufen und daraus ein Unternehmen machen: §Y[Root.GetPeOfferFirm]§!. Sie bieten §G750§! £minerals£ und §G150§! £trade£ aus dem Privatkapital.\n\nIn der Freien Marktwirtschaft kommt eine Absage bei der Wirtschaft schlecht an."

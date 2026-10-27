@@ -6,6 +6,15 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
+## Stand 0.40.0
+
+**Buchhaltung und Erklärbarkeit** ([TESTS_0.40.md](docs/TESTS_0.40.md)):
+- **Gewinnauszahlung ohne Zeitversatz:** Firmen buchen ihren Gewinn wie bisher zur Quote des Vorquartals. Die Differenz zur neuen Quote verrechnet der Investorenpool, und Ersparnisse bekommt er zur Quote, die der Staat wirklich zahlt. Es entsteht und verschwindet kein Handel mehr. Ein Preiskampf senkt den Gewinn jetzt schon vor der Auszahlung, der Staat zahlt also auch weniger.
+- **Neuer Deckel:** Gewinne und Ersparnisse dürfen einen gestaffelten Anteil des Netto-Handels kosten, den das Reich ohne sie hätte: 40 % der ersten 100 im Monat, 70 % der nächsten 200, 85 % von allem darüber. Die Handelsbilanz rutscht dadurch nie ins Minus, und eine große Handelswirtschaft investiert deutlich mehr. Monopol- und Katastrophenhilfe-Faktor liegen jetzt innerhalb des Deckels.
+- **Holdings im Krieg:** Die Holdings mit Zitadelle treten jedem unserer Kriege bei, auch einem zweiten.
+- **Kaufangebot:** Bei der Annahme wird erneut geprüft, ob der Planet noch uns gehört, die Wirtschaftsordnung den Kauf erlaubt und dem Staat ein Distrikt des Typs bleibt. Sonst ist das Angebot hinfällig.
+- **Firmenregister erklärt:** Es zeigt jetzt, warum die Investoren auf dem Planeten gründen oder nicht, für jede Firma den Gewinn des letzten Quartals und was sie tut (baut aus, spart, wartet auf Arbeiter, zahlt Kredit ab …), dazu die aktuelle Auszahlungsquote und den Deckel.
+
 ## Stand 0.39.0
 
 **Volle Lager** ([TESTS_0.39.md](docs/TESTS_0.39.md)):
@@ -53,9 +62,9 @@ Die Privatwirtschaft ist ein Kreislauf:
   - Stadt höchstens 150 pro Produkt.
   - Land 200, oder 150 plus 50 Sparte.
 - **Defizit-Sperre:** Keine Firmen, die eine Ressource im Defizit verbrauchen. Bestehende werden zuerst umgebaut, auch über Klassengrenzen.
-- **Umbau** nur, wenn die neue Firma klar mehr wert ist und danach nichts knapp wird, was die alte gemacht hat. Eine Firma baut frühestens nach 10 Jahren um, ein Planet höchstens alle 5 Jahre.
+- **Umbau** nur, wenn die neue Firma klar mehr wert ist und danach nichts knapp wird, was die alte gemacht hat. Eine Firma baut frühestens nach 10 Jahren um (bei knappen Vorprodukten nach 2), ein Planet höchstens einmal im Jahr.
 - **Freie Pops:** Gründung und Wachstum brauchen Zivilisten minus offene Jobs minus Baustellen-Jobs, mindestens 50. Eine fertige Baustelle öffnet erst, wenn Arbeiter da sind.
-- **Gewinne und Ersparnisse** zusammen höchstens 40 % des Brutto-Handels; was der Staat nicht zahlt, bekommen Firmen und Pool auch nicht.
+- **Gewinne und Ersparnisse** zusammen höchstens ein gestaffelter Anteil des Netto-Handels ohne sie (40 % der ersten 100 im Monat, 70 % der nächsten 200, 85 % darüber); was der Staat nicht zahlt, bekommen Firmen und Pool auch nicht.
 - **Kosten** wie für den Staat. Finanziert über private Ersparnisse (Anteil am Handelseinkommen, nach Ordnung) und Kredit (40 % Anzahlung, Rest aus dem Firmengewinn).
 - **Abwechslung** durch Pseudo-Zufall, Diversifikation und Spezialisierung.
 - **Räumen:** Unter gelenkter und gemischter Wirtschaft kann der Spieler Firmen und Baustellen wie Blocker für Influence räumen; unter Gemischt zusätzlich mit Entschädigung in Handel und mit Unmut.
@@ -67,7 +76,7 @@ Die Privatwirtschaft ist ein Kreislauf:
 - **Konzernflotten:** Im Krieg verleasen Industriekonzerne Flotten (5 Jahre, 10 % Gebühr, danach kaufen oder zurückgeben). Gegen Weltraumkreaturen an der Grenze stellen Konzerne Flotten gegen die Beuterechte (bei KI-Reichen startet die Flotte direkt bei den Kreaturen).
 - **Lieferketten:** Private Minen, Fabriken und (bei katalytischer Verarbeitung) Farmen schließen Lieferverträge mit Stahlwerken, Fabriken, Laboren, Handels- und Medienhäusern auf anderen Planeten: +5 % Ertrag der Branche auf beiden Planeten.
 - **Weitere Konzern-Angebote:** Erkundungscharta (Forschungsschiff gegen Schürfrechte), Konvoischutz gegen Piraten, Schutzflotten für bombardierte Planeten (gegen Firmen, Legierungen oder Einfluss; für den eigenen Hauptsitz kostenlos), Bergung von Trümmerfeldern, eigene Dyson-Schwärme und Arc Furnaces (gebaut wie in Vanilla: Baustelle der Holdings mit Vanilla-Bauzeit; der Konzern zahlt Bau, Ausbau und Unterhalt und wählt einen mittleren Standort; beim Ofen bekommt er die Himmelskörper ohne früheres Vorkommen, die übrigen bleiben beim Reich); Mäzene spenden Schiffe nach Verlusten.
-- **Firmenregister:** Planeten-Entscheidung, die zeigt, welche Firma zu welchem Konzern gehört.
+- **Firmenregister:** Planeten-Entscheidung, die zeigt, welche Firma zu welchem Konzern gehört, was jede Firma im letzten Quartal verdient und getan hat, warum auf dem Planeten gegründet wird oder nicht, und wie viel der Staat von den Gewinnen auszahlt.
 - **Kredite:** Konzerne verleihen aus ihrer Kasse für Wachstum und gegen Verluste (3 % Zins pro Quartal, Kreditlinie −200). Ausfälle treffen den Gläubiger; ein Konzern im Minus verkauft Firmen.
 - **Bombardement:** Firmen bombardierter Planeten verlieren Kapital (0,1–0,3 % je Punkt Verwüstung und Monat), selten Stufen bis zur Zerstörung (Trümmer); danach drei Jahre Kriegsgebiet ohne neue Investitionen; Konzerne bauen ihre Firmen wieder auf, unabhängige gegen einen Zuschuss.
 - **Eroberung:** Geht ein Planet an ein anderes Reich, gehen seine Firmen mit; Konzernbindungen und Kredite enden, ein Konzern mit Hauptsitz dort zieht mit um (oder wird aufgelöst, wenn das neue Reich keinen Platz hat). Ohne Privatwirtschaft beim neuen Besitzer werden die Firmen Staatsdistrikte. Stationen und Megastrukturen der Holdings folgen dem Gebiet.
@@ -100,7 +109,14 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Gefunden im Save Hesukaran 7 (2287):** Schutzflotte der KI ohne passenden Schiffsentwurf (create_ship ungültig, leere Flotte); Kredite eines aufgelösten Konzerns zahlen weiter in seinen leeren Platz; zwei Rohstoffkonzerne horten je 13-14 Tsd. Kasse (Verwendung bzw. Kalibrierung).
 - **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen.
 - **Volle Lager (27.10.2026):** Rüstungsauftrag und Lagervertrag sind in 0.39 umgesetzt. Verworfen: Modernisierung der Verteidigung und Werftausbau durch Konzerne.
-- **Längere Lieferketten (Supply Chains):** mehrstufige Wertschöpfung zwischen Firmen (Vorprodukte, Zulieferer), gemerkt am 27.10.2026.
+- **Längere Lieferketten (Supply Chains):** mehrstufige Wertschöpfung zwischen Firmen (Vorprodukte, Zulieferer), gemerkt am 27.10.2026. Aus dem Review: mit begrenzten Abhängigkeiten, also Ausfällen, Ersatzlieferanten und Versorgungssicherheit statt eines dauerhaften Bonus.
+- **Besetzungsquote pro Jobtyp (aus dem Review, 27.10.2026):** Bisher gilt pro Planet eine gemeinsame Quote aller Privatjobs. Eine volle Mine und ein leeres Labor zählen gleich. Künftig soll jede Firma nach der Besetzung ihrer eigenen Jobgruppe abrechnen und wachsen. Die Jobs werden pro Planet schon einzeln gezählt.
+- **Erweiterungen aus dem Review (27.10.2026):**
+  - **Staatliche Ausschreibungen:** Wir setzen Anreize für benötigte Legierungen, Forschung oder Versorgung, und die Firmen entscheiden, ob sie investieren.
+  - **Konzernprofile und Branchentechnologien:** Konzerne unterscheiden sich durch Spezialisierung, Risikobereitschaft und Investitionsverhalten (passt zu „Firmen forschen an ihrem Sektor“).
+  - **Lobbys mit Interessenkonflikten:** Ein Konzern fordert Privilegien und bietet dafür Leistungen (ergänzt die beschlossenen Lobbys).
+  - **Gezielte Krisen:** Kreditkrisen, Überkapazitäten und Rettungsentscheidungen, erst wenn die Buchhaltung stabil läuft (Sanierung und Lagerverträge seit 0.38/0.39 sind ein Anfang).
+  - **Ökumenopolis und andere Umwandlungen:** Jeder neue Planetentyp braucht eine festgelegte Behandlung der Firmen, die schon dort sind.
 - **Danach (beschlossen):** Lobbys der Branchengruppen (bauen auf den Konzernen auf); private Werften erst, wenn klar ist, was sie spielerisch bringen.
 - **Konjunkturzyklus:** erst, wenn die Wirtschaft stabil läuft.
 - **Aufräumen:** alter Holdings-Prototyp (pe.15-21) und diese Weltraum-Zeile sind überholt.
