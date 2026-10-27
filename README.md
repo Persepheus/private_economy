@@ -6,7 +6,9 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
-## Stand 0.37.0
+## Stand 0.37.1
+
+**0.37.1:** Labore auf Habitaten erkennen jetzt alle Forschungszonen des Vanilla-Sets `habitat_research`, auch Physik, Gesellschaft und Ingenieurwesen. Vorher konnten auf solchen Habitaten nie Labore entstehen.
 
 **Korrekturen 0.37.0** ([TESTS_0.37.md](docs/TESTS_0.37.md)):
 - Forschungsfirmen auf Habitaten bekommen die halben Basisjobs; die andere Hälfte nur, solange das Habitat eine Forschungsspezialisierung (Zone) hat. Das entspricht Vanilla (Forschungsdistrikt 90, mit Zone 180) und dem Bergbau.

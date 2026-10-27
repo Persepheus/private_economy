@@ -212,7 +212,8 @@ const HAB_FOUND = 600;
 const HAB_MONTHS = 12;
 const HAB_UPKEEP = {energy: 2, alloys: 0.25};
 const HAB_PRICE = {u: [225, 150], r: [225, 90]};       // buyout/nationalisation on a habitat: alloys, trade (x stage)
-const HAB_RESEARCH_ZONES = ['zone_habitat_research', 'zone_habitat_research_unity'];
+// Every zone of vanilla's habitat_research set (zones/00_zones.txt, 01_habitat_zones.txt).
+const HAB_RESEARCH_ZONES = ['zone_habitat_research', 'zone_habitat_research_unity', 'zone_research_physics', 'zone_research_society', 'zone_research_engineering'];
 const HAB_FARM_ZONES = ['zone_habitat_hydroponics'];
 // The jobs a state district gets from the specialisation (zone) of its type, per district
 // (vanilla zones/*): a firm in such a district gets the same as private jobs.

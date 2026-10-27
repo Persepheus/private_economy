@@ -15,6 +15,14 @@ Statisch geprüft (Validator einschließlich der Codex-Tests). Im Spiel noch nic
   - Ein Habitat mit Forschungslabor und Forschungszone zeigt unverändert 200 Arbeitskraft (Stufe 1).
   - Wird die Zone entfernt, sind es 100.
 
+## 0.37.1: alle Forschungszonen auf Habitaten
+
+- **Befund aus der Save-Reihe (2296):** Das Forschungshabitat 16781279 hatte nie ein Labor, obwohl es einen staatlichen Forschungsdistrikt mit `zone_research_engineering` hat. `pe_lab_hab_ok` kannte nur `zone_habitat_research` und `zone_habitat_research_unity`. Vanilla 4.5 setzt aber auch `zone_research_physics`, `zone_research_society` und `zone_research_engineering` in das Zonen-Set `habitat_research` (`zones/00_zones.txt`). Bei Land 1 betrifft das zum Beispiel Habitat 16781280.
+- **Jetzt:**
+  - Alle fünf Zonen erlauben Labore und geben die zweite Hälfte der Lab-Jobs.
+  - Die Versorgungsprüfung rechnet den ersetzten Staatsdistrikt mit diesen Zonen: 100 Jobs des jeweiligen Fachs, wie bei Vanilla.
+- **Prüfen:** Auf einem Habitat mit einer dieser Spezialisierungen und einem freien Forschungsdistrikt entsteht mit der Zeit ein Labor, oder es gibt ein Kaufangebot dafür.
+
 ## Firmenstufe 3 heißt „Großbetrieb“
 
 - Die Namen der Firmen-Deposits der Stufe 3 enden jetzt auf „(Großbetrieb)“ bzw. „(Large)“ statt „(Konzern)“ / „(Corporation)“.

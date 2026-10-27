@@ -8120,13 +8120,13 @@ d_pe_firm_xxxy = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 75
 		job_pe_private_biologist_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_biologist_add = 12.5
 	}
@@ -8218,13 +8218,13 @@ d_pe_firm_xxxy_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 112.5
 		job_pe_private_biologist_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 56.25
 		job_pe_private_biologist_add = 18.75
 	}
@@ -8316,13 +8316,13 @@ d_pe_firm_xxxy_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 150
 		job_pe_private_biologist_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 75
 		job_pe_private_biologist_add = 25
 	}
@@ -8414,13 +8414,13 @@ d_pe_firm_xxxz = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 75
 		job_pe_private_engineer_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_engineer_add = 12.5
 	}
@@ -8512,13 +8512,13 @@ d_pe_firm_xxxz_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 112.5
 		job_pe_private_engineer_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 56.25
 		job_pe_private_engineer_add = 18.75
 	}
@@ -8610,13 +8610,13 @@ d_pe_firm_xxxz_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 150
 		job_pe_private_engineer_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 75
 		job_pe_private_engineer_add = 25
 	}
@@ -8708,13 +8708,13 @@ d_pe_firm_xxxb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 75
 		job_pe_private_bureaucrat_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_bureaucrat_add = 12.5
 	}
@@ -8806,13 +8806,13 @@ d_pe_firm_xxxb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 112.5
 		job_pe_private_bureaucrat_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 56.25
 		job_pe_private_bureaucrat_add = 18.75
 	}
@@ -8904,13 +8904,13 @@ d_pe_firm_xxxb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 150
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 75
 		job_pe_private_bureaucrat_add = 25
 	}
@@ -9002,13 +9002,13 @@ d_pe_firm_xxyy = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_biologist_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 25
 	}
@@ -9100,13 +9100,13 @@ d_pe_firm_xxyy_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 75
 		job_pe_private_biologist_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_biologist_add = 37.5
 	}
@@ -9198,13 +9198,13 @@ d_pe_firm_xxyy_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 100
 		job_pe_private_biologist_add = 100
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_biologist_add = 50
 	}
@@ -9299,14 +9299,14 @@ d_pe_firm_xxyz = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 12.5
 		job_pe_private_engineer_add = 12.5
@@ -9402,14 +9402,14 @@ d_pe_firm_xxyz_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 75
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_engineer_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_biologist_add = 18.75
 		job_pe_private_engineer_add = 18.75
@@ -9505,14 +9505,14 @@ d_pe_firm_xxyz_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 100
 		job_pe_private_biologist_add = 50
 		job_pe_private_engineer_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 25
@@ -9608,14 +9608,14 @@ d_pe_firm_xxyb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_biologist_add = 25
 		job_pe_private_bureaucrat_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 12.5
 		job_pe_private_bureaucrat_add = 12.5
@@ -9711,14 +9711,14 @@ d_pe_firm_xxyb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 75
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_bureaucrat_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_biologist_add = 18.75
 		job_pe_private_bureaucrat_add = 18.75
@@ -9814,14 +9814,14 @@ d_pe_firm_xxyb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 100
 		job_pe_private_biologist_add = 50
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_biologist_add = 25
 		job_pe_private_bureaucrat_add = 25
@@ -9914,13 +9914,13 @@ d_pe_firm_xxzz = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_engineer_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_engineer_add = 25
 	}
@@ -10012,13 +10012,13 @@ d_pe_firm_xxzz_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 75
 		job_pe_private_engineer_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_engineer_add = 37.5
 	}
@@ -10110,13 +10110,13 @@ d_pe_firm_xxzz_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 100
 		job_pe_private_engineer_add = 100
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_engineer_add = 50
 	}
@@ -10211,14 +10211,14 @@ d_pe_firm_xxzb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_engineer_add = 25
 		job_pe_private_bureaucrat_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_engineer_add = 12.5
 		job_pe_private_bureaucrat_add = 12.5
@@ -10314,14 +10314,14 @@ d_pe_firm_xxzb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 75
 		job_pe_private_engineer_add = 37.5
 		job_pe_private_bureaucrat_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_engineer_add = 18.75
 		job_pe_private_bureaucrat_add = 18.75
@@ -10417,14 +10417,14 @@ d_pe_firm_xxzb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 100
 		job_pe_private_engineer_add = 50
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_engineer_add = 25
 		job_pe_private_bureaucrat_add = 25
@@ -10517,13 +10517,13 @@ d_pe_firm_xxbb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_bureaucrat_add = 25
 	}
@@ -10615,13 +10615,13 @@ d_pe_firm_xxbb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 75
 		job_pe_private_bureaucrat_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_bureaucrat_add = 37.5
 	}
@@ -10713,13 +10713,13 @@ d_pe_firm_xxbb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 100
 		job_pe_private_bureaucrat_add = 100
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_bureaucrat_add = 50
 	}
@@ -10811,13 +10811,13 @@ d_pe_firm_yyyx = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 12.5
 		job_pe_private_biologist_add = 37.5
 	}
@@ -10909,13 +10909,13 @@ d_pe_firm_yyyx_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_biologist_add = 112.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 18.75
 		job_pe_private_biologist_add = 56.25
 	}
@@ -11007,13 +11007,13 @@ d_pe_firm_yyyx_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_biologist_add = 150
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 75
 	}
@@ -11108,14 +11108,14 @@ d_pe_firm_yyxz = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 50
 		job_pe_private_engineer_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 12.5
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 12.5
@@ -11211,14 +11211,14 @@ d_pe_firm_yyxz_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_biologist_add = 75
 		job_pe_private_engineer_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 18.75
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_engineer_add = 18.75
@@ -11314,14 +11314,14 @@ d_pe_firm_yyxz_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_biologist_add = 100
 		job_pe_private_engineer_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 50
 		job_pe_private_engineer_add = 25
@@ -11417,14 +11417,14 @@ d_pe_firm_yyxb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 50
 		job_pe_private_bureaucrat_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 12.5
 		job_pe_private_biologist_add = 25
 		job_pe_private_bureaucrat_add = 12.5
@@ -11520,14 +11520,14 @@ d_pe_firm_yyxb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_biologist_add = 75
 		job_pe_private_bureaucrat_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 18.75
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_bureaucrat_add = 18.75
@@ -11623,14 +11623,14 @@ d_pe_firm_yyxb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_biologist_add = 100
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 50
 		job_pe_private_bureaucrat_add = 25
@@ -11726,14 +11726,14 @@ d_pe_firm_zzxy = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 12.5
 		job_pe_private_biologist_add = 12.5
 		job_pe_private_engineer_add = 25
@@ -11829,14 +11829,14 @@ d_pe_firm_zzxy_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_engineer_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 18.75
 		job_pe_private_biologist_add = 18.75
 		job_pe_private_engineer_add = 37.5
@@ -11932,14 +11932,14 @@ d_pe_firm_zzxy_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_biologist_add = 50
 		job_pe_private_engineer_add = 100
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 50
@@ -12038,7 +12038,7 @@ d_pe_firm_xyzb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 25
@@ -12046,7 +12046,7 @@ d_pe_firm_xyzb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 12.5
 		job_pe_private_biologist_add = 12.5
 		job_pe_private_engineer_add = 12.5
@@ -12146,7 +12146,7 @@ d_pe_firm_xyzb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_engineer_add = 37.5
@@ -12154,7 +12154,7 @@ d_pe_firm_xyzb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 18.75
 		job_pe_private_biologist_add = 18.75
 		job_pe_private_engineer_add = 18.75
@@ -12254,7 +12254,7 @@ d_pe_firm_xyzb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_biologist_add = 50
 		job_pe_private_engineer_add = 50
@@ -12262,7 +12262,7 @@ d_pe_firm_xyzb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 25
@@ -12359,14 +12359,14 @@ d_pe_firm_bbxy = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 25
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 12.5
 		job_pe_private_biologist_add = 12.5
 		job_pe_private_bureaucrat_add = 25
@@ -12462,14 +12462,14 @@ d_pe_firm_bbxy_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_bureaucrat_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 18.75
 		job_pe_private_biologist_add = 18.75
 		job_pe_private_bureaucrat_add = 37.5
@@ -12565,14 +12565,14 @@ d_pe_firm_bbxy_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_biologist_add = 50
 		job_pe_private_bureaucrat_add = 100
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_biologist_add = 25
 		job_pe_private_bureaucrat_add = 50
@@ -12665,13 +12665,13 @@ d_pe_firm_zzzx = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_engineer_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 12.5
 		job_pe_private_engineer_add = 37.5
 	}
@@ -12763,13 +12763,13 @@ d_pe_firm_zzzx_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_engineer_add = 112.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 18.75
 		job_pe_private_engineer_add = 56.25
 	}
@@ -12861,13 +12861,13 @@ d_pe_firm_zzzx_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_engineer_add = 150
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_engineer_add = 75
 	}
@@ -12962,14 +12962,14 @@ d_pe_firm_zzxb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_engineer_add = 50
 		job_pe_private_bureaucrat_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 12.5
 		job_pe_private_engineer_add = 25
 		job_pe_private_bureaucrat_add = 12.5
@@ -13065,14 +13065,14 @@ d_pe_firm_zzxb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_engineer_add = 75
 		job_pe_private_bureaucrat_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 18.75
 		job_pe_private_engineer_add = 37.5
 		job_pe_private_bureaucrat_add = 18.75
@@ -13168,14 +13168,14 @@ d_pe_firm_zzxb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_engineer_add = 100
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_engineer_add = 50
 		job_pe_private_bureaucrat_add = 25
@@ -13271,14 +13271,14 @@ d_pe_firm_bbxz = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_engineer_add = 25
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 12.5
 		job_pe_private_engineer_add = 12.5
 		job_pe_private_bureaucrat_add = 25
@@ -13374,14 +13374,14 @@ d_pe_firm_bbxz_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_engineer_add = 37.5
 		job_pe_private_bureaucrat_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 18.75
 		job_pe_private_engineer_add = 18.75
 		job_pe_private_bureaucrat_add = 37.5
@@ -13477,14 +13477,14 @@ d_pe_firm_bbxz_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_engineer_add = 50
 		job_pe_private_bureaucrat_add = 100
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_engineer_add = 25
 		job_pe_private_bureaucrat_add = 50
@@ -13577,13 +13577,13 @@ d_pe_firm_bbbx = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_bureaucrat_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 12.5
 		job_pe_private_bureaucrat_add = 37.5
 	}
@@ -13675,13 +13675,13 @@ d_pe_firm_bbbx_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 37.5
 		job_pe_private_bureaucrat_add = 112.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 18.75
 		job_pe_private_bureaucrat_add = 56.25
 	}
@@ -13773,13 +13773,13 @@ d_pe_firm_bbbx_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_physicist_add = 50
 		job_pe_private_bureaucrat_add = 150
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_physicist_add = 25
 		job_pe_private_bureaucrat_add = 75
 	}
@@ -13871,13 +13871,13 @@ d_pe_firm_yyyz = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 75
 		job_pe_private_engineer_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_engineer_add = 12.5
 	}
@@ -13969,13 +13969,13 @@ d_pe_firm_yyyz_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 112.5
 		job_pe_private_engineer_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 56.25
 		job_pe_private_engineer_add = 18.75
 	}
@@ -14067,13 +14067,13 @@ d_pe_firm_yyyz_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 150
 		job_pe_private_engineer_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 75
 		job_pe_private_engineer_add = 25
 	}
@@ -14165,13 +14165,13 @@ d_pe_firm_yyyb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 75
 		job_pe_private_bureaucrat_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_bureaucrat_add = 12.5
 	}
@@ -14263,13 +14263,13 @@ d_pe_firm_yyyb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 112.5
 		job_pe_private_bureaucrat_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 56.25
 		job_pe_private_bureaucrat_add = 18.75
 	}
@@ -14361,13 +14361,13 @@ d_pe_firm_yyyb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 150
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 75
 		job_pe_private_bureaucrat_add = 25
 	}
@@ -14459,13 +14459,13 @@ d_pe_firm_yyzz = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 50
 		job_pe_private_engineer_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 25
 	}
@@ -14557,13 +14557,13 @@ d_pe_firm_yyzz_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 75
 		job_pe_private_engineer_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_engineer_add = 37.5
 	}
@@ -14655,13 +14655,13 @@ d_pe_firm_yyzz_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 100
 		job_pe_private_engineer_add = 100
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 50
 		job_pe_private_engineer_add = 50
 	}
@@ -14756,14 +14756,14 @@ d_pe_firm_yyzb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 50
 		job_pe_private_engineer_add = 25
 		job_pe_private_bureaucrat_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 12.5
 		job_pe_private_bureaucrat_add = 12.5
@@ -14859,14 +14859,14 @@ d_pe_firm_yyzb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 75
 		job_pe_private_engineer_add = 37.5
 		job_pe_private_bureaucrat_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_engineer_add = 18.75
 		job_pe_private_bureaucrat_add = 18.75
@@ -14962,14 +14962,14 @@ d_pe_firm_yyzb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 100
 		job_pe_private_engineer_add = 50
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 50
 		job_pe_private_engineer_add = 25
 		job_pe_private_bureaucrat_add = 25
@@ -15062,13 +15062,13 @@ d_pe_firm_yybb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 50
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 25
 		job_pe_private_bureaucrat_add = 25
 	}
@@ -15160,13 +15160,13 @@ d_pe_firm_yybb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 75
 		job_pe_private_bureaucrat_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_bureaucrat_add = 37.5
 	}
@@ -15258,13 +15258,13 @@ d_pe_firm_yybb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 100
 		job_pe_private_bureaucrat_add = 100
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 50
 		job_pe_private_bureaucrat_add = 50
 	}
@@ -15356,13 +15356,13 @@ d_pe_firm_zzzy = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 12.5
 		job_pe_private_engineer_add = 37.5
 	}
@@ -15454,13 +15454,13 @@ d_pe_firm_zzzy_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_engineer_add = 112.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 18.75
 		job_pe_private_engineer_add = 56.25
 	}
@@ -15552,13 +15552,13 @@ d_pe_firm_zzzy_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 50
 		job_pe_private_engineer_add = 150
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 75
 	}
@@ -15653,14 +15653,14 @@ d_pe_firm_zzyb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 50
 		job_pe_private_bureaucrat_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 12.5
 		job_pe_private_engineer_add = 25
 		job_pe_private_bureaucrat_add = 12.5
@@ -15756,14 +15756,14 @@ d_pe_firm_zzyb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_engineer_add = 75
 		job_pe_private_bureaucrat_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 18.75
 		job_pe_private_engineer_add = 37.5
 		job_pe_private_bureaucrat_add = 18.75
@@ -15859,14 +15859,14 @@ d_pe_firm_zzyb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 50
 		job_pe_private_engineer_add = 100
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 50
 		job_pe_private_bureaucrat_add = 25
@@ -15962,14 +15962,14 @@ d_pe_firm_bbyz = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 25
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 12.5
 		job_pe_private_engineer_add = 12.5
 		job_pe_private_bureaucrat_add = 25
@@ -16065,14 +16065,14 @@ d_pe_firm_bbyz_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_engineer_add = 37.5
 		job_pe_private_bureaucrat_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 18.75
 		job_pe_private_engineer_add = 18.75
 		job_pe_private_bureaucrat_add = 37.5
@@ -16168,14 +16168,14 @@ d_pe_firm_bbyz_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 50
 		job_pe_private_engineer_add = 50
 		job_pe_private_bureaucrat_add = 100
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 25
 		job_pe_private_engineer_add = 25
 		job_pe_private_bureaucrat_add = 50
@@ -16268,13 +16268,13 @@ d_pe_firm_bbby = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 25
 		job_pe_private_bureaucrat_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 12.5
 		job_pe_private_bureaucrat_add = 37.5
 	}
@@ -16366,13 +16366,13 @@ d_pe_firm_bbby_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 37.5
 		job_pe_private_bureaucrat_add = 112.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 18.75
 		job_pe_private_bureaucrat_add = 56.25
 	}
@@ -16464,13 +16464,13 @@ d_pe_firm_bbby_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_biologist_add = 50
 		job_pe_private_bureaucrat_add = 150
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_biologist_add = 25
 		job_pe_private_bureaucrat_add = 75
 	}
@@ -16562,13 +16562,13 @@ d_pe_firm_zzzb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_engineer_add = 75
 		job_pe_private_bureaucrat_add = 25
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_engineer_add = 37.5
 		job_pe_private_bureaucrat_add = 12.5
 	}
@@ -16660,13 +16660,13 @@ d_pe_firm_zzzb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_engineer_add = 112.5
 		job_pe_private_bureaucrat_add = 37.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_engineer_add = 56.25
 		job_pe_private_bureaucrat_add = 18.75
 	}
@@ -16758,13 +16758,13 @@ d_pe_firm_zzzb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_engineer_add = 150
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_engineer_add = 75
 		job_pe_private_bureaucrat_add = 25
 	}
@@ -16856,13 +16856,13 @@ d_pe_firm_zzbb = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_engineer_add = 50
 		job_pe_private_bureaucrat_add = 50
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_engineer_add = 25
 		job_pe_private_bureaucrat_add = 25
 	}
@@ -16954,13 +16954,13 @@ d_pe_firm_zzbb_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_engineer_add = 75
 		job_pe_private_bureaucrat_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_engineer_add = 37.5
 		job_pe_private_bureaucrat_add = 37.5
 	}
@@ -17052,13 +17052,13 @@ d_pe_firm_zzbb_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_engineer_add = 100
 		job_pe_private_bureaucrat_add = 100
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_engineer_add = 50
 		job_pe_private_bureaucrat_add = 50
 	}
@@ -17150,13 +17150,13 @@ d_pe_firm_bbbz = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_engineer_add = 25
 		job_pe_private_bureaucrat_add = 75
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_engineer_add = 12.5
 		job_pe_private_bureaucrat_add = 37.5
 	}
@@ -17248,13 +17248,13 @@ d_pe_firm_bbbz_2 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_engineer_add = 37.5
 		job_pe_private_bureaucrat_add = 112.5
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_engineer_add = 18.75
 		job_pe_private_bureaucrat_add = 56.25
 	}
@@ -17346,13 +17346,13 @@ d_pe_firm_bbbz_3 = {
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } }
 		job_pe_private_engineer_add = 50
 		job_pe_private_bureaucrat_add = 150
 	}
 
 	triggered_planet_modifier = {
-		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
+		potential = { uses_district_set = habitat OR = { num_zones = { type = zone_habitat_research value > 0 } num_zones = { type = zone_habitat_research_unity value > 0 } num_zones = { type = zone_research_physics value > 0 } num_zones = { type = zone_research_society value > 0 } num_zones = { type = zone_research_engineering value > 0 } } exists = owner owner = { is_void_dweller_empire = yes } }
 		job_pe_private_engineer_add = 25
 		job_pe_private_bureaucrat_add = 75
 	}
