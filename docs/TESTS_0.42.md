@@ -31,6 +31,12 @@ Statisch geprüft (Validator einschließlich der Codex-Tests). Im Spiel noch nic
 - Ein Konzern-Habitat, das auf automatischer Designation stand und schon die passende hatte, hat sie nach dem nächsten Monat fest eingestellt.
 - Stellst du danach selbst wieder auf automatisch, bleibt das so, solange die automatische Designation passt. Weicht sie ab, setzt der Konzern seine wieder.
 
+## Firmenregister mit Scrollleiste (0.42.3)
+
+- Das Register öffnet sich in einem eigenen Fenster (720 × 760) mit Titel, scrollbarem Text und „Schließen“.
+- Ein langes Register lässt sich scrollen und ragt nicht mehr über den Bildschirm.
+- error.log: keine Meldungen zu `pe_register_window` oder fehlenden GUI-Elementen.
+
 ## Lagervertrag: Gebühr 20 %
 
 - Die Gebühr steigt von 5 % auf 20 % der monatlichen Nettoproduktion, weil das Firmenlager jetzt keinen Bauplatz mehr kostet.

@@ -137,12 +137,13 @@ country_event = {
 }
 
 # The register of the private firms on a planet (planet decision "Register of Firms"):
-# event_target:pe_reg_planet.
+# event_target:pe_reg_planet. Own window with a scroll bar (interface/pe_register_window.gui).
 country_event = {
 	id = pe.276
 	title = pe.276.name
 	desc = pe.276.desc
-	picture = GFX_evt_galactic_senate
+	diplomatic = yes
+	custom_gui = "pe_register_window"
 	is_triggered_only = yes
 	location = event_target:pe_reg_planet
 
