@@ -15,6 +15,7 @@ country_event = {
 	}
 	immediate = {
 		pe_init = yes
+		pe_safe_month = yes
 		pe_monthly_sites = yes
 		pe_deal_month = yes
 		pe_chab_monthly = yes

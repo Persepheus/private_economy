@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
+import {settingsFiles} from './message-settings.mjs';
+import {safetyFile} from './supply-safety.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const game = process.argv[2] || 'D:/SteamLibrary/steamapps/common/Stellaris';
@@ -250,7 +252,7 @@ for (const lang of languages)
     'common/pop_jobs/pe_private_jobs.txt', 'common/scripted_loc/pe_scripted_loc_generated.txt',
     'common/scripted_effects/pe_corp_effects_generated.txt', 'common/static_modifiers/pe_corp_modifiers_generated.txt', 'common/scripted_loc/pe_corp_loc_generated.txt',
     'common/scripted_triggers/pe_corp_triggers_generated.txt', 'common/deposits/pe_corp_deposits_generated.txt', 'common/deposits/pe_corp_lab_deposits_generated.txt',
-    'common/decisions/pe_decisions.txt', 'common/scripted_loc/pe_register_loc_generated.txt'];
+    'common/decisions/pe_decisions.txt', 'common/scripted_loc/pe_register_loc_generated.txt', safetyFile, ...settingsFiles];
   const before = gen.map(g => fs.readFileSync(path.join(root, g), 'utf8'));
   execFileSync(process.execPath, [path.join(root, 'tools/generate-firms.mjs'), game]);
   gen.forEach((g, i) => assert.equal(fs.readFileSync(path.join(root, g), 'utf8'), before[i], `${g} is stale: run tools/generate-firms.mjs`));
@@ -264,5 +266,7 @@ for (const f of files(path.join(root, 'common/deposits')).filter(f => f.endsWith
   for (const [, icon] of strip(fs.readFileSync(f, 'utf8')).matchAll(/\bicon = (\w+)/g))
     assert([root, game].some(d => fs.existsSync(path.join(d, `gfx/interface/icons/deposits/${icon}.dds`))), `${rel(f)}: missing deposit icon ${icon}`);
 
+await import('./test-message-settings.mjs');
+await import('./test-supply-safety.mjs');
 console.log(`PASS: ${scripts.length} script files; no vanilla overrides; ${jobs.length} jobs, ${deposits.length} firm deposits, ${buildings.length} buildings, ${policies.length} policy; modifiers, references, variables, event types, localisation and icons checked.`);
 console.log('NOT TESTED: engine load, job filling, district slot blocking, AI behaviour.');

@@ -64,7 +64,8 @@ country_event = {
 
 country_event = {
 	id = pe.285
-	title = pe.285.name
+	trigger = { NOT = { has_country_flag = pe_mute_military } }
+	title = pe_notice_285_title
 	desc = { trigger = { check_variable = { which = pe_cl_done value = 1 } } text = pe.285.desc.ok }
 	desc = { trigger = { check_variable = { which = pe_cl_done value = 2 } } text = pe.285.desc.no }
 	picture = GFX_evt_crystal_kraken
@@ -131,7 +132,8 @@ country_event = {
 # Convoy protection result.
 country_event = {
 	id = pe.288
-	title = pe.288.name
+	trigger = { NOT = { has_country_flag = pe_mute_military } }
+	title = pe_notice_288_title
 	desc = { trigger = { check_variable = { which = pe_cv_done value = 1 } } text = pe.288.desc.ok }
 	desc = { trigger = { check_variable = { which = pe_cv_done value = 2 } } text = pe.288.desc.no }
 	picture = GFX_evt_federation_fleet

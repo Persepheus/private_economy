@@ -69,14 +69,14 @@ pe_citadel_step = {
 					if = {
 						limit = { root = { is_ai = no } }
 						solar_system = { star = { save_event_target_as = pe_msg_planet } }
-						root = { set_variable = { which = pe_msg_name value = pe_cit_hnm } pe_corp_msg = { KEY = pe_msg_cit_heir } }
+						root = { set_variable = { which = pe_msg_name value = pe_cit_hnm } if = { limit = { NOT = { has_country_flag = pe_mute_military } } pe_corp_msg = { KEY = pe_msg_cit_heir CATEGORY = military } } }
 					}
 				}
 				else = {
 					if = {
 						limit = { root = { is_ai = no } }
 						solar_system = { star = { save_event_target_as = pe_msg_planet } }
-						root = { create_message = { type = pe_private_economy localization = pe_msg_cit_lost days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+						root = { if = { limit = { NOT = { has_country_flag = pe_mute_military } } create_message = { type = pe_private_economy_military localization = pe_msg_cit_lost days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } } }
 					}
 					set_fleet_flag = pe_ccit_kill
 				}
@@ -89,7 +89,7 @@ pe_citadel_step = {
 						if = {
 							limit = { root = { is_ai = no } }
 							solar_system = { star = { save_event_target_as = pe_msg_planet } }
-							root = { set_variable = { which = pe_msg_name value = prev.pe_ccit_nm } pe_corp_msg = { KEY = pe_msg_cit_done } }
+							root = { set_variable = { which = pe_msg_name value = prev.pe_ccit_nm } if = { limit = { NOT = { has_country_flag = pe_mute_military } } pe_corp_msg = { KEY = pe_msg_cit_done CATEGORY = military } } }
 						}
 					}
 					# Upkeep for the next three months: to the holdings; the corporation pays its value.
@@ -144,7 +144,7 @@ pe_citadel_step = {
 							if = {
 								limit = { root = { is_ai = no } }
 								solar_system = { star = { save_event_target_as = pe_msg_planet } }
-								root = { set_variable = { which = pe_msg_name value = prev.pe_ccit_nm } pe_corp_msg = { KEY = pe_msg_cit_up } }
+								root = { set_variable = { which = pe_msg_name value = prev.pe_ccit_nm } if = { limit = { NOT = { has_country_flag = pe_mute_military } } pe_corp_msg = { KEY = pe_msg_cit_up CATEGORY = military } } }
 							}
 						}
 					}

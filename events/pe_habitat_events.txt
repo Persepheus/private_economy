@@ -5,6 +5,7 @@
 #   pe.303  debug: finish the construction of our corporate habitats, swarms and furnaces at once
 #   pe.304  a habitat site was done, but the system had a habitat already: money back
 #   pe.305  a corporate arc furnace site is done: the furnace (from on_build_complete)
+#   pe.320  attach a completed Dyson swarm one day after removing its construction site
 namespace = pe
 
 country_event = {
@@ -99,6 +100,44 @@ country_event = {
 		if = {
 			limit = { exists = event_target:pe_hold exists = event_target:pe_af_p }
 			pe_corp_furnace_finish = yes
+		}
+	}
+}
+
+# The construction site has been removed on the previous day. The local targets
+# belong to this completion, not to a shared country variable or a random star.
+country_event = {
+	id = pe.320
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = {
+		exists = event_target:pe_sw_target
+		exists = event_target:pe_sw_tsys
+		exists = event_target:pe_sw_owner
+		event_target:pe_sw_target = {
+			has_planet_flag = pe_swb
+			has_any_megastructure = no
+		}
+	}
+	immediate = {
+		event_target:pe_sw_tsys = {
+			set_star_flag = conduit_excluded
+			spawn_megastructure = {
+				type = dyson_swarm_1
+				owner = event_target:pe_sw_owner
+				planet = event_target:pe_sw_target
+			}
+		}
+		event_target:pe_sw_target = {
+			if = { limit = { NOT = { has_modifier = dyson_swarm_1_mod } } add_modifier = { modifier = dyson_swarm_1_mod days = -1 } }
+			set_planet_flag = has_megastructure
+			remove_planet_flag = pe_swb
+		}
+		event_target:pe_sw_tsys = {
+			if = {
+				limit = { exists = owner owner = { is_ai = no } }
+				owner = { if = { limit = { NOT = { has_country_flag = pe_mute_megastructures } } create_message = { type = pe_private_economy_megastructures localization = pe_msg_swarm_done days = 30 target = event_target:pe_sw_target variable = { type = name localization = PLANET scope = event_target:pe_sw_target } } } }
+			}
 		}
 	}
 }

@@ -4,7 +4,19 @@ Stellaris 4.5: Eine Richtlinie **Wirtschaftsordnung** legt fest, wie viel der Wi
 
 Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools/validate.mjs` prüft das).
 
-## Stand 0.36.4
+Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
+
+## Stand 0.36.8
+
+**Versorgung vor Expansion:** Gründung, Wachstum (einschließlich Konzernkrediten und Konzernhabitat-Finanzierung), Distriktkäufe und Umbauten verwenden eine gemeinsame Prüfung für Energie, Mineralien, Nahrung, Konsumgüter und Handel. Eine netto verschlechterte Ressource muss nach der Investition mindestens 5 % ihrer monatlichen Ausgaben als Überschuss behalten, begrenzt auf 10–250. Bereits zugesagte Investitionen und der volle künftige Verbrauch laufender Baustellen werden reichsweit reserviert; deren künftige Produktion finanziert noch keine weitere Expansion. Bestehende Firmen und Überbrückungskredite laufen weiter. Initialisierung im bestehenden Spielstand am nächsten Monatspuls. [Rechenmodell, Prüfungen und Einschränkungen](docs/TESTS_0.36.8.md). Statisch geprüft; Spielprüfung durch den Nutzer steht aus.
+
+**Korrektur 0.36.7:** Der X-Button des Nachrichtenmenüs ist auf beiden Seiten ausdrücklich der wirkungslosen Schließen-Option zugeordnet. Dadurch soll er keine Kategorie mehr umschalten und das Menü nicht erneut öffnen. Statisch geprüft; Bestätigung im Spiel noch offen.
+
+**Nachrichten einstellen:** Auf deiner Hauptstadt unter **Entscheidungen → Privatwirtschaft: Nachrichten einstellen** öffnest du ein kostenloses Menü mit zwölf Kategorien auf zwei Seiten. Jeder Schalter zeigt den aktuellen Zustand **Aktiv/Stumm**; ein Klick schaltet ihn um. Zusätzlich kannst du alle Kategorien aktivieren oder stummschalten. Standardmäßig ist alles aktiv. Die Einstellungen gelten für dein Reich und werden im Spielstand gespeichert. Echte Entscheidungen und Angebote bleiben sichtbar; Meldungsfilter verändern keine Wirtschaftsabläufe.
+
+Jedes Thema hat ein eigenes Symbol in Meldungen und Menü, außerdem einen eigenen Eintrag in den allgemeinen Stellaris-Nachrichteneinstellungen. Diese gelten zusätzlich zum Mod-Filter. [Symbolübersicht](docs/message-icons.png) · [Testanleitung 0.36.6](docs/TESTS_0.36.6.md). Statisch geprüft, noch nicht im Spiel getestet.
+
+Dyson-Schwarm-Fix: Der fertige Konzern-Schwarm wird einen Tag nach dem Entfernen seiner Baustelle angelegt, damit die Rückverknüpfung vom Stern zur Megastruktur erhalten bleibt. Diagnose und manuelle Prüfschritte: [docs/TESTS_0.36.5.md](docs/TESTS_0.36.5.md). Bereits beschädigte Spielstände benötigen eine separate Reparatur dieser Verknüpfung; der Patch allein korrigiert sie nicht rückwirkend. Noch nicht im Spiel getestet.
 
 Die Privatwirtschaft ist ein Kreislauf:
 

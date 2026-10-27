@@ -159,25 +159,11 @@ pe_corp_swarm_build = {
 		fromfrom.solar_system = { save_event_target_as = pe_sw_tsys }
 		from = { save_event_target_as = pe_sw_owner }
 		remove_megastructure = fromfrom
-		event_target:pe_sw_tsys = {
-			set_star_flag = conduit_excluded
-			spawn_megastructure = {
-				type = dyson_swarm_1
-				owner = event_target:pe_sw_owner
-				planet = event_target:pe_sw_target
-			}
-		}
-		event_target:pe_sw_target = {
-			if = { limit = { NOT = { has_modifier = dyson_swarm_1_mod } } add_modifier = { modifier = dyson_swarm_1_mod days = -1 } }
-			set_planet_flag = has_megastructure
-			remove_planet_flag = pe_swb
-		}
-		event_target:pe_sw_tsys = {
-			if = {
-				limit = { exists = owner owner = { is_ai = no } }
-				owner = { create_message = { type = pe_private_economy localization = pe_msg_swarm_done days = 30 target = event_target:pe_sw_target variable = { type = name localization = PLANET scope = event_target:pe_sw_target } } }
-			}
-		}
+		# Finish removing the site before attaching its replacement to the same star.
+		# Spawning inline can leave the swarm's planet reference intact but erase the
+		# star's megastructure reference, so use_planet_resource collects nothing.
+		# Local event targets travel with this event, including simultaneous completions.
+		event_target:pe_sw_owner = { country_event = { id = pe.320 days = 1 } }
 	}
 }
 

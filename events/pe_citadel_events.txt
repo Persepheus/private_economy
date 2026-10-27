@@ -20,7 +20,7 @@ country_event = {
 		hidden_effect = {
 			pe_cit_exec = yes
 			event_target:pe_cit_sys = { star = { save_event_target_as = pe_msg_planet } }
-			pe_corp_msg = { KEY = pe_msg_cit_start }
+			if = { limit = { NOT = { has_country_flag = pe_mute_military } } pe_corp_msg = { KEY = pe_msg_cit_start CATEGORY = military } }
 		}
 	}
 	option = { name = pe.315.b }
@@ -82,7 +82,7 @@ country_event = {
 		if = {
 			limit = { is_ai = no }
 			event_target:pe_cit_sys = { star = { save_event_target_as = pe_msg_planet } }
-			pe_corp_msg = { KEY = pe_msg_cit_start }
+			if = { limit = { NOT = { has_country_flag = pe_mute_military } } pe_corp_msg = { KEY = pe_msg_cit_start CATEGORY = military } }
 		}
 	}
 }

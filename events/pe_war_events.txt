@@ -26,7 +26,7 @@ carrier_event = {
 		}
 		if = {
 			limit = { exists = from from = { is_ai = no } }
-			from = { create_message = { type = pe_private_economy localization = pe_msg_occ_levy days = 30 target = event_target:pe_occ_planet variable = { type = name localization = PLANET scope = event_target:pe_occ_planet } } }
+			from = { if = { limit = { NOT = { has_country_flag = pe_mute_ownership } } create_message = { type = pe_private_economy_ownership localization = pe_msg_occ_levy days = 30 target = event_target:pe_occ_planet variable = { type = name localization = PLANET scope = event_target:pe_occ_planet } } } }
 		}
 	}
 }

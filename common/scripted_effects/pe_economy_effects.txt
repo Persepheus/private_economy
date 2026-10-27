@@ -127,13 +127,13 @@ pe_monthly_sites = {
 				remove_planet_flag = pe_site
 			}
 			owner = {
-				create_message = {
-					type = pe_private_economy
+				if = { limit = { NOT = { has_country_flag = pe_mute_crises } } create_message = {
+					type = pe_private_economy_crises
 					localization = pe_msg_site_cancel
 					days = 30
 					target = event_target:pe_msg_planet
 					variable = { type = name localization = PLANET scope = event_target:pe_msg_planet }
-				}
+				} }
 			}
 		}
 		pe_site_complete = yes
@@ -947,6 +947,7 @@ pe_firm_accounting = {
 		}
 		pe_deposit_fetch = yes
 		pe_deposit_fetch_scale = yes
+		pe_safe_growth = yes
 		pe_firm_book = yes
 		# Rural classes present (a private mine frees its mining district when it restructures).
 		if = { limit = { check_variable = { which = pe_cls value = 2 } } root = { set_variable = { which = pe_here_m value = 1 } } }
@@ -1130,6 +1131,8 @@ pe_firm_book = {
 		else_if = {
 			limit = {
 				check_variable = { which = pe_stage value < 3 }
+				NOT = { check_variable = { which = pe_bomb_hit value = 1 } }
+				root = { check_variable = { which = pe_safe_ok value = 1 } }
 				check_variable = { which = pe_profit value > 0 }
 				check_variable = { which = pe_debt value <= 0 }
 				check_variable = { which = pe_loan value <= 0 }
@@ -1151,12 +1154,14 @@ pe_firm_book = {
 					subtract_variable = { which = pe_chab_cash value = prev.pe_chab_g }
 					change_variable = { which = pe_chab_due value = prev.pe_chab_g }
 				}
+				root = { change_variable = { which = pe_safe_reserved_energy value = pe_sd_energy } change_variable = { which = pe_safe_reserved_minerals value = pe_sd_minerals } change_variable = { which = pe_safe_reserved_food value = pe_sd_food } change_variable = { which = pe_safe_reserved_consumer_goods value = pe_sd_consumer_goods } change_variable = { which = pe_safe_reserved_trade value = pe_sd_trade } }
 				set_variable = { which = pe_pending value = 1 }
 				root = { set_variable = { which = pe_pend_any value = 1 } }
 			}
 			else_if = {
 				limit = { check_variable = { which = pe_fcap value >= pe_tmp } }
 				subtract_variable = { which = pe_fcap value = pe_tmp }
+				root = { change_variable = { which = pe_safe_reserved_energy value = pe_sd_energy } change_variable = { which = pe_safe_reserved_minerals value = pe_sd_minerals } change_variable = { which = pe_safe_reserved_food value = pe_sd_food } change_variable = { which = pe_safe_reserved_consumer_goods value = pe_sd_consumer_goods } change_variable = { which = pe_safe_reserved_trade value = pe_sd_trade } }
 				set_variable = { which = pe_pending value = 1 }
 				root = { set_variable = { which = pe_pend_any value = 1 } }
 			}
@@ -1353,13 +1358,13 @@ pe_auto_book = {
 		else = { set_variable = { which = pe_al_$JOB$ value = 0 } }
 		check_planet_employment = yes
 		owner = {
-			create_message = {
-				type = pe_private_economy
+			if = { limit = { NOT = { has_country_flag = pe_mute_automation } } create_message = {
+				type = pe_private_economy_automation
 				localization = pe_msg_autodown_$JOB$
 				days = 30
 				target = event_target:pe_msg_planet
 				variable = { type = name localization = PLANET scope = event_target:pe_msg_planet }
-			}
+			} }
 		}
 	}
 }
@@ -1474,11 +1479,11 @@ pe_auto_invest = {
 			limit = { root = { check_variable = { which = pe_alvl value = 0 } } }
 			set_variable = { which = pe_al_$JOB$ value = 1 }
 			if = { limit = { NOT = { has_deposit = d_pe_automation } } add_deposit = d_pe_automation }
-			if = { limit = { root = { check_variable = { which = pe_acorp value = 0 } } } owner = { create_message = { type = pe_private_economy localization = pe_msg_auto_$JOB$_1 days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } } }
+			if = { limit = { root = { check_variable = { which = pe_acorp value = 0 } } } owner = { if = { limit = { NOT = { has_country_flag = pe_mute_automation } } create_message = { type = pe_private_economy_automation localization = pe_msg_auto_$JOB$_1 days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } } } }
 		}
 		else = {
 			set_variable = { which = pe_al_$JOB$ value = 2 }
-			if = { limit = { root = { check_variable = { which = pe_acorp value = 0 } } } owner = { create_message = { type = pe_private_economy localization = pe_msg_auto_$JOB$_2 days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } } }
+			if = { limit = { root = { check_variable = { which = pe_acorp value = 0 } } } owner = { if = { limit = { NOT = { has_country_flag = pe_mute_automation } } create_message = { type = pe_private_economy_automation localization = pe_msg_auto_$JOB$_2 days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } } } }
 		}
 		check_planet_employment = yes
 	}
@@ -1486,7 +1491,7 @@ pe_auto_invest = {
 
 pe_consider_variant = {
 	if = {
-		limit = { pe_can_$MODE$_$V$ = yes pe_ok_$V$ = yes }
+		limit = { pe_can_$MODE$_$V$ = yes root = { check_variable = { which = pe_safe_ok value = 1 } } }
 		root = {
 			# Its value here: habitat and void dwellers (pe_pf_u / pe_pf_r), the jobs of the
 			# specialisation of its district type (pe_zb_<rural>, see pe_planet_prepare).
@@ -1545,8 +1550,9 @@ pe_found_firm = {
 	if = {
 		limit = { root = { check_variable = { which = pe_chab_pk value > 0 } } }
 		if = {
-			limit = { root = { check_variable = { which = pe_chab_cash value >= pe_chab_c } } }
-			add_deposit = $SITE$
+			limit = { root = { check_variable = { which = pe_chab_cash value >= pe_chab_c } check_variable = { which = pe_safe_ok value = 1 } } }
+			root = { change_variable = { which = pe_safe_reserved_energy value = pe_safe_build_energy } change_variable = { which = pe_safe_reserved_minerals value = pe_safe_build_minerals } change_variable = { which = pe_safe_reserved_food value = pe_safe_build_food } change_variable = { which = pe_safe_reserved_consumer_goods value = pe_safe_build_consumer_goods } change_variable = { which = pe_safe_reserved_trade value = pe_safe_build_trade } }
+		add_deposit = $SITE$
 			last_added_deposit = {
 				set_variable = { which = pe_target value = $CODE$ }
 				set_variable = { which = pe_tstage value = 1 }
@@ -1564,7 +1570,8 @@ pe_found_firm = {
 		}
 	}
 	else_if = {
-		limit = { root = { check_variable = { which = pe_capital value >= pe_down } } }
+		limit = { root = { check_variable = { which = pe_capital value >= pe_down } check_variable = { which = pe_safe_ok value = 1 } } }
+		root = { change_variable = { which = pe_safe_reserved_energy value = pe_safe_build_energy } change_variable = { which = pe_safe_reserved_minerals value = pe_safe_build_minerals } change_variable = { which = pe_safe_reserved_food value = pe_safe_build_food } change_variable = { which = pe_safe_reserved_consumer_goods value = pe_safe_build_consumer_goods } change_variable = { which = pe_safe_reserved_trade value = pe_safe_build_trade } }
 		add_deposit = $SITE$
 		last_added_deposit = {
 			set_variable = { which = pe_target value = $CODE$ }
@@ -1601,6 +1608,7 @@ pe_buyout_execute = {
 	if = {
 		limit = {
 			has_district = $DISTRICT$
+			root = { check_variable = { which = pe_safe_ok value = 1 } }
 			owner = {
 				OR = {
 					check_variable = { which = pe_chab_buy value = 1 }
@@ -1618,6 +1626,7 @@ pe_buyout_execute = {
 	}
 	if = {
 		limit = { check_variable = { which = pe_before value > pe_after } }
+		root = { change_variable = { which = pe_safe_reserved_energy value = pe_sd_energy } change_variable = { which = pe_safe_reserved_minerals value = pe_sd_minerals } change_variable = { which = pe_safe_reserved_food value = pe_sd_food } change_variable = { which = pe_safe_reserved_consumer_goods value = pe_sd_consumer_goods } change_variable = { which = pe_safe_reserved_trade value = pe_sd_trade } }
 		add_deposit = $FIRM$
 		last_added_deposit = {
 			set_variable = { which = pe_code value = $CODE$ }
@@ -1644,13 +1653,13 @@ pe_buyout_execute = {
 				change_variable = { which = pe_chab_due value = pe_chab_c }
 			}
 			else = { subtract_variable = { which = pe_capital value = pe_down } }
-			create_message = {
-				type = pe_private_economy
+			if = { limit = { NOT = { has_country_flag = pe_mute_firms } } create_message = {
+				type = pe_private_economy_firms
 				localization = pe_msg_buy_$FIRM$
 				days = 30
 				target = event_target:pe_msg_planet
 				variable = { type = name localization = PLANET scope = event_target:pe_msg_planet }
-			}
+			} }
 		}
 	}
 }
@@ -1659,7 +1668,7 @@ pe_buyout_execute = {
 # district type here, side shares their deposits).
 pe_retool_consider = {
 	if = {
-		limit = { pe_can_retool_$V$ = yes pe_ok_$V$ = yes }
+		limit = { pe_can_retool_$V$ = yes }
 		root = {
 			# Its value here (as in pe_consider_variant).
 			set_variable = { which = pe_rv value = pe_val_$V$ }
@@ -1834,7 +1843,7 @@ pe_supply_step = {
 				if = {
 					limit = { root = { is_ai = no } }
 					prev = { save_event_target_as = pe_msg_planet }
-					root = { create_message = { type = pe_private_economy localization = pe_msg_supply_broken days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+					root = { if = { limit = { NOT = { has_country_flag = pe_mute_supply } } create_message = { type = pe_private_economy_supply localization = pe_msg_supply_broken days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } } }
 				}
 			}
 		}
@@ -1891,7 +1900,7 @@ pe_supply_step = {
 			}
 			if = {
 				limit = { is_ai = no }
-				create_message = { type = pe_private_economy localization = pe_msg_supply_m days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = name localization = FROM scope = event_target:pe_sc_seller } }
+				if = { limit = { NOT = { has_country_flag = pe_mute_supply } } create_message = { type = pe_private_economy_supply localization = pe_msg_supply_m days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = name localization = FROM scope = event_target:pe_sc_seller } } }
 			}
 		}
 	}
@@ -1947,7 +1956,7 @@ pe_supply_step = {
 			}
 			if = {
 				limit = { is_ai = no }
-				create_message = { type = pe_private_economy localization = pe_msg_supply_c days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = name localization = FROM scope = event_target:pe_sc_seller } }
+				if = { limit = { NOT = { has_country_flag = pe_mute_supply } } create_message = { type = pe_private_economy_supply localization = pe_msg_supply_c days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = name localization = FROM scope = event_target:pe_sc_seller } } }
 			}
 		}
 	}
@@ -2003,7 +2012,7 @@ pe_supply_step = {
 			}
 			if = {
 				limit = { is_ai = no }
-				create_message = { type = pe_private_economy localization = pe_msg_supply_f days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = name localization = FROM scope = event_target:pe_sc_seller } }
+				if = { limit = { NOT = { has_country_flag = pe_mute_supply } } create_message = { type = pe_private_economy_supply localization = pe_msg_supply_f days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = name localization = FROM scope = event_target:pe_sc_seller } } }
 			}
 		}
 	}
@@ -2096,7 +2105,7 @@ pe_ruins_step = {
 			root = { set_variable = { which = pe_rb_fcap value = 10 } set_variable = { which = pe_rb_debt value = 0 } }
 			pe_ruin_rebuild = yes
 			save_event_target_as = pe_msg_planet
-			if = { limit = { owner = { is_ai = no } } root = { pe_corp_msg = { KEY = pe_msg_corp_rebuild } } }
+			if = { limit = { owner = { is_ai = no } } root = { if = { limit = { NOT = { has_country_flag = pe_mute_corporations } } pe_corp_msg = { KEY = pe_msg_corp_rebuild CATEGORY = corporations } } } }
 		}
 		# Other ruins: an offer for a subsidy (humans), the investors rebuild them (AI).
 		else_if = {

@@ -59,7 +59,8 @@ country_event = {
 # The defence contract has ended: the corporation is in a crisis or gone.
 country_event = {
 	id = pe.308
-	title = pe.308.name
+	trigger = { NOT = { has_country_flag = pe_mute_military } }
+	title = pe_notice_308_title
 	desc = pe.308.desc
 	picture = GFX_evt_federation_fleet
 	is_triggered_only = yes

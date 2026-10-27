@@ -1,0 +1,6 @@
+# Country scope. Shared by the visible acknowledgement and the muted resolution.
+# Muting an information window must never avoid its gameplay consequences.
+pe_tourism_accident_apply = {
+    capital_scope = { add_modifier = { modifier = pe_tourism_accident days = 360 } }
+    hidden_effect = { change_variable = { which = pe_mag_rep value = -1 } }
+}

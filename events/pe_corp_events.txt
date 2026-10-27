@@ -11,7 +11,8 @@ namespace = pe
 # A corporation is founded (pe_corp_found): event_target:pe_corp_planet = headquarters.
 country_event = {
 	id = pe.270
-	title = pe.270.name
+	trigger = { NOT = { has_country_flag = pe_mute_corporations } }
+	title = pe_notice_270_title
 	desc = pe.270.desc
 	picture = GFX_evt_city_planet
 	is_triggered_only = yes

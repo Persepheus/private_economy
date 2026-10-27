@@ -843,8 +843,8 @@ pe_deal_month = {
 			}
 			if = {
 				limit = { is_ai = no exists = event_target:pe_msg_planet }
-				if = { limit = { check_variable = { which = pe_deal_end value = 1 } } create_message = { type = pe_private_economy localization = pe_msg_deal_end days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
-				else = { create_message = { type = pe_private_economy localization = pe_msg_deal_broken days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+				if = { limit = { check_variable = { which = pe_deal_end value = 1 } } if = { limit = { NOT = { has_country_flag = pe_mute_patrons } } create_message = { type = pe_private_economy_patrons localization = pe_msg_deal_end days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } } }
+				else = { if = { limit = { NOT = { has_country_flag = pe_mute_patrons } } create_message = { type = pe_private_economy_patrons localization = pe_msg_deal_broken days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } } }
 			}
 		}
 	}

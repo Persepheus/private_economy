@@ -141,8 +141,8 @@ pe_corp_ground_start = {
 	event_target:pe_gc_planet = { save_event_target_as = pe_msg_planet }
 	if = {
 		limit = { is_ai = no }
-		if = { limit = { check_variable = { which = pe_gc_free value = 1 } } pe_corp_msg = { KEY = pe_msg_guard_hq } }
-		else = { pe_corp_msg = { KEY = pe_msg_guard } }
+		if = { limit = { check_variable = { which = pe_gc_free value = 1 } } if = { limit = { NOT = { has_country_flag = pe_mute_military } } pe_corp_msg = { KEY = pe_msg_guard_hq CATEGORY = military } } }
+		else = { if = { limit = { NOT = { has_country_flag = pe_mute_military } } pe_corp_msg = { KEY = pe_msg_guard CATEGORY = military } } }
 	}
 }
 

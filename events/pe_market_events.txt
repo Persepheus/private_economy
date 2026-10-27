@@ -245,7 +245,8 @@ country_event = {
 # Espionage exposed (follow-up)
 country_event = {
 	id = pe.252
-	title = pe.252.name
+	trigger = { NOT = { has_country_flag = pe_mute_patrons } }
+	title = pe_notice_252_title
 	desc = pe.252.desc
 	picture = GFX_evt_night_raid
 	is_triggered_only = yes

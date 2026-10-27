@@ -169,13 +169,10 @@ country_event = {
 }
 
 # The prototype: result
+# Always resolve its gameplay effects, even when the information window is muted.
 country_event = {
 	id = pe.206
-	title = pe.206.name
-	desc = { trigger = { check_variable = { which = pe_proto_result value = 1 } } text = pe.206.desc.success }
-	desc = { trigger = { check_variable = { which = pe_proto_result value = 2 } } text = pe.206.desc.partial }
-	desc = { trigger = { check_variable = { which = pe_proto_result value = 3 } } text = pe.206.desc.failure }
-	picture = GFX_evt_engineering_bay
+	hide_window = yes
 	is_triggered_only = yes
 
 	immediate = {
@@ -192,8 +189,11 @@ country_event = {
 			capital_scope = { add_modifier = { modifier = pe_prototype_accident days = 720 } }
 			hidden_effect = { change_variable = { which = pe_mag_rep value = -1 } }
 		}
+		if = {
+			limit = { NOT = { has_country_flag = pe_mute_patrons } }
+			country_event = { id = pe_notice.206 }
+		}
 	}
-	option = { name = pe.206.a }
 }
 
 # Charity
@@ -654,17 +654,18 @@ country_event = {
 }
 
 # A tourist accident (follow-up of space tourism)
+# Keep the old scheduled ID. Check the preference when the accident happens,
+# not when the delayed event is queued. The muted branch still applies its cost.
 country_event = {
 	id = pe.228
-	title = pe.228.name
-	desc = pe.228.desc
-	picture = GFX_evt_large_explosion
+	hide_window = yes
 	is_triggered_only = yes
-
-	option = {
-		name = pe.228.a
-		capital_scope = { add_modifier = { modifier = pe_tourism_accident days = 360 } }
-		hidden_effect = { change_variable = { which = pe_mag_rep value = -1 } }
+	immediate = {
+		if = {
+			limit = { has_country_flag = pe_mute_patrons }
+			pe_tourism_accident_apply = yes
+		}
+		else = { country_event = { id = pe_notice.228 } }
 	}
 }
 

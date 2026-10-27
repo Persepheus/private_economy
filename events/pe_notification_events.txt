@@ -1,0 +1,27 @@
+# Display-only follow-ups. Their original IDs in pe_patron_events.txt continue
+# to resolve pending events from existing saves, whether messages are muted or not.
+namespace = pe_notice
+
+country_event = {
+    id = pe_notice.206
+    title = pe_notice_206_title
+    desc = { trigger = { check_variable = { which = pe_proto_result value = 1 } } text = pe.206.desc.success }
+    desc = { trigger = { check_variable = { which = pe_proto_result value = 2 } } text = pe.206.desc.partial }
+    desc = { trigger = { check_variable = { which = pe_proto_result value = 3 } } text = pe.206.desc.failure }
+    picture = GFX_evt_engineering_bay
+    is_triggered_only = yes
+    option = { name = pe.206.a }
+}
+
+country_event = {
+    id = pe_notice.228
+    title = pe_notice_228_title
+    desc = pe.228.desc
+    picture = GFX_evt_large_explosion
+    is_triggered_only = yes
+    # When visible, retain the original timing: consequences on acknowledgement.
+    option = {
+        name = pe.228.a
+        pe_tourism_accident_apply = yes
+    }
+}

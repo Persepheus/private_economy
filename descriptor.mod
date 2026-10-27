@@ -1,4 +1,4 @@
-version="0.36.4"
+version="0.36.8"
 tags={
 	"Gameplay"
 	"Economy"
