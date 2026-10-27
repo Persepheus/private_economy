@@ -1,4 +1,16 @@
-# Tests 0.40.0 / 0.40.1
+# Tests 0.40.0 bis 0.40.2
+
+## 0.40.2: die eigentliche Ursache des Absturzes
+
+- **Befund:** Auch 0.40.1 lud lange, belegte rund 20 GB Arbeitsspeicher und stürzte ab. Ohne Mod startet das Spiel sofort.
+- **Ursache:** Die gemeinsame Versorgungsprüfung aus 0.36.8 (Codex, 27.10.) ist nie im Spiel gelaufen.
+  - Jeder Kandidat einer Gründung oder eines Kaufs rief die komplette Prüfung für alle 80 Varianten auf. Bei Käufen war das ein Block von 4,5 Mio. Zeichen, und die Engine setzt ihn bei jedem dieser rund 400 Aufrufe vollständig ein.
+  - Damit wuchs die Mod von 21 Mio. Tokens (0.36.4, lief) auf 985 Mio. bis 1.091 Mio. (0.36.8 bis 0.40.0).
+  - 0.40.1 hatte nur die Debug-Events entschärft und kam damit auf 508 Mio. Das reichte nicht.
+- **Jetzt:** Jede Variante hat ihre eigene Prüfung (`pe_safe_vec_<Code>`, `pe_safe_buy_<Code>`). Die Rechnung bleibt dieselbe, die Rechentests sind unverändert bestanden. Insgesamt sind es noch 24 Mio. Tokens.
+- **Validator:** Er bricht jetzt schon bei 60 Mio. ab.
+- **Prüfen:** Das Spiel kommt in normaler Zeit ins Hauptmenü und belegt nicht mehr viele Gigabyte Arbeitsspeicher.
+
 
 ## 0.40.1: Absturz beim Laden
 

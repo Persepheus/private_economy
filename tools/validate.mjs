@@ -158,11 +158,11 @@ for (const f of files(path.join(root, 'common/scripted_triggers')).filter(f => f
 }
 
 // 7d. Inlined size: the engine copies every scripted effect into its caller while loading.
-//     Summed over the calls in events and decisions, the mod's effects must stay well below
-//     the size at which 0.39/0.40 made Stellaris crash while loading (about 1.09 billion
-//     tokens; 0.36.8 still loaded at 0.98 billion, slowly).
+//     Summed over the calls in events and decisions, the mod's effects must stay small:
+//     0.36.4 loaded with 21M tokens; 0.36.8-0.40.1 (0.5-1.1 billion, the supply check's
+//     full dispatch per candidate) used 20 GB and crashed before the main menu.
 {
-  const EXPANDED_MAX = 700e6;
+  const EXPANDED_MAX = 60e6;
   const tokenCount = new Map(), memo = new Map();
   const calls = body => [...body.matchAll(/(\w+) = (?:yes|\{)/g)].map(m => m[1]).filter(k => ownEffects.has(k));
   const sizeOf = k => {

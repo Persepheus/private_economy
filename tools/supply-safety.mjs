@@ -57,10 +57,13 @@ export function supplySafety({variants, JOBS, RES, outVar, HAB, NOT_HAB, VOID, H
       if = { limit = { check_variable = { which = pe_ss_test value < pe_safe_margin_${r} } } ${set(ok,0)} }
     }`).join('\n')} }`;
   const reserve = (delta='pe_sd') => `root = { ${S.map(r=>add(`pe_safe_reserved_${r}`,`${delta}_${r}`)).join(' ')} }`;
-  const founding = code => `root = { ${set('pe_ss_code',code)} ${set('pe_ss_scale',1)} } pe_safe_vector = yes
+  // Per variant its own vector (pe_safe_vec_<code>, pe_safe_buy_<code>): the engine copies every
+  // scripted effect call while loading, and a call of the full dispatch (all 80 variants) per
+  // candidate made 0.36.8-0.40.0 crash before the main menu (0.40.2).
+  const founding = code => `root = { ${set('pe_ss_code',code)} ${set('pe_ss_scale',1)} } pe_safe_vec_${code} = yes
     root = { ${S.map(r => `${set(`pe_safe_build_${r}`,`pe_sc_${r}`)} ${mul(`pe_safe_build_${r}`,-1)}`).join(' ')} }
     ${check('pe_sd','pe_safe_build')}`;
-  const buy = code => `root = { ${set('pe_ss_code',code)} ${set('pe_ss_scale',1)} } pe_safe_buy_vector = yes ${check()}`;
+  const buy = code => `root = { ${set('pe_ss_code',code)} ${set('pe_ss_scale',1)} } pe_safe_buy_${code} = yes ${check()}`;
   const growth = `root = { ${set('pe_ss_code','prev.pe_code')} ${set('pe_ss_scale',0.5)} }
     planet = { ${dispatch()} ${check()} }`;
   const retool = `root = { ${set('pe_ss_code','prev.pe_code')} ${set('pe_ss_target','prev.pe_to_c')} ${set('pe_ss_scale','prev.pe_stage')} ${add('pe_ss_scale',1)} ${mul('pe_ss_scale',0.5)} }
@@ -92,14 +95,17 @@ export function supplySafety({variants, JOBS, RES, outVar, HAB, NOT_HAB, VOID, H
   write(safetyFile, header + `# Supply safety: monthly cached budget plus an empire-wide commitment ledger.
 # Full staffing, observed job rates, stage/habitat/zone jobs, direct base upkeep.
 # Population maintenance is already in the budget; no population is created by a job.
-pe_safe_vector = { ${dispatch()} }
+# Dispatchers by root.pe_ss_code (monthly reconciliation); candidates call their own variant.
+pe_safe_vector = { ${zero()} ${ifChain(variants, v => `root = { check_variable = { which = pe_ss_code value = ${v.code} } }`, v => `pe_safe_vec_${v.code} = yes`)} }
+pe_safe_buy_vector = { ${zero()} ${ifChain(variants, v => `root = { check_variable = { which = pe_ss_code value = ${v.code} } }`, v => `pe_safe_buy_${v.code} = yes`)} }
 pe_safe_growth = { ${growth} }
-pe_safe_buy_vector = {
-    ${dispatch()}
+${variants.map(v => `pe_safe_vec_${v.code} = { ${zero()} ${vector(v)} }
+pe_safe_buy_${v.code} = {
+    ${zero()} ${vector(v)}
     root = { ${RES.map(r=>set(`pe_safe_new_${r}`,`pe_sd_${r}`)).join(' ')} }
-    ${ifChain(variants,v=>`root = { check_variable = { which = pe_ss_code value = ${v.code} } }`,state)}
+    ${state(v)}
     root = { ${RES.map(r=>`${mul(`pe_sd_${r}`,-1)} ${add(`pe_sd_${r}`,`pe_safe_new_${r}`)}`).join(' ')} }
-}
+}`).join('\n')}
 ${monthly}
 `);
   return {check, reserve, founding, buy, retool};

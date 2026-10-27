@@ -6,9 +6,9 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
-## Stand 0.40.1
+## Stand 0.40.2
 
-**Absturz beim Laden behoben:** Debug-Events verdoppelten die Skriptmenge, die die Engine beim Laden einsetzt. Seit 0.39 stürzte das Spiel deshalb vor dem Hauptmenü ab. Der Validator prüft diese Größe jetzt ([TESTS_0.40.md](docs/TESTS_0.40.md)).
+**Absturz beim Laden behoben:** Seit 0.36.8 setzte die Engine beim Laden die Versorgungsprüfung für alle 80 Firmenvarianten bei jedem Kandidaten neu ein. Die Mod wuchs dadurch auf etwa das 50-Fache, und das Spiel stürzte vor dem Hauptmenü ab. Jede Variante prüft jetzt nur sich selbst. Der Validator kontrolliert diese Größe ([TESTS_0.40.md](docs/TESTS_0.40.md)).
 
 ## Stand 0.40.0
 
