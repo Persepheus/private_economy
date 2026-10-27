@@ -6,6 +6,12 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
+## Stand 0.41.0
+
+**Firmenlager und Rüstungsauftrag** ([TESTS_0.41.md](docs/TESTS_0.41.md)):
+- **Firmenlager** sind jetzt Vorkommen statt Gebäude. Das Gebäude hatte sich eigene Spezialisierungs-Slots gesucht und dabei Spezialisierungen belegt oder angelegt.
+- **Rüstungsauftrag:** Der Preis pro Schiff steigt mit Panzerungs-, Schild- und Reaktortechnik. Im späten Spiel kostet ein Schlachtschiff etwa 4.400 statt 1.200.
+
 ## Stand 0.40.2
 
 **Absturz beim Laden behoben:** Seit 0.36.8 setzte die Engine beim Laden die Versorgungsprüfung für alle 80 Firmenvarianten bei jedem Kandidaten neu ein. Die Mod wuchs dadurch auf etwa das 50-Fache, und das Spiel stürzte vor dem Hauptmenü ab. Jede Variante prüft jetzt nur sich selbst. Der Validator kontrolliert diese Größe ([TESTS_0.40.md](docs/TESTS_0.40.md)).

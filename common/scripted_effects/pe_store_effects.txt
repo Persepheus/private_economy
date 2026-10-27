@@ -5,7 +5,7 @@
 # the store's maximum (modifier pe_store_<res>, country_resource_max_<res>_add = 100 x
 # pe_sto_<s>_mult) for five years. Its fee: every month 5% of our net production of that
 # resource, which the firm sells on its own account (its base value goes to its corporation's
-# cash or to the investor pool). A warehouse of the firm (pe_building_corp_storage) stands on
+# cash or to the investor pool). A warehouse of the firm (deposit d_pe_store_<s>) stands on
 # its planet while the contract runs. Six months before the end the firm offers to extend it
 # by five years (if the store is still 85% full). One offer a year, a refused resource waits
 # five years.
@@ -16,7 +16,8 @@
 #
 # Arms order: at most every ten years, when the alloy store is 90% full, our defence
 # contractor (otherwise the richest industrial corporation) offers to build warships of our
-# newest design from half our alloys at its own yards (ours stay free): delivered after a
+# newest design from half our alloys at its own yards (ours stay free; the price per ship
+# grows with armour, shield and reactor techs): delivered after a
 # year (pe.327) at the capital, ours with normal upkeep and naval capacity. On top it charges
 # half the alloys' amount in trade, which goes to its cash.
 # Call depths: pe_store_offer, pe_arms_offer 3 (pe_corp_step); pe_store_month 1 (pe.100);
@@ -258,7 +259,7 @@ pe_store_sign = {
 		divide_variable = { which = pe_sto_mult value = 100 }
 		if = { limit = { has_modifier = pe_store_minerals } remove_modifier = pe_store_minerals }
 		add_modifier = { modifier = pe_store_minerals days = -1 multiplier = pe_sto_mult }
-		if = { limit = { exists = event_target:pe_sto_planet } event_target:pe_sto_planet = { set_planet_flag = pe_stb_mi add_building = pe_building_corp_storage } }
+		if = { limit = { exists = event_target:pe_sto_planet } event_target:pe_sto_planet = { set_planet_flag = pe_stb_mi if = { limit = { NOT = { has_deposit = d_pe_store_mi } } add_deposit = d_pe_store_mi } } }
 	}
 	else_if = {
 		limit = { check_variable = { which = pe_sto_r value = 2 } }
@@ -269,7 +270,7 @@ pe_store_sign = {
 		divide_variable = { which = pe_sto_mult value = 100 }
 		if = { limit = { has_modifier = pe_store_energy } remove_modifier = pe_store_energy }
 		add_modifier = { modifier = pe_store_energy days = -1 multiplier = pe_sto_mult }
-		if = { limit = { exists = event_target:pe_sto_planet } event_target:pe_sto_planet = { set_planet_flag = pe_stb_en add_building = pe_building_corp_storage } }
+		if = { limit = { exists = event_target:pe_sto_planet } event_target:pe_sto_planet = { set_planet_flag = pe_stb_en if = { limit = { NOT = { has_deposit = d_pe_store_en } } add_deposit = d_pe_store_en } } }
 	}
 	else_if = {
 		limit = { check_variable = { which = pe_sto_r value = 3 } }
@@ -280,7 +281,7 @@ pe_store_sign = {
 		divide_variable = { which = pe_sto_mult value = 100 }
 		if = { limit = { has_modifier = pe_store_food } remove_modifier = pe_store_food }
 		add_modifier = { modifier = pe_store_food days = -1 multiplier = pe_sto_mult }
-		if = { limit = { exists = event_target:pe_sto_planet } event_target:pe_sto_planet = { set_planet_flag = pe_stb_fo add_building = pe_building_corp_storage } }
+		if = { limit = { exists = event_target:pe_sto_planet } event_target:pe_sto_planet = { set_planet_flag = pe_stb_fo if = { limit = { NOT = { has_deposit = d_pe_store_fo } } add_deposit = d_pe_store_fo } } }
 	}
 	else_if = {
 		limit = { check_variable = { which = pe_sto_r value = 4 } }
@@ -291,7 +292,7 @@ pe_store_sign = {
 		divide_variable = { which = pe_sto_mult value = 100 }
 		if = { limit = { has_modifier = pe_store_alloys } remove_modifier = pe_store_alloys }
 		add_modifier = { modifier = pe_store_alloys days = -1 multiplier = pe_sto_mult }
-		if = { limit = { exists = event_target:pe_sto_planet } event_target:pe_sto_planet = { set_planet_flag = pe_stb_al add_building = pe_building_corp_storage } }
+		if = { limit = { exists = event_target:pe_sto_planet } event_target:pe_sto_planet = { set_planet_flag = pe_stb_al if = { limit = { NOT = { has_deposit = d_pe_store_al } } add_deposit = d_pe_store_al } } }
 	}
 	else_if = {
 		limit = { check_variable = { which = pe_sto_r value = 5 } }
@@ -302,7 +303,7 @@ pe_store_sign = {
 		divide_variable = { which = pe_sto_mult value = 100 }
 		if = { limit = { has_modifier = pe_store_consumer_goods } remove_modifier = pe_store_consumer_goods }
 		add_modifier = { modifier = pe_store_consumer_goods days = -1 multiplier = pe_sto_mult }
-		if = { limit = { exists = event_target:pe_sto_planet } event_target:pe_sto_planet = { set_planet_flag = pe_stb_cg add_building = pe_building_corp_storage } }
+		if = { limit = { exists = event_target:pe_sto_planet } event_target:pe_sto_planet = { set_planet_flag = pe_stb_cg if = { limit = { NOT = { has_deposit = d_pe_store_cg } } add_deposit = d_pe_store_cg } } }
 	}
 	else_if = {
 		limit = { check_variable = { which = pe_sto_r value = 6 } }
@@ -313,13 +314,26 @@ pe_store_sign = {
 		divide_variable = { which = pe_sto_mult value = 100 }
 		if = { limit = { has_modifier = pe_store_trade } remove_modifier = pe_store_trade }
 		add_modifier = { modifier = pe_store_trade days = -1 multiplier = pe_sto_mult }
-		if = { limit = { exists = event_target:pe_sto_planet } event_target:pe_sto_planet = { set_planet_flag = pe_stb_tr add_building = pe_building_corp_storage } }
+		if = { limit = { exists = event_target:pe_sto_planet } event_target:pe_sto_planet = { set_planet_flag = pe_stb_tr if = { limit = { NOT = { has_deposit = d_pe_store_tr } } add_deposit = d_pe_store_tr } } }
 	}
 	log = "private_economy: storage contract \\[Root.pe_sto_r] signed: +\\[Root.pe_sto_capn] capacity, fee about \\[Root.pe_sto_feen] a month, corporation slot \\[Root.pe_sto_kn]"
 }
 
 # Country scope, monthly (pe.100): fees, renewal offers and the end of contracts.
 pe_store_month = {
+	# Saves from 0.39/0.40: the warehouse building becomes the deposit.
+	every_owned_colony = {
+		limit = { has_building = pe_building_corp_storage }
+		remove_building = pe_building_corp_storage
+		if = { limit = { has_building = pe_building_corp_storage } remove_building = pe_building_corp_storage }
+		if = { limit = { has_building = pe_building_corp_storage } remove_building = pe_building_corp_storage }
+		if = { limit = { has_planet_flag = pe_stb_mi NOT = { has_deposit = d_pe_store_mi } } add_deposit = d_pe_store_mi }
+		if = { limit = { has_planet_flag = pe_stb_en NOT = { has_deposit = d_pe_store_en } } add_deposit = d_pe_store_en }
+		if = { limit = { has_planet_flag = pe_stb_fo NOT = { has_deposit = d_pe_store_fo } } add_deposit = d_pe_store_fo }
+		if = { limit = { has_planet_flag = pe_stb_al NOT = { has_deposit = d_pe_store_al } } add_deposit = d_pe_store_al }
+		if = { limit = { has_planet_flag = pe_stb_cg NOT = { has_deposit = d_pe_store_cg } } add_deposit = d_pe_store_cg }
+		if = { limit = { has_planet_flag = pe_stb_tr NOT = { has_deposit = d_pe_store_tr } } add_deposit = d_pe_store_tr }
+	}
 	if = {
 		limit = { check_variable = { which = pe_sto_mi_m value > 0 } }
 		change_variable = { which = pe_sto_mi_m value = -1 }
@@ -371,6 +385,7 @@ pe_store_month = {
 			every_owned_colony = {
 				limit = { has_planet_flag = pe_stb_mi }
 				remove_planet_flag = pe_stb_mi
+				if = { limit = { has_deposit = d_pe_store_mi } remove_deposit = d_pe_store_mi }
 				if = { limit = { has_building = pe_building_corp_storage } remove_building = pe_building_corp_storage }
 			}
 			if = {
@@ -431,6 +446,7 @@ pe_store_month = {
 			every_owned_colony = {
 				limit = { has_planet_flag = pe_stb_en }
 				remove_planet_flag = pe_stb_en
+				if = { limit = { has_deposit = d_pe_store_en } remove_deposit = d_pe_store_en }
 				if = { limit = { has_building = pe_building_corp_storage } remove_building = pe_building_corp_storage }
 			}
 			if = {
@@ -491,6 +507,7 @@ pe_store_month = {
 			every_owned_colony = {
 				limit = { has_planet_flag = pe_stb_fo }
 				remove_planet_flag = pe_stb_fo
+				if = { limit = { has_deposit = d_pe_store_fo } remove_deposit = d_pe_store_fo }
 				if = { limit = { has_building = pe_building_corp_storage } remove_building = pe_building_corp_storage }
 			}
 			if = {
@@ -551,6 +568,7 @@ pe_store_month = {
 			every_owned_colony = {
 				limit = { has_planet_flag = pe_stb_al }
 				remove_planet_flag = pe_stb_al
+				if = { limit = { has_deposit = d_pe_store_al } remove_deposit = d_pe_store_al }
 				if = { limit = { has_building = pe_building_corp_storage } remove_building = pe_building_corp_storage }
 			}
 			if = {
@@ -611,6 +629,7 @@ pe_store_month = {
 			every_owned_colony = {
 				limit = { has_planet_flag = pe_stb_cg }
 				remove_planet_flag = pe_stb_cg
+				if = { limit = { has_deposit = d_pe_store_cg } remove_deposit = d_pe_store_cg }
 				if = { limit = { has_building = pe_building_corp_storage } remove_building = pe_building_corp_storage }
 			}
 			if = {
@@ -671,6 +690,7 @@ pe_store_month = {
 			every_owned_colony = {
 				limit = { has_planet_flag = pe_stb_tr }
 				remove_planet_flag = pe_stb_tr
+				if = { limit = { has_deposit = d_pe_store_tr } remove_deposit = d_pe_store_tr }
 				if = { limit = { has_building = pe_building_corp_storage } remove_building = pe_building_corp_storage }
 			}
 			if = {
@@ -713,6 +733,21 @@ pe_arms_offer = {
 				if = { limit = { has_technology = tech_destroyers } set_variable = { which = pe_ao_cls value = 2 } set_variable = { which = pe_ao_cc value = 300 } }
 				if = { limit = { has_technology = tech_cruisers } set_variable = { which = pe_ao_cls value = 3 } set_variable = { which = pe_ao_cc value = 600 } }
 				if = { limit = { has_technology = tech_battleships } set_variable = { which = pe_ao_cls value = 4 } set_variable = { which = pe_ao_cc value = 1200 } }
+				# Better armour, shields and reactors make ships dearer (0.41): +30% for each of
+				# ten techs from tier 3 on (late game about 3.7 times, a battleship about 4400).
+				set_variable = { which = pe_ao_tf value = 1 }
+				if = { limit = { has_technology = tech_ship_armor_3 } change_variable = { which = pe_ao_tf value = 0.3 } }
+				if = { limit = { has_technology = tech_ship_armor_4 } change_variable = { which = pe_ao_tf value = 0.3 } }
+				if = { limit = { has_technology = tech_ship_armor_5 } change_variable = { which = pe_ao_tf value = 0.3 } }
+				if = { limit = { has_technology = tech_shields_3 } change_variable = { which = pe_ao_tf value = 0.3 } }
+				if = { limit = { has_technology = tech_shields_4 } change_variable = { which = pe_ao_tf value = 0.3 } }
+				if = { limit = { has_technology = tech_shields_5 } change_variable = { which = pe_ao_tf value = 0.3 } }
+				if = { limit = { has_technology = tech_fusion_power } change_variable = { which = pe_ao_tf value = 0.3 } }
+				if = { limit = { has_technology = tech_cold_fusion_power } change_variable = { which = pe_ao_tf value = 0.3 } }
+				if = { limit = { has_technology = tech_antimatter_power } change_variable = { which = pe_ao_tf value = 0.3 } }
+				if = { limit = { has_technology = tech_zero_point_power } change_variable = { which = pe_ao_tf value = 0.3 } }
+				multiply_variable = { which = pe_ao_cc value = pe_ao_tf }
+				round_variable = pe_ao_cc
 				set_variable = { which = pe_ao_nn value = pe_ao_st }
 				multiply_variable = { which = pe_ao_nn value = 0.5 }
 				divide_variable = { which = pe_ao_nn value = pe_ao_cc }

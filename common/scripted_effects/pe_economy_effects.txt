@@ -1841,7 +1841,10 @@ pe_buyout_execute = {
 		limit = { owner = { is_ai = no } }
 		set_variable = { which = pe_buy_safe value = root.pe_safe_ok }
 		owner = { prev = { set_variable = { which = pe_buy_cap value = prev.pe_capital } } }
-		log = "private_economy: buyout $FIRM$ on \\[This.GetName]: $DISTRICT$ before \\[This.pe_before] after \\[This.pe_after], private capital \\[This.pe_buy_cap] (down payment $PRICE$ x 0.4), supply check \\[This.pe_buy_safe]"
+		# Log values from the country: planet variables print empty in a log (0.41).
+		owner = { set_variable = { which = pe_lg_a value = prev.pe_before } set_variable = { which = pe_lg_b value = prev.pe_after } set_variable = { which = pe_lg_c value = prev.pe_buy_safe } set_variable = { which = pe_lg_d value = pe_capital } round_variable = pe_lg_d set_variable = { which = pe_lg_e value = $CODE$ } set_variable = { which = pe_lg_f value = $PRICE$ } multiply_variable = { which = pe_lg_f value = 0.4 } }
+		# No $-parameters inside the text: the engine garbles them there.
+		log = "private_economy: buyout of a district for firm variant \\[Root.pe_lg_e] on \\[This.GetName]: districts of the type before \\[Root.pe_lg_a] after \\[Root.pe_lg_b], private capital \\[Root.pe_lg_d], down payment \\[Root.pe_lg_f], supply check \\[Root.pe_lg_c]"
 	}
 	if = {
 		limit = { check_variable = { which = pe_before value > pe_after } }
@@ -2603,5 +2606,6 @@ pe_xq_found = {
 			}
 		}
 	}
-	log = "private_economy: firm beyond the share on \\[This.GetName]: mode \\[Root.pe_xq_mode], sites before \\[This.pe_sc0] after \\[This.pe_sc1]"
+	root = { set_variable = { which = pe_lg_a value = prev.pe_sc0 } set_variable = { which = pe_lg_b value = prev.pe_sc1 } }
+	log = "private_economy: firm beyond the share on \\[This.GetName]: mode \\[Root.pe_xq_mode], sites before \\[Root.pe_lg_a] after \\[Root.pe_lg_b]"
 }
