@@ -2658,10 +2658,6 @@ pe_auto_cover_step = {
 		}
 		else_if = { limit = { has_deposit = d_pe_ledger_auto } remove_deposit = d_pe_ledger_auto }
 	}
-	if = {
-		limit = { check_variable = { which = pe_months value = 0 } }
-		log = "private_economy: automation refund: private \\[Root.pe_auto_r] of \\[Root.pe_auto_p] energy a month, budget line \\[Root.pe_auto_e]"
-	}
 }
 
 # Colony scope, root = country (pe.323): found the firm root.pe_xq_code beyond the economic

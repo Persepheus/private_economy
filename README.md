@@ -6,7 +6,7 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
-## Stand 0.42.3
+## Stand 0.42.4
 
 **KI-Reiche stärken** ([TESTS_0.42.md](docs/TESTS_0.42.md)):
 - **Wirtschaftsordnung der KI:**
@@ -16,7 +16,7 @@ Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien u
   - Alle anderen: Freie Marktwirtschaft.
 - **Rüstungsaufträge der KI** schon ab halbvollem Lager oder 10.000 Legierungen, alle fünf Jahre.
 - **Staatsanleihen (nur KI):** Privatkapital über 10.000 leiht der Pool einem KI-Staat zinslos. Unter 3.000 zahlt der Staat zurück. Spielerreiche sind nicht betroffen.
-- **Lagervertrag:** Gebühr 20 % der Nettoproduktion.
+- **Lagervertrag:** +100 % Lagergrenze (0.42.4, vorher +20 %; laufende Verträge werden umgestellt), Gebühr 20 % der Nettoproduktion.
 - **Firmenregister:** eigenes Fenster mit fester Höhe und Scrollleiste (0.42.3).
 - **Konzern-Habitat:** Die Designation wird einmal fest gesetzt, auch wenn die automatische Designation schon passt (0.42.2).
 
@@ -147,6 +147,8 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Noch nie im Spiel getestet:** Konvoischutz, Bergung, Schiffsspenden der Mäzene, Konzern-Automatisierung, Liefervertrag (zwei Jahre), Trümmer und Wiederaufbau, Besatzung und Kollaboration.
 - **Prototyp Hilfsreich:** [docs/TESTS_PROTO_HOLDINGS.md](docs/TESTS_PROTO_HOLDINGS.md) (Konsole `event pe.15` bis `pe.21`).
 - **Weltraum (Ideen):** private Stationen und Kilostrukturen über ein Hilfsreich mit Leasing, Spenden von Schiffen durch Mäzene nach Verlusten, Konzernflotten über ein Hilfsreich, private Werften.
+- **Spezialisierungsgebäude durch Konzerne (Variante C, beschlossen 27.10.2026):** Ein Konzern baut auf einem Planeten mit seinen Firmen das passende Gebäude der Spezialisierung (Mineralienaufbereitung, Energienetz, Nahrungsverarbeitung) als Konzernanlage, aus seiner Kasse, und bekommt dafür einen Gewinnanteil. Hilft der KI und nimmt dem Spieler Mikromanagement ab. Offen: Platzierung (`add_building` wählt den Slot selbst; nur bei passender Spezialisierung mit freiem Gebäudeplatz), Höhe des Gewinnanteils, Angebot per Event für Spieler, KI nimmt automatisch an. Ersetzt womöglich die Staatsanleihen der KI (die nur Handel ins Lager legen).
+- **KI in einem neuen Spiel beobachten (27.10.2026):** Vergleich 2301 → 2304 zeigte Fortschritt bei Militär und Firmenzahl, aber kaum mehr Legierungen; Staatsanleihen landen ungenutzt im Handelslager, Gewinnauszahlung bei kleinen KIs nur 21–39 %.
 - **Gemerkte Ideen, noch offen:**
   - Rationalisierung als eigene Firmenstufe („schlank“ statt „groß“), nicht nur als Event.
 - **Verworfen:** Spezialisten-Automatisierung (gibt es im Spiel sonst auch nicht).

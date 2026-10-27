@@ -37,6 +37,12 @@ Statisch geprüft (Validator einschließlich der Codex-Tests). Im Spiel noch nic
 - Ein langes Register lässt sich scrollen und ragt nicht mehr über den Bildschirm.
 - error.log: keine Meldungen zu `pe_register_window` oder fehlenden GUI-Elementen.
 
+## Lagervertrag: +100 % Lagergrenze (0.42.4)
+
+- Neue Angebote nennen als Zusatzkapazität so viel wie die heutige Lagergrenze (vorher 20 % davon).
+- Laufende Verträge werden im nächsten Monat einmal auf das Fünffache umgestellt; die Lagergrenze springt entsprechend.
+- Das game.log enthält keine `automation refund`-Zeilen mehr.
+
 ## Lagervertrag: Gebühr 20 %
 
 - Die Gebühr steigt von 5 % auf 20 % der monatlichen Nettoproduktion, weil das Firmenlager jetzt keinen Bauplatz mehr kostet.

@@ -1,8 +1,8 @@
 # Storage contracts and arms orders from full stores (0.39).
 #
 # Storage contract: when a store is 95% full and still growing, a private firm that makes the
-# resource (a member of a corporation if there is one) offers to store the surplus: +20% of
-# the store's maximum (modifier pe_store_<res>, country_resource_max_<res>_add = 100 x
+# resource (a member of a corporation if there is one) offers to store the surplus: +100% of
+# the store's maximum (0.42.4, before +20%) (modifier pe_store_<res>, country_resource_max_<res>_add = 100 x
 # pe_sto_<s>_mult) for five years. Its fee: every month 20% of our net production of that
 # resource, which the firm sells on its own account (its base value goes to its corporation's
 # cash or to the investor pool). A warehouse of the firm (deposit d_pe_store_<s>) stands on
@@ -231,7 +231,7 @@ pe_store_offer = {
 			limit = { check_variable = { which = pe_sto_r value > 0 } }
 			set_timed_country_flag = { flag = pe_sto_q days = 360 }
 			set_variable = { which = pe_sto_capn value = pe_sto_mx }
-			multiply_variable = { which = pe_sto_capn value = 0.2 }
+			multiply_variable = { which = pe_sto_capn value = 1 }
 			round_variable = pe_sto_capn
 			set_variable = { which = pe_sto_feen value = pe_sto_net }
 			multiply_variable = { which = pe_sto_feen value = 0.2 }
@@ -322,6 +322,59 @@ pe_store_sign = {
 
 # Country scope, monthly (pe.100): fees, renewal offers and the end of contracts.
 pe_store_month = {
+	# Contracts signed before 0.42.4 stored +20%; now +100% of the maximum then.
+	if = {
+		limit = { NOT = { has_country_flag = pe_sto_v0424 } }
+		set_country_flag = pe_sto_v0424
+		if = {
+			limit = { check_variable = { which = pe_sto_mi_m value > 0 } }
+			multiply_variable = { which = pe_sto_mi_cap value = 5 }
+			set_variable = { which = pe_sto_mult value = pe_sto_mi_cap }
+			divide_variable = { which = pe_sto_mult value = 100 }
+			if = { limit = { has_modifier = pe_store_minerals } remove_modifier = pe_store_minerals }
+			add_modifier = { modifier = pe_store_minerals days = -1 multiplier = pe_sto_mult }
+		}
+		if = {
+			limit = { check_variable = { which = pe_sto_en_m value > 0 } }
+			multiply_variable = { which = pe_sto_en_cap value = 5 }
+			set_variable = { which = pe_sto_mult value = pe_sto_en_cap }
+			divide_variable = { which = pe_sto_mult value = 100 }
+			if = { limit = { has_modifier = pe_store_energy } remove_modifier = pe_store_energy }
+			add_modifier = { modifier = pe_store_energy days = -1 multiplier = pe_sto_mult }
+		}
+		if = {
+			limit = { check_variable = { which = pe_sto_fo_m value > 0 } }
+			multiply_variable = { which = pe_sto_fo_cap value = 5 }
+			set_variable = { which = pe_sto_mult value = pe_sto_fo_cap }
+			divide_variable = { which = pe_sto_mult value = 100 }
+			if = { limit = { has_modifier = pe_store_food } remove_modifier = pe_store_food }
+			add_modifier = { modifier = pe_store_food days = -1 multiplier = pe_sto_mult }
+		}
+		if = {
+			limit = { check_variable = { which = pe_sto_al_m value > 0 } }
+			multiply_variable = { which = pe_sto_al_cap value = 5 }
+			set_variable = { which = pe_sto_mult value = pe_sto_al_cap }
+			divide_variable = { which = pe_sto_mult value = 100 }
+			if = { limit = { has_modifier = pe_store_alloys } remove_modifier = pe_store_alloys }
+			add_modifier = { modifier = pe_store_alloys days = -1 multiplier = pe_sto_mult }
+		}
+		if = {
+			limit = { check_variable = { which = pe_sto_cg_m value > 0 } }
+			multiply_variable = { which = pe_sto_cg_cap value = 5 }
+			set_variable = { which = pe_sto_mult value = pe_sto_cg_cap }
+			divide_variable = { which = pe_sto_mult value = 100 }
+			if = { limit = { has_modifier = pe_store_consumer_goods } remove_modifier = pe_store_consumer_goods }
+			add_modifier = { modifier = pe_store_consumer_goods days = -1 multiplier = pe_sto_mult }
+		}
+		if = {
+			limit = { check_variable = { which = pe_sto_tr_m value > 0 } }
+			multiply_variable = { which = pe_sto_tr_cap value = 5 }
+			set_variable = { which = pe_sto_mult value = pe_sto_tr_cap }
+			divide_variable = { which = pe_sto_mult value = 100 }
+			if = { limit = { has_modifier = pe_store_trade } remove_modifier = pe_store_trade }
+			add_modifier = { modifier = pe_store_trade days = -1 multiplier = pe_sto_mult }
+		}
+	}
 	# Saves from 0.39/0.40: the warehouse building becomes the deposit.
 	every_owned_colony = {
 		limit = { has_building = pe_building_corp_storage }
