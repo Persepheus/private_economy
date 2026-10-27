@@ -19,12 +19,12 @@ Statisch geprüft (Validator einschließlich der Codex-Tests). Im Spiel noch nic
 - Sie nehmen es zu 80 % an, wenn ihr Handel für die Gebühr reicht.
 - Für dich gilt weiter: ab 90 %, alle zehn Jahre.
 
-## Staatsanleihen aus brachliegendem Privatkapital
+## Staatsanleihen aus brachliegendem Privatkapital (nur KI, ab 0.42.1)
 
 - Hat der Investorenpool mehr als 10.000, leiht er dem Staat den Überschuss zinslos, als Handel ins Lager. Es wird nur so viel überwiesen, wie ins Lager passt, mindestens 100.
 - Fällt der Pool unter 3.000, zahlt der Staat zurück: höchstens 2.000 pro Quartal und nur, solange er mindestens das Doppelte im Lager hat.
-- Das gilt für alle Reiche, auch für dich: Bei deinem Pool von 24.000 kommen beim nächsten Quartal etwa 14.000 Handel zurück.
-- Das Firmenregister zeigt die offenen Anleihen. Log für dein Reich: `state bonds: the investor pool lends us …` bzw. `we repay …`.
+- Das gilt nur für KI-Reiche. Dein Pool bleibt unberührt; dein Handel darf sich durch Anleihen nicht ändern.
+- Log: `AI state bonds: the investor pool lends …` bzw. `AI state bonds: repaid …`.
 
 ## Lagervertrag: Gebühr 20 %
 

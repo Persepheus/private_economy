@@ -249,14 +249,15 @@ pe_quarterly = {
 	pe_pool_bonds = yes
 }
 
-# Country scope, quarterly: idle private capital (0.42). Above 10000 the investor pool has
-# nothing to spend it on; it lends the surplus to the state, interest-free, as trade (only
-# what fits into our store). Below 3000 the state repays (pe_pb_held), at most 2000 a quarter
-# and only while it keeps at least twice that in its store.
+# Country scope, quarterly: idle private capital of AI empires (0.42; AI only since 0.42.1).
+# Above 10000 the investor pool has nothing to spend it on; it lends the surplus to the
+# state, interest-free, as trade (only what fits into the store). Below 3000 the state
+# repays (pe_pb_held), at most 2000 a quarter and only while it keeps at least twice that in
+# its store.
 pe_pool_bonds = {
 	if = { limit = { NOT = { is_variable_set = pe_pb_held } } set_variable = { which = pe_pb_held value = 0 } }
 	if = {
-		limit = { check_variable = { which = pe_capital value > 10000 } }
+		limit = { is_ai = yes check_variable = { which = pe_capital value > 10000 } }
 		set_variable = { which = pe_pb_x value = pe_capital }
 		change_variable = { which = pe_pb_x value = -10000 }
 		export_resource_stockpile_to_variable = { resource = trade variable = pe_pb_st }
@@ -269,7 +270,7 @@ pe_pool_bonds = {
 			subtract_variable = { which = pe_capital value = pe_pb_x }
 			change_variable = { which = pe_pb_held value = pe_pb_x }
 			add_resource = { trade = 1 mult = pe_pb_x }
-			if = { limit = { is_ai = no } log = "private_economy: state bonds: the investor pool lends us \\[Root.pe_pb_x] trade, held \\[Root.pe_pb_held]" }
+			log = "private_economy: AI state bonds: the investor pool lends \\[Root.pe_pb_x] trade, held \\[Root.pe_pb_held]"
 		}
 	}
 	else_if = {
@@ -286,11 +287,9 @@ pe_pool_bonds = {
 			add_resource = { trade = -1 mult = pe_pb_x }
 			change_variable = { which = pe_capital value = pe_pb_x }
 			subtract_variable = { which = pe_pb_held value = pe_pb_x }
-			if = { limit = { is_ai = no } log = "private_economy: state bonds: we repay \\[Root.pe_pb_x] trade, held \\[Root.pe_pb_held]" }
+			log = "private_economy: AI state bonds: repaid \\[Root.pe_pb_x] trade, held \\[Root.pe_pb_held]"
 		}
 	}
-	set_variable = { which = pe_pb_r value = pe_pb_held }
-	round_variable = pe_pb_r
 }
 
 # Country scope: a firm moves to another planet with its workers, at most once a year per
