@@ -15,3 +15,9 @@ Statisch geprüft (Validator einschließlich der Codex-Tests). Im Spiel noch nic
 - Die Zahlung läuft wie bisher als monatlicher Unterhalt in Handel; das Lager der KI sinkt entsprechend.
 - Für den Spieler ändert sich nichts.
 - **Prüfen im Save:** Bei KI-Reichen mit großem Handelslager sollte `pe_lpay` (Auszahlungsquote) jetzt deutlich höher sein als die bisherigen 21–39 %, und `pe_lstock` zeigt, wie viel das Lager im letzten Quartal beigetragen hat.
+
+## 0.44.1: früher Deckel und Startwarnung
+
+- Deckel der Gewinnauszahlung: 60 % der ersten 100 Netto-Handel im Monat (vorher 40 %), dann wie bisher 70 % der nächsten 200 und 85 % darüber. Bei 65 Netto-Handel steigt der Deckel von 26 auf 39 im Monat.
+- **Prüfen:** game.log, Zeile `ledgers: … cap …`: Bei unter 100 Netto-Handel ist der Deckel 60 % davon.
+- Neues Spiel: error.log enthält keine Meldungen `Variable pe_s_… is not set` mehr.

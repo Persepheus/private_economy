@@ -10,6 +10,8 @@ Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien u
 
 **Bezahlung der Firmen** ([TESTS_0.44.md](docs/TESTS_0.44.md)):
 - **Produktivität und Löhne:** Jeder Privatjob erzeugt zusätzlich +0,5 Handel und verbraucht 0,1 Konsumgüter mehr (bessere Bezahlung). Beides läuft in der Kategorie des Jobs, Boni der Kategorie gelten also auch dafür, und die KI-Wirtschaftsplanung sieht es. Unterm Strich etwa die Hälfte der Gewinnauszahlung unter Gemischt: Privatwirtschaft kostet weiter, aber weniger, und der zusätzliche Handel hebt den Auszahlungsdeckel. Die Lohn-Konsumgüter zählen nicht für die Defizit-Sperre und die Versorgungsprüfung.
+- **Früher Deckel (0.44.1):** Von den ersten 100 Netto-Handel im Monat dürfen jetzt 60 % statt 40 % an die Privatwirtschaft gehen. Kleine Reiche zahlen früh mehr aus.
+- **Startwarnung (0.44.1):** Die Schattenpreise haben ab dem ersten Monat ihre Grundwerte; error.log meldet beim Spielstart keine fehlenden `pe_s_*` mehr.
 - **Auszahlung aus dem Lager (nur KI):** Was der Deckel einer KI nicht auszahlt, zahlt sie aus ihrem Handelslager, soweit dort mehr als zwölf Monatszahlungen liegen. Für dich bleibt der Deckel unverändert.
 
 ## Stand 0.43.0
@@ -111,7 +113,7 @@ Die Privatwirtschaft ist ein Kreislauf:
 - **Defizit-Sperre:** Keine Firmen, die eine Ressource im Defizit verbrauchen. Bestehende werden zuerst umgebaut, auch über Klassengrenzen.
 - **Umbau** nur, wenn die neue Firma klar mehr wert ist und danach nichts knapp wird, was die alte gemacht hat. Eine Firma baut frühestens nach 10 Jahren um (bei knappen Vorprodukten nach 2), ein Planet höchstens einmal im Jahr.
 - **Freie Pops:** Gründung und Wachstum brauchen Zivilisten minus offene Jobs minus Baustellen-Jobs, mindestens 50. Eine fertige Baustelle öffnet erst, wenn Arbeiter da sind.
-- **Gewinne und Ersparnisse** zusammen höchstens ein gestaffelter Anteil des Netto-Handels ohne sie (40 % der ersten 100 im Monat, 70 % der nächsten 200, 85 % darüber); was der Staat nicht zahlt, bekommen Firmen und Pool auch nicht.
+- **Gewinne und Ersparnisse** zusammen höchstens ein gestaffelter Anteil des Netto-Handels ohne sie (60 % der ersten 100 im Monat, seit 0.44.1; 70 % der nächsten 200, 85 % darüber); was der Staat nicht zahlt, bekommen Firmen und Pool auch nicht.
 - **Kosten** wie für den Staat. Finanziert über private Ersparnisse (Anteil am Handelseinkommen, nach Ordnung) und Kredit (40 % Anzahlung, Rest aus dem Firmengewinn).
 - **Abwechslung** durch Pseudo-Zufall, Diversifikation und Spezialisierung.
 - **Räumen:** Unter gelenkter und gemischter Wirtschaft kann der Spieler Firmen und Baustellen wie Blocker für Influence räumen; unter Gemischt zusätzlich mit Entschädigung in Handel und mit Unmut.

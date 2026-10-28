@@ -156,6 +156,21 @@ pe_init = {
 	if = { limit = { NOT = { is_variable_set = pe_pool_income } } set_variable = { which = pe_pool_income value = 0 } }
 	# Share of the profits the state paid last quarter (see pe_ledgers).
 	if = { limit = { NOT = { is_variable_set = pe_lpay } } set_variable = { which = pe_lpay value = 1 } }
+	# Shadow prices at their base values until the first quarter prices them (pe_market): the
+	# monthly supply check values jobs from the first month on (0.44.1).
+	if = {
+		limit = { NOT = { is_variable_set = pe_s_trade } }
+		set_variable = { which = pe_s_alloys value = 4 }
+		set_variable = { which = pe_s_consumer_goods value = 2 }
+		set_variable = { which = pe_s_trade value = 1 }
+		set_variable = { which = pe_s_minerals value = 1 }
+		set_variable = { which = pe_s_energy value = 1 }
+		set_variable = { which = pe_s_food value = 1 }
+		set_variable = { which = pe_s_unity value = 3 }
+		set_variable = { which = pe_s_physics_research value = 3.5 }
+		set_variable = { which = pe_s_society_research value = 3.5 }
+		set_variable = { which = pe_s_engineering_research value = 3.5 }
+	}
 	if = {
 		limit = { NOT = { is_variable_set = pe_seed } }
 		set_variable_to_random_value = { which = pe_seed min = 0 max = 1008 rounded = yes }
@@ -453,8 +468,8 @@ pe_relocate_check_dest = {
 # shows in the budget: each planet's firms' profits (profit ledger) and the private savings
 # (savings ledger on the capital), for the next three months.
 # Cap (0.40): a progressive share of the net trade income the empire would have without
-# these two ledgers (pe_lnet, per month): 40% of the first 100, 70% of the next 200, 85% of
-# everything above 300. So the trade balance never turns negative because of them, and a
+# these two ledgers (pe_lnet, per month): 60% of the first 100 (40% before 0.44.1), 70% of
+# the next 200, 85% of everything above 300. So the trade balance never turns negative because of them, and a
 # rich trade economy may invest far more. Without a net trade income nothing is paid.
 # What the state does not pay, the firms and the investor pool do not get either. The firms
 # booked this quarter's profits at last quarter's share (pe_lpay, pe_firm_book); the
@@ -472,7 +487,7 @@ pe_ledgers = {
 		limit = { check_variable = { which = pe_lnet value > 0 } }
 		set_variable = { which = pe_tmp value = pe_lnet }
 		if = { limit = { check_variable = { which = pe_tmp value > 100 } } set_variable = { which = pe_tmp value = 100 } }
-		multiply_variable = { which = pe_tmp value = 0.4 }
+		multiply_variable = { which = pe_tmp value = 0.6 }
 		change_variable = { which = pe_lcap_m value = pe_tmp }
 	}
 	if = {
