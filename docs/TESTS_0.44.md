@@ -1,0 +1,17 @@
+# Tests 0.44.0
+
+Statisch geprüft (Validator einschließlich der Codex-Tests). Im Spiel noch nicht getestet. Zusammen mit 0.43 (Firmenstufen, [TESTS_0.43.md](TESTS_0.43.md)) testen.
+
+## Produktivität und Löhne der Privatjobs
+
+- Jeder Privatjob (alle elf, auch ihre Swap-Varianten) erzeugt zusätzlich **+0,5 Handel** und hat **0,1 Konsumgüter** mehr Unterhalt.
+- Beides steht im Ressourcenblock des Jobs, in seiner Kategorie (z. B. `planet_miners`). Boni der Kategorie wirken also auch auf diesen Handel.
+- Die Lohn-Konsumgüter zählen nicht für die Defizit-Sperre (`pe_ok_<Firma>`) und nicht für die Versorgungsprüfung vor Gründung, Wachstum und Kauf. Ein Konsumgüter-Defizit stoppt also keine Bergbau- oder Agrarfirmen.
+- **Prüfen:** Tooltip eines privaten Bergarbeiters zeigt +0,5 Handel und −0,1 Konsumgüter. Die Budgetübersicht zeigt mehr Handel aus den Job-Kategorien.
+
+## Gewinnauszahlung aus dem Handelslager (nur KI)
+
+- Wenn der Deckel einer KI kleiner ist als das, was im Quartal fällig ist, wird er um den Teil des Handelslagers erhöht, der über zwölf Monatszahlungen liegt (höchstens bis zum vollen Betrag).
+- Die Zahlung läuft wie bisher als monatlicher Unterhalt in Handel; das Lager der KI sinkt entsprechend.
+- Für den Spieler ändert sich nichts.
+- **Prüfen im Save:** Bei KI-Reichen mit großem Handelslager sollte `pe_lpay` (Auszahlungsquote) jetzt deutlich höher sein als die bisherigen 21–39 %, und `pe_lstock` zeigt, wie viel das Lager im letzten Quartal beigetragen hat.

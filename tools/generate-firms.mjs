@@ -93,6 +93,10 @@ const JOBS = [
 // Resources with a shadow price (pe_market).
 const RES = ['alloys', 'consumer_goods', 'trade', 'minerals', 'energy', 'food', 'unity', 'physics_research', 'society_research', 'engineering_research'];
 const MARKET_RES = ['alloys', 'consumer_goods', 'trade', 'minerals', 'energy', 'food'];
+// Per private job (100 workforce): trade it makes on top (productivity) and consumer goods it
+// costs on top (better wages). About half the profit payout under Mixed, so the private
+// economy still costs the state something.
+const PRIVATE_TRADE = 0.5, PRIVATE_WAGE = 0.1;
 const jobTexts = readDir('common/pop_jobs');
 // Vanilla job texts, to name the private swap variants after them.
 const vanillaLoc = {};
@@ -140,6 +144,12 @@ for (const j of JOBS) {
     const open = body.indexOf('\n', body.indexOf('weight = ', body.indexOf('{', wi)));
     body = body.slice(0, open) + `\n\t\t# Rural premium (pe.232): above specialist jobs (weight 10), so pops stay or come back.\n\t\tmodifier = {\n\t\t\tfactor = 12\n\t\t\tplanet = { has_modifier = pe_rural_premium }\n\t\t}` + body.slice(open);
   }
+  // Productivity and wages (0.44): every private job also makes trade and pays its people
+  // better (consumer goods), in its own category, so its category bonuses apply. Not part of
+  // j.base: the deficit lock and the supply checks ignore the wages.
+  const resOpen = `\tresources = {\n\t\tcategory = ${j.cat}\n`;
+  if (body.split(resOpen).length !== 2) throw new Error(`no resources block for ${j.cat} in ${j.vanilla}`);
+  body = body.replace(resOpen, `${resOpen}\t\t# Private productivity and wages (Private Economy).\n\t\tproduces = {\n\t\t\ttrade = ${PRIVATE_TRADE}\n\t\t}\n\t\tupkeep = {\n\t\t\tconsumer_goods = ${PRIVATE_WAGE}\n\t\t}\n`);
   j.def = `${j.key} = {${body}}`;
   // Default output per job (used while no job of this type is filled):
   // untriggered blocks plus the ones that only check Catalytic Processing.
@@ -170,7 +180,8 @@ const jobByKey = Object.fromEntries(JOBS.map(j => [j.key, j]));
 write('common/pop_jobs/pe_private_jobs.txt', header + `# Private jobs: complete copies of the vanilla jobs (swaps such as anglers, pearl divers
 # or priests, triggered modifiers, weights) in the vanilla economic category, so every
 # bonus of the vanilla job applies. The player cannot set their priority; their count
-# comes only from firm deposits and private buildings (job_<key>_add).
+# comes only from firm deposits and private buildings (job_<key>_add). On top of the vanilla
+# job: +${PRIVATE_TRADE} trade (productivity) and ${PRIVATE_WAGE} consumer goods upkeep (wages).
 ` + JOBS.map(j => '\n' + j.def + '\n').join(''));
 
 // --- Housing like the replaced district (with its technology bonuses) -----------------

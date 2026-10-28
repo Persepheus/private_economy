@@ -500,6 +500,25 @@ pe_ledgers = {
 	set_variable = { which = pe_ltot value = pe_profit_due }
 	multiply_variable = { which = pe_ltot value = pe_lfac }
 	change_variable = { which = pe_ltot value = pe_savings_last }
+	# AI empires (0.44): what the cap leaves unpaid comes from the trade stockpile, as far as it
+	# holds more than a reserve of twelve months of what is due (pe_lstock = the extra this
+	# quarter). The player's payout stays capped by the net income alone.
+	set_variable = { which = pe_lstock value = 0 }
+	if = {
+		limit = {
+			is_ai = yes
+			check_variable = { which = pe_ltot value > pe_lcap }
+		}
+		export_resource_stockpile_to_variable = { resource = trade variable = pe_lstock }
+		set_variable = { which = pe_tmp value = pe_ltot }
+		multiply_variable = { which = pe_tmp value = 4 }
+		subtract_variable = { which = pe_lstock value = pe_tmp }
+		set_variable = { which = pe_tmp value = pe_ltot }
+		subtract_variable = { which = pe_tmp value = pe_lcap }
+		if = { limit = { check_variable = { which = pe_lstock value > pe_tmp } } set_variable = { which = pe_lstock value = pe_tmp } }
+		if = { limit = { check_variable = { which = pe_lstock value < 0 } } set_variable = { which = pe_lstock value = 0 } }
+		change_variable = { which = pe_lcap value = pe_lstock }
+	}
 	set_variable = { which = pe_lscale value = 1 }
 	if = {
 		limit = {

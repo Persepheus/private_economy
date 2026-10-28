@@ -6,6 +6,12 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
+## Stand 0.44.0
+
+**Bezahlung der Firmen** ([TESTS_0.44.md](docs/TESTS_0.44.md)):
+- **Produktivität und Löhne:** Jeder Privatjob erzeugt zusätzlich +0,5 Handel und verbraucht 0,1 Konsumgüter mehr (bessere Bezahlung). Beides läuft in der Kategorie des Jobs, Boni der Kategorie gelten also auch dafür, und die KI-Wirtschaftsplanung sieht es. Unterm Strich etwa die Hälfte der Gewinnauszahlung unter Gemischt: Privatwirtschaft kostet weiter, aber weniger, und der zusätzliche Handel hebt den Auszahlungsdeckel. Die Lohn-Konsumgüter zählen nicht für die Defizit-Sperre und die Versorgungsprüfung.
+- **Auszahlung aus dem Lager (nur KI):** Was der Deckel einer KI nicht auszahlt, zahlt sie aus ihrem Handelslager, soweit dort mehr als zwölf Monatszahlungen liegen. Für dich bleibt der Deckel unverändert.
+
 ## Stand 0.43.0
 
 **Firmenstufen getrennt von der Spezialisierung** ([TESTS_0.43.md](docs/TESTS_0.43.md)):
@@ -168,7 +174,7 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **KI in einem neuen Spiel beobachten (27.10.2026):** Vergleich 2301 → 2304 zeigte Fortschritt bei Militär und Firmenzahl, aber kaum mehr Legierungen; Staatsanleihen landen ungenutzt im Handelslager, Gewinnauszahlung bei kleinen KIs nur 21–39 %.
 - **Effizienzbonus der Konzernstationen prüfen (27.10.2026):** Stationen erzeugen 140 % des Vanilla-Werts, 120 % gehen an uns, 20 % sind Marge. Damit kostet Privatwirtschaft dort nichts und bringt dem Staat sogar mehr; vermutlich zu stark. Neu kalibrieren, sodass Privatisierung auch bei Stationen einen spürbaren Preis hat.
 - **Erledigt (0.43): Neue Firmenstufen, getrennt von der Spezialisierung** (beschlossen 28.10.2026, im Spiel noch ungetestet).
-- **Bezahlung der Firmen (in Diskussion, 27.10.2026):** Die reine Handelszahlung bremst KIs mit wenig Handel. Verworfen: Effizienzbonus auf Jobs wie bei den Stationen (Privatwirtschaft hätte keine Kosten mehr) und eine Marge über dem Bonus (schwächt die Wirtschaft stärker als heute).
+- **Erledigt (0.44): Bezahlung der Firmen** (beschlossen 28.10.2026, im Spiel noch ungetestet): Handelszahlung bleibt, dazu Handel und Lohn-Konsumgüter auf Privatjobs und für die KI Zahlung aus dem Lager. Verworfen: Effizienzbonus auf Jobs wie bei den Stationen (Privatwirtschaft hätte keine Kosten mehr) und eine Marge über dem Bonus (schwächt die Wirtschaft stärker als heute). Noch offen: dasselbe Konzept (Produktivität als Handel, bessere Löhne als Konsumgüter) bei den Konzernen durchdenken, zusammen mit dem Effizienzbonus der Stationen.
 - **Gemerkte Ideen, noch offen:**
   - Rationalisierung als eigene Firmenstufe („schlank“ statt „groß“), nicht nur als Event.
 - **Verworfen:** Spezialisten-Automatisierung (gibt es im Spiel sonst auch nicht).

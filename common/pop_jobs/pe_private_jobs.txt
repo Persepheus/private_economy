@@ -2,7 +2,8 @@
 # Private jobs: complete copies of the vanilla jobs (swaps such as anglers, pearl divers
 # or priests, triggered modifiers, weights) in the vanilla economic category, so every
 # bonus of the vanilla job applies. The player cannot set their priority; their count
-# comes only from firm deposits and private buildings (job_<key>_add).
+# comes only from firm deposits and private buildings (job_<key>_add). On top of the vanilla
+# job: +0.5 trade (productivity) and 0.1 consumer goods upkeep (wages).
 
 pe_private_metallurgist = {
 	category = specialist
@@ -48,6 +49,13 @@ pe_private_metallurgist = {
 
 	resources = {
 		category = planet_metallurgists
+		# Private productivity and wages (Private Economy).
+		produces = {
+			trade = 0.5
+		}
+		upkeep = {
+			consumer_goods = 0.1
+		}
 		inline_script = "output/foundry_output"
 	}
 
@@ -140,6 +148,13 @@ pe_private_artisan = {
 
 	resources = {
 		category = planet_artisans
+		# Private productivity and wages (Private Economy).
+		produces = {
+			trade = 0.5
+		}
+		upkeep = {
+			consumer_goods = 0.1
+		}
 		# PRODUCES
 		produces = {
 			consumer_goods = 6
@@ -308,6 +323,13 @@ pe_private_trader = {
 
 	resources = {
 		category = planet_traders
+		# Private productivity and wages (Private Economy).
+		produces = {
+			trade = 0.5
+		}
+		upkeep = {
+			consumer_goods = 0.1
+		}
 		produces = {
 			trade = 8
 		}
@@ -505,6 +527,13 @@ pe_private_entertainer = {
 
 	resources = {
 		category = planet_entertainers
+		# Private productivity and wages (Private Economy).
+		produces = {
+			trade = 0.5
+		}
+		upkeep = {
+			consumer_goods = 0.1
+		}
 		produces = {
 			unity = 0.5
 		}
@@ -715,6 +744,13 @@ pe_private_physicist = {
 
 	resources = {
 		category = planet_physicists
+		# Private productivity and wages (Private Economy).
+		produces = {
+			trade = 0.5
+		}
+		upkeep = {
+			consumer_goods = 0.1
+		}
 		produces = {
 			physics_research = 3
 		}
@@ -947,6 +983,13 @@ pe_private_biologist = {
 
 	resources = {
 		category = planet_biologists
+		# Private productivity and wages (Private Economy).
+		produces = {
+			trade = 0.5
+		}
+		upkeep = {
+			consumer_goods = 0.1
+		}
 		produces = {
 			society_research = 3
 		}
@@ -1123,6 +1166,13 @@ pe_private_engineer = {
 
 	resources = {
 		category = planet_engineers
+		# Private productivity and wages (Private Economy).
+		produces = {
+			trade = 0.5
+		}
+		upkeep = {
+			consumer_goods = 0.1
+		}
 		produces = {
 			engineering_research = 3
 		}
@@ -1509,6 +1559,13 @@ pe_private_bureaucrat = {
 
 	resources = {
 		category = planet_bureaucrats
+		# Private productivity and wages (Private Economy).
+		produces = {
+			trade = 0.5
+		}
+		upkeep = {
+			consumer_goods = 0.1
+		}
 		# PRODUCES
 		produces = {
 			unity = 3
@@ -1980,6 +2037,13 @@ pe_private_miner = {
 
 	resources = {
 		category = planet_miners
+		# Private productivity and wages (Private Economy).
+		produces = {
+			trade = 0.5
+		}
+		upkeep = {
+			consumer_goods = 0.1
+		}
 		produces = {
 			minerals = 4
 		}
@@ -2145,6 +2209,13 @@ pe_private_technician = {
 
 	resources = {
 		category = planet_technician
+		# Private productivity and wages (Private Economy).
+		produces = {
+			trade = 0.5
+		}
+		upkeep = {
+			consumer_goods = 0.1
+		}
 		produces = {
 			energy = 6
 		}
@@ -2304,6 +2375,13 @@ pe_private_farmer = {
 
 	resources = {
 		category = planet_farmers
+		# Private productivity and wages (Private Economy).
+		produces = {
+			trade = 0.5
+		}
+		upkeep = {
+			consumer_goods = 0.1
+		}
 		produces = {
 			food = 6
 		}
