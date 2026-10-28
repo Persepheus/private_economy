@@ -159,7 +159,6 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen.
 - **Volle Lager (27.10.2026):** Rüstungsauftrag und Lagervertrag sind in 0.39 umgesetzt. Verworfen: Modernisierung der Verteidigung und Werftausbau durch Konzerne.
 - **Längere Lieferketten (Supply Chains):** mehrstufige Wertschöpfung zwischen Firmen (Vorprodukte, Zulieferer), gemerkt am 27.10.2026. Aus dem Review: mit begrenzten Abhängigkeiten, also Ausfällen, Ersatzlieferanten und Versorgungssicherheit statt eines dauerhaften Bonus.
-- **Besetzungsquote pro Jobtyp (aus dem Review, 27.10.2026):** Bisher gilt pro Planet eine gemeinsame Quote aller Privatjobs. Eine volle Mine und ein leeres Labor zählen gleich. Künftig soll jede Firma nach der Besetzung ihrer eigenen Jobgruppe abrechnen und wachsen. Die Jobs werden pro Planet schon einzeln gezählt.
 - **Erweiterungen aus dem Review (27.10.2026):**
   - **Staatliche Ausschreibungen:** Wir setzen Anreize für benötigte Legierungen, Forschung oder Versorgung, und die Firmen entscheiden, ob sie investieren.
   - **Konzernprofile und Branchentechnologien:** Konzerne unterscheiden sich durch Spezialisierung, Risikobereitschaft und Investitionsverhalten (passt zu „Firmen forschen an ihrem Sektor“).
@@ -179,7 +178,7 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Erledigt (0.44): Bezahlung der Firmen** (beschlossen 28.10.2026, im Spiel noch ungetestet): Handelszahlung bleibt, dazu Handel und Lohn-Konsumgüter auf Privatjobs und für die KI Zahlung aus dem Lager. Verworfen: Effizienzbonus auf Jobs wie bei den Stationen (Privatwirtschaft hätte keine Kosten mehr) und eine Marge über dem Bonus (schwächt die Wirtschaft stärker als heute). Noch offen: dasselbe Konzept (Produktivität als Handel, bessere Löhne als Konsumgüter) bei den Konzernen durchdenken, zusammen mit dem Effizienzbonus der Stationen.
 - **Gemerkte Ideen, noch offen:**
   - Rationalisierung als eigene Firmenstufe („schlank“ statt „groß“), nicht nur als Event.
-- **Verworfen:** Spezialisten-Automatisierung (gibt es im Spiel sonst auch nicht).
+- **Verworfen:** Spezialisten-Automatisierung (gibt es im Spiel sonst auch nicht); Besetzungsquote pro Firma statt pro Planet (28.10.2026: eine volle Firma darf nicht wachsen, während dem Planeten Arbeitskräfte fehlen); freie Pops nur gegen offene Privatjobs rechnen (Zivilisten verteilen sich oft lange nicht auf offene Jobs).
 - **Erledigt aus den gemerkten Ideen:** Anwerbekampagne (pe.205), Robotik (pe.231), Modernisierung (pe.262), Rationalisierung als Event (pe.263), Kapitalertragssteuer als Vermögensabgabe (pe.264).
 - **v0.3**: Privatgebäude, Technologieabhängigkeit (Techs schalten Firmenjobs frei, Firmen subventionieren benötigte Techs), Spielerhebel (Steuern, Subventionen, Regulierung, Verstaatlichung).
 
