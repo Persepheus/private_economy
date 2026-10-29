@@ -562,3 +562,5 @@
  pe.299.b.tt:0 "Die Firmen behalten alles. Der Planet bekommt §R-5 Stabilität§! für zwei Jahre."
  pe.299.c:0 "Enteignet den Schlimmsten."
  pe.299.c.tt:0 "Die größte Firma des Planeten wird ohne Entschädigung zum Staatsdistrikt. Der Planet bekommt §Y+5 Stabilität§! für fünf Jahre."
+ pe_msg_fleet_nodesign:0 "Eine Konzernflotte kam nicht zustande: Wir haben keinen Schiffsentwurf, den der Konzern bauen könnte. Was wir bezahlt haben, ist erstattet."
+ pe_msg_arms_nodesign:0 "Unser Rüstungsauftrag konnte nicht geliefert werden: Wir haben keinen Schiffsentwurf, den die Werft bauen könnte. Legierungen und Gebühr sind erstattet."

@@ -50,7 +50,7 @@ export function messageCategory(key) {
     [/^pe_msg_corp_st_/, 'stations'],
     [/^pe_msg_(corp_swarm|corp_furnace|swarm_done)/, 'megastructures'],
     [/^pe_msg_chab_/, 'habitats'],
-    [/^pe_msg_(cit_|charter_|defence_|guard)/, 'military'],
+    [/^pe_msg_(cit_|charter_|defence_|guard|fleet_nodesign|arms_nodesign)/, 'military'],
     [/^pe_msg_(conq_|occ_)/, 'ownership'],
     [/^pe_msg_deal_/, 'patrons'],
   ];

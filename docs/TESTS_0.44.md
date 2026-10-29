@@ -27,3 +27,10 @@ Statisch geprüft (Validator einschließlich der Codex-Tests). Im Spiel noch nic
 - Sechs Monate vor Ende bietet die Firma die Verlängerung an, wenn der Bestand mindestens 85 % des eigenen Lagers ohne Vertrag erreicht (vorher 85 % des verdoppelten Lagers).
 - Beispiel aus dem Save 2235.08.15: eigenes Lager 15.000 Mineralien, mit Vertrag 30.000. Bisher brauchte die Verlängerung 25.500, jetzt 12.750.
 - **Prüfen:** Ein laufender Vertrag mit vollem eigenem Lager meldet sich sechs Monate vor Ende mit dem Verlängerungsangebot (pe.325). Der Tooltip der Lagergrenze zeigt „Speicherkapazität (Mineralien)“ statt des Modifikator-Schlüssels, error.log meldet ihn nicht mehr.
+
+## 0.44.3: Flotte ohne Schiffsentwurf
+
+- Kriegspacht, Räumung, Konvoischutz und Schutzflotte: Kann keine Schiffsklasse gebaut werden (kein einziger passender Entwurf), wird die leere Flotte entfernt, der Vertrag startet nicht, der Konzern zahlt nichts. Bei der Schutzflotte kommen bezahlte Legierungen (voll oder halb) bzw. 150 Einfluss zurück.
+- Rüstungsauftrag: Bei der Lieferung ohne Entwurf kommen die Legierungen und die Handelsgebühr zurück, der Konzern gibt die Gebühr ab.
+- Nachrichten `pe_msg_fleet_nodesign` und `pe_msg_arms_nodesign` (Kategorie Flotten), game.log: `corporate fleet without any ship design` bzw. `arms order without any ship design`.
+- **Prüfen (nur per Konsole sinnvoll):** Alle Kriegsschiff-Entwürfe löschen, dann einen Flottenvertrag annehmen: keine leere Flotte, Nachricht, Erstattung.

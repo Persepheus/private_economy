@@ -562,3 +562,5 @@
  pe.299.b.tt:0 "The firms keep everything. The planet gets §R-5 stability§! for two years."
  pe.299.c:0 "Seize the worst of them."
  pe.299.c.tt:0 "The biggest firm on the planet becomes a state district, without compensation. The planet gets §Y+5 stability§! for five years."
+ pe_msg_fleet_nodesign:0 "A corporate fleet did not come about: we have no ship design the corporation could build. What we paid has been refunded."
+ pe_msg_arms_nodesign:0 "Our arms order could not be delivered: we have no ship design to build. The alloys and the fee have been refunded."

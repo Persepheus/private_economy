@@ -254,28 +254,44 @@ pe_corp_fleet_war_start = {
 			set_fleet_flag = pe_lease_war
 		}
 	}
-	# The leader is the holdings' own; assigned while they own and control the fleet, then leased.
-	event_target:pe_hold = {
-		create_leader = { class = commander species = root name = random skill = 2 }
-		last_created_leader = { save_event_target_as = pe_fl_leader }
+	# Without any ship design we could build (0.44.3): no ships, no contract; the empty fleet
+	# goes, the corporation keeps its cash and the caller refunds what we paid (pe_fl_empty).
+	set_variable = { which = pe_fl_empty value = 0 }
+	last_created_fleet = { if = { limit = { num_ships < 1 } root = { set_variable = { which = pe_fl_empty value = 1 } } } }
+	if = {
+		limit = { check_variable = { which = pe_fl_empty value = 1 } }
+		last_created_fleet = { destroy_fleet = this }
+		log = "private_economy: corporate fleet without any ship design, contract dropped"
+		if = {
+			limit = { is_ai = no }
+			capital_scope = { save_event_target_as = pe_msg_planet }
+			if = { limit = { NOT = { has_country_flag = pe_mute_military } } create_message = { type = pe_private_economy_military localization = pe_msg_fleet_nodesign days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+		}
 	}
-	last_created_fleet = {
-		set_owner = event_target:pe_hold
-		assign_leader = event_target:pe_fl_leader
-		set_controller = root
-		add_modifier = { modifier = pe_leased_fleet days = -1 }
-		if = { limit = { NOT = { exists = leader } } log = "private_economy: corporate fleet without a leader (assign_leader failed)" }
+	else = {
+		# The leader is the holdings' own; assigned while they own and control the fleet, then leased.
+		event_target:pe_hold = {
+			create_leader = { class = commander species = root name = random skill = 2 }
+			last_created_leader = { save_event_target_as = pe_fl_leader }
+		}
+		last_created_fleet = {
+			set_owner = event_target:pe_hold
+			assign_leader = event_target:pe_fl_leader
+			set_controller = root
+			add_modifier = { modifier = pe_leased_fleet days = -1 }
+			if = { limit = { NOT = { exists = leader } } log = "private_economy: corporate fleet without a leader (assign_leader failed)" }
+		}
+		if = { limit = { check_variable = { which = pe_wl_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_wl_spent } }
+		else_if = { limit = { check_variable = { which = pe_wl_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_wl_spent } }
+		else_if = { limit = { check_variable = { which = pe_wl_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_wl_spent } }
+		else_if = { limit = { check_variable = { which = pe_wl_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_wl_spent } }
+		else_if = { limit = { check_variable = { which = pe_wl_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_wl_spent } }
+		else_if = { limit = { check_variable = { which = pe_wl_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_wl_spent } }
+		else_if = { limit = { check_variable = { which = pe_wl_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_wl_spent } }
+		else_if = { limit = { check_variable = { which = pe_wl_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_wl_spent } }
+		set_variable = { which = pe_lease_war_q value = 20 }
+		set_variable = { which = pe_wl_cprice value = pe_fl_cprice }
 	}
-	if = { limit = { check_variable = { which = pe_wl_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_wl_spent } }
-	else_if = { limit = { check_variable = { which = pe_wl_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_wl_spent } }
-	else_if = { limit = { check_variable = { which = pe_wl_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_wl_spent } }
-	else_if = { limit = { check_variable = { which = pe_wl_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_wl_spent } }
-	else_if = { limit = { check_variable = { which = pe_wl_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_wl_spent } }
-	else_if = { limit = { check_variable = { which = pe_wl_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_wl_spent } }
-	else_if = { limit = { check_variable = { which = pe_wl_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_wl_spent } }
-	else_if = { limit = { check_variable = { which = pe_wl_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_wl_spent } }
-	set_variable = { which = pe_lease_war_q value = 20 }
-	set_variable = { which = pe_wl_cprice value = pe_fl_cprice }
 }
 
 # Country scope: start the clearing contract (three years at most).
@@ -331,29 +347,45 @@ pe_corp_fleet_clear_start = {
 			set_fleet_flag = pe_lease_clear
 		}
 	}
-	# The leader is the holdings' own; assigned while they own and control the fleet, then leased.
-	event_target:pe_hold = {
-		create_leader = { class = commander species = root name = random skill = 2 }
-		last_created_leader = { save_event_target_as = pe_fl_leader }
+	# Without any ship design we could build (0.44.3): no ships, no contract; the empty fleet
+	# goes, the corporation keeps its cash and the caller refunds what we paid (pe_fl_empty).
+	set_variable = { which = pe_fl_empty value = 0 }
+	last_created_fleet = { if = { limit = { num_ships < 1 } root = { set_variable = { which = pe_fl_empty value = 1 } } } }
+	if = {
+		limit = { check_variable = { which = pe_fl_empty value = 1 } }
+		last_created_fleet = { destroy_fleet = this }
+		log = "private_economy: corporate fleet without any ship design, contract dropped"
+		if = {
+			limit = { is_ai = no }
+			capital_scope = { save_event_target_as = pe_msg_planet }
+			if = { limit = { NOT = { has_country_flag = pe_mute_military } } create_message = { type = pe_private_economy_military localization = pe_msg_fleet_nodesign days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+		}
 	}
-	last_created_fleet = {
-		set_owner = event_target:pe_hold
-		assign_leader = event_target:pe_fl_leader
-		set_controller = root
-		add_modifier = { modifier = pe_leased_fleet days = -1 }
-		if = { limit = { NOT = { exists = leader } } log = "private_economy: corporate fleet without a leader (assign_leader failed)" }
+	else = {
+		# The leader is the holdings' own; assigned while they own and control the fleet, then leased.
+		event_target:pe_hold = {
+			create_leader = { class = commander species = root name = random skill = 2 }
+			last_created_leader = { save_event_target_as = pe_fl_leader }
+		}
+		last_created_fleet = {
+			set_owner = event_target:pe_hold
+			assign_leader = event_target:pe_fl_leader
+			set_controller = root
+			add_modifier = { modifier = pe_leased_fleet days = -1 }
+			if = { limit = { NOT = { exists = leader } } log = "private_economy: corporate fleet without a leader (assign_leader failed)" }
+		}
+		if = { limit = { check_variable = { which = pe_cl_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_cl_spent } }
+		else_if = { limit = { check_variable = { which = pe_cl_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_cl_spent } }
+		else_if = { limit = { check_variable = { which = pe_cl_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_cl_spent } }
+		else_if = { limit = { check_variable = { which = pe_cl_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_cl_spent } }
+		else_if = { limit = { check_variable = { which = pe_cl_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_cl_spent } }
+		else_if = { limit = { check_variable = { which = pe_cl_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_cl_spent } }
+		else_if = { limit = { check_variable = { which = pe_cl_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_cl_spent } }
+		else_if = { limit = { check_variable = { which = pe_cl_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_cl_spent } }
+		set_variable = { which = pe_lease_clear_q value = 12 }
+		set_variable = { which = pe_cl_run value = pe_cl_k }
+		event_target:pe_cl_sys = { set_star_flag = pe_clear@root }
 	}
-	if = { limit = { check_variable = { which = pe_cl_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_cl_spent } }
-	else_if = { limit = { check_variable = { which = pe_cl_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_cl_spent } }
-	else_if = { limit = { check_variable = { which = pe_cl_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_cl_spent } }
-	else_if = { limit = { check_variable = { which = pe_cl_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_cl_spent } }
-	else_if = { limit = { check_variable = { which = pe_cl_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_cl_spent } }
-	else_if = { limit = { check_variable = { which = pe_cl_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_cl_spent } }
-	else_if = { limit = { check_variable = { which = pe_cl_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_cl_spent } }
-	else_if = { limit = { check_variable = { which = pe_cl_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_cl_spent } }
-	set_variable = { which = pe_lease_clear_q value = 12 }
-	set_variable = { which = pe_cl_run value = pe_cl_k }
-	event_target:pe_cl_sys = { set_star_flag = pe_clear@root }
 }
 
 # Country scope: buy the war fleet (pe_fl_price alloys); it becomes ours, its commander leaves
@@ -634,29 +666,45 @@ pe_corp_convoy_start = {
 			set_fleet_flag = pe_lease_convoy
 		}
 	}
-	# The leader is the holdings' own; assigned while they own and control the fleet, then leased.
-	event_target:pe_hold = {
-		create_leader = { class = commander species = root name = random skill = 2 }
-		last_created_leader = { save_event_target_as = pe_fl_leader }
+	# Without any ship design we could build (0.44.3): no ships, no contract; the empty fleet
+	# goes, the corporation keeps its cash and the caller refunds what we paid (pe_fl_empty).
+	set_variable = { which = pe_fl_empty value = 0 }
+	last_created_fleet = { if = { limit = { num_ships < 1 } root = { set_variable = { which = pe_fl_empty value = 1 } } } }
+	if = {
+		limit = { check_variable = { which = pe_fl_empty value = 1 } }
+		last_created_fleet = { destroy_fleet = this }
+		log = "private_economy: corporate fleet without any ship design, contract dropped"
+		if = {
+			limit = { is_ai = no }
+			capital_scope = { save_event_target_as = pe_msg_planet }
+			if = { limit = { NOT = { has_country_flag = pe_mute_military } } create_message = { type = pe_private_economy_military localization = pe_msg_fleet_nodesign days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+		}
 	}
-	last_created_fleet = {
-		set_owner = event_target:pe_hold
-		assign_leader = event_target:pe_fl_leader
-		set_controller = root
-		add_modifier = { modifier = pe_leased_fleet days = -1 }
-		if = { limit = { NOT = { exists = leader } } log = "private_economy: corporate fleet without a leader (assign_leader failed)" }
+	else = {
+		# The leader is the holdings' own; assigned while they own and control the fleet, then leased.
+		event_target:pe_hold = {
+			create_leader = { class = commander species = root name = random skill = 2 }
+			last_created_leader = { save_event_target_as = pe_fl_leader }
+		}
+		last_created_fleet = {
+			set_owner = event_target:pe_hold
+			assign_leader = event_target:pe_fl_leader
+			set_controller = root
+			add_modifier = { modifier = pe_leased_fleet days = -1 }
+			if = { limit = { NOT = { exists = leader } } log = "private_economy: corporate fleet without a leader (assign_leader failed)" }
+		}
+		if = { limit = { check_variable = { which = pe_cv_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_cv_spent } }
+		else_if = { limit = { check_variable = { which = pe_cv_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_cv_spent } }
+		else_if = { limit = { check_variable = { which = pe_cv_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_cv_spent } }
+		else_if = { limit = { check_variable = { which = pe_cv_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_cv_spent } }
+		else_if = { limit = { check_variable = { which = pe_cv_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_cv_spent } }
+		else_if = { limit = { check_variable = { which = pe_cv_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_cv_spent } }
+		else_if = { limit = { check_variable = { which = pe_cv_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_cv_spent } }
+		else_if = { limit = { check_variable = { which = pe_cv_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_cv_spent } }
+		set_variable = { which = pe_convoy_q value = 12 }
+		set_variable = { which = pe_cv_run value = pe_cv_k }
+		event_target:pe_cv_sys = { set_star_flag = pe_convoy@root }
 	}
-	if = { limit = { check_variable = { which = pe_cv_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_cv_spent } }
-	else_if = { limit = { check_variable = { which = pe_cv_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_cv_spent } }
-	else_if = { limit = { check_variable = { which = pe_cv_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_cv_spent } }
-	else_if = { limit = { check_variable = { which = pe_cv_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_cv_spent } }
-	else_if = { limit = { check_variable = { which = pe_cv_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_cv_spent } }
-	else_if = { limit = { check_variable = { which = pe_cv_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_cv_spent } }
-	else_if = { limit = { check_variable = { which = pe_cv_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_cv_spent } }
-	else_if = { limit = { check_variable = { which = pe_cv_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_cv_spent } }
-	set_variable = { which = pe_convoy_q value = 12 }
-	set_variable = { which = pe_cv_run value = pe_cv_k }
-	event_target:pe_cv_sys = { set_star_flag = pe_convoy@root }
 }
 
 # --- Salvage (pe.289) -------------------------------------------------------------------------
@@ -3237,6 +3285,7 @@ pe_corp_defence = {
 							limit = { check_variable = { which = pe_tmp value >= pe_df_alloys } }
 							add_resource = { alloys = -1 mult = pe_df_alloys }
 							pe_corp_defence_start = yes
+							if = { limit = { check_variable = { which = pe_fl_empty value = 1 } } add_resource = { alloys = 1 mult = pe_df_alloys } }
 						}
 					}
 				}
@@ -3323,31 +3372,47 @@ pe_corp_defence_start = {
 			set_fleet_flag = pe_lease_defence
 		}
 	}
-	# The leader is the holdings' own; assigned while they own and control the fleet.
-	event_target:pe_hold = {
-		create_leader = { class = commander species = root name = random skill = 3 }
-		last_created_leader = { save_event_target_as = pe_fl_leader }
-	}
-	last_created_fleet = {
-		set_owner = event_target:pe_hold
-		assign_leader = event_target:pe_fl_leader
-		set_controller = root
-		add_modifier = { modifier = pe_leased_fleet days = -1 }
-	}
-	if = { limit = { check_variable = { which = pe_df_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c1_name } }
-	else_if = { limit = { check_variable = { which = pe_df_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c2_name } }
-	else_if = { limit = { check_variable = { which = pe_df_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c3_name } }
-	else_if = { limit = { check_variable = { which = pe_df_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c4_name } }
-	else_if = { limit = { check_variable = { which = pe_df_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c5_name } }
-	else_if = { limit = { check_variable = { which = pe_df_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c6_name } }
-	else_if = { limit = { check_variable = { which = pe_df_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c7_name } }
-	else_if = { limit = { check_variable = { which = pe_df_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c8_name } }
-	set_variable = { which = pe_df_q value = 12 }
-	set_variable = { which = pe_df_run value = pe_df_k }
-	event_target:pe_df_planet = { set_planet_flag = pe_df_target save_event_target_as = pe_msg_planet }
+	# Without any ship design we could build (0.44.3): no ships, no contract; the empty fleet
+	# goes, the corporation keeps its cash and the caller refunds what we paid (pe_fl_empty).
+	set_variable = { which = pe_fl_empty value = 0 }
+	last_created_fleet = { if = { limit = { num_ships < 1 } root = { set_variable = { which = pe_fl_empty value = 1 } } } }
 	if = {
-		limit = { is_ai = no }
-		if = { limit = { check_variable = { which = pe_df_free value = 1 } } if = { limit = { NOT = { has_country_flag = pe_mute_military } } pe_corp_msg = { KEY = pe_msg_defence_hq CATEGORY = military } } }
-		else = { if = { limit = { NOT = { has_country_flag = pe_mute_military } } pe_corp_msg = { KEY = pe_msg_defence_start CATEGORY = military } } }
+		limit = { check_variable = { which = pe_fl_empty value = 1 } }
+		last_created_fleet = { destroy_fleet = this }
+		log = "private_economy: corporate fleet without any ship design, contract dropped"
+		if = {
+			limit = { is_ai = no }
+			capital_scope = { save_event_target_as = pe_msg_planet }
+			if = { limit = { NOT = { has_country_flag = pe_mute_military } } create_message = { type = pe_private_economy_military localization = pe_msg_fleet_nodesign days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+		}
+	}
+	else = {
+		# The leader is the holdings' own; assigned while they own and control the fleet.
+		event_target:pe_hold = {
+			create_leader = { class = commander species = root name = random skill = 3 }
+			last_created_leader = { save_event_target_as = pe_fl_leader }
+		}
+		last_created_fleet = {
+			set_owner = event_target:pe_hold
+			assign_leader = event_target:pe_fl_leader
+			set_controller = root
+			add_modifier = { modifier = pe_leased_fleet days = -1 }
+		}
+		if = { limit = { check_variable = { which = pe_df_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c1_name } }
+		else_if = { limit = { check_variable = { which = pe_df_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c2_name } }
+		else_if = { limit = { check_variable = { which = pe_df_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c3_name } }
+		else_if = { limit = { check_variable = { which = pe_df_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c4_name } }
+		else_if = { limit = { check_variable = { which = pe_df_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c5_name } }
+		else_if = { limit = { check_variable = { which = pe_df_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c6_name } }
+		else_if = { limit = { check_variable = { which = pe_df_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c7_name } }
+		else_if = { limit = { check_variable = { which = pe_df_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_df_spent } set_variable = { which = pe_msg_name value = pe_c8_name } }
+		set_variable = { which = pe_df_q value = 12 }
+		set_variable = { which = pe_df_run value = pe_df_k }
+		event_target:pe_df_planet = { set_planet_flag = pe_df_target save_event_target_as = pe_msg_planet }
+		if = {
+			limit = { is_ai = no }
+			if = { limit = { check_variable = { which = pe_df_free value = 1 } } if = { limit = { NOT = { has_country_flag = pe_mute_military } } pe_corp_msg = { KEY = pe_msg_defence_hq CATEGORY = military } } }
+			else = { if = { limit = { NOT = { has_country_flag = pe_mute_military } } pe_corp_msg = { KEY = pe_msg_defence_start CATEGORY = military } } }
+		}
 	}
 }

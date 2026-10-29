@@ -222,6 +222,7 @@ country_event = {
 				limit = { check_variable = { which = pe_tmp value >= pe_df_alloys } }
 				add_resource = { alloys = -1 mult = pe_df_alloys }
 				pe_corp_defence_start = yes
+				if = { limit = { check_variable = { which = pe_fl_empty value = 1 } } add_resource = { alloys = 1 mult = pe_df_alloys } }
 			}
 		}
 	}
@@ -229,7 +230,7 @@ country_event = {
 		name = pe.294.c
 		allow = { has_resource = { type = influence amount >= 150 } }
 		custom_tooltip = pe.294.c.tt
-		hidden_effect = { add_resource = { influence = -150 } pe_corp_defence_start = yes }
+		hidden_effect = { add_resource = { influence = -150 } pe_corp_defence_start = yes if = { limit = { check_variable = { which = pe_fl_empty value = 1 } } add_resource = { influence = 150 } } }
 	}
 	option = {
 		name = pe.294.d
@@ -267,6 +268,7 @@ country_event = {
 				limit = { check_variable = { which = pe_tmp value >= pe_df_half } }
 				add_resource = { alloys = -1 mult = pe_df_half }
 				pe_corp_defence_start = yes
+				if = { limit = { check_variable = { which = pe_fl_empty value = 1 } } add_resource = { alloys = 1 mult = pe_df_half } }
 			}
 		}
 	}

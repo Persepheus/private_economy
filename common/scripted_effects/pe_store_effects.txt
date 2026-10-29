@@ -886,8 +886,32 @@ pe_arms_deliver = {
 		}
 	}
 	set_variable = { which = pe_ao_n value = 0 }
+	# Without any ship design (0.44.3): no fleet; our alloys and the fee come back.
+	set_variable = { which = pe_fl_empty value = 0 }
+	last_created_fleet = { if = { limit = { num_ships < 1 } root = { set_variable = { which = pe_fl_empty value = 1 } } } }
 	if = {
-		limit = { is_ai = no }
-		if = { limit = { NOT = { has_country_flag = pe_mute_military } } create_message = { type = pe_private_economy_military localization = pe_msg_defence_order_done days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+		limit = { check_variable = { which = pe_fl_empty value = 1 } }
+		last_created_fleet = { destroy_fleet = this }
+		add_resource = { alloys = 1 mult = pe_ao_al }
+		add_resource = { trade = 1 mult = pe_ao_fee }
+		if = { limit = { check_variable = { which = pe_ao_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_ao_fee } }
+		else_if = { limit = { check_variable = { which = pe_ao_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_ao_fee } }
+		else_if = { limit = { check_variable = { which = pe_ao_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_ao_fee } }
+		else_if = { limit = { check_variable = { which = pe_ao_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_ao_fee } }
+		else_if = { limit = { check_variable = { which = pe_ao_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_ao_fee } }
+		else_if = { limit = { check_variable = { which = pe_ao_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_ao_fee } }
+		else_if = { limit = { check_variable = { which = pe_ao_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_ao_fee } }
+		else_if = { limit = { check_variable = { which = pe_ao_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_ao_fee } }
+		log = "private_economy: arms order without any ship design, refunded"
+		if = {
+			limit = { is_ai = no }
+			if = { limit = { NOT = { has_country_flag = pe_mute_military } } create_message = { type = pe_private_economy_military localization = pe_msg_arms_nodesign days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+		}
+	}
+	else = {
+		if = {
+			limit = { is_ai = no }
+			if = { limit = { NOT = { has_country_flag = pe_mute_military } } create_message = { type = pe_private_economy_military localization = pe_msg_defence_order_done days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+		}
 	}
 }
