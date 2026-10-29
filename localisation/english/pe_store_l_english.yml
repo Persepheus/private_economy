@@ -63,3 +63,5 @@
  d_pe_store_cg_desc:0 "A private firm stores part of our consumer goods surplus here, for a fee (storage contract: +100% storage, 20% of our monthly net production as its fee). Ends with the contract."
  d_pe_store_tr:0 "Corporate Warehouse: Trade"
  d_pe_store_tr_desc:0 "A private firm stores part of our trade surplus here, for a fee (storage contract: +100% storage, 20% of our monthly net production as its fee). Ends with the contract."
+ mod_country_resource_max_minerals_add:0 "Mineral Storage Capacity"
+ mod_country_resource_max_trade_add:0 "Trade Storage Capacity"

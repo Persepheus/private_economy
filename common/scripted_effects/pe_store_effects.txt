@@ -7,8 +7,8 @@
 # resource, which the firm sells on its own account (its base value goes to its corporation's
 # cash or to the investor pool). A warehouse of the firm (deposit d_pe_store_<s>) stands on
 # its planet while the contract runs. Six months before the end the firm offers to extend it
-# by five years (if the store is still 85% full). One offer a year, a refused resource waits
-# five years.
+# by five years (if the stock still fills 85% of our own store without the contract). One
+# offer a year, a refused resource waits five years.
 # Per resource (short code s): pe_sto_<s>_m months left, pe_sto_<s>_k the firm's corporation
 # (0 = independent), pe_sto_<s>_cap the extra capacity, planet flag pe_stb_<s> the warehouse.
 # Offer: pe_sto_r (1-6, order of R below), pe_sto_kn, pe_sto_capn, pe_sto_feen,
@@ -410,11 +410,13 @@ pe_store_month = {
 			else_if = { limit = { check_variable = { which = pe_sto_mi_k value = 8 } } if = { limit = { check_variable = { which = pe_c8_on value = 1 } } change_variable = { which = pe_c8_cash value = pe_sto_fee } set_variable = { which = pe_sto_paid value = 1 } } }
 			if = { limit = { check_variable = { which = pe_sto_paid value = 0 } } change_variable = { which = pe_capital value = pe_sto_fee } }
 		}
-		# Six months before the end: an extension, if the store is still 85% full.
+		# Six months before the end: an extension, if the stock still fills 85% of our own store
+		# (without the contract; 0.44.2, before 85% of the doubled store, which a slow surplus never reached).
 		if = {
 			limit = { check_variable = { which = pe_sto_mi_m value = 6 } }
 			export_resource_stockpile_to_variable = { resource = minerals variable = pe_sto_st }
 			export_resource_maximum_to_variable = { resource = minerals variable = pe_sto_mx }
+			subtract_variable = { which = pe_sto_mx value = pe_sto_mi_cap }
 			multiply_variable = { which = pe_sto_mx value = 0.85 }
 			if = {
 				limit = { check_variable = { which = pe_sto_st value >= pe_sto_mx } }
@@ -471,11 +473,13 @@ pe_store_month = {
 			else_if = { limit = { check_variable = { which = pe_sto_en_k value = 8 } } if = { limit = { check_variable = { which = pe_c8_on value = 1 } } change_variable = { which = pe_c8_cash value = pe_sto_fee } set_variable = { which = pe_sto_paid value = 1 } } }
 			if = { limit = { check_variable = { which = pe_sto_paid value = 0 } } change_variable = { which = pe_capital value = pe_sto_fee } }
 		}
-		# Six months before the end: an extension, if the store is still 85% full.
+		# Six months before the end: an extension, if the stock still fills 85% of our own store
+		# (without the contract; 0.44.2, before 85% of the doubled store, which a slow surplus never reached).
 		if = {
 			limit = { check_variable = { which = pe_sto_en_m value = 6 } }
 			export_resource_stockpile_to_variable = { resource = energy variable = pe_sto_st }
 			export_resource_maximum_to_variable = { resource = energy variable = pe_sto_mx }
+			subtract_variable = { which = pe_sto_mx value = pe_sto_en_cap }
 			multiply_variable = { which = pe_sto_mx value = 0.85 }
 			if = {
 				limit = { check_variable = { which = pe_sto_st value >= pe_sto_mx } }
@@ -532,11 +536,13 @@ pe_store_month = {
 			else_if = { limit = { check_variable = { which = pe_sto_fo_k value = 8 } } if = { limit = { check_variable = { which = pe_c8_on value = 1 } } change_variable = { which = pe_c8_cash value = pe_sto_fee } set_variable = { which = pe_sto_paid value = 1 } } }
 			if = { limit = { check_variable = { which = pe_sto_paid value = 0 } } change_variable = { which = pe_capital value = pe_sto_fee } }
 		}
-		# Six months before the end: an extension, if the store is still 85% full.
+		# Six months before the end: an extension, if the stock still fills 85% of our own store
+		# (without the contract; 0.44.2, before 85% of the doubled store, which a slow surplus never reached).
 		if = {
 			limit = { check_variable = { which = pe_sto_fo_m value = 6 } }
 			export_resource_stockpile_to_variable = { resource = food variable = pe_sto_st }
 			export_resource_maximum_to_variable = { resource = food variable = pe_sto_mx }
+			subtract_variable = { which = pe_sto_mx value = pe_sto_fo_cap }
 			multiply_variable = { which = pe_sto_mx value = 0.85 }
 			if = {
 				limit = { check_variable = { which = pe_sto_st value >= pe_sto_mx } }
@@ -593,11 +599,13 @@ pe_store_month = {
 			else_if = { limit = { check_variable = { which = pe_sto_al_k value = 8 } } if = { limit = { check_variable = { which = pe_c8_on value = 1 } } change_variable = { which = pe_c8_cash value = pe_sto_fee } set_variable = { which = pe_sto_paid value = 1 } } }
 			if = { limit = { check_variable = { which = pe_sto_paid value = 0 } } change_variable = { which = pe_capital value = pe_sto_fee } }
 		}
-		# Six months before the end: an extension, if the store is still 85% full.
+		# Six months before the end: an extension, if the stock still fills 85% of our own store
+		# (without the contract; 0.44.2, before 85% of the doubled store, which a slow surplus never reached).
 		if = {
 			limit = { check_variable = { which = pe_sto_al_m value = 6 } }
 			export_resource_stockpile_to_variable = { resource = alloys variable = pe_sto_st }
 			export_resource_maximum_to_variable = { resource = alloys variable = pe_sto_mx }
+			subtract_variable = { which = pe_sto_mx value = pe_sto_al_cap }
 			multiply_variable = { which = pe_sto_mx value = 0.85 }
 			if = {
 				limit = { check_variable = { which = pe_sto_st value >= pe_sto_mx } }
@@ -654,11 +662,13 @@ pe_store_month = {
 			else_if = { limit = { check_variable = { which = pe_sto_cg_k value = 8 } } if = { limit = { check_variable = { which = pe_c8_on value = 1 } } change_variable = { which = pe_c8_cash value = pe_sto_fee } set_variable = { which = pe_sto_paid value = 1 } } }
 			if = { limit = { check_variable = { which = pe_sto_paid value = 0 } } change_variable = { which = pe_capital value = pe_sto_fee } }
 		}
-		# Six months before the end: an extension, if the store is still 85% full.
+		# Six months before the end: an extension, if the stock still fills 85% of our own store
+		# (without the contract; 0.44.2, before 85% of the doubled store, which a slow surplus never reached).
 		if = {
 			limit = { check_variable = { which = pe_sto_cg_m value = 6 } }
 			export_resource_stockpile_to_variable = { resource = consumer_goods variable = pe_sto_st }
 			export_resource_maximum_to_variable = { resource = consumer_goods variable = pe_sto_mx }
+			subtract_variable = { which = pe_sto_mx value = pe_sto_cg_cap }
 			multiply_variable = { which = pe_sto_mx value = 0.85 }
 			if = {
 				limit = { check_variable = { which = pe_sto_st value >= pe_sto_mx } }
@@ -715,11 +725,13 @@ pe_store_month = {
 			else_if = { limit = { check_variable = { which = pe_sto_tr_k value = 8 } } if = { limit = { check_variable = { which = pe_c8_on value = 1 } } change_variable = { which = pe_c8_cash value = pe_sto_fee } set_variable = { which = pe_sto_paid value = 1 } } }
 			if = { limit = { check_variable = { which = pe_sto_paid value = 0 } } change_variable = { which = pe_capital value = pe_sto_fee } }
 		}
-		# Six months before the end: an extension, if the store is still 85% full.
+		# Six months before the end: an extension, if the stock still fills 85% of our own store
+		# (without the contract; 0.44.2, before 85% of the doubled store, which a slow surplus never reached).
 		if = {
 			limit = { check_variable = { which = pe_sto_tr_m value = 6 } }
 			export_resource_stockpile_to_variable = { resource = trade variable = pe_sto_st }
 			export_resource_maximum_to_variable = { resource = trade variable = pe_sto_mx }
+			subtract_variable = { which = pe_sto_mx value = pe_sto_tr_cap }
 			multiply_variable = { which = pe_sto_mx value = 0.85 }
 			if = {
 				limit = { check_variable = { which = pe_sto_st value >= pe_sto_mx } }

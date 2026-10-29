@@ -21,3 +21,9 @@ Statisch geprüft (Validator einschließlich der Codex-Tests). Im Spiel noch nic
 - Deckel der Gewinnauszahlung: 60 % der ersten 100 Netto-Handel im Monat (vorher 40 %), dann wie bisher 70 % der nächsten 200 und 85 % darüber. Bei 65 Netto-Handel steigt der Deckel von 26 auf 39 im Monat.
 - **Prüfen:** game.log, Zeile `ledgers: … cap …`: Bei unter 100 Netto-Handel ist der Deckel 60 % davon.
 - Neues Spiel: error.log enthält keine Meldungen `Variable pe_s_… is not set` mehr.
+
+## 0.44.2: Verlängerung des Lagervertrags
+
+- Sechs Monate vor Ende bietet die Firma die Verlängerung an, wenn der Bestand mindestens 85 % des eigenen Lagers ohne Vertrag erreicht (vorher 85 % des verdoppelten Lagers).
+- Beispiel aus dem Save 2235.08.15: eigenes Lager 15.000 Mineralien, mit Vertrag 30.000. Bisher brauchte die Verlängerung 25.500, jetzt 12.750.
+- **Prüfen:** Ein laufender Vertrag mit vollem eigenem Lager meldet sich sechs Monate vor Ende mit dem Verlängerungsangebot (pe.325). Der Tooltip der Lagergrenze zeigt „Speicherkapazität (Mineralien)“ statt des Modifikator-Schlüssels, error.log meldet ihn nicht mehr.

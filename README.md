@@ -12,6 +12,7 @@ Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien u
 - **Produktivität und Löhne:** Jeder Privatjob erzeugt zusätzlich +0,5 Handel und verbraucht 0,1 Konsumgüter mehr (bessere Bezahlung). Beides läuft in der Kategorie des Jobs, Boni der Kategorie gelten also auch dafür, und die KI-Wirtschaftsplanung sieht es. Unterm Strich etwa die Hälfte der Gewinnauszahlung unter Gemischt: Privatwirtschaft kostet weiter, aber weniger, und der zusätzliche Handel hebt den Auszahlungsdeckel. Die Lohn-Konsumgüter zählen nicht für die Defizit-Sperre und die Versorgungsprüfung.
 - **Früher Deckel (0.44.1):** Von den ersten 100 Netto-Handel im Monat dürfen jetzt 60 % statt 40 % an die Privatwirtschaft gehen. Kleine Reiche zahlen früh mehr aus.
 - **Startwarnung (0.44.1):** Die Schattenpreise haben ab dem ersten Monat ihre Grundwerte; error.log meldet beim Spielstart keine fehlenden `pe_s_*` mehr.
+- **Lagervertrag (0.44.2):** Die Verlängerung wird angeboten, wenn der Bestand sechs Monate vor Ende noch 85 % des eigenen Lagers ohne Vertrag füllt. Vorher zählte das durch den Vertrag verdoppelte Lager, das ein langsamer Überschuss nie zu 85 % füllte. Der Vertrag lief deshalb ohne Vorwarnung aus, und der Bestand über dem eigenen Lager ging verloren. Die Lagergrenzen für Mineralien und Handelswert haben jetzt einen Namen im Tooltip.
 - **Auszahlung aus dem Lager (nur KI):** Was der Deckel einer KI nicht auszahlt, zahlt sie aus ihrem Handelslager, soweit dort mehr als zwölf Monatszahlungen liegen. Für dich bleibt der Deckel unverändert.
 
 ## Stand 0.43.0

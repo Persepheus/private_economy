@@ -63,3 +63,5 @@
  d_pe_store_cg_desc:0 "Eine Privatfirma lagert hier gegen eine Gebühr einen Teil unseres Überschusses an Konsumgüter (Lagervertrag: +100 % Lagergrenze, 20 % unserer monatlichen Nettoproduktion als Gebühr). Endet mit dem Vertrag."
  d_pe_store_tr:0 "Firmenlager: Handelswert"
  d_pe_store_tr_desc:0 "Eine Privatfirma lagert hier gegen eine Gebühr einen Teil unseres Überschusses an Handelswert (Lagervertrag: +100 % Lagergrenze, 20 % unserer monatlichen Nettoproduktion als Gebühr). Endet mit dem Vertrag."
+ mod_country_resource_max_minerals_add:0 "Speicherkapazität (Mineralien)"
+ mod_country_resource_max_trade_add:0 "Speicherkapazität (Handelswert)"
