@@ -1,0 +1,71 @@
+# District construction queue (0.45): while a district is in a colony's construction queue, the
+# investors buy no district there. A queued district may replace another one (for example the
+# last farming district by a mining one); a purchase in the meantime could take the district
+# the player wants to keep. The engine tells neither the district type nor whether it replaces
+# one, so every queued district counts.
+#   pe.329 queued: pe_dq + 1    pe.330 unqueued: pe_dq - 1    pe.331 completed: pe_dq - 1
+# Each event renews pe_dq_recent (two years); without it pe_planet_step resets pe_dq, in case a
+# count was lost (a colony lost with a district in its queue, a district added by script).
+namespace = pe
+
+carrier_event = {
+	id = pe.329
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { exists = owner owner = { is_country_type = default } }
+	immediate = {
+		if = { limit = { NOT = { is_variable_set = pe_dq } } set_variable = { which = pe_dq value = 0 } }
+		change_variable = { which = pe_dq value = 1 }
+		set_timed_planet_flag = { flag = pe_dq_recent days = 720 }
+		if = {
+			limit = { owner = { is_ai = no } }
+			save_event_target_as = pe_dq_planet
+			owner = {
+				set_variable = { which = pe_lg_a value = prev.pe_dq }
+				log = "private_economy: district queued on \\[pe_dq_planet.GetName], queued districts there \\[This.pe_lg_a]"
+			}
+		}
+	}
+}
+
+carrier_event = {
+	id = pe.330
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { exists = owner owner = { is_country_type = default } }
+	immediate = {
+		if = { limit = { NOT = { is_variable_set = pe_dq } } set_variable = { which = pe_dq value = 0 } }
+		change_variable = { which = pe_dq value = -1 }
+		if = { limit = { check_variable = { which = pe_dq value < 0 } } set_variable = { which = pe_dq value = 0 } }
+		set_timed_planet_flag = { flag = pe_dq_recent days = 720 }
+		if = {
+			limit = { owner = { is_ai = no } }
+			save_event_target_as = pe_dq_planet
+			owner = {
+				set_variable = { which = pe_lg_a value = prev.pe_dq }
+				log = "private_economy: district unqueued on \\[pe_dq_planet.GetName], queued districts there \\[This.pe_lg_a]"
+			}
+		}
+	}
+}
+
+carrier_event = {
+	id = pe.331
+	hide_window = yes
+	is_triggered_only = yes
+	trigger = { exists = owner owner = { is_country_type = default } }
+	immediate = {
+		if = { limit = { NOT = { is_variable_set = pe_dq } } set_variable = { which = pe_dq value = 0 } }
+		change_variable = { which = pe_dq value = -1 }
+		if = { limit = { check_variable = { which = pe_dq value < 0 } } set_variable = { which = pe_dq value = 0 } }
+		set_timed_planet_flag = { flag = pe_dq_recent days = 720 }
+		if = {
+			limit = { owner = { is_ai = no } }
+			save_event_target_as = pe_dq_planet
+			owner = {
+				set_variable = { which = pe_lg_a value = prev.pe_dq }
+				log = "private_economy: district completed on \\[pe_dq_planet.GetName], queued districts there \\[This.pe_lg_a]"
+			}
+		}
+	}
+}

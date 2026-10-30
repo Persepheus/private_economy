@@ -165,10 +165,13 @@ carrier_event = {
 			count_deposits = { category = pe_deposit_cat_corp count > 0 }
 			has_deposit = d_pe_supply_deal
 			has_deposit = d_pe_ledger_savings
+			has_planet_flag = pe_spb_lease
 		}
 	}
 	immediate = {
 		save_event_target_as = pe_tr_planet
+		# Leases of corporate specialisation buildings end (0.45).
+		pe_spb_clear = yes
 		from = { save_event_target_as = pe_tr_new }
 		if = {
 			limit = { exists = fromfrom fromfrom = { is_country_type = default is_gestalt = no } }

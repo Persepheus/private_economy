@@ -6,6 +6,29 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
+## Stand 0.45.0
+
+**Mehr Aufstiege, Konzerne bauen mit** ([TESTS_0.45.md](docs/TESTS_0.45.md)). Anlass war der Save cevantianmultistellar2 (2241): In elf Jahren gab es 7 Aufstiege, aber rund 65 neue Firmen. Galaxisweit gab es nur 4 Konzerne, die Firmenkassen waren fast leer. Die Gründe:
+- Seit 0.33 war der Gewinnanteil halbiert.
+- Seit 0.43 starten Firmen klein und brauchen einen Aufstieg mehr.
+- Ein Kauf braucht keine freien Pops, ein Aufstieg schon.
+
+Die Gründungsregel für Konzerne bleibt unverändert (Entscheidung 30.10.2026).
+- **Gewinnanteile wieder höher:** Gelenkt 10 %, Gemischt 15 %, Freie Marktwirtschaft 20 %, Laissez-faire 25 %. Reiche mit viel Handel zahlen voll aus, Reiche mit wenig Handel nicht mehr.
+- **Firmen behalten 75 %** ihres Gewinns statt 50 %. Das restliche Viertel geht bei unabhängigen Firmen an den Pool, bei Konzernmitgliedern an den Konzern. Modellrechnung bis „groß“: Stadtfirma etwa 15 statt 33 Jahre, Landfirma etwa 7 statt 16 Jahre.
+- **Fusion:**
+  - Zwei Firmen desselben Typs und derselben Stufe auf einem Planeten werden eine Firma eine Stufe größer. Voraussetzung: Beide haben das Geld für den Ausbau, sind schuldenfrei, und der Ausbau scheitert nur an den Arbeitskräften.
+  - Die reichere Firma bleibt mit ihrer Variante, Gleichstand entscheidet der Zufall. Sie bekommt das Geld beider. Weniger Jobs, ein Distriktplatz wird frei.
+  - Gelenkte und gemischte Wirtschaft können Einspruch erheben (fünf Jahre Pause), die KI nie.
+- **Kauf nur bei besetzten Staatsjobs:** Der Pool kauft einen Landdistrikt nur, wenn dessen Staatsjobs zu mindestens 90 % besetzt sind. Bei Stadt- und Habitatdistrikten gilt das für alle Fachkräftejobs des Planeten.
+- **Bauliste:** Kein Distriktkauf auf einem Planeten, solange dort ein Distrikt in der Bauliste steht. Er könnte den gekauften Distrikt ersetzen, etwa das letzte Farmdistrikt.
+- **Spezialisierungsgebäude der Konzerne:**
+  - Ein Konzern baut auf Planeten mit seinen Firmen die Mineralienaufbereitung, das Energienetz oder die Nahrungsverarbeitung, wenn sich das für die Privatjobs dort in zehn Jahren lohnt. Er nutzt dafür eine vorhandene Spezialisierung oder legt Spezialisierung und Distrikt an.
+  - Lohnt sich nur das Gebäude, kann der Staat den Rest bezahlen.
+  - Der Staat pachtet, was der Konzern bezahlt hat, zehn Jahre lang (Kosten plus 20 %, Budgetzeile). Danach gehört es ihm, oder er löst die Pacht vorher zum Restwert ab.
+  - Der Spieler wird immer gefragt, die KI nimmt an.
+  - Das Gebäude steigert auch den Gewinn der passenden Firmen.
+
 ## Stand 0.44.0
 
 **Bezahlung der Firmen** ([TESTS_0.44.md](docs/TESTS_0.44.md)):
@@ -122,7 +145,8 @@ Die Privatwirtschaft ist ein Kreislauf:
 - **Umzug:** Hat ein Planet keine freien Pops (oder fehlt Wohnraum bzw. fehlen Annehmlichkeiten), ziehen unpassende Firmen samt Arbeitern auf Planeten mit passender Spezialisierung. Die Hauptstadt gibt nur ab, wenn 2/3 ihrer Distriktplätze bebaut sind, oder bei Mangel. Von einem Planeten zieht höchstens alle 3 Jahre eine Firma weg.
 - **Mäzene:** Reiche Privatleute geben überschüssiges Pool-Kapital aus. Es sind durchgehende Figuren mit Ruf. Die Ergebnisse wachsen mit dem Einsatz. Die Events: Galas, Stiftungen, Prototypen, Wohltätigkeit, Anwerbung, Prospektion, Hydroponik, Kunst, Sport, Parteispenden, Kolonisten, Universitäten, Tourismus, Katastrophenhilfe.
 - **Arbeitskräfte-Events:** Bleiben private Arbeiterjobs leer, gibt es Sonderschichten, Gastarbeiter, Maschinen-Leasing, Streiks, Werkswohnungen, Roboter-Startups, eine Landprämie (private Arbeiterjobs schlagen Spezialisten) oder Familienförderung; auch sie wachsen mit dem Einsatz.
-- **Konzerne:** Aus großen Firmen werden benannte Konzerne mit Hauptsitz, Kasse und Vorstand. Sie übernehmen kleinere Firmen, führen Preiskämpfe und fusionieren (mit deiner Genehmigung).
+- **Konzerne:** Aus großen Firmen werden benannte Konzerne mit Hauptsitz, Kasse und Vorstand. Sie übernehmen kleinere Firmen, führen Preiskämpfe und fusionieren (mit deiner Genehmigung). Seit 0.45 bauen sie Spezialisierungsgebäude und verpachten sie uns.
+- **Firmenfusion (0.45):** Fehlen für den Ausbau nur Arbeitskräfte, werden zwei gleiche Firmen eines Planeten zu einer größeren.
 - **Konzern-Stationen:** Konzerne bauen oder kaufen Orbitalstationen (gewöhnliche Rohstoffe, nach Wirtschaftsordnung begrenzt), gehalten von den Private Holdings des Reichs. Sie verarbeiten den Ertrag effizienter (140 %): Davon zahlen sie den Unterhalt ihrer Megastrukturen, liefern uns 120 % des Werts in ihrem eigenen Produkt (Zeile des Hauptsitz-Vorkommens) und behalten 20 % als Marge.
 - **Konzernflotten:** Im Krieg verleasen Industriekonzerne Flotten (5 Jahre, 10 % Gebühr, danach kaufen oder zurückgeben). Gegen Weltraumkreaturen an der Grenze stellen Konzerne Flotten gegen die Beuterechte (bei KI-Reichen startet die Flotte direkt bei den Kreaturen).
 - **Lieferketten:** Private Minen, Fabriken und (bei katalytischer Verarbeitung) Farmen schließen Lieferverträge mit Stahlwerken, Fabriken, Laboren, Handels- und Medienhäusern auf anderen Planeten: +5 % Ertrag der Branche auf beiden Planeten.
@@ -157,8 +181,8 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **In Arbeit: Spezialplaneten.** Habitate (0.30) und Konzern-Habitate (0.31) sind drin; als Nächstes Ringwelten, Ökumenopolen, Arkships und weitere.
 - **Erledigt (0.31): Konzern-Habitat** (im Spiel noch ungetestet, [TESTS_0.31.md](docs/TESTS_0.31.md)). Beschluss war: höchstens eins pro Konzern, gebaut aus seiner Kasse (wir zahlen den Einfluss, so viel wie Vanilla mit unseren Modifikatoren verlangt), eins pro System. Standort: Energie-/Agrarkonzern das System mit den meisten Energievorkommen, Bergbau die meisten Mineralienvorkommen, Wissenschaft die meisten Forschungsvorkommen, Industrie und Handel das System, in dem das Habitat am größten werden kann (die meisten großen Himmelskörper). Rechte: Designation legt der Konzern fest, unbegrenzter Privatanteil (letzter Platz bleibt Staat), alle Firmen dort gehören ihm (neue Mechanik), keine Verstaatlichung oder Räumung, Hauptsitz zieht dorthin, Automatisierung zahlt er, alle seine Kosten dort (Gründung, Wachstum, Automatisierung) 25 % günstiger und aus seiner Kasse. Ausdehnung des Habitats möglichst 0 (Prototyp [TESTS_PROTO_SPRAWL.md](docs/TESTS_PROTO_SPRAWL.md)). Ende bei Krise oder Auflösung: Habitat bleibt uns, Firmen unabhängig; bei Eroberung geht der Konzern mit. Dazu: Bau und Besiedlung wie Vanilla, Planwirtschaft ohne Ausnahme, KI-Reiche ohne Fenster, keine Ausdehnung für Distrikte und Firmen dort.
 - **Erledigt (0.30):** Landfirmen bekommen die Jobs der Spezialisierung ihres Distrikttyps; der letzte Distrikt eines Typs bleibt beim Staat.
-- **Gefunden im Save Hesukaran 7 (2287), Stand 29.10.2026:** Schutzflotte ohne passenden Schiffsentwurf: Ersatzklasse seit 0.34.3. Kredite eines aufgelösten Konzerns: erledigt (Auflösung und Übernahme streichen sie). Rohstoffkonzerne horten Kasse: für später, Verwendung über die Spezialisierungsgebäude. Leere Flotte ohne jeden Entwurf: erledigt (0.44.3).
-- **Gefunden im Save Andari (2235, 29.10.2026): keine Konzerne.** Einen Konzern gründet nur eine Firma der Stufe 3; seit 0.43 starten Firmen klein und wachsen ohne freie Pops nicht. In 35 Jahren entstand in der ganzen Galaxis kein Konzern. Die Gründungsregel muss sich ändern; erst nach einem weiteren Testspiel darüber nachdenken (29.10.2026).
+- **Gefunden im Save Hesukaran 7 (2287), Stand 29.10.2026:** Schutzflotte ohne passenden Schiffsentwurf: Ersatzklasse seit 0.34.3. Kredite eines aufgelösten Konzerns: erledigt (Auflösung und Übernahme streichen sie). Rohstoffkonzerne horten Kasse: für später; eine Verwendung sind seit 0.45 die Spezialisierungsgebäude. Leere Flotte ohne jeden Entwurf: erledigt (0.44.3).
+- **Gefunden im Save Andari (2235, 29.10.2026): keine Konzerne.** Einen Konzern gründet nur eine Firma der Stufe 3; seit 0.43 starten Firmen klein und wachsen ohne freie Pops nicht. In 35 Jahren entstand in der ganzen Galaxis kein Konzern. Nach dem Testspiel Cevantian (2241, 30.10.2026) entschieden: Die Gründungsregel bleibt. Stattdessen sollen mehr Firmen aufsteigen (0.45: höhere Gewinnanteile, 75 % für die Firma, Fusion).
 - **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen.
 - **Volle Lager (27.10.2026):** Rüstungsauftrag und Lagervertrag sind in 0.39 umgesetzt. Verworfen: Modernisierung der Verteidigung und Werftausbau durch Konzerne.
 - **Längere Lieferketten (Supply Chains):** mehrstufige Wertschöpfung zwischen Firmen (Vorprodukte, Zulieferer), gemerkt am 27.10.2026. Aus dem Review: mit begrenzten Abhängigkeiten, also Ausfällen, Ersatzlieferanten und Versorgungssicherheit statt eines dauerhaften Bonus.
@@ -174,14 +198,8 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Noch nie im Spiel getestet:** Konvoischutz, Bergung, Schiffsspenden der Mäzene, Konzern-Automatisierung, Liefervertrag (zwei Jahre), Trümmer und Wiederaufbau, Besatzung und Kollaboration.
 - **Prototyp Hilfsreich:** [docs/TESTS_PROTO_HOLDINGS.md](docs/TESTS_PROTO_HOLDINGS.md) (Konsole `event pe.15` bis `pe.21`).
 - **Weltraum (Ideen):** private Stationen und Kilostrukturen über ein Hilfsreich mit Leasing, Spenden von Schiffen durch Mäzene nach Verlusten, Konzernflotten über ein Hilfsreich, private Werften.
-- **Spezialisierungsgebäude durch Konzerne (Variante C, beschlossen 27.10.2026, Regeln 29.10.2026):** Ein Konzern baut auf einem Planeten mit seinen Firmen das passende Gebäude der Spezialisierung (Mineralienaufbereitung, Energienetz, Nahrungsverarbeitung) aus seiner Kasse. Regeln:
-  - **Lohnen:** nur wenn die Privatwirtschaft auf dem Planeten davon profitiert (Mehrertrag seiner Firmen über etwa zehn Jahre gegen die Kosten; prüfen, ob der Gebäudebonus im Firmengewinn ankommt).
-  - **Passend:** Bergbaugebäude nur in der Bergbauspezialisierung, Energie und Nahrung genauso.
-  - **Platz, drei Stufen:** freier Gebäudeplatz in einer vorhandenen Spezialisierung; sonst bezahlt der Konzern die Spezialisierung mit (dafür muss ein Staatsdistrikt des Typs stehen); sonst auch den Distrikt (dafür muss ein freier Distriktplatz des Typs da sein, einschließlich Vorkommen). Ein Staatsdistrikt ist nicht garantiert: Wer nie einen gebaut hat, hat keinen (der letzte Distrikt bleibt nur beim Staat, wenn es einen gab).
-  - **Technologie:** die des Gebäudes (`tech_mineral_purification_1` usw., schaltet auch den Spezialisierungsplatz frei).
-  - **Pacht (Variante A, gegen das Abwarten):** Es ist das normale Vanilla-Gebäude, alle Jobs profitieren. Der Staat zahlt dem Konzern monatlich Pacht (etwa die Baukosten auf zehn Jahre plus Marge), selbst bauen ist also immer billiger; Rückkauf zum Restwert möglich.
-  - **Nachfrage:** Der Spieler wird immer gefragt, auch unter Laissez-faire (wegen der Pacht). Die KI nimmt automatisch an.
-  - **Voraussetzung:** Es muss Konzerne geben (siehe Fund im Save Andari). Skriptbefehle: `add_zone` (Distrikt, Zone, Platz), `add_building` mit `zone`, `add_district`.
+- **Erledigt (0.45): Spezialisierungsgebäude durch Konzerne** (Regeln 29./30.10.2026, im Spiel noch ungetestet). Pacht als Mietkauf über zehn Jahre in Handel, immer gezahlt. Der Gebäudebonus kommt im Firmengewinn an. Lohnt sich nur das Gebäude, zahlt der Staat auf Wunsch Spezialisierung und Distrikt; die KI tut das, wenn sie die Mineralien hat.
+- **Erledigt (0.45): Sperre bei Distrikten in der Bauliste** (30.10.2026). Offen: Löst ein Ersetzen in der Bauliste `on_district_queued` aus? Das zeigt der nächste Test.
 - **KI in einem neuen Spiel beobachten (27.10.2026):** Vergleich 2301 → 2304 zeigte Fortschritt bei Militär und Firmenzahl, aber kaum mehr Legierungen; Staatsanleihen landen ungenutzt im Handelslager, Gewinnauszahlung bei kleinen KIs nur 21–39 %.
 - **Effizienzbonus der Konzernstationen prüfen (27.10.2026, niedrige Priorität seit 29.10.2026, vorerst bleibt es so):** Stationen erzeugen 140 % des Vanilla-Werts, 120 % gehen an uns, 20 % sind Marge. Damit kostet Privatwirtschaft dort nichts und bringt dem Staat sogar mehr; vermutlich zu stark. Neu kalibrieren, sodass Privatisierung auch bei Stationen einen spürbaren Preis hat.
 - **Erledigt (0.43): Neue Firmenstufen, getrennt von der Spezialisierung** (beschlossen 28.10.2026, im Spiel noch ungetestet).

@@ -626,3 +626,56 @@ d_pe_ledger_auto = {
 		}
 	}
 }
+
+d_pe_ledger_lease = {
+	icon = d_tradestation_interior
+	is_for_colonizable = yes
+	category = pe_deposit_cat_ledger
+	can_be_cleared = { always = no }
+	potential = { always = no }
+	drop_weight = { weight = 0 }
+
+	resources = {
+		category = pe_corp_lease
+		upkeep = {
+			trigger = { planet = { check_variable = { which = pe_lr_b0 value = 1 } } }
+			trade = 0.5
+		}
+		upkeep = {
+			trigger = { planet = { check_variable = { which = pe_lr_b1 value = 1 } } }
+			trade = 1
+		}
+		upkeep = {
+			trigger = { planet = { check_variable = { which = pe_lr_b2 value = 1 } } }
+			trade = 2
+		}
+		upkeep = {
+			trigger = { planet = { check_variable = { which = pe_lr_b3 value = 1 } } }
+			trade = 4
+		}
+		upkeep = {
+			trigger = { planet = { check_variable = { which = pe_lr_b4 value = 1 } } }
+			trade = 8
+		}
+		upkeep = {
+			trigger = { planet = { check_variable = { which = pe_lr_b5 value = 1 } } }
+			trade = 16
+		}
+		upkeep = {
+			trigger = { planet = { check_variable = { which = pe_lr_b6 value = 1 } } }
+			trade = 32
+		}
+		upkeep = {
+			trigger = { planet = { check_variable = { which = pe_lr_b7 value = 1 } } }
+			trade = 64
+		}
+		upkeep = {
+			trigger = { planet = { check_variable = { which = pe_lr_b8 value = 1 } } }
+			trade = 128
+		}
+		upkeep = {
+			trigger = { planet = { check_variable = { which = pe_lr_b9 value = 1 } } }
+			trade = 256
+		}
+	}
+}

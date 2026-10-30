@@ -1,0 +1,50 @@
+# Mergers of two firms (pe_merge_effects.txt, 0.45).
+#   pe.332 Guided and Mixed economy: two firms want to merge; we agree or object.
+namespace = pe
+
+# Scope: country. event_target:pe_mg_planet = the planet; its pe_mg_fa / pe_mg_fb = the firms.
+country_event = {
+	id = pe.332
+	title = pe.332.name
+	desc = pe.332.desc
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+	location = event_target:pe_mg_planet
+
+	option = {
+		name = pe.332.a
+		custom_tooltip = pe.332.a.tt
+		hidden_effect = {
+			event_target:pe_mg_planet = {
+				pe_merge_mark = yes
+				if = {
+					limit = { root = { check_variable = { which = pe_mg_found value = 1 } } }
+					pe_merge_apply = yes
+					pe_firm_change = yes
+				}
+				else = { log = "private_economy: merger on \\[This.GetName] no longer possible" }
+				root = { set_variable = { which = pe_mg_now value = 0 } }
+			}
+			remove_country_flag = pe_mg_offer
+		}
+	}
+	option = {
+		name = pe.332.b
+		custom_tooltip = pe.332.b.tt
+		hidden_effect = {
+			event_target:pe_mg_planet = {
+				every_deposit = {
+					limit = {
+						has_deposit_category = pe_deposit_cat_firms
+						OR = {
+							check_variable = { which = pe_fid value = prev.pe_mg_fa }
+							check_variable = { which = pe_fid value = prev.pe_mg_fb }
+						}
+					}
+					set_variable = { which = pe_mg_veto value = 20 }
+				}
+			}
+			remove_country_flag = pe_mg_offer
+		}
+	}
+}

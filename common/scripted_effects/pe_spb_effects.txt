@@ -1,0 +1,784 @@
+# Specialisation buildings of corporations (0.45). A corporation with a firm of a rural type on a
+# planet builds the matching building of the specialisation there (mineral purification plant,
+# energy grid, food processing facility), with the same technology the state needs:
+#   1 into a zone of the type with a free building slot,
+#   2 else into the state's district of the type, adding the zone (1000 minerals),
+#   3 else onto a free district slot of the type, adding the district (300 minerals) and zone.
+# Worth it: what the private jobs of the type here make more in ten years (+0.5 per job and
+# month, at shadow prices) covers the building. If it also covers the zone and district, the
+# corporation pays everything; if not, the state may pay them (the player is asked, an AI
+# empire pays when it has the minerals). The corporation pays from its cash (minerals at
+# their shadow price) and leases what it paid to the state: its cost plus 20% over 120 months
+# (budget line, d_pe_ledger_lease), then the building is ours; the planet decision Pay Off
+# Lease ends it earlier at its remaining value. Its corporation dissolved, the building gone or
+# the planet lost: the lease ends. The player is always asked (pe.333, also under
+# Laissez-faire, because of the lease); AI empires accept. One building per empire and
+# quarter; not on habitats or other special planets.
+# A building of the type also adds its bonus to the value added of the firms here
+# (pe_spb_va), so it shows in their profit.
+# Call depths: pe_quarterly (1) -> pe_spb_step (2) -> pe_spb_eval_<t> (3), pe_spb_build (3)
+#   -> pe_corp_msg (4); pe.100 -> pe_spb_month (1) -> pe_spb_month_<t> (2) -> pe_corp_msg (3),
+#   pe_ledger_bits (2); pe_firm_accounting (3) -> pe_spb_va (4); pe.131 -> pe_spb_clear (1);
+#   decision -> pe_spb_bb_calc (1); pe.333 -> pe_spb_build (1); pe.334 -> pe_spb_bb_pay (1).
+
+# Country scope, quarterly.
+pe_spb_step = {
+	if = {
+		limit = {
+			NOT = { has_country_flag = pe_spb_offer }
+			NOT = { has_policy_flag = pe_order_planned }
+			OR = {
+				check_variable = { which = pe_c1_on value = 1 }
+				check_variable = { which = pe_c2_on value = 1 }
+				check_variable = { which = pe_c3_on value = 1 }
+				check_variable = { which = pe_c4_on value = 1 }
+				check_variable = { which = pe_c5_on value = 1 }
+				check_variable = { which = pe_c6_on value = 1 }
+				check_variable = { which = pe_c7_on value = 1 }
+				check_variable = { which = pe_c8_on value = 1 }
+			}
+		}
+		set_variable = { which = pe_spb_best value = -1 }
+		set_variable = { which = pe_spb_t value = 0 }
+		set_variable = { which = pe_spb_pick value = 0 }
+		export_resource_stockpile_to_variable = { resource = minerals variable = pe_spb_min }
+		every_owned_colony = {
+			limit = {
+				uses_district_set = standard
+				NOT = { has_modifier = pe_warzone }
+				count_deposits = { category = pe_deposit_cat_firms count > 0 }
+			}
+			pe_spb_eval_m = yes
+			pe_spb_eval_e = yes
+			pe_spb_eval_f = yes
+		}
+		if = {
+			limit = { check_variable = { which = pe_spb_t value > 0 } }
+			# The lease and the corporation's name for the offer (pe_spb_build checks again).
+			set_variable = { which = pe_spb_rent value = pe_spb_cc }
+			multiply_variable = { which = pe_spb_rent value = 0.02 }
+			ceiling_variable = pe_spb_rent
+			multiply_variable = { which = pe_spb_rent value = 0.5 }
+			if = {
+				limit = { is_ai = yes }
+				event_target:pe_spb_planet = { pe_spb_build = yes }
+			}
+			else = {
+				set_timed_country_flag = { flag = pe_spb_offer days = 360 }
+				country_event = { id = pe.333 }
+			}
+		}
+	}
+}
+
+# Colony scope (root = owner): the building_mineral_purification_plant here. The empire's best candidate goes to
+# root.pe_spb_* (pe_spb_t = 1) and event_target:pe_spb_planet.
+pe_spb_eval_m = {
+	if = {
+		limit = {
+			owner = { has_technology = tech_mineral_purification_1 }
+			NOT = { OR = { has_building = building_mineral_purification_plant has_building = building_mineral_purification_hub } }
+			NOT = { has_building_construction = building_mineral_purification_plant }
+			NOT = { has_building_construction = building_mineral_purification_hub }
+			NOT = { has_planet_flag = pe_spb_no_m }
+			any_deposit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_cls value = 2 } check_variable = { which = pe_corp value > 0 } }
+		}
+		# Private workforce with the building's job here (pe_wf_miner, set by the accounts).
+		root = { set_variable = { which = pe_spb_wf value = 0 } set_variable = { which = pe_spb_lc value = 0 } }
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_wf_miner value > 0 } }
+			root = { change_variable = { which = pe_spb_wf value = prev.pe_wf_miner } }
+		}
+		# Where it would go (see the top of this file).
+		if = { limit = { OR = { num_zones = { type = zone_minerals value > 0 } num_zones = { type = zone_betharian value > 0 } num_zones = { type = zone_rare_crystals value > 0 } num_zones = { type = zone_minerals_physics value > 0 } } free_building_slots > 0 } root = { set_variable = { which = pe_spb_lc value = 1 } } }
+		else_if = { limit = { NOR = { num_zones = { type = zone_minerals value > 0 } num_zones = { type = zone_betharian value > 0 } num_zones = { type = zone_rare_crystals value > 0 } num_zones = { type = zone_minerals_physics value > 0 } } num_districts = { type = district_mining value > 0 } } root = { set_variable = { which = pe_spb_lc value = 2 } } }
+		else_if = { limit = { num_districts = { type = district_mining value < 1 } num_free_districts = { type = district_mining value > 0 } } root = { set_variable = { which = pe_spb_lc value = 3 } } }
+		# The corporation: one with a firm of the type here, the one with the most cash.
+		root = { set_variable = { which = pe_spb_kc value = -1 } set_variable = { which = pe_spb_kx value = 0 } }
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_cls value = 2 } check_variable = { which = pe_corp value > 0 } }
+			if = { limit = { check_variable = { which = pe_corp value = 1 } root = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c1_cash } set_variable = { which = pe_spb_kx value = 1 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 2 } root = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c2_cash } set_variable = { which = pe_spb_kx value = 2 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 3 } root = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c3_cash } set_variable = { which = pe_spb_kx value = 3 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 4 } root = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c4_cash } set_variable = { which = pe_spb_kx value = 4 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 5 } root = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c5_cash } set_variable = { which = pe_spb_kx value = 5 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 6 } root = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c6_cash } set_variable = { which = pe_spb_kx value = 6 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 7 } root = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c7_cash } set_variable = { which = pe_spb_kx value = 7 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 8 } root = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c8_cash } set_variable = { which = pe_spb_kx value = 8 } } }
+		}
+		root = {
+			# Ten years of the extra output (+0.5 per job of 100 workforce and month) against the
+			# costs, all at shadow prices: building (pe_spb_xb), zone and district (pe_spb_xr,
+			# in minerals pe_spb_xm).
+			set_variable = { which = pe_spb_v value = pe_spb_wf }
+			multiply_variable = { which = pe_spb_v value = 0.6 }
+			multiply_variable = { which = pe_spb_v value = pe_s_minerals }
+			set_variable = { which = pe_spb_xb value = 200 }
+			multiply_variable = { which = pe_spb_xb value = pe_s_minerals }
+			set_variable = { which = pe_spb_xm value = 0 }
+			if = { limit = { check_variable = { which = pe_spb_lc value >= 2 } } change_variable = { which = pe_spb_xm value = 1000 } }
+			if = { limit = { check_variable = { which = pe_spb_lc value = 3 } } change_variable = { which = pe_spb_xm value = 300 } }
+			set_variable = { which = pe_spb_xr value = pe_spb_xm }
+			multiply_variable = { which = pe_spb_xr value = pe_s_minerals }
+			set_variable = { which = pe_spb_xt value = pe_spb_xb }
+			change_variable = { which = pe_spb_xt value = pe_spb_xr }
+			# 1 the corporation pays all, 2 the building only (the state pays the rest).
+			set_variable = { which = pe_spb_md value = 0 }
+			if = {
+				limit = { check_variable = { which = pe_spb_lc value > 0 } check_variable = { which = pe_spb_kx value > 0 } }
+				if = {
+					limit = { check_variable = { which = pe_spb_v value >= pe_spb_xt } check_variable = { which = pe_spb_kc value >= pe_spb_xt } }
+					set_variable = { which = pe_spb_md value = 1 }
+					set_variable = { which = pe_spb_xc value = pe_spb_xt }
+				}
+				else_if = {
+					limit = { check_variable = { which = pe_spb_v value >= pe_spb_xb } check_variable = { which = pe_spb_kc value >= pe_spb_xb } }
+					set_variable = { which = pe_spb_md value = 2 }
+					set_variable = { which = pe_spb_xc value = pe_spb_xb }
+					# An AI empire pays the rest only from minerals it has.
+					if = { limit = { is_ai = yes check_variable = { which = pe_spb_min value < pe_spb_xm } } set_variable = { which = pe_spb_md value = 0 } }
+				}
+			}
+			if = {
+				limit = { check_variable = { which = pe_spb_md value > 0 } }
+				set_variable = { which = pe_tmp value = pe_spb_v }
+				subtract_variable = { which = pe_tmp value = pe_spb_xc }
+				if = {
+					limit = { check_variable = { which = pe_tmp value > pe_spb_best } }
+					set_variable = { which = pe_spb_best value = pe_tmp }
+					set_variable = { which = pe_spb_t value = 1 }
+					set_variable = { which = pe_spb_lv value = pe_spb_lc }
+					set_variable = { which = pe_spb_mode value = pe_spb_md }
+					set_variable = { which = pe_spb_k value = pe_spb_kx }
+					set_variable = { which = pe_spb_cc value = pe_spb_xc }
+					set_variable = { which = pe_spb_rest value = 0 }
+					if = { limit = { check_variable = { which = pe_spb_md value = 2 } } set_variable = { which = pe_spb_rest value = pe_spb_xm } }
+					set_variable = { which = pe_spb_pick value = 1 }
+				}
+			}
+		}
+		if = {
+			limit = { root = { check_variable = { which = pe_spb_pick value = 1 } } }
+			save_event_target_as = pe_spb_planet
+			root = { set_variable = { which = pe_spb_pick value = 0 } }
+		}
+	}
+}
+
+# Colony scope (root = owner): the building_energy_grid here. The empire's best candidate goes to
+# root.pe_spb_* (pe_spb_t = 2) and event_target:pe_spb_planet.
+pe_spb_eval_e = {
+	if = {
+		limit = {
+			owner = { has_technology = tech_power_hub_1 }
+			NOT = { OR = { has_building = building_energy_grid has_building = building_energy_nexus } }
+			NOT = { has_building_construction = building_energy_grid }
+			NOT = { has_building_construction = building_energy_nexus }
+			NOT = { has_planet_flag = pe_spb_no_e }
+			any_deposit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_cls value = 3 } check_variable = { which = pe_corp value > 0 } }
+		}
+		# Private workforce with the building's job here (pe_wf_technician, set by the accounts).
+		root = { set_variable = { which = pe_spb_wf value = 0 } set_variable = { which = pe_spb_lc value = 0 } }
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_wf_technician value > 0 } }
+			root = { change_variable = { which = pe_spb_wf value = prev.pe_wf_technician } }
+		}
+		# Where it would go (see the top of this file).
+		if = { limit = { OR = { num_zones = { type = zone_energy value > 0 } num_zones = { type = zone_volatile_motes value > 0 } } free_building_slots > 0 } root = { set_variable = { which = pe_spb_lc value = 1 } } }
+		else_if = { limit = { NOR = { num_zones = { type = zone_energy value > 0 } num_zones = { type = zone_volatile_motes value > 0 } } num_districts = { type = district_generator value > 0 } } root = { set_variable = { which = pe_spb_lc value = 2 } } }
+		else_if = { limit = { num_districts = { type = district_generator value < 1 } num_free_districts = { type = district_generator value > 0 } } root = { set_variable = { which = pe_spb_lc value = 3 } } }
+		# The corporation: one with a firm of the type here, the one with the most cash.
+		root = { set_variable = { which = pe_spb_kc value = -1 } set_variable = { which = pe_spb_kx value = 0 } }
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_cls value = 3 } check_variable = { which = pe_corp value > 0 } }
+			if = { limit = { check_variable = { which = pe_corp value = 1 } root = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c1_cash } set_variable = { which = pe_spb_kx value = 1 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 2 } root = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c2_cash } set_variable = { which = pe_spb_kx value = 2 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 3 } root = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c3_cash } set_variable = { which = pe_spb_kx value = 3 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 4 } root = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c4_cash } set_variable = { which = pe_spb_kx value = 4 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 5 } root = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c5_cash } set_variable = { which = pe_spb_kx value = 5 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 6 } root = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c6_cash } set_variable = { which = pe_spb_kx value = 6 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 7 } root = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c7_cash } set_variable = { which = pe_spb_kx value = 7 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 8 } root = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c8_cash } set_variable = { which = pe_spb_kx value = 8 } } }
+		}
+		root = {
+			# Ten years of the extra output (+0.5 per job of 100 workforce and month) against the
+			# costs, all at shadow prices: building (pe_spb_xb), zone and district (pe_spb_xr,
+			# in minerals pe_spb_xm).
+			set_variable = { which = pe_spb_v value = pe_spb_wf }
+			multiply_variable = { which = pe_spb_v value = 0.6 }
+			multiply_variable = { which = pe_spb_v value = pe_s_energy }
+			set_variable = { which = pe_spb_xb value = 400 }
+			multiply_variable = { which = pe_spb_xb value = pe_s_minerals }
+			set_variable = { which = pe_spb_xm value = 0 }
+			if = { limit = { check_variable = { which = pe_spb_lc value >= 2 } } change_variable = { which = pe_spb_xm value = 1000 } }
+			if = { limit = { check_variable = { which = pe_spb_lc value = 3 } } change_variable = { which = pe_spb_xm value = 300 } }
+			set_variable = { which = pe_spb_xr value = pe_spb_xm }
+			multiply_variable = { which = pe_spb_xr value = pe_s_minerals }
+			set_variable = { which = pe_spb_xt value = pe_spb_xb }
+			change_variable = { which = pe_spb_xt value = pe_spb_xr }
+			# 1 the corporation pays all, 2 the building only (the state pays the rest).
+			set_variable = { which = pe_spb_md value = 0 }
+			if = {
+				limit = { check_variable = { which = pe_spb_lc value > 0 } check_variable = { which = pe_spb_kx value > 0 } }
+				if = {
+					limit = { check_variable = { which = pe_spb_v value >= pe_spb_xt } check_variable = { which = pe_spb_kc value >= pe_spb_xt } }
+					set_variable = { which = pe_spb_md value = 1 }
+					set_variable = { which = pe_spb_xc value = pe_spb_xt }
+				}
+				else_if = {
+					limit = { check_variable = { which = pe_spb_v value >= pe_spb_xb } check_variable = { which = pe_spb_kc value >= pe_spb_xb } }
+					set_variable = { which = pe_spb_md value = 2 }
+					set_variable = { which = pe_spb_xc value = pe_spb_xb }
+					# An AI empire pays the rest only from minerals it has.
+					if = { limit = { is_ai = yes check_variable = { which = pe_spb_min value < pe_spb_xm } } set_variable = { which = pe_spb_md value = 0 } }
+				}
+			}
+			if = {
+				limit = { check_variable = { which = pe_spb_md value > 0 } }
+				set_variable = { which = pe_tmp value = pe_spb_v }
+				subtract_variable = { which = pe_tmp value = pe_spb_xc }
+				if = {
+					limit = { check_variable = { which = pe_tmp value > pe_spb_best } }
+					set_variable = { which = pe_spb_best value = pe_tmp }
+					set_variable = { which = pe_spb_t value = 2 }
+					set_variable = { which = pe_spb_lv value = pe_spb_lc }
+					set_variable = { which = pe_spb_mode value = pe_spb_md }
+					set_variable = { which = pe_spb_k value = pe_spb_kx }
+					set_variable = { which = pe_spb_cc value = pe_spb_xc }
+					set_variable = { which = pe_spb_rest value = 0 }
+					if = { limit = { check_variable = { which = pe_spb_md value = 2 } } set_variable = { which = pe_spb_rest value = pe_spb_xm } }
+					set_variable = { which = pe_spb_pick value = 1 }
+				}
+			}
+		}
+		if = {
+			limit = { root = { check_variable = { which = pe_spb_pick value = 1 } } }
+			save_event_target_as = pe_spb_planet
+			root = { set_variable = { which = pe_spb_pick value = 0 } }
+		}
+	}
+}
+
+# Colony scope (root = owner): the building_food_processing_facility here. The empire's best candidate goes to
+# root.pe_spb_* (pe_spb_t = 3) and event_target:pe_spb_planet.
+pe_spb_eval_f = {
+	if = {
+		limit = {
+			owner = { has_technology = tech_food_processing_1 }
+			NOT = { OR = { has_building = building_food_processing_facility has_building = building_food_processing_center } }
+			NOT = { has_building_construction = building_food_processing_facility }
+			NOT = { has_building_construction = building_food_processing_center }
+			NOT = { has_planet_flag = pe_spb_no_f }
+			any_deposit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_cls value = 4 } check_variable = { which = pe_corp value > 0 } }
+		}
+		# Private workforce with the building's job here (pe_wf_farmer, set by the accounts).
+		root = { set_variable = { which = pe_spb_wf value = 0 } set_variable = { which = pe_spb_lc value = 0 } }
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_wf_farmer value > 0 } }
+			root = { change_variable = { which = pe_spb_wf value = prev.pe_wf_farmer } }
+		}
+		# Where it would go (see the top of this file).
+		if = { limit = { OR = { num_zones = { type = zone_food value > 0 } num_zones = { type = zone_exotic_gases value > 0 } num_zones = { type = zone_anglers value > 0 } num_zones = { type = zone_agrarian_anglers value > 0 } } free_building_slots > 0 } root = { set_variable = { which = pe_spb_lc value = 1 } } }
+		else_if = { limit = { NOR = { num_zones = { type = zone_food value > 0 } num_zones = { type = zone_exotic_gases value > 0 } num_zones = { type = zone_anglers value > 0 } num_zones = { type = zone_agrarian_anglers value > 0 } } num_districts = { type = district_farming value > 0 } } root = { set_variable = { which = pe_spb_lc value = 2 } } }
+		else_if = { limit = { num_districts = { type = district_farming value < 1 } num_free_districts = { type = district_farming value > 0 } } root = { set_variable = { which = pe_spb_lc value = 3 } } }
+		# The corporation: one with a firm of the type here, the one with the most cash.
+		root = { set_variable = { which = pe_spb_kc value = -1 } set_variable = { which = pe_spb_kx value = 0 } }
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_cls value = 4 } check_variable = { which = pe_corp value > 0 } }
+			if = { limit = { check_variable = { which = pe_corp value = 1 } root = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c1_cash } set_variable = { which = pe_spb_kx value = 1 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 2 } root = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c2_cash } set_variable = { which = pe_spb_kx value = 2 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 3 } root = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c3_cash } set_variable = { which = pe_spb_kx value = 3 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 4 } root = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c4_cash } set_variable = { which = pe_spb_kx value = 4 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 5 } root = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c5_cash } set_variable = { which = pe_spb_kx value = 5 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 6 } root = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c6_cash } set_variable = { which = pe_spb_kx value = 6 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 7 } root = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c7_cash } set_variable = { which = pe_spb_kx value = 7 } } }
+			if = { limit = { check_variable = { which = pe_corp value = 8 } root = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c8_cash } set_variable = { which = pe_spb_kx value = 8 } } }
+		}
+		root = {
+			# Ten years of the extra output (+0.5 per job of 100 workforce and month) against the
+			# costs, all at shadow prices: building (pe_spb_xb), zone and district (pe_spb_xr,
+			# in minerals pe_spb_xm).
+			set_variable = { which = pe_spb_v value = pe_spb_wf }
+			multiply_variable = { which = pe_spb_v value = 0.6 }
+			multiply_variable = { which = pe_spb_v value = pe_s_food }
+			set_variable = { which = pe_spb_xb value = 400 }
+			multiply_variable = { which = pe_spb_xb value = pe_s_minerals }
+			set_variable = { which = pe_spb_xm value = 0 }
+			if = { limit = { check_variable = { which = pe_spb_lc value >= 2 } } change_variable = { which = pe_spb_xm value = 1000 } }
+			if = { limit = { check_variable = { which = pe_spb_lc value = 3 } } change_variable = { which = pe_spb_xm value = 300 } }
+			set_variable = { which = pe_spb_xr value = pe_spb_xm }
+			multiply_variable = { which = pe_spb_xr value = pe_s_minerals }
+			set_variable = { which = pe_spb_xt value = pe_spb_xb }
+			change_variable = { which = pe_spb_xt value = pe_spb_xr }
+			# 1 the corporation pays all, 2 the building only (the state pays the rest).
+			set_variable = { which = pe_spb_md value = 0 }
+			if = {
+				limit = { check_variable = { which = pe_spb_lc value > 0 } check_variable = { which = pe_spb_kx value > 0 } }
+				if = {
+					limit = { check_variable = { which = pe_spb_v value >= pe_spb_xt } check_variable = { which = pe_spb_kc value >= pe_spb_xt } }
+					set_variable = { which = pe_spb_md value = 1 }
+					set_variable = { which = pe_spb_xc value = pe_spb_xt }
+				}
+				else_if = {
+					limit = { check_variable = { which = pe_spb_v value >= pe_spb_xb } check_variable = { which = pe_spb_kc value >= pe_spb_xb } }
+					set_variable = { which = pe_spb_md value = 2 }
+					set_variable = { which = pe_spb_xc value = pe_spb_xb }
+					# An AI empire pays the rest only from minerals it has.
+					if = { limit = { is_ai = yes check_variable = { which = pe_spb_min value < pe_spb_xm } } set_variable = { which = pe_spb_md value = 0 } }
+				}
+			}
+			if = {
+				limit = { check_variable = { which = pe_spb_md value > 0 } }
+				set_variable = { which = pe_tmp value = pe_spb_v }
+				subtract_variable = { which = pe_tmp value = pe_spb_xc }
+				if = {
+					limit = { check_variable = { which = pe_tmp value > pe_spb_best } }
+					set_variable = { which = pe_spb_best value = pe_tmp }
+					set_variable = { which = pe_spb_t value = 3 }
+					set_variable = { which = pe_spb_lv value = pe_spb_lc }
+					set_variable = { which = pe_spb_mode value = pe_spb_md }
+					set_variable = { which = pe_spb_k value = pe_spb_kx }
+					set_variable = { which = pe_spb_cc value = pe_spb_xc }
+					set_variable = { which = pe_spb_rest value = 0 }
+					if = { limit = { check_variable = { which = pe_spb_md value = 2 } } set_variable = { which = pe_spb_rest value = pe_spb_xm } }
+					set_variable = { which = pe_spb_pick value = 1 }
+				}
+			}
+		}
+		if = {
+			limit = { root = { check_variable = { which = pe_spb_pick value = 1 } } }
+			save_event_target_as = pe_spb_planet
+			root = { set_variable = { which = pe_spb_pick value = 0 } }
+		}
+	}
+}
+
+# Colony scope (event_target:pe_spb_planet; root = owner, root.pe_spb_* from pe_spb_step): the
+# corporation builds. It pays only if the building stands afterwards (a placement the engine
+# refuses is logged, and the planet waits five years for this type).
+pe_spb_build = {
+	root = {
+		set_variable = { which = pe_spb_ok value = 0 }
+		set_variable = { which = pe_spb_name value = 0 }
+		# The corporation must still exist and afford its part.
+		if = { limit = { check_variable = { which = pe_spb_k value = 1 } check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_cash value >= pe_spb_cc } } set_variable = { which = pe_spb_name value = pe_c1_name } }
+		else_if = { limit = { check_variable = { which = pe_spb_k value = 2 } check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_cash value >= pe_spb_cc } } set_variable = { which = pe_spb_name value = pe_c2_name } }
+		else_if = { limit = { check_variable = { which = pe_spb_k value = 3 } check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_cash value >= pe_spb_cc } } set_variable = { which = pe_spb_name value = pe_c3_name } }
+		else_if = { limit = { check_variable = { which = pe_spb_k value = 4 } check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_cash value >= pe_spb_cc } } set_variable = { which = pe_spb_name value = pe_c4_name } }
+		else_if = { limit = { check_variable = { which = pe_spb_k value = 5 } check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_cash value >= pe_spb_cc } } set_variable = { which = pe_spb_name value = pe_c5_name } }
+		else_if = { limit = { check_variable = { which = pe_spb_k value = 6 } check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value >= pe_spb_cc } } set_variable = { which = pe_spb_name value = pe_c6_name } }
+		else_if = { limit = { check_variable = { which = pe_spb_k value = 7 } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value >= pe_spb_cc } } set_variable = { which = pe_spb_name value = pe_c7_name } }
+		else_if = { limit = { check_variable = { which = pe_spb_k value = 8 } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value >= pe_spb_cc } } set_variable = { which = pe_spb_name value = pe_c8_name } }
+		# The lease: its part plus 20% over 120 months, rounded up to 0.5 a month.
+		set_variable = { which = pe_spb_rent value = pe_spb_cc }
+		multiply_variable = { which = pe_spb_rent value = 0.02 }
+		ceiling_variable = pe_spb_rent
+		multiply_variable = { which = pe_spb_rent value = 0.5 }
+	}
+	if = {
+		limit = { root = { check_variable = { which = pe_spb_name value > 0 } } }
+		if = {
+			limit = { root = { check_variable = { which = pe_spb_t value = 1 } } }
+			if = {
+				limit = { NOT = { OR = { has_building = building_mineral_purification_plant has_building = building_mineral_purification_hub } } }
+				if = { limit = { root = { check_variable = { which = pe_spb_lv value = 3 } } num_districts = { type = district_mining value < 1 } num_free_districts = { type = district_mining value > 0 } } add_district = district_mining }
+				if = { limit = { root = { check_variable = { which = pe_spb_lv value >= 2 } } num_districts = { type = district_mining value > 0 } NOR = { num_zones = { type = zone_minerals value > 0 } num_zones = { type = zone_betharian value > 0 } num_zones = { type = zone_rare_crystals value > 0 } num_zones = { type = zone_minerals_physics value > 0 } } } add_zone = { district = district_mining zone = zone_minerals zone_slot = 0 } }
+					if = { limit = { num_zones = { type = zone_minerals value > 0 } } add_building = { zone = zone_minerals building = building_mineral_purification_plant } }
+					else_if = { limit = { num_zones = { type = zone_betharian value > 0 } } add_building = { zone = zone_betharian building = building_mineral_purification_plant } }
+					else_if = { limit = { num_zones = { type = zone_rare_crystals value > 0 } } add_building = { zone = zone_rare_crystals building = building_mineral_purification_plant } }
+					else_if = { limit = { num_zones = { type = zone_minerals_physics value > 0 } } add_building = { zone = zone_minerals_physics building = building_mineral_purification_plant } }
+				if = { limit = { has_building = building_mineral_purification_plant } root = { set_variable = { which = pe_spb_ok value = 1 } } }
+				else = { set_timed_planet_flag = { flag = pe_spb_no_m days = 1800 } }
+			}
+			if = {
+				limit = { root = { check_variable = { which = pe_spb_ok value = 1 } } }
+				set_variable = { which = pe_spb_m_k value = root.pe_spb_k }
+				set_variable = { which = pe_spb_m_n value = root.pe_spb_name }
+				set_variable = { which = pe_spb_m_m value = 120 }
+				set_variable = { which = pe_spb_m_r value = root.pe_spb_rent }
+				set_variable = { which = pe_spb_m_c value = root.pe_spb_cc }
+			}
+		}
+		else_if = {
+			limit = { root = { check_variable = { which = pe_spb_t value = 2 } } }
+			if = {
+				limit = { NOT = { OR = { has_building = building_energy_grid has_building = building_energy_nexus } } }
+				if = { limit = { root = { check_variable = { which = pe_spb_lv value = 3 } } num_districts = { type = district_generator value < 1 } num_free_districts = { type = district_generator value > 0 } } add_district = district_generator }
+				if = { limit = { root = { check_variable = { which = pe_spb_lv value >= 2 } } num_districts = { type = district_generator value > 0 } NOR = { num_zones = { type = zone_energy value > 0 } num_zones = { type = zone_volatile_motes value > 0 } } } add_zone = { district = district_generator zone = zone_energy zone_slot = 0 } }
+					if = { limit = { num_zones = { type = zone_energy value > 0 } } add_building = { zone = zone_energy building = building_energy_grid } }
+					else_if = { limit = { num_zones = { type = zone_volatile_motes value > 0 } } add_building = { zone = zone_volatile_motes building = building_energy_grid } }
+				if = { limit = { has_building = building_energy_grid } root = { set_variable = { which = pe_spb_ok value = 1 } } }
+				else = { set_timed_planet_flag = { flag = pe_spb_no_e days = 1800 } }
+			}
+			if = {
+				limit = { root = { check_variable = { which = pe_spb_ok value = 1 } } }
+				set_variable = { which = pe_spb_e_k value = root.pe_spb_k }
+				set_variable = { which = pe_spb_e_n value = root.pe_spb_name }
+				set_variable = { which = pe_spb_e_m value = 120 }
+				set_variable = { which = pe_spb_e_r value = root.pe_spb_rent }
+				set_variable = { which = pe_spb_e_c value = root.pe_spb_cc }
+			}
+		}
+		else_if = {
+			limit = { root = { check_variable = { which = pe_spb_t value = 3 } } }
+			if = {
+				limit = { NOT = { OR = { has_building = building_food_processing_facility has_building = building_food_processing_center } } }
+				if = { limit = { root = { check_variable = { which = pe_spb_lv value = 3 } } num_districts = { type = district_farming value < 1 } num_free_districts = { type = district_farming value > 0 } } add_district = district_farming }
+				if = { limit = { root = { check_variable = { which = pe_spb_lv value >= 2 } } num_districts = { type = district_farming value > 0 } NOR = { num_zones = { type = zone_food value > 0 } num_zones = { type = zone_exotic_gases value > 0 } num_zones = { type = zone_anglers value > 0 } num_zones = { type = zone_agrarian_anglers value > 0 } } } add_zone = { district = district_farming zone = zone_food zone_slot = 0 } }
+					if = { limit = { num_zones = { type = zone_food value > 0 } } add_building = { zone = zone_food building = building_food_processing_facility } }
+					else_if = { limit = { num_zones = { type = zone_exotic_gases value > 0 } } add_building = { zone = zone_exotic_gases building = building_food_processing_facility } }
+					else_if = { limit = { num_zones = { type = zone_anglers value > 0 } } add_building = { zone = zone_anglers building = building_food_processing_facility } }
+					else_if = { limit = { num_zones = { type = zone_agrarian_anglers value > 0 } } add_building = { zone = zone_agrarian_anglers building = building_food_processing_facility } }
+				if = { limit = { has_building = building_food_processing_facility } root = { set_variable = { which = pe_spb_ok value = 1 } } }
+				else = { set_timed_planet_flag = { flag = pe_spb_no_f days = 1800 } }
+			}
+			if = {
+				limit = { root = { check_variable = { which = pe_spb_ok value = 1 } } }
+				set_variable = { which = pe_spb_f_k value = root.pe_spb_k }
+				set_variable = { which = pe_spb_f_n value = root.pe_spb_name }
+				set_variable = { which = pe_spb_f_m value = 120 }
+				set_variable = { which = pe_spb_f_r value = root.pe_spb_rent }
+				set_variable = { which = pe_spb_f_c value = root.pe_spb_cc }
+			}
+		}
+	}
+	save_event_target_as = pe_msg_planet
+	if = {
+		limit = { root = { check_variable = { which = pe_spb_ok value = 1 } } }
+		set_planet_flag = pe_spb_lease
+		root = {
+			if = { limit = { check_variable = { which = pe_spb_k value = 1 } } subtract_variable = { which = pe_c1_cash value = pe_spb_cc } }
+			if = { limit = { check_variable = { which = pe_spb_k value = 2 } } subtract_variable = { which = pe_c2_cash value = pe_spb_cc } }
+			if = { limit = { check_variable = { which = pe_spb_k value = 3 } } subtract_variable = { which = pe_c3_cash value = pe_spb_cc } }
+			if = { limit = { check_variable = { which = pe_spb_k value = 4 } } subtract_variable = { which = pe_c4_cash value = pe_spb_cc } }
+			if = { limit = { check_variable = { which = pe_spb_k value = 5 } } subtract_variable = { which = pe_c5_cash value = pe_spb_cc } }
+			if = { limit = { check_variable = { which = pe_spb_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_spb_cc } }
+			if = { limit = { check_variable = { which = pe_spb_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_spb_cc } }
+			if = { limit = { check_variable = { which = pe_spb_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_spb_cc } }
+			if = { limit = { check_variable = { which = pe_spb_mode value = 2 } } add_resource = { minerals = -1 mult = pe_spb_rest } }
+			set_variable = { which = pe_msg_name value = pe_spb_name }
+			set_variable = { which = pe_lg_a value = pe_spb_t }
+			set_variable = { which = pe_lg_b value = pe_spb_lv }
+			log = "private_economy: corporate specialisation building, type \\[This.pe_lg_a] placement \\[This.pe_lg_b], on \\[pe_msg_planet.GetName], lease \\[This.pe_spb_rent] a month"
+			if = {
+				limit = { is_ai = no }
+				if = { limit = { NOT = { has_country_flag = pe_mute_corporations } } pe_corp_msg = { KEY = pe_msg_spb_built CATEGORY = corporations } }
+			}
+		}
+	}
+	else = {
+		root = {
+			set_variable = { which = pe_lg_a value = pe_spb_t }
+			log = "private_economy: corporate specialisation building, type \\[This.pe_lg_a], on \\[pe_msg_planet.GetName] not built (corporation gone or short of cash, or placement refused)"
+		}
+	}
+}
+
+# Country scope, monthly: the leases. The corporation gets its rent; the state pays it through
+# the budget line (d_pe_ledger_lease, bits pe_lr_b<i>).
+pe_spb_month = {
+	every_owned_colony = {
+		limit = { has_planet_flag = pe_spb_lease }
+		root = { set_variable = { which = pe_lv value = 0 } set_variable = { which = pe_spb_sum value = 0 } }
+		pe_spb_month_m = yes
+		pe_spb_month_e = yes
+		pe_spb_month_f = yes
+		pe_ledger_bits = { V = lr }
+		if = {
+			limit = { root = { check_variable = { which = pe_spb_sum value > 0 } } }
+			if = { limit = { NOT = { has_deposit = d_pe_ledger_lease } } add_deposit = d_pe_ledger_lease }
+		}
+		else = {
+			if = { limit = { has_deposit = d_pe_ledger_lease } remove_deposit = d_pe_ledger_lease }
+			remove_planet_flag = pe_spb_lease
+		}
+	}
+}
+
+# Colony scope (root = owner): the lease of the building_mineral_purification_plant here.
+pe_spb_month_m = {
+	if = {
+		limit = { check_variable = { which = pe_spb_m_m value > 0 } }
+		save_event_target_as = pe_msg_planet
+		root = {
+			set_variable = { which = pe_spb_alive value = 0 }
+			set_variable = { which = pe_msg_name value = prev.pe_spb_m_n }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 1 } } check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_name value = prev.pe_spb_m_n } } set_variable = { which = pe_spb_alive value = 1 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 2 } } check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_name value = prev.pe_spb_m_n } } set_variable = { which = pe_spb_alive value = 2 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 3 } } check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_name value = prev.pe_spb_m_n } } set_variable = { which = pe_spb_alive value = 3 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 4 } } check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_name value = prev.pe_spb_m_n } } set_variable = { which = pe_spb_alive value = 4 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 5 } } check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_name value = prev.pe_spb_m_n } } set_variable = { which = pe_spb_alive value = 5 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 6 } } check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_name value = prev.pe_spb_m_n } } set_variable = { which = pe_spb_alive value = 6 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 7 } } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_name value = prev.pe_spb_m_n } } set_variable = { which = pe_spb_alive value = 7 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 8 } } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_name value = prev.pe_spb_m_n } } set_variable = { which = pe_spb_alive value = 8 } }
+		}
+		if = {
+			limit = { OR = { NOT = { OR = { has_building = building_mineral_purification_plant has_building = building_mineral_purification_hub } } root = { check_variable = { which = pe_spb_alive value = 0 } } } }
+			set_variable = { which = pe_spb_m_m value = 0 }
+			root = {
+				if = {
+					limit = { is_ai = no }
+					if = { limit = { NOT = { has_country_flag = pe_mute_corporations } } pe_corp_msg = { KEY = pe_msg_spb_end CATEGORY = corporations } }
+				}
+			}
+		}
+		else = {
+			root = {
+				if = { limit = { check_variable = { which = pe_spb_alive value = 1 } } change_variable = { which = pe_c1_cash value = prev.pe_spb_m_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 2 } } change_variable = { which = pe_c2_cash value = prev.pe_spb_m_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 3 } } change_variable = { which = pe_c3_cash value = prev.pe_spb_m_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 4 } } change_variable = { which = pe_c4_cash value = prev.pe_spb_m_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 5 } } change_variable = { which = pe_c5_cash value = prev.pe_spb_m_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 6 } } change_variable = { which = pe_c6_cash value = prev.pe_spb_m_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 7 } } change_variable = { which = pe_c7_cash value = prev.pe_spb_m_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 8 } } change_variable = { which = pe_c8_cash value = prev.pe_spb_m_r } }
+				change_variable = { which = pe_lv value = prev.pe_spb_m_r }
+				change_variable = { which = pe_spb_sum value = prev.pe_spb_m_r }
+			}
+			change_variable = { which = pe_spb_m_m value = -1 }
+			if = {
+				limit = { check_variable = { which = pe_spb_m_m value <= 0 } }
+				root = {
+					if = {
+						limit = { is_ai = no }
+						if = { limit = { NOT = { has_country_flag = pe_mute_corporations } } pe_corp_msg = { KEY = pe_msg_spb_paid CATEGORY = corporations } }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Colony scope (root = owner): the lease of the building_energy_grid here.
+pe_spb_month_e = {
+	if = {
+		limit = { check_variable = { which = pe_spb_e_m value > 0 } }
+		save_event_target_as = pe_msg_planet
+		root = {
+			set_variable = { which = pe_spb_alive value = 0 }
+			set_variable = { which = pe_msg_name value = prev.pe_spb_e_n }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 1 } } check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_name value = prev.pe_spb_e_n } } set_variable = { which = pe_spb_alive value = 1 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 2 } } check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_name value = prev.pe_spb_e_n } } set_variable = { which = pe_spb_alive value = 2 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 3 } } check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_name value = prev.pe_spb_e_n } } set_variable = { which = pe_spb_alive value = 3 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 4 } } check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_name value = prev.pe_spb_e_n } } set_variable = { which = pe_spb_alive value = 4 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 5 } } check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_name value = prev.pe_spb_e_n } } set_variable = { which = pe_spb_alive value = 5 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 6 } } check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_name value = prev.pe_spb_e_n } } set_variable = { which = pe_spb_alive value = 6 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 7 } } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_name value = prev.pe_spb_e_n } } set_variable = { which = pe_spb_alive value = 7 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 8 } } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_name value = prev.pe_spb_e_n } } set_variable = { which = pe_spb_alive value = 8 } }
+		}
+		if = {
+			limit = { OR = { NOT = { OR = { has_building = building_energy_grid has_building = building_energy_nexus } } root = { check_variable = { which = pe_spb_alive value = 0 } } } }
+			set_variable = { which = pe_spb_e_m value = 0 }
+			root = {
+				if = {
+					limit = { is_ai = no }
+					if = { limit = { NOT = { has_country_flag = pe_mute_corporations } } pe_corp_msg = { KEY = pe_msg_spb_end CATEGORY = corporations } }
+				}
+			}
+		}
+		else = {
+			root = {
+				if = { limit = { check_variable = { which = pe_spb_alive value = 1 } } change_variable = { which = pe_c1_cash value = prev.pe_spb_e_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 2 } } change_variable = { which = pe_c2_cash value = prev.pe_spb_e_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 3 } } change_variable = { which = pe_c3_cash value = prev.pe_spb_e_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 4 } } change_variable = { which = pe_c4_cash value = prev.pe_spb_e_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 5 } } change_variable = { which = pe_c5_cash value = prev.pe_spb_e_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 6 } } change_variable = { which = pe_c6_cash value = prev.pe_spb_e_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 7 } } change_variable = { which = pe_c7_cash value = prev.pe_spb_e_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 8 } } change_variable = { which = pe_c8_cash value = prev.pe_spb_e_r } }
+				change_variable = { which = pe_lv value = prev.pe_spb_e_r }
+				change_variable = { which = pe_spb_sum value = prev.pe_spb_e_r }
+			}
+			change_variable = { which = pe_spb_e_m value = -1 }
+			if = {
+				limit = { check_variable = { which = pe_spb_e_m value <= 0 } }
+				root = {
+					if = {
+						limit = { is_ai = no }
+						if = { limit = { NOT = { has_country_flag = pe_mute_corporations } } pe_corp_msg = { KEY = pe_msg_spb_paid CATEGORY = corporations } }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Colony scope (root = owner): the lease of the building_food_processing_facility here.
+pe_spb_month_f = {
+	if = {
+		limit = { check_variable = { which = pe_spb_f_m value > 0 } }
+		save_event_target_as = pe_msg_planet
+		root = {
+			set_variable = { which = pe_spb_alive value = 0 }
+			set_variable = { which = pe_msg_name value = prev.pe_spb_f_n }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 1 } } check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_name value = prev.pe_spb_f_n } } set_variable = { which = pe_spb_alive value = 1 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 2 } } check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_name value = prev.pe_spb_f_n } } set_variable = { which = pe_spb_alive value = 2 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 3 } } check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_name value = prev.pe_spb_f_n } } set_variable = { which = pe_spb_alive value = 3 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 4 } } check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_name value = prev.pe_spb_f_n } } set_variable = { which = pe_spb_alive value = 4 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 5 } } check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_name value = prev.pe_spb_f_n } } set_variable = { which = pe_spb_alive value = 5 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 6 } } check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_name value = prev.pe_spb_f_n } } set_variable = { which = pe_spb_alive value = 6 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 7 } } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_name value = prev.pe_spb_f_n } } set_variable = { which = pe_spb_alive value = 7 } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 8 } } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_name value = prev.pe_spb_f_n } } set_variable = { which = pe_spb_alive value = 8 } }
+		}
+		if = {
+			limit = { OR = { NOT = { OR = { has_building = building_food_processing_facility has_building = building_food_processing_center } } root = { check_variable = { which = pe_spb_alive value = 0 } } } }
+			set_variable = { which = pe_spb_f_m value = 0 }
+			root = {
+				if = {
+					limit = { is_ai = no }
+					if = { limit = { NOT = { has_country_flag = pe_mute_corporations } } pe_corp_msg = { KEY = pe_msg_spb_end CATEGORY = corporations } }
+				}
+			}
+		}
+		else = {
+			root = {
+				if = { limit = { check_variable = { which = pe_spb_alive value = 1 } } change_variable = { which = pe_c1_cash value = prev.pe_spb_f_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 2 } } change_variable = { which = pe_c2_cash value = prev.pe_spb_f_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 3 } } change_variable = { which = pe_c3_cash value = prev.pe_spb_f_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 4 } } change_variable = { which = pe_c4_cash value = prev.pe_spb_f_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 5 } } change_variable = { which = pe_c5_cash value = prev.pe_spb_f_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 6 } } change_variable = { which = pe_c6_cash value = prev.pe_spb_f_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 7 } } change_variable = { which = pe_c7_cash value = prev.pe_spb_f_r } }
+				if = { limit = { check_variable = { which = pe_spb_alive value = 8 } } change_variable = { which = pe_c8_cash value = prev.pe_spb_f_r } }
+				change_variable = { which = pe_lv value = prev.pe_spb_f_r }
+				change_variable = { which = pe_spb_sum value = prev.pe_spb_f_r }
+			}
+			change_variable = { which = pe_spb_f_m value = -1 }
+			if = {
+				limit = { check_variable = { which = pe_spb_f_m value <= 0 } }
+				root = {
+					if = {
+						limit = { is_ai = no }
+						if = { limit = { NOT = { has_country_flag = pe_mute_corporations } } pe_corp_msg = { KEY = pe_msg_spb_paid CATEGORY = corporations } }
+					}
+				}
+			}
+		}
+	}
+}
+
+# Deposit scope (pe_firm_accounting, after pe_deposit_fetch): a specialisation building of the
+# firm's worker job here adds +0.5 per job of 100 workforce and month to its value added at
+# stage "normal" (pe_wf_<job>), at shadow prices.
+pe_spb_va = {
+	if = {
+		limit = { check_variable = { which = pe_wf_miner value > 0 } planet = { OR = { has_building = building_mineral_purification_plant has_building = building_mineral_purification_hub } } }
+		set_variable = { which = pe_tmp value = pe_wf_miner }
+		multiply_variable = { which = pe_tmp value = 0.005 }
+		multiply_variable = { which = pe_tmp value = root.pe_s_minerals }
+		change_variable = { which = pe_va value = pe_tmp }
+	}
+	if = {
+		limit = { check_variable = { which = pe_wf_technician value > 0 } planet = { OR = { has_building = building_energy_grid has_building = building_energy_nexus } } }
+		set_variable = { which = pe_tmp value = pe_wf_technician }
+		multiply_variable = { which = pe_tmp value = 0.005 }
+		multiply_variable = { which = pe_tmp value = root.pe_s_energy }
+		change_variable = { which = pe_va value = pe_tmp }
+	}
+	if = {
+		limit = { check_variable = { which = pe_wf_farmer value > 0 } planet = { OR = { has_building = building_food_processing_facility has_building = building_food_processing_center } } }
+		set_variable = { which = pe_tmp value = pe_wf_farmer }
+		multiply_variable = { which = pe_tmp value = 0.005 }
+		multiply_variable = { which = pe_tmp value = root.pe_s_food }
+		change_variable = { which = pe_va value = pe_tmp }
+	}
+}
+
+# Colony scope: the planet changed hands (pe.131); its leases end.
+pe_spb_clear = {
+	set_variable = { which = pe_spb_m_m value = 0 }
+	set_variable = { which = pe_spb_e_m value = 0 }
+	set_variable = { which = pe_spb_f_m value = 0 }
+	if = { limit = { has_deposit = d_pe_ledger_lease } remove_deposit = d_pe_ledger_lease }
+	remove_planet_flag = pe_spb_lease
+}
+
+# Colony scope (decision Pay Off Lease): what is left of the leases here, cost x months left /
+# 120 -> the owner's pe_spb_bb, rounded up; pe_spb_bb_ok = 1 if we have that much trade.
+pe_spb_bb_calc = {
+	owner = { set_variable = { which = pe_spb_bb value = 0 } }
+	if = {
+		limit = { check_variable = { which = pe_spb_m_m value > 0 } }
+		set_variable = { which = pe_tmp value = pe_spb_m_c }
+		multiply_variable = { which = pe_tmp value = pe_spb_m_m }
+		divide_variable = { which = pe_tmp value = 120 }
+		owner = { change_variable = { which = pe_spb_bb value = prev.pe_tmp } }
+	}
+	if = {
+		limit = { check_variable = { which = pe_spb_e_m value > 0 } }
+		set_variable = { which = pe_tmp value = pe_spb_e_c }
+		multiply_variable = { which = pe_tmp value = pe_spb_e_m }
+		divide_variable = { which = pe_tmp value = 120 }
+		owner = { change_variable = { which = pe_spb_bb value = prev.pe_tmp } }
+	}
+	if = {
+		limit = { check_variable = { which = pe_spb_f_m value > 0 } }
+		set_variable = { which = pe_tmp value = pe_spb_f_c }
+		multiply_variable = { which = pe_tmp value = pe_spb_f_m }
+		divide_variable = { which = pe_tmp value = 120 }
+		owner = { change_variable = { which = pe_spb_bb value = prev.pe_tmp } }
+	}
+	owner = {
+		ceiling_variable = pe_spb_bb
+		set_variable = { which = pe_spb_bb_ok value = 0 }
+		export_resource_stockpile_to_variable = { resource = trade variable = pe_tmp }
+		if = { limit = { check_variable = { which = pe_tmp value >= pe_spb_bb } } set_variable = { which = pe_spb_bb_ok value = 1 } }
+	}
+}
+
+# Colony scope (event pe.334; root = owner): pay off the leases here. Each corporation gets the
+# remaining value of its building; the leases end (the budget line goes next month).
+pe_spb_bb_pay = {
+	if = {
+		limit = { check_variable = { which = pe_spb_m_m value > 0 } }
+		set_variable = { which = pe_tmp value = pe_spb_m_c }
+		multiply_variable = { which = pe_tmp value = pe_spb_m_m }
+		divide_variable = { which = pe_tmp value = 120 }
+		root = {
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 1 } } check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_name value = prev.pe_spb_m_n } } change_variable = { which = pe_c1_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 2 } } check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_name value = prev.pe_spb_m_n } } change_variable = { which = pe_c2_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 3 } } check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_name value = prev.pe_spb_m_n } } change_variable = { which = pe_c3_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 4 } } check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_name value = prev.pe_spb_m_n } } change_variable = { which = pe_c4_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 5 } } check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_name value = prev.pe_spb_m_n } } change_variable = { which = pe_c5_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 6 } } check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_name value = prev.pe_spb_m_n } } change_variable = { which = pe_c6_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 7 } } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_name value = prev.pe_spb_m_n } } change_variable = { which = pe_c7_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_m_k value = 8 } } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_name value = prev.pe_spb_m_n } } change_variable = { which = pe_c8_cash value = prev.pe_tmp } }
+		}
+		set_variable = { which = pe_spb_m_m value = 0 }
+	}
+	if = {
+		limit = { check_variable = { which = pe_spb_e_m value > 0 } }
+		set_variable = { which = pe_tmp value = pe_spb_e_c }
+		multiply_variable = { which = pe_tmp value = pe_spb_e_m }
+		divide_variable = { which = pe_tmp value = 120 }
+		root = {
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 1 } } check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_name value = prev.pe_spb_e_n } } change_variable = { which = pe_c1_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 2 } } check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_name value = prev.pe_spb_e_n } } change_variable = { which = pe_c2_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 3 } } check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_name value = prev.pe_spb_e_n } } change_variable = { which = pe_c3_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 4 } } check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_name value = prev.pe_spb_e_n } } change_variable = { which = pe_c4_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 5 } } check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_name value = prev.pe_spb_e_n } } change_variable = { which = pe_c5_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 6 } } check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_name value = prev.pe_spb_e_n } } change_variable = { which = pe_c6_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 7 } } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_name value = prev.pe_spb_e_n } } change_variable = { which = pe_c7_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_e_k value = 8 } } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_name value = prev.pe_spb_e_n } } change_variable = { which = pe_c8_cash value = prev.pe_tmp } }
+		}
+		set_variable = { which = pe_spb_e_m value = 0 }
+	}
+	if = {
+		limit = { check_variable = { which = pe_spb_f_m value > 0 } }
+		set_variable = { which = pe_tmp value = pe_spb_f_c }
+		multiply_variable = { which = pe_tmp value = pe_spb_f_m }
+		divide_variable = { which = pe_tmp value = 120 }
+		root = {
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 1 } } check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_name value = prev.pe_spb_f_n } } change_variable = { which = pe_c1_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 2 } } check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_name value = prev.pe_spb_f_n } } change_variable = { which = pe_c2_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 3 } } check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_name value = prev.pe_spb_f_n } } change_variable = { which = pe_c3_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 4 } } check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_name value = prev.pe_spb_f_n } } change_variable = { which = pe_c4_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 5 } } check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_name value = prev.pe_spb_f_n } } change_variable = { which = pe_c5_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 6 } } check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_name value = prev.pe_spb_f_n } } change_variable = { which = pe_c6_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 7 } } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_name value = prev.pe_spb_f_n } } change_variable = { which = pe_c7_cash value = prev.pe_tmp } }
+			if = { limit = { prev = { check_variable = { which = pe_spb_f_k value = 8 } } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_name value = prev.pe_spb_f_n } } change_variable = { which = pe_c8_cash value = prev.pe_tmp } }
+		}
+		set_variable = { which = pe_spb_f_m value = 0 }
+	}
+	root = { add_resource = { trade = -1 mult = pe_spb_bb } }
+}

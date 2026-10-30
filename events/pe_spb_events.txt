@@ -1,0 +1,100 @@
+# Specialisation buildings of corporations (pe_spb_effects.txt, 0.45).
+#   pe.333 a corporation offers to build one (always asked, because of the lease)
+#   pe.334 pay off the leases of a planet (planet decision Pay Off Lease)
+namespace = pe
+
+# Scope: country, root.pe_spb_* from pe_spb_step; event_target:pe_spb_planet = the planet.
+country_event = {
+	id = pe.333
+	title = pe.333.name
+	desc = { trigger = { check_variable = { which = pe_spb_mode value = 1 } } text = pe.333.desc.all }
+	desc = { trigger = { check_variable = { which = pe_spb_mode value = 2 } } text = pe.333.desc.rest }
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+	location = event_target:pe_spb_planet
+
+	immediate = {
+		hidden_effect = {
+			if = { limit = { check_variable = { which = pe_spb_k value = 1 } } set_variable = { which = pe_cn333 value = pe_c1_name } }
+			else_if = { limit = { check_variable = { which = pe_spb_k value = 2 } } set_variable = { which = pe_cn333 value = pe_c2_name } }
+			else_if = { limit = { check_variable = { which = pe_spb_k value = 3 } } set_variable = { which = pe_cn333 value = pe_c3_name } }
+			else_if = { limit = { check_variable = { which = pe_spb_k value = 4 } } set_variable = { which = pe_cn333 value = pe_c4_name } }
+			else_if = { limit = { check_variable = { which = pe_spb_k value = 5 } } set_variable = { which = pe_cn333 value = pe_c5_name } }
+			else_if = { limit = { check_variable = { which = pe_spb_k value = 6 } } set_variable = { which = pe_cn333 value = pe_c6_name } }
+			else_if = { limit = { check_variable = { which = pe_spb_k value = 7 } } set_variable = { which = pe_cn333 value = pe_c7_name } }
+			else_if = { limit = { check_variable = { which = pe_spb_k value = 8 } } set_variable = { which = pe_cn333 value = pe_c8_name } }
+		}
+	}
+
+	# The corporation pays everything.
+	option = {
+		name = pe.333.a
+		trigger = { check_variable = { which = pe_spb_mode value = 1 } }
+		custom_tooltip = pe.333.a.tt
+		hidden_effect = {
+			event_target:pe_spb_planet = { pe_spb_build = yes }
+			remove_country_flag = pe_spb_offer
+		}
+	}
+	# The corporation pays the building, we the specialisation (and the district).
+	option = {
+		name = pe.333.c
+		trigger = {
+			check_variable = { which = pe_spb_mode value = 2 }
+			check_variable = { which = pe_spb_lv value = 2 }
+			has_resource = { type = minerals amount >= 1000 }
+		}
+		custom_tooltip = pe.333.c.tt
+		hidden_effect = {
+			event_target:pe_spb_planet = { pe_spb_build = yes }
+			remove_country_flag = pe_spb_offer
+		}
+	}
+	option = {
+		name = pe.333.d
+		trigger = {
+			check_variable = { which = pe_spb_mode value = 2 }
+			check_variable = { which = pe_spb_lv value = 3 }
+			has_resource = { type = minerals amount >= 1300 }
+		}
+		custom_tooltip = pe.333.d.tt
+		hidden_effect = {
+			event_target:pe_spb_planet = { pe_spb_build = yes }
+			remove_country_flag = pe_spb_offer
+		}
+	}
+	# Refused: this planet waits five years for this type.
+	option = {
+		name = pe.333.b
+		custom_tooltip = pe.333.b.tt
+		hidden_effect = {
+			event_target:pe_spb_planet = {
+				if = { limit = { root = { check_variable = { which = pe_spb_t value = 1 } } } set_timed_planet_flag = { flag = pe_spb_no_m days = 1800 } }
+				else_if = { limit = { root = { check_variable = { which = pe_spb_t value = 2 } } } set_timed_planet_flag = { flag = pe_spb_no_e days = 1800 } }
+				else_if = { limit = { root = { check_variable = { which = pe_spb_t value = 3 } } } set_timed_planet_flag = { flag = pe_spb_no_f days = 1800 } }
+			}
+			remove_country_flag = pe_spb_offer
+		}
+	}
+}
+
+# Scope: country; event_target:pe_spb_bb_planet = the planet, pe_spb_bb = what is left of its
+# leases, pe_spb_bb_ok = 1 if we have that much trade (pe_spb_bb_calc).
+country_event = {
+	id = pe.334
+	title = pe.334.name
+	desc = pe.334.desc
+	picture = GFX_evt_tradedeal
+	is_triggered_only = yes
+	location = event_target:pe_spb_bb_planet
+
+	option = {
+		name = pe.334.a
+		trigger = { check_variable = { which = pe_spb_bb_ok value = 1 } }
+		custom_tooltip = pe.334.a.tt
+		hidden_effect = { event_target:pe_spb_bb_planet = { pe_spb_bb_pay = yes } }
+	}
+	option = {
+		name = pe.334.b
+	}
+}

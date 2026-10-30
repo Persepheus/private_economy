@@ -59,3 +59,20 @@ on_tech_increased = {
 	}
 }
 
+# District construction queue (0.45): no district purchase on a colony while a district is
+# queued there (it may replace the one the investors would buy; pe_build_events.txt).
+on_district_queued = {
+	events = {
+		pe.329
+	}
+}
+on_district_unqueued = {
+	events = {
+		pe.330
+	}
+}
+on_district_complete = {
+	events = {
+		pe.331
+	}
+}

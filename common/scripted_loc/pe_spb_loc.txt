@@ -1,0 +1,31 @@
+# Specialisation buildings of corporations (pe.333, 0.45; country scope).
+defined_text = {
+	name = GetPeSpbBuilding
+	text = {
+		trigger = { check_variable = { which = pe_spb_t value = 1 } }
+		localization_key = pe_spb_b_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_spb_t value = 2 } }
+		localization_key = pe_spb_b_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_spb_t value = 3 } }
+		localization_key = pe_spb_b_3
+	}
+}
+defined_text = {
+	name = GetPeSpbPlace
+	text = {
+		trigger = { check_variable = { which = pe_spb_lv value = 1 } }
+		localization_key = pe_spb_place_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_spb_lv value = 2 } }
+		localization_key = pe_spb_place_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_spb_lv value = 3 } }
+		localization_key = pe_spb_place_3
+	}
+}

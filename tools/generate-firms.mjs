@@ -98,6 +98,9 @@ const MARKET_RES = ['alloys', 'consumer_goods', 'trade', 'minerals', 'energy', '
 // economy still costs the state something.
 const PRIVATE_TRADE = 0.5, PRIVATE_WAGE = 0.1;
 const jobTexts = readDir('common/pop_jobs');
+
+// Vanilla specialist jobs: a bought city district takes jobs of its zones, all specialists (0.45).
+const SPECIALIST_JOBS = [...new Set(jobTexts.flatMap(t => [...t.matchAll(/^(\w+) = \{/gm)].filter(m => /^\tcategory = specialist\b/m.test(blockAt(t, t.indexOf('{', m.index)))).map(m => m[1])))].sort();
 // Vanilla job texts, to name the private swap variants after them.
 const vanillaLoc = {};
 for (const lang of ['english', 'german']) {
@@ -492,6 +495,9 @@ pe_supply_deal = {
 pe_auto_refund = {
 	use_for_ai_budget = no
 }
+pe_corp_lease = {
+	use_for_ai_budget = no
+}
 `);
 // A supply deal (pe.260): a private firm delivers good X every month for two years and takes
 // good Y; on the capital, amounts as bits (pe_dlxa_b<i>, pe_dlya_b<i>), goods pe_dlx / pe_dly.
@@ -520,7 +526,7 @@ ${DEAL_RES.flatMap((r, ri) => LEDGER_BITS.map((b, i) => `		upkeep = {
 `;
 write('common/deposits/pe_ledger_deposits.txt', header + `# Ledgers of the private economy: what the state pays each month, as trade upkeep (see
 # pe_ledgers), and the supply deal with a private firm. No district slot.
-` + dealDeposit + [['d_pe_ledger_profit', 'pe_private_profits', 'lp', 'upkeep', 'trade'], ['d_pe_ledger_savings', 'pe_private_savings', 'ls', 'upkeep', 'trade'], ['d_pe_ledger_dividend', 'pe_private_dividends', 'ld', 'produces', 'trade'], ['d_pe_ledger_auto', 'pe_auto_refund', 'la', 'produces', 'energy']].map(([key, cat, v, kind, res]) => `
+` + dealDeposit + [['d_pe_ledger_profit', 'pe_private_profits', 'lp', 'upkeep', 'trade'], ['d_pe_ledger_savings', 'pe_private_savings', 'ls', 'upkeep', 'trade'], ['d_pe_ledger_dividend', 'pe_private_dividends', 'ld', 'produces', 'trade'], ['d_pe_ledger_auto', 'pe_auto_refund', 'la', 'produces', 'energy'], ['d_pe_ledger_lease', 'pe_corp_lease', 'lr', 'upkeep', 'trade']].map(([key, cat, v, kind, res]) => `
 ${key} = {
 	icon = d_tradestation_interior
 	is_for_colonizable = yes
@@ -838,6 +844,27 @@ const buyCall = v => {
   return `${safety.buy(v.code)} if = { limit = { ${HAB} } pe_buyout_execute = { FIRM = ${v.key} CODE = ${v.code} DISTRICT = ${hd} RES = alloys MINERALS = ${ha} TRADE = ${ht} PRICE = ${ha * 4 + ht} } } else = { pe_buyout_execute = { FIRM = ${v.key} CODE = ${v.code} DISTRICT = ${v.district} RES = minerals MINERALS = ${m} TRADE = ${t} PRICE = ${m + t} } }`;
 };
 eff += `
+# Colony scope (0.45): are the state jobs a bought district brings at least 90% filled here?
+# root.pe_bst_<class> = 1 if so (pe_consider_variant, MODE = buy). Rural districts: their
+# worker job. City and habitat housing districts: their zones' jobs are specialists of
+# several kinds, so all vanilla specialist jobs here together (${SPECIALIST_JOBS.length} jobs; private
+# jobs are separate jobs and do not count). Deprioritised jobs do not count as free.
+pe_buy_staffing = {
+${[['m', 'miner'], ['e', 'technician'], ['f', 'farmer']].map(([c, j]) => `	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = ${j} } variable = pe_bs_a }
+	export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = ${j} } variable = pe_bs_f }
+	multiply_variable = { which = pe_bs_f value = 9 }
+	if = { limit = { check_variable = { which = pe_bs_a value >= pe_bs_f } } root = { set_variable = { which = pe_bst_${c} value = 1 } } }
+	else = { root = { set_variable = { which = pe_bst_${c} value = 0 } } }`).join('\n')}
+	set_variable = { which = pe_bs_a value = 0 }
+	set_variable = { which = pe_bs_f value = 0 }
+${SPECIALIST_JOBS.map(j => `	export_trigger_value_to_variable = { trigger = num_assigned_jobs parameters = { job = ${j} } variable = pe_tmp } change_variable = { which = pe_bs_a value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = free_jobs_of_type parameters = { job = ${j} } variable = pe_tmp } change_variable = { which = pe_bs_f value = pe_tmp }`).join('\n')}
+	multiply_variable = { which = pe_bs_f value = 9 }
+	if = { limit = { check_variable = { which = pe_bs_a value >= pe_bs_f } } root = { set_variable = { which = pe_bst_u value = 1 } } }
+	else = { root = { set_variable = { which = pe_bst_u value = 0 } } }
+}
+`;
+eff += `
 # Colony scope: buy a state district. Human empires on Free Market get an offer (one per
 # quarter); AI empires and Laissez-faire buy directly.
 pe_buy_or_offer = {
@@ -956,7 +983,7 @@ pe_firm_change = {
 		root = { set_variable = { which = pe_pend_any value = 0 } }
 		save_event_target_as = pe_msg_planet
 ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = ${p.v.code} } check_variable = { which = pe_chg_stage value = ${p.s} } }`, p => [
-  p.s < 3 ? `if = { limit = { ${rootIs('pe_chg_type', 1)} } add_deposit = ${keyOf(p.v, p.s + 1)} ${initFirm(p.v.code, p.s + 1, 'root.pe_chg_fcap', 'root.pe_chg_debt')} ${msg(`pe_msg_up_${keyOf(p.v, p.s + 1)}`)} }` : '',
+  p.s < 3 ? `if = { limit = { ${rootIs('pe_chg_type', 1)} } add_deposit = ${keyOf(p.v, p.s + 1)} ${initFirm(p.v.code, p.s + 1, 'root.pe_chg_fcap', 'root.pe_chg_debt')} if = { limit = { NOT = { ${rootIs('pe_mg_now', 1)} } } ${msg(`pe_msg_up_${keyOf(p.v, p.s + 1)}`)} } }` : '',
   p.s > 0 ? `if = { limit = { ${rootIs('pe_chg_type', 2)} } add_deposit = ${keyOf(p.v, p.s - 1)} ${initFirm(p.v.code, p.s - 1, 'root.pe_chg_fcap', 'root.pe_chg_debt')} ${msg(`pe_msg_down_${keyOf(p.v, p.s - 1)}`)} }` : '',
   p.s === 0 ? `if = { limit = { ${rootIs('pe_chg_type', 3)} NOT = { ${rootIs('pe_chg_bomb', 1)} } } ${msg(`pe_msg_bankrupt_${p.key}`)} }` : '',
 ].filter(Boolean).join(' '), '\t\t')}
@@ -1364,12 +1391,14 @@ loc.german.push(' pe_msg_site_cancel:0 "Investoren haben eine Baustelle auf $PLA
 loc.english.push(' pe_private_dividends:0 "Dividends"', ' d_pe_ledger_dividend:0 "State Shareholdings"', ' d_pe_ledger_dividend_desc:0 "Shares the state bought in private corporations; they pay dividends every month."');
 loc.german.push(' pe_private_dividends:0 "Dividenden"', ' d_pe_ledger_dividend:0 "Staatliche Aktienbeteiligungen"', ' d_pe_ledger_dividend_desc:0 "Aktien, die der Staat an Privatkonzernen hält; sie zahlen monatlich Dividende."');
 loc.english.push(' pe_auto_refund:0 "Private Automation (Firms\' Refund)"', ' d_pe_ledger_auto:0 "Refund for Private Automation"', ' d_pe_ledger_auto_desc:0 "The private firms pay the energy the automation of their jobs costs us (the line Automated Workforce) back to us every month, from their own capital."');
+loc.english.push(' pe_corp_lease:0 "Lease of Corporate Buildings"', ' d_pe_ledger_lease:0 "Lease of Corporate Buildings"', ' d_pe_ledger_lease_desc:0 "A corporation built a specialisation building here (with its specialisation or district, if it paid for them). We lease it for ten years: the cost plus a 20% margin, spread over 120 months. Then it is ours; the planet decision Pay Off Lease ends it earlier at its remaining value."');
+loc.german.push(' pe_corp_lease:0 "Pacht für Konzerngebäude"', ' d_pe_ledger_lease:0 "Pacht für Konzerngebäude"', ' d_pe_ledger_lease_desc:0 "Ein Konzern hat hier ein Spezialisierungsgebäude gebaut (mit Spezialisierung oder Distrikt, wenn er sie bezahlt hat). Wir pachten es zehn Jahre: die Kosten plus 20 % Marge, verteilt auf 120 Monate. Danach gehört es uns; die Planetenentscheidung Pacht ablösen beendet sie früher zum Restwert."');
 loc.german.push(' pe_auto_refund:0 "Private Automatisierung (Erstattung der Firmen)"', ' d_pe_ledger_auto:0 "Erstattung Private Automatisierung"', ' d_pe_ledger_auto_desc:0 "Die Privatfirmen erstatten uns jeden Monat die Energie, die die Automatisierung ihrer Jobs uns kostet (Zeile Automatisierte Arbeitskraft), aus ihrem eigenen Kapital."');
 loc.english.push(' pe_private_profits:0 "Profit Payouts to Private Firms"', ' pe_private_savings:0 "Private Savings"',
-  ' d_pe_ledger_profit:0 "Profit Payout to Private Firms"', ' d_pe_ledger_profit_desc:0 "§HAn expense of the state.§! The private firms on this planet deliver everything they produce to the empire, just like state jobs. In return the state pays them their profit share every month, in trade: a part of the value their jobs create, by economic order (Guided 7.5%, Mixed 10%, Free Market 12.5%, Laissez-faire 17.5%), minus their running costs. With it the firms grow and new ones are founded.\\n\\nProfits and savings together cost at most a share of the net trade income we would have without them: 60% of the first 100 a month, 70% of the next 200, 85% of everything above. So they never turn our trade balance negative, and a rich trade economy invests more. What the state does not pay, the firms do not get either."',
+  ' d_pe_ledger_profit:0 "Profit Payout to Private Firms"', ' d_pe_ledger_profit_desc:0 "§HAn expense of the state.§! The private firms on this planet deliver everything they produce to the empire, just like state jobs. In return the state pays them their profit share every month, in trade: a part of the value their jobs create, by economic order (Guided 10%, Mixed 15%, Free Market 20%, Laissez-faire 25%), minus their running costs. With it the firms grow and new ones are founded.\\n\\nProfits and savings together cost at most a share of the net trade income we would have without them: 60% of the first 100 a month, 70% of the next 200, 85% of everything above. So they never turn our trade balance negative, and a rich trade economy invests more. What the state does not pay, the firms do not get either."',
   ' d_pe_ledger_savings:0 "Private Savings"', ' d_pe_ledger_savings_desc:0 "§HAn expense of the state.§! Every month a part of our trade income flows into the investor pool as private savings, by economic order (Guided 5%, Mixed 10%, Free Market 15%, Laissez-faire 20%). From the pool investors found new firms and buy state districts."');
 loc.german.push(' pe_private_profits:0 "Gewinnauszahlung an Privatfirmen"', ' pe_private_savings:0 "Private Ersparnisse"',
-  ' d_pe_ledger_profit:0 "Gewinnauszahlung an Privatfirmen"', ' d_pe_ledger_profit_desc:0 "§HEine Ausgabe des Staates.§! Die Privatfirmen auf diesem Planeten liefern ihre ganze Produktion an das Reich, genau wie Staatsjobs. Dafür zahlt der Staat ihnen jeden Monat ihren Gewinnanteil in Handel: einen Teil des Werts, den ihre Jobs schaffen, je nach Wirtschaftsordnung (Gelenkt 7,5 %, Gemischt 10 %, Freie Marktwirtschaft 12,5 %, Laissez-faire 17,5 %), abzüglich ihrer laufenden Kosten. Davon wachsen die Firmen, und neue werden gegründet.\\n\\nGewinne und Ersparnisse zusammen kosten höchstens einen Anteil des Netto-Handels, den wir ohne sie hätten: 60 % der ersten 100 im Monat, 70 % der nächsten 200, 85 % von allem darüber. So drücken sie unsere Handelsbilanz nie ins Minus, und eine reiche Handelswirtschaft investiert mehr. Was der Staat nicht zahlt, bekommen die Firmen auch nicht."',
+  ' d_pe_ledger_profit:0 "Gewinnauszahlung an Privatfirmen"', ' d_pe_ledger_profit_desc:0 "§HEine Ausgabe des Staates.§! Die Privatfirmen auf diesem Planeten liefern ihre ganze Produktion an das Reich, genau wie Staatsjobs. Dafür zahlt der Staat ihnen jeden Monat ihren Gewinnanteil in Handel: einen Teil des Werts, den ihre Jobs schaffen, je nach Wirtschaftsordnung (Gelenkt 10 %, Gemischt 15 %, Freie Marktwirtschaft 20 %, Laissez-faire 25 %), abzüglich ihrer laufenden Kosten. Davon wachsen die Firmen, und neue werden gegründet.\\n\\nGewinne und Ersparnisse zusammen kosten höchstens einen Anteil des Netto-Handels, den wir ohne sie hätten: 60 % der ersten 100 im Monat, 70 % der nächsten 200, 85 % von allem darüber. So drücken sie unsere Handelsbilanz nie ins Minus, und eine reiche Handelswirtschaft investiert mehr. Was der Staat nicht zahlt, bekommen die Firmen auch nicht."',
   ' d_pe_ledger_savings:0 "Private Ersparnisse"', ' d_pe_ledger_savings_desc:0 "§HEine Ausgabe des Staates.§! Jeden Monat fließt ein Teil unseres Handelseinkommens als private Ersparnisse in den Investorenpool, je nach Wirtschaftsordnung (Gelenkt 5 %, Gemischt 10 %, Freie Marktwirtschaft 15 %, Laissez-faire 20 %). Aus dem Pool gründen Investoren neue Firmen und kaufen Staatsdistrikte."');
 loc.german.push(' pe_deposit_cat_automation:0 "Private Automatisierung"');
 loc.english.push(' pe_msg_conq_hq_lost:0 "With $PLANET$ we have lost the headquarters of §Y$CORP$§!. The corporation leaves our economy; its firms here are independent now, its stations and megastructures are ours."', ' pe_msg_conq_hq_gained:0 "With $PLANET$ the corporation §Y$CORP$§! has come under our rule: its headquarters and its firms there are part of our economy now."', ' pe_msg_conq_corp_gone:0 "§Y$CORP$§! has its headquarters on $PLANET$, which is ours now, but our economy has no room for it: the corporation is dissolved, its firms are independent."');
@@ -2489,7 +2518,7 @@ const REG_LINES = 20;
 // What a firm did last quarter (pe_fst, pe_firm_book / pe_corp_lending) and why the investors
 // did or did not do something on the planet (pe_why, pe_planet_step); 0.40.
 const REG_FST = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-const REG_WHY = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18];
+const REG_WHY = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18, 19, 20];
 const REG_FST_TEXT = {
   0: ['no quarterly accounts yet', 'noch keine Quartalsbilanz'],
   1: ['expands', 'baut aus'],
@@ -2526,6 +2555,8 @@ const REG_WHY_TEXT = {
   14: ['The chosen firm would consume what we are short of (supply check).', 'Die gewählte Firma würde knappe Rohstoffe verbrauchen (Versorgungsprüfung).'],
   17: ['Beyond the quota: another request is still open.', 'Über der Quote: Eine andere Anfrage ist noch offen.'],
   18: ['More firms than our economic order allows: one is nationalised.', 'Mehr Firmen, als unsere Wirtschaftsordnung erlaubt: Eine wird verstaatlicht.'],
+  19: ['No purchase: the state jobs a bought district would bring are less than 90% filled.', 'Kein Kauf: Die Staatsjobs, die ein gekaufter Distrikt mitbrächte, sind zu weniger als 90 % besetzt.'],
+  20: ['No purchase: a district is in the construction queue here (it might replace the district they would buy).', 'Kein Kauf: Hier steht ein Distrikt in der Bauliste (er könnte den Distrikt ersetzen, den sie kaufen würden).'],
 };
 const REG = [...Array(REG_LINES).keys()].map(i => i + 1);
 corp += `
@@ -3573,7 +3604,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
 
 // Events that name a corporation: each reads its own variable pe_cn<event>, set in its
 // immediate (pe_corp_cur_name is shared and may change before the window is read).
-const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298, 300, 306, 308, 315, 321, 324, 325, 326];
+const CORP_EVENTS = [270, 280, 282, 283, 284, 285, 286, 287, 288, 289, 292, 293, 294, 295, 297, 298, 300, 306, 308, 315, 321, 324, 325, 326, 333];
 const corpLoc = (name, varName, keyOf) => dtext(name, varName, NAME_IDS.map(id => [id, keyOf(id)]), 'pe_corp_line_none');
 const flagDt = (name, cond, key) => `defined_text = {\n\tname = ${name}\n\ttext = {\n\t\ttrigger = { ${cond} }\n\t\tlocalization_key = ${key}\n\t}\n\tdefault = pe_corp_line_none\n}\n`;
 locDt += flagDt('GetPeLocCw', 'is_variable_set = pe_cw_m check_variable = { which = pe_cw_m value > 0 }', 'pe_loc_cw') + flagDt('GetPeLocArms', 'is_variable_set = pe_dc_here check_variable = { which = pe_dc_here value = 1 }', 'pe_loc_arms') +

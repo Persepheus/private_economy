@@ -25614,6 +25614,14 @@ defined_text = {
 		trigger = { check_variable = { which = pe_reg_why value = 18 } }
 		localization_key = pe_reg_why_18
 	}
+	text = {
+		trigger = { check_variable = { which = pe_reg_why value = 19 } }
+		localization_key = pe_reg_why_19
+	}
+	text = {
+		trigger = { check_variable = { which = pe_reg_why value = 20 } }
+		localization_key = pe_reg_why_20
+	}
 	default = pe_reg_why_0
 }
 defined_text = {

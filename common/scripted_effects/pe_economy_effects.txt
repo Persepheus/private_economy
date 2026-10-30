@@ -12,10 +12,13 @@
 #                                          -> pe_planet_fill (3)      -> pe_count_planet_job (4)
 #                                          -> pe_firm_accounting (3)  -> pe_firm_identify (4)
 #                                                                     -> pe_deposit_fetch (4)
+#                                                                     -> pe_spb_va (4)
 #                                                                     -> pe_firm_book (4)
 #                                          -> pe_cluster_counts (3), pe_cluster_apply (3)
 #                                          -> pe_corp_lending (3)
+#                                          -> pe_merge_find (3), pe_merge_apply (3)
 #                                          -> pe_firm_change (3)
+#                                          -> pe_buy_staffing (3)
 #                                          -> pe_choose_variant (3)   -> pe_consider_variant (4)
 #                                          -> pe_found_variant (3)    -> pe_found_firm (4)
 #                                          -> pe_buy_or_offer (3)     -> pe_buyout_execute (4)
@@ -36,6 +39,7 @@
 #                                        -> pe_corp_free, pe_corp_msg, pe_corp_found_new,
 #                                           pe_corp_station_pick, pe_ledger_bits,
 #                                           pe_chab_pick, pe_chab_exec (4)
+#                    -> pe_spb_step (2) -> pe_spb_eval_<t> (3), pe_spb_build (3) -> pe_corp_msg (4)
 #                    -> pe_relocate (2) -> pe_relocate_from (3) -> pe_relocate_exec (4)
 #                                                             -> pe_relocate_check_dest (4)
 #                    -> pe_patron (2) -> pe_patron_fire (3)   (pe_patron_effects.txt)
@@ -52,11 +56,12 @@
 # lowers the price -> less profit -> restructuring or bankruptcy.
 #
 # Capital is counted in trade. Investor pool (country pe_capital): starts at 500, gets
-# private savings (a share of the trade income, by economic order) and half of each
-# debt-free firm's profit (all of it from corporations). It pays 40% down on foundings
+# private savings (a share of the trade income, by economic order), a quarter of each
+# debt-free independent firm's profit (0.45; a member's quarter goes to its corporation) and
+# what a firm holds beyond its reserve. It pays 40% down on foundings
 # (the state's district cost: city 500, rural 300) and buyouts; the firm owes the rest
 # and repays it before it pays out or grows. It also pays restructuring when the firm
-# cannot. Firm capital (deposit pe_fcap): the other half; pays expansions and
+# cannot. Firm capital (deposit pe_fcap): the other three quarters; pays expansions and
 # restructuring, absorbs losses.
 #
 # Building: a firm is first a construction site (vanilla district build time: city 16,
@@ -146,11 +151,12 @@ pe_monthly_sites = {
 pe_init = {
 	if = { limit = { NOT = { is_variable_set = pe_private_share } } set_variable = { which = pe_private_share value = 0 } }
 	if = { limit = { NOT = { is_variable_set = pe_profit_share } } set_variable = { which = pe_profit_share value = 0 } }
-	# Profit share by economic order (halved in 0.33; set here too, for running games).
-	if = { limit = { has_policy_flag = pe_order_guided } set_variable = { which = pe_profit_share value = 0.075 } set_variable = { which = pe_profit_pct value = 7.5 } }
-	else_if = { limit = { has_policy_flag = pe_order_mixed } set_variable = { which = pe_profit_share value = 0.1 } set_variable = { which = pe_profit_pct value = 10 } }
-	else_if = { limit = { has_policy_flag = pe_order_free_market } set_variable = { which = pe_profit_share value = 0.125 } set_variable = { which = pe_profit_pct value = 12.5 } }
-	else_if = { limit = { has_policy_flag = pe_order_laissez_faire } set_variable = { which = pe_profit_share value = 0.175 } set_variable = { which = pe_profit_pct value = 17.5 } }
+	# Profit share by economic order (halved in 0.33, raised again in 0.45; set here too, for
+	# running games).
+	if = { limit = { has_policy_flag = pe_order_guided } set_variable = { which = pe_profit_share value = 0.1 } set_variable = { which = pe_profit_pct value = 10 } }
+	else_if = { limit = { has_policy_flag = pe_order_mixed } set_variable = { which = pe_profit_share value = 0.15 } set_variable = { which = pe_profit_pct value = 15 } }
+	else_if = { limit = { has_policy_flag = pe_order_free_market } set_variable = { which = pe_profit_share value = 0.2 } set_variable = { which = pe_profit_pct value = 20 } }
+	else_if = { limit = { has_policy_flag = pe_order_laissez_faire } set_variable = { which = pe_profit_share value = 0.25 } set_variable = { which = pe_profit_pct value = 25 } }
 	if = { limit = { NOT = { is_variable_set = pe_savings_rate } } set_variable = { which = pe_savings_rate value = 0 } }
 	if = { limit = { NOT = { is_variable_set = pe_capital } } set_variable = { which = pe_capital value = 500 } }
 	if = { limit = { NOT = { is_variable_set = pe_pool_income } } set_variable = { which = pe_pool_income value = 0 } }
@@ -257,6 +263,8 @@ pe_quarterly = {
 	pe_supply_step = yes
 	pe_relocate = yes
 	pe_corp_step = yes
+	# Specialisation buildings of corporations (0.45, pe_spb_effects.txt).
+	pe_spb_step = yes
 	pe_patron = yes
 	pe_labour = yes
 	pe_deal = yes
@@ -1006,6 +1014,13 @@ pe_count_planet_job = {
 pe_planet_step = {
 	# Assign new pops first, so idle civilians really are idle.
 	check_planet_employment = yes
+	# Districts in the construction queue (pe_build_events.txt): two years without any district
+	# event means the count was lost; it starts again from zero.
+	if = { limit = { NOT = { is_variable_set = pe_dq } } set_variable = { which = pe_dq value = 0 } }
+	if = {
+		limit = { check_variable = { which = pe_dq value > 0 } NOT = { has_planet_flag = pe_dq_recent } }
+		set_variable = { which = pe_dq value = 0 }
+	}
 	# Event deposits that expired.
 	if = {
 		limit = { NOT = { has_planet_flag = pe_hydro } }
@@ -1070,11 +1085,39 @@ pe_planet_step = {
 	pe_cluster_apply = yes
 	# Corporate loans for growth and against losses.
 	pe_corp_lending = yes
+	# No stage change here this quarter: two firms of one type that cannot grow for want of
+	# workers may merge instead (0.45, pe_merge_effects.txt). Guided and Mixed economy: we
+	# are asked (pe.332, one request at a time); otherwise at once.
+	root = { set_variable = { which = pe_mg_now value = 0 } }
+	if = {
+		limit = {
+			root = { check_variable = { which = pe_pend_any value = 0 } }
+			NOT = { has_modifier = pe_warzone }
+			NOT = { has_planet_flag = pe_mg_wait }
+		}
+		pe_merge_find = yes
+		if = {
+			limit = { root = { check_variable = { which = pe_mg_found value = 1 } } }
+			if = {
+				limit = { owner = { is_ai = no OR = { has_policy_flag = pe_order_guided has_policy_flag = pe_order_mixed } } }
+				if = {
+					limit = { owner = { NOT = { has_country_flag = pe_mg_offer } } }
+					set_timed_planet_flag = { flag = pe_mg_wait days = 360 }
+					save_event_target_as = pe_mg_planet
+					owner = {
+						set_timed_country_flag = { flag = pe_mg_offer days = 360 }
+						country_event = { id = pe.332 }
+					}
+				}
+			}
+			else = { pe_merge_apply = yes }
+		}
+	}
 	root = { set_variable = { which = pe_chg_type value = 0 } }
 	pe_firm_change = yes
-	# A growth step (+100 jobs) uses idle pops too.
+	# A growth step (+100 jobs) uses idle pops too (a merger frees workers instead).
 	if = {
-		limit = { root = { check_variable = { which = pe_chg_type value = 1 } } }
+		limit = { root = { check_variable = { which = pe_chg_type value = 1 } check_variable = { which = pe_mg_now value = 0 } } }
 		change_variable = { which = pe_idle value = -100 }
 		if = { limit = { check_variable = { which = pe_idle value < 50 } } root = { set_variable = { which = pe_unemp value = 0 } } }
 	}
@@ -1162,11 +1205,25 @@ pe_planet_step = {
 				if = {
 					# At most one buyout (or offer) per planet every two years.
 					limit = { OR = { owner = { pe_buyout_allowed = yes } has_planet_flag = pe_corp_hab } NOT = { has_planet_flag = pe_buy_cd } }
-					# A firm must be worth clearly more than the state district it replaces.
-					root = { set_variable = { which = pe_best_min value = 2 } set_variable = { which = pe_dmode value = 1 } }
-					pe_choose_variant = { MODE = buy }
-					pe_buy_or_offer = yes
-					if = { limit = { has_planet_flag = pe_buy_cd } set_variable = { which = pe_why value = 11 } }
+					# No purchase while a district is in the construction queue (0.45): it may
+					# replace the district the investors would buy (pe_build_events.txt).
+					if = {
+						limit = { check_variable = { which = pe_dq value > 0 } }
+						set_variable = { which = pe_why value = 20 }
+					}
+					else = {
+						# A firm must be worth clearly more than the state district it replaces,
+						# and that district's state jobs must be at least 90% filled (0.45).
+						pe_buy_staffing = yes
+						root = { set_variable = { which = pe_best_min value = 2 } set_variable = { which = pe_dmode value = 1 } set_variable = { which = pe_bst_hit value = 0 } }
+						pe_choose_variant = { MODE = buy }
+						pe_buy_or_offer = yes
+						if = { limit = { has_planet_flag = pe_buy_cd } set_variable = { which = pe_why value = 11 } }
+						else_if = {
+							limit = { root = { check_variable = { which = pe_best_variant value = 0 } check_variable = { which = pe_bst_hit value = 1 } } }
+							set_variable = { which = pe_why value = 19 }
+						}
+					}
 				}
 			}
 		}
@@ -1225,6 +1282,8 @@ pe_firm_accounting = {
 			set_variable = { which = pe_fid value = root.pe_fid_next }
 		}
 		pe_deposit_fetch = yes
+		# A specialisation building here adds its bonus to the firm's value added (0.45).
+		pe_spb_va = yes
 		pe_deposit_fetch_scale = yes
 		pe_safe_growth = yes
 		pe_firm_book = yes
@@ -1241,13 +1300,14 @@ pe_firm_accounting = {
 # for a large city firm). A firm in debt pays all of it back first: the
 # investor pool's founding loan, then a corporate loan (3% interest a quarter). Lacking
 # capital for growth, or in losses, it asks a corporation for a loan (pe_corp_lending).
-# Then half goes to the firm and half to the investor pool (a corporation keeps it all),
-# but a firm only keeps a reserve for its own restructuring and next growth step; the
-# rest goes to the pool. Losses hit the firm. Then at most one stage change
-# per planet and quarter: expand (next stage, +70 or +100 workforce) when the firm can pay
-# its restructuring cost per size it adds x 2 (city 375 / rural 225 x 2 x pe_szd),
-# its jobs are filled and the planet has idle civilians; shrink or go bankrupt when its
-# capital runs out.
+# Then the firm keeps 75% and a quarter goes to its corporation or, for an independent
+# firm, to the investor pool (0.45; a large firm keeps it all), but a firm only keeps a
+# reserve for its own restructuring and next growth step; the rest goes to the pool.
+# Losses hit the firm. Then at most one stage change per planet and quarter: expand (next
+# stage, +70 or +100 workforce) when the firm can pay its restructuring cost per size it
+# adds x 2 (city 375 / rural 225 x 2 x pe_szd), its jobs are filled and the planet has
+# idle civilians; shrink or go bankrupt when its capital runs out. Without idle pops two
+# firms of one type may merge instead (pe_merge_check, 0.45).
 pe_firm_book = {
 	set_variable = { which = pe_profit value = pe_va }
 	multiply_variable = { which = pe_profit value = pe_sz }
@@ -1263,6 +1323,8 @@ pe_firm_book = {
 	if = { limit = { NOT = { is_variable_set = pe_debt } } set_variable = { which = pe_debt value = 0 } }
 	set_variable = { which = pe_want_loan value = 0 }
 	set_variable = { which = pe_want_bridge value = 0 }
+	# We objected to its merger (pe.332): it waits five years (20 quarters).
+	if = { limit = { check_variable = { which = pe_mg_veto value > 0 } } change_variable = { which = pe_mg_veto value = -1 } }
 	# A corporate loan costs 3% interest a quarter, 1% from the firm's own corporation (0.38).
 	if = {
 		limit = { check_variable = { which = pe_loan value > 0 } }
@@ -1346,13 +1408,15 @@ pe_firm_book = {
 		limit = { check_variable = { which = pe_profit value > 0 } }
 		if = {
 			limit = { check_variable = { which = pe_stage value < 3 } }
+			# The firm keeps 75% (0.45, before half); the other quarter goes to its corporation or,
+			# for an independent firm, to the investor pool.
 			set_variable = { which = pe_tmp value = pe_profit }
-			multiply_variable = { which = pe_tmp value = 0.5 }
+			multiply_variable = { which = pe_tmp value = 0.75 }
 			change_variable = { which = pe_fcap value = pe_tmp }
-			# A member of a corporation sends half of it to the corporation's cash.
+			set_variable = { which = pe_tmp value = pe_profit }
+			multiply_variable = { which = pe_tmp value = 0.25 }
 			if = {
 				limit = { check_variable = { which = pe_corp value > 0 } }
-				multiply_variable = { which = pe_tmp value = 0.5 }
 				if = { limit = { check_variable = { which = pe_corp value = 1 } } root = { change_variable = { which = pe_c1_cash value = prev.pe_tmp } } }
 				if = { limit = { check_variable = { which = pe_corp value = 2 } } root = { change_variable = { which = pe_c2_cash value = prev.pe_tmp } } }
 				if = { limit = { check_variable = { which = pe_corp value = 3 } } root = { change_variable = { which = pe_c3_cash value = prev.pe_tmp } } }
@@ -1362,9 +1426,11 @@ pe_firm_book = {
 				if = { limit = { check_variable = { which = pe_corp value = 7 } } root = { change_variable = { which = pe_c7_cash value = prev.pe_tmp } } }
 				if = { limit = { check_variable = { which = pe_corp value = 8 } } root = { change_variable = { which = pe_c8_cash value = prev.pe_tmp } } }
 			}
-			root = {
-				change_variable = { which = pe_capital value = prev.pe_tmp }
-				change_variable = { which = pe_pool_income value = prev.pe_tmp }
+			else = {
+				root = {
+					change_variable = { which = pe_capital value = prev.pe_tmp }
+					change_variable = { which = pe_pool_income value = prev.pe_tmp }
+				}
 			}
 		}
 		else = {
@@ -1818,7 +1884,15 @@ pe_auto_invest = {
 }
 
 pe_consider_variant = {
+	# Buying: only a district whose state jobs are at least 90% filled (pe_buy_staffing, 0.45).
 	if = {
+		limit = {
+			root = { check_variable = { which = pe_dmode value = 1 } NOT = { check_variable = { which = pe_bst_$DCLS$ value = 1 } } }
+			pe_can_$MODE$_$V$ = yes
+		}
+		root = { set_variable = { which = pe_bst_hit value = 1 } }
+	}
+	else_if = {
 		limit = { pe_can_$MODE$_$V$ = yes root = { check_variable = { which = pe_safe_ok value = 1 } } }
 		root = {
 			# Its value here at stage "normal": planet, habitat or void dwellers (pe_pf_u /
@@ -1936,6 +2010,8 @@ pe_buyout_execute = {
 		limit = {
 			has_district = $DISTRICT$
 			root = { check_variable = { which = pe_safe_ok value = 1 } }
+			# Not while a district is in the construction queue here (0.45; also for offers).
+			NOT = { check_variable = { which = pe_dq value > 0 } }
 			owner = {
 				OR = {
 					check_variable = { which = pe_chab_buy value = 1 }

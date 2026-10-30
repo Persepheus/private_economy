@@ -1,0 +1,165 @@
+# Mergers of two firms (0.45). Two firms of one type (same main product) and stage on a planet,
+# both debt-free and rich enough for their next growth step, which waits only because workers
+# are short (no idle pops, or private jobs here below 90%: pe_fst 12 or 8), become one firm a
+# stage larger with the capital of both. The richer one survives with its variant (a tie is
+# decided by chance) and its corporation (or the other's, if it was independent); firms of two
+# different corporations do not merge. The merged firm has fewer jobs than the two before, and
+# a district slot becomes free: the freed workers let other firms here grow.
+# One merger per planet and quarter (it counts as the planet's stage change). Guided and Mixed
+# economy: we may object (pe.332, the two firms wait five years); AI empires never object.
+# Call depths: pe_planet_step (2) -> pe_merge_find (3), pe_merge_apply (3); pe.332 ->
+# pe_merge_mark (1), pe_merge_apply (1), pe_firm_change (1).
+
+# Colony scope (root = owner): find a pair. Marks the first firm pe_mg_s = 1 and its partner
+# pe_mg_o = 1, root.pe_mg_found = 1 and the firm numbers in the planet's pe_mg_fa / pe_mg_fb.
+pe_merge_find = {
+	root = { set_variable = { which = pe_mg_found value = 0 } }
+	every_deposit = {
+		limit = { has_deposit_category = pe_deposit_cat_firms }
+		set_variable = { which = pe_mg_ok value = 0 }
+		set_variable = { which = pe_mg_s value = 0 }
+		set_variable = { which = pe_mg_o value = 0 }
+		if = {
+			limit = {
+				is_variable_set = pe_szd
+				check_variable = { which = pe_stage value < 3 }
+				check_variable = { which = pe_pending value = 0 }
+				OR = {
+					check_variable = { which = pe_fst value = 8 }
+					check_variable = { which = pe_fst value = 12 }
+				}
+				NOT = { check_variable = { which = pe_mg_veto value > 0 } }
+			}
+			# Its growth cost (pe_firm_book): city 375 / rural 225 x 2 x what the next stage adds.
+			if = {
+				limit = { OR = { check_variable = { which = pe_cls value = 2 } check_variable = { which = pe_cls value = 3 } check_variable = { which = pe_cls value = 4 } } }
+				set_variable = { which = pe_mg_c value = 225 }
+			}
+			else = { set_variable = { which = pe_mg_c value = 375 } }
+			multiply_variable = { which = pe_mg_c value = pe_szd }
+			multiply_variable = { which = pe_mg_c value = 2 }
+			if = { limit = { check_variable = { which = pe_fcap value >= pe_mg_c } } set_variable = { which = pe_mg_ok value = 1 } }
+		}
+	}
+	every_deposit = {
+		limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_mg_ok value = 1 } }
+		if = {
+			limit = { root = { check_variable = { which = pe_mg_found value = 0 } } }
+			root = {
+				set_variable = { which = pe_mg_prim value = prev.pe_prim }
+				set_variable = { which = pe_mg_stage value = prev.pe_stage }
+				set_variable = { which = pe_mg_corp value = prev.pe_corp }
+				set_variable = { which = pe_mg_fa value = prev.pe_fid }
+			}
+			set_variable = { which = pe_mg_s value = 1 }
+			prev = {
+				random_deposit = {
+					limit = {
+						has_deposit_category = pe_deposit_cat_firms
+						check_variable = { which = pe_mg_ok value = 1 }
+						check_variable = { which = pe_mg_s value = 0 }
+						check_variable = { which = pe_prim value = root.pe_mg_prim }
+						check_variable = { which = pe_stage value = root.pe_mg_stage }
+						OR = {
+							check_variable = { which = pe_corp value = root.pe_mg_corp }
+							check_variable = { which = pe_corp value <= 0 }
+							root = { check_variable = { which = pe_mg_corp value <= 0 } }
+						}
+					}
+					set_variable = { which = pe_mg_o value = 1 }
+					root = {
+						set_variable = { which = pe_mg_found value = 1 }
+						set_variable = { which = pe_mg_fb value = prev.pe_fid }
+					}
+				}
+			}
+			if = { limit = { root = { check_variable = { which = pe_mg_found value = 0 } } } set_variable = { which = pe_mg_s value = 0 } }
+		}
+	}
+	if = {
+		limit = { root = { check_variable = { which = pe_mg_found value = 1 } } }
+		set_variable = { which = pe_mg_fa value = root.pe_mg_fa }
+		set_variable = { which = pe_mg_fb value = root.pe_mg_fb }
+	}
+}
+
+# Colony scope (event pe.332): mark the pair by the firm numbers stored on the planet, if both
+# are still here at the same stage below the largest -> root.pe_mg_found.
+pe_merge_mark = {
+	root = { set_variable = { which = pe_mg_found value = 0 } set_variable = { which = pe_mg_stage value = -1 } }
+	every_deposit = {
+		limit = { has_deposit_category = pe_deposit_cat_firms }
+		set_variable = { which = pe_mg_s value = 0 }
+		set_variable = { which = pe_mg_o value = 0 }
+	}
+	random_deposit = {
+		limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_fid value = prev.pe_mg_fa } check_variable = { which = pe_stage value < 3 } }
+		set_variable = { which = pe_mg_s value = 1 }
+		root = { set_variable = { which = pe_mg_stage value = prev.pe_stage } set_variable = { which = pe_mg_prim value = prev.pe_prim } }
+	}
+	random_deposit = {
+		limit = {
+			has_deposit_category = pe_deposit_cat_firms
+			check_variable = { which = pe_fid value = prev.pe_mg_fb }
+			check_variable = { which = pe_mg_s value = 0 }
+			check_variable = { which = pe_stage value = root.pe_mg_stage }
+			check_variable = { which = pe_prim value = root.pe_mg_prim }
+		}
+		set_variable = { which = pe_mg_o value = 1 }
+		root = { set_variable = { which = pe_mg_found value = 1 } }
+	}
+}
+
+# Colony scope (root = owner): merge the marked pair. The richer firm survives and asks for the
+# next stage (pe_pending = 1, carried out by pe_firm_change without the growth message,
+# root.pe_mg_now = 1); the other one goes.
+pe_merge_apply = {
+	random_deposit = { limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_mg_s value = 1 } } root = { set_variable = { which = pe_mg_ca value = prev.pe_fcap } } }
+	random_deposit = { limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_mg_o value = 1 } } root = { set_variable = { which = pe_mg_cb value = prev.pe_fcap } } }
+	set_variable = { which = pe_mg_swap value = 0 }
+	if = { limit = { root = { check_variable = { which = pe_mg_cb value > pe_mg_ca } } } set_variable = { which = pe_mg_swap value = 1 } }
+	else_if = {
+		limit = { root = { check_variable = { which = pe_mg_cb value = pe_mg_ca } } }
+		random_list = {
+			50 = { set_variable = { which = pe_mg_swap value = 1 } }
+			50 = { }
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_mg_swap value = 1 } }
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms OR = { check_variable = { which = pe_mg_s value = 1 } check_variable = { which = pe_mg_o value = 1 } } }
+			set_variable = { which = pe_tmp value = pe_mg_s }
+			set_variable = { which = pe_mg_s value = pe_mg_o }
+			set_variable = { which = pe_mg_o value = pe_tmp }
+		}
+	}
+	random_deposit = {
+		limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_mg_o value = 1 } }
+		root = { set_variable = { which = pe_mg_cb value = prev.pe_fcap } set_variable = { which = pe_mg_kb value = 0 } }
+		if = { limit = { check_variable = { which = pe_corp value > 0 } } root = { set_variable = { which = pe_mg_kb value = prev.pe_corp } } }
+		remove_deposit = yes
+	}
+	every_deposit = {
+		limit = { has_deposit_category = pe_deposit_cat_firms }
+		set_variable = { which = pe_pending value = 0 }
+	}
+	random_deposit = {
+		limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_mg_s value = 1 } }
+		change_variable = { which = pe_fcap value = root.pe_mg_cb }
+		if = { limit = { NOT = { check_variable = { which = pe_corp value > 0 } } } set_variable = { which = pe_corp value = root.pe_mg_kb } }
+		set_variable = { which = pe_pending value = 1 }
+	}
+	root = {
+		set_variable = { which = pe_pend_any value = 1 }
+		set_variable = { which = pe_mg_now value = 1 }
+	}
+	save_event_target_as = pe_msg_planet
+	log = "private_economy: two firms merged on \\[This.GetName]"
+	owner = {
+		if = {
+			limit = { is_ai = no }
+			if = { limit = { NOT = { has_country_flag = pe_mute_firms } } create_message = { type = pe_private_economy_firms localization = pe_msg_merge days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } } }
+		}
+	}
+}

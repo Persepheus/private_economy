@@ -1,0 +1,28 @@
+# Planet decision (0.45): pay off the leases of the corporate specialisation buildings on this
+# planet at their remaining value (pe_spb_effects.txt; never taken by the AI).
+decision_pe_spb_buyback = {
+	owned_planets_only = yes
+	sound = event_administrative_work
+	icon = decision_politics
+
+	resources = {
+		category = decisions
+	}
+
+	potential = {
+		has_planet_flag = pe_spb_lease
+		owner = { is_ai = no }
+	}
+
+	effect = {
+		hidden_effect = {
+			save_event_target_as = pe_spb_bb_planet
+			pe_spb_bb_calc = yes
+			owner = { country_event = { id = pe.334 } }
+		}
+	}
+
+	ai_weight = {
+		weight = 0
+	}
+}
