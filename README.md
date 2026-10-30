@@ -21,6 +21,7 @@ Die Gründungsregel für Konzerne bleibt unverändert (Entscheidung 30.10.2026).
   - Die reichere Firma bleibt mit ihrer Variante, Gleichstand entscheidet der Zufall. Sie bekommt das Geld beider. Weniger Jobs, ein Distriktplatz wird frei.
   - Gelenkte und gemischte Wirtschaft können Einspruch erheben (fünf Jahre Pause), die KI nie.
 - **Kauf nur bei besetzten Staatsjobs:** Der Pool kauft einen Landdistrikt nur, wenn dessen Staatsjobs zu mindestens 90 % besetzt sind. Bei Stadt- und Habitatdistrikten gilt das für alle Fachkräftejobs des Planeten.
+- **Kauf nur mit Arbeitern (0.45.2):** Kein Kauf, solange die Privatjobs des Planeten zu weniger als 90 % besetzt sind. Ein Stadtdistrikt bringt nur die Arbeiter seiner Spezialisierungen mit (100 je Spezialisierung); den Rest einer normalen Stadtfirma müssen freie Pops decken. Anlass: Auf Faenov Prime (2244) kaufte der Pool einen Stadtdistrikt ohne Spezialisierung, obwohl dort schon rund 430 Privatjobs leer waren.
 - **Bauliste:** Kein Distriktkauf auf einem Planeten, solange dort ein Distrikt in der Bauliste steht. Er könnte den gekauften Distrikt ersetzen, etwa das letzte Farmdistrikt.
 - **Spezialisierungsgebäude der Konzerne:**
   - Ein Konzern baut auf Planeten mit seinen Firmen die Mineralienaufbereitung, das Energienetz oder die Nahrungsverarbeitung. Er nutzt dafür eine vorhandene Spezialisierung oder legt Spezialisierung und Distrikt an.

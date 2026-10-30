@@ -89,3 +89,13 @@ Statisch geprüft (Validator). Im Spiel noch nicht getestet. Am besten ein neues
   - Pacht im Angebot = Kosten × 1,5 / 120. Die Kosten sind Mineralien zum Schattenpreis, zum Beispiel 1500 Mineralien × 0,53 = 795, also 10 Handel im Monat.
   - Die Konzernkasse sinkt um die vollen Kosten.
 - **Logs:** Die Zeilen der Bauliste und der Fusion stehen jetzt ohne Backslash in game.log.
+
+## 0.45.2: Kauf nur mit Arbeitern
+
+- **Anlass:** Faenov Prime, 1.2.2244. Der Pool kaufte einen Stadtdistrikt ohne Spezialisierung, also ohne Jobs. Die Firma brachte nur leere Stellen, und der Planet verlor 1200 Wohnraum.
+  - Vorher arbeiteten alle 1269 Pops: 1100 in Staatsjobs, 169 in den 600 Privatjobs.
+  - Die Staatsjobs waren voll, deshalb ließ die Regel aus 0.45 den Kauf zu.
+- **Neu:**
+  - Kein Kauf, solange die Privatjobs des Planeten zu weniger als 90 % besetzt sind. Grund im Register: „Kein Kauf: Die privaten Stellen hier sind zu weniger als 90 % besetzt …“.
+  - Ein Stadt- oder Habitat-Wohndistrikt bringt 100 Arbeitskraft je Spezialisierung mit. Fehlt etwas zu einer normalen Stadtfirma (200 Arbeitskraft, auf Void-Dweller-Habitaten 300), müssen freie Pops es decken. Sonst gibt es keinen Kauf (Grund 19).
+- **Prüfen:** Auf Faenov Prime kauft der Pool keinen weiteren Distrikt. Das Register zeigt Grund 21.

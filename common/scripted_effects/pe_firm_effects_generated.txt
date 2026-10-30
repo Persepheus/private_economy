@@ -8664,6 +8664,28 @@ pe_buy_staffing = {
 	multiply_variable = { which = pe_bs_f value = 9 }
 	if = { limit = { check_variable = { which = pe_bs_a value >= pe_bs_f } } root = { set_variable = { which = pe_bst_u value = 1 } } }
 	else = { root = { set_variable = { which = pe_bst_u value = 0 } } }
+	# A city district brings only the workers of its zones' jobs (one job of 100 workforce per
+	# zone and level); a district without zones brings none (0.45.2, Faenov Prime). Idle pops
+	# here must make up the rest of a normal city firm (200 x pe_pf_u).
+	set_variable = { which = pe_bs_z value = 0 }
+	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = zone_foundry } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = zone_factory } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = zone_industrial } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = zone_trade } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = zone_research } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = zone_research_physics } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = zone_research_society } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = zone_research_engineering } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = zone_research_unity } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = zone_unity } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = zone_unity_spiritualist } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = zone_unity_bio_trophy } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }
+	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = zone_resort_entertainment } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }
+	multiply_variable = { which = pe_bs_z value = 100 }
+	if = { limit = { check_variable = { which = pe_idle value > 0 } } change_variable = { which = pe_bs_z value = pe_idle } }
+	set_variable = { which = pe_tmp value = root.pe_pf_u }
+	multiply_variable = { which = pe_tmp value = 200 }
+	if = { limit = { check_variable = { which = pe_bs_z value < pe_tmp } } root = { set_variable = { which = pe_bst_u value = 0 } } }
 	}
 
 # Colony scope: buy a state district. Human empires on Free Market get an offer (one per

@@ -1211,6 +1211,12 @@ pe_planet_step = {
 						limit = { check_variable = { which = pe_dq value > 0 } }
 						set_variable = { which = pe_why value = 20 }
 					}
+					# Nor while the private jobs here are less than 90% filled (0.45.2): a bought
+					# district would only add empty jobs, like a growth step.
+					else_if = {
+						limit = { root = { check_variable = { which = pe_fill_cur value < 0.9 } } }
+						set_variable = { which = pe_why value = 21 }
+					}
 					else = {
 						# A firm must be worth clearly more than the state district it replaces,
 						# and that district's state jobs must be at least 90% filled (0.45).

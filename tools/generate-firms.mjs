@@ -862,6 +862,16 @@ ${SPECIALIST_JOBS.map(j => `	export_trigger_value_to_variable = { trigger = num_
 	multiply_variable = { which = pe_bs_f value = 9 }
 	if = { limit = { check_variable = { which = pe_bs_a value >= pe_bs_f } } root = { set_variable = { which = pe_bst_u value = 1 } } }
 	else = { root = { set_variable = { which = pe_bst_u value = 0 } } }
+	# A city district brings only the workers of its zones' jobs (one job of 100 workforce per
+	# zone and level); a district without zones brings none (0.45.2, Faenov Prime). Idle pops
+	# here must make up the rest of a normal city firm (200 x pe_pf_u).
+	set_variable = { which = pe_bs_z value = 0 }
+${ZONES.map(([z]) => `	export_trigger_value_to_variable = { trigger = num_zones parameters = { type = ${z} } variable = pe_tmp } change_variable = { which = pe_bs_z value = pe_tmp }`).join('\n')}
+	multiply_variable = { which = pe_bs_z value = 100 }
+	if = { limit = { check_variable = { which = pe_idle value > 0 } } change_variable = { which = pe_bs_z value = pe_idle } }
+	set_variable = { which = pe_tmp value = root.pe_pf_u }
+	multiply_variable = { which = pe_tmp value = 200 }
+	if = { limit = { check_variable = { which = pe_bs_z value < pe_tmp } } root = { set_variable = { which = pe_bst_u value = 0 } } }
 }
 `;
 eff += `
@@ -2518,7 +2528,7 @@ const REG_LINES = 20;
 // What a firm did last quarter (pe_fst, pe_firm_book / pe_corp_lending) and why the investors
 // did or did not do something on the planet (pe_why, pe_planet_step); 0.40.
 const REG_FST = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-const REG_WHY = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18, 19, 20];
+const REG_WHY = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18, 19, 20, 21];
 const REG_FST_TEXT = {
   0: ['no quarterly accounts yet', 'noch keine Quartalsbilanz'],
   1: ['expands', 'baut aus'],
@@ -2555,8 +2565,9 @@ const REG_WHY_TEXT = {
   14: ['The chosen firm would consume what we are short of (supply check).', 'Die gewählte Firma würde knappe Rohstoffe verbrauchen (Versorgungsprüfung).'],
   17: ['Beyond the quota: another request is still open.', 'Über der Quote: Eine andere Anfrage ist noch offen.'],
   18: ['More firms than our economic order allows: one is nationalised.', 'Mehr Firmen, als unsere Wirtschaftsordnung erlaubt: Eine wird verstaatlicht.'],
-  19: ['No purchase: the state jobs a bought district would bring are less than 90% filled.', 'Kein Kauf: Die Staatsjobs, die ein gekaufter Distrikt mitbrächte, sind zu weniger als 90 % besetzt.'],
+  19: ['No purchase: the state jobs a bought district would bring are less than 90% filled, or the district brings too few workers (a city district without specialisations) and there are not enough idle pops.', 'Kein Kauf: Die Staatsjobs, die ein gekaufter Distrikt mitbrächte, sind zu weniger als 90 % besetzt, oder der Distrikt bringt zu wenige Arbeiter mit (Stadtdistrikt ohne Spezialisierung) und es fehlen freie Pops.'],
   20: ['No purchase: a district is in the construction queue here (it might replace the district they would buy).', 'Kein Kauf: Hier steht ein Distrikt in der Bauliste (er könnte den Distrikt ersetzen, den sie kaufen würden).'],
+  21: ['No purchase: the private jobs here are less than 90% filled; a bought district would only add empty jobs.', 'Kein Kauf: Die privaten Stellen hier sind zu weniger als 90 % besetzt; ein gekaufter Distrikt brächte nur weitere leere Stellen.'],
 };
 const REG = [...Array(REG_LINES).keys()].map(i => i + 1);
 corp += `
