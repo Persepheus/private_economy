@@ -4,13 +4,12 @@
 #   1 into a zone of the type with a free building slot,
 #   2 else into the state's district of the type, adding the zone (1000 minerals),
 #   3 else onto a free district slot of the type, adding the district (300 minerals) and zone.
-# Worth it: what the private jobs of the type here make more in ten years (+0.5 per job and
-# month, at shadow prices) covers the building. If it also covers the zone and district, the
-# corporation pays everything; if not, the state may pay them (the player is asked, an AI
-# empire pays when it has the minerals). The corporation pays from its cash (minerals at
-# their shadow price) and leases what it paid to the state: its cost plus 20% over 120 months
-# (budget line, d_pe_ledger_lease), then the building is ours; the planet decision Pay Off
-# Lease ends it earlier at its remaining value. Its corporation dissolved, the building gone or
+# The corporation pays everything from its cash (minerals at their shadow price) and leases
+# it to the state for ten years: the cost plus 50% profit over 120 months (0.45.1, budget line
+# d_pe_ledger_lease), then the building is ours; the planet decision Pay Off Lease ends it
+# earlier at its remaining value. So it is always worth it for the corporation; it only needs
+# a firm of the type there that benefits. Among the candidates of an empire the one whose
+# private jobs gain most against the cost comes first. Its corporation dissolved, the building gone or
 # the planet lost: the lease ends. The player is always asked (pe.333, also under
 # Laissez-faire, because of the lease); AI empires accept. One building per empire and
 # quarter; not on habitats or other special planets.
@@ -38,10 +37,9 @@ pe_spb_step = {
 				check_variable = { which = pe_c8_on value = 1 }
 			}
 		}
-		set_variable = { which = pe_spb_best value = -1 }
+		set_variable = { which = pe_spb_best value = -1000000 }
 		set_variable = { which = pe_spb_t value = 0 }
 		set_variable = { which = pe_spb_pick value = 0 }
-		export_resource_stockpile_to_variable = { resource = minerals variable = pe_spb_min }
 		every_owned_colony = {
 			limit = {
 				uses_district_set = standard
@@ -54,9 +52,9 @@ pe_spb_step = {
 		}
 		if = {
 			limit = { check_variable = { which = pe_spb_t value > 0 } }
-			# The lease and the corporation's name for the offer (pe_spb_build checks again).
+			# The lease for the offer (pe_spb_build checks again).
 			set_variable = { which = pe_spb_rent value = pe_spb_cc }
-			multiply_variable = { which = pe_spb_rent value = 0.02 }
+			multiply_variable = { which = pe_spb_rent value = 0.025 }
 			ceiling_variable = pe_spb_rent
 			multiply_variable = { which = pe_spb_rent value = 0.5 }
 			if = {
@@ -107,37 +105,21 @@ pe_spb_eval_m = {
 			if = { limit = { check_variable = { which = pe_corp value = 8 } root = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c8_cash } set_variable = { which = pe_spb_kx value = 8 } } }
 		}
 		root = {
-			# Ten years of the extra output (+0.5 per job of 100 workforce and month) against the
-			# costs, all at shadow prices: building (pe_spb_xb), zone and district (pe_spb_xr,
-			# in minerals pe_spb_xm).
+			# Ten years of the extra output (+0.5 per job of 100 workforce and month; pe_spb_v)
+			# against the cost (building, zone, district: pe_spb_xt), at shadow prices. The
+			# corporation must afford the whole cost.
 			set_variable = { which = pe_spb_v value = pe_spb_wf }
 			multiply_variable = { which = pe_spb_v value = 0.6 }
 			multiply_variable = { which = pe_spb_v value = pe_s_minerals }
-			set_variable = { which = pe_spb_xb value = 200 }
-			multiply_variable = { which = pe_spb_xb value = pe_s_minerals }
-			set_variable = { which = pe_spb_xm value = 0 }
-			if = { limit = { check_variable = { which = pe_spb_lc value >= 2 } } change_variable = { which = pe_spb_xm value = 1000 } }
-			if = { limit = { check_variable = { which = pe_spb_lc value = 3 } } change_variable = { which = pe_spb_xm value = 300 } }
-			set_variable = { which = pe_spb_xr value = pe_spb_xm }
-			multiply_variable = { which = pe_spb_xr value = pe_s_minerals }
-			set_variable = { which = pe_spb_xt value = pe_spb_xb }
-			change_variable = { which = pe_spb_xt value = pe_spb_xr }
-			# 1 the corporation pays all, 2 the building only (the state pays the rest).
+			set_variable = { which = pe_spb_xt value = 200 }
+			if = { limit = { check_variable = { which = pe_spb_lc value >= 2 } } change_variable = { which = pe_spb_xt value = 1000 } }
+			if = { limit = { check_variable = { which = pe_spb_lc value = 3 } } change_variable = { which = pe_spb_xt value = 300 } }
+			multiply_variable = { which = pe_spb_xt value = pe_s_minerals }
 			set_variable = { which = pe_spb_md value = 0 }
 			if = {
-				limit = { check_variable = { which = pe_spb_lc value > 0 } check_variable = { which = pe_spb_kx value > 0 } }
-				if = {
-					limit = { check_variable = { which = pe_spb_v value >= pe_spb_xt } check_variable = { which = pe_spb_kc value >= pe_spb_xt } }
-					set_variable = { which = pe_spb_md value = 1 }
-					set_variable = { which = pe_spb_xc value = pe_spb_xt }
-				}
-				else_if = {
-					limit = { check_variable = { which = pe_spb_v value >= pe_spb_xb } check_variable = { which = pe_spb_kc value >= pe_spb_xb } }
-					set_variable = { which = pe_spb_md value = 2 }
-					set_variable = { which = pe_spb_xc value = pe_spb_xb }
-					# An AI empire pays the rest only from minerals it has.
-					if = { limit = { is_ai = yes check_variable = { which = pe_spb_min value < pe_spb_xm } } set_variable = { which = pe_spb_md value = 0 } }
-				}
+				limit = { check_variable = { which = pe_spb_lc value > 0 } check_variable = { which = pe_spb_kx value > 0 } check_variable = { which = pe_spb_wf value > 0 } check_variable = { which = pe_spb_kc value >= pe_spb_xt } }
+				set_variable = { which = pe_spb_md value = 1 }
+				set_variable = { which = pe_spb_xc value = pe_spb_xt }
 			}
 			if = {
 				limit = { check_variable = { which = pe_spb_md value > 0 } }
@@ -148,11 +130,8 @@ pe_spb_eval_m = {
 					set_variable = { which = pe_spb_best value = pe_tmp }
 					set_variable = { which = pe_spb_t value = 1 }
 					set_variable = { which = pe_spb_lv value = pe_spb_lc }
-					set_variable = { which = pe_spb_mode value = pe_spb_md }
 					set_variable = { which = pe_spb_k value = pe_spb_kx }
 					set_variable = { which = pe_spb_cc value = pe_spb_xc }
-					set_variable = { which = pe_spb_rest value = 0 }
-					if = { limit = { check_variable = { which = pe_spb_md value = 2 } } set_variable = { which = pe_spb_rest value = pe_spb_xm } }
 					set_variable = { which = pe_spb_pick value = 1 }
 				}
 			}
@@ -201,37 +180,21 @@ pe_spb_eval_e = {
 			if = { limit = { check_variable = { which = pe_corp value = 8 } root = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c8_cash } set_variable = { which = pe_spb_kx value = 8 } } }
 		}
 		root = {
-			# Ten years of the extra output (+0.5 per job of 100 workforce and month) against the
-			# costs, all at shadow prices: building (pe_spb_xb), zone and district (pe_spb_xr,
-			# in minerals pe_spb_xm).
+			# Ten years of the extra output (+0.5 per job of 100 workforce and month; pe_spb_v)
+			# against the cost (building, zone, district: pe_spb_xt), at shadow prices. The
+			# corporation must afford the whole cost.
 			set_variable = { which = pe_spb_v value = pe_spb_wf }
 			multiply_variable = { which = pe_spb_v value = 0.6 }
 			multiply_variable = { which = pe_spb_v value = pe_s_energy }
-			set_variable = { which = pe_spb_xb value = 400 }
-			multiply_variable = { which = pe_spb_xb value = pe_s_minerals }
-			set_variable = { which = pe_spb_xm value = 0 }
-			if = { limit = { check_variable = { which = pe_spb_lc value >= 2 } } change_variable = { which = pe_spb_xm value = 1000 } }
-			if = { limit = { check_variable = { which = pe_spb_lc value = 3 } } change_variable = { which = pe_spb_xm value = 300 } }
-			set_variable = { which = pe_spb_xr value = pe_spb_xm }
-			multiply_variable = { which = pe_spb_xr value = pe_s_minerals }
-			set_variable = { which = pe_spb_xt value = pe_spb_xb }
-			change_variable = { which = pe_spb_xt value = pe_spb_xr }
-			# 1 the corporation pays all, 2 the building only (the state pays the rest).
+			set_variable = { which = pe_spb_xt value = 400 }
+			if = { limit = { check_variable = { which = pe_spb_lc value >= 2 } } change_variable = { which = pe_spb_xt value = 1000 } }
+			if = { limit = { check_variable = { which = pe_spb_lc value = 3 } } change_variable = { which = pe_spb_xt value = 300 } }
+			multiply_variable = { which = pe_spb_xt value = pe_s_minerals }
 			set_variable = { which = pe_spb_md value = 0 }
 			if = {
-				limit = { check_variable = { which = pe_spb_lc value > 0 } check_variable = { which = pe_spb_kx value > 0 } }
-				if = {
-					limit = { check_variable = { which = pe_spb_v value >= pe_spb_xt } check_variable = { which = pe_spb_kc value >= pe_spb_xt } }
-					set_variable = { which = pe_spb_md value = 1 }
-					set_variable = { which = pe_spb_xc value = pe_spb_xt }
-				}
-				else_if = {
-					limit = { check_variable = { which = pe_spb_v value >= pe_spb_xb } check_variable = { which = pe_spb_kc value >= pe_spb_xb } }
-					set_variable = { which = pe_spb_md value = 2 }
-					set_variable = { which = pe_spb_xc value = pe_spb_xb }
-					# An AI empire pays the rest only from minerals it has.
-					if = { limit = { is_ai = yes check_variable = { which = pe_spb_min value < pe_spb_xm } } set_variable = { which = pe_spb_md value = 0 } }
-				}
+				limit = { check_variable = { which = pe_spb_lc value > 0 } check_variable = { which = pe_spb_kx value > 0 } check_variable = { which = pe_spb_wf value > 0 } check_variable = { which = pe_spb_kc value >= pe_spb_xt } }
+				set_variable = { which = pe_spb_md value = 1 }
+				set_variable = { which = pe_spb_xc value = pe_spb_xt }
 			}
 			if = {
 				limit = { check_variable = { which = pe_spb_md value > 0 } }
@@ -242,11 +205,8 @@ pe_spb_eval_e = {
 					set_variable = { which = pe_spb_best value = pe_tmp }
 					set_variable = { which = pe_spb_t value = 2 }
 					set_variable = { which = pe_spb_lv value = pe_spb_lc }
-					set_variable = { which = pe_spb_mode value = pe_spb_md }
 					set_variable = { which = pe_spb_k value = pe_spb_kx }
 					set_variable = { which = pe_spb_cc value = pe_spb_xc }
-					set_variable = { which = pe_spb_rest value = 0 }
-					if = { limit = { check_variable = { which = pe_spb_md value = 2 } } set_variable = { which = pe_spb_rest value = pe_spb_xm } }
 					set_variable = { which = pe_spb_pick value = 1 }
 				}
 			}
@@ -295,37 +255,21 @@ pe_spb_eval_f = {
 			if = { limit = { check_variable = { which = pe_corp value = 8 } root = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_spb_kc } } } root = { set_variable = { which = pe_spb_kc value = pe_c8_cash } set_variable = { which = pe_spb_kx value = 8 } } }
 		}
 		root = {
-			# Ten years of the extra output (+0.5 per job of 100 workforce and month) against the
-			# costs, all at shadow prices: building (pe_spb_xb), zone and district (pe_spb_xr,
-			# in minerals pe_spb_xm).
+			# Ten years of the extra output (+0.5 per job of 100 workforce and month; pe_spb_v)
+			# against the cost (building, zone, district: pe_spb_xt), at shadow prices. The
+			# corporation must afford the whole cost.
 			set_variable = { which = pe_spb_v value = pe_spb_wf }
 			multiply_variable = { which = pe_spb_v value = 0.6 }
 			multiply_variable = { which = pe_spb_v value = pe_s_food }
-			set_variable = { which = pe_spb_xb value = 400 }
-			multiply_variable = { which = pe_spb_xb value = pe_s_minerals }
-			set_variable = { which = pe_spb_xm value = 0 }
-			if = { limit = { check_variable = { which = pe_spb_lc value >= 2 } } change_variable = { which = pe_spb_xm value = 1000 } }
-			if = { limit = { check_variable = { which = pe_spb_lc value = 3 } } change_variable = { which = pe_spb_xm value = 300 } }
-			set_variable = { which = pe_spb_xr value = pe_spb_xm }
-			multiply_variable = { which = pe_spb_xr value = pe_s_minerals }
-			set_variable = { which = pe_spb_xt value = pe_spb_xb }
-			change_variable = { which = pe_spb_xt value = pe_spb_xr }
-			# 1 the corporation pays all, 2 the building only (the state pays the rest).
+			set_variable = { which = pe_spb_xt value = 400 }
+			if = { limit = { check_variable = { which = pe_spb_lc value >= 2 } } change_variable = { which = pe_spb_xt value = 1000 } }
+			if = { limit = { check_variable = { which = pe_spb_lc value = 3 } } change_variable = { which = pe_spb_xt value = 300 } }
+			multiply_variable = { which = pe_spb_xt value = pe_s_minerals }
 			set_variable = { which = pe_spb_md value = 0 }
 			if = {
-				limit = { check_variable = { which = pe_spb_lc value > 0 } check_variable = { which = pe_spb_kx value > 0 } }
-				if = {
-					limit = { check_variable = { which = pe_spb_v value >= pe_spb_xt } check_variable = { which = pe_spb_kc value >= pe_spb_xt } }
-					set_variable = { which = pe_spb_md value = 1 }
-					set_variable = { which = pe_spb_xc value = pe_spb_xt }
-				}
-				else_if = {
-					limit = { check_variable = { which = pe_spb_v value >= pe_spb_xb } check_variable = { which = pe_spb_kc value >= pe_spb_xb } }
-					set_variable = { which = pe_spb_md value = 2 }
-					set_variable = { which = pe_spb_xc value = pe_spb_xb }
-					# An AI empire pays the rest only from minerals it has.
-					if = { limit = { is_ai = yes check_variable = { which = pe_spb_min value < pe_spb_xm } } set_variable = { which = pe_spb_md value = 0 } }
-				}
+				limit = { check_variable = { which = pe_spb_lc value > 0 } check_variable = { which = pe_spb_kx value > 0 } check_variable = { which = pe_spb_wf value > 0 } check_variable = { which = pe_spb_kc value >= pe_spb_xt } }
+				set_variable = { which = pe_spb_md value = 1 }
+				set_variable = { which = pe_spb_xc value = pe_spb_xt }
 			}
 			if = {
 				limit = { check_variable = { which = pe_spb_md value > 0 } }
@@ -336,11 +280,8 @@ pe_spb_eval_f = {
 					set_variable = { which = pe_spb_best value = pe_tmp }
 					set_variable = { which = pe_spb_t value = 3 }
 					set_variable = { which = pe_spb_lv value = pe_spb_lc }
-					set_variable = { which = pe_spb_mode value = pe_spb_md }
 					set_variable = { which = pe_spb_k value = pe_spb_kx }
 					set_variable = { which = pe_spb_cc value = pe_spb_xc }
-					set_variable = { which = pe_spb_rest value = 0 }
-					if = { limit = { check_variable = { which = pe_spb_md value = 2 } } set_variable = { which = pe_spb_rest value = pe_spb_xm } }
 					set_variable = { which = pe_spb_pick value = 1 }
 				}
 			}
@@ -369,9 +310,9 @@ pe_spb_build = {
 		else_if = { limit = { check_variable = { which = pe_spb_k value = 6 } check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value >= pe_spb_cc } } set_variable = { which = pe_spb_name value = pe_c6_name } }
 		else_if = { limit = { check_variable = { which = pe_spb_k value = 7 } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value >= pe_spb_cc } } set_variable = { which = pe_spb_name value = pe_c7_name } }
 		else_if = { limit = { check_variable = { which = pe_spb_k value = 8 } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value >= pe_spb_cc } } set_variable = { which = pe_spb_name value = pe_c8_name } }
-		# The lease: its part plus 20% over 120 months, rounded up to 0.5 a month.
+		# The lease: the cost plus 50% over 120 months, rounded up to 0.5 a month.
 		set_variable = { which = pe_spb_rent value = pe_spb_cc }
-		multiply_variable = { which = pe_spb_rent value = 0.02 }
+		multiply_variable = { which = pe_spb_rent value = 0.025 }
 		ceiling_variable = pe_spb_rent
 		multiply_variable = { which = pe_spb_rent value = 0.5 }
 	}
@@ -455,7 +396,6 @@ pe_spb_build = {
 			if = { limit = { check_variable = { which = pe_spb_k value = 6 } } subtract_variable = { which = pe_c6_cash value = pe_spb_cc } }
 			if = { limit = { check_variable = { which = pe_spb_k value = 7 } } subtract_variable = { which = pe_c7_cash value = pe_spb_cc } }
 			if = { limit = { check_variable = { which = pe_spb_k value = 8 } } subtract_variable = { which = pe_c8_cash value = pe_spb_cc } }
-			if = { limit = { check_variable = { which = pe_spb_mode value = 2 } } add_resource = { minerals = -1 mult = pe_spb_rest } }
 			set_variable = { which = pe_msg_name value = pe_spb_name }
 			set_variable = { which = pe_lg_a value = pe_spb_t }
 			set_variable = { which = pe_lg_b value = pe_spb_lv }

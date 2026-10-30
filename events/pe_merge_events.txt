@@ -22,7 +22,7 @@ country_event = {
 					pe_merge_apply = yes
 					pe_firm_change = yes
 				}
-				else = { log = "private_economy: merger on \\[This.GetName] no longer possible" }
+				else = { log = "private_economy: merger on [This.GetName] no longer possible" }
 				root = { set_variable = { which = pe_mg_now value = 0 } }
 			}
 			remove_country_flag = pe_mg_offer

@@ -23,9 +23,9 @@ Die Gründungsregel für Konzerne bleibt unverändert (Entscheidung 30.10.2026).
 - **Kauf nur bei besetzten Staatsjobs:** Der Pool kauft einen Landdistrikt nur, wenn dessen Staatsjobs zu mindestens 90 % besetzt sind. Bei Stadt- und Habitatdistrikten gilt das für alle Fachkräftejobs des Planeten.
 - **Bauliste:** Kein Distriktkauf auf einem Planeten, solange dort ein Distrikt in der Bauliste steht. Er könnte den gekauften Distrikt ersetzen, etwa das letzte Farmdistrikt.
 - **Spezialisierungsgebäude der Konzerne:**
-  - Ein Konzern baut auf Planeten mit seinen Firmen die Mineralienaufbereitung, das Energienetz oder die Nahrungsverarbeitung, wenn sich das für die Privatjobs dort in zehn Jahren lohnt. Er nutzt dafür eine vorhandene Spezialisierung oder legt Spezialisierung und Distrikt an.
-  - Lohnt sich nur das Gebäude, kann der Staat den Rest bezahlen.
-  - Der Staat pachtet, was der Konzern bezahlt hat, zehn Jahre lang (Kosten plus 20 %, Budgetzeile). Danach gehört es ihm, oder er löst die Pacht vorher zum Restwert ab.
+  - Ein Konzern baut auf Planeten mit seinen Firmen die Mineralienaufbereitung, das Energienetz oder die Nahrungsverarbeitung. Er nutzt dafür eine vorhandene Spezialisierung oder legt Spezialisierung und Distrikt an.
+  - Seit 0.45.1 bezahlt der Konzern immer alles. Der Staat pachtet es zehn Jahre lang für die Kosten plus 50 % Gewinn (Budgetzeile). Danach gehört es ihm, oder er löst die Pacht vorher zum Restwert ab.
+  - Vorher (0.45.0) baute der Konzern nur, wenn sich der Mehrertrag der Privatjobs in zehn Jahren lohnte, und der Staat zahlte gegebenenfalls Spezialisierung und Distrikt. Die Pacht betrug Kosten plus 20 %.
   - Der Spieler wird immer gefragt, die KI nimmt an.
   - Das Gebäude steigert auch den Gewinn der passenden Firmen.
 
@@ -198,8 +198,8 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Noch nie im Spiel getestet:** Konvoischutz, Bergung, Schiffsspenden der Mäzene, Konzern-Automatisierung, Liefervertrag (zwei Jahre), Trümmer und Wiederaufbau, Besatzung und Kollaboration.
 - **Prototyp Hilfsreich:** [docs/TESTS_PROTO_HOLDINGS.md](docs/TESTS_PROTO_HOLDINGS.md) (Konsole `event pe.15` bis `pe.21`).
 - **Weltraum (Ideen):** private Stationen und Kilostrukturen über ein Hilfsreich mit Leasing, Spenden von Schiffen durch Mäzene nach Verlusten, Konzernflotten über ein Hilfsreich, private Werften.
-- **Erledigt (0.45): Spezialisierungsgebäude durch Konzerne** (Regeln 29./30.10.2026, im Spiel noch ungetestet). Pacht als Mietkauf über zehn Jahre in Handel, immer gezahlt. Der Gebäudebonus kommt im Firmengewinn an. Lohnt sich nur das Gebäude, zahlt der Staat auf Wunsch Spezialisierung und Distrikt; die KI tut das, wenn sie die Mineralien hat.
-- **Erledigt (0.45): Sperre bei Distrikten in der Bauliste** (30.10.2026). Offen: Löst ein Ersetzen in der Bauliste `on_district_queued` aus? Das zeigt der nächste Test.
+- **Erledigt (0.45): Spezialisierungsgebäude durch Konzerne** (Regeln 29./30.10.2026, im Spiel noch ungetestet). Pacht als Mietkauf über zehn Jahre in Handel, immer gezahlt. Der Gebäudebonus kommt im Firmengewinn an. Im Spiel bestätigt (30.10.2026): Distrikt, Spezialisierung und Gebäude entstehen auf einmal. Seit 0.45.1 (30.10.2026) zahlt der Konzern alles, die Pacht bringt ihm 50 % Gewinn; es gibt keine Zusatzzahlung des Staates mehr.
+- **Erledigt (0.45): Sperre bei Distrikten in der Bauliste** (30.10.2026). Bestätigt: Ein Ersetzen (Bergbau- durch Stadtdistrikt) löst `on_district_queued` aus.
 - **KI in einem neuen Spiel beobachten (27.10.2026):** Vergleich 2301 → 2304 zeigte Fortschritt bei Militär und Firmenzahl, aber kaum mehr Legierungen; Staatsanleihen landen ungenutzt im Handelslager, Gewinnauszahlung bei kleinen KIs nur 21–39 %.
 - **Effizienzbonus der Konzernstationen prüfen (27.10.2026, niedrige Priorität seit 29.10.2026, vorerst bleibt es so):** Stationen erzeugen 140 % des Vanilla-Werts, 120 % gehen an uns, 20 % sind Marge. Damit kostet Privatwirtschaft dort nichts und bringt dem Staat sogar mehr; vermutlich zu stark. Neu kalibrieren, sodass Privatisierung auch bei Stationen einen spürbaren Preis hat.
 - **Erledigt (0.43): Neue Firmenstufen, getrennt von der Spezialisierung** (beschlossen 28.10.2026, im Spiel noch ungetestet).

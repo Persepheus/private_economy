@@ -22,7 +22,7 @@
  d_pe_ledger_dividend_desc:0 "Aktien, die der Staat an Privatkonzernen hält; sie zahlen monatlich Dividende."
  pe_corp_lease:0 "Pacht für Konzerngebäude"
  d_pe_ledger_lease:0 "Pacht für Konzerngebäude"
- d_pe_ledger_lease_desc:0 "Ein Konzern hat hier ein Spezialisierungsgebäude gebaut (mit Spezialisierung oder Distrikt, wenn er sie bezahlt hat). Wir pachten es zehn Jahre: die Kosten plus 20 % Marge, verteilt auf 120 Monate. Danach gehört es uns; die Planetenentscheidung Pacht ablösen beendet sie früher zum Restwert."
+ d_pe_ledger_lease_desc:0 "Ein Konzern hat hier ein Spezialisierungsgebäude gebaut (mit Spezialisierung und Distrikt, wenn sie fehlten). Wir pachten es zehn Jahre: die Kosten plus 50 % Gewinn für den Konzern, verteilt auf 120 Monate. Danach gehört es uns; die Planetenentscheidung Pacht ablösen beendet sie früher zum Restwert."
  pe_auto_refund:0 "Private Automatisierung (Erstattung der Firmen)"
  d_pe_ledger_auto:0 "Erstattung Private Automatisierung"
  d_pe_ledger_auto_desc:0 "Die Privatfirmen erstatten uns jeden Monat die Energie, die die Automatisierung ihrer Jobs uns kostet (Zeile Automatisierte Arbeitskraft), aus ihrem eigenen Kapital."

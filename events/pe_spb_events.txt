@@ -7,8 +7,7 @@ namespace = pe
 country_event = {
 	id = pe.333
 	title = pe.333.name
-	desc = { trigger = { check_variable = { which = pe_spb_mode value = 1 } } text = pe.333.desc.all }
-	desc = { trigger = { check_variable = { which = pe_spb_mode value = 2 } } text = pe.333.desc.rest }
+	desc = pe.333.desc
 	picture = GFX_evt_tradedeal
 	is_triggered_only = yes
 	location = event_target:pe_spb_planet
@@ -26,38 +25,10 @@ country_event = {
 		}
 	}
 
-	# The corporation pays everything.
+	# The corporation pays everything and leases it to us (cost plus 50% over ten years).
 	option = {
 		name = pe.333.a
-		trigger = { check_variable = { which = pe_spb_mode value = 1 } }
 		custom_tooltip = pe.333.a.tt
-		hidden_effect = {
-			event_target:pe_spb_planet = { pe_spb_build = yes }
-			remove_country_flag = pe_spb_offer
-		}
-	}
-	# The corporation pays the building, we the specialisation (and the district).
-	option = {
-		name = pe.333.c
-		trigger = {
-			check_variable = { which = pe_spb_mode value = 2 }
-			check_variable = { which = pe_spb_lv value = 2 }
-			has_resource = { type = minerals amount >= 1000 }
-		}
-		custom_tooltip = pe.333.c.tt
-		hidden_effect = {
-			event_target:pe_spb_planet = { pe_spb_build = yes }
-			remove_country_flag = pe_spb_offer
-		}
-	}
-	option = {
-		name = pe.333.d
-		trigger = {
-			check_variable = { which = pe_spb_mode value = 2 }
-			check_variable = { which = pe_spb_lv value = 3 }
-			has_resource = { type = minerals amount >= 1300 }
-		}
-		custom_tooltip = pe.333.d.tt
 		hidden_effect = {
 			event_target:pe_spb_planet = { pe_spb_build = yes }
 			remove_country_flag = pe_spb_offer

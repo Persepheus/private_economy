@@ -74,3 +74,18 @@ Statisch geprüft (Validator). Im Spiel noch nicht getestet. Am besten ein neues
   - Variante 2 und 3: Wird die Spezialisierung beziehungsweise der Distrikt richtig angelegt?
   - Pacht ablösen: Der Betrag stimmt, die Budgetzeile verschwindet im nächsten Monat.
   - KI-Saves: Bei KIs mit Konzernen stehen nach einigen Jahren mehr dieser Gebäude, und die Konzernkassen bekommen Pacht.
+
+## 0.45.1: Pacht deckt alle Kosten plus 50 %
+
+- **Im Spiel bestätigt (0.45.0):**
+  - Distrikt, Spezialisierung und Gebäude entstehen auf einmal.
+  - Ein Ersetzen in der Bauliste löst die Sperre aus (`district queued on …`).
+- **Neu:**
+  - Der Konzern baut, wenn eine seiner Firmen des Typs auf dem Planeten davon profitiert und er alle Kosten bezahlen kann. Wie viel die Firmen gewinnen, spielt keine Rolle mehr.
+  - Er zahlt immer alles: Gebäude, gegebenenfalls Spezialisierung und Distrikt.
+  - Die Pacht beträgt die Kosten plus 50 %, verteilt auf 120 Monate und aufgerundet auf 0,5. pe.333 hat nur noch „Annehmen“ und „Ablehnen“.
+  - Unter mehreren Kandidaten eines Reichs kommt zuerst der, dessen Privatjobs im Verhältnis zu den Kosten am meisten gewinnen.
+- **Prüfen:**
+  - Pacht im Angebot = Kosten × 1,5 / 120. Die Kosten sind Mineralien zum Schattenpreis, zum Beispiel 1500 Mineralien × 0,53 = 795, also 10 Handel im Monat.
+  - Die Konzernkasse sinkt um die vollen Kosten.
+- **Logs:** Die Zeilen der Bauliste und der Fusion stehen jetzt ohne Backslash in game.log.

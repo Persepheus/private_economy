@@ -22,7 +22,7 @@ carrier_event = {
 			save_event_target_as = pe_dq_planet
 			owner = {
 				set_variable = { which = pe_lg_a value = prev.pe_dq }
-				log = "private_economy: district queued on \\[pe_dq_planet.GetName], queued districts there \\[This.pe_lg_a]"
+				log = "private_economy: district queued on [pe_dq_planet.GetName], queued districts there [This.pe_lg_a]"
 			}
 		}
 	}
@@ -43,7 +43,7 @@ carrier_event = {
 			save_event_target_as = pe_dq_planet
 			owner = {
 				set_variable = { which = pe_lg_a value = prev.pe_dq }
-				log = "private_economy: district unqueued on \\[pe_dq_planet.GetName], queued districts there \\[This.pe_lg_a]"
+				log = "private_economy: district unqueued on [pe_dq_planet.GetName], queued districts there [This.pe_lg_a]"
 			}
 		}
 	}
@@ -64,7 +64,7 @@ carrier_event = {
 			save_event_target_as = pe_dq_planet
 			owner = {
 				set_variable = { which = pe_lg_a value = prev.pe_dq }
-				log = "private_economy: district completed on \\[pe_dq_planet.GetName], queued districts there \\[This.pe_lg_a]"
+				log = "private_economy: district completed on [pe_dq_planet.GetName], queued districts there [This.pe_lg_a]"
 			}
 		}
 	}
