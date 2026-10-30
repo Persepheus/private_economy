@@ -4,7 +4,8 @@
 #   1 into a zone of the type with a free building slot,
 #   2 else into the state's district of the type, adding the zone (1000 minerals),
 #   3 else onto a free district slot of the type, adding the district (300 minerals) and zone.
-# The corporation pays everything from its cash (minerals at their shadow price) and leases
+# The corporation pays everything from its cash (minerals at the market buying price, pe_pb_minerals,
+# since 0.45.4; before at their shadow price, which a mineral surplus pushes far down) and leases
 # it to the state for ten years: the cost plus 50% profit over 120 months (0.45.1, budget line
 # d_pe_ledger_lease), then the building is ours; the planet decision Pay Off Lease ends it
 # earlier at its remaining value. So it is always worth it for the corporation; it only needs
@@ -57,6 +58,9 @@ pe_spb_step = {
 			multiply_variable = { which = pe_spb_rent value = 0.025 }
 			ceiling_variable = pe_spb_rent
 			multiply_variable = { which = pe_spb_rent value = 0.5 }
+			# The cost, rounded for the offer.
+			set_variable = { which = pe_spb_ccr value = pe_spb_cc }
+			round_variable = pe_spb_ccr
 			if = {
 				limit = { is_ai = yes }
 				event_target:pe_spb_planet = { pe_spb_build = yes }
@@ -106,15 +110,15 @@ pe_spb_eval_m = {
 		}
 		root = {
 			# Ten years of the extra output (+0.5 per job of 100 workforce and month; pe_spb_v)
-			# against the cost (building, zone, district: pe_spb_xt), at shadow prices. The
-			# corporation must afford the whole cost.
+			# against the cost (building, zone, district: pe_spb_xt). The output at shadow prices,
+			# the cost at the market buying price. The corporation must afford the whole cost.
 			set_variable = { which = pe_spb_v value = pe_spb_wf }
 			multiply_variable = { which = pe_spb_v value = 0.6 }
 			multiply_variable = { which = pe_spb_v value = pe_s_minerals }
 			set_variable = { which = pe_spb_xt value = 200 }
 			if = { limit = { check_variable = { which = pe_spb_lc value >= 2 } } change_variable = { which = pe_spb_xt value = 1000 } }
 			if = { limit = { check_variable = { which = pe_spb_lc value = 3 } } change_variable = { which = pe_spb_xt value = 300 } }
-			multiply_variable = { which = pe_spb_xt value = pe_s_minerals }
+			multiply_variable = { which = pe_spb_xt value = pe_pb_minerals }
 			set_variable = { which = pe_spb_md value = 0 }
 			if = {
 				limit = { check_variable = { which = pe_spb_lc value > 0 } check_variable = { which = pe_spb_kx value > 0 } check_variable = { which = pe_spb_wf value > 0 } check_variable = { which = pe_spb_kc value >= pe_spb_xt } }
@@ -181,15 +185,15 @@ pe_spb_eval_e = {
 		}
 		root = {
 			# Ten years of the extra output (+0.5 per job of 100 workforce and month; pe_spb_v)
-			# against the cost (building, zone, district: pe_spb_xt), at shadow prices. The
-			# corporation must afford the whole cost.
+			# against the cost (building, zone, district: pe_spb_xt). The output at shadow prices,
+			# the cost at the market buying price. The corporation must afford the whole cost.
 			set_variable = { which = pe_spb_v value = pe_spb_wf }
 			multiply_variable = { which = pe_spb_v value = 0.6 }
 			multiply_variable = { which = pe_spb_v value = pe_s_energy }
 			set_variable = { which = pe_spb_xt value = 400 }
 			if = { limit = { check_variable = { which = pe_spb_lc value >= 2 } } change_variable = { which = pe_spb_xt value = 1000 } }
 			if = { limit = { check_variable = { which = pe_spb_lc value = 3 } } change_variable = { which = pe_spb_xt value = 300 } }
-			multiply_variable = { which = pe_spb_xt value = pe_s_minerals }
+			multiply_variable = { which = pe_spb_xt value = pe_pb_minerals }
 			set_variable = { which = pe_spb_md value = 0 }
 			if = {
 				limit = { check_variable = { which = pe_spb_lc value > 0 } check_variable = { which = pe_spb_kx value > 0 } check_variable = { which = pe_spb_wf value > 0 } check_variable = { which = pe_spb_kc value >= pe_spb_xt } }
@@ -256,15 +260,15 @@ pe_spb_eval_f = {
 		}
 		root = {
 			# Ten years of the extra output (+0.5 per job of 100 workforce and month; pe_spb_v)
-			# against the cost (building, zone, district: pe_spb_xt), at shadow prices. The
-			# corporation must afford the whole cost.
+			# against the cost (building, zone, district: pe_spb_xt). The output at shadow prices,
+			# the cost at the market buying price. The corporation must afford the whole cost.
 			set_variable = { which = pe_spb_v value = pe_spb_wf }
 			multiply_variable = { which = pe_spb_v value = 0.6 }
 			multiply_variable = { which = pe_spb_v value = pe_s_food }
 			set_variable = { which = pe_spb_xt value = 400 }
 			if = { limit = { check_variable = { which = pe_spb_lc value >= 2 } } change_variable = { which = pe_spb_xt value = 1000 } }
 			if = { limit = { check_variable = { which = pe_spb_lc value = 3 } } change_variable = { which = pe_spb_xt value = 300 } }
-			multiply_variable = { which = pe_spb_xt value = pe_s_minerals }
+			multiply_variable = { which = pe_spb_xt value = pe_pb_minerals }
 			set_variable = { which = pe_spb_md value = 0 }
 			if = {
 				limit = { check_variable = { which = pe_spb_lc value > 0 } check_variable = { which = pe_spb_kx value > 0 } check_variable = { which = pe_spb_wf value > 0 } check_variable = { which = pe_spb_kc value >= pe_spb_xt } }

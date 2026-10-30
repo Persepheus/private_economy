@@ -627,7 +627,9 @@ const msg = loc => `owner = { create_message = { type = pe_private_economy local
 // pe_corp: the corporation (slot 1-8) the firm belongs to, 0 = independent; it stays through
 // stage changes, restructuring and moves. So does a corporate loan (pe_loan, pe_lender,
 // pe_loan_q: quarters of bridging loans in a row).
-const initFirm = (code, stage, fcap, debt, age = 'root.pe_chg_age', corp = 'root.pe_chg_corp') => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } set_variable = { which = pe_debt value = ${debt} } set_variable = { which = pe_age value = ${age} } set_variable = { which = pe_corp value = ${corp} } set_variable = { which = pe_loan value = root.pe_chg_loan } set_variable = { which = pe_lender value = root.pe_chg_lender } set_variable = { which = pe_loan_q value = root.pe_chg_loanq } set_variable = { which = pe_fid value = root.pe_chg_fid } set_variable = { which = pe_sup_fid value = root.pe_chg_supfid } }`;
+// pe_prim is set right away (0.45.4): pe_supply_step runs in the quarter of a stage change,
+// before the next accounting sets it, and a supplier without it lost its buyers.
+const initFirm = (code, stage, fcap, debt, age = 'root.pe_chg_age', corp = 'root.pe_chg_corp') => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } set_variable = { which = pe_debt value = ${debt} } set_variable = { which = pe_age value = ${age} } set_variable = { which = pe_corp value = ${corp} } set_variable = { which = pe_loan value = root.pe_chg_loan } set_variable = { which = pe_lender value = root.pe_chg_lender } set_variable = { which = pe_loan_q value = root.pe_chg_loanq } set_variable = { which = pe_fid value = root.pe_chg_fid } set_variable = { which = pe_sup_fid value = root.pe_chg_supfid } set_variable = { which = pe_prim value = ${LETTERS.indexOf(variants[code - 1].primary) + 1} } }`;
 const RETOOL_AGE = 40;                                 // quarters (10 years) before a firm may restructure
 const RETOOL_AGE_SHORT = 8;                            // quarters (2 years) for a firm consuming what the empire is short of
 const RETOOL_CD = 360;                                 // days (1 year) between two restructurings on a planet
@@ -1348,7 +1350,26 @@ ${ifChain(pairs, p => `root = { check_variable = { which = pe_old_code value = $
 	else = { owner = { create_message = { type = pe_private_economy localization = pe_msg_retool_$NEW$ days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = pe_no_firm localization = OLD } } } }
 }
 `;
-write('common/scripted_effects/pe_firm_effects_generated.txt', eff + eff_ledger_bits + eff_relocate + eff_guard + eff_retool_msg);
+// Mergers (pe_merge_effects.txt): stage 0-2. One localisation key per absorbed firm.
+const mergePairs = pairs.filter(p => p.s < 3);
+const eff_merge_msg = `
+# Colony scope (after pe_merge_apply, root = owner): the merger message naming the surviving
+# firm (FIRM, root.pe_mg_code at stage pe_mg_stg), the absorbed one (in the localisation key,
+# root.pe_mg_ocode) and what the survivor becomes (NEW: its variant a stage larger).
+pe_merge_message = {
+	if = {
+		limit = { owner = { is_ai = no } }
+		save_event_target_as = pe_msg_planet
+${ifChain(mergePairs, p => `root = { check_variable = { which = pe_mg_ocode value = ${p.v.code} } check_variable = { which = pe_mg_stg value = ${p.s} } }`, p => `pe_merge_message_${p.v.primary}_${p.s} = { OTHER = ${p.key} }`, '\t\t')}
+	}
+}
+${[...new Set(mergePairs.map(p => `${p.v.primary}_${p.s}`))].map(ps => `
+# The surviving firm (main product and stage ${ps}) and what it becomes; $OTHER$ = the absorbed firm.
+pe_merge_message_${ps} = {
+${ifChain(mergePairs.filter(p => `${p.v.primary}_${p.s}` === ps), p => `root = { check_variable = { which = pe_mg_code value = ${p.v.code} } }`, p => `owner = { create_message = { type = pe_private_economy localization = pe_msg_merge_$OTHER$ days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = ${p.key} localization = FIRM } variable = { type = key value = ${keyOf(p.v, p.s + 1)} localization = NEW } } }`)}
+}`).join('\n')}
+`;
+write('common/scripted_effects/pe_firm_effects_generated.txt', eff + eff_ledger_bits + eff_relocate + eff_guard + eff_retool_msg + eff_merge_msg);
 
 // --- Scripted localisation (country scope) --------------------------------------
 const dtext = (name, varName, entries, fallback) => `defined_text = {
@@ -1468,6 +1489,10 @@ for (const {v, s, key} of pairs) {
   loc.german.push(` ${key}:0 "${nameOf(v, s, false)}"`,
     ` ${key}_desc:0 "Ein privates Unternehmen, das selbst entscheidet, was es produziert. Es belegt einen Distriktplatz${v.cityLike ? '' : ` und einen ${deD}distrikt`} und bietet Wohnraum wie dieser Distrikt. Arbeitskraft: ${wf} (auf einem Habitat insgesamt ${habWf[0]}, mit Void Dwellern ${habWf[1]})."`,
     ` pe_msg_retool_${key}:0 "§Y$OLD$§! auf $PLANET$ hat umstrukturiert und ist jetzt §Y$${key}$§!."`);
+  if (s < 3) {
+    loc.english.push(` pe_msg_merge_${key}:0 "Merger on $PLANET$: §Y$FIRM$§! has taken over §Y$${key}$§! and is now §Y$NEW$§!, with the money of both. It has fewer jobs than the two before, and a district slot has become free."`);
+    loc.german.push(` pe_msg_merge_${key}:0 "Fusion auf $PLANET$: §Y$FIRM$§! hat §Y$${key}$§! übernommen und ist jetzt §Y$NEW$§!, mit dem Geld beider. Sie hat weniger Stellen als die beiden zuvor, und ein Distriktplatz ist frei geworden."`);
+  }
   // Founded firms start small; bought districts become normal firms.
   if (s === 0) {
     loc.english.push(` pe_msg_found_${key}:0 "A §Y$${key}$§! has opened on $PLANET$."`,

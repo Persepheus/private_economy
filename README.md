@@ -29,6 +29,11 @@ Die Gründungsregel für Konzerne bleibt unverändert (Entscheidung 30.10.2026).
   - Vorher (0.45.0) baute der Konzern nur, wenn sich der Mehrertrag der Privatjobs in zehn Jahren lohnte, und der Staat zahlte gegebenenfalls Spezialisierung und Distrikt. Die Pacht betrug Kosten plus 20 %.
   - Der Spieler wird immer gefragt, die KI nimmt an.
   - Das Gebäude steigert auch den Gewinn der passenden Firmen.
+  - **Preis (0.45.4):** Die Kosten zählen die Mineralien zum Marktkaufpreis, nicht mehr zum Schattenpreis. Bei einem Mineralienüberschuss fällt der Schattenpreis weit unter 1 (Save 2248: 0,26). So kostete Distrikt, Spezialisierung und Energienetz (1700 Mineralien) nur 449 Handel, und die Pacht betrug 6 im Monat. Das Angebot nennt jetzt auch die Baukosten. Die Ablöse ist der noch offene Anteil der Baukosten, ohne den Gewinn des Konzerns.
+- **Fusionsnachricht (0.45.4):** Sie nennt die übernehmende Firma, die übernommene und die neue, etwa „Fusion auf X: Private Mine hat Private Mine übernommen und ist jetzt Mittelständische Private Mine“.
+- **Lieferverträge (0.45.4):**
+  - Wachsen, Umziehen und Fusionieren beenden keinen Vertrag mehr. Eine Firma, die im Quartal wuchs oder umbaute, hatte bis zur nächsten Abrechnung kein Hauptprodukt, und ihre Abnehmer verloren den Lieferanten. Bei einer Fusion übernimmt die verbleibende Firma die Abnehmer der anderen.
+  - Ein Abnehmer, der in eine Branche umbaut, die die Ware nicht braucht, verlässt den Vertrag still, ohne Wartezeit. Bisher blieb er gebunden und belegte einen Platz beim Lieferanten.
 
 ## Stand 0.44.0
 
@@ -187,6 +192,12 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen.
 - **Volle Lager (27.10.2026):** Rüstungsauftrag und Lagervertrag sind in 0.39 umgesetzt. Verworfen: Modernisierung der Verteidigung und Werftausbau durch Konzerne.
 - **Längere Lieferketten (Supply Chains):** mehrstufige Wertschöpfung zwischen Firmen (Vorprodukte, Zulieferer), gemerkt am 27.10.2026. Aus dem Review: mit begrenzten Abhängigkeiten, also Ausfällen, Ersatzlieferanten und Versorgungssicherheit statt eines dauerhaften Bonus.
+  - Vorschlag vom 30.10.2026, noch nicht freigegeben:
+    - Der Abnehmer wählt den Lieferanten mit der höchsten Stufe, bei Gleichstand den mit dem meisten Geld.
+    - Kapazität nach Stufe: klein 1, normal 2, mittel 3, groß 4 Abnehmer.
+    - Gewinn: Der Lieferant verdient +5 % je Abnehmer, der Abnehmer +10 %. Der Produktionsbonus bleibt.
+    - Versorgungssicherheit: Abnehmer mit Vertrag strukturieren bei Defizit als Letzte um.
+    - Ausfälle einzelner Lieferanten: verworfen, zu kleinteilig.
 - **Erweiterungen aus dem Review (27.10.2026):**
   - **Staatliche Ausschreibungen:** Wir setzen Anreize für benötigte Legierungen, Forschung oder Versorgung, und die Firmen entscheiden, ob sie investieren.
   - **Konzernprofile und Branchentechnologien:** Konzerne unterscheiden sich durch Spezialisierung, Risikobereitschaft und Investitionsverhalten (passt zu „Firmen forschen an ihrem Sektor“).

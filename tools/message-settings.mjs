@@ -41,7 +41,7 @@ export const messageCategories = [
 
 export function messageCategory(key) {
   const rules = [
-    [/^pe_msg_(found_|buy_|up_|down_|nat_|merge$)/, 'firms'],
+    [/^pe_msg_(found_|buy_|up_|down_|nat_|merge_)/, 'firms'],
     [/^pe_msg_(relocate|retool_)/, 'restructuring'],
     [/^pe_msg_(auto_|autodown_|corp_auto_)/, 'automation'],
     [/^pe_msg_(bankrupt_|firm_ruined$|site_cancel$|corp_crisis$)/, 'crises'],

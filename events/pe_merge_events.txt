@@ -20,6 +20,7 @@ country_event = {
 				if = {
 					limit = { root = { check_variable = { which = pe_mg_found value = 1 } } }
 					pe_merge_apply = yes
+					pe_merge_message = yes
 					pe_firm_change = yes
 				}
 				else = { log = "private_economy: merger on [This.GetName] no longer possible" }

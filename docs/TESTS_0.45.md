@@ -99,3 +99,19 @@ Statisch geprüft (Validator). Im Spiel noch nicht getestet. Am besten ein neues
   - Kein Kauf, solange die Privatjobs des Planeten zu weniger als 90 % besetzt sind. Grund im Register: „Kein Kauf: Die privaten Stellen hier sind zu weniger als 90 % besetzt …“.
   - Ein Stadt- oder Habitat-Wohndistrikt bringt 100 Arbeitskraft je Spezialisierung mit. Fehlt etwas zu einer normalen Stadtfirma (200 Arbeitskraft, auf Void-Dweller-Habitaten 300), müssen freie Pops es decken. Sonst gibt es keinen Kauf (Grund 19).
 - **Prüfen:** Auf Faenov Prime kauft der Pool keinen weiteren Distrikt. Das Register zeigt Grund 21.
+
+## 0.45.4: Pacht zum Marktpreis, Fusionsnachricht, Lieferverträge
+
+- **Pacht:**
+  - Die Baukosten zählen die Mineralien zum Marktkaufpreis (`pe_pb_minerals`, aus dem Marktpreis für 100 Mineralien). Vorher galt der Schattenpreis, im Save 2248 nur 0,264.
+  - Beispiel Irriamun Prime: Distrikt, Spezialisierung und Energienetz, also 1700 Mineralien. Vorher 449 Handel und 6 Pacht im Monat; zum Marktpreis von etwa 1,3 sind es rund 2200 Handel und etwa 28 im Monat.
+  - pe.333 nennt jetzt die Baukosten.
+  - Die Ablöse (pe.334) bleibt der noch offene Anteil der Baukosten ohne den Gewinn; der Text sagt das jetzt.
+  - Bestehende Pachten behalten ihren alten Betrag.
+- **Prüfen:** Pacht im Angebot = Baukosten × 1,5 / 120. Die Konzernkasse sinkt um die Baukosten.
+- **Fusionsnachricht:** „Fusion auf X: A hat B übernommen und ist jetzt C“. A und C sind dieselbe Variante, C eine Stufe größer.
+- **Lieferverträge:**
+  - Neue und veränderte Firmen haben sofort ihr Hauptprodukt (`pe_prim`). Ein Lieferant, der wächst, umbaut oder fusioniert, behält seine Abnehmer.
+  - Bei einer Fusion kaufen die Abnehmer der übernommenen Firma bei der verbleibenden. Hat diese keinen Lieferanten, übernimmt sie den der anderen.
+  - Ein Abnehmer, der in eine Branche umbaut, die die Ware nicht braucht, verlässt den Vertrag ohne Nachricht und ohne Wartezeit.
+- **Prüfen:** Nach dem Aufstieg einer Mine mit Abnehmern kommt keine Nachricht „Liefervertrag beendet“.
