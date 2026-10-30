@@ -14372,7 +14372,7 @@ pe_firm_change = {
 				set_variable = { which = pe_chg_bomb value = 0 }
 			}
 			if = { limit = { is_variable_set = pe_bomb_hit check_variable = { which = pe_bomb_hit value = 1 } } root = { set_variable = { which = pe_chg_bomb value = 1 } } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		root = { set_variable = { which = pe_pend_any value = 0 } }
 		save_event_target_as = pe_msg_planet
@@ -14828,202 +14828,202 @@ pe_nationalise_one = {
 		if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_stage value = 0 } planet_owner = { has_resource = { type = minerals amount >= 488 } has_resource = { type = trade amount >= 98 } } }
 			planet_owner = { add_resource = { minerals = -488 trade = -98 } change_variable = { which = pe_capital value = 586 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 1 } set_variable = { which = pe_nat_stage value = 0 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_stage value = 0 } planet_owner = { has_resource = { type = alloys amount >= 146 } has_resource = { type = trade amount >= 98 } } }
 			planet_owner = { add_resource = { alloys = -146 trade = -98 } change_variable = { which = pe_capital value = 682 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 1 } set_variable = { which = pe_nat_stage value = 0 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_stage value = 1 } planet_owner = { has_resource = { type = minerals amount >= 750 } has_resource = { type = trade amount >= 150 } } }
 			planet_owner = { add_resource = { minerals = -750 trade = -150 } change_variable = { which = pe_capital value = 900 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 1 } set_variable = { which = pe_nat_stage value = 1 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_stage value = 1 } planet_owner = { has_resource = { type = alloys amount >= 225 } has_resource = { type = trade amount >= 150 } } }
 			planet_owner = { add_resource = { alloys = -225 trade = -150 } change_variable = { which = pe_capital value = 1050 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 1 } set_variable = { which = pe_nat_stage value = 1 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_stage value = 2 } planet_owner = { has_resource = { type = minerals amount >= 1125 } has_resource = { type = trade amount >= 225 } } }
 			planet_owner = { add_resource = { minerals = -1125 trade = -225 } change_variable = { which = pe_capital value = 1350 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 1 } set_variable = { which = pe_nat_stage value = 2 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_stage value = 2 } planet_owner = { has_resource = { type = alloys amount >= 338 } has_resource = { type = trade amount >= 225 } } }
 			planet_owner = { add_resource = { alloys = -338 trade = -225 } change_variable = { which = pe_capital value = 1577 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 1 } set_variable = { which = pe_nat_stage value = 2 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_stage value = 3 } planet_owner = { has_resource = { type = minerals amount >= 1500 } has_resource = { type = trade amount >= 300 } } }
 			planet_owner = { add_resource = { minerals = -1500 trade = -300 } change_variable = { which = pe_capital value = 1800 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 1 } set_variable = { which = pe_nat_stage value = 3 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_stage value = 3 } planet_owner = { has_resource = { type = alloys amount >= 450 } has_resource = { type = trade amount >= 300 } } }
 			planet_owner = { add_resource = { alloys = -450 trade = -300 } change_variable = { which = pe_capital value = 2100 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 1 } set_variable = { which = pe_nat_stage value = 3 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 2 } check_variable = { which = pe_stage value = 0 } planet_owner = { has_resource = { type = minerals amount >= 300 } has_resource = { type = trade amount >= 60 } } }
 			planet_owner = { add_resource = { minerals = -300 trade = -60 } change_variable = { which = pe_capital value = 360 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 2 } set_variable = { which = pe_nat_stage value = 0 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 2 } check_variable = { which = pe_stage value = 0 } planet_owner = { has_resource = { type = alloys amount >= 150 } has_resource = { type = trade amount >= 60 } } }
 			planet_owner = { add_resource = { alloys = -150 trade = -60 } change_variable = { which = pe_capital value = 660 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 2 } set_variable = { which = pe_nat_stage value = 0 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 2 } check_variable = { which = pe_stage value = 1 } planet_owner = { has_resource = { type = minerals amount >= 450 } has_resource = { type = trade amount >= 90 } } }
 			planet_owner = { add_resource = { minerals = -450 trade = -90 } change_variable = { which = pe_capital value = 540 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 2 } set_variable = { which = pe_nat_stage value = 1 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 2 } check_variable = { which = pe_stage value = 1 } planet_owner = { has_resource = { type = alloys amount >= 225 } has_resource = { type = trade amount >= 90 } } }
 			planet_owner = { add_resource = { alloys = -225 trade = -90 } change_variable = { which = pe_capital value = 990 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 2 } set_variable = { which = pe_nat_stage value = 1 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 2 } check_variable = { which = pe_stage value = 2 } planet_owner = { has_resource = { type = minerals amount >= 600 } has_resource = { type = trade amount >= 120 } } }
 			planet_owner = { add_resource = { minerals = -600 trade = -120 } change_variable = { which = pe_capital value = 720 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 2 } set_variable = { which = pe_nat_stage value = 2 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 2 } check_variable = { which = pe_stage value = 2 } planet_owner = { has_resource = { type = alloys amount >= 300 } has_resource = { type = trade amount >= 120 } } }
 			planet_owner = { add_resource = { alloys = -300 trade = -120 } change_variable = { which = pe_capital value = 1320 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 2 } set_variable = { which = pe_nat_stage value = 2 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 2 } check_variable = { which = pe_stage value = 3 } planet_owner = { has_resource = { type = minerals amount >= 750 } has_resource = { type = trade amount >= 150 } } }
 			planet_owner = { add_resource = { minerals = -750 trade = -150 } change_variable = { which = pe_capital value = 900 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 2 } set_variable = { which = pe_nat_stage value = 3 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 2 } check_variable = { which = pe_stage value = 3 } planet_owner = { has_resource = { type = alloys amount >= 375 } has_resource = { type = trade amount >= 150 } } }
 			planet_owner = { add_resource = { alloys = -375 trade = -150 } change_variable = { which = pe_capital value = 1650 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 2 } set_variable = { which = pe_nat_stage value = 3 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 3 } check_variable = { which = pe_stage value = 0 } planet_owner = { has_resource = { type = minerals amount >= 300 } has_resource = { type = trade amount >= 60 } } }
 			planet_owner = { add_resource = { minerals = -300 trade = -60 } change_variable = { which = pe_capital value = 360 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 3 } set_variable = { which = pe_nat_stage value = 0 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 3 } check_variable = { which = pe_stage value = 0 } planet_owner = { has_resource = { type = alloys amount >= 150 } has_resource = { type = trade amount >= 60 } } }
 			planet_owner = { add_resource = { alloys = -150 trade = -60 } change_variable = { which = pe_capital value = 660 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 3 } set_variable = { which = pe_nat_stage value = 0 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 3 } check_variable = { which = pe_stage value = 1 } planet_owner = { has_resource = { type = minerals amount >= 450 } has_resource = { type = trade amount >= 90 } } }
 			planet_owner = { add_resource = { minerals = -450 trade = -90 } change_variable = { which = pe_capital value = 540 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 3 } set_variable = { which = pe_nat_stage value = 1 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 3 } check_variable = { which = pe_stage value = 1 } planet_owner = { has_resource = { type = alloys amount >= 225 } has_resource = { type = trade amount >= 90 } } }
 			planet_owner = { add_resource = { alloys = -225 trade = -90 } change_variable = { which = pe_capital value = 990 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 3 } set_variable = { which = pe_nat_stage value = 1 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 3 } check_variable = { which = pe_stage value = 2 } planet_owner = { has_resource = { type = minerals amount >= 600 } has_resource = { type = trade amount >= 120 } } }
 			planet_owner = { add_resource = { minerals = -600 trade = -120 } change_variable = { which = pe_capital value = 720 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 3 } set_variable = { which = pe_nat_stage value = 2 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 3 } check_variable = { which = pe_stage value = 2 } planet_owner = { has_resource = { type = alloys amount >= 300 } has_resource = { type = trade amount >= 120 } } }
 			planet_owner = { add_resource = { alloys = -300 trade = -120 } change_variable = { which = pe_capital value = 1320 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 3 } set_variable = { which = pe_nat_stage value = 2 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 3 } check_variable = { which = pe_stage value = 3 } planet_owner = { has_resource = { type = minerals amount >= 750 } has_resource = { type = trade amount >= 150 } } }
 			planet_owner = { add_resource = { minerals = -750 trade = -150 } change_variable = { which = pe_capital value = 900 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 3 } set_variable = { which = pe_nat_stage value = 3 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 3 } check_variable = { which = pe_stage value = 3 } planet_owner = { has_resource = { type = alloys amount >= 375 } has_resource = { type = trade amount >= 150 } } }
 			planet_owner = { add_resource = { alloys = -375 trade = -150 } change_variable = { which = pe_capital value = 1650 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 3 } set_variable = { which = pe_nat_stage value = 3 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 4 } check_variable = { which = pe_stage value = 0 } planet_owner = { has_resource = { type = minerals amount >= 300 } has_resource = { type = trade amount >= 60 } } }
 			planet_owner = { add_resource = { minerals = -300 trade = -60 } change_variable = { which = pe_capital value = 360 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 4 } set_variable = { which = pe_nat_stage value = 0 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 4 } check_variable = { which = pe_stage value = 0 } planet_owner = { has_resource = { type = alloys amount >= 150 } has_resource = { type = trade amount >= 60 } } }
 			planet_owner = { add_resource = { alloys = -150 trade = -60 } change_variable = { which = pe_capital value = 660 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 4 } set_variable = { which = pe_nat_stage value = 0 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 4 } check_variable = { which = pe_stage value = 1 } planet_owner = { has_resource = { type = minerals amount >= 450 } has_resource = { type = trade amount >= 90 } } }
 			planet_owner = { add_resource = { minerals = -450 trade = -90 } change_variable = { which = pe_capital value = 540 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 4 } set_variable = { which = pe_nat_stage value = 1 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 4 } check_variable = { which = pe_stage value = 1 } planet_owner = { has_resource = { type = alloys amount >= 225 } has_resource = { type = trade amount >= 90 } } }
 			planet_owner = { add_resource = { alloys = -225 trade = -90 } change_variable = { which = pe_capital value = 990 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 4 } set_variable = { which = pe_nat_stage value = 1 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 4 } check_variable = { which = pe_stage value = 2 } planet_owner = { has_resource = { type = minerals amount >= 600 } has_resource = { type = trade amount >= 120 } } }
 			planet_owner = { add_resource = { minerals = -600 trade = -120 } change_variable = { which = pe_capital value = 720 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 4 } set_variable = { which = pe_nat_stage value = 2 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 4 } check_variable = { which = pe_stage value = 2 } planet_owner = { has_resource = { type = alloys amount >= 300 } has_resource = { type = trade amount >= 120 } } }
 			planet_owner = { add_resource = { alloys = -300 trade = -120 } change_variable = { which = pe_capital value = 1320 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 4 } set_variable = { which = pe_nat_stage value = 2 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 4 } check_variable = { which = pe_stage value = 3 } planet_owner = { has_resource = { type = minerals amount >= 750 } has_resource = { type = trade amount >= 150 } } }
 			planet_owner = { add_resource = { minerals = -750 trade = -150 } change_variable = { which = pe_capital value = 900 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 4 } set_variable = { which = pe_nat_stage value = 3 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 4 } check_variable = { which = pe_stage value = 3 } planet_owner = { has_resource = { type = alloys amount >= 375 } has_resource = { type = trade amount >= 150 } } }
 			planet_owner = { add_resource = { alloys = -375 trade = -150 } change_variable = { which = pe_capital value = 1650 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 4 } set_variable = { which = pe_nat_stage value = 3 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 5 } check_variable = { which = pe_stage value = 0 } planet_owner = { has_resource = { type = minerals amount >= 488 } has_resource = { type = trade amount >= 98 } } }
 			planet_owner = { add_resource = { minerals = -488 trade = -98 } change_variable = { which = pe_capital value = 586 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 5 } set_variable = { which = pe_nat_stage value = 0 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 5 } check_variable = { which = pe_stage value = 0 } planet_owner = { has_resource = { type = alloys amount >= 146 } has_resource = { type = trade amount >= 98 } } }
 			planet_owner = { add_resource = { alloys = -146 trade = -98 } change_variable = { which = pe_capital value = 682 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 5 } set_variable = { which = pe_nat_stage value = 0 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 5 } check_variable = { which = pe_stage value = 1 } planet_owner = { has_resource = { type = minerals amount >= 750 } has_resource = { type = trade amount >= 150 } } }
 			planet_owner = { add_resource = { minerals = -750 trade = -150 } change_variable = { which = pe_capital value = 900 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 5 } set_variable = { which = pe_nat_stage value = 1 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 5 } check_variable = { which = pe_stage value = 1 } planet_owner = { has_resource = { type = alloys amount >= 225 } has_resource = { type = trade amount >= 150 } } }
 			planet_owner = { add_resource = { alloys = -225 trade = -150 } change_variable = { which = pe_capital value = 1050 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 5 } set_variable = { which = pe_nat_stage value = 1 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 5 } check_variable = { which = pe_stage value = 2 } planet_owner = { has_resource = { type = minerals amount >= 1125 } has_resource = { type = trade amount >= 225 } } }
 			planet_owner = { add_resource = { minerals = -1125 trade = -225 } change_variable = { which = pe_capital value = 1350 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 5 } set_variable = { which = pe_nat_stage value = 2 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 5 } check_variable = { which = pe_stage value = 2 } planet_owner = { has_resource = { type = alloys amount >= 338 } has_resource = { type = trade amount >= 225 } } }
 			planet_owner = { add_resource = { alloys = -338 trade = -225 } change_variable = { which = pe_capital value = 1577 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 5 } set_variable = { which = pe_nat_stage value = 2 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { NOT = { uses_district_set = habitat } } check_variable = { which = pe_cls value = 5 } check_variable = { which = pe_stage value = 3 } planet_owner = { has_resource = { type = minerals amount >= 1500 } has_resource = { type = trade amount >= 300 } } }
 			planet_owner = { add_resource = { minerals = -1500 trade = -300 } change_variable = { which = pe_capital value = 1800 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 5 } set_variable = { which = pe_nat_stage value = 3 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		else_if = { limit = { planet = { uses_district_set = habitat } check_variable = { which = pe_cls value = 5 } check_variable = { which = pe_stage value = 3 } planet_owner = { has_resource = { type = alloys amount >= 450 } has_resource = { type = trade amount >= 300 } } }
 			planet_owner = { add_resource = { alloys = -450 trade = -300 } change_variable = { which = pe_capital value = 2100 } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = 5 } set_variable = { which = pe_nat_stage value = 3 } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 	}
 	if = {
@@ -15244,7 +15244,7 @@ pe_restructure = {
 				set_variable = { which = pe_chg_fid value = prev.pe_fid }
 				set_variable = { which = pe_chg_supfid value = prev.pe_sup_fid }
 			}
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 	}
 	if = {
@@ -15751,6 +15751,18 @@ pe_relocate_exec = {
 				set_variable = { which = pe_chg_fid value = prev.pe_fid }
 				set_variable = { which = pe_chg_supfid value = prev.pe_sup_fid }
 		}
+		save_event_target_as = pe_rm_self
+		set_variable = { which = pe_rm value = 1 }
+		if = {
+			limit = { has_deposit_category = pe_deposit_cat_firms }
+			root = { set_variable = { which = pe_rm_code value = prev.pe_code } set_variable = { which = pe_rm_stage value = prev.pe_stage } }
+			planet = { random_deposit = { limit = { has_deposit_category = pe_deposit_cat_firms NOT = { check_variable = { which = pe_rm value = 1 } } check_variable = { which = pe_code value = root.pe_rm_code } check_variable = { which = pe_stage value = root.pe_rm_stage } } event_target:pe_rm_self = { if = { limit = { prev = { is_variable_set = pe_age } } set_variable = { which = pe_age value = prev.pe_age } } if = { limit = { prev = { is_variable_set = pe_bomb_hit } } set_variable = { which = pe_bomb_hit value = prev.pe_bomb_hit } } if = { limit = { prev = { is_variable_set = pe_chab_g } } set_variable = { which = pe_chab_g value = prev.pe_chab_g } } if = { limit = { prev = { is_variable_set = pe_cls } } set_variable = { which = pe_cls value = prev.pe_cls } } if = { limit = { prev = { is_variable_set = pe_code } } set_variable = { which = pe_code value = prev.pe_code } } if = { limit = { prev = { is_variable_set = pe_corp } } set_variable = { which = pe_corp value = prev.pe_corp } } if = { limit = { prev = { is_variable_set = pe_corp_cand } } set_variable = { which = pe_corp_cand value = prev.pe_corp_cand } } if = { limit = { prev = { is_variable_set = pe_corp_mv } } set_variable = { which = pe_corp_mv value = prev.pe_corp_mv } } if = { limit = { prev = { is_variable_set = pe_cost } } set_variable = { which = pe_cost value = prev.pe_cost } } if = { limit = { prev = { is_variable_set = pe_debt } } set_variable = { which = pe_debt value = prev.pe_debt } } if = { limit = { prev = { is_variable_set = pe_fcap } } set_variable = { which = pe_fcap value = prev.pe_fcap } } if = { limit = { prev = { is_variable_set = pe_fid } } set_variable = { which = pe_fid value = prev.pe_fid } } if = { limit = { prev = { is_variable_set = pe_fst } } set_variable = { which = pe_fst value = prev.pe_fst } } if = { limit = { prev = { is_variable_set = pe_gain } } set_variable = { which = pe_gain value = prev.pe_gain } } if = { limit = { prev = { is_variable_set = pe_lamt } } set_variable = { which = pe_lamt value = prev.pe_lamt } } if = { limit = { prev = { is_variable_set = pe_lastp } } set_variable = { which = pe_lastp value = prev.pe_lastp } } if = { limit = { prev = { is_variable_set = pe_lender } } set_variable = { which = pe_lender value = prev.pe_lender } } if = { limit = { prev = { is_variable_set = pe_lneed } } set_variable = { which = pe_lneed value = prev.pe_lneed } } if = { limit = { prev = { is_variable_set = pe_loan } } set_variable = { which = pe_loan value = prev.pe_loan } } if = { limit = { prev = { is_variable_set = pe_loan_q } } set_variable = { which = pe_loan_q value = prev.pe_loan_q } } if = { limit = { prev = { is_variable_set = pe_mg_c } } set_variable = { which = pe_mg_c value = prev.pe_mg_c } } if = { limit = { prev = { is_variable_set = pe_mg_o } } set_variable = { which = pe_mg_o value = prev.pe_mg_o } } if = { limit = { prev = { is_variable_set = pe_mg_ok } } set_variable = { which = pe_mg_ok value = prev.pe_mg_ok } } if = { limit = { prev = { is_variable_set = pe_mg_s } } set_variable = { which = pe_mg_s value = prev.pe_mg_s } } if = { limit = { prev = { is_variable_set = pe_mg_veto } } set_variable = { which = pe_mg_veto value = prev.pe_mg_veto } } if = { limit = { prev = { is_variable_set = pe_pending } } set_variable = { which = pe_pending value = prev.pe_pending } } if = { limit = { prev = { is_variable_set = pe_prim } } set_variable = { which = pe_prim value = prev.pe_prim } } if = { limit = { prev = { is_variable_set = pe_profit } } set_variable = { which = pe_profit value = prev.pe_profit } } if = { limit = { prev = { is_variable_set = pe_res } } set_variable = { which = pe_res value = prev.pe_res } } if = { limit = { prev = { is_variable_set = pe_res2 } } set_variable = { which = pe_res2 value = prev.pe_res2 } } if = { limit = { prev = { is_variable_set = pe_rid } } set_variable = { which = pe_rid value = prev.pe_rid } } if = { limit = { prev = { is_variable_set = pe_rl_c } } set_variable = { which = pe_rl_c value = prev.pe_rl_c } } if = { limit = { prev = { is_variable_set = pe_rl_cand } } set_variable = { which = pe_rl_cand value = prev.pe_rl_cand } } if = { limit = { prev = { is_variable_set = pe_san } } set_variable = { which = pe_san value = prev.pe_san } } if = { limit = { prev = { is_variable_set = pe_sf } } set_variable = { which = pe_sf value = prev.pe_sf } } if = { limit = { prev = { is_variable_set = pe_stage } } set_variable = { which = pe_stage value = prev.pe_stage } } if = { limit = { prev = { is_variable_set = pe_sup_cap } } set_variable = { which = pe_sup_cap value = prev.pe_sup_cap } } if = { limit = { prev = { is_variable_set = pe_sup_cd } } set_variable = { which = pe_sup_cd value = prev.pe_sup_cd } } if = { limit = { prev = { is_variable_set = pe_sup_fid } } set_variable = { which = pe_sup_fid value = prev.pe_sup_fid } } if = { limit = { prev = { is_variable_set = pe_sup_m } } set_variable = { which = pe_sup_m value = prev.pe_sup_m } } if = { limit = { prev = { is_variable_set = pe_sup_n } } set_variable = { which = pe_sup_n value = prev.pe_sup_n } } if = { limit = { prev = { is_variable_set = pe_sup_ok } } set_variable = { which = pe_sup_ok value = prev.pe_sup_ok } } if = { limit = { prev = { is_variable_set = pe_sup_seq } } set_variable = { which = pe_sup_seq value = prev.pe_sup_seq } } if = { limit = { prev = { is_variable_set = pe_sz } } set_variable = { which = pe_sz value = prev.pe_sz } } if = { limit = { prev = { is_variable_set = pe_szd } } set_variable = { which = pe_szd value = prev.pe_szd } } if = { limit = { prev = { is_variable_set = pe_thr } } set_variable = { which = pe_thr value = prev.pe_thr } } if = { limit = { prev = { is_variable_set = pe_to_c } } set_variable = { which = pe_to_c value = prev.pe_to_c } } if = { limit = { prev = { is_variable_set = pe_va } } set_variable = { which = pe_va value = prev.pe_va } } if = { limit = { prev = { is_variable_set = pe_val } } set_variable = { which = pe_val value = prev.pe_val } } if = { limit = { prev = { is_variable_set = pe_want_bridge } } set_variable = { which = pe_want_bridge value = prev.pe_want_bridge } } if = { limit = { prev = { is_variable_set = pe_want_cost } } set_variable = { which = pe_want_cost value = prev.pe_want_cost } } if = { limit = { prev = { is_variable_set = pe_want_loan } } set_variable = { which = pe_want_loan value = prev.pe_want_loan } } if = { limit = { prev = { is_variable_set = pe_wf_farmer } } set_variable = { which = pe_wf_farmer value = prev.pe_wf_farmer } } if = { limit = { prev = { is_variable_set = pe_wf_miner } } set_variable = { which = pe_wf_miner value = prev.pe_wf_miner } } if = { limit = { prev = { is_variable_set = pe_wf_technician } } set_variable = { which = pe_wf_technician value = prev.pe_wf_technician } } if = { limit = { prev = { is_variable_set = pe_wfall } } set_variable = { which = pe_wfall value = prev.pe_wfall } } if = { limit = { prev = { is_variable_set = pe_zq } } set_variable = { which = pe_zq value = prev.pe_zq } } } } }
+		}
+		else_if = {
+			limit = { is_deposit_type = d_pe_ruins }
+			planet = { random_deposit = { limit = { is_deposit_type = d_pe_ruins NOT = { check_variable = { which = pe_rm value = 1 } } } event_target:pe_rm_self = { if = { limit = { prev = { is_variable_set = pe_ruin_code } } set_variable = { which = pe_ruin_code value = prev.pe_ruin_code } } if = { limit = { prev = { is_variable_set = pe_ruin_corp } } set_variable = { which = pe_ruin_corp value = prev.pe_ruin_corp } } } } }
+		}
+		set_variable = { which = pe_rm value = 0 }
 		remove_deposit = yes
 	}
 	root = {
@@ -18773,4 +18785,22 @@ pe_merge_message_f_2 = {
 	else_if = { limit = { root = { check_variable = { which = pe_mg_code value = 78 } } } owner = { if = { limit = { NOT = { has_country_flag = pe_mute_firms } } create_message = { type = pe_private_economy_firms localization = pe_msg_merge_$OTHER$ days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = d_pe_firm_ffft_2 localization = FIRM } variable = { type = key value = d_pe_firm_ffft_3 localization = NEW } } } } }
 	else_if = { limit = { root = { check_variable = { which = pe_mg_code value = 79 } } } owner = { if = { limit = { NOT = { has_country_flag = pe_mute_firms } } create_message = { type = pe_private_economy_firms localization = pe_msg_merge_$OTHER$ days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = d_pe_firm_fffm_2 localization = FIRM } variable = { type = key value = d_pe_firm_fffm_3 localization = NEW } } } } }
 	else_if = { limit = { root = { check_variable = { which = pe_mg_code value = 80 } } } owner = { if = { limit = { NOT = { has_country_flag = pe_mute_firms } } create_message = { type = pe_private_economy_firms localization = pe_msg_merge_$OTHER$ days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = d_pe_firm_fffe_2 localization = FIRM } variable = { type = key value = d_pe_firm_fffe_3 localization = NEW } } } } }
+	}
+
+# Deposit scope: remove this firm or ruin (see depRemove in tools/generate-firms.mjs: the
+# engine removes a deposit of the type, so this one first takes over another one's data).
+pe_dep_remove = {
+	save_event_target_as = pe_rm_self
+	set_variable = { which = pe_rm value = 1 }
+	if = {
+		limit = { has_deposit_category = pe_deposit_cat_firms }
+		root = { set_variable = { which = pe_rm_code value = prev.pe_code } set_variable = { which = pe_rm_stage value = prev.pe_stage } }
+		planet = { random_deposit = { limit = { has_deposit_category = pe_deposit_cat_firms NOT = { check_variable = { which = pe_rm value = 1 } } check_variable = { which = pe_code value = root.pe_rm_code } check_variable = { which = pe_stage value = root.pe_rm_stage } } event_target:pe_rm_self = { if = { limit = { prev = { is_variable_set = pe_age } } set_variable = { which = pe_age value = prev.pe_age } } if = { limit = { prev = { is_variable_set = pe_bomb_hit } } set_variable = { which = pe_bomb_hit value = prev.pe_bomb_hit } } if = { limit = { prev = { is_variable_set = pe_chab_g } } set_variable = { which = pe_chab_g value = prev.pe_chab_g } } if = { limit = { prev = { is_variable_set = pe_cls } } set_variable = { which = pe_cls value = prev.pe_cls } } if = { limit = { prev = { is_variable_set = pe_code } } set_variable = { which = pe_code value = prev.pe_code } } if = { limit = { prev = { is_variable_set = pe_corp } } set_variable = { which = pe_corp value = prev.pe_corp } } if = { limit = { prev = { is_variable_set = pe_corp_cand } } set_variable = { which = pe_corp_cand value = prev.pe_corp_cand } } if = { limit = { prev = { is_variable_set = pe_corp_mv } } set_variable = { which = pe_corp_mv value = prev.pe_corp_mv } } if = { limit = { prev = { is_variable_set = pe_cost } } set_variable = { which = pe_cost value = prev.pe_cost } } if = { limit = { prev = { is_variable_set = pe_debt } } set_variable = { which = pe_debt value = prev.pe_debt } } if = { limit = { prev = { is_variable_set = pe_fcap } } set_variable = { which = pe_fcap value = prev.pe_fcap } } if = { limit = { prev = { is_variable_set = pe_fid } } set_variable = { which = pe_fid value = prev.pe_fid } } if = { limit = { prev = { is_variable_set = pe_fst } } set_variable = { which = pe_fst value = prev.pe_fst } } if = { limit = { prev = { is_variable_set = pe_gain } } set_variable = { which = pe_gain value = prev.pe_gain } } if = { limit = { prev = { is_variable_set = pe_lamt } } set_variable = { which = pe_lamt value = prev.pe_lamt } } if = { limit = { prev = { is_variable_set = pe_lastp } } set_variable = { which = pe_lastp value = prev.pe_lastp } } if = { limit = { prev = { is_variable_set = pe_lender } } set_variable = { which = pe_lender value = prev.pe_lender } } if = { limit = { prev = { is_variable_set = pe_lneed } } set_variable = { which = pe_lneed value = prev.pe_lneed } } if = { limit = { prev = { is_variable_set = pe_loan } } set_variable = { which = pe_loan value = prev.pe_loan } } if = { limit = { prev = { is_variable_set = pe_loan_q } } set_variable = { which = pe_loan_q value = prev.pe_loan_q } } if = { limit = { prev = { is_variable_set = pe_mg_c } } set_variable = { which = pe_mg_c value = prev.pe_mg_c } } if = { limit = { prev = { is_variable_set = pe_mg_o } } set_variable = { which = pe_mg_o value = prev.pe_mg_o } } if = { limit = { prev = { is_variable_set = pe_mg_ok } } set_variable = { which = pe_mg_ok value = prev.pe_mg_ok } } if = { limit = { prev = { is_variable_set = pe_mg_s } } set_variable = { which = pe_mg_s value = prev.pe_mg_s } } if = { limit = { prev = { is_variable_set = pe_mg_veto } } set_variable = { which = pe_mg_veto value = prev.pe_mg_veto } } if = { limit = { prev = { is_variable_set = pe_pending } } set_variable = { which = pe_pending value = prev.pe_pending } } if = { limit = { prev = { is_variable_set = pe_prim } } set_variable = { which = pe_prim value = prev.pe_prim } } if = { limit = { prev = { is_variable_set = pe_profit } } set_variable = { which = pe_profit value = prev.pe_profit } } if = { limit = { prev = { is_variable_set = pe_res } } set_variable = { which = pe_res value = prev.pe_res } } if = { limit = { prev = { is_variable_set = pe_res2 } } set_variable = { which = pe_res2 value = prev.pe_res2 } } if = { limit = { prev = { is_variable_set = pe_rid } } set_variable = { which = pe_rid value = prev.pe_rid } } if = { limit = { prev = { is_variable_set = pe_rl_c } } set_variable = { which = pe_rl_c value = prev.pe_rl_c } } if = { limit = { prev = { is_variable_set = pe_rl_cand } } set_variable = { which = pe_rl_cand value = prev.pe_rl_cand } } if = { limit = { prev = { is_variable_set = pe_san } } set_variable = { which = pe_san value = prev.pe_san } } if = { limit = { prev = { is_variable_set = pe_sf } } set_variable = { which = pe_sf value = prev.pe_sf } } if = { limit = { prev = { is_variable_set = pe_stage } } set_variable = { which = pe_stage value = prev.pe_stage } } if = { limit = { prev = { is_variable_set = pe_sup_cap } } set_variable = { which = pe_sup_cap value = prev.pe_sup_cap } } if = { limit = { prev = { is_variable_set = pe_sup_cd } } set_variable = { which = pe_sup_cd value = prev.pe_sup_cd } } if = { limit = { prev = { is_variable_set = pe_sup_fid } } set_variable = { which = pe_sup_fid value = prev.pe_sup_fid } } if = { limit = { prev = { is_variable_set = pe_sup_m } } set_variable = { which = pe_sup_m value = prev.pe_sup_m } } if = { limit = { prev = { is_variable_set = pe_sup_n } } set_variable = { which = pe_sup_n value = prev.pe_sup_n } } if = { limit = { prev = { is_variable_set = pe_sup_ok } } set_variable = { which = pe_sup_ok value = prev.pe_sup_ok } } if = { limit = { prev = { is_variable_set = pe_sup_seq } } set_variable = { which = pe_sup_seq value = prev.pe_sup_seq } } if = { limit = { prev = { is_variable_set = pe_sz } } set_variable = { which = pe_sz value = prev.pe_sz } } if = { limit = { prev = { is_variable_set = pe_szd } } set_variable = { which = pe_szd value = prev.pe_szd } } if = { limit = { prev = { is_variable_set = pe_thr } } set_variable = { which = pe_thr value = prev.pe_thr } } if = { limit = { prev = { is_variable_set = pe_to_c } } set_variable = { which = pe_to_c value = prev.pe_to_c } } if = { limit = { prev = { is_variable_set = pe_va } } set_variable = { which = pe_va value = prev.pe_va } } if = { limit = { prev = { is_variable_set = pe_val } } set_variable = { which = pe_val value = prev.pe_val } } if = { limit = { prev = { is_variable_set = pe_want_bridge } } set_variable = { which = pe_want_bridge value = prev.pe_want_bridge } } if = { limit = { prev = { is_variable_set = pe_want_cost } } set_variable = { which = pe_want_cost value = prev.pe_want_cost } } if = { limit = { prev = { is_variable_set = pe_want_loan } } set_variable = { which = pe_want_loan value = prev.pe_want_loan } } if = { limit = { prev = { is_variable_set = pe_wf_farmer } } set_variable = { which = pe_wf_farmer value = prev.pe_wf_farmer } } if = { limit = { prev = { is_variable_set = pe_wf_miner } } set_variable = { which = pe_wf_miner value = prev.pe_wf_miner } } if = { limit = { prev = { is_variable_set = pe_wf_technician } } set_variable = { which = pe_wf_technician value = prev.pe_wf_technician } } if = { limit = { prev = { is_variable_set = pe_wfall } } set_variable = { which = pe_wfall value = prev.pe_wfall } } if = { limit = { prev = { is_variable_set = pe_zq } } set_variable = { which = pe_zq value = prev.pe_zq } } } } }
+	}
+	else_if = {
+		limit = { is_deposit_type = d_pe_ruins }
+		planet = { random_deposit = { limit = { is_deposit_type = d_pe_ruins NOT = { check_variable = { which = pe_rm value = 1 } } } event_target:pe_rm_self = { if = { limit = { prev = { is_variable_set = pe_ruin_code } } set_variable = { which = pe_ruin_code value = prev.pe_ruin_code } } if = { limit = { prev = { is_variable_set = pe_ruin_corp } } set_variable = { which = pe_ruin_corp value = prev.pe_ruin_corp } } } } }
+	}
+	set_variable = { which = pe_rm value = 0 }
+	remove_deposit = yes
 	}

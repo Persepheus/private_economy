@@ -161,7 +161,7 @@ country_event = {
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_stage check_variable = { which = pe_stage value = root.pe_to_min } }
 					if = { limit = { is_variable_set = pe_fcap } root = { set_variable = { which = pe_to_fcap value = prev.pe_fcap } } }
-					remove_deposit = yes
+					pe_dep_remove = yes
 				}
 				random_deposit = {
 					limit = { has_deposit_category = pe_deposit_cat_firms }

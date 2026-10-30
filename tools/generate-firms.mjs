@@ -630,6 +630,28 @@ const msg = loc => `owner = { create_message = { type = pe_private_economy local
 // pe_prim is set right away (0.45.4): pe_supply_step runs in the quarter of a stage change,
 // before the next accounting sets it, and a supplier without it lost its buyers.
 const initFirm = (code, stage, fcap, debt, age = 'root.pe_chg_age', corp = 'root.pe_chg_corp') => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } set_variable = { which = pe_debt value = ${debt} } set_variable = { which = pe_age value = ${age} } set_variable = { which = pe_corp value = ${corp} } set_variable = { which = pe_loan value = root.pe_chg_loan } set_variable = { which = pe_lender value = root.pe_chg_lender } set_variable = { which = pe_loan_q value = root.pe_chg_loanq } set_variable = { which = pe_fid value = root.pe_chg_fid } set_variable = { which = pe_sup_fid value = root.pe_chg_supfid } set_variable = { which = pe_prim value = ${LETTERS.indexOf(variants[code - 1].primary) + 1} } }`;
+// Firm deposit variables a firm carries (0.46.1, from the saves); scratch values (pe_tmp...) left out.
+const FIRM_VARS = ['pe_age', 'pe_bomb_hit', 'pe_chab_g', 'pe_cls', 'pe_code', 'pe_corp', 'pe_corp_cand', 'pe_corp_mv', 'pe_cost', 'pe_debt', 'pe_fcap', 'pe_fid', 'pe_fst', 'pe_gain', 'pe_lamt', 'pe_lastp', 'pe_lender', 'pe_lneed', 'pe_loan', 'pe_loan_q', 'pe_mg_c', 'pe_mg_o', 'pe_mg_ok', 'pe_mg_s', 'pe_mg_veto', 'pe_pending', 'pe_prim', 'pe_profit', 'pe_res', 'pe_res2', 'pe_rid', 'pe_rl_c', 'pe_rl_cand', 'pe_san', 'pe_sf', 'pe_stage', 'pe_sup_cap', 'pe_sup_cd', 'pe_sup_fid', 'pe_sup_m', 'pe_sup_n', 'pe_sup_ok', 'pe_sup_seq', 'pe_sz', 'pe_szd', 'pe_thr', 'pe_to_c', 'pe_va', 'pe_val', 'pe_want_bridge', 'pe_want_cost', 'pe_want_loan', 'pe_wf_farmer', 'pe_wf_miner', 'pe_wf_technician', 'pe_wfall', 'pe_zq'];
+const RUIN_VARS = ['pe_ruin_code', 'pe_ruin_corp'];
+const takeOver = vars => `event_target:pe_rm_self = { ${vars.map(x => `if = { limit = { prev = { is_variable_set = ${x} } } set_variable = { which = ${x} value = prev.${x} } }`).join(' ')} }`;
+// Deposit scope: remove this firm (or ruin). The engine's remove_deposit takes a deposit of
+// the type, not necessarily this one: with two firms of one variant and stage on a planet
+// the other one went and this one stayed twice (0.46.1). So this one first takes over the
+// data of another deposit of its type, if there is one: whichever of the two goes, the
+// other firm remains. Inlined in pe_relocate_exec (call depth), pe_dep_remove elsewhere.
+const depRemove = t => `save_event_target_as = pe_rm_self
+${t}set_variable = { which = pe_rm value = 1 }
+${t}if = {
+${t}	limit = { has_deposit_category = pe_deposit_cat_firms }
+${t}	root = { set_variable = { which = pe_rm_code value = prev.pe_code } set_variable = { which = pe_rm_stage value = prev.pe_stage } }
+${t}	planet = { random_deposit = { limit = { has_deposit_category = pe_deposit_cat_firms NOT = { check_variable = { which = pe_rm value = 1 } } check_variable = { which = pe_code value = root.pe_rm_code } check_variable = { which = pe_stage value = root.pe_rm_stage } } ${takeOver(FIRM_VARS)} } }
+${t}}
+${t}else_if = {
+${t}	limit = { is_deposit_type = d_pe_ruins }
+${t}	planet = { random_deposit = { limit = { is_deposit_type = d_pe_ruins NOT = { check_variable = { which = pe_rm value = 1 } } } ${takeOver(RUIN_VARS)} } }
+${t}}
+${t}set_variable = { which = pe_rm value = 0 }
+${t}remove_deposit = yes`;
 const RETOOL_AGE = 40;                                 // quarters (10 years) before a firm may restructure
 const RETOOL_AGE_SHORT = 8;                            // quarters (2 years) for a firm consuming what the empire is short of
 const RETOOL_AGE_SUPPLIED = 16;                        // quarters (4 years) for such a firm with a supplier (0.46)
@@ -991,7 +1013,7 @@ pe_firm_change = {
 				set_variable = { which = pe_chg_bomb value = 0 }
 			}
 			if = { limit = { is_variable_set = pe_bomb_hit check_variable = { which = pe_bomb_hit value = 1 } } root = { set_variable = { which = pe_chg_bomb value = 1 } } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		root = { set_variable = { which = pe_pend_any value = 0 } }
 		save_event_target_as = pe_msg_planet
@@ -1057,7 +1079,7 @@ ${[1, 2, 3, 4, 5].flatMap(c => STAGES.map(s => ({c, s}))).flatMap(({c, s}) => [f
   return `\t\t${i ? 'else_if' : 'if'} = { limit = { planet = { ${hab ? HAB : NOT_HAB} } check_variable = { which = pe_cls value = ${c} } check_variable = { which = pe_stage value = ${s} } planet_owner = { has_resource = { type = ${res} amount >= ${m} } has_resource = { type = trade amount >= ${t} } } }
 			planet_owner = { add_resource = { ${res} = -${m} trade = -${t} } change_variable = { which = pe_capital value = ${val} } change_variable = { which = pe_capital value = prev.pe_fcap } subtract_variable = { which = pe_capital value = prev.pe_debt } }
 			root = { set_variable = { which = pe_nat_cls value = ${c} } set_variable = { which = pe_nat_stage value = ${s} } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}`;
 }).join('\n')}
 	}
@@ -1181,7 +1203,7 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM
 				set_variable = { which = pe_chg_fid value = prev.pe_fid }
 				set_variable = { which = pe_chg_supfid value = prev.pe_sup_fid }
 			}
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 	}
 	if = {
@@ -1268,7 +1290,7 @@ pe_relocate_exec = {
 				set_variable = { which = pe_chg_fid value = prev.pe_fid }
 				set_variable = { which = pe_chg_supfid value = prev.pe_sup_fid }
 		}
-		remove_deposit = yes
+		${depRemove('\t\t')}
 	}
 	root = {
 		subtract_variable = { which = pe_chg_fcap value = pe_rl_cost }
@@ -1378,7 +1400,14 @@ pe_merge_message_${ps} = {
 ${ifChain(mergePairs.filter(p => `${p.v.primary}_${p.s}` === ps), p => `root = { check_variable = { which = pe_mg_code value = ${p.v.code} } }`, p => `owner = { create_message = { type = pe_private_economy localization = pe_msg_merge_$OTHER$ days = 30 target = event_target:pe_msg_planet variable = { type = name localization = PLANET scope = event_target:pe_msg_planet } variable = { type = key value = ${p.key} localization = FIRM } variable = { type = key value = ${keyOf(p.v, p.s + 1)} localization = NEW } } }`)}
 }`).join('\n')}
 `;
-write('common/scripted_effects/pe_firm_effects_generated.txt', eff + eff_ledger_bits + eff_relocate + eff_guard + eff_retool_msg + eff_merge_msg);
+const eff_dep_remove = `
+# Deposit scope: remove this firm or ruin (see depRemove in tools/generate-firms.mjs: the
+# engine removes a deposit of the type, so this one first takes over another one's data).
+pe_dep_remove = {
+	${depRemove('\t')}
+}
+`;
+write('common/scripted_effects/pe_firm_effects_generated.txt', eff + eff_ledger_bits + eff_relocate + eff_guard + eff_retool_msg + eff_merge_msg + eff_dep_remove);
 
 // --- Scripted localisation (country scope) --------------------------------------
 const dtext = (name, varName, entries, fallback) => `defined_text = {

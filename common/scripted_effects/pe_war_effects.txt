@@ -220,7 +220,7 @@ pe_collab_seize = {
 			limit = { has_deposit_category = pe_deposit_cat_firms is_variable_set = pe_stage check_variable = { which = pe_stage value = prev.pe_col_st } }
 			prev = { set_variable = { which = pe_col_cls value = 1 } }
 			if = { limit = { is_variable_set = pe_cls } prev = { set_variable = { which = pe_col_cls value = prev.pe_cls } } }
-			remove_deposit = yes
+			pe_dep_remove = yes
 		}
 		if = {
 			limit = { check_variable = { which = pe_col_cls value > 0 } }

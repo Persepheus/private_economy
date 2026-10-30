@@ -31,3 +31,11 @@ Statisch geprüft (Validator). Im Spiel noch nicht getestet. Ein laufendes Spiel
 
 - Wachsen, Umziehen und Fusionieren beenden keinen Vertrag. Bei einer Fusion übernimmt die verbleibende Firma die Abnehmer der anderen.
 - Ein Abnehmer, der in eine Branche umbaut, die die Ware nicht braucht, verlässt den Vertrag still.
+
+## 0.46.1: die richtige Firma geht
+
+- `pe_dep_remove` (und inline in `pe_relocate_exec`): Vor `remove_deposit` übernimmt die Firma die Daten einer anderen mit gleichem `pe_code` und `pe_stage` auf dem Planeten (Ruinen: `pe_ruin_code`, `pe_ruin_corp`).
+- `pe_supply_step`: Doppelte `pe_fid` eines Reichs bekommen eine neue Nummer.
+- **Prüfen im Spielstand:** Nach einem Quartal gibt es keine doppelte `pe_fid` je Reich mehr (vorher: Minen auf Planet 383 dreimal Nummer 6, KI-Reiche ebenfalls).
+- **Prüfen im Spiel:** Lieferketten-Nachrichten kommen nur noch bei echten Änderungen, nicht mehr jedes Quartal „Lieferant geschrumpft“ plus neuer Vertrag.
+- **Prüfen:** Firmen werden beim Wachsen, Umziehen, Umbauen und Fusionieren weiterhin normal ersetzt; keine Firma verschwindet ohne Nachricht.

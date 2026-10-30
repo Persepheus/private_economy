@@ -8,6 +8,11 @@ Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien u
 
 ## Stand 0.46.0
 
+**0.46.1 – die richtige Firma geht.** Die Engine entfernt mit `remove_deposit` ein Deposit des Typs, nicht unbedingt das gemeinte. Standen zwei Firmen derselben Branche und Stufe auf einem Planeten, verschwand beim Wachsen, Umziehen, Umbauen, Fusionieren oder Verstaatlichen manchmal die andere samt Kapital. Die gemeinte Firma gab es danach doppelt, mit derselben Firmennummer.
+- Folge: Drei Minen mit einer Nummer zählten dieselben Abnehmer. Die kleinste kürzte jedes Quartal Verträge, die größte schloss sie neu ab: zwei Lieferketten-Nachrichten pro Quartal ohne echten Grund.
+- Jetzt übernimmt die zu entfernende Firma vorher die Daten einer gleichartigen. Egal welches Deposit die Engine nimmt, die andere Firma bleibt erhalten (auch bei Ruinen).
+- Laufende Spiele: Doppelte Firmennummern werden im nächsten Quartal neu vergeben. Dabei kann einmalig ein Vertrag gekürzt und neu geschlossen werden.
+
 **Lieferketten mit Wirkung** ([TESTS_0.46.md](docs/TESTS_0.46.md)). Bisher waren die Verträge ein zufällig verteilter +5-%-Bonus. Jetzt gilt:
 - **Lieferantenwahl:** Ein Abnehmer ohne Vertrag nimmt den besten Lieferanten mit freiem Platz. Zuerst zählt die höchste Stufe, dann ein Lieferant aus dem eigenen Konzern, dann das meiste Geld. Der erfolgreichste Zulieferer gilt als der mit den besten Produkten und als der zuverlässigste.
 - **Kapazität nach Stufe:** klein 1, normal 2, mittel 3, groß 4 Abnehmer. Schrumpft ein Lieferant, verliert er die zuletzt gewonnenen Abnehmer. Sie bekommen eine Nachricht und suchen sofort neu.

@@ -1,7 +1,7 @@
 # Private economy logic. Runs quarterly per country (pe.100); construction sites
 # advance monthly.
 # Call depth stays at 4 or less: the engine initialises only 5 nested levels.
-#   pe_monthly_sites (1) -> pe_site_complete (2)
+#   pe_monthly_sites (1) -> pe_site_complete (2), pe_dep_remove (2)
 #   pe_quarterly (1) -> pe_init (2)
 #                    -> pe_census (2)
 #                    -> pe_market (2) -> pe_shadow (3)
@@ -18,14 +18,15 @@
 #                                          -> pe_corp_lending (3)
 #                                          -> pe_merge_find (3), pe_merge_apply (3),
 #                                             pe_merge_message (3) -> pe_merge_message_<product>_<stage> (4)
-#                                          -> pe_firm_change (3)
+#                                          -> pe_firm_change (3)      -> pe_dep_remove (4)
 #                                          -> pe_buy_staffing (3)
 #                                          -> pe_choose_variant (3)   -> pe_consider_variant (4)
 #                                          -> pe_found_variant (3)    -> pe_found_firm (4)
 #                                          -> pe_buy_or_offer (3)     -> pe_buyout_execute (4)
-#                                          -> pe_nationalise_one (3)
+#                                          -> pe_nationalise_one (3)  -> pe_dep_remove (4)
 #                                          -> pe_restructure (3)      -> pe_retool_consider (4)
 #                                                                     -> pe_retool_guard (4)
+#                                                                     -> pe_dep_remove (4)
 #                    -> pe_command_economy (2) -> pe_firm_identify (3), pe_deposit_fetch (3)
 #                    -> pe_supply_step (2)
 #                    -> pe_auto_cover_step (2)
@@ -2247,6 +2248,26 @@ pe_corp_step = {
 # restructures later when the empire is short of what it consumes). See
 # tools/generate-firms.mjs (SUP_*).
 pe_supply_step = {
+	# Firm numbers are unique (0.46.1): a firm that shares its number with another of ours
+	# (left by the engine's remove_deposit before 0.46.1) gets a new one.
+	every_owned_colony = {
+		limit = { count_deposits = { category = pe_deposit_cat_firms count > 0 } }
+		every_deposit = { limit = { has_deposit_category = pe_deposit_cat_firms } set_variable = { which = pe_fid_seen value = 0 } }
+	}
+	every_owned_colony = {
+		limit = { count_deposits = { category = pe_deposit_cat_firms count > 0 } }
+		every_deposit = {
+			limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_fid value > 0 } }
+			root = { set_variable = { which = pe_cur_fid value = prev.pe_fid } }
+			if = {
+				limit = { root = { any_owned_colony = { any_deposit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_fid_seen value = 1 } check_variable = { which = pe_fid value = root.pe_cur_fid } } } } }
+				root = { change_variable = { which = pe_fid_next value = 1 } }
+				set_variable = { which = pe_fid value = root.pe_fid_next }
+				set_variable = { which = pe_sup_n value = 0 }
+			}
+			set_variable = { which = pe_fid_seen value = 1 }
+		}
+	}
 	every_owned_colony = {
 		limit = { count_deposits = { category = pe_deposit_cat_firms count > 0 } }
 		every_deposit = {
@@ -2680,7 +2701,7 @@ pe_ruins_step = {
 				else_if = { limit = { check_variable = { which = pe_rb_corp value = 7 } check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value >= pe_rb_need } } subtract_variable = { which = pe_c7_cash value = pe_rb_cost } set_variable = { which = pe_rb_done value = 1 } set_variable = { which = pe_msg_name value = pe_c7_name } }
 				else_if = { limit = { check_variable = { which = pe_rb_corp value = 8 } check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value >= pe_rb_need } } subtract_variable = { which = pe_c8_cash value = pe_rb_cost } set_variable = { which = pe_rb_done value = 1 } set_variable = { which = pe_msg_name value = pe_c8_name } }
 			}
-			if = { limit = { root = { check_variable = { which = pe_rb_done value = 1 } } } remove_deposit = yes }
+			if = { limit = { root = { check_variable = { which = pe_rb_done value = 1 } } } pe_dep_remove = yes }
 		}
 		if = {
 			limit = { root = { check_variable = { which = pe_rb_done value = 1 } } }
@@ -2709,7 +2730,7 @@ pe_ruins_step = {
 				if = {
 					limit = { is_ai = yes check_variable = { which = pe_capital value >= pe_rb_cost } }
 					subtract_variable = { which = pe_capital value = pe_rb_cost }
-					event_target:pe_rb_ruin = { remove_deposit = yes }
+					event_target:pe_rb_ruin = { pe_dep_remove = yes }
 					set_variable = { which = pe_rb_fcap value = 10 }
 					set_variable = { which = pe_rb_debt value = 0 }
 					event_target:pe_rb_planet = { pe_ruin_rebuild = yes }
@@ -2730,7 +2751,7 @@ pe_ruin_subsidy = {
 	set_variable = { which = pe_rb_fcap value = 10 }
 	set_variable = { which = pe_rb_debt value = pe_rb_cost }
 	subtract_variable = { which = pe_rb_debt value = pe_rb_sub }
-	event_target:pe_rb_ruin = { remove_deposit = yes }
+	event_target:pe_rb_ruin = { pe_dep_remove = yes }
 	event_target:pe_rb_planet = { pe_ruin_rebuild = yes }
 }
 
