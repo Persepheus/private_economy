@@ -6,6 +6,18 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
+## Stand 0.46.0
+
+**Lieferketten mit Wirkung** ([TESTS_0.46.md](docs/TESTS_0.46.md)). Bisher waren die Verträge ein zufällig verteilter +5-%-Bonus. Jetzt gilt:
+- **Lieferantenwahl:** Ein Abnehmer ohne Vertrag nimmt den besten Lieferanten mit freiem Platz. Zuerst zählt die höchste Stufe, dann ein Lieferant aus dem eigenen Konzern, dann das meiste Geld. Der erfolgreichste Zulieferer gilt als der mit den besten Produkten und als der zuverlässigste.
+- **Kapazität nach Stufe:** klein 1, normal 2, mittel 3, groß 4 Abnehmer. Schrumpft ein Lieferant, verliert er die zuletzt gewonnenen Abnehmer. Sie bekommen eine Nachricht und suchen sofort neu.
+- **Bis zu zwei neue Verträge** je Lieferantenart (Mine, Fabrik, Farm), Reich und Quartal, statt einem.
+- **Gewinn:** Ein Lieferant mit festen Abnehmern fährt die Produktion hoch und verdient +5 % je Abnehmer. Ein Abnehmer mit festem Lieferanten plant besser, steht seltener still und verdient +10 %.
+  - Gerechnet wird auf den Rohgewinn vor den Fixkosten.
+  - Der Staat zahlt das über den Gewinnanteil. Der +5-%-Produktionsbonus der Branchen bleibt.
+  - Firmen mit Lieferkette wachsen damit schneller und werden eher zum Konzern.
+- **Versorgungssicherheit:** Fehlt dem Reich etwas, das ein Abnehmer mit Vertrag verbraucht, baut er später um. Statt nach 2 Jahren mit einem Drittel der Schwelle erst nach 4 Jahren mit zwei Dritteln. Firmen ohne Vertrag bauen zuerst um; hält das Defizit an, ziehen die anderen nach.
+
 ## Stand 0.45.0
 
 **Mehr Aufstiege, Konzerne bauen mit** ([TESTS_0.45.md](docs/TESTS_0.45.md)). Anlass war der Save cevantianmultistellar2 (2241): In elf Jahren gab es 7 Aufstiege, aber rund 65 neue Firmen. Galaxisweit gab es nur 4 Konzerne, die Firmenkassen waren fast leer. Die Gründe:
@@ -155,7 +167,7 @@ Die Privatwirtschaft ist ein Kreislauf:
 - **Firmenfusion (0.45):** Fehlen für den Ausbau nur Arbeitskräfte, werden zwei gleiche Firmen eines Planeten zu einer größeren.
 - **Konzern-Stationen:** Konzerne bauen oder kaufen Orbitalstationen (gewöhnliche Rohstoffe, nach Wirtschaftsordnung begrenzt), gehalten von den Private Holdings des Reichs. Sie verarbeiten den Ertrag effizienter (140 %): Davon zahlen sie den Unterhalt ihrer Megastrukturen, liefern uns 120 % des Werts in ihrem eigenen Produkt (Zeile des Hauptsitz-Vorkommens) und behalten 20 % als Marge.
 - **Konzernflotten:** Im Krieg verleasen Industriekonzerne Flotten (5 Jahre, 10 % Gebühr, danach kaufen oder zurückgeben). Gegen Weltraumkreaturen an der Grenze stellen Konzerne Flotten gegen die Beuterechte (bei KI-Reichen startet die Flotte direkt bei den Kreaturen).
-- **Lieferketten:** Private Minen, Fabriken und (bei katalytischer Verarbeitung) Farmen schließen Lieferverträge mit Stahlwerken, Fabriken, Laboren, Handels- und Medienhäusern auf anderen Planeten: +5 % Ertrag der Branche auf beiden Planeten.
+- **Lieferketten:** Private Minen, Fabriken und (bei katalytischer Verarbeitung) Farmen beliefern Stahlwerke, Fabriken, Labore, Handels- und Medienhäuser. Der Abnehmer wählt den größten und reichsten Lieferanten mit freiem Platz (je Stufe ein Abnehmer). Beide Branchen erzeugen +5 %, der Lieferant verdient +5 % je Abnehmer, der Abnehmer +10 %. Bei einem Defizit baut ein Abnehmer mit Vertrag später um (0.46).
 - **Weitere Konzern-Angebote:** Erkundungscharta (Forschungsschiff gegen Schürfrechte), Konvoischutz gegen Piraten, Schutzflotten für bombardierte Planeten (gegen Firmen, Legierungen oder Einfluss; für den eigenen Hauptsitz kostenlos), Bergung von Trümmerfeldern, eigene Dyson-Schwärme und Arc Furnaces (gebaut wie in Vanilla: Baustelle der Holdings mit Vanilla-Bauzeit; der Konzern zahlt Bau, Ausbau und Unterhalt und wählt einen mittleren Standort; beim Ofen bekommt er die Himmelskörper ohne früheres Vorkommen, die übrigen bleiben beim Reich); Mäzene spenden Schiffe nach Verlusten.
 - **Firmenregister:** Planeten-Entscheidung, die zeigt, welche Firma zu welchem Konzern gehört, was jede Firma im letzten Quartal verdient und getan hat, warum auf dem Planeten gegründet wird oder nicht, und wie viel der Staat von den Gewinnen auszahlt.
 - **Kredite:** Konzerne verleihen aus ihrer Kasse für Wachstum und gegen Verluste (3 % Zins pro Quartal, Kreditlinie −200). Ausfälle treffen den Gläubiger; ein Konzern im Minus verkauft Firmen.
@@ -192,12 +204,7 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Nächste Schritte**: Kalibrierung von Gewinn, Kosten und Gewichten; Firmen forschen an ihrem Sektor, Techs schalten Varianten frei; Firmennamen.
 - **Volle Lager (27.10.2026):** Rüstungsauftrag und Lagervertrag sind in 0.39 umgesetzt. Verworfen: Modernisierung der Verteidigung und Werftausbau durch Konzerne.
 - **Längere Lieferketten (Supply Chains):** mehrstufige Wertschöpfung zwischen Firmen (Vorprodukte, Zulieferer), gemerkt am 27.10.2026. Aus dem Review: mit begrenzten Abhängigkeiten, also Ausfällen, Ersatzlieferanten und Versorgungssicherheit statt eines dauerhaften Bonus.
-  - Vorschlag vom 30.10.2026, noch nicht freigegeben:
-    - Der Abnehmer wählt den Lieferanten mit der höchsten Stufe, bei Gleichstand den mit dem meisten Geld.
-    - Kapazität nach Stufe: klein 1, normal 2, mittel 3, groß 4 Abnehmer.
-    - Gewinn: Der Lieferant verdient +5 % je Abnehmer, der Abnehmer +10 %. Der Produktionsbonus bleibt.
-    - Versorgungssicherheit: Abnehmer mit Vertrag strukturieren bei Defizit als Letzte um.
-    - Ausfälle einzelner Lieferanten: verworfen, zu kleinteilig.
+  - Umgesetzt in 0.46.0 (Lieferantenwahl, Kapazität, Gewinn, Versorgungssicherheit). Ausfälle einzelner Lieferanten: verworfen, zu kleinteilig. Offen bleibt die mehrstufige Wertschöpfung.
 - **Erweiterungen aus dem Review (27.10.2026):**
   - **Staatliche Ausschreibungen:** Wir setzen Anreize für benötigte Legierungen, Forschung oder Versorgung, und die Firmen entscheiden, ob sie investieren.
   - **Konzernprofile und Branchentechnologien:** Konzerne unterscheiden sich durch Spezialisierung, Risikobereitschaft und Investitionsverhalten (passt zu „Firmen forschen an ihrem Sektor“).

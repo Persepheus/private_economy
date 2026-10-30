@@ -2526,7 +2526,7 @@
  pe_prod_energy:0 "Energy"
  pe_prod_food:0 "Food"
  d_pe_location:0 "Private Economy"
- d_pe_location_desc:0 "What the private economy does here: §HClusters§! (2 / 3 / 4+ private firms with the same main product: +3 / 6 / 9% output of their sector, state jobs too), §HSupply contracts§! (fixed contracts with firms on other planets), §HCorporate benefits§! of rich corporations, §HArms orders§! of our defence contractor, §HPrice wars§! and the equipment of §HCorporate research institutes§!. The tooltip shows the details."
+ d_pe_location_desc:0 "What the private economy does here: §HClusters§! (2 / 3 / 4+ private firms with the same main product: +3 / 6 / 9% output of their sector, state jobs too), §HSupply contracts§! (fixed contracts between firms: +5% output of their sectors; the supplier earns +5% per buyer, the buyer +10%), §HCorporate benefits§! of rich corporations, §HArms orders§! of our defence contractor, §HPrice wars§! and the equipment of §HCorporate research institutes§!. The tooltip shows the details."
  pe_corp_production:0 "Corporate Production"
  pe_deposit_cat_corp:0 "Corporations"
  pe_msg_corp_st_build:0 "§Y$CORP$§! has built a station of its own above $PLANET$. The corporation processes its output itself."

@@ -137,19 +137,19 @@ pe_cluster_counts = {
 		if = {
 			limit = { check_variable = { which = pe_prim value = 9 } }
 			prev = { change_variable = { which = pe_sch value = 1 } }
-			if = { limit = { check_variable = { which = pe_sup_n value < 2 } } prev = { change_variable = { which = pe_scs_m value = 1 } } }
+			if = { limit = { check_variable = { which = pe_sup_n value <= pe_stage } } prev = { change_variable = { which = pe_scs_m value = 1 } } }
 			if = { limit = { check_variable = { which = pe_sup_n value > 0 } } prev = { change_variable = { which = pe_scl_m value = 1 } } }
 		}
 		if = {
 			limit = { check_variable = { which = pe_prim value = 2 } }
 			prev = { change_variable = { which = pe_sch value = 1 } }
-			if = { limit = { check_variable = { which = pe_sup_n value < 2 } } prev = { change_variable = { which = pe_scs_c value = 1 } } }
+			if = { limit = { check_variable = { which = pe_sup_n value <= pe_stage } } prev = { change_variable = { which = pe_scs_c value = 1 } } }
 			if = { limit = { check_variable = { which = pe_sup_n value > 0 } } prev = { change_variable = { which = pe_scl_c value = 1 } } }
 		}
 		if = {
 			limit = { check_variable = { which = pe_prim value = 11 } }
 			prev = { change_variable = { which = pe_sch value = 1 } }
-			if = { limit = { check_variable = { which = pe_sup_n value < 2 } } prev = { change_variable = { which = pe_scs_f value = 1 } } }
+			if = { limit = { check_variable = { which = pe_sup_n value <= pe_stage } } prev = { change_variable = { which = pe_scs_f value = 1 } } }
 			if = { limit = { check_variable = { which = pe_sup_n value > 0 } } prev = { change_variable = { which = pe_scl_f value = 1 } } }
 		}
 		if = { limit = { check_variable = { which = pe_prim value = 1 } } prev = { change_variable = { which = pe_cn_a value = 1 } } }

@@ -632,6 +632,7 @@ const msg = loc => `owner = { create_message = { type = pe_private_economy local
 const initFirm = (code, stage, fcap, debt, age = 'root.pe_chg_age', corp = 'root.pe_chg_corp') => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } set_variable = { which = pe_debt value = ${debt} } set_variable = { which = pe_age value = ${age} } set_variable = { which = pe_corp value = ${corp} } set_variable = { which = pe_loan value = root.pe_chg_loan } set_variable = { which = pe_lender value = root.pe_chg_lender } set_variable = { which = pe_loan_q value = root.pe_chg_loanq } set_variable = { which = pe_fid value = root.pe_chg_fid } set_variable = { which = pe_sup_fid value = root.pe_chg_supfid } set_variable = { which = pe_prim value = ${LETTERS.indexOf(variants[code - 1].primary) + 1} } }`;
 const RETOOL_AGE = 40;                                 // quarters (10 years) before a firm may restructure
 const RETOOL_AGE_SHORT = 8;                            // quarters (2 years) for a firm consuming what the empire is short of
+const RETOOL_AGE_SUPPLIED = 16;                        // quarters (4 years) for such a firm with a supplier (0.46)
 const RETOOL_CD = 360;                                 // days (1 year) between two restructurings on a planet
 // Real net output per filled job (one job = 100 workforce) of each private job, measured
 // from its category like the value added: country variables pe_o_<job>_<res>.
@@ -1118,17 +1119,25 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM
 		if = { limit = { check_variable = { which = pe_thr value < 3 } } set_variable = { which = pe_thr value = 3 } }
 		# A supply contract (as buyer or supplier) makes it less willing to change.
 		if = { limit = { OR = { check_variable = { which = pe_sup_fid value > 0 } check_variable = { which = pe_sup_n value > 0 } } } multiply_variable = { which = pe_thr value = 1.5 } }
-		# It consumes what the empire is short of: a third of that is enough (0.38).
-		if = { limit = { pe_firm_short = yes } multiply_variable = { which = pe_thr value = 0.33 } }
+		# It consumes what the empire is short of: a third of that is enough (0.38). With a
+		# supplier only two thirds (supply security, 0.46).
+		if = {
+			limit = { pe_firm_short = yes }
+			if = { limit = { check_variable = { which = pe_sup_fid value > 0 } } multiply_variable = { which = pe_thr value = 0.66 } }
+			else = { multiply_variable = { which = pe_thr value = 0.33 } }
+		}
 		if = {
 			limit = {
 				check_variable = { which = pe_debt value <= 0 }
 				check_variable = { which = pe_loan value <= 0 }
 				# Each firm's own pause (pe_age, quarters since founded or restructured): ${RETOOL_AGE / 4}
-				# years, ${RETOOL_AGE_SHORT / 4} if it consumes what the empire is short of.
+				# years, ${RETOOL_AGE_SHORT / 4} if it consumes what the empire is short of, ${RETOOL_AGE_SUPPLIED / 4} then
+				# with a supplier: firms without one restructure first, but a lasting shortage
+				# moves the others too.
 				OR = {
 					check_variable = { which = pe_age value >= ${RETOOL_AGE} }
-					AND = { pe_firm_short = yes check_variable = { which = pe_age value >= ${RETOOL_AGE_SHORT} } }
+					AND = { pe_firm_short = yes NOT = { check_variable = { which = pe_sup_fid value > 0 } } check_variable = { which = pe_age value >= ${RETOOL_AGE_SHORT} } }
+					AND = { pe_firm_short = yes check_variable = { which = pe_sup_fid value > 0 } check_variable = { which = pe_age value >= ${RETOOL_AGE_SUPPLIED} } }
 				}
 				check_variable = { which = pe_gain value > pe_thr }
 				check_variable = { which = pe_gain value > root.pe_best_gain }
@@ -1522,9 +1531,9 @@ for (const c of [1, 2, 3, 4]) for (const s of STAGES) {
 // --- Supply chains ------------------------------------------------------------------------
 // Buyers and suppliers (letters): a mine supplies steelworks and factories (minerals), a
 // factory supplies labs, trading houses and media houses (consumer goods); with Catalytic
-// Processing a farm supplies steelworks (food). A supplier serves at most SUP_CAP buyers.
-// Planets with contracted buyers or suppliers of a sector get +SUP_STEP output there.
-const SUP_CAP = 2;
+// Processing a farm supplies steelworks (food). A supplier serves one buyer per stage (small 1,
+// normal 2, mid-size 3, large 4; 0.46). Planets with contracted buyers or suppliers of a sector
+// get +SUP_STEP output there; the firms earn more (pe_firm_book, pe_supply_step).
 const SUP_STEP = 0.05;
 const SUP_BUYERS = {a: 'm', c: 'm', t: 'c', x: 'c', y: 'c', z: 'c', b: 'c'};
 const SUP_SUPPLIERS = ['m', 'c', 'f'];
@@ -1598,7 +1607,7 @@ ${SUP_LETTERS.map(l => `\tset_variable = { which = pe_scl_${l} value = 0 }`).joi
 		# Supply chains: buyers without a supplier (by the supplier they need), suppliers with room,
 		# and contracted firms per sector (for the modifier).
 ${Object.entries(SUP_BUYERS).map(([l, need]) => `\t\tif = {\n\t\t\tlimit = { check_variable = { which = pe_prim value = ${prim(l)} } }\n\t\t\tif = {\n\t\t\t\tlimit = { check_variable = { which = pe_sup_fid value > 0 } }\n\t\t\t\tprev = { change_variable = { which = pe_scl_${l} value = 1 } }\n\t\t\t}\n\t\t\telse_if = {\n\t\t\t\tlimit = { check_variable = { which = pe_sup_cd value <= 0 } }\n${l === 'a' ? `\t\t\t\tif = { limit = { root = { is_catalytic_empire = yes } } prev = { change_variable = { which = pe_scn_f value = 1 } } }\n\t\t\t\telse = { prev = { change_variable = { which = pe_scn_m value = 1 } } }` : `\t\t\t\tprev = { change_variable = { which = pe_scn_${need} value = 1 } }`}\n\t\t\t}\n\t\t}`).join('\n')}
-${SUP_SUPPLIERS.map(l => `\t\tif = {\n\t\t\tlimit = { check_variable = { which = pe_prim value = ${prim(l)} } }\n\t\t\tprev = { change_variable = { which = pe_sch value = 1 } }\n\t\t\tif = { limit = { check_variable = { which = pe_sup_n value < ${SUP_CAP} } } prev = { change_variable = { which = pe_scs_${l} value = 1 } } }\n\t\t\tif = { limit = { check_variable = { which = pe_sup_n value > 0 } } prev = { change_variable = { which = pe_scl_${l} value = 1 } } }\n\t\t}`).join('\n')}
+${SUP_SUPPLIERS.map(l => `\t\tif = {\n\t\t\tlimit = { check_variable = { which = pe_prim value = ${prim(l)} } }\n\t\t\tprev = { change_variable = { which = pe_sch value = 1 } }\n\t\t\tif = { limit = { check_variable = { which = pe_sup_n value <= pe_stage } } prev = { change_variable = { which = pe_scs_${l} value = 1 } } }\n\t\t\tif = { limit = { check_variable = { which = pe_sup_n value > 0 } } prev = { change_variable = { which = pe_scl_${l} value = 1 } } }\n\t\t}`).join('\n')}
 ${ifChain(LETTERS, l => `check_variable = { which = pe_prim value = ${prim(l)} }`, l => `prev = { change_variable = { which = pe_cn_${l} value = 1 } }`, '\t\t')}
 		if = {
 			limit = { check_variable = { which = pe_corp value = 0 } }
@@ -2540,8 +2549,8 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
     li ? ` d_pe_cprod_${r}_desc:0 "Ein Konzern mit Hauptsitz hier verarbeitet den Ertrag seiner Orbitalstationen und Dyson-Schwärme und liefert dafür 120 % ihres Werts in seinem eigenen Produkt, abzüglich des Unterhalts seiner Megastrukturen."` : ` d_pe_cprod_${r}_desc:0 "A corporation headquartered here processes the output of its orbital stations and Dyson swarms and delivers 120% of its value in its own product, less the upkeep of its megastructures."`));
   PROD.forEach(r => L.push(` pe_prod_${r}:0 "${li ? PROD_NAMES[r][1] : PROD_NAMES[r][0]}"`));
   L.push(li ? ' d_pe_location:0 "Privatwirtschaft"' : ' d_pe_location:0 "Private Economy"',
-    li ? ' d_pe_location_desc:0 "Was die Privatwirtschaft hier bewirkt: §HCluster§! (2 / 3 / 4+ Privatfirmen mit demselben Hauptprodukt: +3 / 6 / 9 % Ertrag ihrer Branche, auch Staatsjobs), §HLieferverträge§! (feste Verträge mit Firmen auf anderen Planeten), §HBetriebliche Sozialleistungen§! reicher Konzerne, §HRüstungsaufträge§! unseres Rüstungskonzerns, §HPreiskämpfe§! und die Ausstattung von §HKonzern-Forschungsinstituten§!. Die Einzelheiten zeigt der Tooltip."'
-       : ' d_pe_location_desc:0 "What the private economy does here: §HClusters§! (2 / 3 / 4+ private firms with the same main product: +3 / 6 / 9% output of their sector, state jobs too), §HSupply contracts§! (fixed contracts with firms on other planets), §HCorporate benefits§! of rich corporations, §HArms orders§! of our defence contractor, §HPrice wars§! and the equipment of §HCorporate research institutes§!. The tooltip shows the details."');
+    li ? ' d_pe_location_desc:0 "Was die Privatwirtschaft hier bewirkt: §HCluster§! (2 / 3 / 4+ Privatfirmen mit demselben Hauptprodukt: +3 / 6 / 9 % Ertrag ihrer Branche, auch Staatsjobs), §HLieferverträge§! (feste Verträge zwischen Firmen: +5 % Ertrag ihrer Branchen; der Lieferant verdient +5 % je Abnehmer, der Abnehmer +10 %), §HBetriebliche Sozialleistungen§! reicher Konzerne, §HRüstungsaufträge§! unseres Rüstungskonzerns, §HPreiskämpfe§! und die Ausstattung von §HKonzern-Forschungsinstituten§!. Die Einzelheiten zeigt der Tooltip."'
+       : ' d_pe_location_desc:0 "What the private economy does here: §HClusters§! (2 / 3 / 4+ private firms with the same main product: +3 / 6 / 9% output of their sector, state jobs too), §HSupply contracts§! (fixed contracts between firms: +5% output of their sectors; the supplier earns +5% per buyer, the buyer +10%), §HCorporate benefits§! of rich corporations, §HArms orders§! of our defence contractor, §HPrice wars§! and the equipment of §HCorporate research institutes§!. The tooltip shows the details."');
   L.push(li ? ' pe_corp_production:0 "Konzernproduktion"' : ' pe_corp_production:0 "Corporate Production"',
     li ? ' pe_deposit_cat_corp:0 "Konzerne"' : ' pe_deposit_cat_corp:0 "Corporations"',
     li ? ' pe_msg_corp_st_build:0 "§Y$CORP$§! hat über $PLANET$ eine eigene Station errichtet. Ihren Ertrag verarbeitet der Konzern selbst."' : ' pe_msg_corp_st_build:0 "§Y$CORP$§! has built a station of its own above $PLANET$. The corporation processes its output itself."',

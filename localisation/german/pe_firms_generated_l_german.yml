@@ -2526,7 +2526,7 @@
  pe_prod_energy:0 "Energie"
  pe_prod_food:0 "Nahrung"
  d_pe_location:0 "Privatwirtschaft"
- d_pe_location_desc:0 "Was die Privatwirtschaft hier bewirkt: §HCluster§! (2 / 3 / 4+ Privatfirmen mit demselben Hauptprodukt: +3 / 6 / 9 % Ertrag ihrer Branche, auch Staatsjobs), §HLieferverträge§! (feste Verträge mit Firmen auf anderen Planeten), §HBetriebliche Sozialleistungen§! reicher Konzerne, §HRüstungsaufträge§! unseres Rüstungskonzerns, §HPreiskämpfe§! und die Ausstattung von §HKonzern-Forschungsinstituten§!. Die Einzelheiten zeigt der Tooltip."
+ d_pe_location_desc:0 "Was die Privatwirtschaft hier bewirkt: §HCluster§! (2 / 3 / 4+ Privatfirmen mit demselben Hauptprodukt: +3 / 6 / 9 % Ertrag ihrer Branche, auch Staatsjobs), §HLieferverträge§! (feste Verträge zwischen Firmen: +5 % Ertrag ihrer Branchen; der Lieferant verdient +5 % je Abnehmer, der Abnehmer +10 %), §HBetriebliche Sozialleistungen§! reicher Konzerne, §HRüstungsaufträge§! unseres Rüstungskonzerns, §HPreiskämpfe§! und die Ausstattung von §HKonzern-Forschungsinstituten§!. Die Einzelheiten zeigt der Tooltip."
  pe_corp_production:0 "Konzernproduktion"
  pe_deposit_cat_corp:0 "Konzerne"
  pe_msg_corp_st_build:0 "§Y$CORP$§! hat über $PLANET$ eine eigene Station errichtet. Ihren Ertrag verarbeitet der Konzern selbst."
