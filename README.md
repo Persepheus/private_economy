@@ -8,6 +8,8 @@ Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien u
 
 ## Stand 0.48.0
 
+**0.48.1 – Konzernrat lesbar** (Test 31.10.2026). Die Optionen im Konzernrat zeigen nur noch Name, kurze Art und Profil, z. B. „Riverstone Bazaar (Handel, Rüstungskonzern)“, und passen in die Knöpfe. Die Schrift des Spiels kennt keine typografischen Anführungszeichen, Gedankenstriche oder Pfeile; alle Texte des Mods nutzen jetzt gerade Anführungszeichen wie Vanilla. Behoben: Der Name der Holdings („Private Holdings (<Reich>)“) wurde als Makro gelesen (error.log), und der Hauptsitz im Gespräch zeigte den Reichsnamen statt des Planeten.
+
 **Konzernprofile** ([TESTS_0.48.md](docs/TESTS_0.48.md)). Jeder Konzern hat ein Profil, das sein Verhalten färbt: Gründerkonzern, Solides Haus, Familienkonzern, Technologiekonzern, Rüstungskonzern, Finanzhaus, Genossenschaft, Pionierkonzern, Kartell.
 - **Zuweisung:** einmal je Konzern, gewichtet nach unserer Ethik und unseren Civics (z. B. Militaristen eher Rüstungskonzerne, Arbeiterkooperative eher Genossenschaften, kriminelles Erbe eher Kartelle) und nach seiner Art (Industrie eher Rüstung, Wissenschaft eher Technologie, Rohstoffe eher Pioniere). Ein Profil, das das Reich schon hat, zählt halb. Bestehende Konzerne bekommen ihr Profil im nächsten Quartal; bei einer Eroberung behält ein Konzern sein Profil.
 - **Wirkung nur über Wahrscheinlichkeiten und bestehende Regeln**, kein Profil bekommt etwas geschenkt:

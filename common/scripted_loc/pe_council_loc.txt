@@ -3,19 +3,19 @@ defined_text = {
 	name = GetPeCorpKind1
 	text = {
 		trigger = { check_variable = { which = pe_c1_grp value = 1 } }
-		localization_key = pe_corp_kind_1
+		localization_key = pe_corp_kshort_1
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c1_grp value = 2 } }
-		localization_key = pe_corp_kind_2
+		localization_key = pe_corp_kshort_2
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c1_grp value = 3 } }
-		localization_key = pe_corp_kind_3
+		localization_key = pe_corp_kshort_3
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c1_grp value = 4 } }
-		localization_key = pe_corp_kind_4
+		localization_key = pe_corp_kshort_4
 	}
 	default = pe_corp_line_none
 }
@@ -23,19 +23,19 @@ defined_text = {
 	name = GetPeCorpKind2
 	text = {
 		trigger = { check_variable = { which = pe_c2_grp value = 1 } }
-		localization_key = pe_corp_kind_1
+		localization_key = pe_corp_kshort_1
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c2_grp value = 2 } }
-		localization_key = pe_corp_kind_2
+		localization_key = pe_corp_kshort_2
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c2_grp value = 3 } }
-		localization_key = pe_corp_kind_3
+		localization_key = pe_corp_kshort_3
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c2_grp value = 4 } }
-		localization_key = pe_corp_kind_4
+		localization_key = pe_corp_kshort_4
 	}
 	default = pe_corp_line_none
 }
@@ -43,19 +43,19 @@ defined_text = {
 	name = GetPeCorpKind3
 	text = {
 		trigger = { check_variable = { which = pe_c3_grp value = 1 } }
-		localization_key = pe_corp_kind_1
+		localization_key = pe_corp_kshort_1
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c3_grp value = 2 } }
-		localization_key = pe_corp_kind_2
+		localization_key = pe_corp_kshort_2
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c3_grp value = 3 } }
-		localization_key = pe_corp_kind_3
+		localization_key = pe_corp_kshort_3
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c3_grp value = 4 } }
-		localization_key = pe_corp_kind_4
+		localization_key = pe_corp_kshort_4
 	}
 	default = pe_corp_line_none
 }
@@ -63,19 +63,19 @@ defined_text = {
 	name = GetPeCorpKind4
 	text = {
 		trigger = { check_variable = { which = pe_c4_grp value = 1 } }
-		localization_key = pe_corp_kind_1
+		localization_key = pe_corp_kshort_1
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c4_grp value = 2 } }
-		localization_key = pe_corp_kind_2
+		localization_key = pe_corp_kshort_2
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c4_grp value = 3 } }
-		localization_key = pe_corp_kind_3
+		localization_key = pe_corp_kshort_3
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c4_grp value = 4 } }
-		localization_key = pe_corp_kind_4
+		localization_key = pe_corp_kshort_4
 	}
 	default = pe_corp_line_none
 }
@@ -83,19 +83,19 @@ defined_text = {
 	name = GetPeCorpKind5
 	text = {
 		trigger = { check_variable = { which = pe_c5_grp value = 1 } }
-		localization_key = pe_corp_kind_1
+		localization_key = pe_corp_kshort_1
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c5_grp value = 2 } }
-		localization_key = pe_corp_kind_2
+		localization_key = pe_corp_kshort_2
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c5_grp value = 3 } }
-		localization_key = pe_corp_kind_3
+		localization_key = pe_corp_kshort_3
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c5_grp value = 4 } }
-		localization_key = pe_corp_kind_4
+		localization_key = pe_corp_kshort_4
 	}
 	default = pe_corp_line_none
 }
@@ -103,19 +103,19 @@ defined_text = {
 	name = GetPeCorpKind6
 	text = {
 		trigger = { check_variable = { which = pe_c6_grp value = 1 } }
-		localization_key = pe_corp_kind_1
+		localization_key = pe_corp_kshort_1
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c6_grp value = 2 } }
-		localization_key = pe_corp_kind_2
+		localization_key = pe_corp_kshort_2
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c6_grp value = 3 } }
-		localization_key = pe_corp_kind_3
+		localization_key = pe_corp_kshort_3
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c6_grp value = 4 } }
-		localization_key = pe_corp_kind_4
+		localization_key = pe_corp_kshort_4
 	}
 	default = pe_corp_line_none
 }
@@ -123,19 +123,19 @@ defined_text = {
 	name = GetPeCorpKind7
 	text = {
 		trigger = { check_variable = { which = pe_c7_grp value = 1 } }
-		localization_key = pe_corp_kind_1
+		localization_key = pe_corp_kshort_1
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c7_grp value = 2 } }
-		localization_key = pe_corp_kind_2
+		localization_key = pe_corp_kshort_2
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c7_grp value = 3 } }
-		localization_key = pe_corp_kind_3
+		localization_key = pe_corp_kshort_3
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c7_grp value = 4 } }
-		localization_key = pe_corp_kind_4
+		localization_key = pe_corp_kshort_4
 	}
 	default = pe_corp_line_none
 }
@@ -143,19 +143,19 @@ defined_text = {
 	name = GetPeCorpKind8
 	text = {
 		trigger = { check_variable = { which = pe_c8_grp value = 1 } }
-		localization_key = pe_corp_kind_1
+		localization_key = pe_corp_kshort_1
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c8_grp value = 2 } }
-		localization_key = pe_corp_kind_2
+		localization_key = pe_corp_kshort_2
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c8_grp value = 3 } }
-		localization_key = pe_corp_kind_3
+		localization_key = pe_corp_kshort_3
 	}
 	text = {
 		trigger = { check_variable = { which = pe_c8_grp value = 4 } }
-		localization_key = pe_corp_kind_4
+		localization_key = pe_corp_kshort_4
 	}
 	default = pe_corp_line_none
 }

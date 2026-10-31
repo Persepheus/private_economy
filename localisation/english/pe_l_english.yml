@@ -72,7 +72,7 @@
  pe.19.desc:0 "§HStock§!\nMinerals: [Root.pe_ph_min] (+[Root.pe_ph_min_inc] a month)\nEnergy: [Root.pe_ph_en] (+[Root.pe_ph_en_inc] a month)\nAlloys: [Root.pe_ph_al]\n\n§HOwned§!\nOrbital stations: [Root.pe_ph_st]\nMegastructures: [Root.pe_ph_ms]\nLeased fleets (owned by them): [Root.pe_ph_fl]\nLeased fleets (controlled by us): [Root.pe_ph_ctl]"
  pe.19.a:0 "Close."
  pe.20.name:0 "Private Holdings: Sale"
- pe.20.desc:0 "The holdings sold us §G[Root.pe_ph_min]§! £minerals£ minerals and §G[Root.pe_ph_en]§! £energy£ energy for §Y[Root.pe_ph_pay]§! £trade£ (half the base price). The trade went to the investor pool. Our stock: minerals [Root.pe_ph_min0] → [Root.pe_ph_min1], energy [Root.pe_ph_en0] → [Root.pe_ph_en1]."
+ pe.20.desc:0 "The holdings sold us §G[Root.pe_ph_min]§! £minerals£ minerals and §G[Root.pe_ph_en]§! £energy£ energy for §Y[Root.pe_ph_pay]§! £trade£ (half the base price). The trade went to the investor pool. Our stock: minerals [Root.pe_ph_min0] -> [Root.pe_ph_min1], energy [Root.pe_ph_en0] -> [Root.pe_ph_en1]."
  pe.20.a:0 "Close."
  pe_leased_fleet:0 "Leased from the Private Holdings"
  pe_leased_fleet_desc:0 "The holdings pay this fleet's upkeep; it takes no naval capacity."

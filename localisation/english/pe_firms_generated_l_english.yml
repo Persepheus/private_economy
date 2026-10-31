@@ -2592,7 +2592,7 @@
  pe_reg_stage_2:0 "mid-size"
  pe_reg_stage_3:0 "large"
  pe_reg_independent:0 "independent"
- pe_reg_more:0 "… and [Root.pe_fl_more] more"
+ pe_reg_more:0 "... and [Root.pe_fl_more] more"
  decision_pe_firm_register:0 "Register of Firms"
  decision_pe_firm_register_desc:0 "Shows the private firms on this planet and the corporations they belong to."
  pe.276.name:0 "Register of Firms: [pe_reg_planet.GetName]"

@@ -2262,7 +2262,7 @@ pe_holdings_ensure = {
 	# Our holdings carry our name (contacts list, 0.47.3).
 	if = {
 		limit = { exists = event_target:pe_hold }
-		event_target:pe_hold = { set_name = { key = pe_holdings_name_of variable_string = "[Root.GetName]" } }
+		event_target:pe_hold = { set_name = { key = pe_holdings_name_of variable_string = "\\\\[Root.GetName]" } }
 	}
 	# Only our own holdings are in our contacts list: released_by_country gave every holdings the
 	# contacts of its empire (0.47.3).
@@ -2788,7 +2788,7 @@ for (const [li, lang] of [[0, 'english'], [1, 'german']]) {
   REG_WHY.forEach(c => L.push(` pe_reg_why_${c}:0 "${REG_WHY_TEXT[c][li]}"`));
   STAGES.forEach(s => L.push(` pe_reg_stage_${s}:0 "${li ? ['klein', 'normal', 'mittel', 'groß'][s] : ['small', 'normal', 'mid-size', 'large'][s]}"`));
   L.push(li ? ' pe_reg_independent:0 "unabhängig"' : ' pe_reg_independent:0 "independent"',
-    li ? ' pe_reg_more:0 "… und [Root.pe_fl_more] weitere"' : ' pe_reg_more:0 "… and [Root.pe_fl_more] more"',
+    li ? ' pe_reg_more:0 "... und [Root.pe_fl_more] weitere"' : ' pe_reg_more:0 "... and [Root.pe_fl_more] more"',
     li ? ' decision_pe_firm_register:0 "Firmenregister"' : ' decision_pe_firm_register:0 "Register of Firms"',
     li ? ' decision_pe_firm_register_desc:0 "Zeigt die Privatfirmen auf diesem Planeten und die Konzerne, zu denen sie gehören."' : ' decision_pe_firm_register_desc:0 "Shows the private firms on this planet and the corporations they belong to."',
     li ? ' pe.276.name:0 "Firmenregister: [pe_reg_planet.GetName]"' : ' pe.276.name:0 "Register of Firms: [pe_reg_planet.GetName]"',

@@ -5240,7 +5240,7 @@ pe_holdings_ensure = {
 	# Our holdings carry our name (contacts list, 0.47.3).
 	if = {
 		limit = { exists = event_target:pe_hold }
-		event_target:pe_hold = { set_name = { key = pe_holdings_name_of variable_string = "[Root.GetName]" } }
+		event_target:pe_hold = { set_name = { key = pe_holdings_name_of variable_string = "\\[Root.GetName]" } }
 	}
 	# Only our own holdings are in our contacts list: released_by_country gave every holdings the
 	# contacts of its empire (0.47.3).
