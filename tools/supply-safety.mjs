@@ -1,7 +1,9 @@
 // Generate the common supply guard. No engine calls are added below depth four.
 export const safetyResources = ['energy', 'minerals', 'food', 'consumer_goods', 'trade'];
 export const safetyFile = 'common/scripted_effects/pe_supply_safety_generated.txt';
-export const costVar = (job, r) => `pe_cost_${job.replace('pe_private_', '')}_${r}`;
+// The stockpile may carry a gap below the margin for this long (0.47.1).
+export const STOCK_MONTHS = 240;
+export const costVar =(job, r) => `pe_cost_${job.replace('pe_private_', '')}_${r}`;
 
 export function supplySafety({variants, JOBS, RES, outVar, HAB, NOT_HAB, VOID, HAB_DISTRICT,
   ZONE_JOBS, ZONES, UPKEEP, HAB_UPKEEP, CITY_F, RURAL_F, szCalc, zoneVar, ifChain, write, header}) {
@@ -49,11 +51,17 @@ export function supplySafety({variants, JOBS, RES, outVar, HAB, NOT_HAB, VOID, H
     } else = { ${v.cityLike ? '' : zone(v.district)} ${upkeep({energy: UPKEEP[v.k]})} }
   `;
   // Negative net changes only. Construction reserves gross consumption, not its output.
+  // Below the margin, the stockpile may carry the gap (0.47.1): allowed while it covers the
+  // gap to the margin for STOCK_MONTHS. A full store no longer stops all growth over a few
+  // units of monthly income (17,000 energy, net 72 against a margin of 76).
   const check = (delta='pe_sd', test=delta, ok='pe_safe_ok') => `root = { ${set(ok,1)}
     if = { limit = { NOT = { has_country_flag = pe_safe_ready } } ${set(ok,0)} }
     ${S.map(r => `if = { limit = { check_variable = { which = ${delta}_${r} value < 0 } }
       ${set('pe_ss_test', `pe_safe_net_${r}`)} ${add('pe_ss_test',`pe_safe_reserved_${r}`)} ${add('pe_ss_test',`${test}_${r}`)}
-      if = { limit = { check_variable = { which = pe_ss_test value < pe_safe_margin_${r} } } ${set(ok,0)} }
+      if = { limit = { check_variable = { which = pe_ss_test value < pe_safe_margin_${r} } }
+        ${set('pe_ss_gap', `pe_safe_margin_${r}`)} ${sub('pe_ss_gap', 'pe_ss_test')} ${mul('pe_ss_gap', STOCK_MONTHS)}
+        if = { limit = { check_variable = { which = pe_safe_stock_${r} value < pe_ss_gap } } ${set(ok,0)} }
+      }
     }`).join('\n')} }`;
   const reserve = (delta='pe_sd') => `root = { ${S.map(r=>add(`pe_safe_reserved_${r}`,`${delta}_${r}`)).join(' ')} }`;
   // Per variant its own vector (pe_safe_vec_<code>, pe_safe_buy_<code>): the engine copies every
@@ -81,6 +89,7 @@ export function supplySafety({variants, JOBS, RES, outVar, HAB, NOT_HAB, VOID, H
     # No expected construction production enters this separate safety ledger.
     pe_job_values = yes
     ${S.map(r=>`export_resource_income_to_variable = { resource = ${r} variable = pe_safe_net_${r} }
+      export_resource_stockpile_to_variable = { resource = ${r} variable = pe_safe_stock_${r} }
       export_trigger_value_to_variable = { trigger = resource_expenses_compare parameters = { resource = ${r} } variable = pe_safe_margin_${r} }
       ${mul(`pe_safe_margin_${r}`,0.05)}
       if = { limit = { check_variable = { which = pe_safe_margin_${r} value < 10 } } ${set(`pe_safe_margin_${r}`,10)} }

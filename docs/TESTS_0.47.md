@@ -27,3 +27,10 @@ Statisch geprüft (Validator). Im Spiel noch nicht getestet. Ein laufendes Spiel
 ## Fehlerbehebung
 
 - `pe_pirate_system`, `pe_monster_system`: `exists = owner`. **Prüfen:** kein „Invalid context switch [owner] from … [fleet]“ im error.log.
+
+## 0.47.1: das Lager zählt
+
+- `pe_safe_month` speichert `pe_safe_stock_<res>`. Liegt `Netto + Reservierung + Firma` unter `pe_safe_margin_<res>`, ist das Wachstum erlaubt, wenn `pe_safe_stock_<res> >= 240 × (Marge − Wert)`.
+- Gilt für Wachstum, Gründung, Kauf von Distrikten und die Prüfung beim Umbau.
+- Statisch geprüft: `node tools/test-supply-safety.mjs` (Grenzfall, zweite Nutzung desselben Lagers, Defizit mit großem Lager).
+- **Prüfen im Spielstand:** Die Zahl der Firmen mit Status 9 („Versorgungsschutz“) sinkt bei KI-Reichen mit vollem Lager deutlich (Save 2276: 48). Reiche mit echtem Mangel und leerem Lager (16777224: Energie −10, Lager 3.500) bleiben gesperrt.

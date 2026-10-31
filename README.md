@@ -8,6 +8,10 @@ Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien u
 
 ## Stand 0.47.0
 
+**0.47.1 – das Lager zählt.** Gefunden im Save 2276 (31.10.2026): 48 Firmen der KI-Reiche durften nicht wachsen, weil der Versorgungsschutz nur den Monatsfluss prüfte. Ein Reich mit 17.000 Energie im Lager und +72 im Monat lag knapp unter seiner Marge von 76. Deshalb wuchs keine Firma, die Energie verbraucht, auch nicht die Konsumgüterfabriken, obwohl ihm Konsumgüter fehlten.
+- Unterschreitet ein Wachstum, eine Gründung oder ein Umbau die Marge, ist es trotzdem erlaubt, solange das Lager die Lücke zur Marge 20 Jahre lang deckt. Jede Zusage verbraucht dabei einen Teil dieser Deckung.
+- Laufende Spiele: Das Lager wird ab dem nächsten Monat berücksichtigt.
+
 **Strukturwandel** ([TESTS_0.47.md](docs/TESTS_0.47.md)). Gefunden im Save 2269 (31.10.2026): Ein KI-Reich mit 82 Firmen verlor 371 Mineralien im Monat bei 1664 im Lager. 13 Konsumgüterfabriken verbrauchten 657 Mineralien für Konsumgüter, von denen es 16.000 im Lager hatte. Die Fabriken machten Verlust, konnten aber nicht umbauen: ohne Kapital für den Umbau, mit Schulden, über Überbrückungskredite am Leben gehalten. Weil nur die Firma mit dem größten Gewinn je Planet umbauen darf, blockierte eine, die nicht zahlen konnte, den ganzen Planeten.
 - **Rettung:** Eine Firma, die zu unseren Preisen Wert vernichtet, oder die etwas verbraucht, das in unter einem Jahr ausgeht, darf nach einem Jahr umbauen, auch mit Gründungsschulden und ohne die Bremse des Liefervertrags.
   - Fehlt ihr Kapital, leiht der Investorenpool den Rest; die Firma schuldet ihn und zahlt ihn aus dem Gewinn zurück.

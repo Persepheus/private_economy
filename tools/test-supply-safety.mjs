@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
-import {safetyResources as S, safetyFile} from './supply-safety.mjs';
+import {safetyResources as S, safetyFile, STOCK_MONTHS} from './supply-safety.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = f => fs.readFileSync(path.join(root, f), 'utf8');
 function parse(text) {
@@ -72,6 +72,7 @@ function run(b,c) {
       c.planet.deposits.push(c.planet.last);
     } else if(k==='last_added_deposit') run(v,enter(c,c.planet.last));
     else if(k==='export_resource_income_to_variable') c.self.vars[field(v,'variable')]=c.root.net[field(v,'resource')]||0;
+    else if(k==='export_resource_stockpile_to_variable') c.self.vars[field(v,'variable')]=c.root.stock[field(v,'resource')]||0;
     else if(k==='export_trigger_value_to_variable') {
       assert.equal(field(v,'trigger'),'resource_expenses_compare');
       c.self.vars[field(v,'variable')]=c.root.expenses[field(field(v,'parameters'),'resource')]||0;
@@ -85,7 +86,7 @@ function run(b,c) {
   }
 }
 function fixture({hab=false,voidDweller=false,zones={}}={}) {
-  const country={vars:{},flags:new Set(['pe_safe_ready']),void:voidDweller,net:{},expenses:{},planets:[]};
+  const country={vars:{},flags:new Set(['pe_safe_ready']),void:voidDweller,net:{},expenses:{},stock:{},planets:[]};
   const planet={vars:{},flags:new Set(),hab,zones,deposits:[]}; country.planets.push(planet);
   const ctx={self:planet,root:country,planet,prev:country};
   for(const r of S) Object.assign(country.vars,{[`pe_safe_net_${r}`]:100,[`pe_safe_margin_${r}`]:10,[`pe_safe_reserved_${r}`]:0});
@@ -113,6 +114,11 @@ v=grow(c,'aaac');near(v.pe_sd_minerals,-6);near(v.pe_sd_energy,-1);assert.equal(
 c.root.vars.pe_safe_net_minerals=15;v=grow(c,'aaac');assert.equal(v.pe_safe_ok,0);
 c.root.vars.pe_safe_net_minerals=16;v=grow(c,'aaac');assert.equal(v.pe_safe_ok,1); // exact boundary
 c.root.vars.pe_safe_reserved_minerals=-6;v=grow(c,'aaac');assert.equal(v.pe_safe_ok,0); // no second use of surplus
+// 0.47.1: below the margin the stockpile carries the gap for STOCK_MONTHS (here net 15 - 6 = 9, gap 1).
+c=fixture();c.root.vars.pe_safe_net_minerals=15;c.root.vars.pe_safe_stock_minerals=STOCK_MONTHS-1;assert.equal(grow(c,'aaac').pe_safe_ok,0);
+c.root.vars.pe_safe_stock_minerals=STOCK_MONTHS;assert.equal(grow(c,'aaac').pe_safe_ok,1);
+c.root.vars.pe_safe_reserved_minerals=-6;assert.equal(grow(c,'aaac').pe_safe_ok,0); // gap 7: the same store is not enough twice
+c.root.vars.pe_safe_net_minerals=-50;c.root.vars.pe_safe_reserved_minerals=0;c.root.vars.pe_safe_stock_minerals=66*STOCK_MONTHS;assert.equal(grow(c,'aaac').pe_safe_ok,1); // deficit, large store
 c=fixture();c.root.vars.pe_safe_net_minerals=-100;v=grow(c,'mmma',1/3);near(v.pe_sd_minerals,1.5);assert.equal(v.pe_safe_ok,1); // mixed mine improves shortage
 c.root.vars.pe_safe_net_energy=9;assert.equal(grow(c,'mmma',1/3).pe_safe_ok,0); // other input still matters
 c=fixture();Object.assign(c.root.vars,{pe_o_metallurgist_minerals:0,pe_cost_metallurgist_minerals:0,pe_o_metallurgist_food:-9,pe_cost_metallurgist_food:9});
@@ -138,11 +144,12 @@ run(definitions.get('pe_retool_guard'),enter(c,firm));assert.equal(c.root.vars.p
 // full consumption of still unfinished sites; do not count their future production.
 c=fixture();Object.assign(c.root.net,{energy:100,minerals:100,food:100,consumer_goods:100,trade:100});
 Object.assign(c.root.expenses,{energy:100,minerals:1000,food:20000});
-c.root.vars.pe_safe_reserved_minerals=-500;
+c.root.vars.pe_safe_reserved_minerals=-500;Object.assign(c.root.stock,{energy:17000});
 const site={category:'pe_deposit_cat_sites',vars:{pe_target:code('mmma'),pe_tstage:2},flags:new Set()};c.planet.deposits.push(site);
 run(definitions.get('pe_safe_month'),enter(c,c.root));
 near(c.root.vars.pe_safe_margin_energy,10);near(c.root.vars.pe_safe_margin_minerals,50);near(c.root.vars.pe_safe_margin_food,250);
 near(c.root.vars.pe_safe_reserved_minerals,-6);near(c.root.vars.pe_safe_reserved_energy,-4/3); // rural mid-size: 400 workforce
+near(c.root.vars.pe_safe_stock_energy,17000);near(c.root.vars.pe_safe_stock_minerals,0);
 // Once the site is a firm and the budget contains it, no old construction debt remains.
 c.planet.deposits=[];c.root.net.minerals=106;run(definitions.get('pe_safe_month'),enter(c,c.root));
 near(c.root.vars.pe_safe_reserved_minerals,0);near(c.root.vars.pe_safe_net_minerals,106);
@@ -169,5 +176,5 @@ assert.match(corp,/pe_safe_growth = yes[\s\S]{0,220}pe_want_loan value = 0/);
 assert.match(corp,/pe_want_loan value > 0[\s\S]{0,900}pe_safe_reserved_minerals/);
 assert.match(eco,/has_district = \$DISTRICT\$\s+root = \{ check_variable = \{ which = pe_safe_ok value = 1/);
 const events=read('events/pe_economy_events.txt');assert(events.indexOf('pe_safe_month = yes')<events.indexOf('pe_monthly_sites = yes'));
-console.log('PASS: supply arithmetic/branches: boundaries, five-resource guard, mixed/catalytic jobs, shared reservations, habitats/zones, buyout differences, restructuring outage, monthly reconciliation and funding-path integration.');
+console.log('PASS: supply arithmetic/branches: boundaries, five-resource guard, stockpile carrying a gap, mixed/catalytic jobs, shared reservations, habitats/zones, buyout differences, restructuring outage, monthly reconciliation and funding-path integration.');
 console.log('NOT TESTED: engine budget refresh timing, actual job staffing or AI economic outcomes.');
