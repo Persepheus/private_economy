@@ -76,3 +76,10 @@ on_district_complete = {
 		pe.331
 	}
 }
+
+# Opening the diplomacy view of our holdings: the corporate council (pe.335, prototype 0.48).
+on_custom_diplomacy = {
+	events = {
+		pe.335
+	}
+}

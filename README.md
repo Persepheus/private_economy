@@ -8,6 +8,8 @@ Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien u
 
 ## Stand 0.47.0
 
+**0.47.2 – Prototyp Konzernrat** ([TESTS_PROTO_COUNCIL.md](docs/TESTS_PROTO_COUNCIL.md)). Die Private Holdings stehen in der Kontaktliste. Öffnet man sie, tagt der Konzernrat wie bei einer Enklave: Man wählt einen Konzern, und sein Vorstand empfängt uns mit eigenem Gesicht (ein Anführer der Holdings, Spezies vom Hauptsitz). Noch ohne Themen; die Ausschreibung ist als gesperrte Option angekündigt.
+
 **0.47.1 – das Lager zählt.** Gefunden im Save 2276 (31.10.2026): 48 Firmen der KI-Reiche durften nicht wachsen, weil der Versorgungsschutz nur den Monatsfluss prüfte. Ein Reich mit 17.000 Energie im Lager und +72 im Monat lag knapp unter seiner Marge von 76. Deshalb wuchs keine Firma, die Energie verbraucht, auch nicht die Konsumgüterfabriken, obwohl ihm Konsumgüter fehlten.
 - Unterschreitet ein Wachstum, eine Gründung oder ein Umbau die Marge, ist es trotzdem erlaubt, solange das Lager die Lücke zur Marge 20 Jahre lang deckt. Jede Zusage verbraucht dabei einen Teil dieser Deckung.
 - Laufende Spiele: Das Lager wird ab dem nächsten Monat berücksichtigt.
@@ -226,8 +228,13 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Volle Lager (27.10.2026):** Rüstungsauftrag und Lagervertrag sind in 0.39 umgesetzt. Verworfen: Modernisierung der Verteidigung und Werftausbau durch Konzerne.
 - **Längere Lieferketten (Supply Chains):** mehrstufige Wertschöpfung zwischen Firmen (Vorprodukte, Zulieferer), gemerkt am 27.10.2026. Aus dem Review: mit begrenzten Abhängigkeiten, also Ausfällen, Ersatzlieferanten und Versorgungssicherheit statt eines dauerhaften Bonus.
   - Umgesetzt in 0.46.0 (Lieferantenwahl, Kapazität, Gewinn, Versorgungssicherheit). Ausfälle einzelner Lieferanten: verworfen, zu kleinteilig. Offen bleibt die mehrstufige Wertschöpfung.
+- **Konzernrat (31.10.2026, Prototyp 0.47.2):** Konzerne direkt ansprechen über den Kontakt der Private Holdings (`custom_diplomacy`, wie Enklaven). Ein Kontakt pro Reich, darin die Wahl des Konzerns, dann Themen. Jeder Vorstand ist ein Anführer mit Gesicht.
+  - Themen: Lage, Ausschreibung vergeben (0.48), Kredit oder Staatsanleihe, Rüstungsauftrag und Lagervertrag anfragen, Investitionswunsch, Lobby-Forderungen.
+  - Vertrauen: Die Meinung der Engine gilt nur pro Kontakt (Holdings gegenüber uns). Vertrauen pro Konzern als eigene Variable, im Gespräch angezeigt; die Meinung der Holdings kann als ausgelöster Meinungsmodifikator den Durchschnitt zeigen.
+  - Jedes Thema braucht einen automatischen Weg für KI-Reiche; für uns bleibt der Kontakt freiwillig.
+  - Offen: Vorsitzender des Rats (Herrscher der Holdings) als Vorstand des größten Konzerns.
 - **Erweiterungen aus dem Review (27.10.2026):**
-  - **Staatliche Ausschreibungen:** Wir setzen Anreize für benötigte Legierungen, Forschung oder Versorgung, und die Firmen entscheiden, ob sie investieren.
+  - **Staatliche Ausschreibungen:** Wir setzen Anreize für benötigte Legierungen, Forschung oder Versorgung, und die Firmen entscheiden, ob sie investieren. Als Nächstes (0.48), über den Konzernrat: Der Staat schreibt eine Menge aus (z. B. 50 Legierungen im Monat für 10 Jahre mit Prämie je Einheit), Konzerne bewerben sich mit ihrer Kasse, der Gewinner baut aus oder um; KI-Reiche schreiben nach Schattenpreisen aus. Nutzt liegendes Kapital (Save 2276: Pool 69.000, Konzernkassen bis 44.500).
   - **Konzernprofile und Branchentechnologien:** Konzerne unterscheiden sich durch Spezialisierung, Risikobereitschaft und Investitionsverhalten (passt zu „Firmen forschen an ihrem Sektor“).
   - **Lobbys mit Interessenkonflikten:** Ein Konzern fordert Privilegien und bietet dafür Leistungen (ergänzt die beschlossenen Lobbys).
   - **Gezielte Krisen:** Kreditkrisen, Überkapazitäten und Rettungsentscheidungen, erst wenn die Buchhaltung stabil läuft (Sanierung und Lagerverträge seit 0.38/0.39 sind ein Anfang).

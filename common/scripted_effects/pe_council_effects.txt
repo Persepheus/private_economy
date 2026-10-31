@@ -1,0 +1,88 @@
+# Corporate council (prototype for 0.48): our holdings (pe_holdings) are a contact; opening
+# their diplomacy view (on_custom_diplomacy) leads to the council (pe.336) and to one
+# corporation (pe.337). Each corporation's chief executive is a leader of the holdings, so the
+# conversation shows a face: name pe_magnate_<pe_c<k>_ceo> (as in our messages), species of a
+# pop group at its headquarters.
+# Call depths: pe.337 immediate -> pe_council_ceo (1) -> pe_council_ceo_create (2)
+#   -> pe_council_ceo_new (3).
+
+# Country scope (we): event_target:pe_hold = our holdings.
+pe_council_hold = {
+	random_country = {
+		limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } }
+		save_event_target_as = pe_hold
+	}
+}
+
+# Country scope (we), event_target:pe_hold: event_target:pe_ceo = the chief executive of
+# corporation slot $K$, a leader of the holdings with the flag pe_ceo_$K$ and the name id of
+# the corporation (pe_ceo_cn). The one of a former corporation in this slot goes.
+pe_council_ceo = {
+	if = { limit = { NOT = { check_variable = { which = pe_c$K$_ceo value > 0 } } } set_variable_to_random_value = { which = pe_c$K$_ceo min = 1 max = 16 rounded = yes } }
+	set_variable = { which = pe_ceo_found value = 0 }
+	event_target:pe_hold = {
+		every_owned_leader = {
+			limit = { has_leader_flag = pe_ceo_$K$ NOT = { check_variable = { which = pe_ceo_cn value = root.pe_c$K$_name } } }
+			kill_leader = { show_notification = no }
+		}
+		random_owned_leader = {
+			limit = { has_leader_flag = pe_ceo_$K$ }
+			save_event_target_as = pe_ceo
+			root = { set_variable = { which = pe_ceo_found value = 1 } }
+		}
+	}
+	if = {
+		limit = { check_variable = { which = pe_ceo_found value = 0 } }
+		species = { save_event_target_as = pe_ceo_sp }
+		random_owned_colony = {
+			limit = { has_planet_flag = pe_hq_$K$ }
+			random_owned_pop_group = { limit = { is_sapient = yes } species = { save_event_target_as = pe_ceo_sp } }
+		}
+		pe_council_ceo_create = { K = $K$ }
+	}
+}
+
+# Country scope (we): a new chief executive for slot $K$, named after pe_c$K$_ceo.
+pe_council_ceo_create = {
+	if = { limit = { check_variable = { which = pe_c$K$_ceo value = 1 } } pe_council_ceo_new = { K = $K$ N = 1 G = male } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 2 } } pe_council_ceo_new = { K = $K$ N = 2 G = female } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 3 } } pe_council_ceo_new = { K = $K$ N = 3 G = male } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 4 } } pe_council_ceo_new = { K = $K$ N = 4 G = female } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 5 } } pe_council_ceo_new = { K = $K$ N = 5 G = male } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 6 } } pe_council_ceo_new = { K = $K$ N = 6 G = female } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 7 } } pe_council_ceo_new = { K = $K$ N = 7 G = male } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 8 } } pe_council_ceo_new = { K = $K$ N = 8 G = female } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 9 } } pe_council_ceo_new = { K = $K$ N = 9 G = male } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 10 } } pe_council_ceo_new = { K = $K$ N = 10 G = female } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 11 } } pe_council_ceo_new = { K = $K$ N = 11 G = male } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 12 } } pe_council_ceo_new = { K = $K$ N = 12 G = female } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 13 } } pe_council_ceo_new = { K = $K$ N = 13 G = male } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 14 } } pe_council_ceo_new = { K = $K$ N = 14 G = female } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 15 } } pe_council_ceo_new = { K = $K$ N = 15 G = male } }
+	else_if = { limit = { check_variable = { which = pe_c$K$_ceo value = 16 } } pe_council_ceo_new = { K = $K$ N = 16 G = female } }
+}
+
+pe_council_ceo_new = {
+	event_target:pe_hold = {
+		create_leader = {
+			class = official
+			species = event_target:pe_ceo_sp
+			name = pe_magnate_$N$
+			gender = $G$
+			skill = 3
+			leader_age_min = 45
+			leader_age_max = 70
+			immortal = yes
+			hide_age = yes
+			hide_leader = yes
+			event_leader = yes
+			can_assign_to_council = no
+			can_manually_change_location = no
+			effect = {
+				set_leader_flag = pe_ceo_$K$
+				set_variable = { which = pe_ceo_cn value = root.pe_c$K$_name }
+			}
+		}
+		last_created_leader = { save_event_target_as = pe_ceo }
+	}
+}
