@@ -1,12 +1,12 @@
 # Corporate fleets: space creatures in this system that are hostile to us (system scope,
 # root = our country; hunting rights).
 pe_monster_system = {
-	any_fleet_in_system = { owner = { OR = { is_amoeba_country_type = yes is_crystal_country_type = yes is_drone_country_type = yes is_voidworms_hostile_country_type = yes } is_hostile = root } }
+	any_fleet_in_system = { exists = owner owner = { OR = { is_amoeba_country_type = yes is_crystal_country_type = yes is_drone_country_type = yes is_voidworms_hostile_country_type = yes } is_hostile = root } }
 }
 
 # Corporate fleets: pirates or marauder raiders in this system (system scope).
 pe_pirate_system = {
-	any_fleet_in_system = { owner = { OR = { is_country_type = pirate is_country_type = marauder_raiders } } }
+	any_fleet_in_system = { exists = owner owner = { OR = { is_country_type = pirate is_country_type = marauder_raiders } } }
 }
 
 # Corporate Dyson swarm: a single star without a megastructure, with an ordinary orbital

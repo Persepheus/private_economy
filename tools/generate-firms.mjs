@@ -609,15 +609,20 @@ for (const v of variants) {
     for (const r of nc) (ca.includes(r) ? both : nonCat).add(r);
     for (const r of ca) if (!nc.includes(r)) catOnly.add(r);
   }
-  const notDef = r => `root = { NOT = { check_variable = { which = pe_def_${r} value = 1 } } }`;
-  const conds = [...[...both].map(notDef),
+  const notIn = flag => r => `root = { NOT = { check_variable = { which = ${flag}_${r} value = 1 } } }`;
+  const conds = notDef => [...[...both].map(notDef),
     ...[...nonCat].filter(r => !both.has(r)).map(r => `OR = { root = { is_catalytic_empire = yes } ${notDef(r)} }`),
     ...[...catOnly].filter(r => !both.has(r)).map(r => `OR = { root = { is_catalytic_empire = no } ${notDef(r)} }`)];
-  trg += `pe_ok_${v.key} = { ${conds.length ? conds.join(' ') : 'always = yes'} }\n`;
-  if (conds.length) shortCodes.push(v);
+  const def = conds(notIn('pe_def'));
+  trg += `pe_ok_${v.key} = { ${def.length ? def.join(' ') : 'always = yes'} }\n`;
+  // Nothing it consumes runs out within a year (pe_acute_<res>, 0.47).
+  if (def.length) trg += `pe_okx_${v.key} = { ${conds(notIn('pe_acute')).join(' ')} }\n`;
+  if (def.length) shortCodes.push(v);
 }
 // pe_firm_short (deposit scope, reads root): the firm consumes something the empire is short of.
 trg += `\n# Deposit scope (reads root): the firm consumes something the empire is short of.\npe_firm_short = {\n\tOR = {\n${shortCodes.map(v => `\t\tAND = { check_variable = { which = pe_code value = ${v.code} } NOT = { pe_ok_${v.key} = yes } }`).join('\n')}\n\t}\n}\n`;
+// pe_firm_acute (deposit scope, reads root): it consumes something that runs out within a year.
+trg += `\n# Deposit scope (reads root): the firm consumes something that runs out within a year (0.47).\npe_firm_acute = {\n\tOR = {\n${shortCodes.map(v => `\t\tAND = { check_variable = { which = pe_code value = ${v.code} } NOT = { pe_okx_${v.key} = yes } }`).join('\n')}\n\t}\n}\n`;
 
 // --- Effects --------------------------------------------------------------------
 const ifChain = (items, cond, body, ind = '\t') => items.map((it, i) => `${ind}${i ? 'else_if' : 'if'} = { limit = { ${cond(it)} } ${body(it)} }`).join('\n');
@@ -631,7 +636,7 @@ const msg = loc => `owner = { create_message = { type = pe_private_economy local
 // before the next accounting sets it, and a supplier without it lost its buyers.
 const initFirm = (code, stage, fcap, debt, age = 'root.pe_chg_age', corp = 'root.pe_chg_corp') => `last_added_deposit = { set_variable = { which = pe_code value = ${code} } set_variable = { which = pe_stage value = ${stage} } set_variable = { which = pe_fcap value = ${fcap} } set_variable = { which = pe_debt value = ${debt} } set_variable = { which = pe_age value = ${age} } set_variable = { which = pe_corp value = ${corp} } set_variable = { which = pe_loan value = root.pe_chg_loan } set_variable = { which = pe_lender value = root.pe_chg_lender } set_variable = { which = pe_loan_q value = root.pe_chg_loanq } set_variable = { which = pe_fid value = root.pe_chg_fid } set_variable = { which = pe_sup_fid value = root.pe_chg_supfid } set_variable = { which = pe_prim value = ${LETTERS.indexOf(variants[code - 1].primary) + 1} } }`;
 // Firm deposit variables a firm carries (0.46.1, from the saves); scratch values (pe_tmp...) left out.
-const FIRM_VARS = ['pe_age', 'pe_bomb_hit', 'pe_chab_g', 'pe_cls', 'pe_code', 'pe_corp', 'pe_corp_cand', 'pe_corp_mv', 'pe_cost', 'pe_debt', 'pe_fcap', 'pe_fid', 'pe_fst', 'pe_gain', 'pe_lamt', 'pe_lastp', 'pe_lender', 'pe_lneed', 'pe_loan', 'pe_loan_q', 'pe_mg_c', 'pe_mg_o', 'pe_mg_ok', 'pe_mg_s', 'pe_mg_veto', 'pe_pending', 'pe_prim', 'pe_profit', 'pe_res', 'pe_res2', 'pe_rid', 'pe_rl_c', 'pe_rl_cand', 'pe_san', 'pe_sf', 'pe_stage', 'pe_sup_cap', 'pe_sup_cd', 'pe_sup_fid', 'pe_sup_m', 'pe_sup_n', 'pe_sup_ok', 'pe_sup_seq', 'pe_sz', 'pe_szd', 'pe_thr', 'pe_to_c', 'pe_va', 'pe_val', 'pe_want_bridge', 'pe_want_cost', 'pe_want_loan', 'pe_wf_farmer', 'pe_wf_miner', 'pe_wf_technician', 'pe_wfall', 'pe_zq'];
+const FIRM_VARS = ['pe_age', 'pe_bomb_hit', 'pe_chab_g', 'pe_cls', 'pe_code', 'pe_corp', 'pe_corp_cand', 'pe_corp_mv', 'pe_cost', 'pe_debt', 'pe_fcap', 'pe_fid', 'pe_fst', 'pe_gain', 'pe_lamt', 'pe_lastp', 'pe_lender', 'pe_lneed', 'pe_loan', 'pe_loan_q', 'pe_mg_c', 'pe_mg_o', 'pe_mg_ok', 'pe_mg_s', 'pe_mg_veto', 'pe_negq', 'pe_pending', 'pe_prim', 'pe_profit', 'pe_res', 'pe_res2', 'pe_rid', 'pe_rl_c', 'pe_rl_cand', 'pe_san', 'pe_sf', 'pe_stage', 'pe_sup_cap', 'pe_sup_cd', 'pe_sup_fid', 'pe_sup_m', 'pe_sup_n', 'pe_sup_ok', 'pe_sup_seq', 'pe_sz', 'pe_szd', 'pe_thr', 'pe_to_c', 'pe_va', 'pe_val', 'pe_want_bridge', 'pe_want_cost', 'pe_want_loan', 'pe_wf_farmer', 'pe_wf_miner', 'pe_wf_technician', 'pe_wfall', 'pe_zq'];
 const RUIN_VARS = ['pe_ruin_code', 'pe_ruin_corp'];
 const takeOver = vars => `event_target:pe_rm_self = { ${vars.map(x => `if = { limit = { prev = { is_variable_set = ${x} } } set_variable = { which = ${x} value = prev.${x} } }`).join(' ')} }`;
 // Deposit scope: remove this firm (or ruin). The engine's remove_deposit takes a deposit of
@@ -653,6 +658,7 @@ ${t}}
 ${t}set_variable = { which = pe_rm value = 0 }
 ${t}remove_deposit = yes`;
 const RETOOL_AGE = 40;                                 // quarters (10 years) before a firm may restructure
+const RETOOL_AGE_RESCUE = 4;                           // quarters (1 year): a firm destroying value, or consuming what runs out (0.47)
 const RETOOL_AGE_SHORT = 8;                            // quarters (2 years) for a firm consuming what the empire is short of
 const RETOOL_AGE_SUPPLIED = 16;                        // quarters (4 years) for such a firm with a supplier (0.46)
 const RETOOL_CD = 360;                                 // days (1 year) between two restructurings on a planet
@@ -1100,7 +1106,11 @@ ${[1, 2, 3, 4, 5].flatMap(c => STAGES.map(s => `\t\tif = { limit = { root = { ch
 # restructured), and nothing it makes becomes short by the switch (pe_retool_guard). It
 # closes for half the build time (a construction site), and the planet pauses
 # restructuring for ${RETOOL_CD / 360} years. Cost: city ${RETOOL.u} / rural ${RETOOL.r} x size (pe_sz), paid
-# from the firm's own capital only (never on credit). A rural target needs a free district of
+# from the firm's own capital. Rescue (0.47): a firm that destroys value at our prices
+# (pe_val < 0) or consumes what runs out within a year (pe_firm_acute) may restructure after
+# ${RETOOL_AGE_RESCUE / 4} year, with founding debt, without the supply contract's brake, and the investor pool lends
+# what its capital lacks (added to its debt). Only firms that can pay compete, so one that
+# cannot no longer blocks the planet. A rural target needs a free district of
 # its type once the old firm is gone; if there is none, the old firm is restored, the
 # cost paid back, and that rural type is not tried again on this planet for a year.
 pe_restructure = {
@@ -1135,31 +1145,51 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM
 			set_variable = { which = pe_to_c value = root.pe_cls_var_all }
 		}
 		subtract_variable = { which = pe_gain value = pe_val }
+		# Rescue (0.47): it destroys value, or consumes what runs out within a year.
+		set_variable = { which = pe_rt_resc value = 0 }
+		if = { limit = { OR = { check_variable = { which = pe_val value < 0 } pe_firm_acute = yes } } set_variable = { which = pe_rt_resc value = 1 } }
+		# Its cost, and what the investor pool would have to lend.
+		if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } set_variable = { which = pe_cost value = ${RETOOL.u} } }
+		else = { set_variable = { which = pe_cost value = ${RETOOL.r} } }
+		multiply_variable = { which = pe_cost value = pe_sz }
+		set_variable = { which = pe_rt_need value = pe_cost }
+		subtract_variable = { which = pe_rt_need value = pe_fcap }
 		# Clearly better: at least 30% of the current value, and at least 3.
 		set_variable = { which = pe_thr value = pe_val }
 		multiply_variable = { which = pe_thr value = 0.3 }
 		if = { limit = { check_variable = { which = pe_thr value < 3 } } set_variable = { which = pe_thr value = 3 } }
-		# A supply contract (as buyer or supplier) makes it less willing to change.
-		if = { limit = { OR = { check_variable = { which = pe_sup_fid value > 0 } check_variable = { which = pe_sup_n value > 0 } } } multiply_variable = { which = pe_thr value = 1.5 } }
+		# A supply contract (as buyer or supplier) makes it less willing to change, unless what
+		# it consumes runs out within a year.
+		if = { limit = { OR = { check_variable = { which = pe_sup_fid value > 0 } check_variable = { which = pe_sup_n value > 0 } } NOT = { pe_firm_acute = yes } } multiply_variable = { which = pe_thr value = 1.5 } }
 		# It consumes what the empire is short of: a third of that is enough (0.38). With a
-		# supplier only two thirds (supply security, 0.46).
+		# supplier only two thirds (supply security, 0.46), unless it runs out within a year.
 		if = {
 			limit = { pe_firm_short = yes }
-			if = { limit = { check_variable = { which = pe_sup_fid value > 0 } } multiply_variable = { which = pe_thr value = 0.66 } }
+			if = { limit = { check_variable = { which = pe_sup_fid value > 0 } NOT = { pe_firm_acute = yes } } multiply_variable = { which = pe_thr value = 0.66 } }
 			else = { multiply_variable = { which = pe_thr value = 0.33 } }
 		}
 		if = {
 			limit = {
-				check_variable = { which = pe_debt value <= 0 }
+				OR = { check_variable = { which = pe_debt value <= 0 } check_variable = { which = pe_rt_resc value = 1 } }
 				check_variable = { which = pe_loan value <= 0 }
+				# It can pay: from its capital, or in a rescue with the pool's loan.
+				OR = {
+					check_variable = { which = pe_fcap value >= pe_cost }
+					AND = {
+						check_variable = { which = pe_rt_resc value = 1 }
+						check_variable = { which = pe_fcap value >= 0 }
+						root = { check_variable = { which = pe_capital value >= prev.pe_rt_need } }
+					}
+				}
 				# Each firm's own pause (pe_age, quarters since founded or restructured): ${RETOOL_AGE / 4}
 				# years, ${RETOOL_AGE_SHORT / 4} if it consumes what the empire is short of, ${RETOOL_AGE_SUPPLIED / 4} then
 				# with a supplier: firms without one restructure first, but a lasting shortage
-				# moves the others too.
+				# moves the others too. ${RETOOL_AGE_RESCUE / 4} in a rescue (0.47).
 				OR = {
 					check_variable = { which = pe_age value >= ${RETOOL_AGE} }
 					AND = { pe_firm_short = yes NOT = { check_variable = { which = pe_sup_fid value > 0 } } check_variable = { which = pe_age value >= ${RETOOL_AGE_SHORT} } }
 					AND = { pe_firm_short = yes check_variable = { which = pe_sup_fid value > 0 } check_variable = { which = pe_age value >= ${RETOOL_AGE_SUPPLIED} } }
+					AND = { check_variable = { which = pe_rt_resc value = 1 } check_variable = { which = pe_age value >= ${RETOOL_AGE_RESCUE} } }
 				}
 				check_variable = { which = pe_gain value > pe_thr }
 				check_variable = { which = pe_gain value > root.pe_best_gain }
@@ -1182,10 +1212,30 @@ ${variants.map(v => `\tpe_retool_consider = { V = ${v.key} CODE = ${v.code} PRIM
 		else_if = { limit = { check_variable = { which = pe_cls value = 5 } } set_variable = { which = pe_cost value = ${RETOOL.u} } }
 		else = { set_variable = { which = pe_cost value = ${RETOOL.r} } }
 		multiply_variable = { which = pe_cost value = pe_sz }
+		set_variable = { which = pe_rt_need value = pe_cost }
+		subtract_variable = { which = pe_rt_need value = pe_fcap }
+		root = { set_variable = { which = pe_rt_fin value = 0 } }
 		if = {
 			limit = { check_variable = { which = pe_fcap value >= pe_cost } root = { check_variable = { which = pe_guard_ok value = 1 } } }
 			subtract_variable = { which = pe_fcap value = pe_cost }
 			root = { set_variable = { which = pe_retool_ok value = 1 } set_variable = { which = pe_paid value = 1 } }
+		}
+		# Rescue (0.47): the investor pool lends what its capital lacks; the firm owes it (its
+		# debt goes to the new firm).
+		else_if = {
+			limit = {
+				check_variable = { which = pe_rt_resc value = 1 }
+				check_variable = { which = pe_fcap value >= 0 }
+				root = { check_variable = { which = pe_guard_ok value = 1 } check_variable = { which = pe_capital value >= prev.pe_rt_need } }
+			}
+			root = {
+				set_variable = { which = pe_rt_fin value = prev.pe_rt_need }
+				subtract_variable = { which = pe_capital value = prev.pe_rt_need }
+				set_variable = { which = pe_retool_ok value = 1 }
+				set_variable = { which = pe_paid value = 3 }
+			}
+			change_variable = { which = pe_debt value = pe_rt_need }
+			set_variable = { which = pe_fcap value = 0 }
 		}
 		if = {
 			limit = { root = { check_variable = { which = pe_retool_ok value = 1 } } }
@@ -1217,11 +1267,13 @@ ${ifChain(variants, v => rootIs('pe_to', v.code), v => {
 			# No room for the rural target: restore the old firm and pay the cost back.
 			if = { limit = { ${rootIs('pe_paid', 1)} } root = { change_variable = { which = pe_chg_fcap value = pe_chg_cost } } }
 			if = { limit = { ${rootIs('pe_paid', 2)} } root = { change_variable = { which = pe_capital value = pe_chg_cost } } }
+			if = { limit = { ${rootIs('pe_paid', 3)} } root = { change_variable = { which = pe_chg_fcap value = pe_chg_cost } subtract_variable = { which = pe_chg_fcap value = pe_rt_fin } change_variable = { which = pe_capital value = pe_rt_fin } subtract_variable = { which = pe_chg_debt value = pe_rt_fin } } }
 ${ifChain(pairs, p => `root = { check_variable = { which = pe_chg_code value = ${p.v.code} } check_variable = { which = pe_chg_stage value = ${p.s} } }`, p => `add_deposit = ${p.key} ${initFirm(p.v.code, p.s, 'root.pe_chg_fcap', 'root.pe_chg_debt')}`, '\t\t\t')}
 		}
 		else = {
 			set_planet_flag = pe_site
 			set_timed_planet_flag = { flag = pe_retool_cd days = ${RETOOL_CD} }
+			log = "private_economy: restructuring on \\\\[This.GetName]: variant \\\\[Root.pe_chg_code] to \\\\[Root.pe_to], pool loan \\\\[Root.pe_rt_fin]" 
 			${safety.reserve("pe_safe_out")}
 		}
 		check_planet_employment = yes

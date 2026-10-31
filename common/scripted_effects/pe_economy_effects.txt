@@ -844,6 +844,15 @@ pe_shadow = {
 	# founded and are the first to restructure.
 	set_variable = { which = pe_def_$RES$ value = 0 }
 	if = { limit = { check_variable = { which = pe_net value < 0 } } set_variable = { which = pe_def_$RES$ value = 1 } }
+	# pe_acute_<res>: the stock runs out within a year (0.47). Its consumers restructure
+	# without waiting for their supply contract or their age (pe_firm_acute).
+	set_variable = { which = pe_acute_$RES$ value = 0 }
+	if = {
+		limit = { check_variable = { which = pe_net value < 0 } }
+		set_variable = { which = pe_tmp value = pe_net }
+		multiply_variable = { which = pe_tmp value = -12 }
+		if = { limit = { check_variable = { which = pe_stock value < pe_tmp } } set_variable = { which = pe_acute_$RES$ value = 1 } }
+	}
 	# Investment goods start from their base value, not the market buying price with fees.
 	if = { limit = { check_variable = { which = pe_is_invest value = 1 } } set_variable = { which = pe_pbuy value = $BASE$ } }
 	set_variable = { which = pe_s_$RES$ value = pe_pbuy }
@@ -1383,6 +1392,10 @@ pe_firm_book = {
 	# A corporate loan the firm cannot carry (its profit below the interest of 3%): after four
 	# such quarters in a row its lender restructures it (pe_sanierung_step, pe.321 / pe.322).
 	if = { limit = { NOT = { is_variable_set = pe_zq } } set_variable = { which = pe_zq value = 0 } }
+	# Quarters in a row it destroyed value at our prices (pe_val < 0, 0.47): from the second
+	# no bridging loan, it shrinks instead (unless it restructures first).
+	if = { limit = { check_variable = { which = pe_val value < 0 } } change_variable = { which = pe_negq value = 1 } }
+	else = { set_variable = { which = pe_negq value = 0 } }
 	if = {
 		limit = { check_variable = { which = pe_loan value > 0 } }
 		set_variable = { which = pe_tmp value = pe_loan }
@@ -1498,10 +1511,12 @@ pe_firm_book = {
 	if = {
 		limit = { root = { check_variable = { which = pe_pend_any value = 0 } } }
 		if = {
-			# Losses: ask for a bridging loan (pe_corp_lending), at most two years in a row.
+			# Losses: ask for a bridging loan (pe_corp_lending), at most two years in a row, and
+			# not for a firm that keeps destroying value (0.47).
 			limit = {
 				check_variable = { which = pe_fcap value < 0 }
 				check_variable = { which = pe_loan_q value < 8 }
+				NOT = { check_variable = { which = pe_negq value >= 2 } }
 			}
 			set_variable = { which = pe_want_bridge value = pe_fcap }
 			multiply_variable = { which = pe_want_bridge value = -1 }

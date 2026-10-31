@@ -6,6 +6,18 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
+## Stand 0.47.0
+
+**Strukturwandel** ([TESTS_0.47.md](docs/TESTS_0.47.md)). Gefunden im Save 2269 (31.10.2026): Ein KI-Reich mit 82 Firmen verlor 371 Mineralien im Monat bei 1664 im Lager. 13 Konsumgüterfabriken verbrauchten 657 Mineralien für Konsumgüter, von denen es 16.000 im Lager hatte. Die Fabriken machten Verlust, konnten aber nicht umbauen: ohne Kapital für den Umbau, mit Schulden, über Überbrückungskredite am Leben gehalten. Weil nur die Firma mit dem größten Gewinn je Planet umbauen darf, blockierte eine, die nicht zahlen konnte, den ganzen Planeten.
+- **Rettung:** Eine Firma, die zu unseren Preisen Wert vernichtet, oder die etwas verbraucht, das in unter einem Jahr ausgeht, darf nach einem Jahr umbauen, auch mit Gründungsschulden und ohne die Bremse des Liefervertrags.
+  - Fehlt ihr Kapital, leiht der Investorenpool den Rest; die Firma schuldet ihn und zahlt ihn aus dem Gewinn zurück.
+  - Firmen mit einem Konzernkredit bleiben bei der Sanierung durch den Kreditgeber.
+- **Bezahlbar:** Um den Umbau auf einem Planeten konkurrieren nur Firmen, die ihn bezahlen können.
+- **Kein Überbrückungskredit** mehr für eine Firma, die zwei Quartale in Folge Wert vernichtet: Sie schrumpft, und ihre Arbeiter werden frei, sofern sie nicht vorher umbaut.
+- **Akuter Mangel:** `pe_acute_<res>`, wenn das Lager bei diesem Defizit kein Jahr mehr reicht.
+- Jeder Umbau steht im game.log (Planet, alte und neue Variante, Kredit des Pools).
+- Fehlerbehebung: Die Piraten- und Monsterprüfung der Konzernflotten greift nicht mehr auf den Besitzer einer besitzerlosen Flotte zu (error.log, Astral Rift Research Station).
+
 ## Stand 0.46.0
 
 **0.46.1 – die richtige Firma geht.** Die Engine entfernt mit `remove_deposit` ein Deposit des Typs, nicht unbedingt das gemeinte. Standen zwei Firmen derselben Branche und Stufe auf einem Planeten, verschwand beim Wachsen, Umziehen, Umbauen, Fusionieren oder Verstaatlichen manchmal die andere samt Kapital. Die gemeinte Firma gab es danach doppelt, mit derselben Firmennummer.
@@ -159,7 +171,7 @@ Die Privatwirtschaft ist ein Kreislauf:
   - Stadt höchstens 150 pro Produkt.
   - Land 200, oder 150 plus 50 Sparte.
 - **Defizit-Sperre:** Keine Firmen, die eine Ressource im Defizit verbrauchen. Bestehende werden zuerst umgebaut, auch über Klassengrenzen.
-- **Umbau** nur, wenn die neue Firma klar mehr wert ist und danach nichts knapp wird, was die alte gemacht hat. Eine Firma baut frühestens nach 10 Jahren um (bei knappen Vorprodukten nach 2), ein Planet höchstens einmal im Jahr.
+- **Umbau** nur, wenn die neue Firma klar mehr wert ist und danach nichts knapp wird, was die alte gemacht hat. Eine Firma baut frühestens nach 10 Jahren um (bei knappen Vorprodukten nach 2), ein Planet höchstens einmal im Jahr. Eine Firma, die Wert vernichtet oder verbraucht, was in unter einem Jahr ausgeht, schon nach einem Jahr, notfalls mit einem Kredit des Investorenpools (0.47).
 - **Freie Pops:** Gründung und Wachstum brauchen Zivilisten minus offene Jobs minus Baustellen-Jobs, mindestens 50. Eine fertige Baustelle öffnet erst, wenn Arbeiter da sind.
 - **Gewinne und Ersparnisse** zusammen höchstens ein gestaffelter Anteil des Netto-Handels ohne sie (60 % der ersten 100 im Monat, seit 0.44.1; 70 % der nächsten 200, 85 % darüber); was der Staat nicht zahlt, bekommen Firmen und Pool auch nicht.
 - **Kosten** wie für den Staat. Finanziert über private Ersparnisse (Anteil am Handelseinkommen, nach Ordnung) und Kredit (40 % Anzahlung, Rest aus dem Firmengewinn).
