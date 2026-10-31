@@ -8,6 +8,16 @@ Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien u
 
 ## Stand 0.47.0
 
+**0.47.3 – Konzernrat mit ersten Themen** (Test 2276.07 vom 31.10.2026: Gesichter funktionieren, keine Fehler im error.log).
+- Nur die eigenen Holdings stehen in der Kontaktliste. `released_by_country` hatte jeder Holding die Kontakte ihres Reichs mitgegeben, so sah man die Holdings aller Nachbarn. Jetzt werden diese Kontakte jedes Quartal entfernt, und die Holdings heißen „Private Holdings (<Reich>)“.
+- Neuer Raum: Konzernsaal (`personality_ruthless_capitalists_room`, der Raum der Megakonzerne).
+- Bei jedem Konzern steht seine Art (Industrie-, Handels- und Freizeit-, Wissenschafts- und Medien-, Rohstoffkonzern), im Gespräch dazu Hauptprodukt und Hauptsitz.
+- Themen aus bestehenden Mechaniken:
+  - **Was für ein Unternehmen führen Sie?** Der Vorstand stellt seinen Konzern vor, mit dem, was diese Art in unserer Wirtschaft tut.
+  - **Rüstungsvertrag** (Industriekonzerne): anfragen zu denselben Bedingungen wie das Angebot von selbst (5000 Kasse, kein anderer Vertrag); der Konzern legt das gewohnte Angebot vor. Unserem Rüstungskonzern können wir kündigen; dann verhandelt er fünf Jahre nicht neu mit uns.
+  - **Schiffe für den Krieg leasen** (nur im Krieg): Industriekonzerne ab 600 Kasse, andere ab 1200; der Konzern legt das gewohnte Leasingangebot vor.
+- Mehrfaches Klicken auf den Kontakt öffnet den Rat nur einmal.
+
 **0.47.2 – Prototyp Konzernrat** ([TESTS_PROTO_COUNCIL.md](docs/TESTS_PROTO_COUNCIL.md)). Die Private Holdings stehen in der Kontaktliste. Öffnet man sie, tagt der Konzernrat wie bei einer Enklave: Man wählt einen Konzern, und sein Vorstand empfängt uns mit eigenem Gesicht (ein Anführer der Holdings, Spezies vom Hauptsitz). Noch ohne Themen; die Ausschreibung ist als gesperrte Option angekündigt.
 
 **0.47.1 – das Lager zählt.** Gefunden im Save 2276 (31.10.2026): 48 Firmen der KI-Reiche durften nicht wachsen, weil der Versorgungsschutz nur den Monatsfluss prüfte. Ein Reich mit 17.000 Energie im Lager und +72 im Monat lag knapp unter seiner Marge von 76. Deshalb wuchs keine Firma, die Energie verbraucht, auch nicht die Konsumgüterfabriken, obwohl ihm Konsumgüter fehlten.
@@ -233,6 +243,17 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
   - Vertrauen: Die Meinung der Engine gilt nur pro Kontakt (Holdings gegenüber uns). Vertrauen pro Konzern als eigene Variable, im Gespräch angezeigt; die Meinung der Holdings kann als ausgelöster Meinungsmodifikator den Durchschnitt zeigen.
   - Jedes Thema braucht einen automatischen Weg für KI-Reiche; für uns bleibt der Kontakt freiwillig.
   - Offen: Vorsitzender des Rats (Herrscher der Holdings) als Vorstand des größten Konzerns.
+  - Seit 0.47.3: Konzernart, Vorstellung, Rüstungsvertrag (anfragen, kündigen), Kriegsleasing.
+  - **Konzernprofile (Vorschläge 31.10.2026, nicht beschlossen):** Jeder Konzern bekommt bei der Gründung ein Profil, gewichtet nach unserer Ethik und seiner Art; der Vorstand erklärt es im Gespräch. Wirkung nur über Hebel, die es schon gibt (Kreditlinie, Anzahlung, Investitionswahl, Auszahlung, Angebote), sodass kein Profil schummelt.
+    - **Gründerkonzern** (Expansion): leiht mehr, investiert früh, übernimmt gern; wenig Kasse, krisenanfällig.
+    - **Solides Haus** (konservativ): hohe Rücklage, kleine Kreditlinie, zeichnet Staatsanleihen und Lagerverträge; übersteht Krisen, wächst langsam.
+    - **Familienkonzern** (Dynastie): Vorstand vererbt sich, Hauptsitz zieht nie um, hohe Sozialleistungen, Stiftungen; passt zu autoritären und traditionellen Reichen.
+    - **Technologiekonzern**: Geld ins Forschungsinstitut, Technologielizenzen und Prototypen; passt zu Materialisten.
+    - **Rüstungskonzern** (militärisch-industriell): sucht Rüstungsvertrag, Kriegsleasing, Zitadellen und Werkschutz; passt zu Militaristen, will Aufträge, auch im Frieden.
+    - **Finanzhaus** (Spekulation): Börsen-Events, Übernahmen, Insiderhandel; hohe Gewinne, Risiko von Crash und Skandal.
+    - **Genossenschaft** (gemeinwohlorientiert): teilt Gewinn mit den Beschäftigten (Zufriedenheit statt Kasse), kleinere Marge; passt zu Egalitären und zur Civic Arbeiterkooperative.
+    - **Pionierkonzern** (Grenze): Prospektion, Stationen, Habitate, Erkundungscharta, Bergung; investiert gern in neuen Kolonien.
+    - **Kartell** (Marktmacht): Preiskämpfe, Monopole, Lobby für Schutzzölle; hohe Gewinne, Unmut der Bevölkerung; passt zu Megakonzernen mit kriminellem Erbe.
 - **Erweiterungen aus dem Review (27.10.2026):**
   - **Staatliche Ausschreibungen:** Wir setzen Anreize für benötigte Legierungen, Forschung oder Versorgung, und die Firmen entscheiden, ob sie investieren. Als Nächstes (0.48), über den Konzernrat: Der Staat schreibt eine Menge aus (z. B. 50 Legierungen im Monat für 10 Jahre mit Prämie je Einheit), Konzerne bewerben sich mit ihrer Kasse, der Gewinner baut aus oder um; KI-Reiche schreiben nach Schattenpreisen aus. Nutzt liegendes Kapital (Save 2276: Pool 69.000, Konzernkassen bis 44.500).
   - **Konzernprofile und Branchentechnologien:** Konzerne unterscheiden sich durch Spezialisierung, Risikobereitschaft und Investitionsverhalten (passt zu „Firmen forschen an ihrem Sektor“).

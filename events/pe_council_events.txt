@@ -1,8 +1,11 @@
-# Corporate council (prototype for 0.48, pe_council_effects.txt): our holdings are in the
-# contacts list; opening their diplomacy view leads here.
-#   pe.335 hidden: on_custom_diplomacy with our holdings -> pe.336
+# Corporate council (pe_council_effects.txt): our holdings are in the contacts list; opening
+# their diplomacy view leads here.
+#   pe.335 hidden: on_custom_diplomacy with our holdings -> pe.336 (once: pe_council_open)
 #   pe.336 the council: the corporations, choose one
-#   pe.337 one corporation (pe_dlg_k): its chief executive receives us
+#   pe.337 one corporation (pe_dlg_k): its chief executive receives us; the topics
+#   pe.338 what kind of company it is
+#   pe.339 the defence contract is ended
+# Every way out of the council removes pe_council_open.
 namespace = pe
 
 # This = we, from = the country whose diplomacy view we open.
@@ -10,8 +13,12 @@ country_event = {
 	id = pe.335
 	hide_window = yes
 	is_triggered_only = yes
-	trigger = { from = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } } }
+	trigger = {
+		NOT = { has_country_flag = pe_council_open }
+		from = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } }
+	}
 	immediate = {
+		set_timed_country_flag = { flag = pe_council_open days = 3 }
 		from = { save_event_target_as = pe_hold }
 		country_event = { id = pe.336 }
 	}
@@ -24,7 +31,7 @@ country_event = {
 	diplomatic = yes
 	picture_event_data = {
 		portrait = event_target:pe_hold
-		room = ethic_spaceship_room
+		room = personality_ruthless_capitalists_room
 	}
 	is_triggered_only = yes
 	immediate = { hidden_effect = { pe_council_hold = yes pe_corp_census = yes } }
@@ -69,7 +76,7 @@ country_event = {
 		trigger = { check_variable = { which = pe_c8_on value = 1 } }
 		hidden_effect = { set_variable = { which = pe_dlg_k value = 8 } country_event = { id = pe.337 } }
 	}
-	option = { name = pe.336.z }
+	option = { name = pe.336.z hidden_effect = { remove_country_flag = pe_council_open } }
 }
 
 country_event = {
@@ -86,23 +93,119 @@ country_event = {
 	diplomatic = yes
 	picture_event_data = {
 		portrait = event_target:pe_ceo
-		room = ethic_spaceship_room
+		room = personality_ruthless_capitalists_room
 	}
 	is_triggered_only = yes
 	immediate = { hidden_effect = {
 		pe_council_hold = yes
 		pe_corp_census = yes
-		if = { limit = { check_variable = { which = pe_dlg_k value = 1 } } pe_council_ceo = { K = 1 } set_variable = { which = pe_corp_cur_name value = pe_c1_name } set_variable = { which = pe_corp_cur_ceo value = pe_c1_ceo } } else_if = { limit = { check_variable = { which = pe_dlg_k value = 2 } } pe_council_ceo = { K = 2 } set_variable = { which = pe_corp_cur_name value = pe_c2_name } set_variable = { which = pe_corp_cur_ceo value = pe_c2_ceo } } else_if = { limit = { check_variable = { which = pe_dlg_k value = 3 } } pe_council_ceo = { K = 3 } set_variable = { which = pe_corp_cur_name value = pe_c3_name } set_variable = { which = pe_corp_cur_ceo value = pe_c3_ceo } } else_if = { limit = { check_variable = { which = pe_dlg_k value = 4 } } pe_council_ceo = { K = 4 } set_variable = { which = pe_corp_cur_name value = pe_c4_name } set_variable = { which = pe_corp_cur_ceo value = pe_c4_ceo } } else_if = { limit = { check_variable = { which = pe_dlg_k value = 5 } } pe_council_ceo = { K = 5 } set_variable = { which = pe_corp_cur_name value = pe_c5_name } set_variable = { which = pe_corp_cur_ceo value = pe_c5_ceo } } else_if = { limit = { check_variable = { which = pe_dlg_k value = 6 } } pe_council_ceo = { K = 6 } set_variable = { which = pe_corp_cur_name value = pe_c6_name } set_variable = { which = pe_corp_cur_ceo value = pe_c6_ceo } } else_if = { limit = { check_variable = { which = pe_dlg_k value = 7 } } pe_council_ceo = { K = 7 } set_variable = { which = pe_corp_cur_name value = pe_c7_name } set_variable = { which = pe_corp_cur_ceo value = pe_c7_ceo } } else_if = { limit = { check_variable = { which = pe_dlg_k value = 8 } } pe_council_ceo = { K = 8 } set_variable = { which = pe_corp_cur_name value = pe_c8_name } set_variable = { which = pe_corp_cur_ceo value = pe_c8_ceo } }
+		if = { limit = { check_variable = { which = pe_dlg_k value = 1 } } pe_council_ceo = { K = 1 } pe_council_slot = { K = 1 } }
+		else_if = { limit = { check_variable = { which = pe_dlg_k value = 2 } } pe_council_ceo = { K = 2 } pe_council_slot = { K = 2 } }
+		else_if = { limit = { check_variable = { which = pe_dlg_k value = 3 } } pe_council_ceo = { K = 3 } pe_council_slot = { K = 3 } }
+		else_if = { limit = { check_variable = { which = pe_dlg_k value = 4 } } pe_council_ceo = { K = 4 } pe_council_slot = { K = 4 } }
+		else_if = { limit = { check_variable = { which = pe_dlg_k value = 5 } } pe_council_ceo = { K = 5 } pe_council_slot = { K = 5 } }
+		else_if = { limit = { check_variable = { which = pe_dlg_k value = 6 } } pe_council_ceo = { K = 6 } pe_council_slot = { K = 6 } }
+		else_if = { limit = { check_variable = { which = pe_dlg_k value = 7 } } pe_council_ceo = { K = 7 } pe_council_slot = { K = 7 } }
+		else_if = { limit = { check_variable = { which = pe_dlg_k value = 8 } } pe_council_ceo = { K = 8 } pe_council_slot = { K = 8 } }
+		if = { limit = { is_variable_set = pe_dc_nm } set_variable = { which = pe_cn308 value = pe_dc_nm } }
 	} }
 
+	# What kind of company (pe.338).
+	option = {
+		name = pe.337.p
+		hidden_effect = { country_event = { id = pe.338 } }
+	}
+	# Defence contract (industry): ask for one; its offer is pe.306.
+	option = {
+		name = pe.337.dc
+		trigger = {
+			check_variable = { which = pe_dlg_grp value = 1 }
+			NOT = { check_variable = { which = pe_dc_k value = pe_dlg_k } }
+		}
+		allow = {
+			custom_tooltip = { fail_text = pe.337.dc.busy NOT = { check_variable = { which = pe_dc_k value > 0 } } }
+			custom_tooltip = { fail_text = pe.337.dc.cash check_variable = { which = pe_dlg_cash value >= 5000 } }
+			custom_tooltip = { fail_text = pe.337.dc.cut NAND = { has_country_flag = pe_dc_cut check_variable = { which = pe_dc_cutnm value = pe_corp_cur_name } } }
+		}
+		custom_tooltip = pe.337.dc.tt
+		hidden_effect = { remove_country_flag = pe_council_open pe_council_dc_offer = yes }
+	}
+	# Our defence contractor: end the contract.
+	option = {
+		name = pe.337.dx
+		trigger = { check_variable = { which = pe_dc_k value = pe_dlg_k } }
+		custom_tooltip = pe.337.dx.tt
+		hidden_effect = { pe_council_dc_cancel = yes country_event = { id = pe.339 } }
+	}
+	# At war: lease a fleet; its offer is pe.282.
+	option = {
+		name = pe.337.wl
+		trigger = { is_at_war = yes }
+		allow = {
+			custom_tooltip = { fail_text = pe.337.wl.run NOT = { check_variable = { which = pe_lease_war_q value > 0 } } }
+			custom_tooltip = {
+				fail_text = pe.337.wl.cash
+				OR = {
+					check_variable = { which = pe_dlg_cash value >= 1200 }
+					AND = { check_variable = { which = pe_dlg_grp value = 1 } check_variable = { which = pe_dlg_cash value >= 600 } }
+				}
+			}
+		}
+		custom_tooltip = pe.337.wl.tt
+		hidden_effect = { remove_country_flag = pe_council_open pe_council_wl_offer = yes }
+	}
 	# Tenders (0.48): announced, not yet possible.
 	option = {
 		name = pe.337.a
-		allow = { custom_tooltip_fail = { text = pe.337.a.tt always = no } }
+		allow = { custom_tooltip = { fail_text = pe.337.a.tt always = no } }
 	}
 	option = {
 		name = pe.337.b
 		hidden_effect = { country_event = { id = pe.336 } }
 	}
-	option = { name = pe.337.z }
+	option = { name = pe.337.z hidden_effect = { remove_country_flag = pe_council_open } }
+}
+
+# Scope and event targets from pe.337 (pe_dlg_*, pe_ceo).
+country_event = {
+	id = pe.338
+	title = pe.337.name
+	desc = { trigger = { check_variable = { which = pe_dlg_grp value = 1 } } text = pe.338.desc.1 }
+	desc = { trigger = { check_variable = { which = pe_dlg_grp value = 2 } } text = pe.338.desc.2 }
+	desc = { trigger = { check_variable = { which = pe_dlg_grp value = 3 } } text = pe.338.desc.3 }
+	desc = { trigger = { check_variable = { which = pe_dlg_grp value = 4 } } text = pe.338.desc.4 }
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:pe_ceo
+		room = personality_ruthless_capitalists_room
+	}
+	is_triggered_only = yes
+
+	option = {
+		name = pe.338.a
+		hidden_effect = { country_event = { id = pe.337 } }
+	}
+	option = {
+		name = pe.337.b
+		hidden_effect = { country_event = { id = pe.336 } }
+	}
+	option = { name = pe.337.z hidden_effect = { remove_country_flag = pe_council_open } }
+}
+
+country_event = {
+	id = pe.339
+	title = pe.337.name
+	desc = pe.339.desc
+	diplomatic = yes
+	picture_event_data = {
+		portrait = event_target:pe_ceo
+		room = personality_ruthless_capitalists_room
+	}
+	is_triggered_only = yes
+
+	option = {
+		name = pe.337.b
+		hidden_effect = { country_event = { id = pe.336 } }
+	}
+	option = { name = pe.337.z hidden_effect = { remove_country_flag = pe_council_open } }
 }

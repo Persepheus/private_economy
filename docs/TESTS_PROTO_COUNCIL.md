@@ -1,6 +1,23 @@
-# Prototyp Konzernrat (0.47.2)
+# Prototyp Konzernrat (0.47.2, Themen 0.47.3)
 
-Statisch geprüft (Validator). Im Spiel noch nicht getestet.
+0.47.2 im Spiel getestet (Save 2276.07, 31.10.2026): Kontakt öffnet den Rat, Gesichter funktionieren, keine Fehler im error.log. Gefunden: Man sah auch die Holdings der anderen Reiche, und der Raum wirkte nicht nach Konzern. 0.47.3 nur statisch geprüft.
+
+## 0.47.3 prüfen
+
+- **Kontaktliste:** Nach dem nächsten Quartalswechsel nur noch die eigenen Holdings, Name „Private Holdings (<unser Reich>)“. Die Holdings anderer Reiche verschwinden.
+- **Raum:** Konzernsaal (`personality_ruthless_capitalists_room`). Falls er nicht passt, Alternativen: `personality_peaceful_traders_room`, `gilded_room`.
+- **Konzernrat:** Hinter jedem Namen die Art des Konzerns.
+- **Gespräch:** Zeile mit Art, Hauptprodukt und Hauptsitz (Planetenname).
+- **Was für ein Unternehmen führen Sie?:** Text passend zur Art, „Zurück zum Gespräch“ zeigt wieder denselben Vorstand.
+- **Rüstungsvertrag** (nur bei Industriekonzernen):
+  - gesperrt mit Begründung, wenn ein anderer Vertrag läuft oder die Kasse unter 5000 liegt;
+  - sonst öffnet sich das gewohnte Angebot (pe.306) mit dem gewählten Konzern;
+  - bei unserem Rüstungskonzern stattdessen „kündigen“: Modifikator weg, Antwort des Vorstands (pe.339); im nächsten Quartal enden Rüstungsaufträge und Rüstungszentrum; danach ist die Anfrage bei ihm fünf Jahre gesperrt.
+- **Kriegsleasing** (nur im Krieg): öffnet das gewohnte Angebot (pe.282) des gewählten Konzerns; gesperrt, solange eine Konzernflotte geleast ist.
+- **Mehrfach klicken:** Der Rat öffnet sich nur einmal; nach dem Schließen wieder normal.
+- **Nebenwirkungen:** Holdings-Zitadellen treten weiter unseren Kriegen bei, obwohl die Holdings keine Kommunikation mehr mit fremden Reichen haben.
+
+## 0.47.2
 
 ## Aufbau
 

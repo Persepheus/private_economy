@@ -1,10 +1,10 @@
-# Corporate council (prototype for 0.48): our holdings (pe_holdings) are a contact; opening
-# their diplomacy view (on_custom_diplomacy) leads to the council (pe.336) and to one
+# Corporate council (0.47.2, topics since 0.47.3): our holdings (pe_holdings) are a contact;
+# opening their diplomacy view (on_custom_diplomacy) leads to the council (pe.336) and to one
 # corporation (pe.337). Each corporation's chief executive is a leader of the holdings, so the
 # conversation shows a face: name pe_magnate_<pe_c<k>_ceo> (as in our messages), species of a
 # pop group at its headquarters.
 # Call depths: pe.337 immediate -> pe_council_ceo (1) -> pe_council_ceo_create (2)
-#   -> pe_council_ceo_new (3).
+#   -> pe_council_ceo_new (3); pe_council_slot (1); options -> pe_council_dc_* / _wl_offer (1).
 
 # Country scope (we): event_target:pe_hold = our holdings.
 pe_council_hold = {
@@ -85,4 +85,62 @@ pe_council_ceo_new = {
 		}
 		last_created_leader = { save_event_target_as = pe_ceo }
 	}
+}
+
+# Country scope (we, pe.337): the facts of corporation slot $K$ for the conversation: name,
+# chief executive, kind (pe_dlg_grp), product (pe_dlg_prod, 0 = not yet known), cash,
+# headquarters (event_target:pe_dlg_hq if pe_dlg_hqok = 1), the share a defence contract would
+# have (pe_dlg_dcs, as in pe_dc_step: 10%, 20% from 15000 cash).
+pe_council_slot = {
+	set_variable = { which = pe_corp_cur_name value = pe_c$K$_name }
+	set_variable = { which = pe_corp_cur_ceo value = pe_c$K$_ceo }
+	set_variable = { which = pe_dlg_grp value = pe_c$K$_grp }
+	set_variable = { which = pe_dlg_prod value = 0 }
+	if = { limit = { is_variable_set = pe_c$K$_prod } set_variable = { which = pe_dlg_prod value = pe_c$K$_prod } }
+	set_variable = { which = pe_dlg_cash value = pe_c$K$_cash }
+	set_variable = { which = pe_dlg_cashr value = pe_c$K$_cash }
+	round_variable = pe_dlg_cashr
+	set_variable = { which = pe_dlg_hqok value = 0 }
+	random_owned_colony = {
+		limit = { has_planet_flag = pe_hq_$K$ }
+		save_event_target_as = pe_dlg_hq
+		root = { set_variable = { which = pe_dlg_hqok value = 1 } }
+	}
+	set_variable = { which = pe_dlg_dcs value = 10 }
+	if = { limit = { check_variable = { which = pe_c$K$_cash value >= 15000 } } set_variable = { which = pe_dlg_dcs value = 20 } }
+}
+
+# Country scope (we, pe.337): we ask corporation pe_dlg_k for a defence contract. It answers
+# with its offer (pe.306), as if it had come by itself (same conditions as pe_dc_step).
+pe_council_dc_offer = {
+	set_variable = { which = pe_dc_cand value = pe_dlg_k }
+	set_variable = { which = pe_dc_s value = pe_dlg_dcs }
+	set_timed_country_flag = { flag = pe_dc_cd days = 1800 }
+	country_event = { id = pe.306 }
+}
+
+# Country scope (we, pe.337): we end the defence contract. The arms orders and the arms centre
+# go with the next quarter (pe_dc_step); this corporation does not negotiate with us for five
+# years (pe_dc_cut, pe_dc_cutnm).
+pe_council_dc_cancel = {
+	set_variable = { which = pe_dc_k value = 0 }
+	if = { limit = { has_modifier = pe_defence_contract } remove_modifier = pe_defence_contract }
+	set_timed_country_flag = { flag = pe_dc_cd days = 1800 }
+	set_timed_country_flag = { flag = pe_dc_cut days = 1800 }
+	set_variable = { which = pe_dc_cutnm value = pe_dc_nm }
+}
+
+# Country scope (we, pe.337): at war, we ask corporation pe_dlg_k to lease us a fleet. It
+# answers with its offer (pe.282), sized as in pe_corp_fleets.
+pe_council_wl_offer = {
+	set_variable = { which = pe_wl_k value = pe_dlg_k }
+	set_variable = { which = pe_wl_best value = pe_dlg_cash }
+	set_timed_country_flag = { flag = pe_lease_war_cd days = 1800 }
+	set_variable = { which = pe_wl_budget value = pe_wl_best }
+	multiply_variable = { which = pe_wl_budget value = 0.5 }
+	export_trigger_value_to_variable = { trigger = fleet_power variable = pe_wl_need }
+	multiply_variable = { which = pe_wl_need value = 0.25 }
+	if = { limit = { check_variable = { which = pe_wl_need value < 500 } } set_variable = { which = pe_wl_need value = 500 } }
+	capital_scope = { save_event_target_as = pe_wl_loc }
+	country_event = { id = pe.282 }
 }

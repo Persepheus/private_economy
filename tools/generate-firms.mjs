@@ -2208,7 +2208,7 @@ write('common/scripted_triggers/pe_corp_triggers_generated.txt', ctrg);
 
 corp += `
 # Country scope, quarterly: find our holdings (event_target:pe_hold); create them once we
-# have a corporation. Our flag, not in the contacts list.
+# have a corporation. Our flag; in our contacts list only (the corporate council).
 pe_holdings_ensure = {
 	random_country = {
 		limit = { is_country_type = pe_holdings has_relation_flag = { who = root flag = pe_holdings_of } }
@@ -2248,6 +2248,17 @@ pe_holdings_ensure = {
 	if = {
 		limit = { exists = event_target:pe_hold NOT = { has_communications = event_target:pe_hold } }
 		establish_communications_no_message = event_target:pe_hold
+	}
+	# Our holdings carry our name (contacts list, 0.47.3).
+	if = {
+		limit = { exists = event_target:pe_hold }
+		event_target:pe_hold = { set_name = { key = pe_holdings_name_of variable_string = "[Root.GetName]" } }
+	}
+	# Only our own holdings are in our contacts list: released_by_country gave every holdings the
+	# contacts of its empire (0.47.3).
+	every_country = {
+		limit = { is_country_type = pe_holdings NOT = { has_relation_flag = { who = root flag = pe_holdings_of } } has_communications = root }
+		remove_communications = root
 	}
 }
 

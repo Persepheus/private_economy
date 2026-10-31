@@ -1,0 +1,233 @@
+# Corporate council (pe_council_events.txt; country scope).
+defined_text = {
+	name = GetPeCorpKind1
+	text = {
+		trigger = { check_variable = { which = pe_c1_grp value = 1 } }
+		localization_key = pe_corp_kind_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_grp value = 2 } }
+		localization_key = pe_corp_kind_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_grp value = 3 } }
+		localization_key = pe_corp_kind_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_grp value = 4 } }
+		localization_key = pe_corp_kind_4
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpKind2
+	text = {
+		trigger = { check_variable = { which = pe_c2_grp value = 1 } }
+		localization_key = pe_corp_kind_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_grp value = 2 } }
+		localization_key = pe_corp_kind_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_grp value = 3 } }
+		localization_key = pe_corp_kind_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_grp value = 4 } }
+		localization_key = pe_corp_kind_4
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpKind3
+	text = {
+		trigger = { check_variable = { which = pe_c3_grp value = 1 } }
+		localization_key = pe_corp_kind_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_grp value = 2 } }
+		localization_key = pe_corp_kind_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_grp value = 3 } }
+		localization_key = pe_corp_kind_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_grp value = 4 } }
+		localization_key = pe_corp_kind_4
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpKind4
+	text = {
+		trigger = { check_variable = { which = pe_c4_grp value = 1 } }
+		localization_key = pe_corp_kind_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_grp value = 2 } }
+		localization_key = pe_corp_kind_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_grp value = 3 } }
+		localization_key = pe_corp_kind_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_grp value = 4 } }
+		localization_key = pe_corp_kind_4
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpKind5
+	text = {
+		trigger = { check_variable = { which = pe_c5_grp value = 1 } }
+		localization_key = pe_corp_kind_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_grp value = 2 } }
+		localization_key = pe_corp_kind_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_grp value = 3 } }
+		localization_key = pe_corp_kind_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_grp value = 4 } }
+		localization_key = pe_corp_kind_4
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpKind6
+	text = {
+		trigger = { check_variable = { which = pe_c6_grp value = 1 } }
+		localization_key = pe_corp_kind_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_grp value = 2 } }
+		localization_key = pe_corp_kind_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_grp value = 3 } }
+		localization_key = pe_corp_kind_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_grp value = 4 } }
+		localization_key = pe_corp_kind_4
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpKind7
+	text = {
+		trigger = { check_variable = { which = pe_c7_grp value = 1 } }
+		localization_key = pe_corp_kind_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_grp value = 2 } }
+		localization_key = pe_corp_kind_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_grp value = 3 } }
+		localization_key = pe_corp_kind_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_grp value = 4 } }
+		localization_key = pe_corp_kind_4
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpKind8
+	text = {
+		trigger = { check_variable = { which = pe_c8_grp value = 1 } }
+		localization_key = pe_corp_kind_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_grp value = 2 } }
+		localization_key = pe_corp_kind_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_grp value = 3 } }
+		localization_key = pe_corp_kind_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_grp value = 4 } }
+		localization_key = pe_corp_kind_4
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeDlgKind
+	text = {
+		trigger = { check_variable = { which = pe_dlg_grp value = 1 } }
+		localization_key = pe_corp_kind_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_grp value = 2 } }
+		localization_key = pe_corp_kind_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_grp value = 3 } }
+		localization_key = pe_corp_kind_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_grp value = 4 } }
+		localization_key = pe_corp_kind_4
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeDlgProd
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prod value = 1 } }
+		localization_key = pe_prod_alloys
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prod value = 2 } }
+		localization_key = pe_prod_consumer_goods
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prod value = 3 } }
+		localization_key = pe_prod_trade
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prod value = 4 } }
+		localization_key = pe_prod_physics_research
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prod value = 5 } }
+		localization_key = pe_prod_society_research
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prod value = 6 } }
+		localization_key = pe_prod_engineering_research
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prod value = 7 } }
+		localization_key = pe_prod_unity
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prod value = 8 } }
+		localization_key = pe_prod_minerals
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prod value = 9 } }
+		localization_key = pe_prod_energy
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prod value = 10 } }
+		localization_key = pe_prod_food
+	}
+	default = pe_dlg_none
+}
+defined_text = {
+	name = GetPeDlgHq
+	text = {
+		trigger = { check_variable = { which = pe_dlg_hqok value = 1 } }
+		localization_key = pe_dlg_hq
+	}
+	default = pe_dlg_none
+}
