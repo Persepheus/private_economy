@@ -2204,6 +2204,7 @@ pe_corp_step = {
 	pe_arms_offer = yes
 	pe_corp_dissolve = yes
 	pe_corp_found = yes
+	pe_prof_ensure = yes
 	pe_corp_acquire = yes
 	pe_corp_rivalry = yes
 	# The holdings and the corporate stations (five years between two purchases).

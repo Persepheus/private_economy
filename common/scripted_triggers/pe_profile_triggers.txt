@@ -1,0 +1,17 @@
+# Corporate profiles (pe_profile_effects.txt). Country scope.
+# pe_prof_is = { V = <variable holding a corporation slot> P = <profile> }: the corporation in
+# that slot has the profile.
+pe_prof_is = {
+	OR = {
+		AND = { check_variable = { which = $V$ value = 1 } check_variable = { which = pe_c1_prof value = $P$ } }
+		AND = { check_variable = { which = $V$ value = 2 } check_variable = { which = pe_c2_prof value = $P$ } }
+		AND = { check_variable = { which = $V$ value = 3 } check_variable = { which = pe_c3_prof value = $P$ } }
+		AND = { check_variable = { which = $V$ value = 4 } check_variable = { which = pe_c4_prof value = $P$ } }
+		AND = { check_variable = { which = $V$ value = 5 } check_variable = { which = pe_c5_prof value = $P$ } }
+		AND = { check_variable = { which = $V$ value = 6 } check_variable = { which = pe_c6_prof value = $P$ } }
+		AND = { check_variable = { which = $V$ value = 7 } check_variable = { which = pe_c7_prof value = $P$ } }
+		AND = { check_variable = { which = $V$ value = 8 } check_variable = { which = pe_c8_prof value = $P$ } }
+	}
+}
+# pe_prof_has = { P = <profile> }: one of our active corporations has the profile.
+pe_prof_has = { check_variable = { which = pe_prof_n_$P$ value > 0 } }

@@ -95,6 +95,8 @@ pe_council_slot = {
 	set_variable = { which = pe_corp_cur_name value = pe_c$K$_name }
 	set_variable = { which = pe_corp_cur_ceo value = pe_c$K$_ceo }
 	set_variable = { which = pe_dlg_grp value = pe_c$K$_grp }
+	set_variable = { which = pe_dlg_prof value = 0 }
+	if = { limit = { is_variable_set = pe_c$K$_prof } set_variable = { which = pe_dlg_prof value = pe_c$K$_prof } }
 	set_variable = { which = pe_dlg_prod value = 0 }
 	if = { limit = { is_variable_set = pe_c$K$_prod } set_variable = { which = pe_dlg_prod value = pe_c$K$_prod } }
 	set_variable = { which = pe_dlg_cash value = pe_c$K$_cash }
@@ -120,13 +122,16 @@ pe_council_dc_offer = {
 }
 
 # Country scope (we, pe.337): we end the defence contract. The arms orders and the arms centre
-# go with the next quarter (pe_dc_step); this corporation does not negotiate with us for five
-# years (pe_dc_cut, pe_dc_cutnm).
+# go with the next quarter (pe_dc_step); this corporation does not negotiate with us for a while
+# (pe_dc_cut, pe_dc_cutnm): a defence or family corporation ten years, a solid house three,
+# any other five.
 pe_council_dc_cancel = {
+	if = { limit = { OR = { pe_prof_is = { V = pe_dc_k P = 5 } pe_prof_is = { V = pe_dc_k P = 3 } } } set_timed_country_flag = { flag = pe_dc_cut days = 3600 } }
+	else_if = { limit = { pe_prof_is = { V = pe_dc_k P = 2 } } set_timed_country_flag = { flag = pe_dc_cut days = 1080 } }
+	else = { set_timed_country_flag = { flag = pe_dc_cut days = 1800 } }
 	set_variable = { which = pe_dc_k value = 0 }
 	if = { limit = { has_modifier = pe_defence_contract } remove_modifier = pe_defence_contract }
 	set_timed_country_flag = { flag = pe_dc_cd days = 1800 }
-	set_timed_country_flag = { flag = pe_dc_cut days = 1800 }
 	set_variable = { which = pe_dc_cutnm value = pe_dc_nm }
 }
 

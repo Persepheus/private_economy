@@ -83,6 +83,7 @@ pe_corp_fleets = {
 			limit = { check_variable = { which = pe_wl_k value > 0 } }
 			random_list = {
 				30 = {
+					modifier = { factor = 1.2 pe_prof_is = { V = pe_wl_k P = 1 } } modifier = { factor = 2 pe_prof_is = { V = pe_wl_k P = 5 } } modifier = { factor = 0.7 pe_prof_is = { V = pe_wl_k P = 6 } } modifier = { factor = 0.3 pe_prof_is = { V = pe_wl_k P = 7 } }
 					set_timed_country_flag = { flag = pe_lease_war_cd days = 1800 }
 					set_variable = { which = pe_wl_budget value = pe_wl_best }
 					multiply_variable = { which = pe_wl_budget value = 0.5 }
@@ -174,6 +175,7 @@ pe_corp_fleets = {
 			limit = { check_variable = { which = pe_cl_k value > 0 } }
 			random_list = {
 				25 = {
+					modifier = { factor = 0.7 pe_prof_is = { V = pe_cl_k P = 2 } } modifier = { factor = 1.5 pe_prof_is = { V = pe_cl_k P = 5 } } modifier = { factor = 2 pe_prof_is = { V = pe_cl_k P = 8 } }
 					set_timed_country_flag = { flag = pe_lease_clear_cd days = 1440 }
 					random_system_within_border = {
 						limit = { any_neighbor_system = { NOT = { exists = owner } pe_monster_system = yes } }
@@ -461,6 +463,7 @@ pe_corp_charter = {
 			limit = { check_variable = { which = pe_ch_k value > 0 } }
 			random_list = {
 				20 = {
+					modifier = { factor = 1.3 pe_prof_is = { V = pe_ch_k P = 4 } } modifier = { factor = 2.5 pe_prof_is = { V = pe_ch_k P = 8 } }
 					set_timed_country_flag = { flag = pe_charter_cd days = 1800 }
 					if = { limit = { check_variable = { which = pe_ch_k value = 1 } } set_timed_country_flag = { flag = pe_charter_cd_1 days = 3600 } }
 					else_if = { limit = { check_variable = { which = pe_ch_k value = 2 } } set_timed_country_flag = { flag = pe_charter_cd_2 days = 3600 } }
@@ -589,6 +592,7 @@ pe_corp_convoy = {
 			limit = { check_variable = { which = pe_cv_k value > 0 } }
 			random_list = {
 				35 = {
+					modifier = { factor = 0.8 pe_prof_is = { V = pe_cv_k P = 2 } } modifier = { factor = 1.5 pe_prof_is = { V = pe_cv_k P = 5 } } modifier = { factor = 1.5 pe_prof_is = { V = pe_cv_k P = 8 } }
 					set_timed_country_flag = { flag = pe_convoy_cd days = 1080 }
 					random_system_within_border = {
 						limit = { pe_pirate_system = yes }
@@ -732,6 +736,7 @@ pe_corp_salvage = {
 			limit = { check_variable = { which = pe_sv_k value > 0 } }
 			random_list = {
 				30 = {
+					modifier = { factor = 1.3 pe_prof_is = { V = pe_sv_k P = 1 } } modifier = { factor = 2 pe_prof_is = { V = pe_sv_k P = 8 } }
 					set_timed_country_flag = { flag = pe_salvage_cd days = 720 }
 					set_variable = { which = pe_db_n value = 0 }
 					every_available_debris = { limit = { NOT = { must_research = yes } } root = { change_variable = { which = pe_db_n value = 1 } } }
@@ -1235,6 +1240,7 @@ pe_corp_swarm = {
 			limit = { check_variable = { which = pe_sw_k value > 0 } }
 			random_list = {
 				20 = {
+					modifier = { factor = 1.3 pe_prof_is = { V = pe_sw_k P = 1 } } modifier = { factor = 0.7 pe_prof_is = { V = pe_sw_k P = 2 } } modifier = { factor = 1.5 pe_prof_is = { V = pe_sw_k P = 4 } }
 					set_timed_country_flag = { flag = pe_swarm_cd days = 1440 }
 					# The star: of those whose deposit pays the upkeep at the last stage (the
 					# corporation earns half the value a month: value x 31 / 2 >= 80 with the Dyson
@@ -2667,6 +2673,7 @@ pe_corp_furnace = {
 			limit = { check_variable = { which = pe_af_k value > 0 } }
 			random_list = {
 				20 = {
+					modifier = { factor = 1.3 pe_prof_is = { V = pe_af_k P = 1 } } modifier = { factor = 0.7 pe_prof_is = { V = pe_af_k P = 2 } } modifier = { factor = 1.3 pe_prof_is = { V = pe_af_k P = 4 } } modifier = { factor = 1.3 pe_prof_is = { V = pe_af_k P = 5 } }
 					set_timed_country_flag = { flag = pe_furnace_cd days = 1440 }
 					set_variable = { which = pe_af_thr value = 13 }
 					if = { limit = { check_variable = { which = pe_af_k value = 1 } check_variable = { which = pe_c1_grp value = 1 } } set_variable = { which = pe_af_thr value = 11 } }
@@ -3255,6 +3262,16 @@ pe_corp_defence = {
 		if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_cash value > pe_df_best } } set_variable = { which = pe_df_k value = 6 } set_variable = { which = pe_df_best value = pe_c6_cash } }
 		if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_cash value > pe_df_best } } set_variable = { which = pe_df_k value = 7 } set_variable = { which = pe_df_best value = pe_c7_cash } }
 		if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_df_best } } set_variable = { which = pe_df_k value = 8 } set_variable = { which = pe_df_best value = pe_c8_cash } }
+		# A defence corporation (profile 5) that can pay comes first (0.48).
+		set_variable = { which = pe_df_b5 value = pe_df_best }
+		if = { limit = { check_variable = { which = pe_c1_on value = 1 } check_variable = { which = pe_c1_prof value = 5 } check_variable = { which = pe_c1_cash value >= 1500 } check_variable = { which = pe_c1_cash value > pe_df_b5 } } set_variable = { which = pe_df_k value = 1 } set_variable = { which = pe_df_best value = pe_c1_cash } }
+		if = { limit = { check_variable = { which = pe_c2_on value = 1 } check_variable = { which = pe_c2_prof value = 5 } check_variable = { which = pe_c2_cash value >= 1500 } check_variable = { which = pe_c2_cash value > pe_df_b5 } } set_variable = { which = pe_df_k value = 2 } set_variable = { which = pe_df_best value = pe_c2_cash } }
+		if = { limit = { check_variable = { which = pe_c3_on value = 1 } check_variable = { which = pe_c3_prof value = 5 } check_variable = { which = pe_c3_cash value >= 1500 } check_variable = { which = pe_c3_cash value > pe_df_b5 } } set_variable = { which = pe_df_k value = 3 } set_variable = { which = pe_df_best value = pe_c3_cash } }
+		if = { limit = { check_variable = { which = pe_c4_on value = 1 } check_variable = { which = pe_c4_prof value = 5 } check_variable = { which = pe_c4_cash value >= 1500 } check_variable = { which = pe_c4_cash value > pe_df_b5 } } set_variable = { which = pe_df_k value = 4 } set_variable = { which = pe_df_best value = pe_c4_cash } }
+		if = { limit = { check_variable = { which = pe_c5_on value = 1 } check_variable = { which = pe_c5_prof value = 5 } check_variable = { which = pe_c5_cash value >= 1500 } check_variable = { which = pe_c5_cash value > pe_df_b5 } } set_variable = { which = pe_df_k value = 5 } set_variable = { which = pe_df_best value = pe_c5_cash } }
+		if = { limit = { check_variable = { which = pe_c6_on value = 1 } check_variable = { which = pe_c6_prof value = 5 } check_variable = { which = pe_c6_cash value >= 1500 } check_variable = { which = pe_c6_cash value > pe_df_b5 } } set_variable = { which = pe_df_k value = 6 } set_variable = { which = pe_df_best value = pe_c6_cash } }
+		if = { limit = { check_variable = { which = pe_c7_on value = 1 } check_variable = { which = pe_c7_prof value = 5 } check_variable = { which = pe_c7_cash value >= 1500 } check_variable = { which = pe_c7_cash value > pe_df_b5 } } set_variable = { which = pe_df_k value = 7 } set_variable = { which = pe_df_best value = pe_c7_cash } }
+		if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_prof value = 5 } check_variable = { which = pe_c8_cash value >= 1500 } check_variable = { which = pe_c8_cash value > pe_df_b5 } } set_variable = { which = pe_df_k value = 8 } set_variable = { which = pe_df_best value = pe_c8_cash } }
 		if = {
 			limit = { check_variable = { which = pe_df_k value > 0 } }
 			set_timed_country_flag = { flag = pe_defence_cd days = 720 }

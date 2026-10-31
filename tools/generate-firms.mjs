@@ -1874,38 +1874,41 @@ ${CORPS.flatMap(k => GROUPS.map(g => `	if = {
 			check_variable = { which = ${C(k, 'cash')} value >= 90 }
 			any_owned_colony = { check_variable = { which = pe_ind_g${g} value > 0 } }
 		}
-		random = {
-			chance = 35
-			set_variable = { which = pe_acq_ok value = 0 }
-			random_owned_colony = {
-				limit = { check_variable = { which = pe_ind_g${g} value > 0 } }
-				save_event_target_as = pe_msg_planet
-				random_deposit = {
-					limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } ${inGroup(g)} }
-					${szCalc('pe_tmp', 'pe_stage', 'pe_code')}
-					if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
-					else = { multiply_variable = { which = pe_tmp value = 90 } }
-					if = {
-						limit = { root = { check_variable = { which = ${C(k, 'cash')} value >= prev.pe_tmp } } }
-						set_variable = { which = pe_corp value = ${k} }
-						root = {
-							subtract_variable = { which = ${C(k, 'cash')} value = prev.pe_tmp }
-							change_variable = { which = pe_capital value = prev.pe_tmp }
-							set_variable = { which = pe_acq_ok value = 1 }
+		random_list = {
+			35 = {
+				modifier = { factor = 1.5 root = { check_variable = { which = ${C(k, 'prof')} value = 1 } } } modifier = { factor = 0.5 root = { check_variable = { which = ${C(k, 'prof')} value = 2 } } } modifier = { factor = 1.5 root = { check_variable = { which = ${C(k, 'prof')} value = 6 } } } modifier = { factor = 0.4 root = { check_variable = { which = ${C(k, 'prof')} value = 7 } } } modifier = { factor = 1.3 root = { check_variable = { which = ${C(k, 'prof')} value = 9 } } }
+				set_variable = { which = pe_acq_ok value = 0 }
+				random_owned_colony = {
+					limit = { check_variable = { which = pe_ind_g${g} value > 0 } }
+					save_event_target_as = pe_msg_planet
+					random_deposit = {
+						limit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = 0 } ${inGroup(g)} }
+						${szCalc('pe_tmp', 'pe_stage', 'pe_code')}
+						if = { limit = { OR = { check_variable = { which = pe_cls value = 1 } check_variable = { which = pe_cls value = 5 } } } multiply_variable = { which = pe_tmp value = 150 } }
+						else = { multiply_variable = { which = pe_tmp value = 90 } }
+						if = {
+							limit = { root = { check_variable = { which = ${C(k, 'cash')} value >= prev.pe_tmp } } }
+							set_variable = { which = pe_corp value = ${k} }
+							root = {
+								subtract_variable = { which = ${C(k, 'cash')} value = prev.pe_tmp }
+								change_variable = { which = pe_capital value = prev.pe_tmp }
+								set_variable = { which = pe_acq_ok value = 1 }
+							}
 						}
+					}
+					if = {
+						limit = { root = { check_variable = { which = pe_acq_ok value = 1 } } }
+						change_variable = { which = pe_ind_g${g} value = -1 }
+						change_variable = { which = pe_mem_${k} value = 1 }
 					}
 				}
 				if = {
-					limit = { root = { check_variable = { which = pe_acq_ok value = 1 } } }
-					change_variable = { which = pe_ind_g${g} value = -1 }
-					change_variable = { which = pe_mem_${k} value = 1 }
+					limit = { check_variable = { which = pe_acq_ok value = 1 } }
+					set_variable = { which = pe_msg_name value = ${C(k, 'name')} }
+					pe_corp_msg = { KEY = pe_msg_corp_acq }
 				}
 			}
-			if = {
-				limit = { check_variable = { which = pe_acq_ok value = 1 } }
-				set_variable = { which = pe_msg_name value = ${C(k, 'name')} }
-				pe_corp_msg = { KEY = pe_msg_corp_acq }
-			}
+			65 = { }
 		}
 	}`)).join('\n')}
 }
@@ -1949,13 +1952,16 @@ ${CORPS.flatMap(k => CORPS.filter(j => j > k).map(j => `	if = {
 			check_variable = { which = ${C(k, 'rival')} value = 0 } check_variable = { which = ${C(j, 'rival')} value = 0 }
 			check_variable = { which = ${C(k, 'wcd')} value < 1 } check_variable = { which = ${C(j, 'wcd')} value < 1 }
 		}
-		random = {
-			chance = 10
-			set_variable = { which = ${C(k, 'war')} value = 12 } set_variable = { which = ${C(j, 'war')} value = 12 }
-			set_variable = { which = ${C(k, 'rival')} value = ${j} } set_variable = { which = ${C(j, 'rival')} value = ${k} }
-			set_variable = { which = pe_mg_s value = ${k} } set_variable = { which = pe_mg_w value = ${j} }
-			set_variable = { which = pe_corp_a_name value = ${C(k, 'name')} } set_variable = { which = pe_corp_b_name value = ${C(j, 'name')} }
-			country_event = { id = pe.271 }
+		random_list = {
+			10 = {
+				modifier = { factor = 1.5 root = { check_variable = { which = ${C(k, 'prof')} value = 1 } } } modifier = { factor = 0.5 root = { check_variable = { which = ${C(k, 'prof')} value = 2 } } } modifier = { factor = 0.7 root = { check_variable = { which = ${C(k, 'prof')} value = 3 } } } modifier = { factor = 0.3 root = { check_variable = { which = ${C(k, 'prof')} value = 7 } } } modifier = { factor = 2.5 root = { check_variable = { which = ${C(k, 'prof')} value = 9 } } } modifier = { factor = 1.5 root = { check_variable = { which = ${C(j, 'prof')} value = 1 } } } modifier = { factor = 0.5 root = { check_variable = { which = ${C(j, 'prof')} value = 2 } } } modifier = { factor = 0.7 root = { check_variable = { which = ${C(j, 'prof')} value = 3 } } } modifier = { factor = 0.3 root = { check_variable = { which = ${C(j, 'prof')} value = 7 } } } modifier = { factor = 2.5 root = { check_variable = { which = ${C(j, 'prof')} value = 9 } } }
+				set_variable = { which = ${C(k, 'war')} value = 12 } set_variable = { which = ${C(j, 'war')} value = 12 }
+				set_variable = { which = ${C(k, 'rival')} value = ${j} } set_variable = { which = ${C(j, 'rival')} value = ${k} }
+				set_variable = { which = pe_mg_s value = ${k} } set_variable = { which = pe_mg_w value = ${j} }
+				set_variable = { which = pe_corp_a_name value = ${C(k, 'name')} } set_variable = { which = pe_corp_b_name value = ${C(j, 'name')} }
+				country_event = { id = pe.271 }
+			}
+			90 = { }
 		}
 	}`)).join('\n')}
 }
@@ -2049,6 +2055,10 @@ pe_corp_lending = {
 		change_variable = { which = pe_lamt value = pe_want_bridge }
 		set_variable = { which = pe_lneed value = pe_lamt }
 		change_variable = { which = pe_lneed value = -${CREDIT_LINE} }
+		# Profiles (0.48): a venture lends down to -${CREDIT_LINE * 2}, a solid house only what it has.
+		set_variable = { which = pe_lneed_v value = pe_lamt }
+		change_variable = { which = pe_lneed_v value = -${CREDIT_LINE * 2} }
+		set_variable = { which = pe_lneed_s value = pe_lamt }
 		root = {
 			set_variable = { which = pe_lend_k value = 0 }
 			set_variable = { which = pe_lend_best value = -${CREDIT_LINE} }
@@ -2061,10 +2071,10 @@ pe_corp_lending = {
 					root = { check_variable = { which = pe_pend_any value = 0 } }
 				}
 			}
-${CORPS.map((k, i) => `\t\t\t${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_corp value = ${k} } root = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'cash')} value >= prev.pe_lneed } } } root = { set_variable = { which = pe_lend_k value = ${k} } } }`).join('\n')}
+${CORPS.map((k, i) => `\t\t\t${i ? 'else_if' : 'if'} = { limit = { check_variable = { which = pe_corp value = ${k} } root = { check_variable = { which = ${C(k, 'on')} value = 1 } OR = { AND = { check_variable = { which = ${C(k, 'prof')} value = 1 } check_variable = { which = ${C(k, 'cash')} value >= prev.pe_lneed_v } } AND = { check_variable = { which = ${C(k, 'prof')} value = 2 } check_variable = { which = ${C(k, 'cash')} value >= prev.pe_lneed_s } } AND = { NOT = { check_variable = { which = ${C(k, 'prof')} value = 1 } } NOT = { check_variable = { which = ${C(k, 'prof')} value = 2 } } check_variable = { which = ${C(k, 'cash')} value >= prev.pe_lneed } } } } } root = { set_variable = { which = pe_lend_k value = ${k} } } }`).join('\n')}
 			if = {
 				limit = { root = { check_variable = { which = pe_lend_k value = 0 } } }
-${CORPS.map(k => `\t\t\t\tif = { limit = { root = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'cash')} value >= prev.pe_lneed } check_variable = { which = ${C(k, 'cash')} value > pe_lend_best } } } root = { set_variable = { which = pe_lend_k value = ${k} } set_variable = { which = pe_lend_best value = ${C(k, 'cash')} } } }`).join('\n')}
+${CORPS.map(k => `\t\t\t\tif = { limit = { root = { check_variable = { which = ${C(k, 'on')} value = 1 } OR = { AND = { check_variable = { which = ${C(k, 'prof')} value = 1 } check_variable = { which = ${C(k, 'cash')} value >= prev.pe_lneed_v } } AND = { check_variable = { which = ${C(k, 'prof')} value = 2 } check_variable = { which = ${C(k, 'cash')} value >= prev.pe_lneed_s } } AND = { NOT = { check_variable = { which = ${C(k, 'prof')} value = 1 } } NOT = { check_variable = { which = ${C(k, 'prof')} value = 2 } } check_variable = { which = ${C(k, 'cash')} value >= prev.pe_lneed } } } check_variable = { which = ${C(k, 'cash')} value > pe_lend_best } } } root = { set_variable = { which = pe_lend_k value = ${k} } set_variable = { which = pe_lend_best value = ${C(k, 'cash')} } } }`).join('\n')}
 			}
 		}
 		if = {
@@ -2305,6 +2315,7 @@ ${CORPS.map(k => `					10 = {
 						modifier = { factor = 0 NOT = { check_variable = { which = ${C(k, 'on')} value = 1 } } }
 						modifier = { factor = 0 check_variable = { which = ${C(k, 'scd')} value > 0 } }
 						modifier = { factor = 10 check_variable = { which = ${C(k, 'right')} value = 1 } }
+						modifier = { factor = 1.5 root = { check_variable = { which = ${C(k, 'prof')} value = 1 } } } modifier = { factor = 0.7 root = { check_variable = { which = ${C(k, 'prof')} value = 2 } } } modifier = { factor = 2.5 root = { check_variable = { which = ${C(k, 'prof')} value = 8 } } } modifier = { factor = 1.2 root = { check_variable = { which = ${C(k, 'prof')} value = 9 } } }
 						modifier = { factor = 0 check_variable = { which = ${C(k, 'cash')} value < ${ST_COST * 3} } }
 ${GROUPS.map(g => `						modifier = { factor = 0 check_variable = { which = ${C(k, 'grp')} value = ${g} } NOT = { any_planet_within_border = { pe_orbital_for_g${g} = yes OR = { has_orbital_station = no pe_state_station = yes } } } }`).join('\n')}
 						set_variable = { which = pe_st_k value = ${k} }
@@ -2858,6 +2869,8 @@ ${CORPS.map(k => `	if = {
 			set_variable = { which = pe_trcash_${k} value = root.${C(k, 'cash')} }
 			set_variable = { which = pe_trgrp_${k} value = root.${C(k, 'grp')} }
 			set_variable = { which = pe_trceo_${k} value = root.${C(k, 'ceo')} }
+			set_variable = { which = pe_trprof_${k} value = 0 }
+			if = { limit = { root = { is_variable_set = ${C(k, 'prof')} } } set_variable = { which = pe_trprof_${k} value = root.${C(k, 'prof')} } }
 			set_variable = { which = pe_trprod_${k} value = 0 }
 			if = { limit = { root = { is_variable_set = ${C(k, 'prod')} } } set_variable = { which = pe_trprod_${k} value = root.${C(k, 'prod')} } }
 		}
@@ -2912,6 +2925,8 @@ ${CORPS.map(k => `		if = {
 					set_variable = { which = pe_tr_cash value = prev.pe_trcash_${k} }
 					set_variable = { which = pe_tr_grp value = prev.pe_trgrp_${k} }
 					set_variable = { which = pe_tr_ceo value = prev.pe_trceo_${k} }
+					set_variable = { which = pe_tr_prof value = 0 }
+					if = { limit = { prev = { is_variable_set = pe_trprof_${k} } } set_variable = { which = pe_tr_prof value = prev.pe_trprof_${k} } }
 					set_variable = { which = pe_tr_prod value = prev.pe_trprod_${k} }
 				}
 				set_variable = { which = pe_trc_${k} value = 0 }
@@ -2924,7 +2939,7 @@ ${CORPS.map(j => `\t\t\tif = { limit = { check_variable = { which = ${C(j, 'on')
 			set_variable = { which = pe_msg_name value = pe_tr_name }
 			if = {
 				limit = { check_variable = { which = pe_tr_j value > 0 } check_variable = { which = pe_tr_gn value < 2 } }
-${corpChain('pe_tr_j', j => `set_variable = { which = ${C(j, 'on')} value = 1 } set_variable = { which = ${C(j, 'name')} value = pe_tr_name } set_variable = { which = ${C(j, 'cash')} value = pe_tr_cash } set_variable = { which = ${C(j, 'grp')} value = pe_tr_grp } set_variable = { which = ${C(j, 'ceo')} value = pe_tr_ceo } set_variable = { which = ${C(j, 'prod')} value = pe_tr_prod } ${['firms', 'war', 'rival', 'wcd', 'scd', 'sv', 'st', 'shv', 'sw', 'sws', 'af', 'afs', 'right', 'out', 'hab'].map(v => `set_variable = { which = ${C(j, v)} value = 0 }`).join(' ')} event_target:pe_tr_planet = { set_planet_flag = pe_hq_${j} }`, '\t\t\t\t')}
+${corpChain('pe_tr_j', j => `set_variable = { which = ${C(j, 'on')} value = 1 } set_variable = { which = ${C(j, 'name')} value = pe_tr_name } set_variable = { which = ${C(j, 'prof')} value = pe_tr_prof } set_variable = { which = ${C(j, 'profnm')} value = pe_tr_name } set_variable = { which = ${C(j, 'cash')} value = pe_tr_cash } set_variable = { which = ${C(j, 'grp')} value = pe_tr_grp } set_variable = { which = ${C(j, 'ceo')} value = pe_tr_ceo } set_variable = { which = ${C(j, 'prod')} value = pe_tr_prod } ${['firms', 'war', 'rival', 'wcd', 'scd', 'sv', 'st', 'shv', 'sw', 'sws', 'af', 'afs', 'right', 'out', 'hab'].map(v => `set_variable = { which = ${C(j, v)} value = 0 }`).join(' ')} event_target:pe_tr_planet = { set_planet_flag = pe_hq_${j} }`, '\t\t\t\t')}
 				# Its corporate habitat (the headquarters are there): the rights go with it.
 				if = {
 					limit = { event_target:pe_tr_planet = { has_planet_flag = pe_corp_hab is_variable_set = pe_chab_corp check_variable = { which = pe_chab_corp value = ${k} } } }
@@ -3028,27 +3043,30 @@ ${CORPS.map(k => `	if = {
 			}
 			if = {
 				limit = { check_variable = { which = pe_occ_try value = 1 } }
-				random = {
-					chance = 3
-					set_variable = { which = pe_occ_best value = 0 }
-					every_owned_colony = {
-						limit = { is_occupied_flag = no is_variable_set = pe_mem_${k} check_variable = { which = pe_mem_${k} value > root.pe_occ_best } }
-						root = { set_variable = { which = pe_occ_best value = prev.pe_mem_${k} } }
-						save_event_target_as = pe_occ_new
-					}
-					if = {
-						limit = { check_variable = { which = pe_occ_best value > 0 } }
-${nameChain(`root.${C(k, 'name')}`, id => `event_target:pe_occ_hq = { if = { limit = { has_deposit = d_pe_hq_${id} } remove_deposit = d_pe_hq_${id} } } event_target:pe_occ_new = { add_deposit = d_pe_hq_${id} }`, '\t\t\t\t\t\t')}
-						event_target:pe_occ_hq = { remove_planet_flag = pe_hq_${k} }
-						event_target:pe_occ_new = { set_planet_flag = pe_hq_${k} save_event_target_as = pe_msg_planet }
-						change_variable = { which = ${C(k, 'cash')} value = ${C(k, 'fz')} }
-						set_variable = { which = ${C(k, 'fz')} value = 0 }
+				random_list = {
+					3 = {
+						modifier = { factor = 1.5 root = { check_variable = { which = ${C(k, 'prof')} value = 1 } } } modifier = { factor = 0.3 root = { check_variable = { which = ${C(k, 'prof')} value = 3 } } }
+						set_variable = { which = pe_occ_best value = 0 }
+						every_owned_colony = {
+							limit = { is_occupied_flag = no is_variable_set = pe_mem_${k} check_variable = { which = pe_mem_${k} value > root.pe_occ_best } }
+							root = { set_variable = { which = pe_occ_best value = prev.pe_mem_${k} } }
+							save_event_target_as = pe_occ_new
+						}
 						if = {
-							limit = { is_ai = no }
-							set_variable = { which = pe_msg_name value = ${C(k, 'name')} }
-							pe_corp_msg = { KEY = pe_msg_occ_hq_moved }
+							limit = { check_variable = { which = pe_occ_best value > 0 } }
+	${nameChain(`root.${C(k, 'name')}`, id => `event_target:pe_occ_hq = { if = { limit = { has_deposit = d_pe_hq_${id} } remove_deposit = d_pe_hq_${id} } } event_target:pe_occ_new = { add_deposit = d_pe_hq_${id} }`, '\t\t\t\t\t\t')}
+							event_target:pe_occ_hq = { remove_planet_flag = pe_hq_${k} }
+							event_target:pe_occ_new = { set_planet_flag = pe_hq_${k} save_event_target_as = pe_msg_planet }
+							change_variable = { which = ${C(k, 'cash')} value = ${C(k, 'fz')} }
+							set_variable = { which = ${C(k, 'fz')} value = 0 }
+							if = {
+								limit = { is_ai = no }
+								set_variable = { which = pe_msg_name value = ${C(k, 'name')} }
+								pe_corp_msg = { KEY = pe_msg_occ_hq_moved }
+							}
 						}
 					}
+					97 = { }
 				}
 			}
 		}
@@ -3145,6 +3163,7 @@ ${CORPS.map(k => `\t\tif = { limit = { check_variable = { which = ${C(k, 'on')} 
 			limit = { check_variable = { which = pe_chab_k value > 0 } }
 			random_list = {
 				20 = {
+					modifier = { factor = 1.5 pe_prof_is = { V = pe_chab_k P = 1 } } modifier = { factor = 0.5 pe_prof_is = { V = pe_chab_k P = 2 } } modifier = { factor = 0.5 pe_prof_is = { V = pe_chab_k P = 3 } } modifier = { factor = 2.5 pe_prof_is = { V = pe_chab_k P = 8 } }
 					set_timed_country_flag = { flag = pe_chab_cd days = 1440 }
 					# Our influence: vanilla 200, with our megastructure cost modifiers.
 					set_variable = { which = pe_chab_inf value = 1 }
@@ -3457,10 +3476,13 @@ ${CORPS.map(k => `	if = { limit = { NOT = { is_variable_set = ${C(k, 'lab')} } }
 			multiply_variable = { which = pe_tmp value = 4000 }
 			if = {
 				limit = { check_variable = { which = ${C(k, 'cash')} value >= pe_tmp } }
-				random = {
-					chance = 25
-					change_variable = { which = ${C(k, 'lab')} value = 1 }
-					change_variable = { which = ${C(k, 'cash')} value = -800 }
+				random_list = {
+					25 = {
+						modifier = { factor = 0.7 root = { check_variable = { which = ${C(k, 'prof')} value = 1 } } } modifier = { factor = 0.7 root = { check_variable = { which = ${C(k, 'prof')} value = 2 } } } modifier = { factor = 2 root = { check_variable = { which = ${C(k, 'prof')} value = 4 } } }
+						change_variable = { which = ${C(k, 'lab')} value = 1 }
+						change_variable = { which = ${C(k, 'cash')} value = -800 }
+					}
+					75 = { }
 				}
 			}
 		}
@@ -3526,7 +3548,7 @@ ${CORPS.map(k => `			set_variable = { which = pe_cw_w value = pe_pfa }
 			divide_variable = { which = pe_cw_w value = pe_cw_all }
 			if = { limit = { has_planet_flag = pe_hq_${k} } set_variable = { which = pe_tmp value = root.${C(k, 'lab')} } multiply_variable = { which = pe_tmp value = 100 } change_variable = { which = pe_cw_w value = pe_tmp } }
 			if = {
-				limit = { check_variable = { which = pe_cw_w value > 0 } root = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'cash')} value >= ${CW_MIN} } } }
+				limit = { check_variable = { which = pe_cw_w value > 0 } root = { check_variable = { which = ${C(k, 'on')} value = 1 } OR = { check_variable = { which = ${C(k, 'cash')} value >= ${CW_MIN} } AND = { OR = { check_variable = { which = ${C(k, 'prof')} value = 3 } check_variable = { which = ${C(k, 'prof')} value = 7 } } check_variable = { which = ${C(k, 'cash')} value >= ${CW_MIN / 2} } } } NAND = { OR = { check_variable = { which = ${C(k, 'prof')} value = 1 } check_variable = { which = ${C(k, 'prof')} value = 9 } } check_variable = { which = ${C(k, 'cash')} value < ${CW_MIN + 2000} } } } }
 				set_variable = { which = pe_cw_c value = pe_cw_w }
 				multiply_variable = { which = pe_cw_c value = 0.03 }
 				multiply_variable = { which = pe_cw_c value = pe_cw_l }
@@ -3611,10 +3633,14 @@ ${corpChain('pe_dc_k', k => `subtract_variable = { which = ${C(k, 'cash')} value
 		set_variable = { which = pe_dc_cand value = 0 }
 		set_variable = { which = pe_dc_best value = ${DC_MIN - 1} }
 ${CORPS.map(k => `\t\tif = { limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'grp')} value = 1 } check_variable = { which = ${C(k, 'cash')} value > pe_dc_best } } set_variable = { which = pe_dc_cand value = ${k} } set_variable = { which = pe_dc_best value = ${C(k, 'cash')} } }`).join('\n')}
+		# A defence corporation (profile 5) of the industry comes first (0.48).
+		set_variable = { which = pe_dc_b5 value = ${DC_MIN - 1} }
+${CORPS.map(k => `\t\tif = { limit = { check_variable = { which = ${C(k, 'on')} value = 1 } check_variable = { which = ${C(k, 'grp')} value = 1 } check_variable = { which = ${C(k, 'prof')} value = 5 } check_variable = { which = ${C(k, 'cash')} value > pe_dc_b5 } } set_variable = { which = pe_dc_cand value = ${k} } set_variable = { which = pe_dc_b5 value = ${C(k, 'cash')} } set_variable = { which = pe_dc_best value = ${C(k, 'cash')} } }`).join('\n')}
 		if = {
 			limit = { check_variable = { which = pe_dc_cand value > 0 } }
 			random_list = {
 				15 = {
+					modifier = { factor = 3 pe_prof_is = { V = pe_dc_cand P = 5 } } modifier = { factor = 1.2 pe_prof_is = { V = pe_dc_cand P = 3 } } modifier = { factor = 0.5 pe_prof_is = { V = pe_dc_cand P = 6 } } modifier = { factor = 0.2 pe_prof_is = { V = pe_dc_cand P = 7 } }
 					set_timed_country_flag = { flag = pe_dc_cd days = 1800 }
 					set_variable = { which = pe_dc_s value = 10 }
 					if = { limit = { check_variable = { which = pe_dc_best value >= ${DC_RICH} } } set_variable = { which = pe_dc_s value = 20 } }

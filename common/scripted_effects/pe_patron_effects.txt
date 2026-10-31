@@ -46,11 +46,14 @@ pe_patron = {
 		if = { limit = { check_variable = { which = pe_c8_on value = 1 } check_variable = { which = pe_c8_cash value > pe_fd_best } } set_variable = { which = pe_pat_src value = 8 } set_variable = { which = pe_fd_best value = pe_c8_cash } set_variable = { which = pe_pat_srcn value = pe_c8_name } }
 		if = {
 			limit = { check_variable = { which = pe_pat_src value > 0 } }
-			random = {
-				chance = 25
-				set_timed_country_flag = { flag = pe_found_cd days = 730 }
-				set_variable = { which = pe_cnpat value = pe_pat_srcn }
-				pe_patron_fire = yes
+			random_list = {
+				25 = {
+					modifier = { factor = 0.5 pe_prof_is = { V = pe_pat_src P = 1 } } modifier = { factor = 2 pe_prof_is = { V = pe_pat_src P = 3 } } modifier = { factor = 1.5 pe_prof_is = { V = pe_pat_src P = 7 } } modifier = { factor = 0.5 pe_prof_is = { V = pe_pat_src P = 9 } }
+					set_timed_country_flag = { flag = pe_found_cd days = 730 }
+					set_variable = { which = pe_cnpat value = pe_pat_srcn }
+					pe_patron_fire = yes
+				}
+				75 = { }
 			}
 		}
 		if = { limit = { NOT = { has_country_flag = pe_found_cd } } set_variable = { which = pe_pat_src value = 0 } }
@@ -85,9 +88,9 @@ pe_patron_fire = {
 	}
 	random_list = {
 		10 = { country_event = { id = pe.200 } }
-		10 = { country_event = { id = pe.202 } }
-		8 = { country_event = { id = pe.203 } }
-		8 = {
+		10 = { modifier = { factor = 1.5 pe_prof_has = { P = 4 } } country_event = { id = pe.202 } }
+		8 = { modifier = { factor = 2 pe_prof_has = { P = 4 } } country_event = { id = pe.203 } }
+		8 = { modifier = { factor = 1.5 pe_prof_has = { P = 3 } }
 			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes OR = { free_housing < 0 free_amenities < 0 } } } }
 			random_owned_colony = {
 				limit = { pe_planet_eligible = yes OR = { free_housing < 0 free_amenities < 0 } }
@@ -105,7 +108,7 @@ pe_patron_fire = {
 			country_event = { id = pe.205 }
 		}
 		# Prospecting find on a planet.
-		8 = {
+		8 = { modifier = { factor = 2 pe_prof_has = { P = 8 } }
 			random_owned_colony = { limit = { pe_planet_eligible = yes } save_event_target_as = pe_pat_planet }
 			country_event = { id = pe.214 }
 		}
@@ -145,7 +148,7 @@ pe_patron_fire = {
 			country_event = { id = pe.225 }
 		}
 		# Disaster relief for a planet in crisis.
-		8 = {
+		8 = { modifier = { factor = 1.5 pe_prof_has = { P = 3 } }
 			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes planet_stability < 25 } } }
 			random_owned_colony = {
 				limit = { pe_planet_eligible = yes planet_stability < 25 }
@@ -210,7 +213,7 @@ pe_patron_fire = {
 			random_owned_colony = { limit = { pe_planet_eligible = yes } save_event_target_as = pe_pat_planet }
 			country_event = { id = pe.266 }
 		}
-		5 = {
+		5 = { modifier = { factor = 2 pe_prof_has = { P = 4 } }
 			modifier = { factor = 0 NOT = { any_country = { is_country_type = default NOT = { is_same_value = root } has_communications = root NOT = { is_at_war_with = root } } } }
 			random_country = {
 				limit = { is_country_type = default NOT = { is_same_value = root } has_communications = root NOT = { is_at_war_with = root } }
@@ -218,7 +221,7 @@ pe_patron_fire = {
 			}
 			country_event = { id = pe.267 }
 		}
-		5 = {
+		5 = { modifier = { factor = 2 pe_prof_has = { P = 9 } }
 			modifier = { factor = 0 NOT = { any_country = { is_country_type = default NOT = { is_same_value = root } has_communications = root } } }
 			modifier = { factor = 0 NOT = { OR = { check_variable = { which = pe_cnt_a value >= 2 } check_variable = { which = pe_cnt_c value >= 2 } } } }
 			random_country = {
@@ -228,16 +231,16 @@ pe_patron_fire = {
 			country_event = { id = pe.268 }
 		}
 		# Market and corporate events (pe_market_events.txt).
-		6 = {
+		6 = { modifier = { factor = 2 pe_prof_has = { P = 6 } }
 			modifier = { factor = 0 NOT = { check_variable = { which = pe_n_corp value > 0 } } }
 			country_event = { id = pe.241 }
 		}
 		# State bonds: four times as often at war or in a deficit (energy, trade, alloys).
-		6 = {
+		6 = { modifier = { factor = 1.5 pe_prof_has = { P = 2 } } modifier = { factor = 1.5 pe_prof_has = { P = 6 } }
 			modifier = { factor = 4 OR = { is_at_war = yes has_monthly_income = { resource = energy value < 0 } has_monthly_income = { resource = trade value < 0 } has_monthly_income = { resource = alloys value < 0 } } }
 			country_event = { id = pe.242 }
 		}
-		6 = {
+		6 = { modifier = { factor = 1.5 pe_prof_has = { P = 1 } } modifier = { factor = 2 pe_prof_has = { P = 6 } }
 			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes count_deposits = { category = pe_deposit_cat_firms count >= 2 } } } }
 			random_owned_colony = {
 				limit = { pe_planet_eligible = yes count_deposits = { category = pe_deposit_cat_firms count >= 2 } }
@@ -245,11 +248,11 @@ pe_patron_fire = {
 			}
 			country_event = { id = pe.243 }
 		}
-		10 = {
+		10 = { modifier = { factor = 2 pe_prof_has = { P = 9 } }
 			modifier = { factor = 0 NOT = { check_variable = { which = pe_mono value = 1 } } }
 			country_event = { id = pe.244 }
 		}
-		5 = {
+		5 = { modifier = { factor = 1.5 pe_prof_has = { P = 4 } } modifier = { factor = 1.5 pe_prof_has = { P = 9 } }
 			modifier = { factor = 0 NOT = { any_country = { is_country_type = default NOT = { is_same_value = root } has_communications = root } } }
 			random_country = {
 				limit = { is_country_type = default NOT = { is_same_value = root } has_communications = root }
@@ -265,7 +268,7 @@ pe_patron_fire = {
 			}
 			country_event = { id = pe.246 }
 		}
-		6 = {
+		6 = { modifier = { factor = 2 pe_prof_has = { P = 9 } } modifier = { factor = 0.5 pe_prof_has = { P = 7 } }
 			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes OR = { has_district = district_mining has_district = district_farming has_district = district_generator } count_deposits = { category = pe_deposit_cat_firms count > 0 } } } }
 			random_owned_colony = {
 				limit = { pe_planet_eligible = yes OR = { has_district = district_mining has_district = district_farming has_district = district_generator } count_deposits = { category = pe_deposit_cat_firms count > 0 } }
@@ -274,16 +277,16 @@ pe_patron_fire = {
 			country_event = { id = pe.247 }
 		}
 		# A crash: rare, only with a big pool; three times as likely after a bubble.
-		2 = {
+		2 = { modifier = { factor = 2 pe_prof_has = { P = 6 } }
 			modifier = { factor = 0 NOT = { check_variable = { which = pe_capital value >= 7000 } } }
 			modifier = { factor = 3 has_country_flag = pe_bubble }
 			country_event = { id = pe.248 }
 		}
-		4 = {
+		4 = { modifier = { factor = 2 pe_prof_has = { P = 6 } }
 			modifier = { factor = 0 NOT = { check_variable = { which = pe_capital value >= 3500 } } }
 			country_event = { id = pe.249 }
 		}
-		4 = { country_event = { id = pe.250 } }
+		4 = { modifier = { factor = 2 pe_prof_has = { P = 6 } } country_event = { id = pe.250 } }
 		5 = {
 			modifier = { factor = 0 NOT = { any_owned_colony = { pe_planet_eligible = yes free_housing > 300 } } }
 			random_owned_colony = {
@@ -494,21 +497,21 @@ pe_labour_fire = {
 			country_event = { id = pe.211 }
 		}
 		25 = { country_event = { id = pe.212 } }
-		20 = { country_event = { id = pe.213 } }
+		20 = { modifier = { factor = 0.5 pe_prof_has = { P = 7 } } modifier = { factor = 1.5 pe_prof_has = { P = 9 } } country_event = { id = pe.213 } }
 		# Company housing where housing is short.
-		20 = {
+		20 = { modifier = { factor = 1.5 pe_prof_has = { P = 3 } } modifier = { factor = 2 pe_prof_has = { P = 7 } }
 			modifier = { factor = 0 NOT = { event_target:pe_pat_planet = { free_housing < 300 } } }
 			country_event = { id = pe.230 }
 		}
 		# Robot start-up: the empire builds robots.
-		20 = {
+		20 = { modifier = { factor = 1.5 pe_prof_has = { P = 4 } }
 			modifier = { factor = 0 NOT = { has_technology = tech_robotic_workers } }
 			modifier = { factor = 0 has_policy_flag = robots_outlawed }
 			country_event = { id = pe.231 }
 		}
 		30 = { country_event = { id = pe.232 } }
 		# Family support: only where pops grow (organic ones; not robots, not machines).
-		15 = {
+		15 = { modifier = { factor = 2 pe_prof_has = { P = 3 } } modifier = { factor = 2 pe_prof_has = { P = 7 } }
 			modifier = { factor = 0 event_target:pe_pat_planet = { NOT = { any_owned_pop_group = { species = { is_robotic = no } } } } }
 			country_event = { id = pe.233 }
 		}

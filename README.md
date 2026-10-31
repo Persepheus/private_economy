@@ -6,6 +6,18 @@ Plug and play: nur neue Dateien, keine Vanilla-Datei wird überschrieben (`tools
 
 Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien und Prüfstatus im [Codex-Changelog](CODEX_CHANGELOG.md) dokumentiert.
 
+## Stand 0.48.0
+
+**Konzernprofile** ([TESTS_0.48.md](docs/TESTS_0.48.md)). Jeder Konzern hat ein Profil, das sein Verhalten färbt: Gründerkonzern, Solides Haus, Familienkonzern, Technologiekonzern, Rüstungskonzern, Finanzhaus, Genossenschaft, Pionierkonzern, Kartell.
+- **Zuweisung:** einmal je Konzern, gewichtet nach unserer Ethik und unseren Civics (z. B. Militaristen eher Rüstungskonzerne, Arbeiterkooperative eher Genossenschaften, kriminelles Erbe eher Kartelle) und nach seiner Art (Industrie eher Rüstung, Wissenschaft eher Technologie, Rohstoffe eher Pioniere). Ein Profil, das das Reich schon hat, zählt halb. Bestehende Konzerne bekommen ihr Profil im nächsten Quartal; bei einer Eroberung behält ein Konzern sein Profil.
+- **Wirkung nur über Wahrscheinlichkeiten und bestehende Regeln**, kein Profil bekommt etwas geschenkt:
+  - Konzernentscheidungen: Übernahmen, Preiskämpfe, Stationen, Konzern-Habitat, Forschungsinstitut, Umzug des Hauptsitzes, Rüstungsvertrag, Kriegsleasing, Jagdrechte, Erkundungscharta, Konvoischutz, Bergung, Dyson-Schwarm, Arc Furnace, Zitadellen, Stiftungen.
+  - Vorrang: Ein Rüstungskonzern wird als Erster um Rüstungsvertrag, Werkschutz und Schutzflotte gefragt.
+  - Regeln: Ein Gründerkonzern verleiht bis −400, ein solides Haus nur, was es hat. Familienkonzerne und Genossenschaften zahlen Sozialleistungen schon ab 1500 Kasse, Gründerkonzerne und Kartelle erst ab 5000.
+  - Ereignisse, die zu keinem Konzern gehören (Börse, Mäzene, Arbeitswelt), werden häufiger oder seltener, je nachdem, welche Profile das Reich hat.
+- **Konzernrat:** Das Profil steht hinter dem Namen; „Was für ein Unternehmen führen Sie?“ stellt es mit eigenem Text vor. Nach einer Kündigung verhandelt ein Rüstungs- oder Familienkonzern zehn Jahre nicht neu, ein solides Haus drei, jeder andere fünf.
+- Jede künftige Mechanik berücksichtigt die Profile.
+
 ## Stand 0.47.0
 
 **0.47.3 – Konzernrat mit ersten Themen** (Test 2276.07 vom 31.10.2026: Gesichter funktionieren, keine Fehler im error.log).
@@ -239,24 +251,15 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
 - **Längere Lieferketten (Supply Chains):** mehrstufige Wertschöpfung zwischen Firmen (Vorprodukte, Zulieferer), gemerkt am 27.10.2026. Aus dem Review: mit begrenzten Abhängigkeiten, also Ausfällen, Ersatzlieferanten und Versorgungssicherheit statt eines dauerhaften Bonus.
   - Umgesetzt in 0.46.0 (Lieferantenwahl, Kapazität, Gewinn, Versorgungssicherheit). Ausfälle einzelner Lieferanten: verworfen, zu kleinteilig. Offen bleibt die mehrstufige Wertschöpfung.
 - **Konzernrat (31.10.2026, Prototyp 0.47.2):** Konzerne direkt ansprechen über den Kontakt der Private Holdings (`custom_diplomacy`, wie Enklaven). Ein Kontakt pro Reich, darin die Wahl des Konzerns, dann Themen. Jeder Vorstand ist ein Anführer mit Gesicht.
-  - Themen: Lage, Ausschreibung vergeben (0.48), Kredit oder Staatsanleihe, Rüstungsauftrag und Lagervertrag anfragen, Investitionswunsch, Lobby-Forderungen.
+  - Themen: Lage, Ausschreibung vergeben (0.49), Kredit oder Staatsanleihe, Rüstungsauftrag und Lagervertrag anfragen, Investitionswunsch, Lobby-Forderungen.
   - Vertrauen: Die Meinung der Engine gilt nur pro Kontakt (Holdings gegenüber uns). Vertrauen pro Konzern als eigene Variable, im Gespräch angezeigt; die Meinung der Holdings kann als ausgelöster Meinungsmodifikator den Durchschnitt zeigen.
   - Jedes Thema braucht einen automatischen Weg für KI-Reiche; für uns bleibt der Kontakt freiwillig.
   - Offen: Vorsitzender des Rats (Herrscher der Holdings) als Vorstand des größten Konzerns.
   - Seit 0.47.3: Konzernart, Vorstellung, Rüstungsvertrag (anfragen, kündigen), Kriegsleasing.
-  - **Konzernprofile (Vorschläge 31.10.2026, nicht beschlossen):** Jeder Konzern bekommt bei der Gründung ein Profil, gewichtet nach unserer Ethik und seiner Art; der Vorstand erklärt es im Gespräch. Wirkung nur über Hebel, die es schon gibt (Kreditlinie, Anzahlung, Investitionswahl, Auszahlung, Angebote), sodass kein Profil schummelt.
-    - **Gründerkonzern** (Expansion): leiht mehr, investiert früh, übernimmt gern; wenig Kasse, krisenanfällig.
-    - **Solides Haus** (konservativ): hohe Rücklage, kleine Kreditlinie, zeichnet Staatsanleihen und Lagerverträge; übersteht Krisen, wächst langsam.
-    - **Familienkonzern** (Dynastie): Vorstand vererbt sich, Hauptsitz zieht nie um, hohe Sozialleistungen, Stiftungen; passt zu autoritären und traditionellen Reichen.
-    - **Technologiekonzern**: Geld ins Forschungsinstitut, Technologielizenzen und Prototypen; passt zu Materialisten.
-    - **Rüstungskonzern** (militärisch-industriell): sucht Rüstungsvertrag, Kriegsleasing, Zitadellen und Werkschutz; passt zu Militaristen, will Aufträge, auch im Frieden.
-    - **Finanzhaus** (Spekulation): Börsen-Events, Übernahmen, Insiderhandel; hohe Gewinne, Risiko von Crash und Skandal.
-    - **Genossenschaft** (gemeinwohlorientiert): teilt Gewinn mit den Beschäftigten (Zufriedenheit statt Kasse), kleinere Marge; passt zu Egalitären und zur Civic Arbeiterkooperative.
-    - **Pionierkonzern** (Grenze): Prospektion, Stationen, Habitate, Erkundungscharta, Bergung; investiert gern in neuen Kolonien.
-    - **Kartell** (Marktmacht): Preiskämpfe, Monopole, Lobby für Schutzzölle; hohe Gewinne, Unmut der Bevölkerung; passt zu Megakonzernen mit kriminellem Erbe.
+  - **Erledigt (0.48): Konzernprofile**, alle neun Vorschläge beschlossen am 31.10.2026. Offen: Profil in der Gründungsnachricht, Vertrauen pro Konzern.
 - **Erweiterungen aus dem Review (27.10.2026):**
-  - **Staatliche Ausschreibungen:** Wir setzen Anreize für benötigte Legierungen, Forschung oder Versorgung, und die Firmen entscheiden, ob sie investieren. Als Nächstes (0.48), über den Konzernrat: Der Staat schreibt eine Menge aus (z. B. 50 Legierungen im Monat für 10 Jahre mit Prämie je Einheit), Konzerne bewerben sich mit ihrer Kasse, der Gewinner baut aus oder um; KI-Reiche schreiben nach Schattenpreisen aus. Nutzt liegendes Kapital (Save 2276: Pool 69.000, Konzernkassen bis 44.500).
-  - **Konzernprofile und Branchentechnologien:** Konzerne unterscheiden sich durch Spezialisierung, Risikobereitschaft und Investitionsverhalten (passt zu „Firmen forschen an ihrem Sektor“).
+  - **Staatliche Ausschreibungen:** Wir setzen Anreize für benötigte Legierungen, Forschung oder Versorgung, und die Firmen entscheiden, ob sie investieren. Als Nächstes (0.49), über den Konzernrat: Der Staat schreibt eine Menge aus (z. B. 50 Legierungen im Monat für 10 Jahre mit Prämie je Einheit), Konzerne bewerben sich mit ihrer Kasse, der Gewinner baut aus oder um; KI-Reiche schreiben nach Schattenpreisen aus. Nutzt liegendes Kapital (Save 2276: Pool 69.000, Konzernkassen bis 44.500).
+  - **Branchentechnologien:** Firmen forschen an ihrem Sektor (die Konzernprofile sind seit 0.48 drin; ein Technologiekonzern wäre der natürliche Träger).
   - **Lobbys mit Interessenkonflikten:** Ein Konzern fordert Privilegien und bietet dafür Leistungen (ergänzt die beschlossenen Lobbys).
   - **Gezielte Krisen:** Kreditkrisen, Überkapazitäten und Rettungsentscheidungen, erst wenn die Buchhaltung stabil läuft (Sanierung und Lagerverträge seit 0.38/0.39 sind ein Anfang).
   - **Ökumenopolis und andere Umwandlungen:** Jeder neue Planetentyp braucht eine festgelegte Behandlung der Firmen, die schon dort sind.

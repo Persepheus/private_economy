@@ -1,0 +1,401 @@
+# Corporate profiles (country scope).
+defined_text = {
+	name = GetPeCorpProf1
+	text = {
+		trigger = { check_variable = { which = pe_c1_prof value = 1 } }
+		localization_key = pe_prof_c_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_prof value = 2 } }
+		localization_key = pe_prof_c_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_prof value = 3 } }
+		localization_key = pe_prof_c_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_prof value = 4 } }
+		localization_key = pe_prof_c_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_prof value = 5 } }
+		localization_key = pe_prof_c_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_prof value = 6 } }
+		localization_key = pe_prof_c_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_prof value = 7 } }
+		localization_key = pe_prof_c_7
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_prof value = 8 } }
+		localization_key = pe_prof_c_8
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c1_prof value = 9 } }
+		localization_key = pe_prof_c_9
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpProf2
+	text = {
+		trigger = { check_variable = { which = pe_c2_prof value = 1 } }
+		localization_key = pe_prof_c_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_prof value = 2 } }
+		localization_key = pe_prof_c_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_prof value = 3 } }
+		localization_key = pe_prof_c_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_prof value = 4 } }
+		localization_key = pe_prof_c_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_prof value = 5 } }
+		localization_key = pe_prof_c_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_prof value = 6 } }
+		localization_key = pe_prof_c_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_prof value = 7 } }
+		localization_key = pe_prof_c_7
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_prof value = 8 } }
+		localization_key = pe_prof_c_8
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c2_prof value = 9 } }
+		localization_key = pe_prof_c_9
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpProf3
+	text = {
+		trigger = { check_variable = { which = pe_c3_prof value = 1 } }
+		localization_key = pe_prof_c_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_prof value = 2 } }
+		localization_key = pe_prof_c_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_prof value = 3 } }
+		localization_key = pe_prof_c_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_prof value = 4 } }
+		localization_key = pe_prof_c_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_prof value = 5 } }
+		localization_key = pe_prof_c_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_prof value = 6 } }
+		localization_key = pe_prof_c_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_prof value = 7 } }
+		localization_key = pe_prof_c_7
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_prof value = 8 } }
+		localization_key = pe_prof_c_8
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c3_prof value = 9 } }
+		localization_key = pe_prof_c_9
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpProf4
+	text = {
+		trigger = { check_variable = { which = pe_c4_prof value = 1 } }
+		localization_key = pe_prof_c_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_prof value = 2 } }
+		localization_key = pe_prof_c_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_prof value = 3 } }
+		localization_key = pe_prof_c_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_prof value = 4 } }
+		localization_key = pe_prof_c_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_prof value = 5 } }
+		localization_key = pe_prof_c_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_prof value = 6 } }
+		localization_key = pe_prof_c_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_prof value = 7 } }
+		localization_key = pe_prof_c_7
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_prof value = 8 } }
+		localization_key = pe_prof_c_8
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c4_prof value = 9 } }
+		localization_key = pe_prof_c_9
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpProf5
+	text = {
+		trigger = { check_variable = { which = pe_c5_prof value = 1 } }
+		localization_key = pe_prof_c_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_prof value = 2 } }
+		localization_key = pe_prof_c_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_prof value = 3 } }
+		localization_key = pe_prof_c_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_prof value = 4 } }
+		localization_key = pe_prof_c_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_prof value = 5 } }
+		localization_key = pe_prof_c_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_prof value = 6 } }
+		localization_key = pe_prof_c_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_prof value = 7 } }
+		localization_key = pe_prof_c_7
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_prof value = 8 } }
+		localization_key = pe_prof_c_8
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c5_prof value = 9 } }
+		localization_key = pe_prof_c_9
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpProf6
+	text = {
+		trigger = { check_variable = { which = pe_c6_prof value = 1 } }
+		localization_key = pe_prof_c_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_prof value = 2 } }
+		localization_key = pe_prof_c_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_prof value = 3 } }
+		localization_key = pe_prof_c_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_prof value = 4 } }
+		localization_key = pe_prof_c_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_prof value = 5 } }
+		localization_key = pe_prof_c_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_prof value = 6 } }
+		localization_key = pe_prof_c_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_prof value = 7 } }
+		localization_key = pe_prof_c_7
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_prof value = 8 } }
+		localization_key = pe_prof_c_8
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c6_prof value = 9 } }
+		localization_key = pe_prof_c_9
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpProf7
+	text = {
+		trigger = { check_variable = { which = pe_c7_prof value = 1 } }
+		localization_key = pe_prof_c_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_prof value = 2 } }
+		localization_key = pe_prof_c_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_prof value = 3 } }
+		localization_key = pe_prof_c_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_prof value = 4 } }
+		localization_key = pe_prof_c_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_prof value = 5 } }
+		localization_key = pe_prof_c_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_prof value = 6 } }
+		localization_key = pe_prof_c_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_prof value = 7 } }
+		localization_key = pe_prof_c_7
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_prof value = 8 } }
+		localization_key = pe_prof_c_8
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c7_prof value = 9 } }
+		localization_key = pe_prof_c_9
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpProf8
+	text = {
+		trigger = { check_variable = { which = pe_c8_prof value = 1 } }
+		localization_key = pe_prof_c_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_prof value = 2 } }
+		localization_key = pe_prof_c_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_prof value = 3 } }
+		localization_key = pe_prof_c_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_prof value = 4 } }
+		localization_key = pe_prof_c_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_prof value = 5 } }
+		localization_key = pe_prof_c_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_prof value = 6 } }
+		localization_key = pe_prof_c_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_prof value = 7 } }
+		localization_key = pe_prof_c_7
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_prof value = 8 } }
+		localization_key = pe_prof_c_8
+	}
+	text = {
+		trigger = { check_variable = { which = pe_c8_prof value = 9 } }
+		localization_key = pe_prof_c_9
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeDlgProfC
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 1 } }
+		localization_key = pe_prof_c_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 2 } }
+		localization_key = pe_prof_c_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 3 } }
+		localization_key = pe_prof_c_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 4 } }
+		localization_key = pe_prof_c_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 5 } }
+		localization_key = pe_prof_c_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 6 } }
+		localization_key = pe_prof_c_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 7 } }
+		localization_key = pe_prof_c_7
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 8 } }
+		localization_key = pe_prof_c_8
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 9 } }
+		localization_key = pe_prof_c_9
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeDlgProfText
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 1 } }
+		localization_key = pe_prof_text_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 2 } }
+		localization_key = pe_prof_text_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 3 } }
+		localization_key = pe_prof_text_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 4 } }
+		localization_key = pe_prof_text_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 5 } }
+		localization_key = pe_prof_text_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 6 } }
+		localization_key = pe_prof_text_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 7 } }
+		localization_key = pe_prof_text_7
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 8 } }
+		localization_key = pe_prof_text_8
+	}
+	text = {
+		trigger = { check_variable = { which = pe_dlg_prof value = 9 } }
+		localization_key = pe_prof_text_9
+	}
+	default = pe_corp_line_none
+}

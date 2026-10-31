@@ -29,7 +29,7 @@
   - Spezies einer Pop-Gruppe auf dem Hauptsitz des Konzerns, sonst unsere Hauptspezies.
   - Unsterblich, ausgeblendet, Flag `pe_ceo_<k>`, Variable `pe_ceo_cn` = Namensnummer des Konzerns.
   - Er wird beim ersten Gespräch angelegt. Übernimmt ein neuer Konzern den Platz, geht der alte Vorstand.
-- Die Option „Über eine Ausschreibung sprechen“ ist gesperrt (kommt mit 0.48).
+- Die Option „Über eine Ausschreibung sprechen“ ist gesperrt (kommt mit 0.49).
 - Konsole: `event pe.336` öffnet den Konzernrat auch ohne Kontaktliste.
 
 ## Prüfen
