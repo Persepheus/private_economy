@@ -809,35 +809,35 @@ pe_safe_growth = { root = { set_variable = { which = pe_ss_code value = prev.pe_
     if = { limit = { check_variable = { which = pe_sd_energy value < 0 } }
       set_variable = { which = pe_ss_test value = pe_safe_net_energy } change_variable = { which = pe_ss_test value = pe_safe_reserved_energy } change_variable = { which = pe_ss_test value = pe_sd_energy }
       if = { limit = { check_variable = { which = pe_ss_test value < pe_safe_margin_energy } }
-        set_variable = { which = pe_ss_gap value = pe_safe_margin_energy } subtract_variable = { which = pe_ss_gap value = pe_ss_test } multiply_variable = { which = pe_ss_gap value = 240 }
+        set_variable = { which = pe_ss_gap value = pe_safe_margin_energy } subtract_variable = { which = pe_ss_gap value = pe_ss_test } multiply_variable = { which = pe_ss_gap value = 120 }
         if = { limit = { check_variable = { which = pe_safe_stock_energy value < pe_ss_gap } } set_variable = { which = pe_safe_ok value = 0 } }
       }
     }
 	if = { limit = { check_variable = { which = pe_sd_minerals value < 0 } }
       set_variable = { which = pe_ss_test value = pe_safe_net_minerals } change_variable = { which = pe_ss_test value = pe_safe_reserved_minerals } change_variable = { which = pe_ss_test value = pe_sd_minerals }
       if = { limit = { check_variable = { which = pe_ss_test value < pe_safe_margin_minerals } }
-        set_variable = { which = pe_ss_gap value = pe_safe_margin_minerals } subtract_variable = { which = pe_ss_gap value = pe_ss_test } multiply_variable = { which = pe_ss_gap value = 240 }
+        set_variable = { which = pe_ss_gap value = pe_safe_margin_minerals } subtract_variable = { which = pe_ss_gap value = pe_ss_test } multiply_variable = { which = pe_ss_gap value = 120 }
         if = { limit = { check_variable = { which = pe_safe_stock_minerals value < pe_ss_gap } } set_variable = { which = pe_safe_ok value = 0 } }
       }
     }
 	if = { limit = { check_variable = { which = pe_sd_food value < 0 } }
       set_variable = { which = pe_ss_test value = pe_safe_net_food } change_variable = { which = pe_ss_test value = pe_safe_reserved_food } change_variable = { which = pe_ss_test value = pe_sd_food }
       if = { limit = { check_variable = { which = pe_ss_test value < pe_safe_margin_food } }
-        set_variable = { which = pe_ss_gap value = pe_safe_margin_food } subtract_variable = { which = pe_ss_gap value = pe_ss_test } multiply_variable = { which = pe_ss_gap value = 240 }
+        set_variable = { which = pe_ss_gap value = pe_safe_margin_food } subtract_variable = { which = pe_ss_gap value = pe_ss_test } multiply_variable = { which = pe_ss_gap value = 120 }
         if = { limit = { check_variable = { which = pe_safe_stock_food value < pe_ss_gap } } set_variable = { which = pe_safe_ok value = 0 } }
       }
     }
 	if = { limit = { check_variable = { which = pe_sd_consumer_goods value < 0 } }
       set_variable = { which = pe_ss_test value = pe_safe_net_consumer_goods } change_variable = { which = pe_ss_test value = pe_safe_reserved_consumer_goods } change_variable = { which = pe_ss_test value = pe_sd_consumer_goods }
       if = { limit = { check_variable = { which = pe_ss_test value < pe_safe_margin_consumer_goods } }
-        set_variable = { which = pe_ss_gap value = pe_safe_margin_consumer_goods } subtract_variable = { which = pe_ss_gap value = pe_ss_test } multiply_variable = { which = pe_ss_gap value = 240 }
+        set_variable = { which = pe_ss_gap value = pe_safe_margin_consumer_goods } subtract_variable = { which = pe_ss_gap value = pe_ss_test } multiply_variable = { which = pe_ss_gap value = 120 }
         if = { limit = { check_variable = { which = pe_safe_stock_consumer_goods value < pe_ss_gap } } set_variable = { which = pe_safe_ok value = 0 } }
       }
     }
 	if = { limit = { check_variable = { which = pe_sd_trade value < 0 } }
       set_variable = { which = pe_ss_test value = pe_safe_net_trade } change_variable = { which = pe_ss_test value = pe_safe_reserved_trade } change_variable = { which = pe_ss_test value = pe_sd_trade }
       if = { limit = { check_variable = { which = pe_ss_test value < pe_safe_margin_trade } }
-        set_variable = { which = pe_ss_gap value = pe_safe_margin_trade } subtract_variable = { which = pe_ss_gap value = pe_ss_test } multiply_variable = { which = pe_ss_gap value = 240 }
+        set_variable = { which = pe_ss_gap value = pe_safe_margin_trade } subtract_variable = { which = pe_ss_gap value = pe_ss_test } multiply_variable = { which = pe_ss_gap value = 120 }
         if = { limit = { check_variable = { which = pe_safe_stock_trade value < pe_ss_gap } } set_variable = { which = pe_safe_ok value = 0 } }
       }
     } } } }

@@ -402,7 +402,7 @@
  pe_field_2:0 "£society£ society"
  pe_field_3:0 "£engineering£ engineering"
  pe.270.name:0 "A Corporation Is Born"
- pe.270.desc:0 "A private firm on §Y[pe_corp_planet.GetName]§! has grown into a corporation: §Y[Root.GetPeCorpName270]§!, in [Root.GetPeCorpGroup270]. Its chief executive is §Y[Root.GetPeCorpCeo270]§!.\n\nFrom now on it will take over smaller independent firms of its sector, and half of what its firms earn beyond their needs goes into its own cash. Its headquarters strengthens the planet."
+ pe.270.desc:0 "A private firm on §Y[pe_corp_planet.GetName]§! has grown into a corporation: §Y[Root.GetPeCorpName270]§!. Its chief executive is §Y[Root.GetPeCorpCeo270]§!.\n\n§R==============================§!\n§Y   CORPORATE COUNCIL: see CONTACTS§!\n§R==============================§!\nWe can talk to our corporations directly: in the §Ycontacts list§!, click §YPrivate Holdings ([Root.GetName])§!. The corporate council meets there with all chief executives: ask about profile and main product, negotiate or cancel a defence contract, lease ships at war.\n\n§HKind: [Root.GetPeCorpKind270]§!\n[Root.GetPeCorpKindText270][Root.GetPeProfText270]\n\n§HWhat happens now§!\nFrom now on it will take over smaller independent firms of its sector, and half of what its firms earn beyond their needs goes into its own cash. Its headquarters strengthens the planet."
  pe.270.a:0 "May it prosper."
  pe.271.name:0 "Price War"
  pe.271.desc:0 "§Y[Root.GetPeCorpA]§! and §Y[Root.GetPeCorpB]§! are fighting for the same customers: discounts, poached managers, advertising everywhere. Their workplaces produce more than ever, but their profits are melting away.\n\nOne of them will not last."

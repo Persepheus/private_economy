@@ -80,3 +80,14 @@ Die Faktoren wirken auf das Gewicht, nicht direkt auf die Prozente: 35 gegen 65 
 - **Verteilung:** Bei Militarismus mehr Rüstungskonzerne, bei Materialismus mehr Technologiekonzerne. Im Save `pe_c<k>_prof` nachsehen, auch bei den KI-Reichen.
 - **Eroberung:** Ein übernommener Konzern behält sein Profil.
 - **error.log:** keine Fehler zu `pe_prof_*`, `random_list` oder `modifier`.
+
+## 0.48.2
+
+- **pe.270:** `immediate` ruft zuerst `pe_prof_ensure` auf und merkt sich das Profil in `pe_prof270`. Der Text zeigt Art (`GetPeCorpKind270`, `GetPeCorpKindText270`), Profil (`GetPeProfText270`) und den Hinweis auf den Konzernrat in der Kontaktliste.
+- **Hauptsitz:** `[pe_dlg_hq.GetName]` steht direkt in pe.337 und pe.338, nicht mehr in Scripted Loc. Ersatz ohne Hauptsitz: ein Planet mit Firmen des Konzerns, sonst die Hauptstadt.
+- **Lager:** `STOCK_MONTHS` 120 statt 240 (`tools/supply-safety.mjs`).
+- **Prüfen:**
+  - Ein neuer Konzern zeigt in seiner Nachricht Art, Profiltext und den roten Kasten zum Konzernrat.
+  - Der Hauptsitz im Gespräch ist ein Planet.
+  - Im error.log kein „Unknown promotion“ zu `pe_dlg_hq`.
+  - Im Save sinkt die Zahl der Firmen mit Status 9 bei KI-Reichen mit großem Lager. Save 2284.12: Reich 16777220 hatte 21 von 46.

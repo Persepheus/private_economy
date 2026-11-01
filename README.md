@@ -8,6 +8,11 @@ Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien u
 
 ## Stand 0.48.0
 
+**0.48.2 – Gründungsnachricht und Lager** (Save 2284.12 vom 01.11.2026).
+- **Ein Konzern entsteht:** Die Nachricht nennt Art und Profil des neuen Konzerns mit ihren Texten und weist auffällig auf den Konzernrat hin: in der Kontaktliste „Private Holdings (<Reich>)“ anklicken.
+- **Hauptsitz im Gespräch:** Scripted Loc löst keine Event-Targets auf (error.log: „Unknown promotion“). Der Planet steht jetzt direkt im Ereignistext. Hat ein Konzern keinen Hauptsitz mehr, steht dort ein Planet mit seinen Firmen.
+- **Versorgungsschutz:** Das Lager muss die Lücke zur Marge nur noch 10 statt 20 Jahre decken. Im Save sperrte die alte Regel 21 von 46 Firmen eines KI-Reichs mit 24.000 Energie im Lager bei −42 im Monat, das sind fast 50 Jahre Vorrat. Bei uns waren es 7 Firmen, bei 35.000 Mineralien und −75 im Monat. Reiche mit echtem Mangel bleiben gesperrt, etwa bei Konsumgütern mit −123 im Monat und 11.000 im Lager.
+
 **0.48.1 – Konzernrat lesbar** (Test 31.10.2026). Die Optionen im Konzernrat zeigen nur noch Name, kurze Art und Profil, z. B. „Riverstone Bazaar (Handel, Rüstungskonzern)“, und passen in die Knöpfe. Die Schrift des Spiels kennt keine typografischen Anführungszeichen, Gedankenstriche oder Pfeile; alle Texte des Mods nutzen jetzt gerade Anführungszeichen wie Vanilla. Behoben: Der Name der Holdings („Private Holdings (<Reich>)“) wurde als Makro gelesen (error.log), und der Hauptsitz im Gespräch zeigte den Reichsnamen statt des Planeten.
 
 **Konzernprofile** ([TESTS_0.48.md](docs/TESTS_0.48.md)). Jeder Konzern hat ein Profil, das sein Verhalten färbt: Gründerkonzern, Solides Haus, Familienkonzern, Technologiekonzern, Rüstungskonzern, Finanzhaus, Genossenschaft, Pionierkonzern, Kartell.
@@ -35,7 +40,7 @@ Die von Codex vorgenommenen Änderungen sind mit Diagnose, betroffenen Dateien u
 **0.47.2 – Prototyp Konzernrat** ([TESTS_PROTO_COUNCIL.md](docs/TESTS_PROTO_COUNCIL.md)). Die Private Holdings stehen in der Kontaktliste. Öffnet man sie, tagt der Konzernrat wie bei einer Enklave: Man wählt einen Konzern, und sein Vorstand empfängt uns mit eigenem Gesicht (ein Anführer der Holdings, Spezies vom Hauptsitz). Noch ohne Themen; die Ausschreibung ist als gesperrte Option angekündigt.
 
 **0.47.1 – das Lager zählt.** Gefunden im Save 2276 (31.10.2026): 48 Firmen der KI-Reiche durften nicht wachsen, weil der Versorgungsschutz nur den Monatsfluss prüfte. Ein Reich mit 17.000 Energie im Lager und +72 im Monat lag knapp unter seiner Marge von 76. Deshalb wuchs keine Firma, die Energie verbraucht, auch nicht die Konsumgüterfabriken, obwohl ihm Konsumgüter fehlten.
-- Unterschreitet ein Wachstum, eine Gründung oder ein Umbau die Marge, ist es trotzdem erlaubt, solange das Lager die Lücke zur Marge 20 Jahre lang deckt. Jede Zusage verbraucht dabei einen Teil dieser Deckung.
+- Unterschreitet ein Wachstum, eine Gründung oder ein Umbau die Marge, ist es trotzdem erlaubt, solange das Lager die Lücke zur Marge 20 Jahre lang deckt (seit 0.48.2: 10 Jahre). Jede Zusage verbraucht dabei einen Teil dieser Deckung.
 - Laufende Spiele: Das Lager wird ab dem nächsten Monat berücksichtigt.
 
 **Strukturwandel** ([TESTS_0.47.md](docs/TESTS_0.47.md)). Gefunden im Save 2269 (31.10.2026): Ein KI-Reich mit 82 Firmen verlor 371 Mineralien im Monat bei 1664 im Lager. 13 Konsumgüterfabriken verbrauchten 657 Mineralien für Konsumgüter, von denen es 16.000 im Lager hatte. Die Fabriken machten Verlust, konnten aber nicht umbauen: ohne Kapital für den Umbau, mit Schulden, über Überbrückungskredite am Leben gehalten. Weil nur die Firma mit dem größten Gewinn je Planet umbauen darf, blockierte eine, die nicht zahlen konnte, den ganzen Planeten.
@@ -258,7 +263,7 @@ Testablauf: [docs/TESTS_0.36.md](docs/TESTS_0.36.md). Ältere Stände: [0.35](do
   - Jedes Thema braucht einen automatischen Weg für KI-Reiche; für uns bleibt der Kontakt freiwillig.
   - Offen: Vorsitzender des Rats (Herrscher der Holdings) als Vorstand des größten Konzerns.
   - Seit 0.47.3: Konzernart, Vorstellung, Rüstungsvertrag (anfragen, kündigen), Kriegsleasing.
-  - **Erledigt (0.48): Konzernprofile**, alle neun Vorschläge beschlossen am 31.10.2026. Offen: Profil in der Gründungsnachricht, Vertrauen pro Konzern.
+  - **Erledigt (0.48): Konzernprofile**, alle neun Vorschläge beschlossen am 31.10.2026. Profil in der Gründungsnachricht seit 0.48.2. Offen: Vertrauen pro Konzern.
 - **Erweiterungen aus dem Review (27.10.2026):**
   - **Staatliche Ausschreibungen:** Wir setzen Anreize für benötigte Legierungen, Forschung oder Versorgung, und die Firmen entscheiden, ob sie investieren. Als Nächstes (0.49), über den Konzernrat: Der Staat schreibt eine Menge aus (z. B. 50 Legierungen im Monat für 10 Jahre mit Prämie je Einheit), Konzerne bewerben sich mit ihrer Kasse, der Gewinner baut aus oder um; KI-Reiche schreiben nach Schattenpreisen aus. Nutzt liegendes Kapital (Save 2276: Pool 69.000, Konzernkassen bis 44.500).
   - **Branchentechnologien:** Firmen forschen an ihrem Sektor (die Konzernprofile sind seit 0.48 drin; ein Technologiekonzern wäre der natürliche Träger).

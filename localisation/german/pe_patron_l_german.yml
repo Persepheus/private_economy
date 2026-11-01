@@ -402,7 +402,7 @@
  pe_field_2:0 "£society£ Gesellschaft"
  pe_field_3:0 "£engineering£ Ingenieurwesen"
  pe.270.name:0 "Ein Konzern entsteht"
- pe.270.desc:0 "Eine Privatfirma auf §Y[pe_corp_planet.GetName]§! ist zu einem Konzern gewachsen: §Y[Root.GetPeCorpName270]§!, Branche [Root.GetPeCorpGroup270]. Vorstandsvorsitz: §Y[Root.GetPeCorpCeo270]§!.\n\nVon nun an übernimmt er kleinere unabhängige Firmen seiner Branche, und die Hälfte dessen, was seine Firmen über ihren Bedarf hinaus verdienen, fließt in seine eigene Kasse. Sein Hauptsitz stärkt den Planeten."
+ pe.270.desc:0 "Eine Privatfirma auf §Y[pe_corp_planet.GetName]§! ist zu einem Konzern gewachsen: §Y[Root.GetPeCorpName270]§!. Vorstandsvorsitz: §Y[Root.GetPeCorpCeo270]§!.\n\n§R==============================§!\n§Y   KONZERNRAT: über KONTAKTE§!\n§R==============================§!\nMit unseren Konzernen sprechen wir direkt: In der §YKontaktliste§! auf §YPrivate Holdings ([Root.GetName])§! klicken. Dort tagt der Konzernrat mit allen Vorständen: Profil und Hauptprodukt erfragen, Rüstungsvertrag aushandeln oder kündigen, im Krieg Schiffe leasen.\n\n§HArt: [Root.GetPeCorpKind270]§!\n[Root.GetPeCorpKindText270][Root.GetPeProfText270]\n\n§HWas jetzt geschieht§!\nVon nun an übernimmt er kleinere unabhängige Firmen seiner Branche, und die Hälfte dessen, was seine Firmen über ihren Bedarf hinaus verdienen, fließt in seine eigene Kasse. Sein Hauptsitz stärkt den Planeten."
  pe.270.a:0 "Möge er gedeihen."
  pe.271.name:0 "Preiskampf"
  pe.271.desc:0 "§Y[Root.GetPeCorpA]§! und §Y[Root.GetPeCorpB]§! kämpfen um dieselben Kunden: Rabatte, abgeworbene Manager, Werbung überall. Ihre Betriebe produzieren mehr denn je, aber die Gewinne schmelzen.\n\nEiner von beiden wird das nicht durchhalten."

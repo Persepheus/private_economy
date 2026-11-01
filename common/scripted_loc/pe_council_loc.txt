@@ -223,11 +223,85 @@ defined_text = {
 	}
 	default = pe_dlg_none
 }
+
+# Founding message (pe.270): kind and profile of the new corporation.
 defined_text = {
-	name = GetPeDlgHq
+	name = GetPeCorpKind270
 	text = {
-		trigger = { check_variable = { which = pe_dlg_hqok value = 1 } }
-		localization_key = pe_dlg_hq
+		trigger = { check_variable = { which = pe_cg270 value = 1 } }
+		localization_key = pe_corp_kind_1
 	}
-	default = pe_dlg_none
+	text = {
+		trigger = { check_variable = { which = pe_cg270 value = 2 } }
+		localization_key = pe_corp_kind_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_cg270 value = 3 } }
+		localization_key = pe_corp_kind_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_cg270 value = 4 } }
+		localization_key = pe_corp_kind_4
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeCorpKindText270
+	text = {
+		trigger = { check_variable = { which = pe_cg270 value = 1 } }
+		localization_key = pe_corp_kdesc_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_cg270 value = 2 } }
+		localization_key = pe_corp_kdesc_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_cg270 value = 3 } }
+		localization_key = pe_corp_kdesc_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_cg270 value = 4 } }
+		localization_key = pe_corp_kdesc_4
+	}
+	default = pe_corp_line_none
+}
+defined_text = {
+	name = GetPeProfText270
+	text = {
+		trigger = { check_variable = { which = pe_prof270 value = 1 } }
+		localization_key = pe_prof_text_1
+	}
+	text = {
+		trigger = { check_variable = { which = pe_prof270 value = 2 } }
+		localization_key = pe_prof_text_2
+	}
+	text = {
+		trigger = { check_variable = { which = pe_prof270 value = 3 } }
+		localization_key = pe_prof_text_3
+	}
+	text = {
+		trigger = { check_variable = { which = pe_prof270 value = 4 } }
+		localization_key = pe_prof_text_4
+	}
+	text = {
+		trigger = { check_variable = { which = pe_prof270 value = 5 } }
+		localization_key = pe_prof_text_5
+	}
+	text = {
+		trigger = { check_variable = { which = pe_prof270 value = 6 } }
+		localization_key = pe_prof_text_6
+	}
+	text = {
+		trigger = { check_variable = { which = pe_prof270 value = 7 } }
+		localization_key = pe_prof_text_7
+	}
+	text = {
+		trigger = { check_variable = { which = pe_prof270 value = 8 } }
+		localization_key = pe_prof_text_8
+	}
+	text = {
+		trigger = { check_variable = { which = pe_prof270 value = 9 } }
+		localization_key = pe_prof_text_9
+	}
+	default = pe_corp_line_none
 }

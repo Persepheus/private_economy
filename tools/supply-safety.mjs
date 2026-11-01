@@ -2,7 +2,7 @@
 export const safetyResources = ['energy', 'minerals', 'food', 'consumer_goods', 'trade'];
 export const safetyFile = 'common/scripted_effects/pe_supply_safety_generated.txt';
 // The stockpile may carry a gap below the margin for this long (0.47.1).
-export const STOCK_MONTHS = 240;
+export const STOCK_MONTHS = 120;
 export const costVar =(job, r) => `pe_cost_${job.replace('pe_private_', '')}_${r}`;
 
 export function supplySafety({variants, JOBS, RES, outVar, HAB, NOT_HAB, VOID, HAB_DISTRICT,

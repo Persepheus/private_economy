@@ -89,7 +89,7 @@ pe_council_ceo_new = {
 
 # Country scope (we, pe.337): the facts of corporation slot $K$ for the conversation: name,
 # chief executive, kind (pe_dlg_grp), product (pe_dlg_prod, 0 = not yet known), cash,
-# headquarters (event_target:pe_dlg_hq if pe_dlg_hqok = 1), the share a defence contract would
+# headquarters (event_target:pe_dlg_hq; without one a planet with its firms, else our capital), the share a defence contract would
 # have (pe_dlg_dcs, as in pe_dc_step: 10%, 20% from 15000 cash).
 pe_council_slot = {
 	set_variable = { which = pe_corp_cur_name value = pe_c$K$_name }
@@ -108,6 +108,14 @@ pe_council_slot = {
 		save_event_target_as = pe_dlg_hq
 		root = { set_variable = { which = pe_dlg_hqok value = 1 } }
 	}
+	if = { limit = { check_variable = { which = pe_dlg_hqok value = 0 } }
+		random_owned_colony = {
+			limit = { any_deposit = { has_deposit_category = pe_deposit_cat_firms check_variable = { which = pe_corp value = $K$ } } }
+			save_event_target_as = pe_dlg_hq
+			root = { set_variable = { which = pe_dlg_hqok value = 1 } }
+		}
+	}
+	if = { limit = { check_variable = { which = pe_dlg_hqok value = 0 } } capital_scope = { save_event_target_as = pe_dlg_hq } }
 	set_variable = { which = pe_dlg_dcs value = 10 }
 	if = { limit = { check_variable = { which = pe_c$K$_cash value >= 15000 } } set_variable = { which = pe_dlg_dcs value = 20 } }
 }
